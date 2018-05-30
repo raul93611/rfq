@@ -12,7 +12,7 @@ if (isset($_POST['registrar_cotizacion'])) {
         list($cotizacion_insertada, $id_rfq) = RepositorioRfq::insertar_cotizacion(Conexion::obtener_conexion(), $cotizacion);
 
         if ($cotizacion_insertada) {
-            $directorio = $_SERVER['DOCUMENT_ROOT'] . '/prueba/documentos/' . $id_rfq;
+            $directorio = $_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $id_rfq;
             mkdir($directorio, 0777);
             $documentos = array_filter($_FILES['documentos']['name']);
             $total = count($documentos);

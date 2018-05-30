@@ -96,7 +96,7 @@
     </div>
     <label>Documentos:</label>
     <?php
-    $ruta = $_SERVER['DOCUMENT_ROOT'] . '/prueba/documentos/' . $cotizacion_recuperada->obtener_id();
+    $ruta = $_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $cotizacion_recuperada->obtener_id();
     if (is_dir($ruta)) {
         $gestor = opendir($ruta);
         echo '<div class="list-group">';
