@@ -1,7 +1,7 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="<?php echo PERFIL; ?>" class="brand-link">
-        <img src="<?php echo RUTA_IMG; ?>favicon.png" alt="E-logic" width="40" height="40" class="brand-image img-circle elevation-3"
+        <img src="<?php echo RUTA_IMG; ?>favicon_logito.jpg" alt="E-logic" style="width:30px;height: 30px;" class="brand-image img-circle elevation-3"
              style="opacity: .8">
         <span class="brand-text font-weight-light">E-logic</span>
     </a>
