@@ -261,6 +261,31 @@ class RepositorioUsuario {
         return $usuarios;
     }
     
+    public static function obtener_usuarios_rfq($conexion) {
+        $usuarios = [];
+
+        if (isset($conexion)) {
+            try {
+                $sql = "SELECT * FROM usuarios WHERE cargo = 4 OR cargo = 3 ";
+
+                $sentencia = $conexion->prepare($sql);
+                
+                $sentencia->execute();
+
+                $resultado = $sentencia->fetchAll();
+
+                if (count($resultado)) {
+                    foreach ($resultado as $fila) {
+                        $usuarios [] = new Usuario($fila['id'], $fila['nombre_usuario'], $fila['password'], $fila['nombres'], $fila['apellidos'], $fila['cargo']);
+                    }
+                }
+            } catch (PDOException $ex) {
+                print 'ERROR:' . $ex->getMessage() . '<br>';
+            }
+        }
+        return $usuarios;
+    }
+    
     public static function obtener_cotizaciones_por_usuario($conexion, $id_usuario, $tipo){
         $cotizaciones = 0;
         if(isset($conexion)){
@@ -291,7 +316,7 @@ class RepositorioUsuario {
         $cotizaciones_ganadas = array();
         $cotizaciones_sometidas = array();
         Conexion::abrir_conexion();
-        $usuarios = RepositorioUsuario::obtener_usuarios_por_cargo(Conexion::obtener_conexion(), 4);
+        $usuarios = RepositorioUsuario::obtener_usuarios_rfq(Conexion::obtener_conexion());
         Conexion::cerrar_conexion();
         
         if(count($usuarios)){

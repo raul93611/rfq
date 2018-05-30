@@ -39,7 +39,7 @@
     <div class="form-group">
         <?php
         Conexion::abrir_conexion();
-        $usuarios = RepositorioUsuario::obtener_usuarios_por_cargo(Conexion::obtener_conexion(), 4);
+        $usuarios = RepositorioUsuario::obtener_usuarios_rfq(Conexion::obtener_conexion());
         Conexion::cerrar_conexion();
         ?>
         <?php
