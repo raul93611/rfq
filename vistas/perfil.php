@@ -1,6 +1,6 @@
 <?php
 if (!ControlSesion::sesion_iniciada()) {
-    Redireccion::redirigir(SERVIDOR);
+    Redireccion::redirigir1(SERVIDOR);
 }
 
 $titulo = 'Perfil';
