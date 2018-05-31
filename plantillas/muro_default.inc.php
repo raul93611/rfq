@@ -1,10 +1,7 @@
 <?php
-list($nombres_usuario, $cotizaciones_completadas, $cotizaciones_ganadas, $cotizaciones_sometidas) = RepositorioUsuario::obtener_array_nombres_usuario_cotizaciones_completadas_ganadas_sometidas();
+list($nombres_usuario, $cotizaciones_completadas, $cotizaciones_completadas_pasadas, $cotizaciones_ganadas, $cotizaciones_ganadas_pasadas, $cotizaciones_sometidas, $cotizaciones_sometidas_pasadas) = RepositorioUsuario::obtener_array_nombres_usuario_cotizaciones_completadas_ganadas_sometidas();
 ?>
-<input type="hidden" id="nombres_usuario" <?php echo "value='" . json_encode($nombres_usuario) . "'"; ?>>
-<input type="hidden" id="cotizaciones_completadas" <?php echo "value='" . json_encode($cotizaciones_completadas) . "'"; ?>>
-<input type="hidden" id="cotizaciones_ganadas" <?php echo "value='" . json_encode($cotizaciones_ganadas) . "'"; ?>>
-<input type="hidden" id="cotizaciones_sometidas" <?php echo "value='" . json_encode($cotizaciones_sometidas) . "'"; ?>>
+
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="content-header">
@@ -61,6 +58,13 @@ list($nombres_usuario, $cotizaciones_completadas, $cotizaciones_ganadas, $cotiza
                 <!-- ./col -->
                 <div class="col-lg-12 col-12">
                     <!-- small box -->
+                    <input type="hidden" id="nombres_usuario" <?php echo "value='" . json_encode($nombres_usuario) . "'"; ?>>
+<input type="hidden" id="cotizaciones_completadas" <?php echo "value='" . json_encode($cotizaciones_completadas) . "'"; ?>>
+<input type="hidden" id="cotizaciones_completadas_pasadas" <?php echo "value='" . json_encode($cotizaciones_completadas_pasadas) . "'"; ?>>
+<input type="hidden" id="cotizaciones_ganadas" <?php echo "value='" . json_encode($cotizaciones_ganadas) . "'"; ?>>
+<input type="hidden" id="cotizaciones_ganadas_pasadas" <?php echo "value='" . json_encode($cotizaciones_ganadas_pasadas) . "'"; ?>>
+<input type="hidden" id="cotizaciones_sometidas" <?php echo "value='" . json_encode($cotizaciones_sometidas) . "'"; ?>>
+<input type="hidden" id="cotizaciones_sometidas_pasadas" <?php echo "value='" . json_encode($cotizaciones_sometidas_pasadas) . "'"; ?>>
                 </div>
                 <!-- ./col -->
                 <!--<div class="col-lg-3 col-6">

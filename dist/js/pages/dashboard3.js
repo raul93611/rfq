@@ -3,13 +3,19 @@ $(function () {
   
   var nombres_usuario = document.getElementById('nombres_usuario').value;
   var cotizaciones_completadas = document.getElementById('cotizaciones_completadas').value;
+  var cotizaciones_completadas_pasadas = document.getElementById('cotizaciones_completadas_pasadas').value;
   var cotizaciones_ganadas = document.getElementById('cotizaciones_ganadas').value;
+  var cotizaciones_ganadas_pasadas = document.getElementById('cotizaciones_ganadas_pasadas').value;
   var cotizaciones_sometidas = document.getElementById('cotizaciones_sometidas').value;
+  var cotizaciones_sometidas_pasadas = document.getElementById('cotizaciones_sometidas_pasadas').value;
   
   nombres_usuario = jQuery.parseJSON(nombres_usuario);
   cotizaciones_completadas = jQuery.parseJSON(cotizaciones_completadas);
+  cotizaciones_completadas_pasadas = jQuery.parseJSON(cotizaciones_completadas_pasadas);
   cotizaciones_ganadas = jQuery.parseJSON(cotizaciones_ganadas);
+  cotizaciones_ganadas_pasadas = jQuery.parseJSON(cotizaciones_ganadas_pasadas);
   cotizaciones_sometidas = jQuery.parseJSON(cotizaciones_sometidas);
+  cotizaciones_sometidas_pasadas = jQuery.parseJSON(cotizaciones_sometidas_pasadas);
   
   var ticksStyle = {
     fontColor: '#495057',
@@ -29,12 +35,12 @@ $(function () {
           backgroundColor: '#007bff',
           borderColor    : '#007bff',
           data           : cotizaciones_completadas
-        }/*,
+        },
         {
           backgroundColor: '#ced4da',
           borderColor    : '#ced4da',
-          data           : [70, 170, 270, 200, 180, 150]
-        }*/
+          data           : cotizaciones_completadas_pasadas
+        }
       ]
     },
     options: {
@@ -93,12 +99,12 @@ $(function () {
           backgroundColor: '#007bff',
           borderColor    : '#007bff',
           data           : cotizaciones_ganadas
-        }/*,
+        },
         {
           backgroundColor: '#ced4da',
           borderColor    : '#ced4da',
-          data           : [70, 170, 270, 200, 180, 150]
-        }*/
+          data           : cotizaciones_ganadas_pasadas
+        }
       ]
     },
     options: {
@@ -157,12 +163,12 @@ $(function () {
           backgroundColor: '#007bff',
           borderColor    : '#007bff',
           data           : cotizaciones_sometidas
-        }/*,
+        },
         {
           backgroundColor: '#ced4da',
           borderColor    : '#ced4da',
-          data           : [70, 170, 270, 200, 180, 150]
-        }*/
+          data           : cotizaciones_sometidas_pasadas
+        }
       ]
     },
     options: {

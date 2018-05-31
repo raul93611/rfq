@@ -288,33 +288,44 @@ class RepositorioUsuario {
     
     public static function obtener_cotizaciones_por_usuario($conexion, $id_usuario, $tipo){
         $cotizaciones = 0;
+        $cotizaciones_pasadas = 0;
         if(isset($conexion)){
             try{
-                $sql = 'SELECT COUNT(*) as cotizaciones FROM rfq WHERE usuario_designado = :usuario_designado AND ' . $tipo . '= 1';
-                
+                $sql = 'SELECT COUNT(*) as cotizaciones FROM rfq WHERE usuario_designado = :usuario_designado AND ' . $tipo . '= 1 AND MONTH(fecha_completado) = MONTH(CURDATE())';
+                $sql1 = 'SELECT COUNT(*) as cotizaciones_pasadas FROM rfq WHERE usuario_designado = :usuario_designado AND ' . $tipo . '= 1 AND MONTH(fecha_completado) = MONTH(CURDATE())-1';
                 $sentencia = $conexion-> prepare($sql);
                 $sentencia-> bindParam(':usuario_designado', $id_usuario, PDO::PARAM_STR);
-                
                 $sentencia->execute();
-
+                
+                $sentencia1 = $conexion-> prepare($sql1);
+                $sentencia1-> bindParam(':usuario_designado', $id_usuario, PDO::PARAM_STR);
+                $sentencia1->execute();
+                
                 $resultado = $sentencia->fetch();
+                $resultado1 = $sentencia1->fetch();
 
                 if (!empty($resultado)) {
                     $cotizaciones = $resultado['cotizaciones'];
+                }
+                if(!empty($resultado1)){
+                    $cotizaciones_pasadas = $resultado1['cotizaciones_pasadas'];
                 }
                 
             } catch (PDOException $ex) {
                 print 'ERROR:' . $ex->getMessage() . '<br>';
             }
         }
-        return $cotizaciones;
+        return array($cotizaciones, $cotizaciones_pasadas);
     }
 
         public static function obtener_array_nombres_usuario_cotizaciones_completadas_ganadas_sometidas(){
         $nombres_usuario = array();
         $cotizaciones_completadas = array();
+        $cotizaciones_completadas_pasadas = array();
         $cotizaciones_ganadas = array();
+        $cotizaciones_ganadas_pasadas = array();
         $cotizaciones_sometidas = array();
+        $cotizaciones_sometidas_pasadas = array();
         Conexion::abrir_conexion();
         $usuarios = RepositorioUsuario::obtener_usuarios_rfq(Conexion::obtener_conexion());
         Conexion::cerrar_conexion();
@@ -324,13 +335,13 @@ class RepositorioUsuario {
                 $usuario = $usuarios[$i];
                 $nombres_usuario[$i] = $usuario-> obtener_nombre_usuario();
                 Conexion::abrir_conexion();
-                $cotizaciones_completadas[$i] = RepositorioUsuario::obtener_cotizaciones_por_usuario(Conexion::obtener_conexion(), $usuario-> obtener_id(), 'completado');
-                $cotizaciones_ganadas[$i] = RepositorioUsuario::obtener_cotizaciones_por_usuario(Conexion::obtener_conexion(), $usuario-> obtener_id(), 'award');
-                $cotizaciones_sometidas[$i] = RepositorioUsuario::obtener_cotizaciones_por_usuario(Conexion::obtener_conexion(), $usuario-> obtener_id(), 'status');
+                list($cotizaciones_completadas[$i], $cotizaciones_completadas_pasadas[$i]) = RepositorioUsuario::obtener_cotizaciones_por_usuario(Conexion::obtener_conexion(), $usuario-> obtener_id(), 'completado');
+                list($cotizaciones_ganadas[$i], $cotizaciones_ganadas_pasadas[$i]) = RepositorioUsuario::obtener_cotizaciones_por_usuario(Conexion::obtener_conexion(), $usuario-> obtener_id(), 'award');
+                list($cotizaciones_sometidas[$i], $cotizaciones_sometidas_pasadas[$i]) = RepositorioUsuario::obtener_cotizaciones_por_usuario(Conexion::obtener_conexion(), $usuario-> obtener_id(), 'status');
                 Conexion::cerrar_conexion();
             }
         }
-        return array($nombres_usuario, $cotizaciones_completadas, $cotizaciones_ganadas, $cotizaciones_sometidas);
+        return array($nombres_usuario, $cotizaciones_completadas, $cotizaciones_completadas_pasadas, $cotizaciones_ganadas, $cotizaciones_ganadas_pasadas, $cotizaciones_sometidas, $cotizaciones_sometidas_pasadas);
     }
     
 }
