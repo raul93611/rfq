@@ -28,9 +28,27 @@ CREATE TABLE rfq(
         comments VARCHAR(100),
         award TINYINT NOT NULL,
         fecha_completado DATE,
+        payment_terms VARCHAR(100) NOT NULL,
+        address TEXT CHARACTER SET utf8 NOT NULL,
+        ship_to TEXT CHARACTER SET utf8 NOT NULL,
+        expiration_date DATE NOT NULL,
+        ship_via VARCHAR(100) NOT NULL,
         PRIMARY KEY(id),
         FOREIGN KEY(id_usuario)
             REFERENCES usuarios(id)
+            ON UPDATE CASCADE
+            ON DELETE RESTRICT
+);
+
+CREATE TABLE equipo(
+        id INT NOT NULL AUTO_INCREMENT UNIQUE,
+        id_rfq INT NOT NULL,
+        brand VARCHAR(100) NOT NULL,
+        part_number VARCHAR(100) NOT NULL,
+        description TEXT CHARACTER SET utf8 NOT NULL,
+        PRIMARY KEY(id),
+        FOREIGN KEY(id_rfq)
+            REFERENCES rfq(id)
             ON UPDATE CASCADE
             ON DELETE RESTRICT
 );
