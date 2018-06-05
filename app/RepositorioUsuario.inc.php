@@ -180,7 +180,7 @@ class RepositorioUsuario {
             <td class='text-center'>
                 <form method="post" action="<?php echo ELIMINAR_USUARIO; ?>">
                     <input type="hidden" name="id_usuario" value="<?php echo $usuario->obtener_id(); ?>">
-                    <button type="submit" class="btn btn-sm btn-warning" name="eliminar_usuario">Eliminar</button>
+                    <button type="submit" class="btn btn-sm btn-warning" name="eliminar_usuario">Delete</button>
                 </form>
             </td>
         </tr>
@@ -197,9 +197,9 @@ class RepositorioUsuario {
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr>
-                        <th>Nombres</th>
-                        <th>Apellidos</th>
-                        <th>Opciones</th>
+                        <th>First names</th>
+                        <th>Last names</th>
+                        <th>Options</th>
                     </tr>
                 </thead>
                 <tbody id="myTable">

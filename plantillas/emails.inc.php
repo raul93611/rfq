@@ -20,7 +20,7 @@
                 <section class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Cotizaciones</h3>
+                            <h3 class="card-title">Quotes</h3>
                         </div>
                         <div class="card-body table-responsive">
                             <input class="form-control" id="myInput" type="text" placeholder="Search.." autofocus>

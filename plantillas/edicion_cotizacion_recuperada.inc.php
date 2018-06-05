@@ -24,7 +24,7 @@
         }
         ?>
                id="status">
-        <label class="form-check-label" for="status">Sometido</label>
+        <label class="form-check-label" for="status">Submitted</label>
     </div>
     <div class="form-check
     <?php
@@ -40,7 +40,7 @@
         }
         ?>
                id="completado">
-        <label class="form-check-label" for="completado">Completado</label>
+        <label class="form-check-label" for="completado">Completed</label>
     </div>
     <div class="form-group">
         <label for="amount">Amount:</label>
@@ -75,7 +75,7 @@
         <?php
         if (count($usuarios)) {
             ?>
-            <label for="usuario_designado">Usuario designado:</label>
+            <label for="usuario_designado">Designated user:</label>
             <select id="usuario_designado" class="form-control" name="usuario_designado">
                 <?php
                 foreach ($usuarios as $usuario) {
@@ -93,7 +93,7 @@
         }
         ?>
     </div>
-    <label>Documentos:</label>
+    <label>Documents:</label>
     <?php
     $ruta = $_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $cotizacion_recuperada->obtener_id();
     if (is_dir($ruta)) {
@@ -121,6 +121,6 @@
     </div>
 </div>
 <div class="card-footer">
-    <button type="submit" onclick="alert('Estas seguro?');" class="btn btn-primary" name="guardar_cambios_cotizacion">Guardar cambios</button>
+    <button type="submit" onclick="alert('Estas seguro?');" class="btn btn-primary" name="guardar_cambios_cotizacion">Save</button>
 </div>
 

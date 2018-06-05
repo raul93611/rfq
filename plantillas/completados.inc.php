@@ -3,7 +3,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0 text-dark">Cotizaciones completadas</h1>
+                    <h1 class="m-0 text-dark">Completed quotes</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <!--<ol class="breadcrumb float-sm-right">
@@ -20,7 +20,7 @@
                 <section class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Cotizaciones</h3>
+                            <h3 class="card-title">Quotes</h3>
                         </div>
                         <div class="card-body">
                             <input class="form-control" id="myInput" type="text" placeholder="Search.." autofocus>

@@ -45,7 +45,7 @@
         <?php
         if (count($usuarios)) {
             ?>
-            <label for="usuario_designado">Usuario designado:</label>
+            <label for="usuario_designado">Designated user:</label>
             <select id="usuario_designado" class="form-control" name="usuario_designado">
                 <?php
                 foreach ($usuarios as $usuario) {
@@ -60,7 +60,7 @@
         ?>
     </div>
     <div class="form-group">
-        <label for="canal">Canal:</label>
+        <label for="canal">Channel:</label>
         <select class="form-control" name="canal" id="canal">
             <option>GSA-Buy</option>
             <option>FedBid</option>
@@ -75,5 +75,5 @@
     </div>
 </div>
 <div class="card-footer">
-    <button type="submit" class="btn btn-primary" name="registrar_cotizacion">Registrar</button>
+    <button type="submit" class="btn btn-primary" name="registrar_cotizacion">Save</button>
 </div>

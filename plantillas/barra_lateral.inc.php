@@ -27,7 +27,7 @@
                     <a href="#" class="nav-link">
                         <i class="nav-icon fa fa-home"></i>
                         <p>
-                            Inicio
+                            Home
                             <i class="right fa fa-angle-left"></i>
                         </p>
                     </a>
@@ -41,7 +41,7 @@
                             ?>
                                ">
                                 <i class="fa fa-th nav-icon"></i>
-                                <p>Muro</p>
+                                <p>Dashboard</p>
                             </a>
                         </li>
                         <?php
@@ -56,7 +56,7 @@
                                 ?>
                                    ">
                                     <i class="fa fa-users nav-icon"></i>
-                                    <p>Registrar usuario</p>
+                                    <p>User register</p>
                                 </a>
                             </li>
                             <?php
@@ -104,7 +104,7 @@
                             ">
                             <a href="#" class="nav-link">
                                 <i class="fa fa-th nav-icon"></i>
-                                <p>Cotizaciones</p>
+                                <p>Quotes</p>
                                 <i class="right fa fa-angle-left"></i>
                             </a>
                             <ul class="nav nav-treeview">
@@ -191,7 +191,7 @@
                             ?>
                                ">
                                 <i class="fa fa-check-circle-o nav-icon"></i>
-                                <p>Cotizaciones completadas</p>
+                                <p>Completed quotes</p>
                             </a>
                         </li>
                         <?php
@@ -206,7 +206,7 @@
                                 ?>
                                    ">
                                     <i class="fa fa-plus nav-icon"></i>
-                                    <p>Nueva cotizacion</p>
+                                    <p>New quote</p>
                                 </a>
                             </li>
                             <?php

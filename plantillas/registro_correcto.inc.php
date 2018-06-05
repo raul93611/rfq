@@ -28,7 +28,7 @@ if($cargo != 1){
                     <div class="small-box bg-success-gradient">
                         <div class="inner">
                             <h1><i class="fa fa-3x fa-check-circle"></i> </h1>
-                            <p>El usuario ha sido registrado exitosamente.</p>
+                            <p>Successful registration.</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-person-add"></i>

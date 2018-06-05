@@ -30,11 +30,11 @@ include_once 'plantillas/validacion_login.inc.php';
             <!-- /.login-logo -->
             <div class="card">
                 <div class="card-body login-card-body">
-                    <p class="login-box-msg">Inicia sesión</p>
+                    <p class="login-box-msg">Please log in</p>
 
                     <form action="<?php echo SERVIDOR; ?>" method="post">
                         <div class="form-group has-feedback">
-                            <input type="text" class="form-control" name="nombre_usuario" placeholder="Nombre de usuario" autofocus required
+                            <input type="text" class="form-control" name="nombre_usuario" placeholder="Username" autofocus required
                             <?php
                             if (isset($_POST['iniciar_sesion']) && isset($_POST['nombre_usuario']) && !empty($_POST['nombre_usuario'])) {
                                 echo 'value="' . $_POST['nombre_usuario'] . '"';
@@ -44,7 +44,7 @@ include_once 'plantillas/validacion_login.inc.php';
                             <span class="fa fa-user form-control-feedback"></span>
                         </div>
                         <div class="form-group has-feedback">
-                            <input type="password" class="form-control" name="password" placeholder="Contraseña" required>
+                            <input type="password" class="form-control" name="password" placeholder="Password" required>
                             <span class="fa fa-lock form-control-feedback"></span>
                             <?php
                             if (isset($_POST['iniciar_sesion'])) {
@@ -54,7 +54,7 @@ include_once 'plantillas/validacion_login.inc.php';
                         </div>
                         <div class="row">
                             <div class="col-12">
-                                <button type="submit" class="btn btn-primary btn-block btn-flat" name="iniciar_sesion">Iniciar sesión</button>
+                                <button type="submit" class="btn btn-primary btn-block btn-flat" name="iniciar_sesion">Log in</button>
                             </div>
                         </div>
                     </form>

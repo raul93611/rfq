@@ -22,7 +22,7 @@ header($_SERVER['SERVER_PROTOCOL'] . '404Not Found', true, 404);
                 <div class="col-md-8">
                     <div class="jumbotron bg-danger text-white">
                         <h1>ERROR: 404</h1>
-                        <p>La página no existe.</p>
+                        <p>Page not found.</p>
                     </div>
                 </div>
                 <div class="col-md-2">

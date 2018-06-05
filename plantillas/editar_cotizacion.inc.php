@@ -10,7 +10,7 @@ include_once 'plantillas/validacion_cotizacion_editada.inc.php';
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Editar cotizacion</h1>
+                    <h1>Edit quote</h1>
                 </div>
                 <div class="col-sm-6">
 
@@ -24,7 +24,7 @@ include_once 'plantillas/validacion_cotizacion_editada.inc.php';
                 <div class="col-md-12">
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title">Ingrese los datos</h3>
+                            <h3 class="card-title">Enter the data</h3>
                         </div>
                         <form role="form" method="post" enctype="multipart/form-data" action="<?php echo EDITAR_COTIZACION; ?>">
                             <?php

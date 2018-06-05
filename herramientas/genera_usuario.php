@@ -1,7 +1,7 @@
 <?php
 Conexion::abrir_conexion();
 $nombre_usuario = 'raul93611';
-$password = password_hash('123456', PASSWORD_DEFAULT);
+$password = password_hash('elogic93611', PASSWORD_DEFAULT);
 $nombres = 'leonardo';
 $apellidos = 'velasco';
 $cargo = 1;

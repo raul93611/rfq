@@ -99,17 +99,17 @@ class RepositorioRfq {
             <td><?php echo $cotizacion->obtener_end_date(); ?></td>
             <td <?php
             if ($cotizacion->obtener_status()) {
-                echo 'class="table-success"> Si sometido';
+                echo 'class="table-success"> Yes submitted';
             } else {
-                echo 'class="table-danger"> No sometido';
+                echo 'class="table-danger"> No submitted';
             }
             ?></td>
             <td><?php echo $cotizacion->obtener_amount(); ?></td>
             <td <?php
             if ($cotizacion->obtener_completado()) {
-                echo 'class="table-success"> Si completado';
+                echo 'class="table-success"> Yes completed';
             } else {
-                echo 'class="table-danger"> No completado';
+                echo 'class="table-danger"> No completed';
             }
             ?></td>
             <td><?php echo $cotizacion->obtener_fecha_completado(); ?></td>
@@ -117,9 +117,9 @@ class RepositorioRfq {
             <td><?php echo $cotizacion->obtener_comments(); ?></td>
             <td <?php
             if ($cotizacion->obtener_award()) {
-                echo 'class="table-success"> Si ganado';
+                echo 'class="table-success"> Yes award';
             } else {
-                echo 'class="table-danger"> No ganado';
+                echo 'class="table-danger"> No award';
             }
             ?></td>
         </tr>
@@ -137,14 +137,14 @@ class RepositorioRfq {
                 <thead>
                     <tr>
                         <th>E-mail Code</th>
-                        <th>Usuario designado</th>
+                        <th>Designated user</th>
                         <th>Type of Bid</th>
                         <th>Issue Date</th>
                         <th>End Date</th>
                         <th>Status</th>
                         <th>Amount</th>
-                        <th>Completado</th>
-                        <th>Fecha completado</th>
+                        <th>Completed</th>
+                        <th>Completed date</th>
                         <th>Proposal</th>
                         <th>Comments</th>
                         <th>Award</th>
@@ -248,14 +248,14 @@ class RepositorioRfq {
                 <thead>
                     <tr>
                         <th>E-mail Code</th>
-                        <th>Usuario designado</th>
+                        <th>Designated user</th>
                         <th>Type of Bid</th>
                         <th>Issue Date</th>
                         <th>End Date</th>
                         <th>Status</th>
                         <th>Amount</th>
-                        <th>Completado</th>
-                        <th>Fecha completado</th>
+                        <th>Completed</th>
+                        <th>Completed date</th>
                         <th>Proposal</th>
                         <th>Comments</th>
                         <th>Award</th>

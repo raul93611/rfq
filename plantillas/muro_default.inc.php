@@ -8,7 +8,7 @@ list($nombres_usuario, $cotizaciones_completadas, $cotizaciones_completadas_pasa
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0 text-dark">Inicio</h1>
+                    <h1 class="m-0 text-dark">Home</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <!--<ol class="breadcrumb float-sm-right">
@@ -109,7 +109,7 @@ list($nombres_usuario, $cotizaciones_completadas, $cotizaciones_completadas_pasa
                     <div class="card">
                         <div class="card-header no-border">
                             <div class="d-flex justify-content-between">
-                                <h3 class="card-title">Completados</h3>
+                                <h3 class="card-title">Completed</h3>
                             </div>
                         </div>
                         <div class="card-body">
@@ -121,11 +121,11 @@ list($nombres_usuario, $cotizaciones_completadas, $cotizaciones_completadas_pasa
 
                             <div class="d-flex flex-row justify-content-end">
                                 <span class="mr-2">
-                                    <i class="fa fa-square text-primary"></i> Mes actual
+                                    <i class="fa fa-square text-primary"></i> Current month
                                 </span>
 
                                 <span>
-                                    <i class="fa fa-square text-gray"></i> Mes pasado
+                                    <i class="fa fa-square text-gray"></i> Last month
                                 </span>
                             </div>
                         </div>
@@ -134,7 +134,7 @@ list($nombres_usuario, $cotizaciones_completadas, $cotizaciones_completadas_pasa
                     <div class="card">
                         <div class="card-header no-border">
                             <div class="d-flex justify-content-between">
-                                <h3 class="card-title">Sometidas</h3>
+                                <h3 class="card-title">Submitted</h3>
                             </div>
                         </div>
                         <div class="card-body">
@@ -146,11 +146,11 @@ list($nombres_usuario, $cotizaciones_completadas, $cotizaciones_completadas_pasa
 
                             <div class="d-flex flex-row justify-content-end">
                                 <span class="mr-2">
-                                    <i class="fa fa-square text-primary"></i> Mes actual
+                                    <i class="fa fa-square text-primary"></i> Current month
                                 </span>
 
                                 <span>
-                                    <i class="fa fa-square text-gray"></i> Mes pasado
+                                    <i class="fa fa-square text-gray"></i> Last month
                                 </span>
                             </div>
                         </div>
@@ -171,7 +171,7 @@ list($nombres_usuario, $cotizaciones_completadas, $cotizaciones_completadas_pasa
                     <div class="card">
                         <div class="card-header no-border">
                             <div class="d-flex justify-content-between">
-                                <h3 class="card-title">Ganadas</h3>
+                                <h3 class="card-title">Awards</h3>
                             </div>
                         </div>
                         <div class="card-body">
@@ -183,11 +183,11 @@ list($nombres_usuario, $cotizaciones_completadas, $cotizaciones_completadas_pasa
 
                             <div class="d-flex flex-row justify-content-end">
                                 <span class="mr-2">
-                                    <i class="fa fa-square text-primary"></i> Mes actual
+                                    <i class="fa fa-square text-primary"></i> Current month
                                 </span>
 
                                 <span>
-                                    <i class="fa fa-square text-gray"></i> Mes pasado
+                                    <i class="fa fa-square text-gray"></i> Last month
                                 </span>
                             </div>
                         </div>
