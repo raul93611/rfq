@@ -16,16 +16,23 @@
         <label for="end_date">End date:</label>
         <input type="text" class="form-control" id="end_date" disabled value="<?php echo $cotizacion_recuperada->obtener_end_date(); ?>">
     </div>
-    <div class="form-check">
-        <input type="checkbox" class="form-check-input" name="status" value="si" 
-        <?php
-        if ($cotizacion_recuperada->obtener_status()) {
-            echo 'checked';
-        }
+    <?php
+    if ($cargo == 3) {
         ?>
-               id="status">
-        <label class="form-check-label" for="status">Submitted</label>
-    </div>
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" name="status" value="si" 
+            <?php
+            if ($cotizacion_recuperada->obtener_status()) {
+                echo 'checked';
+            }
+            ?>
+                   id="status">
+            <label class="form-check-label" for="status">Submitted</label>
+        </div>
+        <?php
+    }
+    ?>
+
     <div class="form-check
     <?php
     if ($cotizacion_recuperada->obtener_completado()) {
