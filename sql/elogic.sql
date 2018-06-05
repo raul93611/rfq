@@ -24,7 +24,6 @@ CREATE TABLE rfq(
         status TINYINT NOT NULL,
         completado TINYINT NOT NULL,
         amount VARCHAR(50),
-        proposal INT,
         comments VARCHAR(100),
         award TINYINT NOT NULL,
         fecha_completado DATE,
@@ -52,3 +51,5 @@ CREATE TABLE equipo(
             ON UPDATE CASCADE
             ON DELETE RESTRICT
 );
+
+ALTER TABLE rfq AUTO_INCREMENT = 300;
