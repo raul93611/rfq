@@ -13,12 +13,16 @@ class Rfq {
     private $status;
     private $completado;
     private $amount;
-    private $proposal;
     private $comments;
     private $award;
     private $fecha_completado;
+    private $payment_terms;
+    private $address;
+    private $ship_to;
+    private $expiration_date;
+    private $ship_via;
 
-    public function __construct($id, $id_usuario, $usuario_designado, $canal, $email_code, $type_of_bid, $issue_date, $end_date, $status, $completado, $amount, $proposal, $comments, $award, $fecha_completado) {
+    public function __construct($id, $id_usuario, $usuario_designado, $canal, $email_code, $type_of_bid, $issue_date, $end_date, $status, $completado, $amount, $comments, $award, $fecha_completado, $payment_terms, $address, $ship_to, $expiration_date, $ship_via) {
         $this->id = $id;
         $this->id_usuario = $id_usuario;
         $this->usuario_designado = $usuario_designado;
@@ -30,10 +34,14 @@ class Rfq {
         $this->status = $status;
         $this->completado = $completado;
         $this->amount = $amount;
-        $this->proposal = $proposal;
         $this->comments = $comments;
         $this->award = $award;
         $this->fecha_completado = $fecha_completado;
+        $this->payment_terms = $payment_terms;
+        $this->address = $address;
+        $this->ship_to = $ship_to;
+        $this->expiration_date = $expiration_date;
+        $this->ship_via = $ship_via;
     }
 
     public function obtener_id() {
@@ -79,10 +87,6 @@ class Rfq {
     public function obtener_amount() {
         return $this->amount;
     }
-    
-    public function obtener_proposal(){
-        return $this-> proposal;
-    }
 
     public function obtener_comments() {
         return $this->comments;
@@ -94,6 +98,26 @@ class Rfq {
     
     public function obtener_fecha_completado(){
         return $this->fecha_completado;
+    }
+    
+    public function obtener_payment_terms(){
+        return $this->payment_terms;
+    }
+    
+    public function obtener_address(){
+        return $this->address;
+    }
+    
+    public function obtener_ship_to(){
+        return $this->ship_to;
+    }
+    
+    public function obtener_expiration_date(){
+        return $this->expiration_date;
+    }
+    
+    public function obtener_ship_via(){
+        return $this->ship_via;
     }
 
 }
