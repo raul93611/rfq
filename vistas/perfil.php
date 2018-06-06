@@ -48,6 +48,9 @@ switch ($gestor_actual) {
             case 'completados':
                 include_once 'plantillas/completados.inc.php';
                 break;
+            case 'add_equipment':
+                include_once 'plantillas/add_equipment.inc.php';
+                break;
             default :
                 include_once 'plantillas/cotizaciones.inc.php';
         }

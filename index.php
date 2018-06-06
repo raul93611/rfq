@@ -17,6 +17,9 @@ include_once 'app/ValidadorCotizacion.inc.php';
 include_once 'app/ValidadorCotizacionRegistro.inc.php';
 include_once 'app/ValidadorCotizacionEdicion.inc.php';
 
+include_once 'app/Equipo.inc.php';
+include_once 'app/RepositorioEquipo.inc.php';
+
 $componentes_url = parse_url($_SERVER['REQUEST_URI']);
 $ruta = $componentes_url['path'];
 
@@ -92,6 +95,9 @@ if ($partes_ruta[0] == 'rfq') {
                     break;
                 case 'completados':
                     $cotizacion = 'completados';
+                    break;
+                case 'add_equipment':
+                    $cotizacion = 'add_equipment';
                     break;
             }
         } else if ($partes_ruta[1] == 'descarga') {

@@ -4,6 +4,7 @@ if (!ControlSesion::sesion_iniciada()) {
 }
 
 include_once 'plantillas/validacion_cotizacion_editada.inc.php';
+include_once 'plantillas/validacion_registro_equipo.inc.php';
 ?>
 <div class="content-wrapper">
     <section class="content-header">
@@ -28,7 +29,7 @@ include_once 'plantillas/validacion_cotizacion_editada.inc.php';
                         </div>
                         <form role="form" method="post" enctype="multipart/form-data" action="<?php echo EDITAR_COTIZACION; ?>">
                             <?php
-                            if (isset($_POST['editar'])) {
+                            if (isset($_POST['editar']) || isset($_POST['cancelar']) || isset($_POST['guardar_equipo'])) {
                                 Conexion::abrir_conexion();
                                 $id_rfq = $_POST['id_rfq'];
                                 $cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
