@@ -103,6 +103,10 @@
         </select>
     </div>
     <?php
+    RepositorioEquipo::escribir_equipos($cotizacion_recuperada-> obtener_id());
+    ?>
+    <br>
+    <?php
     if ($cargo == 3) {
         ?>
         <div class="form-check">
