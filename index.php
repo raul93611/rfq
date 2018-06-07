@@ -60,7 +60,7 @@ if ($partes_ruta[0] == 'rfq') {
                     $ruta_elegida = 'scripts/eliminar_usuario.php';
                     break;
             }
-        }else if($partes_ruta[1] == 'proposal'){
+        } else if ($partes_ruta[1] == 'proposal') {
             $id_rfq = $partes_ruta[2];
             $ruta_elegida = 'scripts/proposal.php';
         }
@@ -96,17 +96,33 @@ if ($partes_ruta[0] == 'rfq') {
                 case 'editar_cotizacion':
                     $cotizacion = 'editar_cotizacion';
                     break;
-                case 'completados':
-                    $cotizacion = 'completados';
-                    break;
                 case 'add_equipment':
                     $cotizacion = 'add_equipment';
                     break;
             }
-        } else if ($partes_ruta[1] == 'descarga') {
-            $id_rfq = $partes_ruta[2];
-            $archivo = $partes_ruta[3];
-            $ruta_elegida = 'scripts/descargar.php';
+        } else if ($partes_ruta[1] == 'perfil' && $partes_ruta[2] == 'completados') {
+            $gestor_actual = 'completados';
+            $ruta_elegida = 'vistas/perfil.php';
+            switch ($partes_ruta[3]) {
+                case 'gsa_buy':
+                    $cotizacion = 'gsa_buy_completados';
+                    break;
+                case 'fedbid':
+                    $cotizacion = 'fedbid_completados';
+                    break;
+                case 'emails':
+                    $cotizacion = 'emails_completados';
+                    break;
+                case 'findfrp':
+                    $cotizacion = 'findfrp_completados';
+                    break;
+                case 'embassies':
+                    $cotizacion = 'embassies_completados';
+                    break;
+                case 'fbo':
+                    $cotizacion = 'fbo_completados';
+                    break;
+            }
         }
     }
 }

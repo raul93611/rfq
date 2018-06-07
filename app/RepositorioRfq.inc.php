@@ -52,11 +52,11 @@ class RepositorioRfq {
             try {
 
                 if ($cargo < 4) {
-                    $sql = "SELECT * FROM rfq WHERE canal = :canal ORDER BY end_date DESC";
+                    $sql = "SELECT * FROM rfq WHERE canal = :canal AND completado = 0 ORDER BY end_date DESC";
                     $sentencia = $conexion->prepare($sql);
                     $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
                 } else if ($cargo == 4) {
-                    $sql = "SELECT * FROM rfq WHERE canal = :canal AND usuario_designado = :id_usuario ORDER BY end_date DESC";
+                    $sql = "SELECT * FROM rfq WHERE canal = :canal AND usuario_designado = :id_usuario AND completado = 0 ORDER BY end_date DESC";
                     $sentencia = $conexion->prepare($sql);
                     $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
                     $sentencia->bindParam(':id_usuario', $id_usuario, PDO::PARAM_STR);
@@ -109,13 +109,6 @@ class RepositorioRfq {
             }
             ?></td>
             <td><?php echo $cotizacion->obtener_amount(); ?></td>
-            <td <?php
-            if ($cotizacion->obtener_completado()) {
-                echo 'class="table-success"> Yes completed';
-            } else {
-                echo 'class="table-danger"> No completed';
-            }
-            ?></td>
             <td><?php echo $cotizacion->obtener_fecha_completado(); ?></td>
             <td><?php echo $cotizacion->obtener_id(); ?></td>
             <td><?php echo $cotizacion->obtener_comments(); ?></td>
@@ -147,7 +140,6 @@ class RepositorioRfq {
                         <th>End Date</th>
                         <th>Status</th>
                         <th>Amount</th>
-                        <th>Completed</th>
                         <th>Completed date</th>
                         <th>Proposal</th>
                         <th>Comments</th>
@@ -221,13 +213,14 @@ class RepositorioRfq {
         return $cotizacion_editada;
     }
 
-    public static function obtener_cotizaciones_completadas($conexion) {
+    public static function obtener_cotizaciones_completadas_por_canal($conexion, $canal) {
         $cotizaciones = [];
 
         if (isset($conexion)) {
             try {
-                $sql = "SELECT * FROM rfq WHERE completado = 1 ORDER BY fecha_completado DESC";
+                $sql = "SELECT * FROM rfq WHERE completado = 1 AND canal = :canal ORDER BY fecha_completado DESC";
                 $sentencia = $conexion->prepare($sql);
+                $sentencia-> bindParam(':canal', $canal, PDO::PARAM_STR);
                 $sentencia->execute();
 
                 $resultado = $sentencia->fetchAll();
@@ -244,9 +237,9 @@ class RepositorioRfq {
         return $cotizaciones;
     }
 
-    public static function escribir_cotizaciones_completadas() {
+    public static function escribir_cotizaciones_completadas_por_canal($canal) {
         Conexion::abrir_conexion();
-        $cotizaciones = self::obtener_cotizaciones_completadas(Conexion::obtener_conexion());
+        $cotizaciones = self::obtener_cotizaciones_completadas_por_canal(Conexion::obtener_conexion(), $canal);
         Conexion::cerrar_conexion();
 
         if (count($cotizaciones)) {
@@ -261,7 +254,6 @@ class RepositorioRfq {
                         <th>End Date</th>
                         <th>Status</th>
                         <th>Amount</th>
-                        <th>Completed</th>
                         <th>Completed date</th>
                         <th>Proposal</th>
                         <th>Comments</th>

@@ -1,4 +1,5 @@
 <?php
+
 if (!ControlSesion::sesion_iniciada()) {
     Redireccion::redirigir1(SERVIDOR);
 }
@@ -16,6 +17,7 @@ include_once 'plantillas/barra_lateral.inc.php';
 ?>
 
 <?php
+
 switch ($gestor_actual) {
     case '':
         include_once 'plantillas/muro.inc.php';
@@ -45,9 +47,6 @@ switch ($gestor_actual) {
             case 'editar_cotizacion':
                 include_once 'plantillas/editar_cotizacion.inc.php';
                 break;
-            case 'completados':
-                include_once 'plantillas/completados.inc.php';
-                break;
             case 'add_equipment':
                 include_once 'plantillas/add_equipment.inc.php';
                 break;
@@ -55,9 +54,13 @@ switch ($gestor_actual) {
                 include_once 'plantillas/cotizaciones.inc.php';
         }
         break;
+    case 'completados':
+        include_once 'plantillas/completados.inc.php';
+        break;
 }
 ?>
 <?php
+
 include_once 'plantillas/documento_cierre.inc.php';
 ?>
 
