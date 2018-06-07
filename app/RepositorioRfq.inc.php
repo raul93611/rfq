@@ -251,7 +251,10 @@ class RepositorioRfq {
         ?>
         <tr>
             <td>
-                <?php echo $cotizacion-> obtener_email_code(); ?>
+                <form method="post" action="<?php echo EDITAR_COTIZACION; ?>">
+                    <input type="hidden" name="id_rfq" value="<?php echo $cotizacion->obtener_id(); ?>">
+                    <button type="submit" class="btn btn-sm btn-secondary" name="editar"><?php echo $cotizacion->obtener_email_code(); ?></button>
+                </form>
             </td>
             <td>
                 <?php
