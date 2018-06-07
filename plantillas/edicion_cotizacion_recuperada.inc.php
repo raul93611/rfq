@@ -153,6 +153,7 @@
     <input type="hidden" name="expiration_date" value="<?php echo $cotizacion_recuperada-> obtener_expiration_date(); ?>">
 </div>
 <div class="card-footer">
+    <a class="btn btn-primary" href="<?php echo PROPOSAL . '/' . $cotizacion_recuperada-> obtener_id(); ?>" target="_blank">Generate</a>
     <button type="submit" onclick="alert('Estas seguro?');" class="btn btn-primary" name="guardar_cambios_cotizacion">Save</button>
     <button type="submit" class="btn btn-primary float-right" name="registrar_equipo" formaction="<?php echo ADD_EQUIPMENT; ?>">Add equipment</button
 </div>
