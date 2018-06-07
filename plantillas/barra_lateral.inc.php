@@ -71,15 +71,7 @@
                         </li>-->
                     </ul>
                 </li>
-                <!--<li class="nav-item">
-                    <a href="pages/widgets.html" class="nav-link">
-                        <i class="nav-icon fa fa-th"></i>
-                        <p>
-                            Widgets
-                            <span class="right badge badge-danger">New</span>
-                        </p>
-                    </a>
-                </li>-->
+                <!---->
                 <li class="nav-item has-treeview 
                 <?php
                 if ($gestor_actual == 'cotizaciones' || $gestor_actual == 'completados') {
@@ -287,7 +279,6 @@
                             <?php
                         }
                         ?>
-
                         <!--<li class="nav-item">
                             <a href="pages/charts/inline.html" class="nav-link">
                                 <i class="fa fa-circle-o nav-icon"></i>

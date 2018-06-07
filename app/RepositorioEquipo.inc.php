@@ -6,13 +6,11 @@ class RepositorioEquipo {
         $equipo_insertado = false;
         if (isset($conexion)) {
             try {
-                $sql = 'INSERT INTO equipo(id_rfq, brand, part_number, description, quantity, unit_price, total) VALUES(:id_rfq, :brand, :part_number, :description, :quantity, :unit_price, :total)';
+                $sql = 'INSERT INTO equipo(id_rfq, description, quantity, unit_price, total) VALUES(:id_rfq, :description, :quantity, :unit_price, :total)';
 
                 $sentencia = $conexion->prepare($sql);
 
                 $sentencia->bindParam(':id_rfq', $equipo->obtener_id_rfq(), PDO::PARAM_STR);
-                $sentencia->bindParam(':brand', $equipo->obtener_brand(), PDO::PARAM_STR);
-                $sentencia->bindParam(':part_number', $equipo->obtener_part_number(), PDO::PARAM_STR);
                 $sentencia->bindParam(':description', $equipo->obtener_description(), PDO::PARAM_STR);
                 $sentencia->bindParam(':quantity', $equipo->obtener_quantity(), PDO::PARAM_STR);
                 $sentencia->bindParam(':unit_price', $equipo->obtener_unit_price(), PDO::PARAM_STR);
@@ -45,7 +43,7 @@ class RepositorioEquipo {
 
                 if (count($resultado)) {
                     foreach ($resultado as $fila) {
-                        $equipos[] = new Equipo($fila['id'], $fila['id_rfq'], $fila['brand'], $fila['part_number'], $fila['description'], $fila['quantity'], $fila['unit_price'], $fila['total']);
+                        $equipos[] = new Equipo($fila['id'], $fila['id_rfq'], $fila['description'], $fila['quantity'], $fila['unit_price'], $fila['total']);
                     }
                 }
             } catch (PDOException $ex) {
@@ -61,8 +59,7 @@ class RepositorioEquipo {
         }
         ?>
         <tr>
-            <td><?php echo $equipo->obtener_brand(); ?></td>
-            <td><?php echo $equipo->obtener_part_number(); ?></td>
+            <td><?php echo nl2br($equipo-> obtener_description()); ?></td>
         </tr>
         <?php
     }
@@ -78,8 +75,7 @@ class RepositorioEquipo {
             <table class="table table-bordered table-hover">
                 <thead class="bg-warning">
                     <tr>
-                        <th>Brand</th>
-                        <th>Part #</th>
+                        <th>Description</th>
                     </tr>
                 </thead>
                 <tbody id="myTable">

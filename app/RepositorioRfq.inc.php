@@ -119,6 +119,12 @@ class RepositorioRfq {
                 echo 'class="table-danger"> No award';
             }
             ?></td>
+            <td class="text-center">
+                <form method="post" action="<?php echo ADD_EQUIPMENT; ?>">
+                    <input type="hidden" name="id_rfq" value="<?php echo $cotizacion->obtener_id(); ?>">
+                    <button type="submit" class="btn btn-sm btn-primary" name="registrar_equipo"><i class="fa fa-plus-circle"></i></button>
+                </form>
+            </td>
         </tr>
         <?php
     }
@@ -134,16 +140,17 @@ class RepositorioRfq {
                 <thead>
                     <tr>
                         <th>E-mail Code</th>
-                        <th>Designated user</th>
+                        <th>Designated<br>user</th>
                         <th>Type of Bid</th>
-                        <th>Issue Date</th>
-                        <th>End Date</th>
+                        <th>Issue<br>Date</th>
+                        <th>End<br>Date</th>
                         <th>Status</th>
                         <th>Amount</th>
-                        <th>Completed date</th>
+                        <th>Completed<br>date</th>
                         <th>Proposal</th>
                         <th>Comments</th>
                         <th>Award</th>
+                        <th>Add<br>Equipment</th>
                     </tr>
                 </thead>
                 <tbody id="myTable">
@@ -236,6 +243,49 @@ class RepositorioRfq {
         }
         return $cotizaciones;
     }
+    
+    public static function escribir_cotizacion_completada($cotizacion) {
+        if (!isset($cotizacion)) {
+            return;
+        }
+        ?>
+        <tr>
+            <td>
+                <?php echo $cotizacion-> obtener_email_code(); ?>
+            </td>
+            <td>
+                <?php
+                Conexion::abrir_conexion();
+                $usuario = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), $cotizacion->obtener_usuario_designado());
+                Conexion::cerrar_conexion();
+                echo $usuario->obtener_nombre_usuario();
+                ?>
+            </td>
+            <td><?php echo $cotizacion->obtener_type_of_bid(); ?></td>
+            <td><?php echo $cotizacion->obtener_issue_date(); ?></td>
+            <td><?php echo $cotizacion->obtener_end_date(); ?></td>
+            <td <?php
+            if ($cotizacion->obtener_status()) {
+                echo 'class="table-success"> Yes submitted';
+            } else {
+                echo 'class="table-danger"> No submitted';
+            }
+            ?></td>
+            <td><?php echo $cotizacion->obtener_amount(); ?></td>
+            <td><?php echo $cotizacion->obtener_fecha_completado(); ?></td>
+            <td><?php echo $cotizacion->obtener_id(); ?></td>
+            <td><?php echo $cotizacion->obtener_comments(); ?></td>
+            <td <?php
+            if ($cotizacion->obtener_award()) {
+                echo 'class="table-success"> Yes award';
+            } else {
+                echo 'class="table-danger"> No award';
+            }
+            ?></td>
+            <td class="text-center"><a class="btn btn-primary btn-sm" href="<?php echo PROPOSAL . '/' . $cotizacion-> obtener_id(); ?>" target="_blank"><i class="fa fa-copy"></i></a></td>
+        </tr>
+        <?php
+    }
 
     public static function escribir_cotizaciones_completadas_por_canal($canal) {
         Conexion::abrir_conexion();
@@ -258,12 +308,13 @@ class RepositorioRfq {
                         <th>Proposal</th>
                         <th>Comments</th>
                         <th>Award</th>
+                        <th>Proposal</th>
                     </tr>
                 </thead>
                 <tbody id="myTable">
                     <?php
                     foreach ($cotizaciones as $cotizacion) {
-                        self::escribir_cotizacion($cotizacion);
+                        self::escribir_cotizacion_completada($cotizacion);
                     }
                     ?>
                 </tbody>

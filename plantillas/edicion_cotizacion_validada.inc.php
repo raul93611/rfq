@@ -151,7 +151,7 @@
     </div>  
 </div>
 <div class="card-footer">
-    <button type="submit"  onclick="alert('Estas seguro?');" class="btn btn-primary" name="guardar_cambios_cotizacion">Save</button>
+    <button type="submit" onclick="alert('Estas seguro?');" class="btn btn-primary" name="guardar_cambios_cotizacion">Save</button>
 </div>
 
 

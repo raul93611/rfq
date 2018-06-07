@@ -42,8 +42,6 @@ CREATE TABLE rfq(
 CREATE TABLE equipo(
         id INT NOT NULL AUTO_INCREMENT UNIQUE,
         id_rfq INT NOT NULL,
-        brand VARCHAR(100) NOT NULL,
-        part_number VARCHAR(100) NOT NULL,
         description TEXT CHARACTER SET utf8 NOT NULL,
         quantity INT NOT NULL,
         unit_price DECIMAL(10,2) NOT NULL,
