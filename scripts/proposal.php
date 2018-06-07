@@ -21,7 +21,7 @@ table, th, td {
 </style>
 </head>';
 $html .= '<body><div>
-    <img style="float:right;width:270px;height:170px;margin-left:15px;" src="' . IMG . '/elogic_logo.png">
+    <img style="float:right;width:270px;height:170px;margin-left:15px;" src="' . RUTA_IMG . '/elogic_logo.png">
     <b>E-logic, Inc.</b><br>
     1025 Connecticut Ave NW<br>
     Suite 1000<br>
@@ -87,7 +87,7 @@ if(count($equipos)){
         $equipo = $equipos[$i];
         $html .= '<tr>
     <td>' . $a . '</td>
-    <td><b>Brand:</b><br>' . $equipo-> obtener_brand() . '<br><b>Part #:</b><br>' . $equipo-> obtener_part_number() . '<br><b>Description:</b><br>' . nl2br($equipo-> obtener_description()) . '</td>
+    <td>' . nl2br($equipo-> obtener_description()) . '</td>
     <td>' . $equipo-> obtener_quantity() . '</td>
     <td>' . $equipo-> obtener_unit_price() . '</td>
     <td>' . $equipo-> obtener_total() . '</td>
