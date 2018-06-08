@@ -9,6 +9,7 @@ $(function () {
   var cotizaciones_no_sometidas = document.getElementById('cotizaciones_no_sometidas').value;
   var cotizaciones_no_sometidas_pasadas = document.getElementById('cotizaciones_no_sometidas_pasadas').value;
   var cotizaciones_mes = document.getElementById('cotizaciones_mes').value;
+  var monto_cotizaciones_mes = document.getElementById('monto_cotizaciones_mes').value;
   
   nombres_usuario = jQuery.parseJSON(nombres_usuario);
   cotizaciones_completadas = jQuery.parseJSON(cotizaciones_completadas);
@@ -18,6 +19,7 @@ $(function () {
   cotizaciones_no_sometidas = jQuery.parseJSON(cotizaciones_no_sometidas);
   cotizaciones_no_sometidas_pasadas = jQuery.parseJSON(cotizaciones_no_sometidas_pasadas);
   cotizaciones_mes = jQuery.parseJSON(cotizaciones_mes);
+  monto_cotizaciones_mes = jQuery.parseJSON(monto_cotizaciones_mes);
   
   var ticksStyle = {
     fontColor: '#495057',
@@ -281,7 +283,70 @@ $(function () {
       }
     }
   })
-  
+
+var $montoganadosAnualesChart = $('#monto_ganados_anual_chart')
+  var montoganadosAnualesChart  = new Chart($montoganadosAnualesChart, {
+    type   : 'bar',
+    data   : {
+      labels  : ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
+      datasets: [
+        {
+          backgroundColor: '#007bff',
+          borderColor    : '#007bff',
+          data           : monto_cotizaciones_mes/*[1,2,3,4,5,6,7,8,9,1,2,0]*/
+        }/*,
+        {
+          backgroundColor: '#ced4da',
+          borderColor    : '#ced4da',
+          data           : cotizaciones_completadas_pasadas
+        }*/
+      ]
+    },
+    options: {
+      maintainAspectRatio: false,
+      tooltips           : {
+        mode     : mode,
+        intersect: intersect
+      },
+      hover              : {
+        mode     : mode,
+        intersect: intersect
+      },
+      legend             : {
+        display: false
+      },
+      scales             : {
+        yAxes: [{
+          // display: false,
+          gridLines: {
+            display      : true,
+            lineWidth    : '4px',
+            color        : 'rgba(0, 0, 0, .2)',
+            zeroLineColor: 'transparent'
+          },
+          ticks    : $.extend({
+            beginAtZero: true,
+
+            // Include a dollar sign in the ticks
+            callback: function (value, index, values) {
+              if (value >= 1000) {
+                value /= 1000
+                value += 'k'
+              }
+              return '$' + value
+            }
+          }, ticksStyle)
+        }],
+        xAxes: [{
+          display  : true,
+          gridLines: {
+            display: false
+          },
+          ticks    : ticksStyle
+        }]
+      }
+    }
+  })  
 
   var $visitorsChart = $('#visitors-chart')
   var visitorsChart  = new Chart($visitorsChart, {

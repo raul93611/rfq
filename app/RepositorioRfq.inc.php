@@ -348,6 +348,31 @@ class RepositorioRfq {
         }
         return $cotizaciones_mes;
     }
+    
+    public static function obtener_monto_cotizaciones_ganadas_por_mes($conexion){
+        $monto_cotizaciones_mes = array();
+        
+        if(isset($conexion)){
+            try{
+                for($i = 1;$i <= 12; $i++){
+                    $sql = 'SELECT SUM(amount) as monto FROM rfq WHERE award = 1 AND MONTH(fecha_completado) =' . $i . ' AND YEAR(fecha_completado) = YEAR(CURDATE())';
+                    $sentencia = $conexion-> prepare($sql);
+                    $sentencia-> execute();
+                    $resultado = $sentencia-> fetch();
+                    
+                    if(is_null($resultado['monto'])){
+                        $monto_cotizaciones_mes[$i-1] = 0;
+                    }else{
+                        $monto_cotizaciones_mes[$i-1] = $resultado['monto'];
+                    }
+                  
+                }
+            } catch (PDOException $ex) {
+                print 'ERROR:' . $ex->getMessage() . '<br>';
+            }
+        }
+        return $monto_cotizaciones_mes;
+    }
 
 }
 ?>
