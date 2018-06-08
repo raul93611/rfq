@@ -14,9 +14,21 @@ $html = '<!DOCTYPE html>
 <html>
 <head>
 <style>
-table, th, td {
+body{
+    font-family: Arial, Helvetica, sans-serif;
+}
+th, td {
     border: 1px solid black;
     border-collapse: collapse;
+}
+th,td{
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+td{
+    font-size: 12px;
 }
 </style>
 </head>';
@@ -31,13 +43,13 @@ $html .= '<body><div>
     http://www.e-logic.us
 </div>
 <div style="text-align:center;">
-    <h3>Proposal</h3>
+    <h1>Proposal</h1>
 </div>';
 
 $html .= '<table style="width:100%">
   <tr>
-    <th>ADDRESS</th>
-    <th>SHIP TO</th> 
+    <th style="width:50%">ADDRESS</th>
+    <th style="width:50%">SHIP TO</th> 
   </tr>
   <tr>
     <td>' . nl2br($cotizacion-> obtener_address()) .'</td>
@@ -52,9 +64,9 @@ $html .= '<table style="width:100%">
     <th>EXPIRATION DATE</th>
   </tr>
   <tr>
-    <td>' . $cotizacion-> obtener_id() . '</td>
-    <td>' . $cotizacion-> obtener_fecha_completado() . '</td>
-    <td>' . $cotizacion-> obtener_expiration_date() . '</td>
+    <td style="text-align:center;">' . $cotizacion-> obtener_id() . '</td>
+    <td style="text-align:center;">' . $cotizacion-> obtener_fecha_completado() . '</td>
+    <td style="text-align:center;">' . $cotizacion-> obtener_expiration_date() . '</td>
   </tr>
 </table>
 <br>
@@ -63,13 +75,15 @@ $html .= '<table style="width:100%">
     <th>SHIP VIA</th>
     <th>CONTRACT NUMBER</th> 
     <th>SALES REP</th>
-    <th>PAYMENT_TERMS</th>
+    <th>E-MAIL</th>
+    <th>PAYMENT TERMS</th>
   </tr>
   <tr>
-    <td>' . $cotizacion-> obtener_ship_via() . '</td>
-    <td>' . $cotizacion-> obtener_email_code() . '</td>
-    <td>' . $usuario_designado-> obtener_nombre_usuario() . '</td>
-    <td>' . $cotizacion-> obtener_payment_terms() . '</td>
+    <td style="text-align:center;">' . $cotizacion-> obtener_ship_via() . '</td>
+    <td style="text-align:center;">' . $cotizacion-> obtener_email_code() . '</td>
+    <td style="text-align:center;">' . $usuario_designado-> obtener_nombres() . ' ' . $usuario_designado-> obtener_apellidos() . '</td>
+        <td style="text-align:center;">' . $usuario_designado-> obtener_email() . '</td>
+    <td style="text-align:center;">' . $cotizacion-> obtener_payment_terms() . '</td>
   </tr>
 </table><br>';
 
@@ -88,23 +102,23 @@ if(count($equipos)){
         $html .= '<tr>
     <td>' . $a . '</td>
     <td>' . nl2br($equipo-> obtener_description()) . '</td>
-    <td>' . $equipo-> obtener_quantity() . '</td>
-    <td>' . $equipo-> obtener_unit_price() . '</td>
-    <td>' . $equipo-> obtener_total() . '</td>
+    <td style="text-align:right;">' . $equipo-> obtener_quantity() . '</td>
+    <td style="text-align:right;">$ ' . $equipo-> obtener_unit_price() . '</td>
+    <td style="text-align:right;">$ ' . $equipo-> obtener_total() . '</td>
   </tr>';
         $a++;
     }
     $html .= '<tr>
-        <td></td>
-    <td><b>TOTAL:</b></td>
-    <td></td> 
-    <td></td>
-    <td>$' . $total . '</td>
+        <td style="border:none;"></td>
+    <td style="font-size:30px;border:none;"><b>TOTAL:</b></td>
+    <td style="border:none;"></td> 
+    <td style="border:none;"></td>
+    <td style="font-size:30px;text-align:right;">$' . $total . '</td>
   </tr>';
     $html .= '</table>';
 }
 if($cotizacion-> obtener_payment_terms() == 'Net 30/CC'){
-    $html .= '<b>PAYMENT TERMS: </b><br><b>NET TERMS: </b>30 Days<br><b>CREDIT CARD PAYMENT: </b>Please add an additional 2.1% to process credit card payments.';
+    $html .= '<br><b>PAYMENT TERMS</b><br><b>NET TERMS: </b>30 Days<br><b>CREDIT CARD PAYMENT: </b>Please add an additional 2.1% to process credit card payments.';
 }
 $html .= '</body></html>';
 $mpdf->SetHTMLFooter('

@@ -9,6 +9,7 @@ CREATE TABLE usuarios(
         nombres VARCHAR(100) NOT NULL,
         apellidos VARCHAR(100) NOT NULL,
         cargo TINYINT NOT NULL,
+        email VARCHAR(100) NOT NULL UNIQUE,
         PRIMARY KEY(id)
 );
 

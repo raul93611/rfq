@@ -25,6 +25,10 @@
         <?php $validador-> mostrar_error_apellidos(); ?>
     </div>
     <div class="form-group">
+        <label for="email">E-mail:</label>
+        <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
+    </div>
+    <div class="form-group">
         <label for="cargo">Position:</label>
         <select class="form-control" name="cargo" id="cargo">
             <option>Jefe</option>

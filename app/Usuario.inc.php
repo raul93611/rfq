@@ -7,13 +7,14 @@ class Usuario{
     private $apellidos;
     private $cargo;
     
-    public function __construct($id, $nombre_usuario, $password, $nombres, $apellidos, $cargo){
+    public function __construct($id, $nombre_usuario, $password, $nombres, $apellidos, $cargo, $email){
         $this-> id = $id;
         $this-> nombre_usuario = $nombre_usuario;
         $this-> password = $password;
         $this-> nombres = $nombres;
         $this-> apellidos = $apellidos;
         $this-> cargo = $cargo;
+        $this-> email = $email;
     }
     
     public function obtener_id(){
@@ -38,6 +39,10 @@ class Usuario{
     
     public function obtener_cargo(){
         return $this-> cargo;
+    }
+    
+    public function obtener_email(){
+        return $this-> email;
     }
 }
 ?>

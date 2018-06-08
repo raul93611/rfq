@@ -7,7 +7,7 @@ class RepositorioUsuario {
 
         if (isset($conexion)) {
             try {
-                $sql = 'INSERT INTO usuarios(nombre_usuario, password, nombres, apellidos, cargo) VALUES(:nombre_usuario, :password, :nombres, :apellidos, :cargo)';
+                $sql = 'INSERT INTO usuarios(nombre_usuario, password, nombres, apellidos, cargo, email) VALUES(:nombre_usuario, :password, :nombres, :apellidos, :cargo, :email)';
 
                 $sentencia = $conexion->prepare($sql);
 
@@ -16,6 +16,7 @@ class RepositorioUsuario {
                 $sentencia->bindParam(':nombres', $usuario->obtener_nombres(), PDO::PARAM_STR);
                 $sentencia->bindParam(':apellidos', $usuario->obtener_apellidos(), PDO::PARAM_STR);
                 $sentencia->bindParam(':cargo', $usuario->obtener_cargo(), PDO::PARAM_STR);
+                $sentencia->bindParam(':email', $usuario-> obtener_email(), PDO::PARAM_STR);
 
                 $resultado = $sentencia->execute();
 
@@ -43,7 +44,7 @@ class RepositorioUsuario {
                 $resultado = $sentencia->fetch();
 
                 if (!empty($resultado)) {
-                    $usuario = new Usuario($resultado['id'], $resultado['nombre_usuario'], $resultado['password'], $resultado['nombres'], $resultado['apellidos'], $resultado['cargo']);
+                    $usuario = new Usuario($resultado['id'], $resultado['nombre_usuario'], $resultado['password'], $resultado['nombres'], $resultado['apellidos'], $resultado['cargo'], $resultado['email']);
                 }
             } catch (PDOException $ex) {
                 print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -65,7 +66,7 @@ class RepositorioUsuario {
                 $resultado = $sentencia->fetch();
 
                 if (!empty($resultado)) {
-                    $usuario = new Usuario($resultado['id'], $resultado['nombre_usuario'], $resultado['password'], $resultado['nombres'], $resultado['apellidos'], $resultado['cargo']);
+                    $usuario = new Usuario($resultado['id'], $resultado['nombre_usuario'], $resultado['password'], $resultado['nombres'], $resultado['apellidos'], $resultado['cargo'], $resultado['email']);
                 }
             } catch (PDOException $ex) {
                 print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -159,7 +160,7 @@ class RepositorioUsuario {
 
                 if (count($resultado)) {
                     foreach ($resultado as $fila) {
-                        $usuarios [] = new Usuario($fila['id'], $fila['nombre_usuario'], $fila['password'], $fila['nombres'], $fila['apellidos'], $fila['cargo']);
+                        $usuarios [] = new Usuario($fila['id'], $fila['nombre_usuario'], $fila['password'], $fila['nombres'], $fila['apellidos'], $fila['cargo'], $fila['email']);
                     }
                 }
             } catch (PDOException $ex) {
@@ -251,7 +252,7 @@ class RepositorioUsuario {
 
                 if (count($resultado)) {
                     foreach ($resultado as $fila) {
-                        $usuarios [] = new Usuario($fila['id'], $fila['nombre_usuario'], $fila['password'], $fila['nombres'], $fila['apellidos'], $fila['cargo']);
+                        $usuarios [] = new Usuario($fila['id'], $fila['nombre_usuario'], $fila['password'], $fila['nombres'], $fila['apellidos'], $fila['cargo'], $fila['email']);
                     }
                 }
             } catch (PDOException $ex) {
@@ -276,7 +277,7 @@ class RepositorioUsuario {
 
                 if (count($resultado)) {
                     foreach ($resultado as $fila) {
-                        $usuarios [] = new Usuario($fila['id'], $fila['nombre_usuario'], $fila['password'], $fila['nombres'], $fila['apellidos'], $fila['cargo']);
+                        $usuarios [] = new Usuario($fila['id'], $fila['nombre_usuario'], $fila['password'], $fila['nombres'], $fila['apellidos'], $fila['cargo'], $fila['email']);
                     }
                 }
             } catch (PDOException $ex) {
