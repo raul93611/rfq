@@ -6,16 +6,16 @@ $(function () {
   var cotizaciones_completadas_pasadas = document.getElementById('cotizaciones_completadas_pasadas').value;
   var cotizaciones_ganadas = document.getElementById('cotizaciones_ganadas').value;
   var cotizaciones_ganadas_pasadas = document.getElementById('cotizaciones_ganadas_pasadas').value;
-  var cotizaciones_sometidas = document.getElementById('cotizaciones_sometidas').value;
-  var cotizaciones_sometidas_pasadas = document.getElementById('cotizaciones_sometidas_pasadas').value;
+  var cotizaciones_no_sometidas = document.getElementById('cotizaciones_no_sometidas').value;
+  var cotizaciones_no_sometidas_pasadas = document.getElementById('cotizaciones_no_sometidas_pasadas').value;
   
   nombres_usuario = jQuery.parseJSON(nombres_usuario);
   cotizaciones_completadas = jQuery.parseJSON(cotizaciones_completadas);
   cotizaciones_completadas_pasadas = jQuery.parseJSON(cotizaciones_completadas_pasadas);
   cotizaciones_ganadas = jQuery.parseJSON(cotizaciones_ganadas);
   cotizaciones_ganadas_pasadas = jQuery.parseJSON(cotizaciones_ganadas_pasadas);
-  cotizaciones_sometidas = jQuery.parseJSON(cotizaciones_sometidas);
-  cotizaciones_sometidas_pasadas = jQuery.parseJSON(cotizaciones_sometidas_pasadas);
+  cotizaciones_no_sometidas = jQuery.parseJSON(cotizaciones_no_sometidas);
+  cotizaciones_no_sometidas_pasadas = jQuery.parseJSON(cotizaciones_no_sometidas_pasadas);
   
   var ticksStyle = {
     fontColor: '#495057',
@@ -162,12 +162,12 @@ $(function () {
         {
           backgroundColor: '#007bff',
           borderColor    : '#007bff',
-          data           : cotizaciones_sometidas
+          data           : cotizaciones_no_sometidas
         },
         {
           backgroundColor: '#ced4da',
           borderColor    : '#ced4da',
-          data           : cotizaciones_sometidas_pasadas
+          data           : cotizaciones_no_sometidas_pasadas
         }
       ]
     },

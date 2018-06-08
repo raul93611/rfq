@@ -1,6 +1,29 @@
 <?php
 
 if (isset($_POST['guardar_cambios_cotizacion'])) {
+    $id_rfq = $_POST['id_rfq'];
+    Conexion::abrir_conexion();
+    $cotizacion = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
+    Conexion::cerrar_conexion();
+    $canal = $cotizacion->obtener_canal();
+    switch ($canal) {
+        case 'GSA-Buy':
+            $canal = 'gsa_buy';
+            break;
+        case 'FedBid':
+            $canal = 'fedbid';
+            break;
+        case 'E-mails':
+            $canal = 'emails';
+            break;
+        case 'FindFRP':
+            $canal = 'findfrp';
+            break;
+        case 'FBO':
+            $canal = 'fbo';
+            break;
+    }
+
     Conexion::abrir_conexion();
     if (isset($_POST['status']) && $_POST['status'] == 'si') {
         $status = 1;
@@ -50,7 +73,7 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
                 move_uploaded_file($tmp_path, $new_path);
             }
         }
-        Redireccion::redirigir1(COTIZACIONES . 'gsa_buy');
+        Redireccion::redirigir1(COTIZACIONES . $canal);
     }
     #}
     Conexion::cerrar_conexion();

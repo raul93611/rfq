@@ -1,5 +1,5 @@
 <?php
-list($nombres_usuario, $cotizaciones_completadas, $cotizaciones_completadas_pasadas, $cotizaciones_ganadas, $cotizaciones_ganadas_pasadas, $cotizaciones_sometidas, $cotizaciones_sometidas_pasadas) = RepositorioUsuario::obtener_array_nombres_usuario_cotizaciones_completadas_ganadas_sometidas();
+list($nombres_usuario, $cotizaciones_completadas, $cotizaciones_completadas_pasadas, $cotizaciones_ganadas, $cotizaciones_ganadas_pasadas, $cotizaciones_sometidas, $cotizaciones_sometidas_pasadas, $cotizaciones_no_sometidas, $cotizaciones_no_sometidas_pasadas) = RepositorioUsuario::obtener_array_nombres_usuario_cotizaciones_completadas_ganadas_sometidas();
 ?>
 
 <div class="content-wrapper">
@@ -65,6 +65,8 @@ list($nombres_usuario, $cotizaciones_completadas, $cotizaciones_completadas_pasa
 <input type="hidden" id="cotizaciones_ganadas_pasadas" <?php echo "value='" . json_encode($cotizaciones_ganadas_pasadas) . "'"; ?>>
 <input type="hidden" id="cotizaciones_sometidas" <?php echo "value='" . json_encode($cotizaciones_sometidas) . "'"; ?>>
 <input type="hidden" id="cotizaciones_sometidas_pasadas" <?php echo "value='" . json_encode($cotizaciones_sometidas_pasadas) . "'"; ?>>
+<input type="hidden" id="cotizaciones_no_sometidas" <?php echo "value='" . json_encode($cotizaciones_no_sometidas) . "'"; ?>>
+<input type="hidden" id="cotizaciones_no_sometidas_pasadas" <?php echo "value='" . json_encode($cotizaciones_no_sometidas_pasadas) . "'"; ?>>
                 </div>
                 <!-- ./col -->
                 <!--<div class="col-lg-3 col-6">
@@ -134,7 +136,7 @@ list($nombres_usuario, $cotizaciones_completadas, $cotizaciones_completadas_pasa
                     <div class="card">
                         <div class="card-header no-border">
                             <div class="d-flex justify-content-between">
-                                <h3 class="card-title">Submitted</h3>
+                                <h3 class="card-title">No submitted</h3>
                             </div>
                         </div>
                         <div class="card-body">

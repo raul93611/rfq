@@ -213,25 +213,25 @@ class RepositorioUsuario {
             <?php
         }
     }
-    
-    public static function eliminar_usuario($conexion, $id_usuario){
+
+    public static function eliminar_usuario($conexion, $id_usuario) {
         $usuario_eliminado = false;
-        if(isset($conexion)){
-            try{
+        if (isset($conexion)) {
+            try {
                 $sql = "DELETE FROM usuarios WHERE id = :id_usuario";
-                
-                $sentencia1 = $conexion-> prepare($sql);
-                $sentencia1-> bindParam(':id_usuario', $id_usuario, PDO::PARAM_STR);
-                $resultado = $sentencia1-> execute();
-                
-                if($resultado){
+
+                $sentencia1 = $conexion->prepare($sql);
+                $sentencia1->bindParam(':id_usuario', $id_usuario, PDO::PARAM_STR);
+                $resultado = $sentencia1->execute();
+
+                if ($resultado) {
                     $usuario_eliminado = true;
                 }
             } catch (PDOException $ex) {
                 print 'ERROR:' . $ex->getMessage() . '<br>';
             }
         }
-        
+
         return $usuario_eliminado;
     }
 
@@ -243,8 +243,8 @@ class RepositorioUsuario {
                 $sql = "SELECT * FROM usuarios WHERE cargo = :cargo";
 
                 $sentencia = $conexion->prepare($sql);
-                $sentencia-> bindParam(':cargo', $cargo, PDO::PARAM_STR);
-                
+                $sentencia->bindParam(':cargo', $cargo, PDO::PARAM_STR);
+
                 $sentencia->execute();
 
                 $resultado = $sentencia->fetchAll();
@@ -260,7 +260,7 @@ class RepositorioUsuario {
         }
         return $usuarios;
     }
-    
+
     public static function obtener_usuarios_rfq($conexion) {
         $usuarios = [];
 
@@ -269,7 +269,7 @@ class RepositorioUsuario {
                 $sql = "SELECT * FROM usuarios WHERE cargo = 4 OR cargo = 3 ";
 
                 $sentencia = $conexion->prepare($sql);
-                
+
                 $sentencia->execute();
 
                 $resultado = $sentencia->fetchAll();
@@ -285,32 +285,63 @@ class RepositorioUsuario {
         }
         return $usuarios;
     }
-    
-    public static function obtener_cotizaciones_por_usuario($conexion, $id_usuario, $tipo){
+
+    public static function obtener_cotizaciones_por_usuario($conexion, $id_usuario, $tipo) {
         $cotizaciones = 0;
         $cotizaciones_pasadas = 0;
-        if(isset($conexion)){
-            try{
+        if (isset($conexion)) {
+            try {
                 $sql = 'SELECT COUNT(*) as cotizaciones FROM rfq WHERE usuario_designado = :usuario_designado AND ' . $tipo . '= 1 AND MONTH(fecha_completado) = MONTH(CURDATE()) AND YEAR(fecha_completado) = YEAR(CURDATE())';
                 $sql1 = 'SELECT COUNT(*) as cotizaciones_pasadas FROM rfq WHERE usuario_designado = :usuario_designado AND ' . $tipo . '= 1 AND MONTH(fecha_completado) = MONTH(DATE_SUB(CURDATE(), INTERVAL 1 MONTH)) AND YEAR(fecha_completado) = YEAR(DATE_SUB(CURDATE(), INTERVAL 1 MONTH))';
-                $sentencia = $conexion-> prepare($sql);
-                $sentencia-> bindParam(':usuario_designado', $id_usuario, PDO::PARAM_STR);
+
+                $sentencia = $conexion->prepare($sql);
+                $sentencia->bindParam(':usuario_designado', $id_usuario, PDO::PARAM_STR);
                 $sentencia->execute();
-                
-                $sentencia1 = $conexion-> prepare($sql1);
-                $sentencia1-> bindParam(':usuario_designado', $id_usuario, PDO::PARAM_STR);
+
+                $sentencia1 = $conexion->prepare($sql1);
+                $sentencia1->bindParam(':usuario_designado', $id_usuario, PDO::PARAM_STR);
                 $sentencia1->execute();
-                
+
                 $resultado = $sentencia->fetch();
                 $resultado1 = $sentencia1->fetch();
 
                 if (!empty($resultado)) {
                     $cotizaciones = $resultado['cotizaciones'];
                 }
+                if (!empty($resultado1)) {
+                    $cotizaciones_pasadas = $resultado1['cotizaciones_pasadas'];
+                }
+            } catch (PDOException $ex) {
+                print 'ERROR:' . $ex->getMessage() . '<br>';
+            }
+        }
+        return array($cotizaciones, $cotizaciones_pasadas);
+    }
+    
+    public static function obtener_cotizaciones_no_sometidas_por_usuario($conexion, $id_usuario){
+        $cotizaciones = 0;
+        $cotizaciones_pasadas = 0;
+        if(isset($conexion)){
+            try{
+                $sql = 'SELECT COUNT(*) as cotizaciones FROM rfq WHERE usuario_designado = :usuario_designado AND status = 0 AND MONTH(fecha_completado) = MONTH(CURDATE()) AND YEAR(fecha_completado) = YEAR(CURDATE())';
+                $sql1 = 'SELECT COUNT(*) as cotizaciones_pasadas FROM rfq WHERE usuario_designado = :usuario_designado AND status = 0 AND MONTH(fecha_completado) = MONTH(DATE_SUB(CURDATE(), INTERVAL 1 MONTH)) AND YEAR(fecha_completado) = YEAR(DATE_SUB(CURDATE(), INTERVAL 1 MONTH))';
+                $sentencia = $conexion-> prepare($sql);
+                $sentencia-> bindParam(':usuario_designado', $id_usuario, PDO::PARAM_STR);
+                $sentencia-> execute();
+                
+                $sentencia1 = $conexion-> prepare($sql1);
+                $sentencia1-> bindParam(':usuario_designado', $id_usuario, PDO::PARAM_STR);
+                $sentencia1-> execute();
+                
+                $resultado = $sentencia-> fetch();
+                $resultado1 = $sentencia1-> fetch();
+                
+                if(!empty($resultado)){
+                    $cotizaciones = $resultado['cotizaciones'];
+                }
                 if(!empty($resultado1)){
                     $cotizaciones_pasadas = $resultado1['cotizaciones_pasadas'];
                 }
-                
             } catch (PDOException $ex) {
                 print 'ERROR:' . $ex->getMessage() . '<br>';
             }
@@ -318,7 +349,7 @@ class RepositorioUsuario {
         return array($cotizaciones, $cotizaciones_pasadas);
     }
 
-        public static function obtener_array_nombres_usuario_cotizaciones_completadas_ganadas_sometidas(){
+    public static function obtener_array_nombres_usuario_cotizaciones_completadas_ganadas_sometidas() {
         $nombres_usuario = array();
         $cotizaciones_completadas = array();
         $cotizaciones_completadas_pasadas = array();
@@ -326,23 +357,26 @@ class RepositorioUsuario {
         $cotizaciones_ganadas_pasadas = array();
         $cotizaciones_sometidas = array();
         $cotizaciones_sometidas_pasadas = array();
+        $cotizaciones_no_sometidas = array();
+        $cotizaciones_no_sometidas_pasadas = array();
         Conexion::abrir_conexion();
-        $usuarios = RepositorioUsuario::obtener_usuarios_rfq(Conexion::obtener_conexion());
+        $usuarios = self::obtener_usuarios_rfq(Conexion::obtener_conexion());
         Conexion::cerrar_conexion();
-        
-        if(count($usuarios)){
-            for($i = 0; $i < count($usuarios); $i++){
+
+        if (count($usuarios)) {
+            for ($i = 0; $i < count($usuarios); $i++) {
                 $usuario = $usuarios[$i];
-                $nombres_usuario[$i] = $usuario-> obtener_nombre_usuario();
+                $nombres_usuario[$i] = $usuario->obtener_nombre_usuario();
                 Conexion::abrir_conexion();
-                list($cotizaciones_completadas[$i], $cotizaciones_completadas_pasadas[$i]) = RepositorioUsuario::obtener_cotizaciones_por_usuario(Conexion::obtener_conexion(), $usuario-> obtener_id(), 'completado');
-                list($cotizaciones_ganadas[$i], $cotizaciones_ganadas_pasadas[$i]) = RepositorioUsuario::obtener_cotizaciones_por_usuario(Conexion::obtener_conexion(), $usuario-> obtener_id(), 'award');
-                list($cotizaciones_sometidas[$i], $cotizaciones_sometidas_pasadas[$i]) = RepositorioUsuario::obtener_cotizaciones_por_usuario(Conexion::obtener_conexion(), $usuario-> obtener_id(), 'status');
+                list($cotizaciones_completadas[$i], $cotizaciones_completadas_pasadas[$i]) = self::obtener_cotizaciones_por_usuario(Conexion::obtener_conexion(), $usuario->obtener_id(), 'completado');
+                list($cotizaciones_ganadas[$i], $cotizaciones_ganadas_pasadas[$i]) = self::obtener_cotizaciones_por_usuario(Conexion::obtener_conexion(), $usuario->obtener_id(), 'award');
+                list($cotizaciones_sometidas[$i], $cotizaciones_sometidas_pasadas[$i]) = self::obtener_cotizaciones_por_usuario(Conexion::obtener_conexion(), $usuario->obtener_id(), 'status');
+                list($cotizaciones_no_sometidas[$i], $cotizaciones_no_sometidas_pasadas[$i]) = self::obtener_cotizaciones_no_sometidas_por_usuario(Conexion::obtener_conexion(), $usuario-> obtener_id());
                 Conexion::cerrar_conexion();
             }
         }
-        return array($nombres_usuario, $cotizaciones_completadas, $cotizaciones_completadas_pasadas, $cotizaciones_ganadas, $cotizaciones_ganadas_pasadas, $cotizaciones_sometidas, $cotizaciones_sometidas_pasadas);
+        return array($nombres_usuario, $cotizaciones_completadas, $cotizaciones_completadas_pasadas, $cotizaciones_ganadas, $cotizaciones_ganadas_pasadas, $cotizaciones_sometidas, $cotizaciones_sometidas_pasadas, $cotizaciones_no_sometidas, $cotizaciones_no_sometidas_pasadas);
     }
-    
+
 }
 ?>
