@@ -325,6 +325,29 @@ class RepositorioRfq {
             <?php
         }
     }
+    
+    public static function obtener_cotizaciones_ganadas_por_mes($conexion){
+        $cotizaciones_mes = array();
+        
+        if(isset($conexion)){
+           try{
+               for($i = 1; $i <= 12; $i++){
+                   $sql = 'SELECT COUNT(*) as cotizaciones_mes FROM rfq WHERE award = 1 AND MONTH(fecha_completado) =' . $i . ' AND YEAR(fecha_completado) = YEAR(CURDATE())';
+                   $sentencia = $conexion-> prepare($sql);
+                   $sentencia-> execute();
+                   $resultado = $sentencia-> fetch();
+                   if(!empty($resultado)){
+                       $cotizaciones_mes[$i-1] = $resultado['cotizaciones_mes'];
+                   }else{
+                       $cotizaciones_mes[$i-1] = 0;
+                   }
+               }
+           } catch (PDOException $ex) {
+               print 'ERROR:' . $ex->getMessage() . '<br>';
+           } 
+        }
+        return $cotizaciones_mes;
+    }
 
 }
 ?>
