@@ -23,7 +23,7 @@ CREATE TABLE rfq(
         end_date DATETIME NOT NULL,
         status TINYINT NOT NULL,
         completado TINYINT NOT NULL,
-        amount VARCHAR(50),
+        amount DECIMAL(10,2),
         comments VARCHAR(100),
         award TINYINT NOT NULL,
         fecha_completado DATE,

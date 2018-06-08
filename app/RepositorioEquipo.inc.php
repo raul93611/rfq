@@ -6,23 +6,31 @@ class RepositorioEquipo {
         $equipo_insertado = false;
         if (isset($conexion)) {
             try {
-                $sql = 'INSERT INTO equipo(id_rfq, description, quantity, unit_price, total) VALUES(:id_rfq, :description, :quantity, :unit_price, :total)';
-
-                $sentencia = $conexion->prepare($sql);
-
-                $sentencia->bindParam(':id_rfq', $equipo->obtener_id_rfq(), PDO::PARAM_STR);
-                $sentencia->bindParam(':description', $equipo->obtener_description(), PDO::PARAM_STR);
-                $sentencia->bindParam(':quantity', $equipo->obtener_quantity(), PDO::PARAM_STR);
-                $sentencia->bindParam(':unit_price', $equipo->obtener_unit_price(), PDO::PARAM_STR);
-                $sentencia->bindParam(':total', $equipo->obtener_total(), PDO::PARAM_STR);
-
-                $resultado = $sentencia->execute();
-
-                if ($resultado) {
+                $conexion-> beginTransaction();
+                
+                $sql1 = 'INSERT INTO equipo(id_rfq, description, quantity, unit_price, total) VALUES(:id_rfq, :description, :quantity, :unit_price, :total)';
+                $sentencia1 = $conexion->prepare($sql1);
+                $sentencia1->bindParam(':id_rfq', $equipo->obtener_id_rfq(), PDO::PARAM_STR);
+                $sentencia1->bindParam(':description', $equipo->obtener_description(), PDO::PARAM_STR);
+                $sentencia1->bindParam(':quantity', $equipo->obtener_quantity(), PDO::PARAM_STR);
+                $sentencia1->bindParam(':unit_price', $equipo->obtener_unit_price(), PDO::PARAM_STR);
+                $sentencia1->bindParam(':total', $equipo->obtener_total(), PDO::PARAM_STR);
+                $resultado1 = $sentencia1->execute();
+                
+                $sql2 = 'UPDATE rfq SET amount = amount + :total WHERE id = :id_rfq';
+                $sentencia2 = $conexion-> prepare($sql2);
+                $sentencia2-> bindParam(':total', $equipo-> obtener_total(), PDO::PARAM_STR);
+                $sentencia2-> bindParam(':id_rfq', $equipo-> obtener_id_rfq(), PDO::PARAM_STR);
+                $resultado2 = $sentencia2-> execute();
+                
+                if($resultado1 && $resultado2){
                     $equipo_insertado = true;
                 }
+                $conexion-> commit();
+                
             } catch (PDOException $ex) {
                 print 'ERROR:' . $ex->getMessage() . '<br>';
+                $conexion-> rollBack();
             }
         }
         return $equipo_insertado;
