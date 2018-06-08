@@ -33,12 +33,14 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
 
     if ($_POST['completado_antiguo']) {
         $completado = 1;
+        $ruta_completado = 1;
     } else {
         if (isset($_POST['completado']) && $_POST['completado'] == 'si') {
             $completado = 1;
         } else {
             $completado = 0;
         }
+        $ruta_completado = 0;
     }
 
     if (isset($_POST['award']) && $_POST['award'] == 'si') {
@@ -73,7 +75,12 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
                 move_uploaded_file($tmp_path, $new_path);
             }
         }
-        Redireccion::redirigir1(COTIZACIONES . $canal);
+        if($ruta_completado){
+            Redireccion::redirigir1(COMPLETADOS . $canal);
+        }else{
+            Redireccion::redirigir1(COTIZACIONES . $canal);
+        }
+        
     }
     #}
     Conexion::cerrar_conexion();
