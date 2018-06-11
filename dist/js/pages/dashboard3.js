@@ -363,7 +363,12 @@ $(function () {
                 display: false,
                 text: 'Predicted world population (millions) in 2050'
             },
-            cutoutPercentage: 50
+            cutoutPercentage: 50,
+            animation:{
+                easing: 'easeOutBounce',
+                duration: 1500
+            }
+            
         }
     });
 
