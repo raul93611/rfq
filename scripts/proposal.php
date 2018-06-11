@@ -119,10 +119,10 @@ if(count($equipos)){
     }
     $html .= '<tr>
         <td style="border:none;"></td>
-    <td style="font-size:30px;border:none;"><b>TOTAL:</b></td>
+    <td style="font-size:20px;border:none;"><b>TOTAL:</b></td>
     <td style="border:none;"></td> 
     <td style="border:none;"></td>
-    <td style="font-size:30px;text-align:right;"><b>$ ' . $total . '</b></td>
+    <td style="font-size:20px;text-align:right;"><b>$ ' . $total . '</b></td>
   </tr>';
     $html .= '</table>';
 }
@@ -136,5 +136,6 @@ EIN: 51-0629765, DUNS: 786-965876, CAGE:4QTF4<br>SBA 8(a) and HUBZone certified
 </div>
 ');
 $mpdf-> WriteHTML($html);
-$mpdf-> Output();
+$mpdf-> Output($_SERVER['DOCUMENT_ROOT'] . 'rfq/documentos/' . $cotizacion->obtener_id() . '/' . $cotizacion-> obtener_email_code() . '.pdf', 'F');
+$mpdf-> Output($cotizacion-> obtener_email_code() . '.pdf', 'I');
 ?>
