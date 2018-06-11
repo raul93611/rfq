@@ -14,15 +14,21 @@
 <!-- ./wrapper -->
 
 <!-- jQuery -->
-<script src="<?php echo PLUGINS; ?>jquery/jquery.min.js"></script>
+
 <!-- jQuery UI 1.11.4 -->
+<script src="<?php echo PLUGINS; ?>jquery/jquery.min.js"></script>
+<script src="<?php echo PLUGINS; ?>bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="<?php echo PLUGINS; ?>chart.js/Chart.min.js"></script>
+<script src="<?php echo PLUGINS; ?>fastclick/fastclick.js"></script>
+<script src="<?php echo DIST; ?>js/adminlte.js"></script>
+<script src="<?php echo DIST; ?>js/demo.js"></script>
 <script src="<?php echo PLUGINS; ?>jQueryUI/jquery-ui.min.js"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script>
     $.widget.bridge('uibutton', $.ui.button)
 </script>
 <!-- Bootstrap 4 -->
-<script src="<?php echo PLUGINS; ?>bootstrap/js/bootstrap.bundle.min.js"></script>
+
 <!-- Morris.js charts -->
 <script src="<?php echo RUTA_JS; ?>raphael-min.js"></script>
 <script src="<?php echo PLUGINS; ?>morris/morris.min.js"></script>
@@ -43,15 +49,15 @@
 <!-- Slimscroll -->
 <script src="<?php echo PLUGINS; ?>slimScroll/jquery.slimscroll.min.js"></script>
 <!-- FastClick -->
-<script src="<?php echo PLUGINS; ?>fastclick/fastclick.js"></script>
+
 <!-- AdminLTE App -->
-<script src="<?php echo DIST; ?>js/adminlte.js"></script>
+
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="<?php echo DIST; ?>js/pages/dashboard.js"></script>
 <!-- AdminLTE for demo purposes -->
-<script src="<?php echo DIST; ?>js/demo.js"></script>
+
 <script src="<?php echo RUTA_JS; ?>tabla.js"></script>
-<script src="<?php echo PLUGINS; ?>chart.js/Chart.min.js"></script>
+
 <script src="<?php echo DIST; ?>js/pages/dashboard3.js"></script>
 </body>
 </html>

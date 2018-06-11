@@ -255,6 +255,29 @@ Conexion::cerrar_conexion();
                             </div>
                         </div>
                     </div>
+                    
+                    <div class="card">
+                        <div class="card-header no-border">
+                            <div class="d-flex justify-content-between">
+                                <h3 class="card-title">Annual awards</h3>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <!-- /.d-flex -->
+
+                            <div class="position-relative mb-4">
+                                <canvas id="pie-chart" height="150"></canvas>
+                            </div>
+
+                            <div class="d-flex flex-row justify-content-end">
+                                <span class="mr-2">
+                                    <i class="fa fa-square text-primary"></i> Current year
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
                     <!-- Map card -->
 
                     <!-- /.card -->
@@ -274,4 +297,6 @@ Conexion::cerrar_conexion();
     </section>
     <!-- /.content -->
 </div>
-
+<script>
+    
+</script>
