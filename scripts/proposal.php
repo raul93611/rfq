@@ -16,23 +16,32 @@ $html = '<!DOCTYPE html>
 <style>
 body{
     font-family: Arial, Helvetica, sans-serif;
+    
+}
+th{
+    color: #004A97;
+    background-color: #DEE8F2;
 }
 th, td {
     border: 1px solid black;
     border-collapse: collapse;
-}
-th,td{
     padding-left: 10px;
     padding-right: 10px;
     padding-top: 5px;
     padding-bottom: 5px;
+    border-color: #004A97;
 }
 td{
     font-size: 12px;
+    color: #022B49;
+}
+
+.color{
+    color: #004A97;
 }
 </style>
 </head>';
-$html .= '<body><div>
+$html .= '<body><div class="color">
     <img style="float:right;width:270px;height:170px;margin-left:15px;" src="' . RUTA_IMG . '/elogic_logo.png">
     <b>E-logic, Inc.</b><br>
     1025 Connecticut Ave NW<br>
@@ -43,7 +52,7 @@ $html .= '<body><div>
     http://www.e-logic.us
 </div>
 <div style="text-align:center;">
-    <h1>Proposal</h1>
+    <h1 class="color">Proposal</h1>
 </div>';
 
 $html .= '<table style="width:100%">
@@ -113,16 +122,16 @@ if(count($equipos)){
     <td style="font-size:30px;border:none;"><b>TOTAL:</b></td>
     <td style="border:none;"></td> 
     <td style="border:none;"></td>
-    <td style="font-size:30px;text-align:right;">$' . $total . '</td>
+    <td style="font-size:30px;text-align:right;"><b>$ ' . $total . '</b></td>
   </tr>';
     $html .= '</table>';
 }
 if($cotizacion-> obtener_payment_terms() == 'Net 30/CC'){
-    $html .= '<br><b>PAYMENT TERMS</b><br><b>NET TERMS: </b>30 Days<br><b>CREDIT CARD PAYMENT: </b>Please add an additional 2.1% to process credit card payments.';
+    $html .= '<br><div class="color"><b>PAYMENT TERMS</b><br><b>NET TERMS: </b>30 Days<br><b>CREDIT CARD PAYMENT: </b>Please add an additional 2.1% to process credit card payments.</div>';
 }
 $html .= '</body></html>';
 $mpdf->SetHTMLFooter('
-<div style="text-align:center;">
+<div class="color" style="text-align:center;">
 EIN: 51-0629765, DUNS: 786-965876, CAGE:4QTF4<br>SBA 8(a) and HUBZone certified
 </div>
 ');
