@@ -276,7 +276,7 @@ class RepositorioRfq {
             ?></td>
             <td><?php echo $cotizacion->obtener_amount(); ?></td>
             <td><?php echo $cotizacion->obtener_fecha_completado(); ?></td>
-            <td><?php echo $cotizacion->obtener_id(); ?></td>
+            <td class="proposal"><?php echo $cotizacion->obtener_id(); ?></td>
             <td><?php echo $cotizacion->obtener_comments(); ?></td>
             <td <?php
             if ($cotizacion->obtener_award()) {

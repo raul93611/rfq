@@ -98,7 +98,7 @@
                             <h3 class="card-title">Registered users</h3>
                         </div>
                         <div id="content" class="card-body table-responsive">
-                            <input class="form-control" id="myInput" type="text" placeholder="Search.." autofocus>
+                            <input class="form-control" id="myInput" type="text" onkeyup="myFunction()" placeholder="Search.." autofocus>
                             <br>
                             <?php
                             RepositorioUsuario::escribir_usuarios();
