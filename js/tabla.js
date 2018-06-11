@@ -42,6 +42,12 @@ function myFunction() {
             case 'Award':
                 td = tr[i].getElementsByTagName("td")[10];
                 break;
+            case 'First names':
+                td = tr[i].getElementsByTagName("td")[0];
+                break;
+            case 'Last names':
+                td = tr[i].getElementsByTagName("td")[1];
+                break;
         }
         
         if (td) {
