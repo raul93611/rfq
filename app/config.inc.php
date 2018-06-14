@@ -4,7 +4,7 @@ define('NOMBRE_USUARIO', 'root');
 define('PASSWORD', '');
 define('NOMBRE_BD', 'elogic');
 
-define('SERVIDOR', 'http://192.168.1.80/rfq/');
+define('SERVIDOR', 'http://localhost/rfq/');
 define('ERROR', SERVIDOR . 'error');
 define('PERFIL', SERVIDOR . 'perfil/');
 define('LOGOUT', SERVIDOR . 'logout');
