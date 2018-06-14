@@ -44,6 +44,30 @@ class RepositorioRfq {
 
         return array($cotizacion_insertada, $id);
     }
+    
+    public static function email_code_existe($conexion, $email_code){
+        $email_code_existe = true;
+        if(isset($conexion)){
+            try{
+                $sql = 'SELECT * FROM rfq WHERE email_code = :email_code';
+                
+                $sentencia = $conexion-> prepare($sql);
+                $sentencia-> bindParam(':email_code', $email_code, PDO::PARAM_STR);
+                
+                $sentencia-> execute();
+                $resultado = $sentencia-> fetchall();
+                
+                if(count($resultado)){
+                    $email_code_existe = true;
+                }else{
+                    $email_code_existe = false;
+                }
+            } catch (PDOException $ex) {
+                print 'ERROR:' . $ex->getMessage() . '<br>';
+            }
+        }
+        return $email_code_existe;
+    }
 
     public static function obtener_cotizaciones_por_canal_usuario_cargo($conexion, $canal, $id_usuario, $cargo) {
         $cotizaciones = [];
