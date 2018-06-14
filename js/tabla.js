@@ -8,7 +8,7 @@ function myFunction() {
     tr = table.getElementsByTagName("tr");
 
     for (i = 0; i < tr.length; i++) {
-        switch(tipo){
+        switch (tipo) {
             case 'E-mail Code':
                 td = tr[i].getElementsByTagName("button")[0];
                 break;
@@ -49,7 +49,7 @@ function myFunction() {
                 td = tr[i].getElementsByTagName("td")[1];
                 break;
         }
-        
+
         if (td) {
             if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
                 tr[i].style.display = "";
@@ -73,3 +73,15 @@ function validar_form() {
         return false;
     }
 }
+
+$(document).ready(function () {
+    $('#issue_date').inputmask('mm/dd/yyyy', {'placeholder': 'mm/dd/yyyy'});
+    $('#end_date').inputmask("datetime", {
+        mask: "2-1-y h:s",
+        placeholder: "mm-dd-yyyy hh:mm",
+        leapday: "02-29-",
+        separator: "-",
+        alias: "mm/dd/yyyy"
+    });
+});
+    
