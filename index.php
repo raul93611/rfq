@@ -17,8 +17,8 @@ include_once 'app/ValidadorCotizacion.inc.php';
 include_once 'app/ValidadorCotizacionRegistro.inc.php';
 include_once 'app/ValidadorCotizacionEdicion.inc.php';
 
-include_once 'app/Equipo.inc.php';
-include_once 'app/RepositorioEquipo.inc.php';
+include_once 'app/Item.inc.php';
+include_once 'app/RepositorioItem.inc.php';
 
 $componentes_url = parse_url($_SERVER['REQUEST_URI']);
 $ruta = $componentes_url['path'];
@@ -124,6 +124,10 @@ if ($partes_ruta[0] == 'rfq') {
             switch($partes_ruta[3]){
                 case 'editar_cotizacion':
                     $cotizacion = 'editar_cotizacion';
+                    $id_rfq = $partes_ruta[4];
+                    break;
+                case 'add_item':
+                    $cotizacion = 'add_item';
                     $id_rfq = $partes_ruta[4];
                     break;
             }

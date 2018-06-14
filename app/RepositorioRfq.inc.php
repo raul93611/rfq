@@ -124,30 +124,9 @@ class RepositorioRfq {
             <td><?php echo $cotizacion->obtener_type_of_bid(); ?></td>
             <td><?php echo $cotizacion->obtener_issue_date(); ?></td>
             <td><?php echo $cotizacion->obtener_end_date(); ?></td>
-            <td <?php
-            if ($cotizacion->obtener_status()) {
-                echo 'class="table-success"> Yes submitted';
-            } else {
-                echo 'class="table-danger"> No submitted';
-            }
-            ?></td>
             <td><?php echo $cotizacion->obtener_amount(); ?></td>
-            <td><?php echo $cotizacion->obtener_fecha_completado(); ?></td>
             <td><?php echo $cotizacion->obtener_id(); ?></td>
             <td><?php echo $cotizacion->obtener_comments(); ?></td>
-            <td <?php
-            if ($cotizacion->obtener_award()) {
-                echo 'class="table-success"> Yes award';
-            } else {
-                echo 'class="table-danger"> No award';
-            }
-            ?></td>
-            <td class="text-center">
-                <form method="post" action="<?php echo ADD_EQUIPMENT; ?>">
-                    <input type="hidden" name="id_rfq" value="<?php echo $cotizacion->obtener_id(); ?>">
-                    <button type="submit" class="btn btn-sm btn-primary" name="registrar_equipo"><i class="fa fa-plus-circle"></i></button>
-                </form>
-            </td>
         </tr>
         <?php
     }
@@ -163,17 +142,13 @@ class RepositorioRfq {
                 <thead>
                     <tr>
                         <th>E-mail Code</th>
-                        <th>Designated<br>user</th>
+                        <th>Designated user</th>
                         <th>Type of Bid</th>
-                        <th>Issue<br>Date</th>
-                        <th>End<br>Date</th>
-                        <th>Status</th>
+                        <th>Issue Date</th>
+                        <th>End Date</th>
                         <th>Amount</th>
-                        <th>Completed<br>date</th>
                         <th>Proposal</th>
                         <th>Comments</th>
-                        <th>Award</th>
-                        <th>Add<br>Equipment</th>
                     </tr>
                 </thead>
                 <tbody id="myTable">

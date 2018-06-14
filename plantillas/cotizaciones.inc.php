@@ -1,5 +1,4 @@
 <?php
-include_once 'plantillas/validacion_registro_equipo.inc.php';
 switch ($cotizacion) {
     case 'gsa_buy':
         $canal = 'GSA-Buy';

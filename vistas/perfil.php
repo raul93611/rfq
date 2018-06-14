@@ -50,8 +50,11 @@ switch ($gestor_actual) {
                 Conexion::cerrar_conexion();
                 include_once 'plantillas/editar_cotizacion.inc.php';
                 break;
-            case 'add_equipment':
-                include_once 'plantillas/add_equipment.inc.php';
+            case 'add_item':
+                Conexion::abrir_conexion();
+                $cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
+                Conexion::cerrar_conexion();
+                include_once 'plantillas/add_item.inc.php';
                 break;
             default :
                 include_once 'plantillas/cotizaciones.inc.php';

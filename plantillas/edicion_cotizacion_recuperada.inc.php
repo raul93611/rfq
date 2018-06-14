@@ -193,6 +193,6 @@
 </div>
 <div class="card-footer">
     <button type="submit" onclick="alert('Estas seguro?');" class="btn btn-primary" name="guardar_cambios_cotizacion">Save</button>
-    <a class="btn btn-primary float-right" href="<?php echo AGREGAR_ITEM . '/' . $cotizacion_recuperada->obtener_id(); ?>">Add item</a>
+    <a class="btn btn-primary float-right" href="<?php echo ADD_ITEM . '/' . $cotizacion_recuperada->obtener_id(); ?>">Add item</a>
 </div>
 

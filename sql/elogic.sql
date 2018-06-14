@@ -40,16 +40,21 @@ CREATE TABLE rfq(
             ON DELETE RESTRICT
 );
 
-CREATE TABLE equipo(
+CREATE TABLE item(
         id INT NOT NULL AUTO_INCREMENT UNIQUE,
         id_rfq INT NOT NULL,
+        id_usuario INT NOT NULL,
+        brand VARCHAR(100) NOT NULL,
+        part_number VARCHAR(100) NOT NULL,
         description TEXT CHARACTER SET utf8 NOT NULL,
         quantity INT NOT NULL,
-        unit_price DECIMAL(10,2) NOT NULL,
-        total INT NOT NULL,
         PRIMARY KEY(id),
         FOREIGN KEY(id_rfq)
             REFERENCES rfq(id)
+            ON UPDATE CASCADE
+            ON DELETE RESTRICT,
+        FOREIGN KEY(id_usuario)
+            REFERENCES usuarios(id)
             ON UPDATE CASCADE
             ON DELETE RESTRICT
 );
