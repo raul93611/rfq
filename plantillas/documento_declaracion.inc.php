@@ -11,25 +11,15 @@
         }
         echo "<title>$titulo</title>";
         ?>
-        <!-- Font Awesome -->
-        
-        <!-- Ionicons -->
-        
-        <!-- iCheck -->
         <link rel="stylesheet" href="<?php echo PLUGINS; ?>iCheck/flat/blue.css">
-        <!-- Morris chart -->
         <link rel="stylesheet" href="<?php echo PLUGINS; ?>morris/morris.css">
-        <!-- jvectormap -->
         <link rel="stylesheet" href="<?php echo PLUGINS; ?>jvectormap/jquery-jvectormap-1.2.2.css">
-        <!-- Date Picker -->
         <link rel="stylesheet" href="<?php echo PLUGINS; ?>datepicker/datepicker3.css">
-        <!-- Daterange picker -->
         <link rel="stylesheet" href="<?php echo PLUGINS; ?>daterangepicker/daterangepicker-bs3.css">
-        <!-- bootstrap wysihtml5 - text editor -->
         <link rel="stylesheet" href="<?php echo PLUGINS; ?>bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
         <link rel="stylesheet" href="<?php echo PLUGINS; ?>font-awesome/css/font-awesome.min.css">
         <link rel="stylesheet" href="<?php echo DIST; ?>css/adminlte.min.css">
-        <!-- Google Font: Source Sans Pro -->
+        <link rel="stylesheet" href="<?php echo RUTA_CSS; ?>estilos.css">
     </head>
     <body class="hold-transition sidebar-mini">
         <div class="wrapper">

@@ -44,22 +44,22 @@ class RepositorioRfq {
 
         return array($cotizacion_insertada, $id);
     }
-    
-    public static function email_code_existe($conexion, $email_code){
+
+    public static function email_code_existe($conexion, $email_code) {
         $email_code_existe = true;
-        if(isset($conexion)){
-            try{
+        if (isset($conexion)) {
+            try {
                 $sql = 'SELECT * FROM rfq WHERE email_code = :email_code';
-                
-                $sentencia = $conexion-> prepare($sql);
-                $sentencia-> bindParam(':email_code', $email_code, PDO::PARAM_STR);
-                
-                $sentencia-> execute();
-                $resultado = $sentencia-> fetchall();
-                
-                if(count($resultado)){
+
+                $sentencia = $conexion->prepare($sql);
+                $sentencia->bindParam(':email_code', $email_code, PDO::PARAM_STR);
+
+                $sentencia->execute();
+                $resultado = $sentencia->fetchall();
+
+                if (count($resultado)) {
                     $email_code_existe = true;
-                }else{
+                } else {
                     $email_code_existe = false;
                 }
             } catch (PDOException $ex) {
@@ -109,10 +109,9 @@ class RepositorioRfq {
         ?>
         <tr>
             <td>
-                <form method="post" action="<?php echo EDITAR_COTIZACION; ?>">
-                    <input type="hidden" name="id_rfq" value="<?php echo $cotizacion->obtener_id(); ?>">
-                    <button type="submit" class="btn btn-sm btn-secondary" name="editar"><?php echo $cotizacion->obtener_email_code(); ?></button>
-                </form>
+                <a href="<?php echo EDITAR_COTIZACION . '/' . $cotizacion-> obtener_id(); ?>" class="btn btn-warning">
+                    <?php echo $cotizacion->obtener_email_code(); ?>
+                </a>
             </td>
             <td>
                 <?php
@@ -211,29 +210,17 @@ class RepositorioRfq {
         return $cotizacion_recuperada;
     }
 
-    public static function actualizar_cotizacion($conexion, $id_rfq, $usuario_designado, $status, $completado, $comments, $award, $fecha_completado, $payment_terms, $address, $ship_to, $expiration_date, $ship_via) {
+    public static function actualizar_usuario_designado($conexion, $usuario_designado, $id_rfq) {
         $cotizacion_editada = false;
         if (isset($conexion)) {
             try {
-                $sql = "UPDATE rfq SET usuario_designado = :usuario_designado, status = :status, completado = :completado, comments = :comments, award = :award, fecha_completado = :fecha_completado ,payment_terms = :payment_terms, address = :address, ship_to = :ship_to, expiration_date = :expiration_date, ship_via = :ship_via WHERE id = :id_rfq";
+                $sql = "UPDATE rfq SET usuario_designado = :usuario_designado WHERE id = :id_rfq";
                 $sentencia = $conexion->prepare($sql);
                 $sentencia->bindParam(':usuario_designado', $usuario_designado, PDO::PARAM_STR);
-                $sentencia->bindParam(':status', $status, PDO::PARAM_STR);
-                $sentencia->bindParam(':completado', $completado, PDO::PARAM_STR);
-                $sentencia->bindParam(':comments', $comments, PDO::PARAM_STR);
-                $sentencia->bindParam(':award', $award, PDO::PARAM_STR);
-                $sentencia->bindParam(':fecha_completado', $fecha_completado, PDO::PARAM_STR);
-                $sentencia->bindParam(':payment_terms', $payment_terms, PDO::PARAM_STR);
-                $sentencia->bindParam(':address', $address, PDO::PARAM_STR);
-                $sentencia->bindParam(':ship_to', $ship_to, PDO::PARAM_STR);
-                $sentencia->bindParam(':expiration_date', $expiration_date, PDO::PARAM_STR);
-                $sentencia->bindParam(':ship_via', $ship_via, PDO::PARAM_STR);
                 $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
 
                 $sentencia->execute();
-
-                #$resultado = $sentencia-> rowCount();
-
+                
                 if ($sentencia) {
                     $cotizacion_editada = true;
                 }
@@ -251,7 +238,7 @@ class RepositorioRfq {
             try {
                 $sql = "SELECT * FROM rfq WHERE completado = 1 AND canal = :canal ORDER BY fecha_completado DESC";
                 $sentencia = $conexion->prepare($sql);
-                $sentencia-> bindParam(':canal', $canal, PDO::PARAM_STR);
+                $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
                 $sentencia->execute();
 
                 $resultado = $sentencia->fetchAll();
@@ -267,7 +254,7 @@ class RepositorioRfq {
         }
         return $cotizaciones;
     }
-    
+
     public static function escribir_cotizacion_completada($cotizacion) {
         if (!isset($cotizacion)) {
             return;
@@ -309,7 +296,7 @@ class RepositorioRfq {
                 echo 'class="table-danger"> No award';
             }
             ?></td>
-            <td class="text-center"><a class="btn btn-primary btn-sm" href="<?php echo PROPOSAL . '/' . $cotizacion-> obtener_id(); ?>" target="_blank"><i class="fa fa-copy"></i></a></td>
+            <td class="text-center"><a class="btn btn-primary btn-sm" href="<?php echo PROPOSAL . '/' . $cotizacion->obtener_id(); ?>" target="_blank"><i class="fa fa-copy"></i></a></td>
         </tr>
         <?php
     }
@@ -349,47 +336,46 @@ class RepositorioRfq {
             <?php
         }
     }
-    
-    public static function obtener_cotizaciones_ganadas_por_mes($conexion){
+
+    public static function obtener_cotizaciones_ganadas_por_mes($conexion) {
         $cotizaciones_mes = array();
-        
-        if(isset($conexion)){
-           try{
-               for($i = 1; $i <= 12; $i++){
-                   $sql = 'SELECT COUNT(*) as cotizaciones_mes FROM rfq WHERE award = 1 AND MONTH(fecha_completado) =' . $i . ' AND YEAR(fecha_completado) = YEAR(CURDATE())';
-                   $sentencia = $conexion-> prepare($sql);
-                   $sentencia-> execute();
-                   $resultado = $sentencia-> fetch();
-                   if(!empty($resultado)){
-                       $cotizaciones_mes[$i-1] = $resultado['cotizaciones_mes'];
-                   }else{
-                       $cotizaciones_mes[$i-1] = 0;
-                   }
-               }
-           } catch (PDOException $ex) {
-               print 'ERROR:' . $ex->getMessage() . '<br>';
-           } 
+
+        if (isset($conexion)) {
+            try {
+                for ($i = 1; $i <= 12; $i++) {
+                    $sql = 'SELECT COUNT(*) as cotizaciones_mes FROM rfq WHERE award = 1 AND MONTH(fecha_completado) =' . $i . ' AND YEAR(fecha_completado) = YEAR(CURDATE())';
+                    $sentencia = $conexion->prepare($sql);
+                    $sentencia->execute();
+                    $resultado = $sentencia->fetch();
+                    if (!empty($resultado)) {
+                        $cotizaciones_mes[$i - 1] = $resultado['cotizaciones_mes'];
+                    } else {
+                        $cotizaciones_mes[$i - 1] = 0;
+                    }
+                }
+            } catch (PDOException $ex) {
+                print 'ERROR:' . $ex->getMessage() . '<br>';
+            }
         }
         return $cotizaciones_mes;
     }
-    
-    public static function obtener_monto_cotizaciones_ganadas_por_mes($conexion){
+
+    public static function obtener_monto_cotizaciones_ganadas_por_mes($conexion) {
         $monto_cotizaciones_mes = array();
-        
-        if(isset($conexion)){
-            try{
-                for($i = 1;$i <= 12; $i++){
+
+        if (isset($conexion)) {
+            try {
+                for ($i = 1; $i <= 12; $i++) {
                     $sql = 'SELECT SUM(amount) as monto FROM rfq WHERE award = 1 AND MONTH(fecha_completado) =' . $i . ' AND YEAR(fecha_completado) = YEAR(CURDATE())';
-                    $sentencia = $conexion-> prepare($sql);
-                    $sentencia-> execute();
-                    $resultado = $sentencia-> fetch();
-                    
-                    if(is_null($resultado['monto'])){
-                        $monto_cotizaciones_mes[$i-1] = 0;
-                    }else{
-                        $monto_cotizaciones_mes[$i-1] = $resultado['monto'];
+                    $sentencia = $conexion->prepare($sql);
+                    $sentencia->execute();
+                    $resultado = $sentencia->fetch();
+
+                    if (is_null($resultado['monto'])) {
+                        $monto_cotizaciones_mes[$i - 1] = 0;
+                    } else {
+                        $monto_cotizaciones_mes[$i - 1] = $resultado['monto'];
                     }
-                  
                 }
             } catch (PDOException $ex) {
                 print 'ERROR:' . $ex->getMessage() . '<br>';

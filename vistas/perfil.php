@@ -45,6 +45,9 @@ switch ($gestor_actual) {
                 include_once 'plantillas/registro_cotizacion_correcto.inc.php';
                 break;
             case 'editar_cotizacion':
+                Conexion::abrir_conexion();
+                $cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
+                Conexion::cerrar_conexion();
                 include_once 'plantillas/editar_cotizacion.inc.php';
                 break;
             case 'add_equipment':

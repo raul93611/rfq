@@ -27,7 +27,6 @@ $partes_ruta = explode('/', $ruta);
 $partes_ruta = array_filter($partes_ruta);
 $partes_ruta = array_slice($partes_ruta, 0);
 $ruta_elegida = 'vistas/404.php';
-
 if ($partes_ruta[0] == 'rfq') {
     if (count($partes_ruta) == 1) {
         $ruta_elegida = 'vistas/home.php';
@@ -90,12 +89,6 @@ if ($partes_ruta[0] == 'rfq') {
                 case 'nuevo':
                     $cotizacion = 'nuevo';
                     break;
-                case 'registro_cotizacion_correcto':
-                    $cotizacion = 'registro_cotizacion_correcto';
-                    break;
-                case 'editar_cotizacion':
-                    $cotizacion = 'editar_cotizacion';
-                    break;
                 case 'add_equipment':
                     $cotizacion = 'add_equipment';
                     break;
@@ -121,6 +114,17 @@ if ($partes_ruta[0] == 'rfq') {
                     break;
                 case 'fbo':
                     $cotizacion = 'fbo_completados';
+                    break;
+            }
+        }
+    }else if(count($partes_ruta) == 5){
+        if($partes_ruta[1] == 'perfil' && $partes_ruta[2] == 'cotizaciones'){
+            $gestor_actual = 'cotizaciones';
+            $ruta_elegida = 'vistas/perfil.php';
+            switch($partes_ruta[3]){
+                case 'editar_cotizacion':
+                    $cotizacion = 'editar_cotizacion';
+                    $id_rfq = $partes_ruta[4];
                     break;
             }
         }

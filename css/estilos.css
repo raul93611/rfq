@@ -1,0 +1,10 @@
+table{
+    font-size: 0.8em;
+}
+.btn-warning{
+    font-size: 0.9em !important;
+}
+
+.list-group-item:hover{
+    background-color: #f9c416;
+}

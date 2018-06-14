@@ -77,10 +77,10 @@ function validar_form() {
 $(document).ready(function () {
     $('#issue_date').inputmask('mm/dd/yyyy', {'placeholder': 'mm/dd/yyyy'});
     $('#end_date').inputmask("datetime", {
-        mask: "2-1-y h:s",
-        placeholder: "mm-dd-yyyy hh:mm",
-        leapday: "02-29-",
-        separator: "-",
+        mask: "2/1/y h:s",
+        placeholder: "mm/dd/yyyy hh:mm",
+        leapday: "02/29/",
+        separator: "/",
         alias: "mm/dd/yyyy"
     });
 });
