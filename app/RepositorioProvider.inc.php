@@ -48,5 +48,51 @@ class RepositorioProvider{
         }
         return $providers;
     }
+    
+    public static function obtener_provider_por_id($conexion, $id_provider){
+        $provider = null;
+        
+        if(isset($conexion)){
+            try{
+                $sql = 'SELECT * FROM provider WHERE id = :id_provider';
+                $sentencia = $conexion-> prepare($sql);
+                $sentencia-> bindParam(':id_provider', $id_provider, PDO::PARAM_STR);
+                $sentencia-> execute();
+                
+                $resultado = $sentencia-> fetch();
+                
+                if(!empty($resultado)){
+                    $provider = new Provider($resultado['id'], $resultado['id_item'], $resultado['provider'], $resultado['price']);
+                }
+            } catch (PDOException $ex) {
+                print 'ERROR:' . $ex->getMessage() . '<br>';
+            }
+        }
+        return $provider;
+    }
+    
+    public static function actualizar_provider($conexion, $id_provider, $provider, $price){
+        $provider_editado = false;
+        
+        if(isset($conexion)){
+            try{
+                $sql = 'UPDATE provider SET provider = :provider, price = :price WHERE id = :id_provider';
+                $sentencia = $conexion-> prepare($sql);
+                
+                $sentencia-> bindParam(':provider', $provider, PDO::PARAM_STR);
+                $sentencia-> bindParam(':price', $price, PDO::PARAM_STR);
+                $sentencia-> bindParam(':id_provider', $id_provider, PDO::PARAM_STR);
+                
+                $sentencia-> execute();
+                
+                if($sentencia){
+                    $provider_editado = true;
+                }
+            } catch (PDOException $ex) {
+                print 'ERROR:' . $ex->getMessage() . '<br>';
+            }
+        }
+        return $provider_editado;
+    }
 }
 ?>

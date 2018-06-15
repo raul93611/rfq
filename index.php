@@ -138,6 +138,10 @@ if ($partes_ruta[0] == 'rfq') {
                     $cotizacion = 'edit_item';
                     $id_item = $partes_ruta[4];
                     break;
+                case 'edit_provider':
+                    $cotizacion = 'edit_provider';
+                    $id_provider = $partes_ruta[4];
+                    break;
             }
         }
     }

@@ -68,7 +68,7 @@ class RepositorioItem {
         echo '<td><div class="row"><div class="col-6">';
         for($i = 0; $i < count($providers); $i++){
             $provider = $providers[$i];
-            echo '<b>'.$provider-> obtener_provider().':</b><br>';
+            echo '<a href="' . EDIT_PROVIDER . '/' . $provider-> obtener_id() . '"><b>'.$provider-> obtener_provider().':</b></a><br>';
         }
         echo '</div><div class="col-6">';
         for($i = 0; $i < count($providers); $i++){
