@@ -109,7 +109,7 @@ class RepositorioRfq {
         ?>
         <tr>
             <td>
-                <a href="<?php echo EDITAR_COTIZACION . '/' . $cotizacion-> obtener_id(); ?>" class="btn btn-warning">
+                <a href="<?php echo EDITAR_COTIZACION . '/' . $cotizacion-> obtener_id(); ?>" class="btn-block">
                     <?php echo $cotizacion->obtener_email_code(); ?>
                 </a>
             </td>
@@ -141,14 +141,14 @@ class RepositorioRfq {
             <table class="table table-bordered table-striped table-hover">
                 <thead>
                     <tr>
-                        <th>E-mail Code</th>
-                        <th>Designated user</th>
-                        <th>Type of Bid</th>
-                        <th>Issue Date</th>
-                        <th>End Date</th>
-                        <th>Amount</th>
-                        <th>Proposal</th>
-                        <th>Comments</th>
+                        <th>E-MAIL CODE</th>
+                        <th>DESIGNATED USER</th>
+                        <th>TYPE OF BID</th>
+                        <th>ISSUE DATE</th>
+                        <th>END DATE</th>
+                        <th>AMOUNT</th>
+                        <th>PROPOSAL</th>
+                        <th>COMMENTS</th>
                     </tr>
                 </thead>
                 <tbody id="myTable">

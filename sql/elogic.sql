@@ -45,8 +45,11 @@ CREATE TABLE item(
         id_rfq INT NOT NULL,
         id_usuario INT NOT NULL,
         brand VARCHAR(100) NOT NULL,
+        brand_project VARCHAR(100) NOT NULL,
         part_number VARCHAR(100) NOT NULL,
+        part_number_project VARCHAR(100) NOT NULL,
         description TEXT CHARACTER SET utf8 NOT NULL,
+        description_project TEXT CHARACTER SET utf8 NOT NULL,
         quantity INT NOT NULL,
         PRIMARY KEY(id),
         FOREIGN KEY(id_rfq)
@@ -55,6 +58,18 @@ CREATE TABLE item(
             ON DELETE RESTRICT,
         FOREIGN KEY(id_usuario)
             REFERENCES usuarios(id)
+            ON UPDATE CASCADE
+            ON DELETE RESTRICT
+);
+
+CREATE TABLE provider(
+        id INT NOT NULL AUTO_INCREMENT UNIQUE,
+        id_item INT NOT NULL,
+        provider VARCHAR(100) NOT NULL,
+        price  DECIMAL(10,2) NOT NULL,
+        PRIMARY KEY(id),
+        FOREIGN KEY(id_item)
+            REFERENCES item(id)
             ON UPDATE CASCADE
             ON DELETE RESTRICT
 );

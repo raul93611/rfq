@@ -69,7 +69,9 @@
         closedir($gestor);
         echo "</div>";
     }
+    RepositorioItem::escribir_items($cotizacion_recuperada-> obtener_id());
     ?>
+    
     <!--<div class="form-group">
         <label for="payment_terms">Payment terms:</label>
         <select id="payment_terms" class="form-control" name="payment_terms">

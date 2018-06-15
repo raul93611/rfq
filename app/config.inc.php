@@ -31,6 +31,7 @@ define('EDITAR_COTIZACION', COTIZACIONES . 'editar_cotizacion');
 define('DOCS', SERVIDOR . 'documentos/');
 define('PROPOSAL', SERVIDOR . 'proposal');
 define('ADD_ITEM', COTIZACIONES . 'add_item');
+define('ADD_PROVIDER', COTIZACIONES . 'add_provider');
 
 define('RUTA_CSS', SERVIDOR . 'css/');
 define('RUTA_JS', SERVIDOR . 'js/');

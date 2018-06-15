@@ -56,6 +56,12 @@ switch ($gestor_actual) {
                 Conexion::cerrar_conexion();
                 include_once 'plantillas/add_item.inc.php';
                 break;
+            case 'add_provider':
+                Conexion::abrir_conexion();
+                $item = RepositorioItem::obtener_item_por_id(Conexion::obtener_conexion(), $id_item);
+                Conexion::cerrar_conexion();
+                include_once 'plantillas/add_provider.inc.php';
+                break;
             default :
                 include_once 'plantillas/cotizaciones.inc.php';
         }

@@ -20,6 +20,9 @@ include_once 'app/ValidadorCotizacionEdicion.inc.php';
 include_once 'app/Item.inc.php';
 include_once 'app/RepositorioItem.inc.php';
 
+include_once 'app/Provider.inc.php';
+include_once 'app/RepositorioProvider.inc.php';
+
 $componentes_url = parse_url($_SERVER['REQUEST_URI']);
 $ruta = $componentes_url['path'];
 
@@ -89,9 +92,6 @@ if ($partes_ruta[0] == 'rfq') {
                 case 'nuevo':
                     $cotizacion = 'nuevo';
                     break;
-                case 'add_equipment':
-                    $cotizacion = 'add_equipment';
-                    break;
             }
         } else if ($partes_ruta[1] == 'perfil' && $partes_ruta[2] == 'completados') {
             $gestor_actual = 'completados';
@@ -129,6 +129,10 @@ if ($partes_ruta[0] == 'rfq') {
                 case 'add_item':
                     $cotizacion = 'add_item';
                     $id_rfq = $partes_ruta[4];
+                    break;
+                case 'add_provider':
+                    $cotizacion = 'add_provider';
+                    $id_item = $partes_ruta[4];
                     break;
             }
         }
