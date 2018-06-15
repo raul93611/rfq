@@ -60,17 +60,17 @@ class RepositorioItem {
         $providers = RepositorioProvider::obtener_providers_por_id_item(Conexion::obtener_conexion(), $item-> obtener_id());
         Conexion::cerrar_conexion();
         echo '<tr>';
-        echo '<td><a href="' . ADD_PROVIDER . '/' . $item-> obtener_id() . '" class="btn btn-warning">Add Provider</a></td>';
+        echo '<td><a href="' . ADD_PROVIDER . '/' . $item-> obtener_id() . '" class="btn btn-warning btn-block">Add Provider</a><br><a href="' . EDIT_ITEM . '/' . $item-> obtener_id() . '" class="btn btn-warning btn-block">Edit item</a></td>';
         echo '<td>' . $i . '</td>';
         echo '<td><b>Brand:</b>' . $item-> obtener_brand_project() . '<br><b>Part #:</b>' . $item-> obtener_part_number_project() . '<br><b>Description:</b>' . nl2br($item->obtener_description_project()) . '</td>';
         echo '<td><b>Brand:</b>' . $item-> obtener_brand() . '<br><b>Part #:</b>' . $item-> obtener_part_number() . '<br><b>Description:</b>' . nl2br($item->obtener_description()) . '</td>';
         echo '<td>' . $item-> obtener_quantity() . '</td>';
-        echo '<td><div class="row"><div class="col-8">';
+        echo '<td><div class="row"><div class="col-6">';
         for($i = 0; $i < count($providers); $i++){
             $provider = $providers[$i];
             echo '<b>'.$provider-> obtener_provider().':</b><br>';
         }
-        echo '</div><div class="col-4">';
+        echo '</div><div class="col-6">';
         for($i = 0; $i < count($providers); $i++){
             $provider = $providers[$i];
             echo '$ ' . $provider-> obtener_price().'<br>';
@@ -126,6 +126,35 @@ class RepositorioItem {
             }
         }
         return $item;
+    }
+    
+    public static function actualizar_item($conexion, $id_item, $brand, $brand_project, $part_number, $part_number_project, $description, $description_project, $quantity){
+        $item_editado = false;
+        
+        if(isset($conexion)){
+            try{
+                $sql = 'UPDATE item SET brand = :brand, brand_project = :brand_project, part_number = :part_number, part_number_project = :part_number_project, description = :description, description_project = :description_project, quantity = :quantity WHERE id = :id_item';
+                $sentencia = $conexion-> prepare($sql);
+                
+                $sentencia-> bindParam(':brand', $brand, PDO::PARAM_STR);
+                $sentencia-> bindParam(':brand_project', $brand_project, PDO::PARAM_STR);
+                $sentencia-> bindParam(':part_number', $part_number, PDO::PARAM_STR);
+                $sentencia-> bindParam(':part_number_project', $part_number_project, PDO::PARAM_STR);
+                $sentencia-> bindParam(':description', $description, PDO::PARAM_STR);
+                $sentencia-> bindParam(':description_project', $description_project, PDO::PARAM_STR);
+                $sentencia-> bindParam(':quantity', $quantity, PDO::PARAM_STR);
+                $sentencia-> bindParam(':id_item', $id_item, PDO::PARAM_STR);
+                
+                $sentencia-> execute();
+                
+                if($sentencia){
+                    $item_editado = true;
+                }
+            } catch (PDOException $ex) {
+                print 'ERROR:' . $ex->getMessage() . '<br>';
+            }
+        }
+        return $item_editado;
     }
 }
 ?>
