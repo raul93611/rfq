@@ -6,7 +6,7 @@ class RepositorioItem {
         $item_insertado = false;
         if (isset($conexion)) {
             try {
-                $sql = 'INSERT INTO item(id_rfq, id_usuario, brand, brand_project, part_number, part_number_project, description, description_project, quantity) VALUES(:id_rfq, :id_usuario, :brand, :brand_project, :part_number, :part_number_project, :description, :description_project, :quantity)';
+                $sql = 'INSERT INTO item(id_rfq, id_usuario, brand, brand_project, part_number, part_number_project, description, description_project, quantity, comments) VALUES(:id_rfq, :id_usuario, :brand, :brand_project, :part_number, :part_number_project, :description, :description_project, :quantity, :comments)';
                 $sentencia = $conexion->prepare($sql);
                 $sentencia->bindParam(':id_rfq', $item->obtener_id_rfq(), PDO::PARAM_STR);
                 $sentencia-> bindParam(':id_usuario', $item-> obtener_id_usuario(), PDO::PARAM_STR);
@@ -16,7 +16,8 @@ class RepositorioItem {
                 $sentencia-> bindParam(':part_number_project', $item-> obtener_part_number_project(), PDO::PARAM_STR);
                 $sentencia-> bindParam(':description', $item->obtener_description(), PDO::PARAM_STR);
                 $sentencia-> bindParam(':description_project', $item-> obtener_description_project(), PDO::PARAM_STR);
-                $sentencia->bindParam(':quantity', $item->obtener_quantity(), PDO::PARAM_STR);
+                $sentencia-> bindParam(':quantity', $item->obtener_quantity(), PDO::PARAM_STR);
+                $sentencia-> bindParam(':comments', $item->obtener_comments(), PDO::PARAM_STR);
                 $resultado = $sentencia->execute();
 
                 if ($resultado) {
@@ -42,7 +43,7 @@ class RepositorioItem {
                 
                 if(count($resultado)){
                     foreach ($resultado as $fila){
-                        $items[] = new Item($fila['id'], $fila['id_rfq'], $fila['id_usuario'], $fila['brand'], $fila['brand_project'], $fila['part_number'], $fila['part_number_project'], $fila['description'], $fila['description_project'], $fila['quantity']);
+                        $items[] = new Item($fila['id'], $fila['id_rfq'], $fila['id_usuario'], $fila['brand'], $fila['brand_project'], $fila['part_number'], $fila['part_number_project'], $fila['description'], $fila['description_project'], $fila['quantity'], $fila['comments']);
                     }
                 }
             } catch (PDOException $ex) {
@@ -76,6 +77,20 @@ class RepositorioItem {
             echo '$ ' . $provider-> obtener_price().'<br>';
         }
         echo '</div></div></td>';
+        echo '<td>';
+        for($i = 0; $i < count($providers); $i++){
+            $provider = $providers[$i];
+            $precios[$i] = $provider-> obtener_price(); 
+        }
+        if(!empty($precios)){
+            $best_unit_price = min($precios); 
+            echo '$ ' . $best_unit_price;
+        }
+        echo '</td>';
+        echo '<td></td>';
+        echo '<td></td>';
+        echo '<td></td>';
+        echo '<td>' . nl2br($item-> obtener_comments()) . '</td>';
         echo '</tr>';
     }
     
@@ -86,22 +101,40 @@ class RepositorioItem {
         
         if(count($items)){
             echo '<br><h2>Items:</h2>';
-            echo '<table class="table table-bordered table-hover">';
+            echo '<form method="post" action="' . EDITAR_COTIZACION . '/' . $id_rfq . '">';
+            echo '<div class="row">';
+            echo '<div class="col">';
+            echo '<label>Taxes (%):</label><input type="number" name="taxes" id="taxes" class="form-control" value="0"><br><button type="button" id="calculate" class="btn btn-primary">Calculate</button>';
+            echo '<input type="hidden" name="id_rfq" value="' . $id_rfq . '">';
+            echo '</div><div class="col">';
+            echo '<label>Profit (%):</label><input type="number" name="profit" id="profit" class="form-control" value="0"><br><button type="submit" class="btn btn-primary" name="fijar_taxes_profit">Set taxes & profit</button>';
+            echo '</div></div></form><br>';
+            echo '<table id="tabla_items" class="table table-bordered table-hover">';
             echo '<thead>';
             echo '<tr>';
-            echo '<th>Options</th>';
-            echo '<th>#</th>';
-            echo '<th>PROJECT SPECIFICATIONS</th>';
-            echo '<th>E-LOGIC PROPOSAL</th>';
-            echo '<th>QTY</th>';
+            echo '<th class="options">Options</th>';
+            echo '<th id="numeracion">#</th>';
+            echo '<th class="description">PROJECT SPECIFICATIONS</th>';
+            echo '<th class="description">E-LOGIC PROPOSAL</th>';
+            echo '<th class="options">QTY</th>';
             echo '<th>PROVIDERS</th>';
+            echo '<th class="options">BEST UNIT COST</th>';
+            echo '<th class="options">TOTAL COST</th>';
+            echo '<th class="options">PRICE FOR CLIENT</th>';
+            echo '<th class="options">TOTAL PRICE</th>';
+            echo '<th>COMMENTS</th>';
             echo '</tr>';
             echo '</thead>';
-            echo '<tbody id="myTable">';
+            echo '<tbody id="items">';
             for($i = 0; $i < count($items); $i++){
                 $item = $items[$i];
                 self::escribir_item($item, $i+1);
             }
+            echo '<td colspan="7" class="display-4"><b><h4>TOTAL:</h4></b></td>';
+            echo '<td id="total1"></td>';
+            echo '<td></td>';
+            echo '<td id="total2"></td>';
+            echo '<td></td>';
             echo '</tbody>';
             echo '</table>';
         }
@@ -119,7 +152,7 @@ class RepositorioItem {
                 $resultado = $sentencia-> fetch();
                 
                 if(!empty($resultado)){
-                    $item = new Item($resultado['id'], $resultado['id_rfq'], $resultado['id_usuario'], $resultado['brand'], $resultado['brand_project'], $resultado['part_number'], $resultado['part_number_project'], $resultado['description'], $resultado['description_project'], $resultado['quantity']);
+                    $item = new Item($resultado['id'], $resultado['id_rfq'], $resultado['id_usuario'], $resultado['brand'], $resultado['brand_project'], $resultado['part_number'], $resultado['part_number_project'], $resultado['description'], $resultado['description_project'], $resultado['quantity'], $resultado['comments']);
                 }
             } catch (PDOException $ex) {
                 print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -128,12 +161,12 @@ class RepositorioItem {
         return $item;
     }
     
-    public static function actualizar_item($conexion, $id_item, $brand, $brand_project, $part_number, $part_number_project, $description, $description_project, $quantity){
+    public static function actualizar_item($conexion, $id_item, $brand, $brand_project, $part_number, $part_number_project, $description, $description_project, $quantity, $comments){
         $item_editado = false;
         
         if(isset($conexion)){
             try{
-                $sql = 'UPDATE item SET brand = :brand, brand_project = :brand_project, part_number = :part_number, part_number_project = :part_number_project, description = :description, description_project = :description_project, quantity = :quantity WHERE id = :id_item';
+                $sql = 'UPDATE item SET brand = :brand, brand_project = :brand_project, part_number = :part_number, part_number_project = :part_number_project, description = :description, description_project = :description_project, quantity = :quantity, comments = :comments WHERE id = :id_item';
                 $sentencia = $conexion-> prepare($sql);
                 
                 $sentencia-> bindParam(':brand', $brand, PDO::PARAM_STR);
@@ -143,6 +176,7 @@ class RepositorioItem {
                 $sentencia-> bindParam(':description', $description, PDO::PARAM_STR);
                 $sentencia-> bindParam(':description_project', $description_project, PDO::PARAM_STR);
                 $sentencia-> bindParam(':quantity', $quantity, PDO::PARAM_STR);
+                $sentencia-> bindParam(':comments', $comments, PDO::PARAM_STR);
                 $sentencia-> bindParam(':id_item', $id_item, PDO::PARAM_STR);
                 
                 $sentencia-> execute();

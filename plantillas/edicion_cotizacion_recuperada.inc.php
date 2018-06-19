@@ -1,5 +1,5 @@
 <input type="hidden" name="id_rfq" value="<?php echo $cotizacion_recuperada-> obtener_id(); ?>">
-<div class="card-body">
+<div class="card-body table-responsive">
     <div class="row">
         <div class="col">
             <div class="form-group">

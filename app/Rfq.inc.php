@@ -21,8 +21,10 @@ class Rfq {
     private $ship_to;
     private $expiration_date;
     private $ship_via;
+    private $taxes;
+    private $profit;
 
-    public function __construct($id, $id_usuario, $usuario_designado, $canal, $email_code, $type_of_bid, $issue_date, $end_date, $status, $completado, $amount, $comments, $award, $fecha_completado, $payment_terms, $address, $ship_to, $expiration_date, $ship_via) {
+    public function __construct($id, $id_usuario, $usuario_designado, $canal, $email_code, $type_of_bid, $issue_date, $end_date, $status, $completado, $amount, $comments, $award, $fecha_completado, $payment_terms, $address, $ship_to, $expiration_date, $ship_via, $taxes, $profit) {
         $this->id = $id;
         $this->id_usuario = $id_usuario;
         $this->usuario_designado = $usuario_designado;
@@ -42,6 +44,8 @@ class Rfq {
         $this->ship_to = $ship_to;
         $this->expiration_date = $expiration_date;
         $this->ship_via = $ship_via;
+        $this->taxes = $taxes;
+        $this->profit = $profit;
     }
 
     public function obtener_id() {
@@ -119,7 +123,14 @@ class Rfq {
     public function obtener_ship_via(){
         return $this->ship_via;
     }
-
+    
+    public function obtener_taxes(){
+        return $this->taxes;
+    }
+    
+    public function obtener_profit(){
+        return $this->profit;
+    }
 }
 
 ?>

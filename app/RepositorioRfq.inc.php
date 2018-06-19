@@ -7,7 +7,7 @@ class RepositorioRfq {
 
         if (isset($conexion)) {
             try {
-                $sql = 'INSERT INTO rfq(id_usuario, usuario_designado, canal, email_code, type_of_bid, issue_date, end_date, status, completado, amount, comments, award, fecha_completado, payment_terms, address, ship_to, expiration_date, ship_via) VALUES(:id_usuario, :usuario_designado, :canal, :email_code, :type_of_bid, :issue_date, :end_date, :status, :completado, :amount, :comments, :award, :fecha_completado, :payment_terms, :address, :ship_to, :expiration_date, :ship_via)';
+                $sql = 'INSERT INTO rfq(id_usuario, usuario_designado, canal, email_code, type_of_bid, issue_date, end_date, status, completado, amount, comments, award, fecha_completado, payment_terms, address, ship_to, expiration_date, ship_via, taxes, profit) VALUES(:id_usuario, :usuario_designado, :canal, :email_code, :type_of_bid, :issue_date, :end_date, :status, :completado, :amount, :comments, :award, :fecha_completado, :payment_terms, :address, :ship_to, :expiration_date, :ship_via, :taxes, :profit)';
 
                 $sentencia = $conexion->prepare($sql);
 
@@ -29,6 +29,8 @@ class RepositorioRfq {
                 $sentencia->bindParam(':ship_to', $cotizacion->obtener_ship_to(), PDO::PARAM_STR);
                 $sentencia->bindParam(':expiration_date', $cotizacion->obtener_expiration_date(), PDO::PARAM_STR);
                 $sentencia->bindParam(':ship_via', $cotizacion->obtener_ship_via(), PDO::PARAM_STR);
+                $sentencia->bindParam(':taxes', $cotizacion->obtener_taxes(), PDO::PARAM_STR);
+                $sentencia->bindParam(':profit', $cotizacion->obtener_profit(), PDO::PARAM_STR);
 
                 $resultado = $sentencia->execute();
 
@@ -92,7 +94,7 @@ class RepositorioRfq {
 
                 if (count($resultado)) {
                     foreach ($resultado as $fila) {
-                        $cotizaciones [] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['amount'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via']);
+                        $cotizaciones [] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['amount'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via'], $fila['taxes'], $fila['profit']);
                     }
                 }
             } catch (PDOException $ex) {
@@ -176,7 +178,7 @@ class RepositorioRfq {
                 $resultado = $sentencia->fetch();
 
                 if (!empty($resultado)) {
-                    $cotizacion_recuperada = new Rfq($resultado['id'], $resultado['id_usuario'], $resultado['usuario_designado'], $resultado['canal'], $resultado['email_code'], $resultado['type_of_bid'], $resultado['issue_date'], $resultado['end_date'], $resultado['status'], $resultado['completado'], $resultado['amount'], $resultado['comments'], $resultado['award'], $resultado['fecha_completado'], $resultado['payment_terms'], $resultado['address'], $resultado['ship_to'], $resultado['expiration_date'], $resultado['ship_via']);
+                    $cotizacion_recuperada = new Rfq($resultado['id'], $resultado['id_usuario'], $resultado['usuario_designado'], $resultado['canal'], $resultado['email_code'], $resultado['type_of_bid'], $resultado['issue_date'], $resultado['end_date'], $resultado['status'], $resultado['completado'], $resultado['amount'], $resultado['comments'], $resultado['award'], $resultado['fecha_completado'], $resultado['payment_terms'], $resultado['address'], $resultado['ship_to'], $resultado['expiration_date'], $resultado['ship_via'], $resultado['taxes'], $resultado['profit']);
                 }
             } catch (PDOException $ex) {
                 print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -205,6 +207,28 @@ class RepositorioRfq {
         }
         return $cotizacion_editada;
     }
+    
+    public static function actualizar_taxes_profit($conexion, $taxes, $profit, $id_rfq){
+        $cotizacion_editada = false;
+        if(isset($conexion)){
+            try{
+                $sql = 'UPDATE rfq SET taxes = :taxes, profit = :profit WHERE id = :id_rfq';
+                $sentencia = $conexion-> prepare($sql);
+                $sentencia-> bindParam(':taxes', $taxes, PDO::PARAM_STR);
+                $sentencia-> bindParam(':profit', $profit, PDO::PARAM_STR);
+                $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+                
+                $sentencia-> execute();
+                
+                if($sentencia){
+                    $cotizacion_editada = true;
+                }
+            } catch (PDOException $ex) {
+                print 'ERROR:' . $ex->getMessage() . '<br>';
+            }
+        }
+        return $cotizacion_editada;
+    }
 
     public static function obtener_cotizaciones_completadas_por_canal($conexion, $canal) {
         $cotizaciones = [];
@@ -220,7 +244,7 @@ class RepositorioRfq {
 
                 if (count($resultado)) {
                     foreach ($resultado as $fila) {
-                        $cotizaciones [] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['amount'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via']);
+                        $cotizaciones [] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['amount'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via'], $fila['taxes'], $fila['profit']);
                     }
                 }
             } catch (PDOException $ex) {

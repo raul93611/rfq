@@ -33,6 +33,8 @@ CREATE TABLE rfq(
         ship_to TEXT CHARACTER SET utf8 NOT NULL,
         expiration_date DATE NOT NULL,
         ship_via VARCHAR(100) NOT NULL,
+        taxes DECIMAL(10,2) NOT NULL,
+        profit DECIMAL(10,2) NOT NULL,
         PRIMARY KEY(id),
         FOREIGN KEY(id_usuario)
             REFERENCES usuarios(id)
@@ -51,6 +53,7 @@ CREATE TABLE item(
         description TEXT CHARACTER SET utf8 NOT NULL,
         description_project TEXT CHARACTER SET utf8 NOT NULL,
         quantity INT NOT NULL,
+        comments TEXT CHARACTER SET utf8 NOT NULL,
         PRIMARY KEY(id),
         FOREIGN KEY(id_rfq)
             REFERENCES rfq(id)

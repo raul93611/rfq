@@ -8,3 +8,15 @@ table{
 .list-group-item:hover{
     background-color: #f9c416;
 }
+
+#tabla_items .description{
+    width: 200px !important;
+}
+
+#tabla_items .options{
+    width: 100px !important;
+}
+
+#tabla_items #numeracion{
+    width: 20px !important;
+}

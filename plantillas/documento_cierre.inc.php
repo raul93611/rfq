@@ -4,8 +4,6 @@
         <b>Version</b> 0.1
     </div>
 </footer>
-<aside class="control-sidebar control-sidebar">
-</aside>
 </div>
 <script src="<?php echo PLUGINS; ?>jquery/jquery.min.js"></script>
 <script src="<?php echo PLUGINS; ?>bootstrap/js/bootstrap.bundle.min.js"></script>
