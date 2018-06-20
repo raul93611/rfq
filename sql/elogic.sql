@@ -55,6 +55,7 @@ CREATE TABLE item(
         description_project TEXT CHARACTER SET utf8 NOT NULL,
         quantity INT NOT NULL,
         comments TEXT CHARACTER SET utf8 NOT NULL,
+        website VARCHAR(255) NOT NULL,
         PRIMARY KEY(id),
         FOREIGN KEY(id_rfq)
             REFERENCES rfq(id)

@@ -41,6 +41,10 @@
         <label for="comments">Comments:</label>
         <textarea class="form-control" rows="5" placeholder="Enter comments ..." id="comments" name="comments"><?php echo $item->obtener_comments(); ?></textarea>
     </div>
+    <div class="form-group">
+        <label for="website">Website:</label>
+        <input type="text" class="form-control" id="website" name="website" placeholder="Website ..." required value="<?php echo $item->obtener_website(); ?>">
+    </div>
 </div>
 <div class="card-footer">
     <button type="submit" class="btn btn-primary" name="guardar_cambios_item">Save</button>

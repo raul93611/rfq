@@ -11,8 +11,9 @@ class Item{
     private $description_project;
     private $quantity;
     private $comments;
+    private $website;
     
-    public function __construct($id, $id_rfq, $id_usuario, $brand, $brand_project, $part_number, $part_number_project, $description, $description_project, $quantity, $comments){
+    public function __construct($id, $id_rfq, $id_usuario, $brand, $brand_project, $part_number, $part_number_project, $description, $description_project, $quantity, $comments, $website){
         $this-> id = $id;
         $this-> id_rfq = $id_rfq;
         $this-> id_usuario = $id_usuario;
@@ -24,6 +25,7 @@ class Item{
         $this-> description_project = $description_project;
         $this-> quantity = $quantity;
         $this-> comments = $comments;
+        $this-> website = $website;
     }
     
     public function obtener_id(){
@@ -68,6 +70,10 @@ class Item{
     
     public function obtener_comments(){
         return $this-> comments;
+    }
+    
+    public function obtener_website(){
+        return $this-> website;
     }
 }
 ?>
