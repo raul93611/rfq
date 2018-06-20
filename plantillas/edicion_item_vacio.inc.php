@@ -43,7 +43,7 @@
     </div>
     <div class="form-group">
         <label for="website">Website:</label>
-        <input type="text" class="form-control" id="website" name="website" placeholder="Website ..." required value="<?php echo $item->obtener_website(); ?>">
+        <input type="text" class="form-control" id="website" name="website" placeholder="Website ..." value="<?php echo $item->obtener_website(); ?>">
     </div>
 </div>
 <div class="card-footer">

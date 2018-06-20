@@ -10,13 +10,17 @@ table{
 }
 
 #tabla_items .description{
-    width: 170px !important;
+    width: 150px !important;
 }
 
 #tabla_items .options{
-    width: 100px !important;
+    min-width: 100px !important;
 }
 
 #tabla_items #numeracion{
-    width: 20px !important;
+    min-width: 20px !important;
+}
+
+#tabla_items #provider{
+    min-width: 200px !important;
 }
