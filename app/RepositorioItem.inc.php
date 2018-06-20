@@ -6,10 +6,11 @@ class RepositorioItem {
         $item_insertado = false;
         if (isset($conexion)) {
             try {
-                $sql = 'INSERT INTO item(id_rfq, id_usuario, brand, brand_project, part_number, part_number_project, description, description_project, quantity, comments, website) VALUES(:id_rfq, :id_usuario, :brand, :brand_project, :part_number, :part_number_project, :description, :description_project, :quantity, :comments, :website)';
+                $sql = 'INSERT INTO item(id_rfq, id_usuario, provider_menor, brand, brand_project, part_number, part_number_project, description, description_project, quantity, comments, website) VALUES(:id_rfq, :id_usuario, :provider_menor, :brand, :brand_project, :part_number, :part_number_project, :description, :description_project, :quantity, :comments, :website)';
                 $sentencia = $conexion->prepare($sql);
                 $sentencia->bindParam(':id_rfq', $item->obtener_id_rfq(), PDO::PARAM_STR);
                 $sentencia->bindParam(':id_usuario', $item->obtener_id_usuario(), PDO::PARAM_STR);
+                $sentencia->bindParam(':provider_menor', $item->obtener_provider_menor(), PDO::PARAM_STR);
                 $sentencia->bindParam(':brand', $item->obtener_brand(), PDO::PARAM_STR);
                 $sentencia->bindParam(':brand_project', $item->obtener_brand_project(), PDO::PARAM_STR);
                 $sentencia->bindParam(':part_number', $item->obtener_part_number(), PDO::PARAM_STR);
@@ -30,6 +31,26 @@ class RepositorioItem {
         }
         return $item_insertado;
     }
+    
+    public static function actualizar_provider_menor_item($conexion, $provider_menor, $id_item){
+        $item_editado = false;
+        if(isset($conexion)){
+            try{
+                $sql = 'UPDATE item SET provider_menor = :provider_menor WHERE id = :id_item';
+                $sentencia = $conexion-> prepare($sql);
+                $sentencia-> bindParam(':provider_menor', $provider_menor, PDO::PARAM_STR);
+                $sentencia-> bindParam(':id_item', $id_item, PDO::PARAM_STR);
+                $sentencia-> execute();
+                
+                if($sentencia){
+                    $item_editado = true;
+                }
+            } catch (PDOException $ex) {
+                print 'ERROR:' . $ex->getMessage() . '<br>';
+            }
+        }
+        return $item_editado;
+    }
 
     public static function obtener_items_por_id_rfq($conexion, $id_rfq) {
         $items = [];
@@ -44,7 +65,7 @@ class RepositorioItem {
 
                 if (count($resultado)) {
                     foreach ($resultado as $fila) {
-                        $items[] = new Item($fila['id'], $fila['id_rfq'], $fila['id_usuario'], $fila['brand'], $fila['brand_project'], $fila['part_number'], $fila['part_number_project'], $fila['description'], $fila['description_project'], $fila['quantity'], $fila['comments'], $fila['website']);
+                        $items[] = new Item($fila['id'], $fila['id_rfq'], $fila['id_usuario'], $fila['provider_menor'], $fila['brand'], $fila['brand_project'], $fila['part_number'], $fila['part_number_project'], $fila['description'], $fila['description_project'], $fila['quantity'], $fila['comments'], $fila['website']);
                     }
                 }
             } catch (PDOException $ex) {
@@ -85,6 +106,13 @@ class RepositorioItem {
         }
         if (!empty($precios)) {
             $best_unit_price = min($precios);
+            for($i = 0;$i < count($precios); $i++){
+                if($best_unit_price == $precios[$i]){
+                    Conexion::abrir_conexion();
+                    self::actualizar_provider_menor_item(Conexion::obtener_conexion(), $providers[$i]->obtener_id(), $item-> obtener_id());
+                    Conexion::cerrar_conexion();
+                }
+            }
             echo '$ ' . $best_unit_price;
         }
         echo '</td>';
@@ -92,7 +120,7 @@ class RepositorioItem {
         echo '<td></td>';
         echo '<td></td>';
         echo '<td>' . nl2br($item->obtener_comments()) . '</td>';
-        echo '<td><a href="'. $item-> obtener_website() .'">'. $item-> obtener_website() .'</a></td>';
+        echo '<td><a target="_blank" href="'. $item-> obtener_website() .'">'. $item-> obtener_website() .'</a></td>';
         echo '</tr>';
     }
 
@@ -147,7 +175,6 @@ class RepositorioItem {
             echo '<td id="total1"></td>';
             echo '<td></td>';
             echo '<td id="total2"></td>';
-            echo '<td></td>';
             echo '</tbody>';
             echo '</table>';
             echo '<input type="hidden" id="total_cost" name="total_cost" value="">';
@@ -167,7 +194,7 @@ class RepositorioItem {
                 $resultado = $sentencia->fetch();
 
                 if (!empty($resultado)) {
-                    $item = new Item($resultado['id'], $resultado['id_rfq'], $resultado['id_usuario'], $resultado['brand'], $resultado['brand_project'], $resultado['part_number'], $resultado['part_number_project'], $resultado['description'], $resultado['description_project'], $resultado['quantity'], $resultado['comments'], $resultado['website']);
+                    $item = new Item($resultado['id'], $resultado['id_rfq'], $resultado['id_usuario'], $resultado['provider_menor'], $resultado['brand'], $resultado['brand_project'], $resultado['part_number'], $resultado['part_number_project'], $resultado['description'], $resultado['description_project'], $resultado['quantity'], $resultado['comments'], $resultado['website']);
                 }
             } catch (PDOException $ex) {
                 print 'ERROR:' . $ex->getMessage() . '<br>';

@@ -3,6 +3,7 @@ class Item{
     private $id;
     private $id_rfq;
     private $id_usuario;
+    private $provider_menor;
     private $brand;
     private $brand_project;
     private $part_number;
@@ -13,10 +14,11 @@ class Item{
     private $comments;
     private $website;
     
-    public function __construct($id, $id_rfq, $id_usuario, $brand, $brand_project, $part_number, $part_number_project, $description, $description_project, $quantity, $comments, $website){
+    public function __construct($id, $id_rfq, $id_usuario, $provider_menor, $brand, $brand_project, $part_number, $part_number_project, $description, $description_project, $quantity, $comments, $website){
         $this-> id = $id;
         $this-> id_rfq = $id_rfq;
         $this-> id_usuario = $id_usuario;
+        $this-> provider_menor = $provider_menor;
         $this-> brand = $brand;
         $this-> brand_project = $brand_project;
         $this-> part_number = $part_number;
@@ -40,6 +42,10 @@ class Item{
         return $this-> id_usuario;
     }
     
+    public function obtener_provider_menor(){
+        return $this-> provider_menor;
+    }
+
     public function obtener_brand(){
         return $this-> brand;
     }

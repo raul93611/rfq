@@ -71,7 +71,7 @@ switch ($gestor_actual) {
             case 'edit_provider':
                 Conexion::abrir_conexion();
                 $provider = RepositorioProvider::obtener_provider_por_id(Conexion::obtener_conexion(), $id_provider);
-                $item = RepositorioItem::obtener_item_por_id(Conexion::obtener_conexion(), $provider-> obtener_id_item());
+                $item = RepositorioItem::obtener_item_por_id(Conexion::obtener_conexion(), $provider->obtener_id_item());
                 Conexion::cerrar_conexion();
                 include_once 'plantillas/edit_provider.inc.php';
                 break;

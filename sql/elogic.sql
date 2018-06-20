@@ -47,6 +47,7 @@ CREATE TABLE item(
         id INT NOT NULL AUTO_INCREMENT UNIQUE,
         id_rfq INT NOT NULL,
         id_usuario INT NOT NULL,
+        provider_menor INT NOT NULL,
         brand VARCHAR(100) NOT NULL,
         brand_project VARCHAR(100) NOT NULL,
         part_number VARCHAR(100) NOT NULL,
