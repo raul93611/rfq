@@ -3,7 +3,6 @@ if (!ControlSesion::sesion_iniciada()) {
     Redireccion::redirigir1(SERVIDOR);
 }
 include_once 'plantillas/validacion_cotizacion_editada.inc.php';
-include_once 'plantillas/fijar_taxes_profit.inc.php';
 ?>
 <div class="content-wrapper">
     <section class="content-header">

@@ -7,7 +7,7 @@ class RepositorioRfq {
 
         if (isset($conexion)) {
             try {
-                $sql = 'INSERT INTO rfq(id_usuario, usuario_designado, canal, email_code, type_of_bid, issue_date, end_date, status, completado, amount, comments, award, fecha_completado, payment_terms, address, ship_to, expiration_date, ship_via, taxes, profit) VALUES(:id_usuario, :usuario_designado, :canal, :email_code, :type_of_bid, :issue_date, :end_date, :status, :completado, :amount, :comments, :award, :fecha_completado, :payment_terms, :address, :ship_to, :expiration_date, :ship_via, :taxes, :profit)';
+                $sql = 'INSERT INTO rfq(id_usuario, usuario_designado, canal, email_code, type_of_bid, issue_date, end_date, status, completado, total_cost, total_price, comments, award, fecha_completado, payment_terms, address, ship_to, expiration_date, ship_via, taxes, profit) VALUES(:id_usuario, :usuario_designado, :canal, :email_code, :type_of_bid, :issue_date, :end_date, :status, :completado, :total_cost, :total_price, :comments, :award, :fecha_completado, :payment_terms, :address, :ship_to, :expiration_date, :ship_via, :taxes, :profit)';
 
                 $sentencia = $conexion->prepare($sql);
 
@@ -20,7 +20,8 @@ class RepositorioRfq {
                 $sentencia->bindParam(':end_date', $cotizacion->obtener_end_date(), PDO::PARAM_STR);
                 $sentencia->bindParam(':status', $cotizacion->obtener_status(), PDO::PARAM_STR);
                 $sentencia->bindParam(':completado', $cotizacion->obtener_completado(), PDO::PARAM_STR);
-                $sentencia->bindParam(':amount', $cotizacion->obtener_amount(), PDO::PARAM_STR);
+                $sentencia->bindParam(':total_cost', $cotizacion->obtener_total_cost(), PDO::PARAM_STR);
+                $sentencia->bindParam(':total_price', $cotizacion->obtener_total_price(), PDO::PARAM_STR);
                 $sentencia->bindParam(':comments', $cotizacion->obtener_comments(), PDO::PARAM_STR);
                 $sentencia->bindParam(':award', $cotizacion->obtener_award(), PDO::PARAM_STR);
                 $sentencia->bindParam(':fecha_completado', $cotizacion->obtener_fecha_completado(), PDO::PARAM_STR);
@@ -94,7 +95,7 @@ class RepositorioRfq {
 
                 if (count($resultado)) {
                     foreach ($resultado as $fila) {
-                        $cotizaciones [] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['amount'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via'], $fila['taxes'], $fila['profit']);
+                        $cotizaciones [] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['total_cost'], $fila['total_price'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via'], $fila['taxes'], $fila['profit']);
                     }
                 }
             } catch (PDOException $ex) {
@@ -126,7 +127,7 @@ class RepositorioRfq {
             <td><?php echo $cotizacion->obtener_type_of_bid(); ?></td>
             <td><?php echo $cotizacion->obtener_issue_date(); ?></td>
             <td><?php echo $cotizacion->obtener_end_date(); ?></td>
-            <td><?php echo $cotizacion->obtener_amount(); ?></td>
+            <td><?php echo $cotizacion->obtener_total_price(); ?></td>
             <td><?php echo $cotizacion->obtener_id(); ?></td>
             <td><?php echo $cotizacion->obtener_comments(); ?></td>
         </tr>
@@ -178,7 +179,7 @@ class RepositorioRfq {
                 $resultado = $sentencia->fetch();
 
                 if (!empty($resultado)) {
-                    $cotizacion_recuperada = new Rfq($resultado['id'], $resultado['id_usuario'], $resultado['usuario_designado'], $resultado['canal'], $resultado['email_code'], $resultado['type_of_bid'], $resultado['issue_date'], $resultado['end_date'], $resultado['status'], $resultado['completado'], $resultado['amount'], $resultado['comments'], $resultado['award'], $resultado['fecha_completado'], $resultado['payment_terms'], $resultado['address'], $resultado['ship_to'], $resultado['expiration_date'], $resultado['ship_via'], $resultado['taxes'], $resultado['profit']);
+                    $cotizacion_recuperada = new Rfq($resultado['id'], $resultado['id_usuario'], $resultado['usuario_designado'], $resultado['canal'], $resultado['email_code'], $resultado['type_of_bid'], $resultado['issue_date'], $resultado['end_date'], $resultado['status'], $resultado['completado'], $resultado['total_cost'], $resultado['total_price'], $resultado['comments'], $resultado['award'], $resultado['fecha_completado'], $resultado['payment_terms'], $resultado['address'], $resultado['ship_to'], $resultado['expiration_date'], $resultado['ship_via'], $resultado['taxes'], $resultado['profit']);
                 }
             } catch (PDOException $ex) {
                 print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -208,14 +209,16 @@ class RepositorioRfq {
         return $cotizacion_editada;
     }
     
-    public static function actualizar_taxes_profit($conexion, $taxes, $profit, $id_rfq){
+    public static function actualizar_taxes_profit($conexion, $taxes, $profit, $total_cost, $total_price, $id_rfq){
         $cotizacion_editada = false;
         if(isset($conexion)){
             try{
-                $sql = 'UPDATE rfq SET taxes = :taxes, profit = :profit WHERE id = :id_rfq';
+                $sql = 'UPDATE rfq SET taxes = :taxes, profit = :profit, total_cost = :total_cost, total_price = :total_price WHERE id = :id_rfq';
                 $sentencia = $conexion-> prepare($sql);
                 $sentencia-> bindParam(':taxes', $taxes, PDO::PARAM_STR);
                 $sentencia-> bindParam(':profit', $profit, PDO::PARAM_STR);
+                $sentencia-> bindParam(':total_cost', $total_cost, PDO::PARAM_STR);
+                $sentencia-> bindParam(':total_price', $total_price, PDO::PARAM_STR);
                 $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
                 
                 $sentencia-> execute();
@@ -244,7 +247,7 @@ class RepositorioRfq {
 
                 if (count($resultado)) {
                     foreach ($resultado as $fila) {
-                        $cotizaciones [] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['amount'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via'], $fila['taxes'], $fila['profit']);
+                        $cotizaciones [] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['total_cost'], $fila['total_price'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via'], $fila['taxes'], $fila['profit']);
                     }
                 }
             } catch (PDOException $ex) {
@@ -284,7 +287,7 @@ class RepositorioRfq {
                 echo 'class="table-danger"> No submitted';
             }
             ?></td>
-            <td><?php echo $cotizacion->obtener_amount(); ?></td>
+            <td><?php echo $cotizacion->obtener_total_price(); ?></td>
             <td><?php echo $cotizacion->obtener_fecha_completado(); ?></td>
             <td class="proposal"><?php echo $cotizacion->obtener_id(); ?></td>
             <td><?php echo $cotizacion->obtener_comments(); ?></td>
@@ -365,7 +368,7 @@ class RepositorioRfq {
         if (isset($conexion)) {
             try {
                 for ($i = 1; $i <= 12; $i++) {
-                    $sql = 'SELECT SUM(amount) as monto FROM rfq WHERE award = 1 AND MONTH(fecha_completado) =' . $i . ' AND YEAR(fecha_completado) = YEAR(CURDATE())';
+                    $sql = 'SELECT SUM(total_price) as monto FROM rfq WHERE award = 1 AND MONTH(fecha_completado) =' . $i . ' AND YEAR(fecha_completado) = YEAR(CURDATE())';
                     $sentencia = $conexion->prepare($sql);
                     $sentencia->execute();
                     $resultado = $sentencia->fetch();

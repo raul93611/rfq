@@ -90,9 +90,9 @@ $(document).ready(function () {
 
     $('#items tr').each(function () {
         quantity.push($(this).find('td').eq(4).text());
-        if(!isNaN($(this).find('td').eq(6).text().split(' ')[1])){
+        if (!isNaN($(this).find('td').eq(6).text().split(' ')[1])) {
             monto.push($(this).find('td').eq(6).text().split(' ')[1]);
-        }else{
+        } else {
             monto.push(0);
         }
     });
@@ -117,7 +117,7 @@ $(document).ready(function () {
         total_cost = total_cost.toFixed(2);
 
         if (!isNaN(total_cost)) {
-            total1 = total1 + parseInt(total_cost);
+            total1 = total1 + parseFloat(total_cost);
         }
 
         $(this).find('td').eq(7).html('$ ' + total_cost);
@@ -125,12 +125,16 @@ $(document).ready(function () {
         total_price = total_price.toFixed(2);
 
         if (!isNaN(total_price)) {
-            total2 = total2 + parseInt(total_price);
+            total2 = total2 + parseFloat(total_price);
         }
 
         $(this).find('td').eq(9).html('$ ' + total_price);
         i++;
     });
+    total1 = total1.toFixed(2);
+    total2 = total2.toFixed(2);
+    $('#total_cost').val(total1);
+    $('#total_price').val(total2);
     $('#total1').html('$ ' + total1);
     $('#total2').html('$ ' + total2);
 
@@ -169,6 +173,10 @@ $(document).ready(function () {
             $(this).find('td').eq(9).html('$ ' + total_price);
             i++;
         });
+        total1 = total1.toFixed(2);
+        total2 = total2.toFixed(2);
+        $('#total_cost').val(total1);
+        $('#total_price').val(total2);
         $('#total1').html('$ ' + total1);
         $('#total2').html('$ ' + total2);
     });

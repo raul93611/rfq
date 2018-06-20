@@ -96,19 +96,29 @@ class RepositorioItem {
     
     public static function escribir_items($id_rfq){
         Conexion::abrir_conexion();
+        $cotizacion = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
         $items = self::obtener_items_por_id_rfq(Conexion::obtener_conexion(), $id_rfq);
         Conexion::cerrar_conexion();
         
         if(count($items)){
             echo '<br><h2>Items:</h2>';
-            echo '<form method="post" action="' . EDITAR_COTIZACION . '/' . $id_rfq . '">';
             echo '<div class="row">';
             echo '<div class="col">';
-            echo '<label>Taxes (%):</label><input type="number" name="taxes" id="taxes" class="form-control" value="0"><br><button type="button" id="calculate" class="btn btn-primary">Calculate</button>';
-            echo '<input type="hidden" name="id_rfq" value="' . $id_rfq . '">';
+            if($cotizacion-> obtener_taxes() != 0){
+                echo '<label>Taxes (%):</label><input type="number" step=".01" name="taxes" id="taxes" class="form-control" value="'. $cotizacion-> obtener_taxes() .'"><br><button type="button" id="calculate" class="btn btn-primary">Calculate</button>';
+            }else{
+                echo '<label>Taxes (%):</label><input type="number" step=".01" name="taxes" id="taxes" class="form-control" value="0"><br><button type="button" id="calculate" class="btn btn-primary">Calculate</button>';
+            }
+            
             echo '</div><div class="col">';
-            echo '<label>Profit (%):</label><input type="number" name="profit" id="profit" class="form-control" value="0"><br><button type="submit" class="btn btn-primary" name="fijar_taxes_profit">Set taxes & profit</button>';
-            echo '</div></div></form><br>';
+            
+            if($cotizacion-> obtener_profit() != 0){
+                echo '<label>Profit (%):</label><input type="number" step=".01" name="profit" id="profit" class="form-control" value="'. $cotizacion-> obtener_profit() .'">';
+            }else{
+                echo '<label>Profit (%):</label><input type="number" step=".01" name="profit" id="profit" class="form-control" value="0">';
+            }
+            
+            echo '</div></div><br>';
             echo '<table id="tabla_items" class="table table-bordered table-hover">';
             echo '<thead>';
             echo '<tr>';
@@ -137,6 +147,8 @@ class RepositorioItem {
             echo '<td></td>';
             echo '</tbody>';
             echo '</table>';
+            echo '<input type="hidden" id="total_cost" name="total_cost" value="">';
+            echo '<input type="hidden" id="total_price" name="total_price" value="">';
         }
     }
     

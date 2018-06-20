@@ -15,7 +15,6 @@ include_once 'app/Rfq.inc.php';
 include_once 'app/RepositorioRfq.inc.php';
 include_once 'app/ValidadorCotizacion.inc.php';
 include_once 'app/ValidadorCotizacionRegistro.inc.php';
-include_once 'app/ValidadorCotizacionEdicion.inc.php';
 
 include_once 'app/Item.inc.php';
 include_once 'app/RepositorioItem.inc.php';
