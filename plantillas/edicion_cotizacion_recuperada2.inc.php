@@ -21,7 +21,7 @@
             </div>
             <div class="form-group">
                 <label for="address">Address:</label>
-                <textarea class="form-control" rows="5" placeholder="Enter address ..." id="address" name="address"><?php #echo $cotizacion_recuperada->obtener_address();       ?></textarea>
+                <textarea class="form-control" rows="5" placeholder="Enter address ..." id="address" name="address"><?php echo $cotizacion_recuperada->obtener_address(); ?></textarea>
             </div>
         </div>
         <div class="col">
@@ -34,12 +34,12 @@
             </div>
             <div class="form-group">
                 <label for="ship_to">Ship to:</label>
-                <textarea class="form-control" rows="5" placeholder="Enter ship to ..." id="ship_to" name="ship_to"><?php #echo $cotizacion_recuperada->obtener_ship_to();       ?></textarea>
+                <textarea class="form-control" rows="5" placeholder="Enter ship to ..." id="ship_to" name="ship_to"><?php echo $cotizacion_recuperada->obtener_ship_to();?></textarea>
             </div>
         </div>
     </div>
-    <div class="form-check <?php if ($cotizacion_recuperada->obtener_completado()) {echo 'disabled';}?>">
-        <input type="checkbox" class="form-check-input" name="completado" value="si" <?php if ($cotizacion_recuperada->obtener_completado()) {echo 'checked disabled';}?> id="completado">
+    <div class="form-check">
+        <input type="checkbox" class="form-check-input" name="completado" value="si" <?php if ($cotizacion_recuperada->obtener_completado()) {echo 'checked';}?> id="completado">
         <label class="form-check-label" for="completado">Completed</label>
     </div>
 </div>
