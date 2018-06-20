@@ -4,13 +4,13 @@ function myFunction() {
     var tipo = select.options[select.selectedIndex].value;
     input = document.getElementById("myInput");
     filter = input.value.toUpperCase();
-    table = document.getElementById("myTable");
+    table = document.getElementById("tabla_cotizaciones");
     tr = table.getElementsByTagName("tr");
 
     for (i = 0; i < tr.length; i++) {
         switch (tipo) {
             case 'E-mail Code':
-                td = tr[i].getElementsByTagName("button")[0];
+                td = tr[i].getElementsByTagName("a")[0];
                 break;
             case 'Designated user':
                 td = tr[i].getElementsByTagName("td")[1];
@@ -24,29 +24,11 @@ function myFunction() {
             case 'End Date':
                 td = tr[i].getElementsByTagName("td")[4];
                 break;
-            case 'Status':
+            case 'Proposal':
                 td = tr[i].getElementsByTagName("td")[5];
                 break;
-            case 'Amount':
-                td = tr[i].getElementsByTagName("td")[6];
-                break;
-            case 'Completed date':
-                td = tr[i].getElementsByTagName("td")[7];
-                break;
-            case 'Proposal':
-                td = tr[i].getElementsByTagName("td")[8];
-                break;
             case 'Comments':
-                td = tr[i].getElementsByTagName("td")[9];
-                break;
-            case 'Award':
-                td = tr[i].getElementsByTagName("td")[10];
-                break;
-            case 'First names':
-                td = tr[i].getElementsByTagName("td")[0];
-                break;
-            case 'Last names':
-                td = tr[i].getElementsByTagName("td")[1];
+                td = tr[i].getElementsByTagName("td")[6];
                 break;
         }
 
@@ -59,19 +41,6 @@ function myFunction() {
         }
     }
 
-}
-
-function validar_form() {
-    var brand = document.forms['form_equipo']['brand'].value;
-    var part_number = document.forms['form_equipo']['part_number'].value;
-    var description = document.forms['form_equipo']['description'].value;
-    var quantity = document.forms['form_equipo']['quantity'].value;
-    var unit_price = document.forms['form_equipo']['unit_price'].value;
-
-    if (brand == '' || part_number == '' || description == '' || quantity == '' || unit_price == '') {
-        alert('Form must be fill out.');
-        return false;
-    }
 }
 
 $(document).ready(function () {
