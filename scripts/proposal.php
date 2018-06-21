@@ -114,8 +114,8 @@ if (count($items)) {
     <td>' . $a . '</td>
     <td><b>Brand:</b>' . $item->obtener_brand() . '<br><b>Part #:</b>' . $item->obtener_part_number() . '<br><b>Description:</b>' . nl2br($item->obtener_description()) . '</td>
     <td style="text-align:right;">' . $item->obtener_quantity() . '</td>
-    <td style="text-align:right;">$ ' . $equipo->obtener_unit_price() . '</td>
-    <td style="text-align:right;">$ ' . $equipo->obtener_total() . '</td>
+    <td style="text-align:right;">$ ' . $item->obtener_unit_price() . '</td>
+    <td style="text-align:right;">$ ' . $item->obtener_total_price() . '</td>
   </tr>';
         $a++;
     }
@@ -124,7 +124,7 @@ if (count($items)) {
     <td style="font-size:20px;border:none;"><b>TOTAL:</b></td>
     <td style="border:none;"></td> 
     <td style="border:none;"></td>
-    <td style="font-size:20px;text-align:right;"><b>$ ' . $total . '</b></td>
+    <td style="font-size:20px;text-align:right;"><b>$ ' . $cotizacion-> obtener_total_price() . '</b></td>
   </tr>';
     $html .= '</table>';
 }
