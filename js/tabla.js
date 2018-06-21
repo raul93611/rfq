@@ -27,8 +27,55 @@ function myFunction() {
             case 'Proposal':
                 td = tr[i].getElementsByTagName("td")[5];
                 break;
+        }
+
+        if (td) {
+            if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+}
+
+function myFunction2() {
+    var input, filter, table, tr, td, i, select;
+    select = document.getElementById("tipo");
+    var tipo = select.options[select.selectedIndex].value;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("tabla_cotizaciones_completados");
+    tr = table.getElementsByTagName("tr");
+
+    for (i = 0; i < tr.length; i++) {
+        switch (tipo) {
+            case 'E-mail Code':
+                td = tr[i].getElementsByTagName("a")[0];
+                break;
+            case 'Designated user':
+                td = tr[i].getElementsByTagName("td")[1];
+                break;
+            case 'Type of Bid':
+                td = tr[i].getElementsByTagName("td")[2];
+                break;
+            case 'Issue Date':
+                td = tr[i].getElementsByTagName("td")[3];
+                break;
+            case 'End Date':
+                td = tr[i].getElementsByTagName("td")[4];
+                break;
+            case 'Amount':
+                td = tr[i].getElementByTagName('td')[5];
+                break;
+            case 'Completed date':
+                td = tr[i].getElementByTagName('td')[6];
+                break;
+            case 'Proposal':
+                td = tr[i].getElementsByTagName("td")[7];
+                break;
             case 'Comments':
-                td = tr[i].getElementsByTagName("td")[6];
+                td = tr[i].getElementByTagName('td')[8];
                 break;
         }
 
@@ -40,7 +87,6 @@ function myFunction() {
             }
         }
     }
-
 }
 
 $(document).ready(function () {
@@ -67,52 +113,12 @@ $(document).ready(function () {
     });
 
     var taxes = $('#taxes').val();
-    var profit = $('#profit').val();
-    var i = 0;
-    var total1 = 0;
-    var total2 = 0;
-    $('#items tr').each(function () {
-        var resul_taxes = (1 + (taxes / 100)) * monto[i];
-        resul_taxes = resul_taxes.toFixed(2);
-        $(this).find('td').eq(6).html('$ ' + resul_taxes);
-        if (profit !== 0) {
-            var resul_profit = (1 + (profit / 100)) * resul_taxes;
-            resul_profit = resul_profit.toFixed(2);
-            $(this).find('td').eq(8).html('$ ' + resul_profit);
-        } else {
-            $(this).find('td').eq(8).html('$ ' + resul_taxes);
-        }
-        var total_cost = resul_taxes * quantity[i];
-        total_cost = total_cost.toFixed(2);
-
-        if (!isNaN(total_cost)) {
-            total1 = total1 + parseFloat(total_cost);
-        }
-
-        $(this).find('td').eq(7).html('$ ' + total_cost);
-        var total_price = resul_profit * quantity[i];
-        total_price = total_price.toFixed(2);
-
-        if (!isNaN(total_price)) {
-            total2 = total2 + parseFloat(total_price);
-        }
-
-        $(this).find('td').eq(9).html('$ ' + total_price);
-        i++;
-    });
-    total1 = total1.toFixed(2);
-    total2 = total2.toFixed(2);
-    $('#total_cost').val(total1);
-    $('#total_price').val(total2);
-    $('#total1').html('$ ' + total1);
-    $('#total2').html('$ ' + total2);
-
-    $('#calculate').click(function () {
-        var taxes = $('#taxes').val();
         var profit = $('#profit').val();
         var i = 0;
         var total1 = 0;
         var total2 = 0;
+        var partes_total_price = '';
+        var unit_prices = '';
         $('#items tr').each(function () {
             var resul_taxes = (1 + (taxes / 100)) * monto[i];
             resul_taxes = resul_taxes.toFixed(2);
@@ -121,8 +127,18 @@ $(document).ready(function () {
                 var resul_profit = (1 + (profit / 100)) * resul_taxes;
                 resul_profit = resul_profit.toFixed(2);
                 $(this).find('td').eq(8).html('$ ' + resul_profit);
+                if(i === 0){
+                    unit_prices = unit_prices + resul_profit;
+                }else{
+                    unit_prices = unit_prices + ',' + resul_profit;
+                }
             } else {
                 $(this).find('td').eq(8).html('$ ' + resul_taxes);
+                if(i === 0){
+                    unit_prices = unit_prices + resul_taxes;
+                }else{
+                    unit_prices = unit_prices + ',' + resul_taxes;
+                }
             }
             var total_cost = resul_taxes * quantity[i];
             total_cost = total_cost.toFixed(2);
@@ -140,8 +156,78 @@ $(document).ready(function () {
             }
 
             $(this).find('td').eq(9).html('$ ' + total_price);
+            
+            if(i === 0){
+                partes_total_price = partes_total_price + total_price;
+            }else{
+                partes_total_price = partes_total_price + ',' + total_price;
+            }
             i++;
         });
+        $('#unit_prices').val(unit_prices);
+        $('#partes_total_price').val(partes_total_price);
+        total1 = total1.toFixed(2);
+        total2 = total2.toFixed(2);
+        $('#total_cost').val(total1);
+        $('#total_price').val(total2);
+        $('#total1').html('$ ' + total1);
+        $('#total2').html('$ ' + total2);
+
+    $('#calculate').click(function () {
+        var taxes = $('#taxes').val();
+        var profit = $('#profit').val();
+        var i = 0;
+        var total1 = 0;
+        var total2 = 0;
+        var partes_total_price = '';
+        var unit_prices = '';
+        $('#items tr').each(function () {
+            var resul_taxes = (1 + (taxes / 100)) * monto[i];
+            resul_taxes = resul_taxes.toFixed(2);
+            $(this).find('td').eq(6).html('$ ' + resul_taxes);
+            if (profit !== 0) {
+                var resul_profit = (1 + (profit / 100)) * resul_taxes;
+                resul_profit = resul_profit.toFixed(2);
+                $(this).find('td').eq(8).html('$ ' + resul_profit);
+                if(i === 0){
+                    unit_prices = unit_prices + resul_profit;
+                }else{
+                    unit_prices = unit_prices + ',' + resul_profit;
+                }
+            } else {
+                $(this).find('td').eq(8).html('$ ' + resul_taxes);
+                if(i === 0){
+                    unit_prices = unit_prices + resul_taxes;
+                }else{
+                    unit_prices = unit_prices + ',' + resul_taxes;
+                }
+            }
+            var total_cost = resul_taxes * quantity[i];
+            total_cost = total_cost.toFixed(2);
+
+            if (!isNaN(total_cost)) {
+                total1 = total1 + parseFloat(total_cost);
+            }
+
+            $(this).find('td').eq(7).html('$ ' + total_cost);
+            var total_price = resul_profit * quantity[i];
+            total_price = total_price.toFixed(2);
+
+            if (!isNaN(total_price)) {
+                total2 = total2 + parseFloat(total_price);
+            }
+
+            $(this).find('td').eq(9).html('$ ' + total_price);
+            
+            if(i === 0){
+                partes_total_price = partes_total_price + total_price;
+            }else{
+                partes_total_price = partes_total_price + ',' + total_price;
+            }
+            i++;
+        });
+        $('#unit_prices').val(unit_prices);
+        $('#partes_total_price').val(partes_total_price);
         total1 = total1.toFixed(2);
         total2 = total2.toFixed(2);
         $('#total_cost').val(total1);

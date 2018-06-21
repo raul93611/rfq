@@ -26,7 +26,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-8">
-                                    <input class="form-control" id="myInput" type="text" onkeyup="myFunction()" placeholder="Search.." autofocus>
+                                    <input class="form-control" id="myInput" type="text" onkeyup="myFunction2()" placeholder="Search.." autofocus>
                                 </div>
                                 <div class="col-md-4">
                                     <select class="form-control" id="tipo">
@@ -35,12 +35,10 @@
                                         <option>Type of Bid</option>
                                         <option>Issue Date</option>
                                         <option>End Date</option>
-                                        <option>Status</option>
                                         <option>Amount</option>
                                         <option>Completed date</option>
                                         <option>Proposal</option>
                                         <option>Comments</option>
-                                        <option>Award</option>
                                     </select>
                                 </div>
                             </div>

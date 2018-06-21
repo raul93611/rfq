@@ -38,33 +38,37 @@
             </div>
         </div>
     </div>
-    <div class="form-check">
+    <?php
+    if(!$cotizacion_recuperada-> obtener_completado()){
+        ?>
+        <div class="form-check">
         <input type="checkbox" class="form-check-input" name="completado" value="si" <?php if ($cotizacion_recuperada->obtener_completado()) {echo 'checked';}?> id="completado">
-        <label class="form-check-label" for="completado">Completed</label>
-    </div>
+            <label class="form-check-label" for="completado">Completed</label>
+        </div>
+    <?php
+    }else{
+        ?>
+        <div class="form-check">
+        <input type="checkbox" class="form-check-input" name="status" value="si" <?php if ($cotizacion_recuperada->obtener_status()) {echo 'checked';} ?> id="status">
+            <label class="form-check-label" for="status">Submit</label>
+        </div>
+    <?php
+    }
+    ?>
 </div>
 <div class="card-footer">
     <button type="submit" onclick="alert('Estas seguro?');" class="btn btn-primary" name="guardar_cambios_cotizacion2">Save</button>
-    <a class="btn btn-primary" href="<?php echo COTIZACIONES . $canal; ?>">Go back</a>
+    <?php
+    if($cotizacion_recuperada-> obtener_completado()){
+        echo '<a class="btn btn-primary" href="' . COMPLETADOS . $canal . '">Go back</a>';
+    }else{
+        echo '<a class="btn btn-primary" href="' . COTIZACIONES . $canal . '">Go back</a>';
+    }
+    ?>
 </div>
 <!--
 <br>
-<?php
-#if ($cargo == 3) {
-?>
-    <div class="form-check">
-        <input type="checkbox" class="form-check-input" name="status" value="si" 
-<?php
-#if ($cotizacion_recuperada->obtener_status()) {
-#    echo 'checked';
-#}
-?>
-               id="status">
-        <label class="form-check-label" for="status">Submitted</label>
-    </div>
-<?php
-#}
-?>
+    
 
 <div class="form-check">
     <input type="checkbox" class="form-check-input" name="award" value="si" 

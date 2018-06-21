@@ -35,7 +35,6 @@
                                         <option>Issue Date</option>
                                         <option>End Date</option>
                                         <option>Proposal</option>
-                                        <option>Comments</option>
                                     </select>
                                 </div>
                             </div>

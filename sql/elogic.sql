@@ -55,6 +55,8 @@ CREATE TABLE item(
         description TEXT CHARACTER SET utf8 NOT NULL,
         description_project TEXT CHARACTER SET utf8 NOT NULL,
         quantity INT NOT NULL,
+        unit_price DECIMAL(10,2) NOT NULL,
+        total_price DECIMAL(10,2) NOT NULL,
         comments TEXT CHARACTER SET utf8 NOT NULL,
         website VARCHAR(255) NOT NULL,
         PRIMARY KEY(id),

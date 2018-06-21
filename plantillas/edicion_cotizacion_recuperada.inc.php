@@ -95,5 +95,11 @@
 <div class="card-footer">
     <button type="submit" onclick="alert('Estas seguro?');" class="btn btn-primary" name="guardar_cambios_cotizacion">Save</button>
     <a class="btn btn-primary float-right" href="<?php echo ADD_ITEM . '/' . $cotizacion_recuperada->obtener_id(); ?>">Add item</a>
-    <a class="btn btn-primary" href="<?php echo COTIZACIONES . $canal; ?>">Go back</a>
+    <?php
+    if($cotizacion_recuperada-> obtener_completado()){
+        echo '<a class="btn btn-primary" href="' . COMPLETADOS . $canal . '">Go back</a>';
+    }else{
+        echo '<a class="btn btn-primary" href="' . COTIZACIONES . $canal . '">Go back</a>';
+    }
+    ?>
 </div>

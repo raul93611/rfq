@@ -128,7 +128,6 @@ class RepositorioRfq {
             <td><?php echo $cotizacion->obtener_issue_date(); ?></td>
             <td><?php echo $cotizacion->obtener_end_date(); ?></td>
             <td><?php echo $cotizacion->obtener_id(); ?></td>
-            <td><?php echo $cotizacion->obtener_comments(); ?></td>
         </tr>
         <?php
     }
@@ -149,7 +148,6 @@ class RepositorioRfq {
                         <th>ISSUE DATE</th>
                         <th>END DATE</th>
                         <th>PROPOSAL</th>
-                        <th>COMMENTS</th>
                     </tr>
                 </thead>
                 <tbody id="tabla_cotizaciones">
@@ -259,13 +257,14 @@ class RepositorioRfq {
         if (!isset($cotizacion)) {
             return;
         }
+        $partes_fecha_completado = explode('-', $cotizacion-> obtener_fecha_completado());
+        $fecha_completado = $partes_fecha_completado[1] . '/' . $partes_fecha_completado[2] . '/' . $partes_fecha_completado[0];
         ?>
         <tr>
             <td>
-                <form method="post" action="<?php echo EDITAR_COTIZACION; ?>">
-                    <input type="hidden" name="id_rfq" value="<?php echo $cotizacion->obtener_id(); ?>">
-                    <button type="submit" class="btn btn-sm btn-secondary" name="editar"><?php echo $cotizacion->obtener_email_code(); ?></button>
-                </form>
+                <a href="<?php echo EDITAR_COTIZACION . '/' . $cotizacion-> obtener_id(); ?>" class="btn-block">
+                    <?php echo $cotizacion->obtener_email_code(); ?>
+                </a>
             </td>
             <td>
                 <?php
@@ -278,24 +277,10 @@ class RepositorioRfq {
             <td><?php echo $cotizacion->obtener_type_of_bid(); ?></td>
             <td><?php echo $cotizacion->obtener_issue_date(); ?></td>
             <td><?php echo $cotizacion->obtener_end_date(); ?></td>
-            <td <?php
-            if ($cotizacion->obtener_status()) {
-                echo 'class="table-success"> Yes submitted';
-            } else {
-                echo 'class="table-danger"> No submitted';
-            }
-            ?></td>
-            <td><?php echo $cotizacion->obtener_total_price(); ?></td>
-            <td><?php echo $cotizacion->obtener_fecha_completado(); ?></td>
-            <td class="proposal"><?php echo $cotizacion->obtener_id(); ?></td>
+            <td><?php echo '$ '.$cotizacion->obtener_total_price(); ?></td>
+            <td><?php echo $fecha_completado; ?></td>
+            <td><?php echo $cotizacion->obtener_id(); ?></td>
             <td><?php echo $cotizacion->obtener_comments(); ?></td>
-            <td <?php
-            if ($cotizacion->obtener_award()) {
-                echo 'class="table-success"> Yes award';
-            } else {
-                echo 'class="table-danger"> No award';
-            }
-            ?></td>
             <td class="text-center"><a class="btn btn-primary btn-sm" href="<?php echo PROPOSAL . '/' . $cotizacion->obtener_id(); ?>" target="_blank"><i class="fa fa-copy"></i></a></td>
         </tr>
         <?php
@@ -311,21 +296,19 @@ class RepositorioRfq {
             <table class="table table-bordered table-striped table-responsive-md">
                 <thead>
                     <tr>
-                        <th>E-mail Code</th>
-                        <th>Designated user</th>
-                        <th>Type of Bid</th>
-                        <th>Issue Date</th>
-                        <th>End Date</th>
-                        <th>Status</th>
-                        <th>Amount</th>
-                        <th>Completed date</th>
-                        <th>Proposal</th>
-                        <th>Comments</th>
-                        <th>Award</th>
-                        <th>Proposal</th>
+                        <th>E-MAIL CODE</th>
+                        <th>DEDIGNATED USER</th>
+                        <th>TYPE OF BID</th>
+                        <th>ISSUE DATE</th>
+                        <th>END DATE</th>
+                        <th>AMOUNT</th>
+                        <th>COMPLETED DATE</th>
+                        <th>PROPOSAL</th>
+                        <th>COMMENTS</th>
+                        <th>GENERATE PROPOSAL</th>
                     </tr>
                 </thead>
-                <tbody id="myTable">
+                <tbody id="tabla_cotizaciones_completados">
                     <?php
                     foreach ($cotizaciones as $cotizacion) {
                         self::escribir_cotizacion_completada($cotizacion);
@@ -408,6 +391,26 @@ class RepositorioRfq {
             }
         }
         return $rfq_editado;
+    }
+    
+    public static function insertar_fecha_completado($conexion, $id_rfq){
+       $rfq_editado = false;
+       if(isset($conexion)){
+           try{
+               $sql = 'UPDATE rfq SET fecha_completado = NOW(), expiration_date = DATE_ADD(NOW(), INTERVAL 1 MONTH) WHERE id = :id_rfq';
+               $sentencia = $conexion-> prepare($sql);
+               $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+               
+               $sentencia-> execute();
+               
+               if($sentencia){
+                   $rfq_editado = true;
+               }
+           } catch (PDOException $ex) {
+               print 'ERROR:' . $ex->getMessage() . '<br>';
+           }
+       }
+       return $rfq_editado;
     }
 
 }
