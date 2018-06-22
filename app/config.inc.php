@@ -42,6 +42,7 @@ define('NUEVA_COTIZACION', COTIZACIONES . 'nuevo');
 define('EDITAR_COTIZACION', COTIZACIONES . 'editar_cotizacion');
 define('DOCS', SERVIDOR . 'documentos/');
 define('PROPOSAL', SERVIDOR . 'proposal');
+define('PROPOSAL_GSA', SERVIDOR . 'proposal_gsa');
 define('ADD_ITEM', COTIZACIONES . 'add_item');
 define('ADD_PROVIDER', COTIZACIONES . 'add_provider');
 define('EDIT_ITEM', COTIZACIONES . 'edit_item');

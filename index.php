@@ -64,6 +64,10 @@ if ($partes_ruta[0] == 'rfq') {
         } else if ($partes_ruta[1] == 'proposal') {
             $id_rfq = $partes_ruta[2];
             $ruta_elegida = 'scripts/proposal.php';
+        }else if($partes_ruta[1] == 'proposal_gsa'){
+            $id_rfq = $partes_ruta[2];
+            $encabezado = 1;
+            $ruta_elegida = 'scripts/proposal.php';
         }
     } else if (count($partes_ruta) == 4) {
         if ($partes_ruta[1] == 'perfil' && $partes_ruta[2] == 'cotizaciones') {
