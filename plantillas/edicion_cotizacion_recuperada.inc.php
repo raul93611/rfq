@@ -113,7 +113,9 @@
     <button type="submit" onclick="alert('Estas seguro?');" class="btn btn-primary" name="guardar_cambios_cotizacion">Save</button>
     <a class="btn btn-primary float-right" href="<?php echo ADD_ITEM . '/' . $cotizacion_recuperada->obtener_id(); ?>">Add item</a>
     <?php
-    if($cotizacion_recuperada-> obtener_status()){
+    if($cotizacion_recuperada-> obtener_award()){
+        echo '<a class="btn btn-primary" href="' . AWARD . $canal . '">Go back</a>';
+    }else if($cotizacion_recuperada-> obtener_status()){
         echo '<a class="btn btn-primary" href="' . SUBMITTED . $canal . '">Go back</a>';
     }else if($cotizacion_recuperada-> obtener_completado()){
         echo '<a class="btn btn-primary" href="' . COMPLETADOS . $canal . '">Go back</a>';

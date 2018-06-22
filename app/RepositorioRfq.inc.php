@@ -231,16 +231,22 @@ class RepositorioRfq {
         return $cotizacion_editada;
     }
 
-    public static function obtener_cotizaciones_completadas_por_canal($conexion, $canal) {
+    public static function obtener_cotizaciones_completadas_por_canal($conexion, $canal, $id_usuario, $cargo) {
         $cotizaciones = [];
 
         if (isset($conexion)) {
             try {
-                $sql = "SELECT * FROM rfq WHERE completado = 1 AND status = 0 AND award = 0 AND canal = :canal ORDER BY fecha_completado DESC";
-                $sentencia = $conexion->prepare($sql);
-                $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
+                if ($cargo < 4) {
+                    $sql = "SELECT * FROM rfq WHERE canal = :canal AND completado = 1 AND status = 0 AND award = 0 ORDER BY fecha_completado DESC";
+                    $sentencia = $conexion->prepare($sql);
+                    $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
+                } else if ($cargo == 4) {
+                    $sql = "SELECT * FROM rfq WHERE canal = :canal AND usuario_designado = :id_usuario AND completado = 1 AND status = 0 AND award = 0 ORDER BY end_date DESC";
+                    $sentencia = $conexion->prepare($sql);
+                    $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
+                    $sentencia->bindParam(':id_usuario', $id_usuario, PDO::PARAM_STR);
+                }
                 $sentencia->execute();
-
                 $resultado = $sentencia->fetchAll();
 
                 if (count($resultado)) {
@@ -288,9 +294,9 @@ class RepositorioRfq {
         <?php
     }
 
-    public static function escribir_cotizaciones_completadas_por_canal($canal) {
+    public static function escribir_cotizaciones_completadas_por_canal($canal, $id_usuario, $cargo) {
         Conexion::abrir_conexion();
-        $cotizaciones = self::obtener_cotizaciones_completadas_por_canal(Conexion::obtener_conexion(), $canal);
+        $cotizaciones = self::obtener_cotizaciones_completadas_por_canal(Conexion::obtener_conexion(), $canal, $id_usuario, $cargo);
         Conexion::cerrar_conexion();
 
         if (count($cotizaciones)) {
@@ -399,10 +405,99 @@ class RepositorioRfq {
                         <th>COMMENTS</th>
                     </tr>
                 </thead>
-                <tbody id="tabla_cotizaciones_completados">
+                <tbody id="tabla_cotizaciones_submitted">
                     <?php
                     foreach ($cotizaciones as $cotizacion) {
                         self::escribir_cotizacion_submitted($cotizacion);
+                    }
+                    ?>
+                </tbody>
+            </table>    
+            <?php
+        }
+    }
+    
+    public static function obtener_cotizaciones_award_por_canal($conexion, $canal) {
+        $cotizaciones = [];
+
+        if (isset($conexion)) {
+            try {
+                $sql = "SELECT * FROM rfq WHERE completado = 1 AND status = 1 AND award = 1 AND canal = :canal ORDER BY fecha_completado DESC";
+                $sentencia = $conexion->prepare($sql);
+                $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
+                $sentencia->execute();
+
+                $resultado = $sentencia->fetchAll();
+
+                if (count($resultado)) {
+                    foreach ($resultado as $fila) {
+                        $cotizaciones [] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['total_cost'], $fila['total_price'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['fecha_submitted'], $fila['fecha_award'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via'], $fila['taxes'], $fila['profit']);
+                    }
+                }
+            } catch (PDOException $ex) {
+                print 'ERROR:' . $ex->getMessage() . '<br>';
+            }
+        }
+        return $cotizaciones;
+    }
+    
+    public static function escribir_cotizacion_award($cotizacion) {
+        if (!isset($cotizacion)) {
+            return;
+        }
+        $partes_fecha_award = explode('-', $cotizacion-> obtener_fecha_award());
+        $fecha_award = $partes_fecha_award[1] . '/' . $partes_fecha_award[2] . '/' . $partes_fecha_award[0];
+        ?>
+        <tr>
+            <td>
+                <a href="<?php echo EDITAR_COTIZACION . '/' . $cotizacion-> obtener_id(); ?>" class="btn-block">
+                    <?php echo $cotizacion->obtener_email_code(); ?>
+                </a>
+            </td>
+            <td>
+                <?php
+                Conexion::abrir_conexion();
+                $usuario = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), $cotizacion->obtener_usuario_designado());
+                Conexion::cerrar_conexion();
+                echo $usuario->obtener_nombre_usuario();
+                ?>
+            </td>
+            <td><?php echo $cotizacion->obtener_type_of_bid(); ?></td>
+            <td><?php echo $cotizacion->obtener_issue_date(); ?></td>
+            <td><?php echo $cotizacion->obtener_end_date(); ?></td>
+            <td><?php echo '$ '.$cotizacion->obtener_total_price(); ?></td>
+            <td><?php echo $fecha_award; ?></td>
+            <td><?php echo $cotizacion->obtener_id(); ?></td>
+            <td><?php echo $cotizacion->obtener_comments(); ?></td>
+        </tr>
+        <?php
+    }
+    
+    public static function escribir_cotizaciones_award_por_canal($canal) {
+        Conexion::abrir_conexion();
+        $cotizaciones = self::obtener_cotizaciones_award_por_canal(Conexion::obtener_conexion(), $canal);
+        Conexion::cerrar_conexion();
+
+        if (count($cotizaciones)) {
+            ?>
+            <table class="table table-bordered table-striped table-responsive-md">
+                <thead>
+                    <tr>
+                        <th>E-MAIL CODE</th>
+                        <th>DEDIGNATED USER</th>
+                        <th>TYPE OF BID</th>
+                        <th>ISSUE DATE</th>
+                        <th>END DATE</th>
+                        <th>AMOUNT</th>
+                        <th>AWARD DATE</th>
+                        <th>PROPOSAL</th>
+                        <th>COMMENTS</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla_cotizaciones_award">
+                    <?php
+                    foreach ($cotizaciones as $cotizacion) {
+                        self::escribir_cotizacion_award($cotizacion);
                     }
                     ?>
                 </tbody>
@@ -508,6 +603,26 @@ class RepositorioRfq {
        if(isset($conexion)){
            try{
                $sql = 'UPDATE rfq SET completado = 1, fecha_completado = NOW(), expiration_date = DATE_ADD(NOW(), INTERVAL 1 MONTH) WHERE id = :id_rfq';
+               $sentencia = $conexion-> prepare($sql);
+               $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+               
+               $sentencia-> execute();
+               
+               if($sentencia){
+                   $rfq_editado = true;
+               }
+           } catch (PDOException $ex) {
+               print 'ERROR:' . $ex->getMessage() . '<br>';
+           }
+       }
+       return $rfq_editado;
+    }
+    
+    public static function actualizar_fecha_y_award($conexion, $id_rfq){
+       $rfq_editado = false;
+       if(isset($conexion)){
+           try{
+               $sql = 'UPDATE rfq SET award = 1, fecha_award = NOW() WHERE id = :id_rfq';
                $sentencia = $conexion-> prepare($sql);
                $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
                

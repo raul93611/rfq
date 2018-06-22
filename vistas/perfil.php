@@ -85,6 +85,9 @@ switch ($gestor_actual) {
     case 'submitted':
         include_once 'plantillas/submitted.inc.php';
         break;
+    case 'award':
+        include_once 'plantillas/award.inc.php';
+        break;
 }
 ?>
 <?php
