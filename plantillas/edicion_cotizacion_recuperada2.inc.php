@@ -39,7 +39,7 @@
         </div>
     </div>
     <?php
-    if($cotizacion_recuperada-> obtener_completado() && $cotizacion_recuperada-> obtener_status() && !$cotizacion_recuperada-> obtener_award()){
+    if($cotizacion_recuperada-> obtener_completado() && $cotizacion_recuperada-> obtener_status() && !$cotizacion_recuperada-> obtener_award() && $cargo < 4){
         ?>
         <div class="form-check">
             <input type="checkbox" class="form-check-input" name="award" value="si" <?php if ($cotizacion_recuperada->obtener_award()) {echo 'checked';}?> id="award">
@@ -47,14 +47,14 @@
         </div>
         
     <?php
-    }else if($cotizacion_recuperada-> obtener_completado() && !$cotizacion_recuperada-> obtener_status() && !$cotizacion_recuperada-> obtener_award()){
+    }else if($cotizacion_recuperada-> obtener_completado() && !$cotizacion_recuperada-> obtener_status() && !$cotizacion_recuperada-> obtener_award() && $cargo < 4){
         ?>
         <div class="form-check">
             <input type="checkbox" class="form-check-input" name="status" value="si" <?php if ($cotizacion_recuperada->obtener_status()) {echo 'checked';} ?> id="status">
             <label class="form-check-label" for="status">Submit</label>
         </div>
     <?php
-    }else if(!($cotizacion_recuperada-> obtener_completado() && $cotizacion_recuperada-> obtener_status() && $cotizacion_recuperada-> obtener_award())){
+    }else if(!$cotizacion_recuperada-> obtener_completado() && !$cotizacion_recuperada-> obtener_status() && !$cotizacion_recuperada-> obtener_award()){
         ?>
         <div class="form-check">
             <input type="checkbox" class="form-check-input" name="completado" value="si" <?php if ($cotizacion_recuperada->obtener_completado()) {echo 'checked';}?> id="completado">
