@@ -203,7 +203,7 @@ class RepositorioUsuario {
                         <th>Options</th>
                     </tr>
                 </thead>
-                <tbody id="myTable">
+                <tbody id="tabla_usuarios">
                     <?php
                     foreach ($usuarios as $usuario) {
                         self::escribir_usuario($usuario);

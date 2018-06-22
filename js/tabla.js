@@ -89,7 +89,7 @@ function myFunction2() {
     }
 }
 
-function myFunction2() {
+function myFunction3() {
     var input, filter, table, tr, td, i, select;
     select = document.getElementById("tipo");
     var tipo = select.options[select.selectedIndex].value;
@@ -126,6 +126,35 @@ function myFunction2() {
                 break;
             case 'Comments':
                 td = tr[i].getElementByTagName('td')[8];
+                break;
+        }
+
+        if (td) {
+            if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+}
+
+function myFunction4() {
+    var input, filter, table, tr, td, i, select;
+    select = document.getElementById("tipo");
+    var tipo = select.options[select.selectedIndex].value;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("tabla_usuarios");
+    tr = table.getElementsByTagName("tr");
+
+    for (i = 0; i < tr.length; i++) {
+        switch (tipo) {
+            case 'First names':
+                td = tr[i].getElementsByTagName("td")[0];
+                break;
+            case 'Last names':
+                td = tr[i].getElementsByTagName("td")[1];
                 break;
         }
 

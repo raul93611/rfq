@@ -29,9 +29,6 @@ switch ($gestor_actual) {
             include_once 'plantillas/muro.inc.php';
         }
         break;
-    case 'registro_correcto':
-        include_once 'plantillas/registro_correcto.inc.php';
-        break;
     case 'cotizaciones':
         switch ($cotizacion) {
             case 'nuevo':
@@ -40,9 +37,6 @@ switch ($gestor_actual) {
                 } else {
                     Redireccion::redirigir1(PERFIL);
                 }
-                break;
-            case 'registro_cotizacion_correcto':
-                include_once 'plantillas/registro_cotizacion_correcto.inc.php';
                 break;
             case 'editar_cotizacion':
                 Conexion::abrir_conexion();

@@ -100,7 +100,7 @@
                         <div id="content" class="card-body table-responsive">
                             <div class="row">
                                 <div class="col-md-8">
-                                    <input class="form-control" id="myInput" type="text" onkeyup="myFunction()" placeholder="Search.." autofocus>
+                                    <input class="form-control" id="myInput" type="text" onkeyup="myFunction4()" placeholder="Search.." autofocus>
                                 </div>
                                 <div class="col-md-4">
                                     <select class="form-control" id="tipo">
