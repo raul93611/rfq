@@ -26,33 +26,49 @@
             </div>
         </div>
     </div>
-    <div class="form-group">
-        <?php
+    <?php
+    
+    if ($cotizacion_recuperada->obtener_completado()) {
         Conexion::abrir_conexion();
-        $usuarios = RepositorioUsuario::obtener_usuarios_rfq(Conexion::obtener_conexion());
+        $usuario = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), $cotizacion_recuperada-> obtener_usuario_designado());
         Conexion::cerrar_conexion();
         ?>
+        <label for="usuario_designado">Designated user:</label>
+        <input type="text" class="form-control" value="<?php echo $usuario->obtener_nombre_usuario(); ?>" disabled>
         <?php
-        if (count($usuarios)) {
-            ?>
-            <label for="usuario_designado">Designated user:</label>
-            <select id="usuario_designado" class="form-control" name="usuario_designado">
-                <?php
-                foreach ($usuarios as $usuario) {
-                    ?>
-                    <option <?php
-                    if ($usuario->obtener_id() == $cotizacion_recuperada->obtener_usuario_designado()) {
-                        echo 'selected';
-                    }
-                    ?>><?php echo $usuario->obtener_nombre_usuario(); ?></option>
-                        <?php
-                    }
-                    ?>
-            </select>   
-            <?php
-        }
+    } else {
         ?>
-    </div>
+        <div class="form-group">
+            <?php
+            Conexion::abrir_conexion();
+            $usuarios = RepositorioUsuario::obtener_usuarios_rfq(Conexion::obtener_conexion());
+            Conexion::cerrar_conexion();
+            ?>
+            <?php
+            if (count($usuarios)) {
+                ?>
+                <label for="usuario_designado">Designated user:</label>
+                <select id="usuario_designado" class="form-control" name="usuario_designado">
+                    <?php
+                    foreach ($usuarios as $usuario) {
+                        ?>
+                        <option <?php
+                        if ($usuario->obtener_id() == $cotizacion_recuperada->obtener_usuario_designado()) {
+                            echo 'selected';
+                        }
+                        ?>><?php echo $usuario->obtener_nombre_usuario(); ?></option>
+                            <?php
+                        }
+                        ?>
+                </select>   
+                <?php
+            }
+            ?>
+        </div>
+        <?php
+    }
+    ?>
+
     <label>Documents:</label>
     <?php
     $ruta = $_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $cotizacion_recuperada->obtener_id();
@@ -96,9 +112,11 @@
     <button type="submit" onclick="alert('Estas seguro?');" class="btn btn-primary" name="guardar_cambios_cotizacion">Save</button>
     <a class="btn btn-primary float-right" href="<?php echo ADD_ITEM . '/' . $cotizacion_recuperada->obtener_id(); ?>">Add item</a>
     <?php
-    if($cotizacion_recuperada-> obtener_completado()){
+    if($cotizacion_recuperada-> obtener_status()){
+        echo '<a class="btn btn-primary" href="' . SUBMITTED . $canal . '">Go back</a>';
+    }else if($cotizacion_recuperada-> obtener_completado()){
         echo '<a class="btn btn-primary" href="' . COMPLETADOS . $canal . '">Go back</a>';
-    }else{
+    }else {
         echo '<a class="btn btn-primary" href="' . COTIZACIONES . $canal . '">Go back</a>';
     }
     ?>

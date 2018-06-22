@@ -17,6 +17,8 @@ class Rfq {
     private $comments;
     private $award;
     private $fecha_completado;
+    private $fecha_submitted;
+    private $fecha_award;
     private $payment_terms;
     private $address;
     private $ship_to;
@@ -25,7 +27,7 @@ class Rfq {
     private $taxes;
     private $profit;
 
-    public function __construct($id, $id_usuario, $usuario_designado, $canal, $email_code, $type_of_bid, $issue_date, $end_date, $status, $completado, $total_cost, $total_price, $comments, $award, $fecha_completado, $payment_terms, $address, $ship_to, $expiration_date, $ship_via, $taxes, $profit) {
+    public function __construct($id, $id_usuario, $usuario_designado, $canal, $email_code, $type_of_bid, $issue_date, $end_date, $status, $completado, $total_cost, $total_price, $comments, $award, $fecha_completado, $fecha_submitted, $fecha_award, $payment_terms, $address, $ship_to, $expiration_date, $ship_via, $taxes, $profit) {
         $this->id = $id;
         $this->id_usuario = $id_usuario;
         $this->usuario_designado = $usuario_designado;
@@ -41,6 +43,8 @@ class Rfq {
         $this->comments = $comments;
         $this->award = $award;
         $this->fecha_completado = $fecha_completado;
+        $this->fecha_submitted = $fecha_submitted;
+        $this->fecha_award = $fecha_award;
         $this->payment_terms = $payment_terms;
         $this->address = $address;
         $this->ship_to = $ship_to;
@@ -108,6 +112,14 @@ class Rfq {
     
     public function obtener_fecha_completado(){
         return $this->fecha_completado;
+    }
+    
+    public function obtener_fecha_submitted(){
+        return $this->fecha_submitted;
+    }
+    
+    public function obtener_fecha_award(){
+        return $this->fecha_award;
     }
     
     public function obtener_payment_terms(){

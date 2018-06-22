@@ -29,6 +29,8 @@ CREATE TABLE rfq(
         comments VARCHAR(100),
         award TINYINT NOT NULL,
         fecha_completado DATE,
+        fecha_submitted DATE,
+        fecha_award DATE,
         payment_terms VARCHAR(100) NOT NULL,
         address TEXT CHARACTER SET utf8 NOT NULL,
         ship_to TEXT CHARACTER SET utf8 NOT NULL,

@@ -82,6 +82,9 @@ switch ($gestor_actual) {
     case 'completados':
         include_once 'plantillas/completados.inc.php';
         break;
+    case 'submitted':
+        include_once 'plantillas/submitted.inc.php';
+        break;
 }
 ?>
 <?php

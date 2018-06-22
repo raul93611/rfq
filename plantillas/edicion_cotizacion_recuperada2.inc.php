@@ -39,18 +39,26 @@
         </div>
     </div>
     <?php
-    if(!$cotizacion_recuperada-> obtener_completado()){
+    if($cotizacion_recuperada-> obtener_completado() && $cotizacion_recuperada-> obtener_status()){
         ?>
         <div class="form-check">
-        <input type="checkbox" class="form-check-input" name="completado" value="si" <?php if ($cotizacion_recuperada->obtener_completado()) {echo 'checked';}?> id="completado">
-            <label class="form-check-label" for="completado">Completed</label>
+            <input type="checkbox" class="form-check-input" name="award" value="si" <?php if ($cotizacion_recuperada->obtener_award()) {echo 'checked';}?> id="award">
+            <label class="form-check-label" for="award">Award</label>
+        </div>
+        
+    <?php
+    }else if($cotizacion_recuperada-> obtener_completado()){
+        ?>
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" name="status" value="si" <?php if ($cotizacion_recuperada->obtener_status()) {echo 'checked';} ?> id="status">
+            <label class="form-check-label" for="status">Submit</label>
         </div>
     <?php
     }else{
         ?>
         <div class="form-check">
-        <input type="checkbox" class="form-check-input" name="status" value="si" <?php if ($cotizacion_recuperada->obtener_status()) {echo 'checked';} ?> id="status">
-            <label class="form-check-label" for="status">Submit</label>
+            <input type="checkbox" class="form-check-input" name="completado" value="si" <?php if ($cotizacion_recuperada->obtener_completado()) {echo 'checked';}?> id="completado">
+            <label class="form-check-label" for="completado">Completed</label>
         </div>
     <?php
     }
@@ -59,9 +67,11 @@
 <div class="card-footer">
     <button type="submit" onclick="alert('Estas seguro?');" class="btn btn-primary" name="guardar_cambios_cotizacion2">Save</button>
     <?php
-    if($cotizacion_recuperada-> obtener_completado()){
+    if($cotizacion_recuperada-> obtener_status()){
+        echo '<a class="btn btn-primary" href="' . SUBMITTED . $canal . '">Go back</a>';
+    }else if($cotizacion_recuperada-> obtener_completado()){
         echo '<a class="btn btn-primary" href="' . COMPLETADOS . $canal . '">Go back</a>';
-    }else{
+    }else {
         echo '<a class="btn btn-primary" href="' . COTIZACIONES . $canal . '">Go back</a>';
     }
     ?>
@@ -70,16 +80,7 @@
 <br>
     
 
-<div class="form-check">
-    <input type="checkbox" class="form-check-input" name="award" value="si" 
-<?php
-#if ($cotizacion_recuperada->obtener_award()) {
-#    echo 'checked';
-#}
-?>
-           id="award">
-    <label class="form-check-label" for="award">Award</label>
-</div>
+
 -->
 
 

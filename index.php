@@ -115,6 +115,29 @@ if ($partes_ruta[0] == 'rfq') {
                     $cotizacion = 'fbo_completados';
                     break;
             }
+        }else if($partes_ruta[1] == 'perfil' && $partes_ruta[2] == 'submitted'){
+            $gestor_actual = 'submitted';
+            $ruta_elegida = 'vistas/perfil.php';
+            switch ($partes_ruta[3]){
+                case 'gsa_buy':
+                    $cotizacion = 'gsa_buy_submitted';
+                    break;
+                case 'fedbid':
+                    $cotizacion = 'fedbid_submitted';
+                    break;
+                case 'emails':
+                    $cotizacion = 'emails_submitted';
+                    break;
+                case 'findfrp':
+                    $cotizacion = 'findfrp_submitted';
+                    break;
+                case 'embassies':
+                    $cotizacion = 'embassies_submitted';
+                    break;
+                case 'fbo':
+                    $cotizacion = 'fbo_submitted';
+                    break;
+            }
         }
     } else if (count($partes_ruta) == 5) {
         if ($partes_ruta[1] == 'perfil' && $partes_ruta[2] == 'cotizaciones') {
