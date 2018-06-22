@@ -24,6 +24,7 @@ define('FEDBID_COMPLETADOS', COMPLETADOS . 'fedbid');
 define('EMAILS_COMPLETADOS', COMPLETADOS . 'emails');
 define('FINDFRP_COMPLETADOS', COMPLETADOS . 'findfrp');
 define('EMBASSIES_COMPLETADOS', COMPLETADOS . 'embassies');
+define('FBO_COMPLETADOS', COMPLETADOS . 'fbo');
 define('SUBMITTED', PERFIL . 'submitted/');
 define('GSA_BUY_SUBMITTED', SUBMITTED . 'gsa_buy');
 define('FEDBID_SUBMITTED', SUBMITTED . 'fedbid');

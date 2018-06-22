@@ -79,7 +79,13 @@
                 }
                 ?>
                     ">
-                    <a href="#" class="nav-link">
+                    <a href="#" class="nav-link 
+                    <?php
+                    if ($gestor_actual == 'cotizaciones' || $gestor_actual == 'completados' || $gestor_actual == 'submitted') {
+                        echo 'active';
+                    }
+                    ?>
+                       ">
                         <i class="nav-icon fa fa-money"></i>
                         <p>
                             RFQ
@@ -89,12 +95,18 @@
                     <ul class="nav nav-treeview">
                         <li class="nav-item has-treeview
                         <?php
-                        if ($gestor_actual == 'cotizaciones') {
+                        if ($gestor_actual == 'cotizaciones' && $cotizacion != 'editar_cotizacion' && $cotizacion != 'nuevo' && $cotizacion != 'add_item' && $cotizacion != 'add_provider' && $cotizacion != 'edit_item' && $cotizacion != 'edit_provider') {
                             echo 'menu-open';
                         }
                         ?>
                             ">
-                            <a href="#" class="nav-link">
+                            <a href="#" class="nav-link
+                            <?php
+                            if ($gestor_actual == 'cotizaciones' && $cotizacion != 'editar_cotizacion' && $cotizacion != 'nuevo' && $cotizacion != 'add_item' && $cotizacion != 'add_provider' && $cotizacion != 'edit_item' && $cotizacion != 'edit_provider') {
+                                echo 'active';
+                            }
+                            ?>
+                               ">
                                 <i class="fa fa-th nav-icon"></i>
                                 <p>Quotes</p>
                                 <i class="right fa fa-angle-left"></i>
@@ -184,7 +196,13 @@
                             }
                             ?>
                                 ">
-                                <a href="#" class="nav-link">
+                                <a href="#" class="nav-link
+                                <?php
+                                if ($gestor_actual == 'completados') {
+                                    echo 'active';
+                                }
+                                ?>
+                                   ">
                                     <i class="fa fa-check-circle-o nav-icon"></i>
                                     <p>Completed</p>
                                     <i class="right fa fa-angle-left"></i>
@@ -264,7 +282,7 @@
                                     </li>
                                 </ul>
                             </li>
-                            
+
                             <li class="nav-item has-treeview 
                             <?php
                             if ($gestor_actual == 'submitted') {
@@ -272,7 +290,13 @@
                             }
                             ?>
                                 ">
-                                <a href="#" class="nav-link">
+                                <a href="#" class="nav-link
+                                <?php
+                                if ($gestor_actual == 'submitted') {
+                                    echo 'active';
+                                }
+                                ?>
+                                   ">
                                     <i class="fa fa-check-circle-o nav-icon"></i>
                                     <p>Submitted</p>
                                     <i class="right fa fa-angle-left"></i>

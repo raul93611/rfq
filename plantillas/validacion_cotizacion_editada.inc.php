@@ -11,7 +11,7 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
     for ($i = 0; $i < count($id_items); $i++) {
         RepositorioItem::insertar_calculos(Conexion::obtener_conexion(), $unit_prices[$i], $partes_total_price[$i], $id_items[$i]);
     }
-
+    
     $usuario = RepositorioUsuario::obtener_usuario_por_nombre_usuario(Conexion::obtener_conexion(), $_POST['usuario_designado']);
     $usuario_designado = $usuario->obtener_id();
     $cotizacion_editada = RepositorioRfq::actualizar_usuario_designado(Conexion::obtener_conexion(), $usuario_designado, $_POST['id_rfq']);
@@ -96,6 +96,23 @@ if (isset($_POST['guardar_cambios_cotizacion2'])) {
             
             if($cargo < 4){
                 Redireccion::redirigir1(SUBMITTED . $canal);
+            }else{
+                Redireccion::redirigir1(COTIZACIONES . $canal);
+            }
+        }else{
+            $cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $_POST['id_rfq']);
+        }
+    }else if(!$cotizacion_recuperada-> obtener_award()){
+        if(isset($_POST['award']) && $_POST['award'] == 'si'){
+            $award = 1;
+        }else{
+            $award = 0;
+        }
+        if($award){
+            RepositorioRfq::actualizar_fecha_y_award(Conexion::obtener_conexion(), $_POST['id_rfq']);
+            
+            if($cargo < 4){
+                Redireccion::redirigir1(AWARD . $canal);
             }else{
                 Redireccion::redirigir1(COTIZACIONES . $canal);
             }

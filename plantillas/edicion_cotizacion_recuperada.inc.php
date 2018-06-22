@@ -28,13 +28,14 @@
     </div>
     <?php
     
-    if ($cotizacion_recuperada->obtener_completado()) {
+    if ($cotizacion_recuperada->obtener_completado() || $cotizacion_recuperada-> obtener_status()) {
         Conexion::abrir_conexion();
         $usuario = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), $cotizacion_recuperada-> obtener_usuario_designado());
         Conexion::cerrar_conexion();
         ?>
         <label for="usuario_designado">Designated user:</label>
         <input type="text" class="form-control" value="<?php echo $usuario->obtener_nombre_usuario(); ?>" disabled>
+        <input type="hidden" value="<?php echo $usuario-> obtener_nombre_usuario(); ?>" name="usuario_designado">
         <?php
     } else {
         ?>
