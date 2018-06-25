@@ -97,6 +97,10 @@ $(function () {
                         },
                         ticks: ticksStyle
                     }]
+            },
+            animation:{
+              easing: 'easeOutCirc',
+              duration: 1500
             }
         }
     })
@@ -161,6 +165,10 @@ $(function () {
                         },
                         ticks: ticksStyle
                     }]
+            },
+            animation:{
+              easing: 'easeOutCirc',
+              duration: 1500
             }
         }
     })
@@ -225,6 +233,10 @@ $(function () {
                         },
                         ticks: ticksStyle
                     }]
+            },
+            animation:{
+              easing: 'easeOutCirc',
+              duration: 1500
             }
         }
     })
@@ -288,6 +300,10 @@ $(function () {
                         },
                         ticks: ticksStyle
                     }]
+            },
+            animation:{
+              easing: 'easeOutCirc',
+              duration: 1500
             }
         }
     })
@@ -352,6 +368,10 @@ $(function () {
                         },
                         ticks: ticksStyle
                     }]
+            },
+            animation:{
+              easing: 'easeOutCirc',
+              duration: 1500
             }
         }
     })
@@ -362,7 +382,7 @@ $(function () {
             labels: ["No Bid", "Manufacturer in the Bid", "Expired due date", "Supplier did not provide a quote"],
             datasets: [{
                     label: "Population (millions)",
-                    backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
+                    backgroundColor: ["#ff2e00", "#edcf0e", "#0cd63f", "#0c8bd6"],
                     data: [no_bid, manufacturer_in_the_bid, expired_due_date, supplier_did_not_provide_a_quote]
                 }]
         },
@@ -371,9 +391,9 @@ $(function () {
                 display: false,
                 text: 'Predicted world population (millions) in 2050'
             },
-            cutoutPercentage: 50,
+            cutoutPercentage: 3,
             animation:{
-                easing: 'easeOutBounce',
+                easing: 'easeInOutCubic',
                 duration: 1500
             }
             

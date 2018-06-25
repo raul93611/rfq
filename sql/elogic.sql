@@ -49,6 +49,11 @@ CREATE TABLE cuestionario(
         id INT NOT NULL AUTO_INCREMENT UNIQUE,
         id_rfq INT NOT NULL,
         
+        PRIMARY KEY(id),
+        FOREIGN KEY(id_rfq)
+            REFERENCES rfq(id)
+            ON UPDATE CASCADE
+            ON DELETE RESTRICT
 );
 
 CREATE TABLE item(

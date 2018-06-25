@@ -276,7 +276,7 @@ Conexion::cerrar_conexion();
 
                             <div class="d-flex flex-row justify-content-end">
                                 <span class="mr-2">
-                                    <i class="fa fa-square text-primary"></i> Current year
+                                    Current year
                                 </span>
                             </div>
                         </div>
