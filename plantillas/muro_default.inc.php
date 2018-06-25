@@ -3,6 +3,7 @@ list($nombres_usuario, $cotizaciones_completadas, $cotizaciones_completadas_pasa
 Conexion::abrir_conexion();
 $cotizaciones_mes = RepositorioRfq::obtener_cotizaciones_ganadas_por_mes(Conexion::obtener_conexion());
 $monto_cotizaciones_mes = RepositorioRfq::obtener_monto_cotizaciones_ganadas_por_mes(Conexion::obtener_conexion());
+list($no_bid, $manufacturer_in_the_bid, $expired_due_date, $supplier_did_not_provide_a_quote) = RepositorioRfq::obtener_comments(Conexion::obtener_conexion());
 Conexion::cerrar_conexion();
 ?>
 
@@ -73,6 +74,10 @@ Conexion::cerrar_conexion();
                     <input type="hidden" id="cotizaciones_no_sometidas_pasadas" <?php echo "value='" . json_encode($cotizaciones_no_sometidas_pasadas) . "'"; ?>>
                     <input type="hidden" id="cotizaciones_mes" <?php echo "value='" . json_encode($cotizaciones_mes) . "'"; ?>>
                     <input type="hidden" id="monto_cotizaciones_mes" <?php echo "value='" . json_encode($monto_cotizaciones_mes) . "'"; ?>>
+                    <input type="hidden" id="no_bid" <?php echo "value='" . json_encode($no_bid) . "'"; ?>>
+                    <input type="hidden" id="manufacturer_in_the_bid" <?php echo "value='" . json_encode($manufacturer_in_the_bid) . "'"; ?>>
+                    <input type="hidden" id="expired_due_date" <?php echo "value='" . json_encode($expired_due_date) . "'"; ?>>
+                    <input type="hidden" id="supplier_did_not_provide_a_quote" <?php echo "value='" . json_encode($supplier_did_not_provide_a_quote) . "'"; ?>>
                 </div>
                 <!-- ./col -->
                 <!--<div class="col-lg-3 col-6">
@@ -259,14 +264,14 @@ Conexion::cerrar_conexion();
                     <div class="card">
                         <div class="card-header no-border">
                             <div class="d-flex justify-content-between">
-                                <h3 class="card-title">Annual awards</h3>
+                                <h3 class="card-title"></h3>
                             </div>
                         </div>
                         <div class="card-body">
                             <!-- /.d-flex -->
 
                             <div class="position-relative mb-4">
-                                <canvas id="pie-chart" height="79"></canvas>
+                                <canvas id="pie-chart" height="88"></canvas>
                             </div>
 
                             <div class="d-flex flex-row justify-content-end">

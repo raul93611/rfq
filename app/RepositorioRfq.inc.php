@@ -647,6 +647,56 @@ class RepositorioRfq {
         }
         return $rfq_editado;
     }
+    
+    public static function obtener_comments($conexion){
+        $no_bid = 0;
+        $manufacturer_in_the_bid = 0;
+        $expired_due_date = 0;
+        $supplier_did_not_provide_a_quote = 0;
+        
+        if(isset($conexion)){
+            try{
+                $sql = 'SELECT COUNT(*) as no_bid FROM rfq WHERE comments = "No Bid" AND YEAR(fecha_completado) = YEAR(CURDATE())';
+                $sql1 = 'SELECT COUNT(*) as manufacturer_in_bid FROM rfq WHERE comments = "Manufacturer in the Bid" AND YEAR(fecha_completado) = YEAR(CURDATE())';
+                $sql2 = 'SELECT COUNT(*) as expired_due_date FROM rfq WHERE comments = "Expired due date" AND YEAR(fecha_completado) = YEAR(CURDATE())';
+                $sql3 = 'SELECT COUNT(*) as supplier_did_not_provide_a_quote FROM rfq WHERE comments = "Supplier did not provide a quote" AND YEAR(fecha_completado) = YEAR(CURDATE())';
+                
+                $sentencia = $conexion-> prepare($sql);
+                $sentencia1 = $conexion-> prepare($sql1);
+                $sentencia2 = $conexion-> prepare($sql2);
+                $sentencia3 = $conexion-> prepare($sql3);
+                
+                $sentencia-> execute();
+                $sentencia1-> execute();
+                $sentencia2-> execute();
+                $sentencia3-> execute();
+                
+                $resultado = $sentencia-> fetch();
+                $resultado1 = $sentencia1-> fetch();
+                $resultado2 = $sentencia2-> fetch();
+                $resultado3 = $sentencia3-> fetch();
+                
+                if(!empty($resultado)){
+                    $no_bid = $resultado['no_bid'];
+                }
+                
+                if(!empty($resultado1)){
+                    $manufacturer_in_the_bid = $resultado1['manufacturer_in_bid'];
+                }
+                
+                if(!empty($resultado2)){
+                    $expired_due_date = $resultado2['expired_due_date'];
+                }
+                
+                if(!empty($resultado3)){
+                    $supplier_did_not_provide_a_quote = $resultado3['supplier_did_not_provide_a_quote'];
+                }
+            } catch (PDOException $ex) {
+                print 'ERROR:' . $ex->getMessage() . '<br>';
+            }
+        }
+        return array($no_bid, $manufacturer_in_the_bid, $expired_due_date, $supplier_did_not_provide_a_quote);
+    }
 
 }
 ?>

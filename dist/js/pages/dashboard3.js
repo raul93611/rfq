@@ -10,6 +10,10 @@ $(function () {
     var cotizaciones_no_sometidas_pasadas = document.getElementById('cotizaciones_no_sometidas_pasadas').value;
     var cotizaciones_mes = document.getElementById('cotizaciones_mes').value;
     var monto_cotizaciones_mes = document.getElementById('monto_cotizaciones_mes').value;
+    var no_bid = document.getElementById('no_bid').value;
+    var manufacturer_in_the_bid = document.getElementById('manufacturer_in_the_bid').value;
+    var expired_due_date = document.getElementById('expired_due_date').value;
+    var supplier_did_not_provide_a_quote = document.getElementById('supplier_did_not_provide_a_quote').value;
 
     nombres_usuario = jQuery.parseJSON(nombres_usuario);
     cotizaciones_completadas = jQuery.parseJSON(cotizaciones_completadas);
@@ -20,6 +24,10 @@ $(function () {
     cotizaciones_no_sometidas_pasadas = jQuery.parseJSON(cotizaciones_no_sometidas_pasadas);
     cotizaciones_mes = jQuery.parseJSON(cotizaciones_mes);
     monto_cotizaciones_mes = jQuery.parseJSON(monto_cotizaciones_mes);
+    no_bid = jQuery.parseJSON(no_bid);
+    manufacturer_in_the_bid = jQuery.parseJSON(manufacturer_in_the_bid);
+    expired_due_date = jQuery.parseJSON(expired_due_date);
+    supplier_did_not_provide_a_quote = jQuery.parseJSON(supplier_did_not_provide_a_quote);
 
     var ticksStyle = {
         fontColor: '#495057',
@@ -351,11 +359,11 @@ $(function () {
     new Chart(document.getElementById("pie-chart"), {
         type: 'pie',
         data: {
-            labels: ["Africa", "Asia", "Europe", "Latin America", "North America"],
+            labels: ["No Bid", "Manufacturer in the Bid", "Expired due date", "Supplier did not provide a quote"],
             datasets: [{
                     label: "Population (millions)",
                     backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
-                    data: [2478, 5267, 734, 784, 433]
+                    data: [no_bid, manufacturer_in_the_bid, expired_due_date, supplier_did_not_provide_a_quote]
                 }]
         },
         options: {
