@@ -1,5 +1,5 @@
 $(function () {
-    'use strict'
+    'use strict';
 
     var nombres_usuario = document.getElementById('nombres_usuario').value;
     var cotizaciones_completadas = document.getElementById('cotizaciones_completadas').value;
@@ -32,12 +32,12 @@ $(function () {
     var ticksStyle = {
         fontColor: '#495057',
         fontStyle: 'bold'
-    }
+    };
 
-    var mode = 'index'
-    var intersect = true
+    var mode = 'index';
+    var intersect = true;
 
-    var $completadosChart = $('#completados-chart')
+    var $completadosChart = $('#completados-chart');
     var completadosChart = new Chart($completadosChart, {
         type: 'bar',
         data: {
@@ -83,10 +83,10 @@ $(function () {
                             // Include a dollar sign in the ticks
                             callback: function (value, index, values) {
                                 if (value >= 1000) {
-                                    value /= 1000
-                                    value += 'k'
+                                    value /= 1000;
+                                    value += 'k';
                                 }
-                                return value
+                                return value;
                             }
                         }, ticksStyle)
                     }],
@@ -103,9 +103,9 @@ $(function () {
               duration: 1500
             }
         }
-    })
+    });
 
-    var $ganadasChart = $('#ganadas-chart')
+    var $ganadasChart = $('#ganadas-chart');
     var ganadasChart = new Chart($ganadasChart, {
         type: 'bar',
         data: {
@@ -138,7 +138,7 @@ $(function () {
             },
             scales: {
                 yAxes: [{
-                        // display: false,
+                        //display: true,
                         gridLines: {
                             display: true,
                             lineWidth: '4px',
@@ -151,10 +151,10 @@ $(function () {
                             // Include a dollar sign in the ticks
                             callback: function (value, index, values) {
                                 if (value >= 1000) {
-                                    value /= 1000
-                                    value += 'k'
+                                    value /= 1000;
+                                    value += 'k';
                                 }
-                                return value
+                                return value;
                             }
                         }, ticksStyle)
                     }],
@@ -171,9 +171,9 @@ $(function () {
               duration: 1500
             }
         }
-    })
+    });
 
-    var $sometidasChart = $('#sometidas-chart')
+    var $sometidasChart = $('#sometidas-chart');
     var sometidasChart = new Chart($sometidasChart, {
         type: 'bar',
         data: {
@@ -219,10 +219,10 @@ $(function () {
                             // Include a dollar sign in the ticks
                             callback: function (value, index, values) {
                                 if (value >= 1000) {
-                                    value /= 1000
-                                    value += 'k'
+                                    value /= 1000;
+                                    value += 'k';
                                 }
-                                return value
+                                return value;
                             }
                         }, ticksStyle)
                     }],
@@ -239,8 +239,8 @@ $(function () {
               duration: 1500
             }
         }
-    })
-    var $ganadosAnualesChart = $('#ganados_anuales_chart')
+    });
+    var $ganadosAnualesChart = $('#ganados_anuales_chart');
     var ganadosAnualesChart = new Chart($ganadosAnualesChart, {
         type: 'bar',
         data: {
@@ -286,10 +286,10 @@ $(function () {
                             // Include a dollar sign in the ticks
                             callback: function (value, index, values) {
                                 if (value >= 1000) {
-                                    value /= 1000
-                                    value += 'k'
+                                    value /= 1000;
+                                    value += 'k';
                                 }
-                                return value
+                                return value;
                             }
                         }, ticksStyle)
                     }],
@@ -306,9 +306,9 @@ $(function () {
               duration: 1500
             }
         }
-    })
+    });
 
-    var $montoganadosAnualesChart = $('#monto_ganados_anual_chart')
+    var $montoganadosAnualesChart = $('#monto_ganados_anual_chart');
     var montoganadosAnualesChart = new Chart($montoganadosAnualesChart, {
         type: 'bar',
         data: {
@@ -354,10 +354,10 @@ $(function () {
                             // Include a dollar sign in the ticks
                             callback: function (value, index, values) {
                                 if (value >= 1000) {
-                                    value /= 1000
-                                    value += 'k'
+                                    value /= 1000;
+                                    value += 'k';
                                 }
-                                return '$' + value
+                                return '$' + value;
                             }
                         }, ticksStyle)
                     }],
@@ -374,7 +374,7 @@ $(function () {
               duration: 1500
             }
         }
-    })
+    });
 
     new Chart(document.getElementById("pie-chart"), {
         type: 'pie',
@@ -400,7 +400,7 @@ $(function () {
         }
     });
 
-    var $visitorsChart = $('#visitors-chart')
+    var $visitorsChart = $('#visitors-chart');
     var visitorsChart = new Chart($visitorsChart, {
         data: {
             labels: ['18th', '20th', '22nd', '24th', '26th', '28th', '30th'],
@@ -463,5 +463,5 @@ $(function () {
                     }]
             }
         }
-    })
-})
+    });
+});
