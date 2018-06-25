@@ -81,11 +81,11 @@ class RepositorioRfq {
             try {
 
                 if ($cargo < 4) {
-                    $sql = "SELECT * FROM rfq WHERE canal = :canal AND completado = 0 AND status = 0 AND award = 0 ORDER BY end_date DESC";
+                    $sql = "SELECT * FROM rfq WHERE canal = :canal AND completado = 0 AND status = 0 AND award = 0";
                     $sentencia = $conexion->prepare($sql);
                     $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
                 } else if ($cargo == 4) {
-                    $sql = "SELECT * FROM rfq WHERE canal = :canal AND usuario_designado = :id_usuario AND completado = 0 AND status = 0 AND award = 0 ORDER BY end_date DESC";
+                    $sql = "SELECT * FROM rfq WHERE canal = :canal AND usuario_designado = :id_usuario AND completado = 0 AND status = 0 AND award = 0";
                     $sentencia = $conexion->prepare($sql);
                     $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
                     $sentencia->bindParam(':id_usuario', $id_usuario, PDO::PARAM_STR);
@@ -241,7 +241,7 @@ class RepositorioRfq {
                     $sentencia = $conexion->prepare($sql);
                     $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
                 } else if ($cargo == 4) {
-                    $sql = "SELECT * FROM rfq WHERE canal = :canal AND usuario_designado = :id_usuario AND completado = 1 AND status = 0 AND award = 0 ORDER BY end_date DESC";
+                    $sql = "SELECT * FROM rfq WHERE canal = :canal AND usuario_designado = :id_usuario AND completado = 1 AND status = 0 AND award = 0 ORDER BY fecha_completado DESC";
                     $sentencia = $conexion->prepare($sql);
                     $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
                     $sentencia->bindParam(':id_usuario', $id_usuario, PDO::PARAM_STR);
@@ -343,7 +343,7 @@ class RepositorioRfq {
 
         if (isset($conexion)) {
             try {
-                $sql = "SELECT * FROM rfq WHERE completado = 1 AND status = 1 AND award = 0 AND canal = :canal ORDER BY fecha_completado DESC";
+                $sql = "SELECT * FROM rfq WHERE completado = 1 AND status = 1 AND award = 0 AND canal = :canal ORDER BY fecha_submitted DESC";
                 $sentencia = $conexion->prepare($sql);
                 $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
                 $sentencia->execute();
@@ -432,7 +432,7 @@ class RepositorioRfq {
 
         if (isset($conexion)) {
             try {
-                $sql = "SELECT * FROM rfq WHERE completado = 1 AND status = 1 AND award = 1 AND canal = :canal ORDER BY fecha_completado DESC";
+                $sql = "SELECT * FROM rfq WHERE completado = 1 AND status = 1 AND award = 1 AND canal = :canal ORDER BY fecha_award DESC";
                 $sentencia = $conexion->prepare($sql);
                 $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
                 $sentencia->execute();
@@ -522,7 +522,7 @@ class RepositorioRfq {
         if (isset($conexion)) {
             try {
                 for ($i = 1; $i <= 12; $i++) {
-                    $sql = 'SELECT COUNT(*) as cotizaciones_mes FROM rfq WHERE award = 1 AND MONTH(fecha_completado) =' . $i . ' AND YEAR(fecha_completado) = YEAR(CURDATE())';
+                    $sql = 'SELECT COUNT(*) as cotizaciones_mes FROM rfq WHERE award = 1 AND MONTH(fecha_award) =' . $i . ' AND YEAR(fecha_award) = YEAR(CURDATE())';
                     $sentencia = $conexion->prepare($sql);
                     $sentencia->execute();
                     $resultado = $sentencia->fetch();
@@ -545,7 +545,7 @@ class RepositorioRfq {
         if (isset($conexion)) {
             try {
                 for ($i = 1; $i <= 12; $i++) {
-                    $sql = 'SELECT SUM(total_price) as monto FROM rfq WHERE award = 1 AND MONTH(fecha_completado) =' . $i . ' AND YEAR(fecha_completado) = YEAR(CURDATE())';
+                    $sql = 'SELECT SUM(total_price) as monto FROM rfq WHERE award = 1 AND MONTH(fecha_award) =' . $i . ' AND YEAR(fecha_award) = YEAR(CURDATE())';
                     $sentencia = $conexion->prepare($sql);
                     $sentencia->execute();
                     $resultado = $sentencia->fetch();

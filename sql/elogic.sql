@@ -45,6 +45,12 @@ CREATE TABLE rfq(
             ON DELETE RESTRICT
 );
 
+CREATE TABLE cuestionario(
+        id INT NOT NULL AUTO_INCREMENT UNIQUE,
+        id_rfq INT NOT NULL,
+        
+);
+
 CREATE TABLE item(
         id INT NOT NULL AUTO_INCREMENT UNIQUE,
         id_rfq INT NOT NULL,
