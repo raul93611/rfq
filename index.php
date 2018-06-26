@@ -22,6 +22,9 @@ include_once 'app/RepositorioItem.inc.php';
 include_once 'app/Provider.inc.php';
 include_once 'app/RepositorioProvider.inc.php';
 
+include_once 'app/Cuestionario.inc.php';
+include_once 'app/RepositorioCuestionario.inc.php';
+
 $componentes_url = parse_url($_SERVER['REQUEST_URI']);
 $ruta = $componentes_url['path'];
 
