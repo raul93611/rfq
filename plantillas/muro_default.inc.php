@@ -271,7 +271,7 @@ Conexion::cerrar_conexion();
                             <!-- /.d-flex -->
 
                             <div class="position-relative mb-4">
-                                <canvas id="pie-chart" height="88"></canvas>
+                                <canvas id="pie-chart" style="height: 222px"></canvas>
                             </div>
 
                             <div class="d-flex flex-row justify-content-end">

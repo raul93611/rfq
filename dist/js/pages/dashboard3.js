@@ -73,13 +73,11 @@ $(function () {
                         // display: false,
                         gridLines: {
                             display: true,
-                            lineWidth: '4px',
-                            color: 'rgba(0, 0, 0, .2)',
-                            zeroLineColor: 'transparent'
+                            color: 'rgba(122, 125, 130, .2)'
                         },
                         ticks: $.extend({
                             beginAtZero: true,
-
+                            stepSize: 1,
                             // Include a dollar sign in the ticks
                             callback: function (value, index, values) {
                                 if (value >= 1000) {
@@ -93,7 +91,7 @@ $(function () {
                 xAxes: [{
                         display: true,
                         gridLines: {
-                            display: false
+                            display: true
                         },
                         ticks: ticksStyle
                     }]
@@ -141,13 +139,11 @@ $(function () {
                         //display: true,
                         gridLines: {
                             display: true,
-                            lineWidth: '4px',
-                            color: 'rgba(0, 0, 0, .2)',
-                            zeroLineColor: 'transparent'
+                            color: 'rgba(122, 125, 130, .2)'
                         },
                         ticks: $.extend({
                             beginAtZero: true,
-
+                            stepSize: 1,
                             // Include a dollar sign in the ticks
                             callback: function (value, index, values) {
                                 if (value >= 1000) {
@@ -161,7 +157,7 @@ $(function () {
                 xAxes: [{
                         display: true,
                         gridLines: {
-                            display: false
+                            display: true
                         },
                         ticks: ticksStyle
                     }]
@@ -209,13 +205,11 @@ $(function () {
                         // display: false,
                         gridLines: {
                             display: true,
-                            lineWidth: '4px',
-                            color: 'rgba(0, 0, 0, .2)',
-                            zeroLineColor: 'transparent'
+                            color: 'rgba(122, 125, 130, .2)'
                         },
                         ticks: $.extend({
                             beginAtZero: true,
-
+                            stepSize: 1,
                             // Include a dollar sign in the ticks
                             callback: function (value, index, values) {
                                 if (value >= 1000) {
@@ -229,7 +223,7 @@ $(function () {
                 xAxes: [{
                         display: true,
                         gridLines: {
-                            display: false
+                            display: true
                         },
                         ticks: ticksStyle
                     }]
@@ -276,13 +270,11 @@ $(function () {
                         // display: false,
                         gridLines: {
                             display: true,
-                            lineWidth: '4px',
-                            color: 'rgba(0, 0, 0, .2)',
-                            zeroLineColor: 'transparent'
+                            color: 'rgba(122, 125, 130, .2)'
                         },
                         ticks: $.extend({
                             beginAtZero: true,
-
+                            stepSize: 1,
                             // Include a dollar sign in the ticks
                             callback: function (value, index, values) {
                                 if (value >= 1000) {
@@ -296,7 +288,7 @@ $(function () {
                 xAxes: [{
                         display: true,
                         gridLines: {
-                            display: false
+                            display: true
                         },
                         ticks: ticksStyle
                     }]
@@ -341,16 +333,13 @@ $(function () {
             },
             scales: {
                 yAxes: [{
-                        // display: false,
+                        display: true,
                         gridLines: {
                             display: true,
-                            lineWidth: '4px',
-                            color: 'rgba(0, 0, 0, .2)',
-                            zeroLineColor: 'transparent'
+                            color: 'rgba(122, 125, 130, .2)'
                         },
                         ticks: $.extend({
                             beginAtZero: true,
-
                             // Include a dollar sign in the ticks
                             callback: function (value, index, values) {
                                 if (value >= 1000) {
@@ -364,7 +353,7 @@ $(function () {
                 xAxes: [{
                         display: true,
                         gridLines: {
-                            display: false
+                            display: true
                         },
                         ticks: ticksStyle
                     }]
@@ -387,6 +376,7 @@ $(function () {
                 }]
         },
         options: {
+            maintainAspectRatio: false,
             title: {
                 display: false,
                 text: 'Predicted world population (millions) in 2050'
