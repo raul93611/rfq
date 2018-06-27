@@ -114,6 +114,8 @@ As authorized by FAR 19.8, Federal agencies may issue sole source contracts to 8
 The agency CO should send “Offer Letter” and PWS to dcofferletters@sba.gov. The SBA processes the Offer Letter and returns it to the agency CO within 5 business days for contract processing.
 </td> 
   </tr>';
+    }else{
+        $html .= '<table style="width:100%">';
     }
     $html .= '
   <tr>
