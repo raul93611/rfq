@@ -99,6 +99,30 @@ switch ($gestor_actual) {
                 Conexion::cerrar_conexion();
                 include_once 'plantillas/add_project_milestone.inc.php';
                 break;
+            case 'edit_high_level_requirement':
+                Conexion::abrir_conexion();
+                $high_level_requirement = RepositorioHighLevelRequirement::obtener_high_level_requirement_por_id(Conexion::obtener_conexion(), $id_high_level_requirement);
+                Conexion::cerrar_conexion();
+                include_once 'plantillas/edit_high_level_requirement.inc.php';
+                break;
+            case 'edit_out_of_scope':
+                Conexion::abrir_conexion();
+                $out_of_scope = RepositorioOutOfScope::obtener_out_of_scope_por_id(Conexion::obtener_conexion(), $id_out_of_scope);
+                Conexion::cerrar_conexion();
+                include_once 'plantillas/edit_out_of_scope.inc.php';
+                break;
+            case 'edit_project_risk':
+                Conexion::abrir_conexion();
+                $project_risk = RepositorioProjectRisk::obtener_project_risk_por_id(Conexion::obtener_conexion(), $id_project_risk);
+                Conexion::cerrar_conexion();
+                include_once 'plantillas/edit_project_risk.inc.php';
+                break;
+            case 'edit_project_milestone':
+                Conexion::abrir_conexion();
+                $project_milestone = RepositorioProjectMilestone::obtener_project_milestone_por_id(Conexion::obtener_conexion(), $id_project_milestone);
+                Conexion::cerrar_conexion();
+                include_once 'plantillas/edit_project_milestone.inc.php';
+                break;
             default :
                 include_once 'plantillas/cotizaciones.inc.php';
         }

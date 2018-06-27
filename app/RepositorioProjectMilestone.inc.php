@@ -56,6 +56,7 @@ class RepositorioProjectMilestone{
             <td><?php echo $i; ?></td>
             <td><?php echo $project_milestone-> obtener_date_milestone(); ?></td>
             <td><?php echo $project_milestone-> obtener_description(); ?></td>
+            <td><a class="btn btn-warning" href="<?php echo EDIT_PROJECT_MILESTONE . '/' . $project_milestone-> obtener_id(); ?>">Edit</a></td>
         </tr>
         <?php
     }
@@ -73,6 +74,7 @@ class RepositorioProjectMilestone{
                         <th>#</th>
                         <th>DATE</th>
                         <th>DESCRIPTION</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -86,6 +88,49 @@ class RepositorioProjectMilestone{
             </table> 
             <?php
         }
+    }
+    
+    public static function obtener_project_milestone_por_id($conexion, $id_project_milestone) {
+        $project_milestone = null;
+
+        if (isset($conexion)) {
+            try {
+                $sql = 'SELECT * FROM project_milestones WHERE id = :id_project_milestone';
+                $sentencia = $conexion->prepare($sql);
+                $sentencia->bindParam(':id_project_milestone', $id_project_milestone, PDO::PARAM_STR);
+                $sentencia->execute();
+
+                $resultado = $sentencia->fetch();
+
+                if (!empty($resultado)) {
+                    $project_milestone = new ProjectMilestone($resultado['id'], $resultado['id_cuestionario'], $resultado['date_milestone'], $resultado['description']);
+                }
+            } catch (PDOException $ex) {
+                print 'ERROR:' . $ex->getMessage() . '<br>';
+            }
+        }
+        return $project_milestone;
+    }
+    
+    public static function actualizar_project_milestone($conexion, $date_milestone, $description, $id_project_milestone){
+        $project_milestone_editado = false;
+        if(isset($conexion)){
+            try{
+                $sql = 'UPDATE project_milestones SET date_milestone = :date_milestone, description = :description WHERE id = :id_project_milestone';
+                $sentencia = $conexion-> prepare($sql);
+                $sentencia-> bindParam(':date_milestone', $date_milestone, PDO::PARAM_STR);
+                $sentencia-> bindParam(':description', $description, PDO::PARAM_STR);
+                $sentencia-> bindParam(':id_project_milestone', $id_project_milestone, PDO::PARAM_STR);
+                $sentencia-> execute();
+                
+                if($sentencia){
+                    $project_milestone_editado = true;
+                }
+            } catch (PDOException $ex) {
+                print 'ERROR:' . $ex->getMessage() . '<br>';
+            }
+        }
+        return $project_milestone_editado;
     }
 }
 ?>

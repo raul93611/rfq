@@ -54,6 +54,7 @@ class RepositorioOutOfScope{
         <tr>
             <td><?php echo $i; ?></td>
             <td><?php echo $out_of_scope-> obtener_requirement(); ?></td>
+            <td><a class="btn btn-warning" href="<?php echo EDIT_OUT_OF_SCOPE . '/' . $out_of_scope->obtener_id(); ?>">Edit</a></td>
         </tr>
         <?php
     }
@@ -70,6 +71,7 @@ class RepositorioOutOfScope{
                     <tr>
                         <th>#</th>
                         <th>REQUIREMENT</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -83,6 +85,48 @@ class RepositorioOutOfScope{
             </table> 
             <?php
         }
+    }
+    
+    public static function obtener_out_of_scope_por_id($conexion, $id_out_of_scope) {
+        $out_of_scope = null;
+
+        if (isset($conexion)) {
+            try {
+                $sql = 'SELECT * FROM out_of_scopes WHERE id = :id_out_of_scope';
+                $sentencia = $conexion->prepare($sql);
+                $sentencia->bindParam(':id_out_of_scope', $id_out_of_scope, PDO::PARAM_STR);
+                $sentencia->execute();
+
+                $resultado = $sentencia->fetch();
+
+                if (!empty($resultado)) {
+                    $out_of_scope = new OutOfScope($resultado['id'], $resultado['id_cuestionario'], $resultado['requirement']);
+                }
+            } catch (PDOException $ex) {
+                print 'ERROR:' . $ex->getMessage() . '<br>';
+            }
+        }
+        return $out_of_scope;
+    }
+    
+    public static function actualizar_out_of_scope($conexion, $requirement, $id_out_of_scope){
+        $out_of_scope_editado = false;
+        if(isset($conexion)){
+            try{
+                $sql = 'UPDATE out_of_scopes SET requirement = :requirement WHERE id = :id_out_of_scope';
+                $sentencia = $conexion-> prepare($sql);
+                $sentencia-> bindParam(':requirement', $requirement, PDO::PARAM_STR);
+                $sentencia-> bindParam(':id_out_of_scope', $id_out_of_scope, PDO::PARAM_STR);
+                $sentencia-> execute();
+                
+                if($sentencia){
+                    $out_of_scope_editado = true;
+                }
+            } catch (PDOException $ex) {
+                print 'ERROR:' . $ex->getMessage() . '<br>';
+            }
+        }
+        return $out_of_scope_editado;
     }
 }
 ?>

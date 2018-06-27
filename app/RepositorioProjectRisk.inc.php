@@ -54,6 +54,7 @@ class RepositorioProjectRisk{
         <tr>
             <td><?php echo $i; ?></td>
             <td><?php echo $project_risk-> obtener_description(); ?></td>
+            <td><a class="btn btn-warning" href="<?php echo EDIT_PROJECT_RISK . '/' . $project_risk-> obtener_id(); ?>">Edit</a></td>
         </tr>
         <?php
     }
@@ -70,6 +71,7 @@ class RepositorioProjectRisk{
                     <tr>
                         <th>#</th>
                         <th>DESCRIPTION</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -83,6 +85,48 @@ class RepositorioProjectRisk{
             </table> 
             <?php
         }
+    }
+    
+    public static function obtener_project_risk_por_id($conexion, $id_project_risk) {
+        $project_risk = null;
+
+        if (isset($conexion)) {
+            try {
+                $sql = 'SELECT * FROM project_risks WHERE id = :id_project_risk';
+                $sentencia = $conexion->prepare($sql);
+                $sentencia->bindParam(':id_project_risk', $id_project_risk, PDO::PARAM_STR);
+                $sentencia->execute();
+
+                $resultado = $sentencia->fetch();
+
+                if (!empty($resultado)) {
+                    $project_risk = new ProjectRisk($resultado['id'], $resultado['id_cuestionario'], $resultado['description']);
+                }
+            } catch (PDOException $ex) {
+                print 'ERROR:' . $ex->getMessage() . '<br>';
+            }
+        }
+        return $project_risk;
+    }
+    
+    public static function actualizar_project_risk($conexion, $description, $id_project_risk){
+        $project_risk_editado = false;
+        if(isset($conexion)){
+            try{
+                $sql = 'UPDATE project_risks SET description = :description WHERE id = :id_project_risk';
+                $sentencia = $conexion-> prepare($sql);
+                $sentencia-> bindParam(':description', $description, PDO::PARAM_STR);
+                $sentencia-> bindParam(':id_project_risk', $id_project_risk, PDO::PARAM_STR);
+                $sentencia-> execute();
+                
+                if($sentencia){
+                    $project_risk_editado = true;
+                }
+            } catch (PDOException $ex) {
+                print 'ERROR:' . $ex->getMessage() . '<br>';
+            }
+        }
+        return $project_risk_editado;
     }
 }
 ?>

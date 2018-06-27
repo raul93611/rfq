@@ -226,6 +226,22 @@ if ($partes_ruta[0] == 'rfq') {
                     $cotizacion = 'add_project_milestone';
                     $id_cuestionario = $partes_ruta[4];
                     break;
+                case 'edit_high_level_requirement':
+                    $cotizacion = 'edit_high_level_requirement';
+                    $id_high_level_requirement = $partes_ruta[4];
+                    break;
+                case 'edit_out_of_scope':
+                    $cotizacion = 'edit_out_of_scope';
+                    $id_out_of_scope = $partes_ruta[4];
+                    break;
+                case 'edit_project_risk':
+                    $cotizacion = 'edit_project_risk';
+                    $id_project_risk = $partes_ruta[4];
+                    break;
+                case 'edit_project_milestone':
+                    $cotizacion = 'edit_project_milestone';
+                    $id_project_milestone = $partes_ruta[4];
+                    break;
             }
         }
     }

@@ -52,6 +52,10 @@ define('ADD_HIGH_LEVEL_REQUIREMENT', COTIZACIONES . 'add_high_level_requirement'
 define('ADD_OUT_OF_SCOPE', COTIZACIONES . 'add_out_of_scope');
 define('ADD_PROJECT_RISK', COTIZACIONES . 'add_project_risk');
 define('ADD_PROJECT_MILESTONE', COTIZACIONES . 'add_project_milestone');
+define('EDIT_HIGH_LEVEL_REQUIREMENT', COTIZACIONES . 'edit_high_level_requirement');
+define('EDIT_OUT_OF_SCOPE', COTIZACIONES . 'edit_out_of_scope');
+define('EDIT_PROJECT_RISK', COTIZACIONES . 'edit_project_risk');
+define('EDIT_PROJECT_MILESTONE', COTIZACIONES . 'edit_project_milestone');
 
 define('RUTA_CSS', SERVIDOR . 'css/');
 define('RUTA_JS', SERVIDOR . 'js/');
