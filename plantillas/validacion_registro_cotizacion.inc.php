@@ -10,7 +10,7 @@ if (isset($_POST['registrar_cotizacion'])) {
     if ($validador->registro_cotizacion_valida()) {
         $cotizacion = new Rfq('', $_SESSION['id_usuario'], $usuario_designado, $_POST['canal'], $validador->obtener_email_code(), $_POST['type_of_bid'], $validador->obtener_issue_date(), $validador->obtener_end_date(), 0, 0, 0, 0, '', 0, '', '', '', '', '', '', '', '', 0, 0);
         list($cotizacion_insertada, $id_rfq) = RepositorioRfq::insertar_cotizacion(Conexion::obtener_conexion(), $cotizacion);
-        $cuestionario = new Cuestionario('', $id_rfq);
+        $cuestionario = new Cuestionario('', $id_rfq, '', '', '', '', '', '', '', '');
         RepositorioCuestionario::insertar_cuestionario(Conexion::obtener_conexion(), $cuestionario);
 
         if ($cotizacion_insertada) {

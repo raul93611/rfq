@@ -47,6 +47,11 @@ define('ADD_ITEM', COTIZACIONES . 'add_item');
 define('ADD_PROVIDER', COTIZACIONES . 'add_provider');
 define('EDIT_ITEM', COTIZACIONES . 'edit_item');
 define('EDIT_PROVIDER', COTIZACIONES . 'edit_provider');
+define('CUESTIONARIO', COTIZACIONES . 'cuestionario');
+define('ADD_HIGH_LEVEL_REQUIREMENT', COTIZACIONES . 'add_high_level_requirement');
+define('ADD_OUT_OF_SCOPE', COTIZACIONES . 'add_out_of_scope');
+define('ADD_PROJECT_RISK', COTIZACIONES . 'add_project_risk');
+define('ADD_PROJECT_MILESTONE', COTIZACIONES . 'add_project_milestone');
 
 define('RUTA_CSS', SERVIDOR . 'css/');
 define('RUTA_JS', SERVIDOR . 'js/');

@@ -25,6 +25,18 @@ include_once 'app/RepositorioProvider.inc.php';
 include_once 'app/Cuestionario.inc.php';
 include_once 'app/RepositorioCuestionario.inc.php';
 
+include_once 'app/HighLevelrequirement.inc.php';
+include_once 'app/RepositorioHighLevelRequirement.inc.php';
+
+include_once 'app/OutOfScope.inc.php';
+include_once 'app/RepositorioOutOfScope.inc.php';
+
+include_once 'app/ProjectRisk.inc.php';
+include_once 'app/RepositorioProjectRisk.inc.php';
+
+include_once 'app/ProjectMilestone.inc.php';
+include_once 'app/RepositorioProjectMilestone.inc.php';
+
 $componentes_url = parse_url($_SERVER['REQUEST_URI']);
 $ruta = $componentes_url['path'];
 
@@ -193,6 +205,26 @@ if ($partes_ruta[0] == 'rfq') {
                 case 'edit_provider':
                     $cotizacion = 'edit_provider';
                     $id_provider = $partes_ruta[4];
+                    break;
+                case 'cuestionario':
+                    $cotizacion = 'cuestionario';
+                    $id_rfq = $partes_ruta[4];
+                    break;
+                case 'add_high_level_requirement':
+                    $cotizacion = 'add_high_level_requirement';
+                    $id_cuestionario = $partes_ruta[4];
+                    break;
+                case 'add_out_of_scope':
+                    $cotizacion = 'add_out_of_scope';
+                    $id_cuestionario = $partes_ruta[4];
+                    break;
+                case 'add_project_risk':
+                    $cotizacion = 'add_project_risk';
+                    $id_cuestionario = $partes_ruta[4];
+                    break;
+                case 'add_project_milestone':
+                    $cotizacion = 'add_project_milestone';
+                    $id_cuestionario = $partes_ruta[4];
                     break;
             }
         }

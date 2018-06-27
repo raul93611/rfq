@@ -177,6 +177,7 @@ $(document).ready(function () {
         separator: "/",
         alias: "mm/dd/yyyy"
     });
+    $('#date_milestone').inputmask('mm/dd/yyyy', {'placeholder': 'mm/dd/yyyy'});
 
     //REALIZAR CALCULO DE LA TABLA DE ITEMS
     var monto = [];

@@ -77,6 +77,7 @@
         echo '<a class="btn btn-primary" href="' . COTIZACIONES . $canal . '">Go back</a>';
     }
     ?>
+    <a class="btn btn-primary" href="<?php echo CUESTIONARIO . '/' . $cotizacion_recuperada-> obtener_id(); ?>">Project charter</a>
 </div>
 <!--
 <br>

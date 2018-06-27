@@ -101,14 +101,14 @@
                     <ul class="nav nav-treeview">
                         <li class="nav-item has-treeview
                         <?php
-                        if ($gestor_actual == 'cotizaciones' && $cotizacion != 'editar_cotizacion' && $cotizacion != 'nuevo' && $cotizacion != 'add_item' && $cotizacion != 'add_provider' && $cotizacion != 'edit_item' && $cotizacion != 'edit_provider') {
+                        if ($gestor_actual == 'cotizaciones' && $cotizacion != 'add_project_risk' && $cotizacion != 'add_project_milestone' && $cotizacion != 'add_out_of_scope' && $cotizacion != 'add_high_level_requirement' && $cotizacion != 'cuestionario' && $cotizacion != 'editar_cotizacion' && $cotizacion != 'nuevo' && $cotizacion != 'add_item' && $cotizacion != 'add_provider' && $cotizacion != 'edit_item' && $cotizacion != 'edit_provider') {
                             echo 'menu-open';
                         }
                         ?>
                             ">
                             <a href="#" class="nav-link
                             <?php
-                            if ($gestor_actual == 'cotizaciones' && $cotizacion != 'editar_cotizacion' && $cotizacion != 'nuevo' && $cotizacion != 'add_item' && $cotizacion != 'add_provider' && $cotizacion != 'edit_item' && $cotizacion != 'edit_provider') {
+                            if ($gestor_actual == 'cotizaciones' && $cotizacion != 'add_project_risk' && $cotizacion != 'add_project_milestone' && $cotizacion != 'add_out_of_scope' && $cotizacion != 'add_high_level_requirement' && $cotizacion != 'cuestionario' && $cotizacion != 'editar_cotizacion' && $cotizacion != 'nuevo' && $cotizacion != 'add_item' && $cotizacion != 'add_provider' && $cotizacion != 'edit_item' && $cotizacion != 'edit_provider') {
                                 echo 'active';
                             }
                             ?>

@@ -69,6 +69,36 @@ switch ($gestor_actual) {
                 Conexion::cerrar_conexion();
                 include_once 'plantillas/edit_provider.inc.php';
                 break;
+            case 'cuestionario':
+                Conexion::abrir_conexion();
+                $cuestionario = RepositorioCuestionario::obtener_cuestionario_por_id_rfq(Conexion::obtener_conexion(), $id_rfq);
+                Conexion::cerrar_conexion();
+                include_once 'plantillas/cuestionario.inc.php';
+                break;
+            case 'add_high_level_requirement':
+                Conexion::abrir_conexion();
+                $cuestionario = RepositorioCuestionario::obtener_cuestionario_por_id(Conexion::obtener_conexion(), $id_cuestionario);
+                Conexion::cerrar_conexion();
+                include_once 'plantillas/add_high_level_requirement.inc.php';
+                break;
+            case 'add_out_of_scope':
+                Conexion::abrir_conexion();
+                $cuestionario = RepositorioCuestionario::obtener_cuestionario_por_id(Conexion::obtener_conexion(), $id_cuestionario);
+                Conexion::cerrar_conexion();
+                include_once 'plantillas/add_out_of_scope.inc.php';
+                break;
+            case 'add_project_risk':
+                Conexion::abrir_conexion();
+                $cuestionario = RepositorioCuestionario::obtener_cuestionario_por_id(Conexion::obtener_conexion(), $id_cuestionario);
+                Conexion::cerrar_conexion();
+                include_once 'plantillas/add_project_risk.inc.php';
+                break;
+            case 'add_project_milestone':
+                Conexion::abrir_conexion();
+                $cuestionario = RepositorioCuestionario::obtener_cuestionario_por_id(Conexion::obtener_conexion(), $id_cuestionario);
+                Conexion::cerrar_conexion();
+                include_once 'plantillas/add_project_milestone.inc.php';
+                break;
             default :
                 include_once 'plantillas/cotizaciones.inc.php';
         }
