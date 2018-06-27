@@ -3,7 +3,7 @@
 <div class="card-body">
     <div class="form-group">
         <label>Date:</label>
-        <input type="text" class="form-control" id="date_milestone" name="date_milestone" required value="<?php echo $project_milestone-> obtener_date_milestone(); ?>">
+        <input type="text" class="form-control" id="date_milestone" name="date_milestone" autofocus required value="<?php echo $project_milestone-> obtener_date_milestone(); ?>">
     </div>
     <div class="form-group">
         <label>Description:</label>

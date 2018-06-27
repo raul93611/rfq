@@ -10,8 +10,9 @@ class Cuestionario{
     private $cost_goals;
     private $time_goals;
     private $quality_goals;
+    private $locations;
     
-    public function __construct($id, $id_rfq, $reach_objectives, $cost_objectives, $time_objectives, $quality_objectives, $reach_goals, $cost_goals, $time_goals, $quality_goals){
+    public function __construct($id, $id_rfq, $reach_objectives, $cost_objectives, $time_objectives, $quality_objectives, $reach_goals, $cost_goals, $time_goals, $quality_goals, $locations){
         $this-> id = $id;
         $this-> id_rfq = $id_rfq;
         $this-> reach_objectives = $reach_objectives;
@@ -22,6 +23,7 @@ class Cuestionario{
         $this-> cost_goals = $cost_goals;
         $this-> time_goals = $time_goals;
         $this-> quality_goals = $quality_goals;
+        $this-> locations = $locations;
     }
     
     public function obtener_id(){
@@ -64,5 +66,8 @@ class Cuestionario{
         return $this-> quality_goals;
     }
     
+    public function obtener_locations(){
+        return $this-> locations;
+    }
 }
 ?>

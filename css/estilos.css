@@ -24,3 +24,7 @@ table{
 #tabla_items #provider{
     min-width: 200px !important;
 }
+
+.cuestionario{
+    width: 50px !important;
+}

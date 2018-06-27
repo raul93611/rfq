@@ -2,7 +2,7 @@
 <div class="card-body">
     <div class="form-group">
         <label for="quantity">Description:</label>
-        <input type="text" class="form-control" name="description" required>
+        <input type="text" class="form-control" name="description" autofocus required>
     </div>
 </div>
 <div class="card-footer">

@@ -2,7 +2,7 @@
 <div class="card-body">
     <div class="form-group">
         <label>Date:</label>
-        <input type="text" id="date_milestone" class="form-control" name="date_milestone" required>
+        <input type="text" id="date_milestone" class="form-control" autofocus name="date_milestone" required>
     </div>
     <div class="form-group">
         <label>Description:</label>

@@ -3,7 +3,7 @@
 <div class="card-body">
     <div class="form-group">
         <label>Description:</label>
-        <input type="text" class="form-control" name="description" required value="<?php echo $project_risk-> obtener_description(); ?>">
+        <input type="text" class="form-control" name="description" autofocus required value="<?php echo $project_risk-> obtener_description(); ?>">
     </div>
 </div>
 <div class="card-footer">

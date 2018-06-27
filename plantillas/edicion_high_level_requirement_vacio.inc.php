@@ -3,7 +3,7 @@
 <div class="card-body">
     <div class="form-group">
         <label for="quantity">Requirement:</label>
-        <input type="text" class="form-control" name="requirement" required value="<?php echo $high_level_requirement-> obtener_requirement(); ?>">
+        <input type="text" class="form-control" name="requirement" autofocus required value="<?php echo $high_level_requirement-> obtener_requirement(); ?>">
     </div>
 </div>
 <div class="card-footer">

@@ -3,7 +3,7 @@
 <div class="card-body">
     <div class="form-group">
         <label>Requirement:</label>
-        <input type="text" class="form-control" name="requirement" required value="<?php echo $out_of_scope-> obtener_requirement(); ?>">
+        <input type="text" class="form-control" name="requirement" autofocus required value="<?php echo $out_of_scope-> obtener_requirement(); ?>">
     </div>
 </div>
 <div class="card-footer">

@@ -71,10 +71,10 @@ class RepositorioProjectMilestone{
             <table class="table table-bordered table-striped table-hover">
                 <thead>
                     <tr>
-                        <th>#</th>
+                        <th class="cuestionario">#</th>
                         <th>DATE</th>
                         <th>DESCRIPTION</th>
-                        <th></th>
+                        <th class="cuestionario"></th>
                     </tr>
                 </thead>
                 <tbody>

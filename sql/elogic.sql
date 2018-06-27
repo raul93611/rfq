@@ -56,6 +56,7 @@ CREATE TABLE cuestionario(
         cost_goals VARCHAR(255) NOT NULL,
         time_goals VARCHAR(255) NOT NULL,
         quality_goals VARCHAR(255) NOT NULL,
+        locations VARCHAR(255) NOT NULL,
         PRIMARY KEY(id),
         FOREIGN KEY(id_rfq)
             REFERENCES rfq(id)
