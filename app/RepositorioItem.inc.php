@@ -6,7 +6,7 @@ class RepositorioItem {
         $item_insertado = false;
         if (isset($conexion)) {
             try {
-                $sql = 'INSERT INTO item(id_rfq, id_usuario, provider_menor, brand, brand_project, part_number, part_number_project, description, description_project, quantity, unit_price, total_price, comments, website) VALUES(:id_rfq, :id_usuario, :provider_menor, :brand, :brand_project, :part_number, :part_number_project, :description, :description_project, :quantity, :unit_price, :total_price, :comments, :website)';
+                $sql = 'INSERT INTO item(id_rfq, id_usuario, provider_menor, brand, brand_project, part_number, part_number_project, description, description_project, quantity, unit_price, total_price, comments, website, additional) VALUES(:id_rfq, :id_usuario, :provider_menor, :brand, :brand_project, :part_number, :part_number_project, :description, :description_project, :quantity, :unit_price, :total_price, :comments, :website, :additional)';
                 $sentencia = $conexion->prepare($sql);
                 $sentencia->bindParam(':id_rfq', $item->obtener_id_rfq(), PDO::PARAM_STR);
                 $sentencia->bindParam(':id_usuario', $item->obtener_id_usuario(), PDO::PARAM_STR);
@@ -22,6 +22,7 @@ class RepositorioItem {
                 $sentencia->bindParam(':total_price', $item->obtener_total_price(), PDO::PARAM_STR);
                 $sentencia->bindParam(':comments', $item->obtener_comments(), PDO::PARAM_STR);
                 $sentencia->bindParam(':website', $item->obtener_website(), PDO::PARAM_STR);
+                $sentencia->bindParam(':additional', $item->obtener_additional(), PDO::PARAM_STR);
                 $resultado = $sentencia->execute();
 
                 if ($resultado) {
@@ -67,7 +68,7 @@ class RepositorioItem {
 
                 if (count($resultado)) {
                     foreach ($resultado as $fila) {
-                        $items[] = new Item($fila['id'], $fila['id_rfq'], $fila['id_usuario'], $fila['provider_menor'], $fila['brand'], $fila['brand_project'], $fila['part_number'], $fila['part_number_project'], $fila['description'], $fila['description_project'], $fila['quantity'], $fila['unit_price'], $fila['total_price'], $fila['comments'], $fila['website']);
+                        $items[] = new Item($fila['id'], $fila['id_rfq'], $fila['id_usuario'], $fila['provider_menor'], $fila['brand'], $fila['brand_project'], $fila['part_number'], $fila['part_number_project'], $fila['description'], $fila['description_project'], $fila['quantity'], $fila['unit_price'], $fila['total_price'], $fila['comments'], $fila['website'], $fila['additional']);
                     }
                 }
             } catch (PDOException $ex) {
@@ -81,6 +82,7 @@ class RepositorioItem {
         if (!isset($item)) {
             return;
         }
+        $j = $i;
         Conexion::abrir_conexion();
         $providers = RepositorioProvider::obtener_providers_por_id_item(Conexion::obtener_conexion(), $item->obtener_id());
         Conexion::cerrar_conexion();
@@ -101,6 +103,12 @@ class RepositorioItem {
             echo '$ ' . $provider->obtener_price() . '<br>';
         }
         echo '</div></div></td>';
+        if($item-> obtener_additional() != 0){
+            echo '<td><input type="text" id="add_cost'.$j.'" size="10" value="'.$item-> obtener_additional().'"></td>';
+        }else{
+            echo '<td><input type="text" id="add_cost'.$j.'" size="10" value="0"></td>';
+        }
+        
         echo '<td>';
         for ($i = 0; $i < count($providers); $i++) {
             $provider = $providers[$i];
@@ -160,6 +168,7 @@ class RepositorioItem {
             echo '<th class="description">E-LOGIC PROPOSAL</th>';
             echo '<th class="options">QTY</th>';
             echo '<th id="provider">PROVIDERS</th>';
+            echo '<th class="options">ADDITIONAL</th>';
             echo '<th class="options">BEST UNIT COST</th>';
             echo '<th class="options">TOTAL COST</th>';
             echo '<th class="options">PRICE FOR CLIENT</th>';
@@ -173,7 +182,7 @@ class RepositorioItem {
                 $item = $items[$i];
                 self::escribir_item($item, $i + 1);
             }
-            echo '<td colspan="7" class="display-4"><b><h4>TOTAL:</h4></b></td>';
+            echo '<td colspan="8" class="display-4"><b><h4>TOTAL:</h4></b></td>';
             echo '<td id="total1"></td>';
             echo '<td></td>';
             echo '<td id="total2"></td>';
@@ -190,6 +199,7 @@ class RepositorioItem {
             }
             echo '<input type="hidden" id="id_items" name="id_items" value="'.$id_items.'">';
             echo '<input type="hidden" id="partes_total_price" name="partes_total_price" value="">';
+            echo '<input type="hidden" id="additional" name="additional" value="">';
             echo '<input type="hidden" id="unit_prices" name="unit_prices" value="">';
             echo '<input type="hidden" id="total_cost" name="total_cost" value="">';
             echo '<input type="hidden" id="total_price" name="total_price" value="">';
@@ -208,7 +218,7 @@ class RepositorioItem {
                 $resultado = $sentencia->fetch();
 
                 if (!empty($resultado)) {
-                    $item = new Item($resultado['id'], $resultado['id_rfq'], $resultado['id_usuario'], $resultado['provider_menor'], $resultado['brand'], $resultado['brand_project'], $resultado['part_number'], $resultado['part_number_project'], $resultado['description'], $resultado['description_project'], $resultado['quantity'], $resultado['unit_price'], $resultado['total_price'], $resultado['comments'], $resultado['website']);
+                    $item = new Item($resultado['id'], $resultado['id_rfq'], $resultado['id_usuario'], $resultado['provider_menor'], $resultado['brand'], $resultado['brand_project'], $resultado['part_number'], $resultado['part_number_project'], $resultado['description'], $resultado['description_project'], $resultado['quantity'], $resultado['unit_price'], $resultado['total_price'], $resultado['comments'], $resultado['website'], $resultado['additional']);
                 }
             } catch (PDOException $ex) {
                 print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -248,14 +258,15 @@ class RepositorioItem {
         return $item_editado;
     }
     
-    public static function insertar_calculos($conexion, $unit_price, $total_price, $id_item){
+    public static function insertar_calculos($conexion, $unit_price, $total_price, $additional, $id_item){
         $item_editado = false;
         if(isset($conexion)){
             try{
-                $sql = 'UPDATE item SET unit_price = :unit_price, total_price = :total_price WHERE id = :id_item';
+                $sql = 'UPDATE item SET unit_price = :unit_price, total_price = :total_price, additional = :additional WHERE id = :id_item';
                 $sentencia = $conexion-> prepare($sql);
                 $sentencia-> bindParam(':unit_price', $unit_price, PDO::PARAM_STR);
                 $sentencia-> bindParam(':total_price', $total_price, PDO::PARAM_STR);
+                $sentencia-> bindParam(':additional', $additional, PDO::PARAM_STR);
                 $sentencia-> bindParam(':id_item', $id_item, PDO::PARAM_STR);
                 
                 $sentencia-> execute();

@@ -94,5 +94,33 @@ class RepositorioProvider{
         }
         return $provider_editado;
     }
+    
+    public static function actualizar_precio($conexion, $id_provider, $operacion, $price){
+        $provider_editado = false;
+        
+        if(isset($conexion)){
+            try{
+                if($operacion == 'sumar'){
+                    $sql = 'UPDATE provider SET price = price + :price WHERE id = :id_provider';
+                }else if($operacion == 'restar'){
+                    $sql = 'UPDATE provider SET price = price - :price WHERE id = :id_provider';
+                }
+                
+                $sentencia = $conexion-> prepare($sql);
+                
+                $sentencia-> bindParam(':price', $price, PDO::PARAM_STR);
+                $sentencia-> bindParam(':id_provider', $id_provider, PDO::PARAM_STR);
+                
+                $sentencia-> execute();
+                
+                if($sentencia){
+                    $provider_editado = true;
+                }
+            } catch (PDOException $ex) {
+                print 'ERROR:' . $ex->getMessage() . '<br>';
+            }
+        }
+        return $provider_editado;
+    }
 }
 ?>

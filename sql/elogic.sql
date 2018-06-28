@@ -125,6 +125,7 @@ CREATE TABLE item(
         total_price DECIMAL(10,2) NOT NULL,
         comments TEXT CHARACTER SET utf8 NOT NULL,
         website VARCHAR(255) NOT NULL,
+        additional VARCHAR(100) NOT NULL,
         PRIMARY KEY(id),
         FOREIGN KEY(id_rfq)
             REFERENCES rfq(id)

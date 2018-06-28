@@ -7,9 +7,9 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
     $id_items = explode(',', $_POST['id_items']);
     $partes_total_price = explode(',', $_POST['partes_total_price']);
     $unit_prices = explode(',', $_POST['unit_prices']);
-
+    $additional = explode(',', $_POST['additional']);
     for ($i = 0; $i < count($id_items); $i++) {
-        RepositorioItem::insertar_calculos(Conexion::obtener_conexion(), $unit_prices[$i], $partes_total_price[$i], $id_items[$i]);
+        RepositorioItem::insertar_calculos(Conexion::obtener_conexion(), $unit_prices[$i], $partes_total_price[$i], $additional[$i], $id_items[$i]);
     }
     
     $usuario = RepositorioUsuario::obtener_usuario_por_nombre_usuario(Conexion::obtener_conexion(), $_POST['usuario_designado']);
