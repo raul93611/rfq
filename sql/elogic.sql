@@ -38,6 +38,7 @@ CREATE TABLE rfq(
         ship_via VARCHAR(100) NOT NULL,
         taxes DECIMAL(10,2) NOT NULL,
         profit DECIMAL(10,2) NOT NULL,
+        additional VARCHAR(100) NOT NULL,
         PRIMARY KEY(id),
         FOREIGN KEY(id_usuario)
             REFERENCES usuarios(id)

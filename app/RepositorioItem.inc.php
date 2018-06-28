@@ -158,6 +158,13 @@ class RepositorioItem {
                 echo '<label>Profit (%):</label><input type="number" step=".01" name="profit" id="profit" class="form-control" value="0">';
             }
 
+            echo '</div><div class="col">';
+            
+            if($cotizacion-> obtener_additional() != 0){
+                echo '<label>Additional general ($):</label><input type="text" name="additional_general" id="additional_general" class="form-control" value="' . $cotizacion->obtener_additional() . '">';
+            }else{
+                echo '<label>Additional general ($):</label><input type="text" name="additional_general" id="additional_general" class="form-control" value="0">';
+            }
             echo '</div></div><br>';
             echo '<table id="tabla_items" class="table table-bordered table-hover">';
             echo '<thead>';
