@@ -194,6 +194,7 @@ $(document).ready(function () {
 
     var taxes = $('#taxes').val();
     var profit = $('#profit').val();
+    var additional_general = $('#additional_general').val();
 
     var i = 0;
     var j = 1;
@@ -201,14 +202,15 @@ $(document).ready(function () {
     var total2 = 0;
     var partes_total_price = '';
     var unit_prices = '';
+    var additional = '';
     $('#items tr').each(function () {
         var add_cost = $('#add_cost' + j).val();
-        if(i === 0){
-                additional = additional + add_cost;
-            }else{
-                additional = additional + ',' + add_cost;
-            }
-        var resul_taxes = parseFloat(add_cost) + ((1 + (taxes / 100)) * monto[i]);
+        if (i === 0) {
+            additional = additional + add_cost;
+        } else {
+            additional = additional + ',' + add_cost;
+        }
+        var resul_taxes = parseFloat(additional_general) + parseFloat(add_cost) + ((1 + (taxes / 100)) * monto[i]);
         resul_taxes = resul_taxes.toFixed(2);
         $(this).find('td').eq(7).html('$ ' + resul_taxes);
         if (profit !== 0) {
@@ -277,9 +279,9 @@ $(document).ready(function () {
         var additional = '';
         $('#items tr').each(function () {
             var add_cost = $('#add_cost' + j).val();
-            if(i === 0){
+            if (i === 0) {
                 additional = additional + add_cost;
-            }else{
+            } else {
                 additional = additional + ',' + add_cost;
             }
             var resul_taxes = parseFloat(additional_general) + parseFloat(add_cost) + ((1 + (taxes / 100)) * monto[i]);
