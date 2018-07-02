@@ -136,7 +136,7 @@ CREATE TABLE item(
             REFERENCES usuarios(id)
             ON UPDATE CASCADE
             ON DELETE RESTRICT
-);
+);                                                      
 
 CREATE TABLE provider(
         id INT NOT NULL AUTO_INCREMENT UNIQUE,
