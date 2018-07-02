@@ -12,11 +12,21 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
         RepositorioItem::insertar_calculos(Conexion::obtener_conexion(), $unit_prices[$i], $partes_total_price[$i], $additional[$i], $id_items[$i]);
     }
     
+    switch($_POST['payment_terms']){
+        case 'Net 30':
+            $payment_terms = 'Net 30';
+            break;
+        case 'Net 30/CC':
+            $payment_terms = 'Net 30/CC';
+            break;
+    }
+    
     $usuario = RepositorioUsuario::obtener_usuario_por_nombre_usuario(Conexion::obtener_conexion(), $_POST['usuario_designado']);
     $usuario_designado = $usuario->obtener_id();
     $cotizacion_editada = RepositorioRfq::actualizar_usuario_designado(Conexion::obtener_conexion(), $usuario_designado, $_POST['id_rfq']);
     $cotizacion_editada1 = RepositorioRfq::actualizar_taxes_profit(Conexion::obtener_conexion(), $_POST['taxes'], $_POST['profit'], $_POST['total_cost'], $_POST['total_price'], $_POST['additional_general'], $_POST['id_rfq']);
-
+    $cotizacion_editada2 = RepositorioRfq::actualizar_payment_terms(Conexion::obtener_conexion(), $payment_terms, $_POST['id_rfq']);
+    
     if ($usuario_antiguo->obtener_nombre_usuario() != $_POST['usuario_designado']) {
         switch ($cotizacion_recuperada->obtener_canal()) {
             case 'GSA-Buy':
@@ -45,7 +55,7 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
 if (isset($_POST['guardar_cambios_cotizacion2'])) {
     Conexion::abrir_conexion();
     $cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $_POST['id_rfq']);
-    RepositorioRfq::actualizar_rfq_2(Conexion::obtener_conexion(), $_POST['comments'], $_POST['ship_via'], htmlspecialchars($_POST['address']), $_POST['payment_terms'], htmlspecialchars($_POST['ship_to']), $_POST['id_rfq']);
+    RepositorioRfq::actualizar_rfq_2(Conexion::obtener_conexion(), $_POST['comments'], $_POST['ship_via'], htmlspecialchars($_POST['address']), htmlspecialchars($_POST['ship_to']), $_POST['id_rfq']);
 
     switch ($cotizacion_recuperada->obtener_canal()) {
         case 'GSA-Buy':

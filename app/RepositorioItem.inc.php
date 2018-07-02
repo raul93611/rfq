@@ -165,6 +165,28 @@ class RepositorioItem {
             }else{
                 echo '<label>Additional general ($):</label><input type="text" name="additional_general" id="additional_general" class="form-control" value="0">';
             }
+            
+            echo '</div><div class="col">';
+
+            echo '<label>Payment terms:</label><div class="form-group">
+                <div class="form-check-inline">
+                    <input class="form-check-input" type="radio" value="Net 30" name="payment_terms"';
+                    if ($cotizacion->obtener_payment_terms() == 'Net 30') {
+                        echo 'checked';
+                    }
+                    echo '><label class="form-check-label">Net 30</label>
+                </div>
+                <div class="form-check-inline">
+                    <input class="form-check-input" type="radio" value="Net 30/CC" name="payment_terms"';
+                    
+                    if ($cotizacion->obtener_payment_terms() == 'Net 30/CC') {
+                        echo 'checked';
+                    }
+                    
+            echo '><label class="form-check-label">Net 30/CC</label>
+                </div>
+            </div>';
+            
             echo '</div></div><br>';
             echo '<table id="tabla_items" class="table table-bordered table-hover">';
             echo '<thead>';

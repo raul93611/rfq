@@ -192,6 +192,13 @@ $(document).ready(function () {
         }
     });
 
+
+    var payment_terms = 0;
+    if ($('input:radio[name=payment_terms]:checked').val() === 'Net 30/CC') {
+        payment_terms = 1.0215;
+    } else {
+        payment_terms = 1;
+    }
     var taxes = $('#taxes').val();
     var profit = $('#profit').val();
     var additional_general = $('#additional_general').val();
@@ -210,7 +217,7 @@ $(document).ready(function () {
         } else {
             additional = additional + ',' + add_cost;
         }
-        var resul_taxes = parseFloat(additional_general) + parseFloat(add_cost) + ((1 + (taxes / 100)) * monto[i]);
+        var resul_taxes = parseFloat(additional_general) + parseFloat(add_cost) + ((1 + (taxes / 100)) * monto[i] * payment_terms);
         resul_taxes = resul_taxes.toFixed(2);
         $(this).find('td').eq(7).html('$ ' + resul_taxes);
         if (profit !== 0) {
@@ -266,6 +273,12 @@ $(document).ready(function () {
     $('#total2').html('$ ' + total2);
 
     $('#calculate').click(function () {
+        var payment_terms = 0;
+        if ($('input:radio[name=payment_terms]:checked').val() === 'Net 30/CC') {
+            payment_terms = 1.0215;
+        } else {
+            payment_terms = 1;
+        }
         var taxes = $('#taxes').val();
         var profit = $('#profit').val();
         var additional_general = $('#additional_general').val();
@@ -284,7 +297,7 @@ $(document).ready(function () {
             } else {
                 additional = additional + ',' + add_cost;
             }
-            var resul_taxes = parseFloat(additional_general) + parseFloat(add_cost) + ((1 + (taxes / 100)) * monto[i]);
+            var resul_taxes = parseFloat(additional_general) + parseFloat(add_cost) + ((1 + (taxes / 100)) * monto[i] * payment_terms);
             resul_taxes = resul_taxes.toFixed(2);
             $(this).find('td').eq(7).html('$ ' + resul_taxes);
             if (profit !== 0) {

@@ -565,16 +565,15 @@ class RepositorioRfq {
         return $monto_cotizaciones_mes;
     }
 
-    public static function actualizar_rfq_2($conexion, $comments, $ship_via, $address, $payment_terms, $ship_to, $id_rfq) {
+    public static function actualizar_rfq_2($conexion, $comments, $ship_via, $address, $ship_to, $id_rfq) {
         $rfq_editado = false;
         if (isset($conexion)) {
             try {
-                $sql = 'UPDATE rfq SET comments = :comments, ship_via = :ship_via, address = :address, payment_terms = :payment_terms, ship_to = :ship_to WHERE id = :id_rfq';
+                $sql = 'UPDATE rfq SET comments = :comments, ship_via = :ship_via, address = :address, ship_to = :ship_to WHERE id = :id_rfq';
                 $sentencia = $conexion->prepare($sql);
                 $sentencia->bindParam(':comments', $comments, PDO::PARAM_STR);
                 $sentencia->bindParam(':ship_via', $ship_via, PDO::PARAM_STR);
                 $sentencia->bindParam(':address', $address, PDO::PARAM_STR);
-                $sentencia->bindParam(':payment_terms', $payment_terms, PDO::PARAM_STR);
                 $sentencia->bindParam(':ship_to', $ship_to, PDO::PARAM_STR);
                 $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
 
@@ -596,6 +595,27 @@ class RepositorioRfq {
             try {
                 $sql = 'UPDATE rfq SET status = 1, fecha_submitted = NOW() WHERE id = :id_rfq';
                 $sentencia = $conexion->prepare($sql);
+                $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+
+                $sentencia->execute();
+
+                if ($sentencia) {
+                    $rfq_editado = true;
+                }
+            } catch (PDOException $ex) {
+                print 'ERROR:' . $ex->getMessage() . '<br>';
+            }
+        }
+        return $rfq_editado;
+    }
+    
+    public static function actualizar_payment_terms($conexion, $payment_terms, $id_rfq) {
+        $rfq_editado = false;
+        if (isset($conexion)) {
+            try {
+                $sql = 'UPDATE rfq SET payment_terms = :payment_terms WHERE id = :id_rfq';
+                $sentencia = $conexion->prepare($sql);
+                $sentencia->bindParam(':payment_terms', $payment_terms, PDO::PARAM_STR);
                 $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
 
                 $sentencia->execute();
