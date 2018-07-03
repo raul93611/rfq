@@ -7,11 +7,12 @@ abstract class ValidadorCotizacion {
     protected $email_code;
     protected $issue_date;
     protected $end_date;
-    protected $amount;
+    protected $usuario_designado;
+    protected $type_of_bid;
+    protected $canal;
     protected $error_email_code;
     protected $error_issue_date;
     protected $error_end_date;
-    protected $error_amount;
 
     public function __construct() {
         
@@ -25,11 +26,15 @@ abstract class ValidadorCotizacion {
         }
     }
 
-    protected function validar_email_code($email_code) {
+    protected function validar_email_code($conexion, $email_code) {
         if (!$this->variable_iniciada($email_code)) {
-            return 'Completa este campo.';
+            return 'Must be fill out.';
         } else {
             $this->email_code = $email_code;
+        }
+        
+        if(RepositorioRfq::email_code_existe($conexion, $email_code)){
+            return 'E-mail Code already exists.';
         }
 
         return '';
@@ -37,7 +42,7 @@ abstract class ValidadorCotizacion {
 
     protected function validar_issue_date($issue_date) {
         if (!$this->variable_iniciada($issue_date)) {
-            return 'Completa este campo.';
+            return 'Must be fill out.';
         } else {
             $this->issue_date = $issue_date;
         }
@@ -47,25 +52,9 @@ abstract class ValidadorCotizacion {
 
     protected function validar_end_date($end_date) {
         if (!$this->variable_iniciada($end_date)) {
-            return 'Completa este campo.';
+            return 'Must be fill out.';
         } else {
             $this->end_date = $end_date;
-        }
-
-        return '';
-    }
-
-    protected function validar_amount($amount) {
-        $this->amount = $amount;
-
-        $partes_amount = explode('.', $amount);
-        
-        if(count($partes_amount)){
-            for($i = 0; $i < count($partes_amount); $i++){
-                if(!preg_match("/^-?[0-9]+([,\.][0-9]*)?$/", $partes_amount[$i])){
-                    return 'Caracteres no permitidos';
-                }
-            }
         }
 
         return '';
@@ -82,9 +71,17 @@ abstract class ValidadorCotizacion {
     public function obtener_end_date() {
         return $this->end_date;
     }
-
-    public function obtener_amount() {
-        return $this->amount;
+    
+    public function obtener_usuario_designado() {
+        return $this->usuario_designado;
+    }
+    
+    public function obtener_type_of_bid() {
+        return $this->type_of_bid;
+    }
+    
+    public function obtener_canal() {
+        return $this->canal;
     }
 
     public function obtener_error_email_code() {
@@ -99,19 +96,21 @@ abstract class ValidadorCotizacion {
         return $this->error_end_date;
     }
 
-    public function obtener_error_amount() {
-        return $this->error_amount;
-    }
-
     public function mostrar_email_code() {
         if ($this->email_code != '') {
             echo 'value="' . $this->email_code . '"';
         }
     }
-
-    public function mostrar_amount() {
-        if ($this->amount != '') {
-            echo 'value="' . $this->amount . '"';
+    
+    public function mostrar_issue_date() {
+        if ($this->issue_date != '') {
+            echo 'value="' . $this->issue_date . '"';
+        }
+    }
+    
+    public function mostrar_end_date() {
+        if ($this->end_date != '') {
+            echo 'value="' . $this->end_date . '"';
         }
     }
 
@@ -133,14 +132,8 @@ abstract class ValidadorCotizacion {
         }
     }
 
-    public function mostrar_error_amount() {
-        if ($this->error_amount != '') {
-            echo $this->aviso_inicio . $this->error_amount . $this->aviso_cierre;
-        }
-    }
-
     public function registro_cotizacion_valida() {
-        if ($this->error_email_code == '' && $this->error_issue_date == '' && $this->error_end_date == '' && $this->error_amount == '') {
+        if ($this->error_email_code == '' && $this->error_issue_date == '' && $this->error_end_date == '') {
             return true;
         } else {
             return false;

@@ -1,0 +1,30 @@
+table{
+    font-size: 0.8em;
+}
+.btn-warning{
+    font-size: 0.9em !important;
+}
+
+.list-group-item:hover{
+    background-color: #f9c416;
+}
+
+#tabla_items .description{
+    width: 150px !important;
+}
+
+#tabla_items .options{
+    min-width: 100px !important;
+}
+
+#tabla_items #numeracion{
+    min-width: 20px !important;
+}
+
+#tabla_items #provider{
+    min-width: 200px !important;
+}
+
+.cuestionario{
+    width: 50px !important;
+}

@@ -2,7 +2,6 @@
 if (!ControlSesion::sesion_iniciada()) {
     Redireccion::redirigir1(SERVIDOR);
 }
-
 include_once 'plantillas/validacion_cotizacion_editada.inc.php';
 ?>
 <div class="content-wrapper">
@@ -10,7 +9,7 @@ include_once 'plantillas/validacion_cotizacion_editada.inc.php';
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Edit quote</h1>
+                    <h1>Internal quote</h1>
                 </div>
                 <div class="col-sm-6">
 
@@ -26,21 +25,14 @@ include_once 'plantillas/validacion_cotizacion_editada.inc.php';
                         <div class="card-header">
                             <h3 class="card-title">Enter the data</h3>
                         </div>
-                        <form role="form" method="post" enctype="multipart/form-data" action="<?php echo EDITAR_COTIZACION; ?>">
+                        <form role="form" method="post" enctype="multipart/form-data" action="<?php echo EDITAR_COTIZACION . '/' . $id_rfq; ?>">
                             <?php
-                            if (isset($_POST['editar'])) {
-                                Conexion::abrir_conexion();
-                                $id_rfq = $_POST['id_rfq'];
-                                $cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
-                                Conexion::cerrar_conexion();
-                                include_once 'plantillas/edicion_cotizacion_recuperada.inc.php';
-                            } else if (isset($_POST['guardar_cambios_cotizacion'])) {
-                                Conexion::abrir_conexion();
-                                $id_rfq = $_POST['id_rfq'];
-                                $cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
-                                Conexion::cerrar_conexion();
-                                include_once 'plantillas/edicion_cotizacion_validada.inc.php';
-                            }
+                            include_once 'plantillas/edicion_cotizacion_recuperada.inc.php';
+                            ?>
+                        </form>
+                        <form role="form" method="post" enctype="multipart/form-data" action="<?php echo EDITAR_COTIZACION . '/' . $id_rfq; ?>">
+                            <?php
+                            include_once 'plantillas/edicion_cotizacion_recuperada2.inc.php';
                             ?>
                         </form>
                     </div>

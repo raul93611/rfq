@@ -16,17 +16,22 @@ header($_SERVER['SERVER_PROTOCOL'] . '404Not Found', true, 404);
     <body class="inicio">
         <div class="container-fluid">
             <div class="row">
+
                 <div class="col-md-2">
-                    
+
                 </div>
                 <div class="col-md-8">
+                    <br>
+                    <br>
+                    <br>
+                    <br>
                     <div class="jumbotron bg-danger text-white">
                         <h1>ERROR: 404</h1>
                         <p>Page not found.</p>
                     </div>
                 </div>
                 <div class="col-md-2">
-                    
+
                 </div>
             </div>
         </div>

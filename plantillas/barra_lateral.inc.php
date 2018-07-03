@@ -24,7 +24,13 @@
                 <!-- Add icons to the links using the .nav-icon class
                      with font-awesome or any other icon font library -->
                 <li class="nav-item has-treeview menu-open">
-                    <a href="#" class="nav-link">
+                    <a href="#" class="nav-link
+                    <?php
+                    if ($gestor_actual == '') {
+                        echo 'active';
+                    }
+                    ?>
+                       ">
                         <i class="nav-icon fa fa-home"></i>
                         <p>
                             Home
@@ -74,12 +80,18 @@
                 <!---->
                 <li class="nav-item has-treeview 
                 <?php
-                if ($gestor_actual == 'cotizaciones' || $gestor_actual == 'completados') {
+                if ($gestor_actual == 'cotizaciones' || $gestor_actual == 'completados' || $gestor_actual == 'submitted' || $gestor_actual == 'award') {
                     echo 'menu-open';
                 }
                 ?>
                     ">
-                    <a href="#" class="nav-link">
+                    <a href="#" class="nav-link 
+                    <?php
+                    if ($gestor_actual == 'cotizaciones' || $gestor_actual == 'completados' || $gestor_actual == 'submitted' || $gestor_actual == 'award') {
+                        echo 'active';
+                    }
+                    ?>
+                       ">
                         <i class="nav-icon fa fa-money"></i>
                         <p>
                             RFQ
@@ -89,12 +101,18 @@
                     <ul class="nav nav-treeview">
                         <li class="nav-item has-treeview
                         <?php
-                        if ($gestor_actual == 'cotizaciones') {
+                        if ($gestor_actual == 'cotizaciones' && $cotizacion != 'add_project_risk' && $cotizacion != 'add_project_milestone' && $cotizacion != 'add_out_of_scope' && $cotizacion != 'add_high_level_requirement' && $cotizacion != 'cuestionario' && $cotizacion != 'editar_cotizacion' && $cotizacion != 'nuevo' && $cotizacion != 'add_item' && $cotizacion != 'add_provider' && $cotizacion != 'edit_item' && $cotizacion != 'edit_provider') {
                             echo 'menu-open';
                         }
                         ?>
                             ">
-                            <a href="#" class="nav-link">
+                            <a href="#" class="nav-link
+                            <?php
+                            if ($gestor_actual == 'cotizaciones' && $cotizacion != 'add_project_risk' && $cotizacion != 'add_project_milestone' && $cotizacion != 'add_out_of_scope' && $cotizacion != 'add_high_level_requirement' && $cotizacion != 'cuestionario' && $cotizacion != 'editar_cotizacion' && $cotizacion != 'nuevo' && $cotizacion != 'add_item' && $cotizacion != 'add_provider' && $cotizacion != 'edit_item' && $cotizacion != 'edit_provider') {
+                                echo 'active';
+                            }
+                            ?>
+                               ">
                                 <i class="fa fa-th nav-icon"></i>
                                 <p>Quotes</p>
                                 <i class="right fa fa-angle-left"></i>
@@ -174,6 +192,7 @@
                                 </li>
                             </ul>
                         </li>
+
                         <li class="nav-item has-treeview 
                         <?php
                         if ($gestor_actual == 'completados') {
@@ -181,9 +200,15 @@
                         }
                         ?>
                             ">
-                            <a href="#" class="nav-link">
+                            <a href="#" class="nav-link
+                            <?php
+                            if ($gestor_actual == 'completados') {
+                                echo 'active';
+                            }
+                            ?>
+                               ">
                                 <i class="fa fa-check-circle-o nav-icon"></i>
-                                <p>Completados</p>
+                                <p>Completed</p>
                                 <i class="right fa fa-angle-left"></i>
                             </a>
                             <ul class="nav nav-treeview">
@@ -261,6 +286,200 @@
                                 </li>
                             </ul>
                         </li>
+                        <?php
+                        if ($cargo < 4) {
+                            ?>
+                            <li class="nav-item has-treeview 
+                            <?php
+                            if ($gestor_actual == 'submitted') {
+                                echo 'menu-open';
+                            }
+                            ?>
+                                ">
+                                <a href="#" class="nav-link
+                                <?php
+                                if ($gestor_actual == 'submitted') {
+                                    echo 'active';
+                                }
+                                ?>
+                                   ">
+                                    <i class="fa fa-check-circle-o nav-icon"></i>
+                                    <p>Submitted</p>
+                                    <i class="right fa fa-angle-left"></i>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="<?php echo GSA_BUY_SUBMITTED; ?>" class="nav-link
+                                        <?php
+                                        if ($cotizacion == 'gsa_buy_submitted') {
+                                            echo 'active';
+                                        }
+                                        ?>
+                                           ">
+                                            <i class="fa fa-dollar nav-icon"></i>
+                                            <p>GSA-Buy</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="<?php echo FEDBID_SUBMITTED; ?>" class="nav-link
+                                        <?php
+                                        if ($cotizacion == 'fedbid_submitted') {
+                                            echo 'active';
+                                        }
+                                        ?>
+                                           ">
+                                            <i class="fa fa-dollar nav-icon"></i>
+                                            <p>FedBid</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="<?php echo EMAILS_SUBMITTED; ?>" class="nav-link
+                                        <?php
+                                        if ($cotizacion == 'emails_submitted') {
+                                            echo 'active';
+                                        }
+                                        ?>
+                                           ">
+                                            <i class="fa fa-dollar nav-icon"></i>
+                                            <p>E-mails</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="<?php echo FINDFRP_SUBMITTED; ?>" class="nav-link
+                                        <?php
+                                        if ($cotizacion == 'findfrp_submitted') {
+                                            echo 'active';
+                                        }
+                                        ?>
+                                           ">
+                                            <i class="fa fa-dollar nav-icon"></i>
+                                            <p>FindFRP</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="<?php echo EMBASSIES_SUBMITTED; ?>" class="nav-link
+                                        <?php
+                                        if ($cotizacion == 'embassies_submitted') {
+                                            echo 'active';
+                                        }
+                                        ?>
+                                           ">
+                                            <i class="fa fa-dollar nav-icon"></i>
+                                            <p>Embassies</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="<?php echo FBO_SUBMITTED; ?>" class="nav-link
+                                        <?php
+                                        if ($cotizacion == 'fbo_submitted') {
+                                            echo 'active';
+                                        }
+                                        ?>
+                                           ">
+                                            <i class="fa fa-dollar nav-icon"></i>
+                                            <p>FBO</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li class="nav-item has-treeview 
+                            <?php
+                            if ($gestor_actual == 'award') {
+                                echo 'menu-open';
+                            }
+                            ?>
+                                ">
+                                <a href="#" class="nav-link
+                                <?php
+                                if ($gestor_actual == 'award') {
+                                    echo 'active';
+                                }
+                                ?>
+                                   ">
+                                    <i class="fa fa-check-circle-o nav-icon"></i>
+                                    <p>Award</p>
+                                    <i class="right fa fa-angle-left"></i>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="<?php echo GSA_BUY_AWARD; ?>" class="nav-link
+                                        <?php
+                                        if ($cotizacion == 'gsa_buy_award') {
+                                            echo 'active';
+                                        }
+                                        ?>
+                                           ">
+                                            <i class="fa fa-dollar nav-icon"></i>
+                                            <p>GSA-Buy</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="<?php echo FEDBID_AWARD; ?>" class="nav-link
+                                        <?php
+                                        if ($cotizacion == 'fedbid_award') {
+                                            echo 'active';
+                                        }
+                                        ?>
+                                           ">
+                                            <i class="fa fa-dollar nav-icon"></i>
+                                            <p>FedBid</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="<?php echo EMAILS_AWARD; ?>" class="nav-link
+                                        <?php
+                                        if ($cotizacion == 'emails_award') {
+                                            echo 'active';
+                                        }
+                                        ?>
+                                           ">
+                                            <i class="fa fa-dollar nav-icon"></i>
+                                            <p>E-mails</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="<?php echo FINDFRP_AWARD; ?>" class="nav-link
+                                        <?php
+                                        if ($cotizacion == 'findfrp_award') {
+                                            echo 'active';
+                                        }
+                                        ?>
+                                           ">
+                                            <i class="fa fa-dollar nav-icon"></i>
+                                            <p>FindFRP</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="<?php echo EMBASSIES_AWARD; ?>" class="nav-link
+                                        <?php
+                                        if ($cotizacion == 'embassies_award') {
+                                            echo 'active';
+                                        }
+                                        ?>
+                                           ">
+                                            <i class="fa fa-dollar nav-icon"></i>
+                                            <p>Embassies</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="<?php echo FBO_AWARD; ?>" class="nav-link
+                                        <?php
+                                        if ($cotizacion == 'fbo_award') {
+                                            echo 'active';
+                                        }
+                                        ?>
+                                           ">
+                                            <i class="fa fa-dollar nav-icon"></i>
+                                            <p>FBO</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <?php
+                        }
+                        ?>
+
                         <?php
                         if ($cargo <= 3) {
                             ?>

@@ -15,10 +15,27 @@ include_once 'app/Rfq.inc.php';
 include_once 'app/RepositorioRfq.inc.php';
 include_once 'app/ValidadorCotizacion.inc.php';
 include_once 'app/ValidadorCotizacionRegistro.inc.php';
-include_once 'app/ValidadorCotizacionEdicion.inc.php';
 
-include_once 'app/Equipo.inc.php';
-include_once 'app/RepositorioEquipo.inc.php';
+include_once 'app/Item.inc.php';
+include_once 'app/RepositorioItem.inc.php';
+
+include_once 'app/Provider.inc.php';
+include_once 'app/RepositorioProvider.inc.php';
+
+include_once 'app/Cuestionario.inc.php';
+include_once 'app/RepositorioCuestionario.inc.php';
+
+include_once 'app/HighLevelrequirement.inc.php';
+include_once 'app/RepositorioHighLevelRequirement.inc.php';
+
+include_once 'app/OutOfScope.inc.php';
+include_once 'app/RepositorioOutOfScope.inc.php';
+
+include_once 'app/ProjectRisk.inc.php';
+include_once 'app/RepositorioProjectRisk.inc.php';
+
+include_once 'app/ProjectMilestone.inc.php';
+include_once 'app/RepositorioProjectMilestone.inc.php';
 
 $componentes_url = parse_url($_SERVER['REQUEST_URI']);
 $ruta = $componentes_url['path'];
@@ -27,7 +44,6 @@ $partes_ruta = explode('/', $ruta);
 $partes_ruta = array_filter($partes_ruta);
 $partes_ruta = array_slice($partes_ruta, 0);
 $ruta_elegida = 'vistas/404.php';
-
 if ($partes_ruta[0] == 'rfq') {
     if (count($partes_ruta) == 1) {
         $ruta_elegida = 'vistas/home.php';
@@ -63,6 +79,10 @@ if ($partes_ruta[0] == 'rfq') {
         } else if ($partes_ruta[1] == 'proposal') {
             $id_rfq = $partes_ruta[2];
             $ruta_elegida = 'scripts/proposal.php';
+        }else if($partes_ruta[1] == 'proposal_gsa'){
+            $id_rfq = $partes_ruta[2];
+            $encabezado = 1;
+            $ruta_elegida = 'scripts/proposal.php';
         }
     } else if (count($partes_ruta) == 4) {
         if ($partes_ruta[1] == 'perfil' && $partes_ruta[2] == 'cotizaciones') {
@@ -90,15 +110,6 @@ if ($partes_ruta[0] == 'rfq') {
                 case 'nuevo':
                     $cotizacion = 'nuevo';
                     break;
-                case 'registro_cotizacion_correcto':
-                    $cotizacion = 'registro_cotizacion_correcto';
-                    break;
-                case 'editar_cotizacion':
-                    $cotizacion = 'editar_cotizacion';
-                    break;
-                case 'add_equipment':
-                    $cotizacion = 'add_equipment';
-                    break;
             }
         } else if ($partes_ruta[1] == 'perfil' && $partes_ruta[2] == 'completados') {
             $gestor_actual = 'completados';
@@ -121,6 +132,115 @@ if ($partes_ruta[0] == 'rfq') {
                     break;
                 case 'fbo':
                     $cotizacion = 'fbo_completados';
+                    break;
+            }
+        }else if($partes_ruta[1] == 'perfil' && $partes_ruta[2] == 'submitted'){
+            $gestor_actual = 'submitted';
+            $ruta_elegida = 'vistas/perfil.php';
+            switch ($partes_ruta[3]){
+                case 'gsa_buy':
+                    $cotizacion = 'gsa_buy_submitted';
+                    break;
+                case 'fedbid':
+                    $cotizacion = 'fedbid_submitted';
+                    break;
+                case 'emails':
+                    $cotizacion = 'emails_submitted';
+                    break;
+                case 'findfrp':
+                    $cotizacion = 'findfrp_submitted';
+                    break;
+                case 'embassies':
+                    $cotizacion = 'embassies_submitted';
+                    break;
+                case 'fbo':
+                    $cotizacion = 'fbo_submitted';
+                    break;
+            }
+        }else if ($partes_ruta[1] == 'perfil' && $partes_ruta[2] == 'award') {
+            $gestor_actual = 'award';
+            $ruta_elegida = 'vistas/perfil.php';
+            switch ($partes_ruta[3]){
+                case 'gsa_buy':
+                    $cotizacion = 'gsa_buy_award';
+                    break;
+                case 'fedbid':
+                    $cotizacion = 'fedbid_award';
+                    break;
+                case 'emails':
+                    $cotizacion = 'emails_award';
+                    break;
+                case 'findfrp':
+                    $cotizacion = 'findfrp_award';
+                    break;
+                case 'embassies':
+                    $cotizacion = 'embassies_award';
+                    break;
+                case 'fbo':
+                    $cotizacion = 'fbo_award';
+                    break;
+            }
+        }
+    } else if (count($partes_ruta) == 5) {
+        if ($partes_ruta[1] == 'perfil' && $partes_ruta[2] == 'cotizaciones') {
+            $gestor_actual = 'cotizaciones';
+            $ruta_elegida = 'vistas/perfil.php';
+            switch ($partes_ruta[3]) {
+                case 'editar_cotizacion':
+                    $cotizacion = 'editar_cotizacion';
+                    $id_rfq = $partes_ruta[4];
+                    break;
+                case 'add_item':
+                    $cotizacion = 'add_item';
+                    $id_rfq = $partes_ruta[4];
+                    break;
+                case 'add_provider':
+                    $cotizacion = 'add_provider';
+                    $id_item = $partes_ruta[4];
+                    break;
+                case 'edit_item':
+                    $cotizacion = 'edit_item';
+                    $id_item = $partes_ruta[4];
+                    break;
+                case 'edit_provider':
+                    $cotizacion = 'edit_provider';
+                    $id_provider = $partes_ruta[4];
+                    break;
+                case 'cuestionario':
+                    $cotizacion = 'cuestionario';
+                    $id_rfq = $partes_ruta[4];
+                    break;
+                case 'add_high_level_requirement':
+                    $cotizacion = 'add_high_level_requirement';
+                    $id_cuestionario = $partes_ruta[4];
+                    break;
+                case 'add_out_of_scope':
+                    $cotizacion = 'add_out_of_scope';
+                    $id_cuestionario = $partes_ruta[4];
+                    break;
+                case 'add_project_risk':
+                    $cotizacion = 'add_project_risk';
+                    $id_cuestionario = $partes_ruta[4];
+                    break;
+                case 'add_project_milestone':
+                    $cotizacion = 'add_project_milestone';
+                    $id_cuestionario = $partes_ruta[4];
+                    break;
+                case 'edit_high_level_requirement':
+                    $cotizacion = 'edit_high_level_requirement';
+                    $id_high_level_requirement = $partes_ruta[4];
+                    break;
+                case 'edit_out_of_scope':
+                    $cotizacion = 'edit_out_of_scope';
+                    $id_out_of_scope = $partes_ruta[4];
+                    break;
+                case 'edit_project_risk':
+                    $cotizacion = 'edit_project_risk';
+                    $id_project_risk = $partes_ruta[4];
+                    break;
+                case 'edit_project_milestone':
+                    $cotizacion = 'edit_project_milestone';
+                    $id_project_milestone = $partes_ruta[4];
                     break;
             }
         }
