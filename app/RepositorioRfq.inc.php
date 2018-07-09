@@ -7,7 +7,7 @@ class RepositorioRfq {
 
         if (isset($conexion)) {
             try {
-                $sql = 'INSERT INTO rfq(id_usuario, usuario_designado, canal, email_code, type_of_bid, issue_date, end_date, status, completado, total_cost, total_price, comments, award, fecha_completado, fecha_submitted, fecha_award, payment_terms, address, ship_to, expiration_date, ship_via, taxes, profit, additional) VALUES(:id_usuario, :usuario_designado, :canal, :email_code, :type_of_bid, :issue_date, :end_date, :status, :completado, :total_cost, :total_price, :comments, :award, :fecha_completado, :fecha_submitted, :fecha_award, :payment_terms, :address, :ship_to, :expiration_date, :ship_via, :taxes, :profit, :additional)';
+                $sql = 'INSERT INTO rfq(id_usuario, usuario_designado, canal, email_code, type_of_bid, issue_date, end_date, status, completado, total_cost, total_price, comments, award, fecha_completado, fecha_submitted, fecha_award, payment_terms, address, ship_to, expiration_date, ship_via, taxes, profit, additional, shipping, shipping_cost) VALUES(:id_usuario, :usuario_designado, :canal, :email_code, :type_of_bid, :issue_date, :end_date, :status, :completado, :total_cost, :total_price, :comments, :award, :fecha_completado, :fecha_submitted, :fecha_award, :payment_terms, :address, :ship_to, :expiration_date, :ship_via, :taxes, :profit, :additional, :shipping, :shipping_cost)';
 
                 $sentencia = $conexion->prepare($sql);
 
@@ -35,6 +35,8 @@ class RepositorioRfq {
                 $sentencia->bindParam(':taxes', $cotizacion->obtener_taxes(), PDO::PARAM_STR);
                 $sentencia->bindParam(':profit', $cotizacion->obtener_profit(), PDO::PARAM_STR);
                 $sentencia->bindParam(':additional', $cotizacion->obtener_additional(), PDO::PARAM_STR);
+                $sentencia->bindParam(':shipping', $cotizacion->obtener_shipping(), PDO::PARAM_STR);
+                $sentencia->bindParam(':shipping_cost', $cotizacion->obtener_shipping_cost(), PDO::PARAM_STR);
 
                 $resultado = $sentencia->execute();
 
@@ -98,7 +100,7 @@ class RepositorioRfq {
 
                 if (count($resultado)) {
                     foreach ($resultado as $fila) {
-                        $cotizaciones [] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['total_cost'], $fila['total_price'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['fecha_submitted'], $fila['fecha_award'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via'], $fila['taxes'], $fila['profit'], $fila['additional']);
+                        $cotizaciones [] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['total_cost'], $fila['total_price'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['fecha_submitted'], $fila['fecha_award'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via'], $fila['taxes'], $fila['profit'], $fila['additional'], $fila['shipping'], $fila['shipping_cost']);
                     }
                 }
             } catch (PDOException $ex) {
@@ -145,7 +147,7 @@ class RepositorioRfq {
             <table class="table table-bordered table-striped table-hover">
                 <thead>
                     <tr>
-                        <th>E-MAIL CODE</th>
+                        <th>CODE</th>
                         <th>DESIGNATED USER</th>
                         <th>TYPE OF BID</th>
                         <th>ISSUE DATE</th>
@@ -160,7 +162,7 @@ class RepositorioRfq {
                     }
                     ?>
                 </tbody>
-            </table>    
+            </table>
             <?php
         }
     }
@@ -178,7 +180,7 @@ class RepositorioRfq {
                 $resultado = $sentencia->fetch();
 
                 if (!empty($resultado)) {
-                    $cotizacion_recuperada = new Rfq($resultado['id'], $resultado['id_usuario'], $resultado['usuario_designado'], $resultado['canal'], $resultado['email_code'], $resultado['type_of_bid'], $resultado['issue_date'], $resultado['end_date'], $resultado['status'], $resultado['completado'], $resultado['total_cost'], $resultado['total_price'], $resultado['comments'], $resultado['award'], $resultado['fecha_completado'], $resultado['fecha_submitted'], $resultado['fecha_award'], $resultado['payment_terms'], $resultado['address'], $resultado['ship_to'], $resultado['expiration_date'], $resultado['ship_via'], $resultado['taxes'], $resultado['profit'], $resultado['additional']);
+                    $cotizacion_recuperada = new Rfq($resultado['id'], $resultado['id_usuario'], $resultado['usuario_designado'], $resultado['canal'], $resultado['email_code'], $resultado['type_of_bid'], $resultado['issue_date'], $resultado['end_date'], $resultado['status'], $resultado['completado'], $resultado['total_cost'], $resultado['total_price'], $resultado['comments'], $resultado['award'], $resultado['fecha_completado'], $resultado['fecha_submitted'], $resultado['fecha_award'], $resultado['payment_terms'], $resultado['address'], $resultado['ship_to'], $resultado['expiration_date'], $resultado['ship_via'], $resultado['taxes'], $resultado['profit'], $resultado['additional'], $resultado['shipping'], $resultado['shipping_cost']);
                 }
             } catch (PDOException $ex) {
                 print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -208,17 +210,19 @@ class RepositorioRfq {
         return $cotizacion_editada;
     }
 
-    public static function actualizar_taxes_profit($conexion, $taxes, $profit, $total_cost, $total_price, $additional, $id_rfq) {
+    public static function actualizar_taxes_profit($conexion, $taxes, $profit, $total_cost, $total_price, $additional, $shipping, $shipping_cost, $id_rfq) {
         $cotizacion_editada = false;
         if (isset($conexion)) {
             try {
-                $sql = 'UPDATE rfq SET taxes = :taxes, profit = :profit, total_cost = :total_cost, total_price = :total_price, additional = :additional WHERE id = :id_rfq';
+                $sql = 'UPDATE rfq SET taxes = :taxes, profit = :profit, total_cost = :total_cost, total_price = :total_price, additional = :additional, shipping = :shipping, shipping_cost = :shipping_cost WHERE id = :id_rfq';
                 $sentencia = $conexion->prepare($sql);
                 $sentencia->bindParam(':taxes', $taxes, PDO::PARAM_STR);
                 $sentencia->bindParam(':profit', $profit, PDO::PARAM_STR);
                 $sentencia->bindParam(':total_cost', $total_cost, PDO::PARAM_STR);
                 $sentencia->bindParam(':total_price', $total_price, PDO::PARAM_STR);
                 $sentencia->bindParam(':additional', $additional, PDO::PARAM_STR);
+                $sentencia->bindParam(':shipping', $shipping, PDO::PARAM_STR);
+                $sentencia->bindParam(':shipping_cost', $shipping_cost, PDO::PARAM_STR);
                 $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
 
                 $sentencia->execute();
@@ -316,7 +320,7 @@ class RepositorioRfq {
             <table class="table table-bordered table-striped table-responsive-md">
                 <thead>
                     <tr>
-                        <th>E-MAIL CODE</th>
+                        <th>CODE</th>
                         <th>DEDIGNATED USER</th>
                         <th>TYPE OF BID</th>
                         <th>ISSUE DATE</th>
@@ -335,7 +339,7 @@ class RepositorioRfq {
                     }
                     ?>
                 </tbody>
-            </table>    
+            </table>
             <?php
         }
     }
@@ -406,7 +410,7 @@ class RepositorioRfq {
             <table class="table table-bordered table-striped table-responsive-md">
                 <thead>
                     <tr>
-                        <th>E-MAIL CODE</th>
+                        <th>CODE</th>
                         <th>DEDIGNATED USER</th>
                         <th>TYPE OF BID</th>
                         <th>ISSUE DATE</th>
@@ -424,7 +428,7 @@ class RepositorioRfq {
                     }
                     ?>
                 </tbody>
-            </table>    
+            </table>
             <?php
         }
     }
@@ -495,7 +499,7 @@ class RepositorioRfq {
             <table class="table table-bordered table-striped table-responsive-md">
                 <thead>
                     <tr>
-                        <th>E-MAIL CODE</th>
+                        <th>CODE</th>
                         <th>DEDIGNATED USER</th>
                         <th>TYPE OF BID</th>
                         <th>ISSUE DATE</th>
@@ -513,7 +517,7 @@ class RepositorioRfq {
                     }
                     ?>
                 </tbody>
-            </table>    
+            </table>
             <?php
         }
     }
@@ -608,7 +612,7 @@ class RepositorioRfq {
         }
         return $rfq_editado;
     }
-    
+
     public static function actualizar_payment_terms($conexion, $payment_terms, $id_rfq) {
         $rfq_editado = false;
         if (isset($conexion)) {
@@ -669,47 +673,47 @@ class RepositorioRfq {
         }
         return $rfq_editado;
     }
-    
+
     public static function obtener_comments($conexion){
         $no_bid = 0;
         $manufacturer_in_the_bid = 0;
         $expired_due_date = 0;
         $supplier_did_not_provide_a_quote = 0;
-        
+
         if(isset($conexion)){
             try{
                 $sql = 'SELECT COUNT(*) as no_bid FROM rfq WHERE comments = "No Bid" AND YEAR(fecha_completado) = YEAR(CURDATE())';
                 $sql1 = 'SELECT COUNT(*) as manufacturer_in_bid FROM rfq WHERE comments = "Manufacturer in the Bid" AND YEAR(fecha_completado) = YEAR(CURDATE())';
                 $sql2 = 'SELECT COUNT(*) as expired_due_date FROM rfq WHERE comments = "Expired due date" AND YEAR(fecha_completado) = YEAR(CURDATE())';
                 $sql3 = 'SELECT COUNT(*) as supplier_did_not_provide_a_quote FROM rfq WHERE comments = "Supplier did not provide a quote" AND YEAR(fecha_completado) = YEAR(CURDATE())';
-                
+
                 $sentencia = $conexion-> prepare($sql);
                 $sentencia1 = $conexion-> prepare($sql1);
                 $sentencia2 = $conexion-> prepare($sql2);
                 $sentencia3 = $conexion-> prepare($sql3);
-                
+
                 $sentencia-> execute();
                 $sentencia1-> execute();
                 $sentencia2-> execute();
                 $sentencia3-> execute();
-                
+
                 $resultado = $sentencia-> fetch();
                 $resultado1 = $sentencia1-> fetch();
                 $resultado2 = $sentencia2-> fetch();
                 $resultado3 = $sentencia3-> fetch();
-                
+
                 if(!empty($resultado)){
                     $no_bid = $resultado['no_bid'];
                 }
-                
+
                 if(!empty($resultado1)){
                     $manufacturer_in_the_bid = $resultado1['manufacturer_in_bid'];
                 }
-                
+
                 if(!empty($resultado2)){
                     $expired_due_date = $resultado2['expired_due_date'];
                 }
-                
+
                 if(!empty($resultado3)){
                     $supplier_did_not_provide_a_quote = $resultado3['supplier_did_not_provide_a_quote'];
                 }

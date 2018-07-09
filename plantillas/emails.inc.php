@@ -29,7 +29,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <select class="form-control" id="tipo">
-                                        <option>E-mail Code</option>
+                                        <option>Code</option>
                                         <option>Designated user</option>
                                         <option>Type of Bid</option>
                                         <option>Issue Date</option>
@@ -49,4 +49,3 @@
         </div>
     </section>
 </div>
-

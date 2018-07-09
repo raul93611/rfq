@@ -34,7 +34,7 @@ class RepositorioItem {
         }
         return $item_insertado;
     }
-    
+
     public static function actualizar_provider_menor_item($conexion, $provider_menor, $id_item){
         $item_editado = false;
         if(isset($conexion)){
@@ -44,7 +44,7 @@ class RepositorioItem {
                 $sentencia-> bindParam(':provider_menor', $provider_menor, PDO::PARAM_STR);
                 $sentencia-> bindParam(':id_item', $id_item, PDO::PARAM_STR);
                 $sentencia-> execute();
-                
+
                 if($sentencia){
                     $item_editado = true;
                 }
@@ -91,6 +91,7 @@ class RepositorioItem {
         echo '<td>' . $i . '</td>';
         echo '<td><b>Brand:</b>' . $item->obtener_brand_project() . '<br><b>Part #:</b>' . $item->obtener_part_number_project() . '<br><b>Description:</b>' . nl2br($item->obtener_description_project()) . '</td>';
         echo '<td><b>Brand:</b>' . $item->obtener_brand() . '<br><b>Part #:</b>' . $item->obtener_part_number() . '<br><b>Description:</b>' . nl2br($item->obtener_description()) . '</td>';
+        echo '<td><a target="_blank" href="'. $item-> obtener_website() .'">'. $item-> obtener_website() .'</a></td>';
         echo '<td>' . $item->obtener_quantity() . '</td>';
         echo '<td><div class="row"><div class="col-6">';
         for ($i = 0; $i < count($providers); $i++) {
@@ -108,7 +109,7 @@ class RepositorioItem {
         }else{
             echo '<td><input type="text" id="add_cost'.$j.'" size="10" value="0"></td>';
         }
-        
+
         echo '<td>';
         for ($i = 0; $i < count($providers); $i++) {
             $provider = $providers[$i];
@@ -130,7 +131,6 @@ class RepositorioItem {
         echo '<td></td>';
         echo '<td></td>';
         echo '<td>' . nl2br($item->obtener_comments()) . '</td>';
-        echo '<td><a target="_blank" href="'. $item-> obtener_website() .'">'. $item-> obtener_website() .'</a></td>';
         echo '</tr>';
     }
 
@@ -159,13 +159,13 @@ class RepositorioItem {
             }
 
             echo '</div><div class="col">';
-            
+
             if($cotizacion-> obtener_additional() != 0){
                 echo '<label>Additional general ($):</label><input type="text" name="additional_general" id="additional_general" class="form-control" value="' . $cotizacion->obtener_additional() . '">';
             }else{
                 echo '<label>Additional general ($):</label><input type="text" name="additional_general" id="additional_general" class="form-control" value="0">';
             }
-            
+
             echo '</div><div class="col">';
 
             echo '<label>Payment terms:</label><div class="form-group">
@@ -178,15 +178,15 @@ class RepositorioItem {
                 </div>
                 <div class="form-check-inline">
                     <input class="form-check-input" type="radio" value="Net 30/CC" name="payment_terms"';
-                    
+
                     if ($cotizacion->obtener_payment_terms() == 'Net 30/CC') {
                         echo 'checked';
                     }
-                    
+
             echo '><label class="form-check-label">Net 30/CC</label>
                 </div>
             </div>';
-            
+
             echo '</div></div><br>';
             echo '<table id="tabla_items" class="table table-bordered table-hover">';
             echo '<thead>';
@@ -195,6 +195,7 @@ class RepositorioItem {
             echo '<th id="numeracion">#</th>';
             echo '<th class="description">PROJECT SPECIFICATIONS</th>';
             echo '<th class="description">E-LOGIC PROPOSAL</th>';
+            echo '<th class="options">WEBSITE</th>';
             echo '<th class="options">QTY</th>';
             echo '<th id="provider">PROVIDERS</th>';
             echo '<th class="options">ADDITIONAL</th>';
@@ -203,7 +204,6 @@ class RepositorioItem {
             echo '<th class="options">PRICE FOR CLIENT</th>';
             echo '<th class="options">TOTAL PRICE</th>';
             echo '<th class="description">COMMENTS</th>';
-            echo '<th class="options">WEBSITE</th>';
             echo '</tr>';
             echo '</thead>';
             echo '<tbody id="items">';
@@ -211,7 +211,7 @@ class RepositorioItem {
                 $item = $items[$i];
                 self::escribir_item($item, $i + 1);
             }
-            echo '<td colspan="8" class="display-4"><b><h4>TOTAL:</h4></b></td>';
+            echo '<td colspan="9" class="display-4"><b><h4>TOTAL:</h4></b></td>';
             echo '<td id="total1"></td>';
             echo '<td></td>';
             echo '<td id="total2"></td>';
@@ -286,7 +286,7 @@ class RepositorioItem {
         }
         return $item_editado;
     }
-    
+
     public static function insertar_calculos($conexion, $unit_price, $total_price, $additional, $id_item){
         $item_editado = false;
         if(isset($conexion)){
@@ -297,9 +297,9 @@ class RepositorioItem {
                 $sentencia-> bindParam(':total_price', $total_price, PDO::PARAM_STR);
                 $sentencia-> bindParam(':additional', $additional, PDO::PARAM_STR);
                 $sentencia-> bindParam(':id_item', $id_item, PDO::PARAM_STR);
-                
+
                 $sentencia-> execute();
-                
+
                 if($sentencia){
                     $item_editado = true;
                 }

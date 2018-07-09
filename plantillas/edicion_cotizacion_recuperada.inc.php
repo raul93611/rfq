@@ -3,7 +3,7 @@
     <div class="row">
         <div class="col">
             <div class="form-group">
-                <label for="email_code">Email-code:</label>
+                <label for="email_code">Code:</label>
                 <input type="text" class="form-control" id="email_code" disabled value="<?php echo $cotizacion_recuperada->obtener_email_code(); ?>">
             </div>
         </div>
@@ -27,7 +27,7 @@
         </div>
     </div>
     <?php
-    
+
     if ($cotizacion_recuperada->obtener_completado() || $cotizacion_recuperada-> obtener_status()) {
         Conexion::abrir_conexion();
         $usuario = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), $cotizacion_recuperada-> obtener_usuario_designado());
@@ -61,7 +61,7 @@
                             <?php
                         }
                         ?>
-                </select>   
+                </select>
                 <?php
             }
             ?>
@@ -87,6 +87,23 @@
         echo "</div>";
     }
     RepositorioItem::escribir_items($cotizacion_recuperada->obtener_id());
+    ?>
+    <br>
+    <div class="row">
+      <label for="shipping">Shipping:</label>
+      <div class="col">
+        <div class="form-group">
+            <input type="text" class="form-control" id="shipping" name="shipping" value="<?php echo $cotizacion_recuperada->obtener_shipping(); ?>">
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-group">
+            <input type="number" step=".01" class="form-control" id="shipping_cost" name="shipping_cost" value="<?php echo $cotizacion_recuperada->obtener_shipping_cost(); ?>">
+        </div>
+      </div>
+    </div>
+
+    <?php
     switch ($cotizacion_recuperada->obtener_canal()) {
         case 'GSA-Buy':
             $canal = 'gsa_buy';
@@ -110,7 +127,7 @@
     ?>
 </div>
 <div class="card-footer">
-    <button type="submit" onclick="alert('Estas seguro?');" class="btn btn-primary" name="guardar_cambios_cotizacion">Save</button>
+    <button type="submit" onclick="alert('Are you sure?');" class="btn btn-primary" name="guardar_cambios_cotizacion">Save</button>
     <a class="btn btn-primary float-right" href="<?php echo ADD_ITEM . '/' . $cotizacion_recuperada->obtener_id(); ?>">Add item</a>
     <?php
     if($cotizacion_recuperada-> obtener_award()){

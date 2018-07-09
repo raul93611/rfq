@@ -59,7 +59,7 @@ if ($cotizacion_recuperada->obtener_completado() && $cotizacion_recuperada->obte
 ?>
 </div>
 <div class="card-footer">
-    <button type="submit" onclick="alert('Estas seguro?');" class="btn btn-primary" name="guardar_cambios_cotizacion2">Save</button>
+    <button type="submit" onclick="alert('Are you sure?');" class="btn btn-primary" name="guardar_cambios_cotizacion2">Save</button>
 <?php
 if ($cotizacion_recuperada->obtener_award()) {
     echo '<a class="btn btn-primary" href="' . AWARD . $canal . '">Go back</a>';
@@ -75,10 +75,7 @@ if ($cotizacion_recuperada->obtener_award()) {
 </div>
 <!--
 <br>
-    
+
 
 
 -->
-
-
-

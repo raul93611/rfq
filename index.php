@@ -25,7 +25,7 @@ include_once 'app/RepositorioProvider.inc.php';
 include_once 'app/Cuestionario.inc.php';
 include_once 'app/RepositorioCuestionario.inc.php';
 
-include_once 'app/HighLevelrequirement.inc.php';
+include_once 'app/HighLevelRequirement.inc.php';
 include_once 'app/RepositorioHighLevelRequirement.inc.php';
 
 include_once 'app/OutOfScope.inc.php';

@@ -39,6 +39,8 @@ CREATE TABLE rfq(
         taxes DECIMAL(10,2) NOT NULL,
         profit DECIMAL(10,2) NOT NULL,
         additional VARCHAR(100) NOT NULL,
+        shipping_cost DECIMAL(10,2) NOT NULL,
+        shipping VARCHAR(100) NOT NULL,
         PRIMARY KEY(id),
         FOREIGN KEY(id_usuario)
             REFERENCES usuarios(id)
@@ -136,7 +138,7 @@ CREATE TABLE item(
             REFERENCES usuarios(id)
             ON UPDATE CASCADE
             ON DELETE RESTRICT
-);                                                      
+);
 
 CREATE TABLE provider(
         id INT NOT NULL AUTO_INCREMENT UNIQUE,

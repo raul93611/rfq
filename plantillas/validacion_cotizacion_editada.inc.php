@@ -11,7 +11,7 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
     for ($i = 0; $i < count($id_items); $i++) {
         RepositorioItem::insertar_calculos(Conexion::obtener_conexion(), $unit_prices[$i], $partes_total_price[$i], $additional[$i], $id_items[$i]);
     }
-    
+
     switch($_POST['payment_terms']){
         case 'Net 30':
             $payment_terms = 'Net 30';
@@ -20,13 +20,13 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
             $payment_terms = 'Net 30/CC';
             break;
     }
-    
+
     $usuario = RepositorioUsuario::obtener_usuario_por_nombre_usuario(Conexion::obtener_conexion(), $_POST['usuario_designado']);
     $usuario_designado = $usuario->obtener_id();
     $cotizacion_editada = RepositorioRfq::actualizar_usuario_designado(Conexion::obtener_conexion(), $usuario_designado, $_POST['id_rfq']);
-    $cotizacion_editada1 = RepositorioRfq::actualizar_taxes_profit(Conexion::obtener_conexion(), $_POST['taxes'], $_POST['profit'], $_POST['total_cost'], $_POST['total_price'], $_POST['additional_general'], $_POST['id_rfq']);
+    $cotizacion_editada1 = RepositorioRfq::actualizar_taxes_profit(Conexion::obtener_conexion(), $_POST['taxes'], $_POST['profit'], $_POST['total_cost'], $_POST['total_price'], $_POST['additional_general'], $_POST['shipping'], $_POST['shipping_cost'], $_POST['id_rfq']);
     $cotizacion_editada2 = RepositorioRfq::actualizar_payment_terms(Conexion::obtener_conexion(), $payment_terms, $_POST['id_rfq']);
-    
+
     if ($usuario_antiguo->obtener_nombre_usuario() != $_POST['usuario_designado']) {
         switch ($cotizacion_recuperada->obtener_canal()) {
             case 'GSA-Buy':
@@ -103,7 +103,7 @@ if (isset($_POST['guardar_cambios_cotizacion2'])) {
         }
         if ($submitted) {
             RepositorioRfq::actualizar_fecha_y_submitted(Conexion::obtener_conexion(), $_POST['id_rfq']);
-            
+
             if($cargo < 4){
                 Redireccion::redirigir1(SUBMITTED . $canal);
             }else{
@@ -120,7 +120,7 @@ if (isset($_POST['guardar_cambios_cotizacion2'])) {
         }
         if($award){
             RepositorioRfq::actualizar_fecha_y_award(Conexion::obtener_conexion(), $_POST['id_rfq']);
-            
+
             if($cargo < 4){
                 Redireccion::redirigir1(AWARD . $canal);
             }else{

@@ -2,8 +2,8 @@
     <div class="row">
         <div class="col">
             <div class="form-group">
-                <label for="email_code">Email-code:</label>
-                <input type="text" class="form-control" id="email_code" name="email_code" placeholder="Email-code" autofocus required>
+                <label for="email_code">Code:</label>
+                <input type="text" class="form-control" id="email_code" name="email_code" placeholder="Code" autofocus required>
             </div>
             <div class="form-group">
                 <label for="issue_date">Issue date:</label>
@@ -27,7 +27,7 @@
                             <?php
                         }
                         ?>
-                    </select>   
+                    </select>
                     <?php
                 }
                 ?>
