@@ -26,7 +26,7 @@ class Rfq {
     private $ship_via;
     private $taxes;
     private $profit;
-    private $addtional;
+    private $additional;
 
     public function __construct($id, $id_usuario, $usuario_designado, $canal, $email_code, $type_of_bid, $issue_date, $end_date, $status, $completado, $total_cost, $total_price, $comments, $award, $fecha_completado, $fecha_submitted, $fecha_award, $payment_terms, $address, $ship_to, $expiration_date, $ship_via, $taxes, $profit, $additional) {
         $this->id = $id;
