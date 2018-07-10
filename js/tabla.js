@@ -202,11 +202,12 @@ $(document).ready(function () {
     var taxes = $('#taxes').val();
     var profit = $('#profit').val();
     var additional_general = $('#additional_general').val();
+    var shipping_cost = $('#shipping_cost').val();
 
     var i = 0;
     var j = 1;
     var total1 = 0;
-    var total2 = 0;
+    var total2 = 0 + parseFloat(shipping_cost);
     var partes_total_price = '';
     var unit_prices = '';
     var additional = '';
@@ -282,11 +283,12 @@ $(document).ready(function () {
         var taxes = $('#taxes').val();
         var profit = $('#profit').val();
         var additional_general = $('#additional_general').val();
+        var shipping_cost = $('#shipping_cost').val();
 
         var i = 0;
         var j = 1;
         var total1 = 0;
-        var total2 = 0;
+        var total2 = 0 + parseFloat(shipping_cost);
         var partes_total_price = '';
         var unit_prices = '';
         var additional = '';
