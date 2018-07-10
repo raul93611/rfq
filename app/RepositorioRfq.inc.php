@@ -210,17 +210,37 @@ class RepositorioRfq {
         return $cotizacion_editada;
     }
 
-    public static function actualizar_taxes_profit($conexion, $taxes, $profit, $total_cost, $total_price, $additional, $shipping, $shipping_cost, $id_rfq) {
+    public static function actualizar_taxes_profit($conexion, $taxes, $profit, $total_cost, $total_price, $additional, $id_rfq) {
         $cotizacion_editada = false;
         if (isset($conexion)) {
             try {
-                $sql = 'UPDATE rfq SET taxes = :taxes, profit = :profit, total_cost = :total_cost, total_price = :total_price, additional = :additional, shipping = :shipping, shipping_cost = :shipping_cost WHERE id = :id_rfq';
+                $sql = 'UPDATE rfq SET taxes = :taxes, profit = :profit, total_cost = :total_cost, total_price = :total_price, additional = :additional WHERE id = :id_rfq';
                 $sentencia = $conexion->prepare($sql);
                 $sentencia->bindParam(':taxes', $taxes, PDO::PARAM_STR);
                 $sentencia->bindParam(':profit', $profit, PDO::PARAM_STR);
                 $sentencia->bindParam(':total_cost', $total_cost, PDO::PARAM_STR);
                 $sentencia->bindParam(':total_price', $total_price, PDO::PARAM_STR);
                 $sentencia->bindParam(':additional', $additional, PDO::PARAM_STR);
+                $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+
+                $sentencia->execute();
+
+                if ($sentencia) {
+                    $cotizacion_editada = true;
+                }
+            } catch (PDOException $ex) {
+                print 'ERROR:' . $ex->getMessage() . '<br>';
+            }
+        }
+        return $cotizacion_editada;
+    }
+
+    public static function actualizar_shipping($conexion, $shipping, $shipping_cost, $id_rfq) {
+        $cotizacion_editada = false;
+        if (isset($conexion)) {
+            try {
+                $sql = 'UPDATE rfq SET shipping = :shipping, shipping_cost = :shipping_cost WHERE id = :id_rfq';
+                $sentencia = $conexion->prepare($sql);
                 $sentencia->bindParam(':shipping', $shipping, PDO::PARAM_STR);
                 $sentencia->bindParam(':shipping_cost', $shipping_cost, PDO::PARAM_STR);
                 $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);

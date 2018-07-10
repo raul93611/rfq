@@ -3,7 +3,7 @@ class ValidadorRegistro extends ValidadorUsuario{
     public function __construct($nombre_usuario, $password1, $password2, $nombres, $apellidos, $conexion) {
         $this->aviso_inicio = "<br><div class='alert alert-danger' role='alert'>";
         $this->aviso_cierre = "</div>";
-        
+
         $this-> nombre_usuario = '';
         $this-> password = '';
         $this-> nombres = '';
@@ -20,6 +20,4 @@ class ValidadorRegistro extends ValidadorUsuario{
         }
     }
 }
-
 ?>
-

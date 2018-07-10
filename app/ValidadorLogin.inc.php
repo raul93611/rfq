@@ -39,4 +39,3 @@ class ValidadorLogin extends ValidadorUsuario {
 
 }
 ?>
-

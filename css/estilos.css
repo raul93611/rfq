@@ -14,7 +14,11 @@ table{
 }
 
 #tabla_items .options{
-    min-width: 100px !important;
+    width: 100px !important;
+}
+
+.estrechar{
+  word-break: break-all !important;
 }
 
 #tabla_items #numeracion{

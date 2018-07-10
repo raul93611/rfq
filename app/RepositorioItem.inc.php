@@ -91,7 +91,7 @@ class RepositorioItem {
         echo '<td>' . $i . '</td>';
         echo '<td><b>Brand:</b>' . $item->obtener_brand_project() . '<br><b>Part #:</b>' . $item->obtener_part_number_project() . '<br><b>Description:</b>' . nl2br($item->obtener_description_project()) . '</td>';
         echo '<td><b>Brand:</b>' . $item->obtener_brand() . '<br><b>Part #:</b>' . $item->obtener_part_number() . '<br><b>Description:</b>' . nl2br($item->obtener_description()) . '</td>';
-        echo '<td><a target="_blank" href="'. $item-> obtener_website() .'">'. $item-> obtener_website() .'</a></td>';
+        echo '<td class="estrechar"><a target="_blank" href="'. $item-> obtener_website() .'">'. $item-> obtener_website() .'</a></td>';
         echo '<td>' . $item->obtener_quantity() . '</td>';
         echo '<td><div class="row"><div class="col-6">';
         for ($i = 0; $i < count($providers); $i++) {
