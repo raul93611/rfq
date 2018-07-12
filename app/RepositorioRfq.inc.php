@@ -318,11 +318,11 @@ class RepositorioRfq {
             <?php
             if ($cotizacion->obtener_canal() != 'GSA-Buy') {
                 ?>
-                <td class="text-center"><a class="btn btn-warning btn-sm" href="<?php echo PROPOSAL . '/' . $cotizacion->obtener_id(); ?>" target="_blank"><i class="fa fa-copy"></i></a></td>
+                <td class="text-center"><a class="btn btn-primary btn-sm" href="<?php echo PROPOSAL . '/' . $cotizacion->obtener_id(); ?>" target="_blank"><i class="fa fa-copy"></i></a></td>
                 <?php
             } else {
                 ?>
-                <td class="text-center"><a class="btn btn-warning btn-sm" href="<?php echo PROPOSAL . '/' . $cotizacion->obtener_id(); ?>" target="_blank"><i class="fa fa-copy"></i></a>&nbsp;&nbsp;<a class="btn btn-info btn-sm" href="<?php echo PROPOSAL_GSA . '/' . $cotizacion->obtener_id(); ?>" target="_blank"><i class="fa fa-copy"></i></a></td>
+                <td class="text-center"><a class="btn btn-primary btn-sm" href="<?php echo PROPOSAL . '/' . $cotizacion->obtener_id(); ?>" target="_blank"><i class="fa fa-copy"></i></a>&nbsp;&nbsp;<a class="btn btn-info btn-sm" href="<?php echo PROPOSAL_GSA . '/' . $cotizacion->obtener_id(); ?>" target="_blank"><i class="fa fa-copy"></i></a></td>
                 <?php
             }
             ?>

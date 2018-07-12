@@ -136,11 +136,11 @@
     ?>
 </div>
 <div class="card-footer">
-    <button type="submit" class="btn btn-primary" name="guardar_cambios_cotizacion"><i class="fa fa-save"></i> Save</button>
+    <button type="submit" class="btn btn-success" name="guardar_cambios_cotizacion"><i class="fa fa-save"></i> Save</button>
     <?php
       if(count($items)){
         ?>
-        <button type="button" id="calculate" class="btn btn-primary"><i class="fa fa-calculator"></i> Calculate</button>
+        <button type="button" id="calculate" class="btn btn-info"><i class="fa fa-calculator"></i> Calculate</button>
         <?php
       }
     ?>
