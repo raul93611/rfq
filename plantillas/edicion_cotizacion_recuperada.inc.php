@@ -74,25 +74,20 @@
     <?php
     $ruta = $_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $cotizacion_recuperada->obtener_id();
     if (is_dir($ruta)) {
-      $a = 0;
         $gestor = opendir($ruta);
         echo '<div class="list-group">';
+        $carpeta = @scandir($ruta);
+        if(count($carpeta) <= 2){
+          echo '<h3 class="text-center">No files!</h3>';
+        }
         while (($archivo = readdir($gestor)) !== false) {
             $ruta_completa = $ruta . "/" . $archivo;
             if ($archivo != "." && $archivo != "..") {
                 $archivo_url = str_replace(' ', '%20', $archivo);
                 echo '<a download class="list-group-item list-group-item-action" href="' . DOCS . $cotizacion_recuperada->obtener_id() . '/' . $archivo_url . '">' . $archivo . "</a>";
-            }else{
-
-              if($a){
-
-              }else{
-                echo '<h3 class="text-center">No files!</h3>';
-                $a++;
-              }
-
             }
         }
+
         closedir($gestor);
         echo "</div>";
     }
