@@ -136,7 +136,6 @@
     ?>
 </div>
 <div class="card-footer">
-    <button type="submit" class="btn btn-success" name="guardar_cambios_cotizacion"><i class="fa fa-save"></i> Save</button>
     <?php
       if(count($items)){
         ?>
@@ -144,6 +143,7 @@
         <?php
       }
     ?>
+    <button type="submit" class="btn btn-success" name="guardar_cambios_cotizacion"><i class="fa fa-save"></i> Save</button>
     <a class="btn btn-primary float-right" href="<?php echo ADD_ITEM . '/' . $cotizacion_recuperada->obtener_id(); ?>"><i class="fa fa-plus-circle"></i> Add item</a>
     <?php
     if($cotizacion_recuperada-> obtener_award()){
