@@ -145,9 +145,9 @@ class RepositorioItem {
             echo '<div class="row">';
             echo '<div class="col">';
             if ($cotizacion->obtener_taxes() != 0) {
-                echo '<label>Taxes (%):</label><input type="number" step=".01" name="taxes" id="taxes" class="form-control" value="' . $cotizacion->obtener_taxes() . '"><br><button type="button" id="calculate" class="btn btn-primary">Calculate</button>';
+                echo '<label>Taxes (%):</label><input type="number" step=".01" name="taxes" id="taxes" class="form-control" value="' . $cotizacion->obtener_taxes() . '">';
             } else {
-                echo '<label>Taxes (%):</label><input type="number" step=".01" name="taxes" id="taxes" class="form-control" value="0"><br><button type="button" id="calculate" class="btn btn-primary">Calculate</button>';
+                echo '<label>Taxes (%):</label><input type="number" step=".01" name="taxes" id="taxes" class="form-control" value="0">';
             }
 
             echo '</div><div class="col">';
