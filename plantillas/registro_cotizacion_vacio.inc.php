@@ -81,5 +81,6 @@
     </div>
 </div>
 <div class="card-footer">
-    <button type="submit" class="btn btn-primary" name="registrar_cotizacion">Save</button>
+    <button type="submit" class="btn btn-primary" name="registrar_cotizacion"><i class="fa fa-save"></i> Save</button>
+    <a href="<?php echo PERFIL; ?>" class="btn btn-primary"><i class="fa fa-ban"></i> Cancel</a>
 </div>

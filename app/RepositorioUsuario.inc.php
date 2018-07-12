@@ -181,7 +181,7 @@ class RepositorioUsuario {
             <td class='text-center'>
                 <form method="post" action="<?php echo ELIMINAR_USUARIO; ?>">
                     <input type="hidden" name="id_usuario" value="<?php echo $usuario->obtener_id(); ?>">
-                    <button type="submit" class="btn btn-sm btn-warning" name="eliminar_usuario">Delete</button>
+                    <button type="submit" class="btn btn-sm btn-warning" name="eliminar_usuario"><i class="fa fa-trash"></i> Delete</button>
                 </form>
             </td>
         </tr>
@@ -210,7 +210,7 @@ class RepositorioUsuario {
                     }
                     ?>
                 </tbody>
-            </table>    
+            </table>
             <?php
         }
     }

@@ -33,5 +33,5 @@
     </div>
 </div>
 <div class="card-footer">
-    <button type="submit" class="btn btn-primary" name="registrar_usuario">Sign in</button>
+    <button type="submit" class="btn btn-primary" name="registrar_usuario"><i class="fa fa-save"></i> Sign in</button>
 </div>
