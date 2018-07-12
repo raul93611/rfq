@@ -12,6 +12,18 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
         RepositorioItem::insertar_calculos(Conexion::obtener_conexion(), $unit_prices[$i], $partes_total_price[$i], $additional[$i], $id_items[$i]);
     }
 
+    $directorio = $_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $id_rfq;
+    $documentos = array_filter($_FILES['documentos']['name']);
+    $total = count($documentos);
+    for ($i = 0; $i < $total; $i++) {
+        $tmp_path = $_FILES['documentos']['tmp_name'][$i];
+
+        if ($tmp_path != '') {
+            $new_path = $directorio . '/' . $_FILES['documentos']['name'][$i];
+            move_uploaded_file($tmp_path, $new_path);
+        }
+    }
+
     switch($_POST['payment_terms']){
         case 'Net 30':
             $payment_terms = 'Net 30';

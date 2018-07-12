@@ -91,6 +91,12 @@
         closedir($gestor);
         echo "</div>";
     }
+    ?>
+    <br>
+    <div class="form-group">
+        <input type="file" name="documentos[]" multiple class="btn btn-primary btn-block">
+    </div>
+    <?php
     RepositorioItem::escribir_items($cotizacion_recuperada->obtener_id());
     Conexion::abrir_conexion();
     $items = RepositorioItem::obtener_items_por_id_rfq(Conexion::obtener_conexion(), $cotizacion_recuperada->obtener_id());
