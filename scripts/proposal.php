@@ -79,7 +79,8 @@ try{
   <table border=0 width="100%">
     <tr>
       <td width="150">
-      <img style="width:110px;height:63px;padding-top:-40px;" src="' . RUTA_IMG . '/elogic_logo.jpg">
+      <img style="width:110px;height:63px;padding-top:-20px;" src="' . RUTA_IMG . '/elogic_logo.jpg">
+      <img style="width:130px;height:40px;padding-left: 5pt" src="' . RUTA_IMG . '/logounido.jpg">
       </td>
       <td>
         <div class="color letra_chiquita">
@@ -212,7 +213,7 @@ try{
     </tr>';
       $html .= '</table>';
   }
-  if ($cotizacion->obtener_payment_terms() == 'Net 30/CC') {
+  if ($cotizacion->obtener_payment_terms() == 'Net 30') {
       $html .= '<br><div class="color letra_chiquita"><b>PAYMENT TERMS</b><br><b>NET TERMS: </b>30 Days<br><b>CREDIT CARD PAYMENT: </b>Please add an additional 2.1% to process credit card payments.</div>';
   }
   $html .= '</body></html>';
