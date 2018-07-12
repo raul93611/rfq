@@ -56,7 +56,7 @@ try{
       border-collapse: collapse;
   }
   td{
-      color: #022B49;
+      color: #3B3B3B;
   }
 
   .quantity{
@@ -184,14 +184,15 @@ try{
       $a = 1;
       for ($i = 0; $i < count($items); $i++) {
           $item = $items[$i];
-          $html .= '<tr>
-      <td>' . $a . '</td>
-      <td><b>Brand name:</b>' . $item->obtener_brand() . '<br><b>Part number:</b>' . $item->obtener_part_number() . '<br><b> Item description:</b><br>' . nl2br($item->obtener_description()) . '</td>
-      <td style="text-align:right;">' . $item->obtener_quantity() . '</td>
-      <td style="text-align:right;">$ ' . $item->obtener_unit_price() . '</td>
-      <td style="text-align:right;">$ ' . $item->obtener_total_price() . '</td>
-    </tr>';
-          $a++;
+            $html .= '<tr>
+                <td>' . $a . '</td>
+                <td><b>Brand name:</b>' . $item->obtener_brand() . '<br><b>Part number:</b>' . $item->obtener_part_number() . '<br><b> Item description:</b><br>' . nl2br($item->obtener_description()) . '</td>
+                <td style="text-align:right;">' . $item->obtener_quantity() . '</td>
+                <td style="text-align:right;">$ ' . number_format($item->obtener_unit_price()) . '</td>
+                <td style="text-align:right;">$ ' . number_format($item->obtener_total_price()) . '</td>
+              </tr>';
+            $a++;
+
       }
       $html .= '
       <tr>
@@ -199,7 +200,7 @@ try{
         <td style="border:none;"></td>
         <td style="border:none;"></td>
         <td style="font-size:10pt;">' . $cotizacion->obtener_shipping() .'</td>
-        <td style="text-align:right;">$ ' . $cotizacion->obtener_shipping_cost() .'</td>
+        <td style="text-align:right;">$ ' . number_format($cotizacion->obtener_shipping_cost()) .'</td>
       </tr>
       <tr>
           <td style="border:none;"></td>
@@ -207,7 +208,7 @@ try{
           <td style="border:none;"></td>
       <td style="font-size:12pt;">TOTAL:</td>
 
-      <td style="font-size:12pt;text-align:right;">$ ' . $cotizacion->obtener_total_price() . '</td>
+      <td style="font-size:12pt;text-align:right;">$ ' . number_format($cotizacion->obtener_total_price()) . '</td>
     </tr>';
       $html .= '</table>';
   }
@@ -221,7 +222,7 @@ try{
   </div>
   ');
   $mpdf->WriteHTML($html);
-  $mpdf->Output($_SERVER['DOCUMENT_ROOT'] . 'rfq/documentos/' . $cotizacion->obtener_id() . '/' . $cotizacion->obtener_email_code() . '.pdf', 'F');
+  $mpdf->Output($_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $cotizacion->obtener_id() . '/' . $cotizacion->obtener_email_code() . '.pdf', 'F');
   $mpdf->Output($cotizacion->obtener_email_code() . '.pdf', 'I');
 } catch (\Mpdf\MpdfException $e) { // Note: safer fully qualified exception name used for catch
     // Process the exception, log, print etc.
