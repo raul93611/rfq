@@ -78,28 +78,15 @@ try{
   $html .= '<body>
   <table border=0 width="100%">
     <tr>
-      <td width="150">
-      <img style="width:110px;height:63px;padding-top:-20px;" src="' . RUTA_IMG . '/elogic_logo.jpg">
-      <img style="width:130px;height:40px;padding-left: 5pt" src="' . RUTA_IMG . '/logounido.jpg">
+      <td width="550">
+      <img style="width:350px;height:120px;" src="' . RUTA_IMG . '/logo_proposal.png">
       </td>
       <td>
-        <div class="color letra_chiquita">
-          <b>E-logic, Inc.</b><br>
-          1025 Connecticut Ave NW Suite 1000<br>
-          Washington, DC 20036<br>
-          (202) 499-7840<br>
-          elogic@e-logic.us<br>
-          http://www.e-logic.us
-        </div>
-      </td>
-      <td width="170" valign="top">
         <span class="color letra_grande">PROPOSAL</span>
       </td>
     </tr>
   </table>
-
   <div >
-
   </div>';
 
   $html .= '
