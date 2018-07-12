@@ -59,19 +59,19 @@ if ($cotizacion_recuperada->obtener_completado() && $cotizacion_recuperada->obte
 ?>
 </div>
 <div class="card-footer">
-    <button type="submit" onclick="alert('Are you sure?');" class="btn btn-primary" name="guardar_cambios_cotizacion2">Save</button>
+    <button type="submit" onclick="alert('Are you sure?');" class="btn btn-primary" name="guardar_cambios_cotizacion2"><i class="fa fa-save"></i> Save</button>
 <?php
 if ($cotizacion_recuperada->obtener_award()) {
-    echo '<a class="btn btn-primary" href="' . AWARD . $canal . '">Go back</a>';
+    echo '<a class="btn btn-primary" href="' . AWARD . $canal . '"><i class="fa fa-backward"></i> Go back</a>';
 } else if ($cotizacion_recuperada->obtener_status()) {
-    echo '<a class="btn btn-primary" href="' . SUBMITTED . $canal . '">Go back</a>';
+    echo '<a class="btn btn-primary" href="' . SUBMITTED . $canal . '"><i class="fa fa-backward"></i> Go back</a>';
 } else if ($cotizacion_recuperada->obtener_completado()) {
-    echo '<a class="btn btn-primary" href="' . COMPLETADOS . $canal . '">Go back</a>';
+    echo '<a class="btn btn-primary" href="' . COMPLETADOS . $canal . '"><i class="fa fa-backward"></i> Go back</a>';
 } else {
-    echo '<a class="btn btn-primary" href="' . COTIZACIONES . $canal . '">Go back</a>';
+    echo '<a class="btn btn-primary" href="' . COTIZACIONES . $canal . '"><i class="fa fa-backward"></i> Go back</a>';
 }
 ?>
-    <a class="btn btn-primary" href="<?php echo CUESTIONARIO . '/' . $cotizacion_recuperada->obtener_id(); ?>">Project charter</a>
+    <a class="btn btn-primary" href="<?php echo CUESTIONARIO . '/' . $cotizacion_recuperada->obtener_id(); ?>"><i class="fa fa-sticky-note"></i> Project charter</a>
 </div>
 <!--
 <br>
