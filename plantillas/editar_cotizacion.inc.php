@@ -28,10 +28,6 @@ include_once 'plantillas/validacion_cotizacion_editada.inc.php';
                         <form role="form" method="post" enctype="multipart/form-data" action="<?php echo EDITAR_COTIZACION . '/' . $id_rfq; ?>">
                             <?php
                             include_once 'plantillas/edicion_cotizacion_recuperada.inc.php';
-                            ?>
-                        </form>
-                        <form role="form" method="post" enctype="multipart/form-data" action="<?php echo EDITAR_COTIZACION . '/' . $id_rfq; ?>">
-                            <?php
                             include_once 'plantillas/edicion_cotizacion_recuperada2.inc.php';
                             ?>
                         </form>
@@ -41,4 +37,3 @@ include_once 'plantillas/validacion_cotizacion_editada.inc.php';
         </div>
     </section>
 </div>
-
