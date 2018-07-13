@@ -170,20 +170,20 @@ class RepositorioItem {
 
             echo '<label>Payment terms:</label><div class="form-group">
                 <div class="form-check-inline">
-                    <input class="form-check-input" type="radio" value="Net 30" name="payment_terms"';
+                    <input class="form-check-input" type="radio" id="net_30" value="Net 30" name="payment_terms"';
                     if ($cotizacion->obtener_payment_terms() == 'Net 30') {
                         echo 'checked';
                     }
-                    echo '><label class="form-check-label">Net 30</label>
+                    echo '><label class="form-check-label" for="net_30">Net 30</label>
                 </div>
                 <div class="form-check-inline">
-                    <input class="form-check-input" type="radio" value="Net 30/CC" name="payment_terms"';
+                    <input class="form-check-input" type="radio" id="net_30cc" value="Net 30/CC" name="payment_terms"';
 
                     if ($cotizacion->obtener_payment_terms() == 'Net 30/CC') {
                         echo 'checked';
                     }
 
-            echo '><label class="form-check-label">Net 30/CC</label>
+            echo '><label class="form-check-label" for="net_30cc">Net 30/CC</label>
                 </div>
             </div>';
 

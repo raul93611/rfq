@@ -38,20 +38,20 @@
     <br>
     <div class="form-group">
         <div class="form-check-inline">
-            <input class="form-check-input" type="radio" value="multiple" name="locations" <?php
+            <input class="form-check-input" type="radio" id="multiple" value="multiple" name="locations" <?php
             if ($cuestionario->obtener_locations() == 'multiple') {
                 echo 'checked';
             }
             ?>>
-            <label class="form-check-label">Multiple</label>
+            <label class="form-check-label" for="multiple">Multiple</label>
         </div>
         <div class="form-check-inline">
-            <input class="form-check-input" type="radio" value="one_location" name="locations" <?php
+            <input class="form-check-input" type="radio" id="one_location" value="one_location" name="locations" <?php
             if ($cuestionario->obtener_locations() == 'one_location') {
                 echo 'checked';
             }
             ?>>
-            <label class="form-check-label">One location</label>
+            <label class="form-check-label" for="one_location">One location</label>
         </div>
     </div>
 </div>
