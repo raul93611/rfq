@@ -21,7 +21,7 @@ class RepositorioProjectRisk{
         }
         return $project_risk_insertado;
     }
-    
+
     public static function obtener_project_risks_de_un_cuestionario($conexion, $id_cuestionario) {
         $project_risks = [];
         if (isset($conexion)) {
@@ -54,7 +54,7 @@ class RepositorioProjectRisk{
         <tr>
             <td><?php echo $i; ?></td>
             <td><?php echo $project_risk-> obtener_description(); ?></td>
-            <td><a class="btn btn-warning" href="<?php echo EDIT_PROJECT_RISK . '/' . $project_risk-> obtener_id(); ?>">Edit</a></td>
+            <td><a class="btn btn-warning" href="<?php echo EDIT_PROJECT_RISK . '/' . $project_risk-> obtener_id(); ?>"><i class="fa fa-edit"></i> Edit</a></td>
         </tr>
         <?php
     }
@@ -82,11 +82,11 @@ class RepositorioProjectRisk{
                     }
                     ?>
                 </tbody>
-            </table> 
+            </table>
             <?php
         }
     }
-    
+
     public static function obtener_project_risk_por_id($conexion, $id_project_risk) {
         $project_risk = null;
 
@@ -108,7 +108,7 @@ class RepositorioProjectRisk{
         }
         return $project_risk;
     }
-    
+
     public static function actualizar_project_risk($conexion, $description, $id_project_risk){
         $project_risk_editado = false;
         if(isset($conexion)){
@@ -118,7 +118,7 @@ class RepositorioProjectRisk{
                 $sentencia-> bindParam(':description', $description, PDO::PARAM_STR);
                 $sentencia-> bindParam(':id_project_risk', $id_project_risk, PDO::PARAM_STR);
                 $sentencia-> execute();
-                
+
                 if($sentencia){
                     $project_risk_editado = true;
                 }

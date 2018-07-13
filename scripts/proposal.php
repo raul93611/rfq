@@ -79,7 +79,7 @@ try{
   <table border=0 width="100%">
     <tr>
       <td width="550">
-      <img style="width:350px;height:120px;" src="' . RUTA_IMG . '/logo_proposal.png">
+      <img style="width:350px;height:120px;" src="' . RUTA_IMG . '/logo_proposal.jpg">
       </td>
       <td>
         <span class="color letra_grande">PROPOSAL</span>
@@ -176,8 +176,8 @@ try{
                 <td>' . $a . '</td>
                 <td><b>Brand name:</b>' . $item->obtener_brand() . '<br><b>Part number:</b>' . $item->obtener_part_number() . '<br><b> Item description:</b><br>' . nl2br($item->obtener_description()) . '</td>
                 <td style="text-align:right;">' . $item->obtener_quantity() . '</td>
-                <td style="text-align:right;">$ ' . number_format($item->obtener_unit_price()) . '</td>
-                <td style="text-align:right;">$ ' . number_format($item->obtener_total_price()) . '</td>
+                <td style="text-align:right;">$ ' . number_format($item->obtener_unit_price(), 2) . '</td>
+                <td style="text-align:right;">$ ' . number_format($item->obtener_total_price(), 2) . '</td>
               </tr>';
             $a++;
 
@@ -188,7 +188,7 @@ try{
         <td style="border:none;"></td>
         <td style="border:none;"></td>
         <td style="font-size:10pt;">' . $cotizacion->obtener_shipping() .'</td>
-        <td style="text-align:right;">$ ' . number_format($cotizacion->obtener_shipping_cost()) .'</td>
+        <td style="text-align:right;">$ ' . number_format($cotizacion->obtener_shipping_cost(), 2) .'</td>
       </tr>
       <tr>
           <td style="border:none;"></td>
@@ -196,7 +196,7 @@ try{
           <td style="border:none;"></td>
       <td style="font-size:12pt;">TOTAL:</td>
 
-      <td style="font-size:12pt;text-align:right;">$ ' . number_format($cotizacion->obtener_total_price()) . '</td>
+      <td style="font-size:12pt;text-align:right;">$ ' . number_format($cotizacion->obtener_total_price(), 2) . '</td>
     </tr>';
       $html .= '</table>';
   }

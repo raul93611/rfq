@@ -22,7 +22,7 @@ class RepositorioProjectMilestone{
         }
         return $project_milestone_insertado;
     }
-    
+
     public static function obtener_project_milestones_de_un_cuestionario($conexion, $id_cuestionario) {
         $project_milestones = [];
         if (isset($conexion)) {
@@ -56,7 +56,7 @@ class RepositorioProjectMilestone{
             <td><?php echo $i; ?></td>
             <td><?php echo $project_milestone-> obtener_date_milestone(); ?></td>
             <td><?php echo $project_milestone-> obtener_description(); ?></td>
-            <td><a class="btn btn-warning" href="<?php echo EDIT_PROJECT_MILESTONE . '/' . $project_milestone-> obtener_id(); ?>">Edit</a></td>
+            <td><a class="btn btn-warning" href="<?php echo EDIT_PROJECT_MILESTONE . '/' . $project_milestone-> obtener_id(); ?>"><i class="fa fa-edit"></i> Edit</a></td>
         </tr>
         <?php
     }
@@ -85,11 +85,11 @@ class RepositorioProjectMilestone{
                     }
                     ?>
                 </tbody>
-            </table> 
+            </table>
             <?php
         }
     }
-    
+
     public static function obtener_project_milestone_por_id($conexion, $id_project_milestone) {
         $project_milestone = null;
 
@@ -111,7 +111,7 @@ class RepositorioProjectMilestone{
         }
         return $project_milestone;
     }
-    
+
     public static function actualizar_project_milestone($conexion, $date_milestone, $description, $id_project_milestone){
         $project_milestone_editado = false;
         if(isset($conexion)){
@@ -122,7 +122,7 @@ class RepositorioProjectMilestone{
                 $sentencia-> bindParam(':description', $description, PDO::PARAM_STR);
                 $sentencia-> bindParam(':id_project_milestone', $id_project_milestone, PDO::PARAM_STR);
                 $sentencia-> execute();
-                
+
                 if($sentencia){
                     $project_milestone_editado = true;
                 }

@@ -56,12 +56,12 @@
     </div>
 </div>
 <div class="card-footer">
-    <button type="submit" class="btn btn-primary" name="registrar_cuestionario">Save</button>
-    <a class="btn btn-primary" href="<?php echo EDITAR_COTIZACION . '/' . $cuestionario->obtener_id_rfq(); ?>">Go Back</a>
+    <button type="submit" class="btn btn-success" name="registrar_cuestionario"><i class="fa fa-save"></i> Save</button>
+    <a class="btn btn-danger" href="<?php echo EDITAR_COTIZACION . '/' . $cuestionario->obtener_id_rfq(); ?>"><i class="fa fa-ban"></i> Cancel</a>
 </div>
 <div class="card-body">
     <h3 class="card-title">HIGH LEVEL REQUIREMENTS</h3>
-    <a class="btn btn-info btn-sm float-right" href="<?php echo ADD_HIGH_LEVEL_REQUIREMENT . '/' . $cuestionario->obtener_id(); ?>">Add</a>
+    <a class="btn btn-info btn-sm float-right" href="<?php echo ADD_HIGH_LEVEL_REQUIREMENT . '/' . $cuestionario->obtener_id(); ?>"><i class="fa fa-plus-circle"></i> Add</a>
     <br>
     <br>
     <?php
@@ -69,7 +69,7 @@
     ?>
     <hr>
     <h3 class="card-title">OUT OF SCOPE</h3>
-    <a class="btn btn-info btn-sm float-right" href="<?php echo ADD_OUT_OF_SCOPE . '/' . $cuestionario->obtener_id(); ?>">Add</a>
+    <a class="btn btn-info btn-sm float-right" href="<?php echo ADD_OUT_OF_SCOPE . '/' . $cuestionario->obtener_id(); ?>"><i class="fa fa-plus-circle"></i> Add</a>
     <br>
     <br>
     <?php
@@ -77,7 +77,7 @@
     ?>
     <hr>
     <h3 class="card-title">PROJECT RISKS</h3>
-    <a class="btn btn-info btn-sm float-right" href="<?php echo ADD_PROJECT_RISK . '/' . $cuestionario->obtener_id(); ?>">Add</a>
+    <a class="btn btn-info btn-sm float-right" href="<?php echo ADD_PROJECT_RISK . '/' . $cuestionario->obtener_id(); ?>"><i class="fa fa-plus-circle"></i> Add</a>
     <br>
     <br>
     <?php
@@ -85,7 +85,7 @@
     ?>
     <hr>
     <h3 class="card-title">PROJECT MILESTONES</h3>
-    <a class="btn btn-info btn-sm float-right" href="<?php echo ADD_PROJECT_MILESTONE . '/' . $cuestionario->obtener_id(); ?>">Add</a>
+    <a class="btn btn-info btn-sm float-right" href="<?php echo ADD_PROJECT_MILESTONE . '/' . $cuestionario->obtener_id(); ?>"> <i class="fa fa-plus-circle"></i> Add</a>
     <br>
     <br>
     <?php

@@ -1,4 +1,9 @@
 <input type="hidden" name="id_item" value="<?php echo $id_item; ?>">
+<?php
+Conexion::abrir_conexion();
+$item = RepositorioItem::obtener_item_por_id(Conexion::obtener_conexion(), $id_item);
+Conexion::cerrar_conexion();
+?>
 <div class="card-body">
     <div class="row">
         <div class="col">
@@ -16,6 +21,6 @@
     </div>
 </div>
 <div class="card-footer">
-    <button type="submit" class="btn btn-primary" name="guardar_provider">Save</button>
+    <button type="submit" class="btn btn-success" name="guardar_provider"><i class="fa fa-save"></i> Save</button>
+    <a href="<?php echo EDITAR_COTIZACION . '/' . $item-> obtener_id_rfq(); ?>" class="btn btn-danger"><i class="fa fa-ban"></i> Cancel</a>
 </div>
-

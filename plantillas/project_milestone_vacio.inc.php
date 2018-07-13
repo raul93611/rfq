@@ -10,5 +10,6 @@
     </div>
 </div>
 <div class="card-footer">
-    <button type="submit" class="btn btn-primary" name="guardar_project_milestone">Save</button>
+    <button type="submit" class="btn btn-success" name="guardar_project_milestone"><i class="fa fa-save"></i> Save</button>
+    <a href="<?php echo CUESTIONARIO . '/' . $cuestionario-> obtener_id_rfq(); ?>" class="btn btn-danger"><i class="fa fa-ban"></i> Cancel</a>
 </div>

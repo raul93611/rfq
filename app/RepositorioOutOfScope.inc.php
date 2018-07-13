@@ -1,4 +1,4 @@
-<?php 
+<?php
 class RepositorioOutOfScope{
     public static function insertar_out_of_scope($conexion, $out_of_scope){
         $out_of_scope_insertado = false;
@@ -21,7 +21,7 @@ class RepositorioOutOfScope{
         }
         return $out_of_scope_insertado;
     }
-    
+
     public static function obtener_out_of_scopes_de_un_cuestionario($conexion, $id_cuestionario) {
         $out_of_scopes = [];
         if (isset($conexion)) {
@@ -54,7 +54,7 @@ class RepositorioOutOfScope{
         <tr>
             <td><?php echo $i; ?></td>
             <td><?php echo $out_of_scope-> obtener_requirement(); ?></td>
-            <td><a class="btn btn-warning" href="<?php echo EDIT_OUT_OF_SCOPE . '/' . $out_of_scope->obtener_id(); ?>">Edit</a></td>
+            <td><a class="btn btn-warning" href="<?php echo EDIT_OUT_OF_SCOPE . '/' . $out_of_scope->obtener_id(); ?>"><i class="fa fa-edit"></i> Edit</a></td>
         </tr>
         <?php
     }
@@ -82,11 +82,11 @@ class RepositorioOutOfScope{
                     }
                     ?>
                 </tbody>
-            </table> 
+            </table>
             <?php
         }
     }
-    
+
     public static function obtener_out_of_scope_por_id($conexion, $id_out_of_scope) {
         $out_of_scope = null;
 
@@ -108,7 +108,7 @@ class RepositorioOutOfScope{
         }
         return $out_of_scope;
     }
-    
+
     public static function actualizar_out_of_scope($conexion, $requirement, $id_out_of_scope){
         $out_of_scope_editado = false;
         if(isset($conexion)){
@@ -118,7 +118,7 @@ class RepositorioOutOfScope{
                 $sentencia-> bindParam(':requirement', $requirement, PDO::PARAM_STR);
                 $sentencia-> bindParam(':id_out_of_scope', $id_out_of_scope, PDO::PARAM_STR);
                 $sentencia-> execute();
-                
+
                 if($sentencia){
                     $out_of_scope_editado = true;
                 }

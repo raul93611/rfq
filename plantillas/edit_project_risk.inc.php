@@ -23,7 +23,7 @@ include_once 'plantillas/validacion_edicion_project_risk.inc.php';
                 <div class="col-md-12">
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3>Enter the data</h3>
+                            <h3 class="card-title"><i class="fa fa-pencil"></i> Enter the data</h3>
                         </div>
                         <form role="form" method="post" action="<?php echo EDIT_PROJECT_RISK . '/' . $id_project_risk; ?>">
                             <?php
@@ -36,5 +36,3 @@ include_once 'plantillas/validacion_edicion_project_risk.inc.php';
         </div>
     </section>
 </div>
-
-

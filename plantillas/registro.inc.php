@@ -20,7 +20,7 @@ include_once 'validacion_registro_usuario.inc.php';
                 <div class="col-md-12">
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title">Sign in</h3>
+                            <h3 class="card-title"><i class="fa fa-user-plus"></i> Sign in</h3>
                         </div>
                         <form role="form" method="post" action="<?php echo REGISTRO; ?>">
                             <?php

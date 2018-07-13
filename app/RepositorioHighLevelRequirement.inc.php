@@ -56,7 +56,7 @@ class RepositorioHighLevelRequirement {
         <tr>
             <td><?php echo $i; ?></td>
             <td><?php echo $high_level_requirement-> obtener_requirement(); ?></td>
-            <td><a class="btn btn-warning" href="<?php echo EDIT_HIGH_LEVEL_REQUIREMENT . '/' . $high_level_requirement-> obtener_id(); ?>">Edit</a></td>
+            <td><a class="btn btn-warning" href="<?php echo EDIT_HIGH_LEVEL_REQUIREMENT . '/' . $high_level_requirement-> obtener_id(); ?>"><i class="fa fa-edit"></i> Edit</a></td>
         </tr>
         <?php
     }
@@ -84,11 +84,11 @@ class RepositorioHighLevelRequirement {
                     }
                     ?>
                 </tbody>
-            </table> 
+            </table>
             <?php
         }
     }
-    
+
     public static function obtener_high_level_requirement_por_id($conexion, $id_high_level_requirement) {
         $high_level_requirement = null;
         if (isset($conexion)) {
@@ -109,7 +109,7 @@ class RepositorioHighLevelRequirement {
         }
         return $high_level_requirement;
     }
-    
+
     public static function actualizar_high_level_requirement($conexion, $requirement, $id_high_level_requirement){
         $high_level_requirement_editado = false;
         if(isset($conexion)){
@@ -119,7 +119,7 @@ class RepositorioHighLevelRequirement {
                 $sentencia-> bindParam(':requirement', $requirement, PDO::PARAM_STR);
                 $sentencia-> bindParam(':id_high_level_requirement', $id_high_level_requirement, PDO::PARAM_STR);
                 $sentencia-> execute();
-                
+
                 if($sentencia){
                     $high_level_requirement_editado = true;
                 }
