@@ -201,7 +201,12 @@ $(document).ready(function () {
     }
     var taxes = $('#taxes').val();
     var profit = $('#profit').val();
-    var additional_general = $('#additional_general').val();
+    if($('#additional_general').val() == ''){
+      var additional_general = 0;
+    }else{
+      var additional_general = $('#additional_general').val();
+    }
+
     var shipping_cost = $('#shipping_cost').val();
 
     var i = 0;
@@ -282,7 +287,11 @@ $(document).ready(function () {
         }
         var taxes = $('#taxes').val();
         var profit = $('#profit').val();
-        var additional_general = $('#additional_general').val();
+        if($('#additional_general').val() == ''){
+          var additional_general = 0;
+        }else{
+          var additional_general = $('#additional_general').val();
+        }
         var shipping_cost = $('#shipping_cost').val();
 
         var i = 0;
@@ -293,7 +302,11 @@ $(document).ready(function () {
         var unit_prices = '';
         var additional = '';
         $('#items tr').each(function () {
+          if($('#add_cost' + j).val() == ''){
+            var add_cost = 0;
+          }else{
             var add_cost = $('#add_cost' + j).val();
+          }
             if (i === 0) {
                 additional = additional + add_cost;
             } else {
