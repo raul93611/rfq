@@ -79,7 +79,7 @@ try{
   <table border=0 width="100%">
     <tr>
       <td width="550">
-      <img style="width:350px;height:120px;" src="' . RUTA_IMG . '/logo_proposal.jpg">
+      <img style="width:350px;height:130px;" src="' . RUTA_IMG . '/logo_proposal.jpg">
       </td>
       <td>
         <span class="color letra_grande">PROPOSAL</span>
