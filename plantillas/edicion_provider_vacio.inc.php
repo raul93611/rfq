@@ -18,5 +18,6 @@
 </div>
 <div class="card-footer">
     <button type="submit" class="btn btn-success" name="guardar_cambios_provider"><i class="fa fa-save"></i> Save</button>
-    <a href="<?php echo EDITAR_COTIZACION . '/' . $item-> obtener_id_rfq(); ?>" class="btn btn-danger"><i class="fa fa-ban"></i> Cancel</a>
+    <a href="<?php echo EDITAR_COTIZACION . '/' . $item-> obtener_id_rfq(); ?>" class="btn btn-info"><i class="fa fa-ban"></i> Cancel</a>
+    <a href="<?php echo DELETE_PROVIDER . '/' . $id_provider; ?>" class="btn btn-danger"><i class="fa fa-trash"></i> Delete</a>
 </div>

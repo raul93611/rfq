@@ -206,6 +206,10 @@ if ($partes_ruta[0] == 'rfq') {
                     $cotizacion = 'edit_provider';
                     $id_provider = $partes_ruta[4];
                     break;
+                case 'delete_provider':
+                    $cotizacion = 'delete_provider';
+                    $id_provider = $partes_ruta[4];
+                    break;
                 case 'cuestionario':
                     $cotizacion = 'cuestionario';
                     $id_rfq = $partes_ruta[4];

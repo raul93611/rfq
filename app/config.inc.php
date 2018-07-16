@@ -47,6 +47,7 @@ define('ADD_ITEM', COTIZACIONES . 'add_item');
 define('ADD_PROVIDER', COTIZACIONES . 'add_provider');
 define('EDIT_ITEM', COTIZACIONES . 'edit_item');
 define('EDIT_PROVIDER', COTIZACIONES . 'edit_provider');
+define('DELETE_PROVIDER', COTIZACIONES . 'delete_provider');
 define('CUESTIONARIO', COTIZACIONES . 'cuestionario');
 define('ADD_HIGH_LEVEL_REQUIREMENT', COTIZACIONES . 'add_high_level_requirement');
 define('ADD_OUT_OF_SCOPE', COTIZACIONES . 'add_out_of_scope');

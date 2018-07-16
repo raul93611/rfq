@@ -48,7 +48,7 @@ CREATE TABLE rfq(
             ON DELETE RESTRICT
 );
 
-CREATE TABLE rfp(
+/*CREATE TABLE rfp(
     id INT NOT NULL AUTO_INCREMENT UNIQUE,
     id_user INT NOT NULL,
     designated_user INT NOT NULL,
@@ -73,7 +73,7 @@ CREATE TABLE rfp(
       REFERENCES usuarios(id)
       ON UPDATE CASCADE
       ON DELETE RESTRICT
-);
+);*/
 
 CREATE TABLE cuestionario(
         id INT NOT NULL AUTO_INCREMENT UNIQUE,
@@ -168,7 +168,7 @@ CREATE TABLE item(
 );
 
 
-CREATE TABLE item_rfp(
+/*CREATE TABLE item_rfp(
     id INT NOT NULL AUTO_INCREMENT UNIQUE,
     id_rfp INT NOT NULL,
     selected_provider INT NOT NULL,
@@ -189,7 +189,7 @@ CREATE TABLE item_rfp(
       REFERENCES rfp(id)
       ON UPDATE CASCADE
       ON DELETE RESTRICT
-);
+);*/
 
 CREATE TABLE provider(
         id INT NOT NULL AUTO_INCREMENT UNIQUE,
@@ -203,7 +203,7 @@ CREATE TABLE provider(
             ON DELETE RESTRICT
 );
 
-CREATE TABLE provider_rfp(
+/*CREATE TABLE provider_rfp(
     id INT NOT NULL AUTO_INCREMENT UNIQUE,
     id_item INT NOT NULL,
     provider VARCHAR(100) NOT NULL,
@@ -213,6 +213,6 @@ CREATE TABLE provider_rfp(
       REFERENCES item(id)
       ON UPDATE CASCADE
       ON DELETE RESTRICT
-);
+);*/
 
 ALTER TABLE rfq AUTO_INCREMENT = 300;

@@ -69,6 +69,9 @@ switch ($gestor_actual) {
                 Conexion::cerrar_conexion();
                 include_once 'plantillas/edit_provider.inc.php';
                 break;
+            case 'delete_provider':
+                include_once 'scripts/delete_provider.php';
+                break;
             case 'cuestionario':
                 Conexion::abrir_conexion();
                 $cuestionario = RepositorioCuestionario::obtener_cuestionario_por_id_rfq(Conexion::obtener_conexion(), $id_rfq);
@@ -142,4 +145,3 @@ switch ($gestor_actual) {
 
 include_once 'plantillas/documento_cierre.inc.php';
 ?>
-
