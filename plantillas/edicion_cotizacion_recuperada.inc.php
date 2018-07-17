@@ -28,6 +28,12 @@
     </div>
     <div class="row">
       <div class="col">
+        <div class="form-group">
+            <label for="id">Proposal:</label>
+            <input type="text" class="form-control" id="end_date" disabled value="<?php echo $cotizacion_recuperada->obtener_id(); ?>">
+        </div>
+      </div>
+      <div class="col">
         <?php
 
         if ($cotizacion_recuperada->obtener_completado() || $cotizacion_recuperada-> obtener_status()) {
