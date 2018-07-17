@@ -32,3 +32,13 @@ table{
 .cuestionario{
     width: 50px !important;
 }
+
+#footer_item{
+  position: fixed !important;
+  bottom: 55px !important;
+  width: 85.3%;
+  background-color: #c6c9ce;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 0.25rem;
+  box-shadow: 1px 1px 10px grey;
+}
