@@ -77,7 +77,7 @@
             <label for="completed_date">Completed date:</label>
             <input type="text" class="form-control" id="completed_date" name="completed_date"
             <?php
-            if(!empty($cotizacion_recuperada->obtener_fecha_completado())){
+            if($cotizacion_recuperada->obtener_fecha_completado() != '0000-00-00'){
               $fecha_completado_formato = date('m/d/Y', strtotime($cotizacion_recuperada->obtener_fecha_completado()));
               echo 'value="' . $fecha_completado_formato . '"';
             }
@@ -89,7 +89,7 @@
             <label for="expiration_date">Expiration date:</label>
             <input type="text" class="form-control" id="expiration_date" name="expiration_date"
             <?php
-            if(!empty($cotizacion_recuperada->obtener_expiration_date())){
+            if($cotizacion_recuperada->obtener_expiration_date() != '0000-00-00'){
               $expiration_date_formato = date('m/d/Y', strtotime($cotizacion_recuperada->obtener_expiration_date()));
               echo 'value="' . $expiration_date_formato . '"';
             }
