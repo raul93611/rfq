@@ -169,6 +169,12 @@ function myFunction4() {
 }
 
 $(document).ready(function () {
+  $('#sidebar_collapse').on('click', function(){
+    $('#footer_item').toggleClass('footer_item1');
+  });
+
+
+
     $('#issue_date').inputmask('mm/dd/yyyy', {'placeholder': 'mm/dd/yyyy'});
     $('#end_date').inputmask("datetime", {
         mask: "2/1/y h:s",

@@ -33,7 +33,7 @@ table{
     width: 50px !important;
 }
 
-#footer_item{
+.footer_item{
   position: fixed !important;
   bottom: 55px !important;
   width: 85.3%;
@@ -41,4 +41,10 @@ table{
   border: 1px solid rgba(0, 0, 0, 0.125);
   border-radius: 0.25rem;
   box-shadow: 1px 1px 10px grey;
+  transition: width 0.3s;
+}
+
+.footer_item1{
+  width: 94.5% !important;
+  transition: width 0.3s;
 }

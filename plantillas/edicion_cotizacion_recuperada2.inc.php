@@ -58,7 +58,7 @@ if ($cotizacion_recuperada->obtener_completado() && $cotizacion_recuperada->obte
 }
 ?>
 </div>
-<div class="card-footer" id="footer_item">
+<div class="card-footer footer_item" id="footer_item">
   <?php
     if(count($items)){
       ?>
