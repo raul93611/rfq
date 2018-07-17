@@ -69,7 +69,18 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
     Conexion::abrir_conexion();
     $cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $_POST['id_rfq']);
     RepositorioRfq::actualizar_rfq_2(Conexion::obtener_conexion(), $_POST['comments'], $_POST['ship_via'], htmlspecialchars($_POST['address']), htmlspecialchars($_POST['ship_to']), $_POST['id_rfq']);
+    $expiration_date = $_POST['expiration_date'];
+    $partes_expiration_date = explode('/', $expiration_date);
+    $expiration_date = $partes_expiration_date[2] . '-' . $partes_expiration_date[0] . '-' . $partes_expiration_date[1];
+    $expiration_date = strtotime($expiration_date);
+    $expiration_date = date('Y-m-d', $expiration_date);
 
+    $fecha_completado = $_POST['completed_date'];
+    $partes_completed_date = explode('/', $fecha_completado);
+    $fecha_completado = $partes_completed_date[2] . '-' . $partes_completed_date[0] . '-' . $partes_completed_date[1];
+      $fecha_completado = strtotime($fecha_completado);
+      $fecha_completado = date('Y-m-d', $fecha_completado);
+      RepositorioRfq::actualizar_fecha_y_completado(Conexion::obtener_conexion(), $fecha_completado, $expiration_date, $_POST['id_rfq']);
     switch ($cotizacion_recuperada->obtener_canal()) {
         case 'GSA-Buy':
             $canal = 'gsa_buy';
@@ -98,8 +109,6 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
             $completado = 0;
         }
         if ($completado) {
-            RepositorioRfq::actualizar_fecha_y_completado(Conexion::obtener_conexion(), $_POST['id_rfq']);
-
             if ($cargo < 4) {
                 Redireccion::redirigir1(COMPLETADOS . $canal);
             } else {

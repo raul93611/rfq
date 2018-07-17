@@ -26,49 +26,78 @@
             </div>
         </div>
     </div>
-    <?php
-
-    if ($cotizacion_recuperada->obtener_completado() || $cotizacion_recuperada-> obtener_status()) {
-        Conexion::abrir_conexion();
-        $usuario = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), $cotizacion_recuperada-> obtener_usuario_designado());
-        Conexion::cerrar_conexion();
-        ?>
-        <label for="usuario_designado">Designated user:</label>
-        <input type="text" class="form-control" value="<?php echo $usuario->obtener_nombre_usuario(); ?>" disabled>
-        <input type="hidden" value="<?php echo $usuario-> obtener_nombre_usuario(); ?>" name="usuario_designado">
+    <div class="row">
+      <div class="col">
         <?php
-    } else {
-        ?>
-        <div class="form-group">
-            <?php
+
+        if ($cotizacion_recuperada->obtener_completado() || $cotizacion_recuperada-> obtener_status()) {
             Conexion::abrir_conexion();
-            $usuarios = RepositorioUsuario::obtener_usuarios_rfq(Conexion::obtener_conexion());
+            $usuario = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), $cotizacion_recuperada-> obtener_usuario_designado());
             Conexion::cerrar_conexion();
             ?>
+            <label for="usuario_designado">Designated user:</label>
+            <input type="text" class="form-control" value="<?php echo $usuario->obtener_nombre_usuario(); ?>" disabled>
+            <input type="hidden" value="<?php echo $usuario-> obtener_nombre_usuario(); ?>" name="usuario_designado">
             <?php
-            if (count($usuarios)) {
-                ?>
-                <label for="usuario_designado">Designated user:</label>
-                <select id="usuario_designado" class="form-control" name="usuario_designado">
-                    <?php
-                    foreach ($usuarios as $usuario) {
-                        ?>
-                        <option <?php
-                        if ($usuario->obtener_id() == $cotizacion_recuperada->obtener_usuario_designado()) {
-                            echo 'selected';
-                        }
-                        ?>><?php echo $usuario->obtener_nombre_usuario(); ?></option>
-                            <?php
-                        }
-                        ?>
-                </select>
-                <?php
-            }
+        } else {
             ?>
+            <div class="form-group">
+                <?php
+                Conexion::abrir_conexion();
+                $usuarios = RepositorioUsuario::obtener_usuarios_rfq(Conexion::obtener_conexion());
+                Conexion::cerrar_conexion();
+                ?>
+                <?php
+                if (count($usuarios)) {
+                    ?>
+                    <label for="usuario_designado">Designated user:</label>
+                    <select id="usuario_designado" class="form-control" name="usuario_designado">
+                        <?php
+                        foreach ($usuarios as $usuario) {
+                            ?>
+                            <option <?php
+                            if ($usuario->obtener_id() == $cotizacion_recuperada->obtener_usuario_designado()) {
+                                echo 'selected';
+                            }
+                            ?>><?php echo $usuario->obtener_nombre_usuario(); ?></option>
+                                <?php
+                            }
+                            ?>
+                    </select>
+                    <?php
+                }
+                ?>
+            </div>
+            <?php
+        }
+        ?>
+      </div>
+      <div class="col">
+        <div class="form-group">
+            <label for="completed_date">Completed date:</label>
+            <input type="text" class="form-control" id="completed_date" name="completed_date"
+            <?php
+            if(!empty($cotizacion_recuperada->obtener_fecha_completado())){
+              $fecha_completado_formato = date('m/d/Y', strtotime($cotizacion_recuperada->obtener_fecha_completado()));
+              echo 'value="' . $fecha_completado_formato . '"';
+            }
+            ?>>
         </div>
-        <?php
-    }
-    ?>
+      </div>
+      <div class="col">
+        <div class="form-group">
+            <label for="expiration_date">Expiration date:</label>
+            <input type="text" class="form-control" id="expiration_date" name="expiration_date"
+            <?php
+            if(!empty($cotizacion_recuperada->obtener_expiration_date())){
+              $expiration_date_formato = date('m/d/Y', strtotime($cotizacion_recuperada->obtener_expiration_date()));
+              echo 'value="' . $expiration_date_formato . '"';
+            }
+            ?>>
+        </div>
+      </div>
+    </div>
+
 
     <label>Documents:</label>
     <?php

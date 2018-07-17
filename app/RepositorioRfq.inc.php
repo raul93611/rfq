@@ -666,13 +666,15 @@ class RepositorioRfq {
         return $rfq_editado;
     }
 
-    public static function actualizar_fecha_y_completado($conexion, $id_rfq) {
+    public static function actualizar_fecha_y_completado($conexion, $fecha_completado , $expiration_date, $id_rfq) {
         $rfq_editado = false;
         if (isset($conexion)) {
             try {
-                $sql = 'UPDATE rfq SET completado = 1, fecha_completado = NOW(), expiration_date = DATE_ADD(NOW(), INTERVAL 1 MONTH) WHERE id = :id_rfq';
+                $sql = 'UPDATE rfq SET completado = 1, fecha_completado = :fecha_completado, expiration_date = :expiration_date WHERE id = :id_rfq';
                 $sentencia = $conexion->prepare($sql);
                 $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+                $sentencia->bindParam(':fecha_completado', $fecha_completado, PDO::PARAM_STR);
+                $sentencia->bindParam(':expiration_date', $expiration_date, PDO::PARAM_STR);
 
                 $sentencia->execute();
 
