@@ -84,11 +84,11 @@ class RepositorioRfq {
             try {
 
                 if ($cargo < 4) {
-                    $sql = "SELECT * FROM rfq WHERE canal = :canal AND completado = 0 AND status = 0 AND award = 0";
+                    $sql = "SELECT * FROM rfq WHERE canal = :canal AND completado = 0 AND status = 0 AND award = 0 ORDER BY id DESC";
                     $sentencia = $conexion->prepare($sql);
                     $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
                 } else if ($cargo == 4) {
-                    $sql = "SELECT * FROM rfq WHERE canal = :canal AND usuario_designado = :id_usuario AND completado = 0 AND status = 0 AND award = 0";
+                    $sql = "SELECT * FROM rfq WHERE canal = :canal AND usuario_designado = :id_usuario AND completado = 0 AND status = 0 AND award = 0 ORDER BY id";
                     $sentencia = $conexion->prepare($sql);
                     $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
                     $sentencia->bindParam(':id_usuario', $id_usuario, PDO::PARAM_STR);
