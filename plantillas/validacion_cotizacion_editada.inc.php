@@ -36,6 +36,7 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
     $usuario = RepositorioUsuario::obtener_usuario_por_nombre_usuario(Conexion::obtener_conexion(), $_POST['usuario_designado']);
     $usuario_designado = $usuario->obtener_id();
     $cotizacion_editada = RepositorioRfq::actualizar_usuario_designado(Conexion::obtener_conexion(), $usuario_designado, $_POST['id_rfq']);
+    $cotizacion_editada4 = RepositorioRfq::actualizar_rfq_inicio(Conexion::obtener_conexion(), $_POST['email_code'], $_POST['type_of_bid'], $_POST['issue_date'], $_POST['end_date'], $_POST['id_rfq']);
     $cotizacion_editada3 = RepositorioRfq::actualizar_shipping(Conexion::obtener_conexion(), $_POST['shipping'], $_POST['shipping_cost'], $_POST['id_rfq']);
     $cotizacion_editada1 = RepositorioRfq::actualizar_taxes_profit(Conexion::obtener_conexion(), $_POST['taxes'], $_POST['profit'], $_POST['total_cost'], $_POST['total_price'], $_POST['additional_general'], $_POST['id_rfq']);
     $cotizacion_editada2 = RepositorioRfq::actualizar_payment_terms(Conexion::obtener_conexion(), $payment_terms, $_POST['id_rfq']);
@@ -69,6 +70,7 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
     Conexion::abrir_conexion();
     $cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $_POST['id_rfq']);
     RepositorioRfq::actualizar_rfq_2(Conexion::obtener_conexion(), $_POST['comments'], $_POST['ship_via'], htmlspecialchars($_POST['address']), htmlspecialchars($_POST['ship_to']), $_POST['id_rfq']);
+
     $expiration_date = $_POST['expiration_date'];
     $partes_expiration_date = explode('/', $expiration_date);
     $expiration_date = $partes_expiration_date[2] . '-' . $partes_expiration_date[0] . '-' . $partes_expiration_date[1];

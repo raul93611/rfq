@@ -210,6 +210,30 @@ class RepositorioRfq {
         return $cotizacion_editada;
     }
 
+    public static function actualizar_rfq_inicio($conexion, $email_code, $type_of_bid, $issue_date, $end_date, $id_rfq) {
+        $cotizacion_editada = false;
+        if (isset($conexion)) {
+            try {
+                $sql = "UPDATE rfq SET email_code = :email_code, type_of_bid = :type_of_bid, issue_date = :issue_date, end_date = :end_date WHERE id = :id_rfq";
+                $sentencia = $conexion->prepare($sql);
+                $sentencia->bindParam(':email_code', $email_code, PDO::PARAM_STR);
+                $sentencia->bindParam(':type_of_bid', $type_of_bid, PDO::PARAM_STR);
+                $sentencia->bindParam(':issue_date', $issue_date, PDO::PARAM_STR);
+                $sentencia->bindParam(':end_date', $end_date, PDO::PARAM_STR);
+                $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+
+                $sentencia->execute();
+
+                if ($sentencia) {
+                    $cotizacion_editada = true;
+                }
+            } catch (PDOException $ex) {
+                print 'ERROR:' . $ex->getMessage() . '<br>';
+            }
+        }
+        return $cotizacion_editada;
+    }
+
     public static function actualizar_taxes_profit($conexion, $taxes, $profit, $total_cost, $total_price, $additional, $id_rfq) {
         $cotizacion_editada = false;
         if (isset($conexion)) {
