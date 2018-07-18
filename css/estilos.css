@@ -1,6 +1,7 @@
 body{
   font-family: 'Roboto', sans-serif;
   font-size: 11pt !important;
+  color: #39485A !important;
 }
 
 .sidebar-dark-primary{
@@ -64,15 +65,15 @@ body{
 
 .btn-primary {
   color: #ffffff;
-  background-color: #13A8F0;
-  border-color: #13A8F0;
+  background-color: #13A8F0 !important;
+  border-color: #13A8F0 !important;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
 }
 
 .btn-primary:hover {
   color: #ffffff;
-  background-color: #40B7EE;
-  border-color: #40B7EE;
+  background-color: #40B7EE !important;
+  border-color: #40B7EE !important;
 }
 
 .alert-danger{
@@ -83,6 +84,45 @@ body{
   background-color: #E45D7F !important;
 }
 
+.card-primary:not(.card-outline) .card-header {
+  background-color: #E7E9EB !important;
+  border-bottom: 0;
+}
+
+.card-primary:not(.card-outline) .card-header,
+.card-primary:not(.card-outline) .card-header a {
+  color: #39485A !important;
+}
+
+.card-footer{
+  background-color: #E7E9EB !important;
+}
+
+.btn-success {
+  color: #ffffff;
+  background-color: #01D3AA !important;
+  border-color: #01D3AA !important;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+
+.btn-success:hover {
+  color: #ffffff;
+  background-color: #34DCBB !important;
+  border-color: #34DCBB !important;
+}
+
+.btn-danger {
+  color: #ffffff;
+  background-color: #DD355F !important;
+  border-color: #DD355F !important;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+
+.btn-danger:hover {
+  color: #ffffff;
+  background-color: #E45D7F !important;
+  border-color: #E45D7F !important;
+}
 /*Aun no he usado
 .sidebar-dark-primary .user-panel a:hover {
   color: #ffffff !important;
