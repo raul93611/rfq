@@ -21,8 +21,9 @@ include_once 'plantillas/validacion_login.inc.php';
         <!-- iCheck -->
         <link rel="stylesheet" href="<?php echo PLUGINS; ?>iCheck/square/blue.css">
         <link rel="Shortcut Icon" href="<?php echo RUTA_IMG; ?>favicon.png" type="image/x-icon" />
+        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     </head>
-    <body class="hold-transition login-page">
+    <body class="hold-transition login-page" style="font-family: 'Roboto', sans-serif;">
         <div class="login-box">
             <div class="login-logo">
                 <img class="mb-4" src="<?php echo RUTA_IMG; ?>elogic_logo.png" alt="" width="250" height="125">

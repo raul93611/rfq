@@ -23,69 +23,59 @@
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class
                      with font-awesome or any other icon font library -->
-                <li class="nav-item has-treeview menu-open">
+                <!--<li class="nav-item has-treeview menu-open">
                     <a href="#" class="nav-link
                     <?php
-                    if ($gestor_actual == '') {
-                        echo 'active';
-                    }
+                    //if ($gestor_actual == '') {
+                        //echo 'active';
+                    //}
                     ?>
                        ">
                         <i class="nav-icon fa fa-home"></i>
                         <p>
                             Home
-                            <i class="right fa fa-angle-left"></i>
                         </p>
                     </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="<?php echo PERFIL; ?>" class="nav-link
-                            <?php
-                            if ($gestor_actual == '') {
-                                echo 'active';
-                            }
-                            ?>
-                               ">
-                                <i class="fa fa-th nav-icon"></i>
-                                <p>Dashboard</p>
-                            </a>
-                        </li>
+                </li>-->
+                <li class="nav-item has-treeview menu-open">
+                  <a href="<?php echo PERFIL; ?>" class="nav-link
+                  <?php
+                  if ($gestor_actual == '') {
+                      echo 'active';
+                  }
+                  ?>
+                     ">
+                      <i class="fa fa-th nav-icon"></i>
+                      <p>Dashboard</p>
+                  </a>
+                </li>
+                <?php
+                if ($cargo == 1) {
+                    ?>
+                    <li class="nav-item has-treeview menu-open">
+                        <a href="<?php echo REGISTRO; ?>" class="nav-link
                         <?php
-                        if ($cargo == 1) {
-                            ?>
-                            <li class="nav-item">
-                                <a href="<?php echo REGISTRO; ?>" class="nav-link
-                                <?php
-                                if ($gestor_actual == 'registro' || $gestor_actual == 'registro_correcto') {
-                                    echo 'active';
-                                }
-                                ?>
-                                   ">
-                                    <i class="fa fa-users nav-icon"></i>
-                                    <p>User register</p>
-                                </a>
-                            </li>
-                            <?php
+                        if ($gestor_actual == 'registro' || $gestor_actual == 'registro_correcto') {
+                            echo 'active';
                         }
                         ?>
-
-                        <!--<li class="nav-item">
-                            <a href="./index3.html" class="nav-link">
-                                <i class="fa fa-circle-o nav-icon"></i>
-                                <p>Dashboard v3</p>
-                            </a>
-                        </li>-->
-                    </ul>
-                </li>
+                           ">
+                            <i class="fa fa-users nav-icon"></i>
+                            <p>User register</p>
+                        </a>
+                    </li>
+                    <?php
+                }
+                ?>
                 <!---->
-                <li class="nav-item has-treeview 
+                <li class="nav-item has-treeview
                 <?php
                 if ($gestor_actual == 'cotizaciones' || $gestor_actual == 'completados' || $gestor_actual == 'submitted' || $gestor_actual == 'award') {
                     echo 'menu-open';
                 }
                 ?>
                     ">
-                    <a href="#" class="nav-link 
+                    <a href="#" class="nav-link
                     <?php
                     if ($gestor_actual == 'cotizaciones' || $gestor_actual == 'completados' || $gestor_actual == 'submitted' || $gestor_actual == 'award') {
                         echo 'active';
@@ -113,7 +103,7 @@
                             }
                             ?>
                                ">
-                                <i class="fa fa-th nav-icon"></i>
+                                <!--<i class="fa fa-th nav-icon"></i>-->
                                 <p>Quotes</p>
                                 <i class="right fa fa-angle-left"></i>
                             </a>
@@ -126,7 +116,6 @@
                                     }
                                     ?>
                                        ">
-                                        <i class="fa fa-dollar nav-icon"></i>
                                         <p>GSA-Buy</p>
                                     </a>
                                 </li>
@@ -138,7 +127,6 @@
                                     }
                                     ?>
                                        ">
-                                        <i class="fa fa-dollar nav-icon"></i>
                                         <p>FedBid</p>
                                     </a>
                                 </li>
@@ -150,7 +138,6 @@
                                     }
                                     ?>
                                        ">
-                                        <i class="fa fa-dollar nav-icon"></i>
                                         <p>E-mails</p>
                                     </a>
                                 </li>
@@ -162,7 +149,6 @@
                                     }
                                     ?>
                                        ">
-                                        <i class="fa fa-dollar nav-icon"></i>
                                         <p>FindFRP</p>
                                     </a>
                                 </li>
@@ -174,7 +160,6 @@
                                     }
                                     ?>
                                        ">
-                                        <i class="fa fa-dollar nav-icon"></i>
                                         <p>Embassies</p>
                                     </a>
                                 </li>
@@ -186,14 +171,13 @@
                                     }
                                     ?>
                                        ">
-                                        <i class="fa fa-dollar nav-icon"></i>
                                         <p>FBO</p>
                                     </a>
                                 </li>
                             </ul>
                         </li>
 
-                        <li class="nav-item has-treeview 
+                        <li class="nav-item has-treeview
                         <?php
                         if ($gestor_actual == 'completados') {
                             echo 'menu-open';
@@ -207,7 +191,7 @@
                             }
                             ?>
                                ">
-                                <i class="fa fa-check-circle-o nav-icon"></i>
+                                <!--<i class="fa fa-check-circle-o nav-icon"></i>-->
                                 <p>Completed</p>
                                 <i class="right fa fa-angle-left"></i>
                             </a>
@@ -220,7 +204,6 @@
                                     }
                                     ?>
                                        ">
-                                        <i class="fa fa-dollar nav-icon"></i>
                                         <p>GSA-Buy</p>
                                     </a>
                                 </li>
@@ -232,7 +215,6 @@
                                     }
                                     ?>
                                        ">
-                                        <i class="fa fa-dollar nav-icon"></i>
                                         <p>FedBid</p>
                                     </a>
                                 </li>
@@ -244,7 +226,6 @@
                                     }
                                     ?>
                                        ">
-                                        <i class="fa fa-dollar nav-icon"></i>
                                         <p>E-mails</p>
                                     </a>
                                 </li>
@@ -256,7 +237,6 @@
                                     }
                                     ?>
                                        ">
-                                        <i class="fa fa-dollar nav-icon"></i>
                                         <p>FindFRP</p>
                                     </a>
                                 </li>
@@ -268,7 +248,6 @@
                                     }
                                     ?>
                                        ">
-                                        <i class="fa fa-dollar nav-icon"></i>
                                         <p>Embassies</p>
                                     </a>
                                 </li>
@@ -280,7 +259,6 @@
                                     }
                                     ?>
                                        ">
-                                        <i class="fa fa-dollar nav-icon"></i>
                                         <p>FBO</p>
                                     </a>
                                 </li>
@@ -289,7 +267,7 @@
                         <?php
                         if ($cargo < 4) {
                             ?>
-                            <li class="nav-item has-treeview 
+                            <li class="nav-item has-treeview
                             <?php
                             if ($gestor_actual == 'submitted') {
                                 echo 'menu-open';
@@ -303,7 +281,7 @@
                                 }
                                 ?>
                                    ">
-                                    <i class="fa fa-check-circle-o nav-icon"></i>
+                                    <!--<i class="fa fa-check-circle-o nav-icon"></i>-->
                                     <p>Submitted</p>
                                     <i class="right fa fa-angle-left"></i>
                                 </a>
@@ -316,7 +294,6 @@
                                         }
                                         ?>
                                            ">
-                                            <i class="fa fa-dollar nav-icon"></i>
                                             <p>GSA-Buy</p>
                                         </a>
                                     </li>
@@ -328,7 +305,6 @@
                                         }
                                         ?>
                                            ">
-                                            <i class="fa fa-dollar nav-icon"></i>
                                             <p>FedBid</p>
                                         </a>
                                     </li>
@@ -340,7 +316,6 @@
                                         }
                                         ?>
                                            ">
-                                            <i class="fa fa-dollar nav-icon"></i>
                                             <p>E-mails</p>
                                         </a>
                                     </li>
@@ -352,7 +327,6 @@
                                         }
                                         ?>
                                            ">
-                                            <i class="fa fa-dollar nav-icon"></i>
                                             <p>FindFRP</p>
                                         </a>
                                     </li>
@@ -364,7 +338,6 @@
                                         }
                                         ?>
                                            ">
-                                            <i class="fa fa-dollar nav-icon"></i>
                                             <p>Embassies</p>
                                         </a>
                                     </li>
@@ -376,14 +349,13 @@
                                         }
                                         ?>
                                            ">
-                                            <i class="fa fa-dollar nav-icon"></i>
                                             <p>FBO</p>
                                         </a>
                                     </li>
                                 </ul>
                             </li>
 
-                            <li class="nav-item has-treeview 
+                            <li class="nav-item has-treeview
                             <?php
                             if ($gestor_actual == 'award') {
                                 echo 'menu-open';
@@ -397,7 +369,7 @@
                                 }
                                 ?>
                                    ">
-                                    <i class="fa fa-check-circle-o nav-icon"></i>
+                                    <!--<i class="fa fa-check-circle-o nav-icon"></i>-->
                                     <p>Award</p>
                                     <i class="right fa fa-angle-left"></i>
                                 </a>
@@ -484,7 +456,7 @@
                         if ($cargo <= 3) {
                             ?>
                             <li class="nav-item">
-                                <a href="<?php echo NUEVA_COTIZACION; ?>" class="nav-link
+                                <a href="<?php echo NUEVA_COTIZACION; ?>" id="new_quote" class="nav-link
                                 <?php
                                 if ($cotizacion == 'nuevo') {
                                     echo 'active';

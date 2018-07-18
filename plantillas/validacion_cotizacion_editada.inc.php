@@ -109,6 +109,7 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
             $completado = 0;
         }
         if ($completado) {
+          RepositorioRfq::check_completed(Conexion::obtener_conexion(), $_POST['id_rfq']);
             if ($cargo < 4) {
                 Redireccion::redirigir1(COMPLETADOS . $canal);
             } else {

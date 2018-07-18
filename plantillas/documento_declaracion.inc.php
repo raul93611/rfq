@@ -20,6 +20,7 @@
         <link rel="stylesheet" href="<?php echo PLUGINS; ?>font-awesome/css/font-awesome.min.css">
         <link rel="stylesheet" href="<?php echo DIST; ?>css/adminlte.min.css">
         <link rel="stylesheet" href="<?php echo RUTA_CSS; ?>estilos.css">
+        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     </head>
     <body class="hold-transition sidebar-mini">
         <div class="wrapper">

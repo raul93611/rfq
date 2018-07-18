@@ -670,7 +670,7 @@ class RepositorioRfq {
         $rfq_editado = false;
         if (isset($conexion)) {
             try {
-                $sql = 'UPDATE rfq SET completado = 1, fecha_completado = :fecha_completado, expiration_date = :expiration_date WHERE id = :id_rfq';
+                $sql = 'UPDATE rfq SET fecha_completado = :fecha_completado, expiration_date = :expiration_date WHERE id = :id_rfq';
                 $sentencia = $conexion->prepare($sql);
                 $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
                 $sentencia->bindParam(':fecha_completado', $fecha_completado, PDO::PARAM_STR);
@@ -686,6 +686,26 @@ class RepositorioRfq {
             }
         }
         return $rfq_editado;
+    }
+
+    public static function check_completed($conexion, $id_rfq){
+      $rfq_editado = false;
+      if (isset($conexion)) {
+          try {
+              $sql = 'UPDATE rfq SET completado = 1 WHERE id = :id_rfq';
+              $sentencia = $conexion->prepare($sql);
+              $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+
+              $sentencia->execute();
+
+              if ($sentencia) {
+                  $rfq_editado = true;
+              }
+          } catch (PDOException $ex) {
+              print 'ERROR:' . $ex->getMessage() . '<br>';
+          }
+      }
+      return $rfq_editado;
     }
 
     public static function actualizar_fecha_y_award($conexion, $id_rfq) {
