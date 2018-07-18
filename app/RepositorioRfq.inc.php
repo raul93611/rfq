@@ -489,14 +489,21 @@ class RepositorioRfq {
         }
     }
 
-    public static function obtener_cotizaciones_award_por_canal($conexion, $canal) {
+    public static function obtener_cotizaciones_award_por_canal($conexion, $canal, $id_usuario, $cargo) {
         $cotizaciones = [];
 
         if (isset($conexion)) {
             try {
-                $sql = "SELECT * FROM rfq WHERE completado = 1 AND status = 1 AND award = 1 AND canal = :canal AND comments = 'No comments' ORDER BY fecha_award DESC";
-                $sentencia = $conexion->prepare($sql);
-                $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
+              if ($cargo < 4) {
+                  $sql = "SELECT * FROM rfq WHERE completado = 1 AND status = 1 AND award = 1 AND canal = :canal AND comments = 'No comments' ORDER BY fecha_award DESC";
+                  $sentencia = $conexion->prepare($sql);
+                  $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
+              } else if ($cargo == 4) {
+                $sql = "SELECT * FROM rfq WHERE usuario_designado = :id_usuario AND completado = 1 AND status = 1 AND award = 1 AND canal = :canal AND comments = 'No comments' ORDER BY fecha_award DESC";
+                  $sentencia = $conexion->prepare($sql);
+                  $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
+                  $sentencia->bindParam(':id_usuario', $id_usuario, PDO::PARAM_STR);
+              }
                 $sentencia->execute();
 
                 $resultado = $sentencia->fetchAll();
@@ -545,9 +552,9 @@ class RepositorioRfq {
         <?php
     }
 
-    public static function escribir_cotizaciones_award_por_canal($canal) {
+    public static function escribir_cotizaciones_award_por_canal($canal, $id_usuario, $cargo) {
         Conexion::abrir_conexion();
-        $cotizaciones = self::obtener_cotizaciones_award_por_canal(Conexion::obtener_conexion(), $canal);
+        $cotizaciones = self::obtener_cotizaciones_award_por_canal(Conexion::obtener_conexion(), $canal, $id_usuario, $cargo);
         Conexion::cerrar_conexion();
 
         if (count($cotizaciones)) {

@@ -354,7 +354,9 @@
                                     </li>
                                 </ul>
                             </li>
-
+                            <?php
+                        }
+                        ?>
                             <li class="nav-item has-treeview
                             <?php
                             if ($gestor_actual == 'award') {
@@ -382,7 +384,6 @@
                                         }
                                         ?>
                                            ">
-                                            <i class="fa fa-dollar nav-icon"></i>
                                             <p>GSA-Buy</p>
                                         </a>
                                     </li>
@@ -394,7 +395,6 @@
                                         }
                                         ?>
                                            ">
-                                            <i class="fa fa-dollar nav-icon"></i>
                                             <p>FedBid</p>
                                         </a>
                                     </li>
@@ -406,7 +406,6 @@
                                         }
                                         ?>
                                            ">
-                                            <i class="fa fa-dollar nav-icon"></i>
                                             <p>E-mails</p>
                                         </a>
                                     </li>
@@ -418,7 +417,6 @@
                                         }
                                         ?>
                                            ">
-                                            <i class="fa fa-dollar nav-icon"></i>
                                             <p>FindFRP</p>
                                         </a>
                                     </li>
@@ -430,7 +428,6 @@
                                         }
                                         ?>
                                            ">
-                                            <i class="fa fa-dollar nav-icon"></i>
                                             <p>Embassies</p>
                                         </a>
                                     </li>
@@ -442,15 +439,12 @@
                                         }
                                         ?>
                                            ">
-                                            <i class="fa fa-dollar nav-icon"></i>
                                             <p>FBO</p>
                                         </a>
                                     </li>
                                 </ul>
                             </li>
-                            <?php
-                        }
-                        ?>
+
                         <li class="nav-item">
                             <a href="<?php echo NO_BID; ?>" class="nav-link
                             <?php
