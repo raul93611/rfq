@@ -19,6 +19,7 @@ include_once 'plantillas/validacion_login.inc.php';
         <!-- Theme style -->
         <link rel="stylesheet" href="<?php echo DIST; ?>css/adminlte.min.css">
         <!-- iCheck -->
+        <link rel="stylesheet" href="<?php echo RUTA_CSS; ?>estilos.css">
         <link rel="stylesheet" href="<?php echo PLUGINS; ?>iCheck/square/blue.css">
         <link rel="Shortcut Icon" href="<?php echo RUTA_IMG; ?>favicon.png" type="image/x-icon" />
         <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
@@ -31,7 +32,7 @@ include_once 'plantillas/validacion_login.inc.php';
             <!-- /.login-logo -->
             <div class="card">
                 <div class="card-body login-card-body">
-                    <p class="login-box-msg">Please log in</p>
+                    <p class="login-box-msg" style="color: #BDC5CF !important;">Please log in</p>
 
                     <form action="<?php echo SERVIDOR; ?>" method="post">
                         <div class="form-group has-feedback">
@@ -42,11 +43,11 @@ include_once 'plantillas/validacion_login.inc.php';
                             }
                             ?>
                                    >
-                            <span class="fa fa-user form-control-feedback"></span>
+                            <span class="fa fa-user form-control-feedback" style="color: #BDC5CF !important;"></span>
                         </div>
                         <div class="form-group has-feedback">
                             <input type="password" class="form-control" name="password" placeholder="Password" required>
-                            <span class="fa fa-lock form-control-feedback"></span>
+                            <span class="fa fa-lock form-control-feedback" style="color: #BDC5CF !important;"></span>
                             <?php
                             if (isset($_POST['iniciar_sesion'])) {
                                 $validador->mostrar_error();

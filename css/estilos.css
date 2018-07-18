@@ -55,11 +55,34 @@ body{
 .sidebar-dark-primary .nav-treeview > .nav-item > .nav-link{
   padding-left: 47px !important;
 }
+
 #new_quote{
   padding-left: 13px !important;
   background-color: white !important;
   color: #39485A !important;
 }
+
+.btn-primary {
+  color: #ffffff;
+  background-color: #13A8F0;
+  border-color: #13A8F0;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+
+.btn-primary:hover {
+  color: #ffffff;
+  background-color: #40B7EE;
+  border-color: #40B7EE;
+}
+
+.alert-danger{
+  background-color: #DD355F !important;
+}
+
+.alert-danger:hover{
+  background-color: #E45D7F !important;
+}
+
 /*Aun no he usado
 .sidebar-dark-primary .user-panel a:hover {
   color: #ffffff !important;
