@@ -77,7 +77,7 @@
         </div>
     </div>
     <div class="form-group">
-        <input type="file" name="documentos[]" multiple class="btn btn-primary btn-block">
+        <input type="file" name="documentos[]" multiple class="btn btn-secondary btn-block">
     </div>
 </div>
 <div class="card-footer">

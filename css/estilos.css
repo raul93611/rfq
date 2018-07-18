@@ -123,6 +123,19 @@ body{
   background-color: #E45D7F !important;
   border-color: #E45D7F !important;
 }
+
+.btn-secondary {
+  color: #39485A !important;
+  background-color: #E7E9EB !important;
+  border-color: #E7E9EB !important;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+
+.btn-secondary:hover {
+  color: #ffffff !important;
+  background-color: #5a6268 !important;
+  border-color: #545b62 !important;
+}
 /*Aun no he usado
 .sidebar-dark-primary .user-panel a:hover {
   color: #ffffff !important;
@@ -183,9 +196,9 @@ table{
 
 .footer_item{
   position: fixed !important;
-  bottom: 55px !important;
-  width: 85.3%;
-  background-color: #c6c9ce;
+  bottom: 0 !important;
+  width: auto;
+  background-color: #E7E9EB;
   border: 1px solid rgba(0, 0, 0, 0.125);
   border-radius: 0.25rem;
   transition: width 0.3s;

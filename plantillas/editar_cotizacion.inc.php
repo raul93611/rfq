@@ -36,5 +36,4 @@ include_once 'plantillas/validacion_cotizacion_editada.inc.php';
             </div>
         </div>
     </section>
-    <br><br>
 </div>

@@ -58,7 +58,7 @@ if ($cotizacion_recuperada->obtener_completado() && $cotizacion_recuperada->obte
 }
 ?>
 </div>
-<div class="card-footer footer_item" id="footer_item">
+<div class="card-footer footer_item">
   <?php
     if(count($items)){
       ?>
@@ -78,12 +78,9 @@ if ($cotizacion_recuperada->obtener_award()) {
     echo '<a class="btn btn-primary" href="' . COTIZACIONES . $canal . '"><i class="fa fa-backward"></i> Go back</a>';
 }
 ?>
-<span class="float-right">
     <a class="btn btn-primary" href="<?php echo CUESTIONARIO . '/' . $cotizacion_recuperada->obtener_id(); ?>"><i class="fa fa-sticky-note"></i> Project charter</a>
-
     <!--<button type="submit" class="btn btn-success" name="guardar_cambios_cotizacion"><i class="fa fa-save"></i> Save</button>-->
     <a class="btn btn-primary" href="<?php echo ADD_ITEM . '/' . $cotizacion_recuperada->obtener_id(); ?>"><i class="fa fa-plus-circle"></i> Add item</a>
-  </span>
 </div>
 <!--
 <br>
