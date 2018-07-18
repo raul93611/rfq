@@ -110,6 +110,9 @@ if ($partes_ruta[0] == 'rfq') {
                 case 'nuevo':
                     $cotizacion = 'nuevo';
                     break;
+                case 'no_bid':
+                    $cotizacion = 'no_bid';
+                    break;
             }
         } else if ($partes_ruta[1] == 'perfil' && $partes_ruta[2] == 'completados') {
             $gestor_actual = 'completados';

@@ -8,6 +8,8 @@
             <option <?php if ($cotizacion_recuperada->obtener_comments() == 'Manufactured in the Bid') {echo 'selected';} ?>>Manufacturer in the Bid</option>
             <option <?php if ($cotizacion_recuperada->obtener_comments() == 'Expired due date') { echo 'selected';} ?>>Expired due date</option>
             <option <?php if ($cotizacion_recuperada->obtener_comments() == 'Supplier did not provide a quote') { echo 'selected';} ?>>Supplier did not provide a quote</option>
+            <option <?php if($cotizacion_recuperada->obtener_comments() == 'Others'){echo 'selected';} ?>>Others</option>
+            <option <?php if ($cotizacion_recuperada->obtener_comments() == 'Working on it'){echo 'selected';} ?>>Working on it</option>
         </select>
     </div>
     <div class="form-group">

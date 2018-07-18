@@ -84,11 +84,11 @@ class RepositorioRfq {
             try {
 
                 if ($cargo < 4) {
-                    $sql = "SELECT * FROM rfq WHERE canal = :canal AND completado = 0 AND status = 0 AND award = 0 ORDER BY id DESC";
+                    $sql = "SELECT * FROM rfq WHERE canal = :canal AND completado = 0 AND status = 0 AND award = 0 AND (comments = 'Working on it' OR comments = 'No comments' OR comments = '') ORDER BY id DESC";
                     $sentencia = $conexion->prepare($sql);
                     $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
                 } else if ($cargo == 4) {
-                    $sql = "SELECT * FROM rfq WHERE canal = :canal AND usuario_designado = :id_usuario AND completado = 0 AND status = 0 AND award = 0 ORDER BY id";
+                    $sql = "SELECT * FROM rfq WHERE canal = :canal AND usuario_designado = :id_usuario AND completado = 0 AND status = 0 AND award = 0 AND (comments = 'Working on it' OR comments = 'No comments' OR comments = '') ORDER BY id";
                     $sentencia = $conexion->prepare($sql);
                     $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
                     $sentencia->bindParam(':id_usuario', $id_usuario, PDO::PARAM_STR);
@@ -115,7 +115,7 @@ class RepositorioRfq {
             return;
         }
         ?>
-        <tr>
+        <tr <?php if($cotizacion->obtener_comments() == 'Working on it'){echo 'style="background-color: rgba(255, 239, 73, 0.5);"';} ?>>
             <td>
                 <a href="<?php echo EDITAR_COTIZACION . '/' . $cotizacion->obtener_id(); ?>" class="btn-block">
                     <?php echo $cotizacion->obtener_email_code(); ?>
@@ -546,6 +546,88 @@ class RepositorioRfq {
                     <?php
                     foreach ($cotizaciones as $cotizacion) {
                         self::escribir_cotizacion_award($cotizacion);
+                    }
+                    ?>
+                </tbody>
+            </table>
+            <?php
+        }
+    }
+
+    public static function obtener_cotizaciones_no_bid($conexion) {
+        $cotizaciones = [];
+
+        if (isset($conexion)) {
+            try {
+                $sql = "SELECT * FROM rfq WHERE comments = 'No Bid' OR comments = 'Manufacturer in the Bid' OR comments = 'Expired due date' OR comments = 'Supplier did not provide a quote' OR comments = 'Others' ORDER BY id DESC";
+                $sentencia = $conexion->prepare($sql);
+                $sentencia->execute();
+
+                $resultado = $sentencia->fetchAll();
+
+                if (count($resultado)) {
+                    foreach ($resultado as $fila) {
+                        $cotizaciones [] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['total_cost'], $fila['total_price'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['fecha_submitted'], $fila['fecha_award'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via'], $fila['taxes'], $fila['profit'], $fila['additional'], $fila['shipping'], $fila['shipping_cost']);
+                    }
+                }
+            } catch (PDOException $ex) {
+                print 'ERROR:' . $ex->getMessage() . '<br>';
+            }
+        }
+        return $cotizaciones;
+    }
+
+    public static function escribir_cotizacion_no_bid($cotizacion) {
+        if (!isset($cotizacion)) {
+            return;
+        }
+        ?>
+        <tr>
+            <td>
+                <a href="<?php echo EDITAR_COTIZACION . '/' . $cotizacion->obtener_id(); ?>" class="btn-block">
+                    <?php echo $cotizacion->obtener_email_code(); ?>
+                </a>
+            </td>
+            <td>
+                <?php
+                Conexion::abrir_conexion();
+                $usuario = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), $cotizacion->obtener_usuario_designado());
+                Conexion::cerrar_conexion();
+                echo $usuario->obtener_nombre_usuario();
+                ?>
+            </td>
+            <td><?php echo $cotizacion->obtener_type_of_bid(); ?></td>
+            <td><?php echo $cotizacion->obtener_issue_date(); ?></td>
+            <td><?php echo $cotizacion->obtener_end_date(); ?></td>
+            <td><?php echo $cotizacion->obtener_id(); ?></td>
+            <td><?php echo $cotizacion->obtener_comments(); ?></td>
+        </tr>
+        <?php
+    }
+
+    public static function escribir_cotizaciones_no_bid() {
+        Conexion::abrir_conexion();
+        $cotizaciones = self::obtener_cotizaciones_no_bid(Conexion::obtener_conexion());
+        Conexion::cerrar_conexion();
+
+        if (count($cotizaciones)) {
+            ?>
+            <table class="table table-bordered table-striped table-responsive-md">
+                <thead>
+                    <tr>
+                        <th>CODE</th>
+                        <th>DEDIGNATED USER</th>
+                        <th>TYPE OF BID</th>
+                        <th>ISSUE DATE</th>
+                        <th>END DATE</th>
+                        <th>PROPOSAL</th>
+                        <th>COMMENTS</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla_cotizaciones_no_bid">
+                    <?php
+                    foreach ($cotizaciones as $cotizacion) {
+                        self::escribir_cotizacion_no_bid($cotizacion);
                     }
                     ?>
                 </tbody>

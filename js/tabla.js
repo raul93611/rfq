@@ -168,6 +168,50 @@ function myFunction4() {
     }
 }
 
+function myFunction5(){
+  var input, filter, table, tr, td, i, select;
+  select = document.getElementById("tipo");
+  var tipo = select.options[select.selectedIndex].value;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("tabla_cotizaciones_no_bid");
+  tr = table.getElementsByTagName("tr");
+
+  for (i = 0; i < tr.length; i++) {
+      switch (tipo) {
+          case 'Code':
+              td = tr[i].getElementsByTagName("a")[0];
+              break;
+          case 'Designated user':
+              td = tr[i].getElementsByTagName("td")[1];
+              break;
+          case 'Type of Bid':
+              td = tr[i].getElementsByTagName("td")[2];
+              break;
+          case 'Issue Date':
+              td = tr[i].getElementsByTagName("td")[3];
+              break;
+          case 'End Date':
+              td = tr[i].getElementsByTagName("td")[4];
+              break;
+          case 'Proposal':
+              td = tr[i].getElementsByTagName("td")[5];
+              break;
+          case 'Comments':
+              td = tr[i].getElementByTagName('td')[6];
+              break;
+      }
+
+      if (td) {
+          if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+              tr[i].style.display = "";
+          } else {
+              tr[i].style.display = "none";
+          }
+      }
+  }
+}
+
 $(document).ready(function () {
   $('#sidebar_collapse').on('click', function(){
     $('#footer_item').toggleClass('footer_item1');
