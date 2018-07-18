@@ -36,6 +36,14 @@
         <label for="quantity">Quantity:</label>
         <input type="number" class="form-control" id="quantity" name="quantity">
     </div>
+    <div class="form-group">
+        <label for="comments">Comments:</label>
+        <textarea class="form-control" rows="5" placeholder="Enter comments ..." id="comments" name="comments"></textarea>
+    </div>
+    <div class="form-group">
+        <label for="website">Website:</label>
+        <input type="text" class="form-control" id="website" name="website" placeholder="Website ...">
+    </div>
 </div>
 <div class="card-footer">
     <button type="submit" class="btn btn-success" name="guardar_item"><i class="fa fa-check"></i> Save</button>
