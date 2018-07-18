@@ -89,8 +89,8 @@ class RepositorioItem {
         echo '<tr>';
         echo '<td><a href="' . ADD_PROVIDER . '/' . $item->obtener_id() . '" class="btn btn-warning btn-block"><i class="fa fa-plus-circle"></i> Add Provider</a><br><a href="' . EDIT_ITEM . '/' . $item->obtener_id() . '" class="btn btn-warning btn-block"><i class="fa fa-edit"></i> Edit item</a></td>';
         echo '<td>' . $i . '</td>';
-        echo '<td><b>Brand:</b>' . $item->obtener_brand_project() . '<br><b>Part #:</b>' . $item->obtener_part_number_project() . '<br><b>Description:</b>' . nl2br(mb_substr($item->obtener_description_project(), 0, 100)) . ' ...</td>';
-        echo '<td><b>Brand:</b>' . $item->obtener_brand() . '<br><b>Part #:</b>' . $item->obtener_part_number() . '<br><b>Description:</b>' . nl2br(mb_substr($item->obtener_description(), 0, 100)) . ' ...</td>';
+        echo '<td><b>Brand:</b> ' . $item->obtener_brand_project() . '<br><b>Part #:</b> ' . $item->obtener_part_number_project() . '<br><b>Description:</b> ' . nl2br(mb_substr($item->obtener_description_project(), 0, 100)) . ' ...</td>';
+        echo '<td><b>Brand:</b> ' . $item->obtener_brand() . '<br><b>Part #:</b> ' . $item->obtener_part_number() . '<br><b>Description:</b> ' . nl2br(mb_substr($item->obtener_description(), 0, 100)) . ' ...</td>';
         echo '<td class="estrechar"><a target="_blank" href="'. $item-> obtener_website() .'">'. $item-> obtener_website() .'</a></td>';
         echo '<td>' . $item->obtener_quantity() . '</td>';
         echo '<td><div class="row"><div class="col-6">';
