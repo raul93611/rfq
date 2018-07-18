@@ -38,6 +38,6 @@
     </div>
 </div>
 <div class="card-footer">
-    <button type="submit" class="btn btn-success" name="guardar_item"><i class="fa fa-save"></i> Save</button>
-    <a href="<?php echo EDITAR_COTIZACION . '/' . $id_rfq; ?>" class="btn btn-danger"><i class="fa fa-ban"></i> Cancel</a>
+    <button type="submit" class="btn btn-success" name="guardar_item"><i class="fa fa-check"></i> Save</button>
+    <a href="<?php echo EDITAR_COTIZACION . '/' . $id_rfq; ?>" class="btn btn-danger"><i class="fa fa-times"></i> Cancel</a>
 </div>

@@ -84,7 +84,7 @@
                        ">
                         <i class="nav-icon fa fa-money"></i>
                         <p>
-                            RFQ
+                            RFQ Team
                             <i class="right fa fa-angle-left"></i>
                         </p>
                     </a>
