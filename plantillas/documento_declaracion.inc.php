@@ -22,5 +22,5 @@
         <link rel="stylesheet" href="<?php echo RUTA_CSS; ?>estilos.css">
         <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     </head>
-    <body class="hold-transition sidebar-mini">
+    <body class="hold-transition sidebar-mini sidebar-collapse">
         <div class="wrapper">
