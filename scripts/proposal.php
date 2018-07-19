@@ -63,6 +63,10 @@ try{
       width: 20px;
   }
 
+  .total_ancho{
+    width: 130px;
+  }
+
   .letra_chiquita{
       font-size: 8pt;
   }
@@ -78,11 +82,26 @@ try{
   $html .= '<body>
   <table border=0 width="100%">
     <tr>
-      <td width="550">
+      <td width="400">
       <img style="width:350px;height:130px;" src="' . RUTA_IMG . '/logo_proposal.jpg">
       </td>
-      <td>
+      <td align="right">
         <span class="color letra_grande">PROPOSAL</span>
+        <br><br>
+        <table id="tabla">
+          <tr>
+            <th>PROPOSAL #</th>
+            <th>DATE</th>
+            <th>EXPIRATION DATE</th>
+          </tr>
+          <tr>
+            <td style="text-align:center;">' . $cotizacion->obtener_id() . '</td>
+            <td style="text-align:center;">' . $fecha_completado . '</td>
+            <td style="text-align:center;">' . $expiration_date . '</td>
+          </tr>
+        </table>
+
+
       </td>
     </tr>
   </table>
@@ -90,18 +109,6 @@ try{
   </div>';
 
   $html .= '
-  <table id="tabla" align="right">
-    <tr>
-      <th>PROPOSAL #</th>
-      <th>DATE</th>
-      <th>EXPIRATION DATE</th>
-    </tr>
-    <tr>
-      <td style="text-align:center;">' . $cotizacion->obtener_id() . '</td>
-      <td style="text-align:center;">' . $fecha_completado . '</td>
-      <td style="text-align:center;">' . $expiration_date . '</td>
-    </tr>
-  </table>
   <br>
   <table id="tabla" style="width:100%">
     <tr>
@@ -139,7 +146,7 @@ try{
             <th>DESCRIPTION</th>
             <th class="quantity">QTY</th>
             <th>UNIT PRICE</th>
-            <th>TOTAL</th>
+            <th class="total_ancho">TOTAL</th>
           </tr>
               <tr>
         <td></td>
@@ -165,7 +172,7 @@ try{
             <th>DESCRIPTION</th>
             <th class="quantity">QTY</th>
             <th>UNIT PRICE</th>
-            <th>TOTAL</th>
+            <th class="total_ancho">TOTAL</th>
           </tr>';
       }
 
