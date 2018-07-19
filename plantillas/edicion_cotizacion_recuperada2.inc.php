@@ -76,8 +76,10 @@ if ($cotizacion_recuperada->obtener_award()) {
     echo '<a class="btn btn-primary" href="' . SUBMITTED . $canal . '"><i class="fa fa-backward"></i> Go back</a>';
 } else if ($cotizacion_recuperada->obtener_completado()) {
     echo '<a class="btn btn-primary" href="' . COMPLETADOS . $canal . '"><i class="fa fa-backward"></i> Go back</a>';
-} else {
-    echo '<a class="btn btn-primary" href="' . COTIZACIONES . $canal . '"><i class="fa fa-backward"></i> Go back</a>';
+} else if ($cotizacion_recuperada->obtener_comments() != 'No comments' && $cotizacion_recuperada->obtener_comments() != 'Working on it') {
+    echo '<a class="btn btn-primary" href="' . NO_BID . '"><i class="fa fa-backward"></i> Go back</a>';
+}else{
+  echo '<a class="btn btn-primary" href="' . COTIZACIONES . $canal . '"><i class="fa fa-backward"></i> Go back</a>';
 }
 ?>
     <a class="btn btn-primary" href="<?php echo CUESTIONARIO . '/' . $cotizacion_recuperada->obtener_id(); ?>"><i class="fa fa-sticky-note"></i> Project charter</a>
