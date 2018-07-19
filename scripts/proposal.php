@@ -174,7 +174,7 @@ try{
           $item = $items[$i];
             $html .= '<tr>
                 <td>' . $a . '</td>
-                <td><b>Brand name:</b> ' . $item->obtener_brand() . '<br><b>Part number:</b> ' . $item->obtener_part_number() . '<br><b> Item description:</b><br> ' . nl2br($item->obtener_description()) . '</td>
+                <td><b>Brand name:</b> ' . $item->obtener_brand() . '<br><b>Part number:</b> ' . $item->obtener_part_number() . '<br><b> Item description:</b><br> ' . $item->obtener_description() . '</td>
                 <td style="text-align:right;">' . $item->obtener_quantity() . '</td>
                 <td style="text-align:right;">$ ' . number_format($item->obtener_unit_price(), 2) . '</td>
                 <td style="text-align:right;">$ ' . number_format($item->obtener_total_price(), 2) . '</td>

@@ -27,6 +27,7 @@
 <script src="<?php echo RUTA_JS; ?>moment.min.js"></script>
 <script src="<?php echo PLUGINS; ?>daterangepicker/daterangepicker.js"></script>
 <script src="<?php echo PLUGINS; ?>datepicker/bootstrap-datepicker.js"></script>
+<script src="<?php echo PLUGINS; ?>ckeditor/ckeditor.js"></script>
 <script src="<?php echo PLUGINS; ?>bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
 <script src="<?php echo PLUGINS; ?>slimScroll/jquery.slimscroll.min.js"></script>
 <script src="<?php echo DIST; ?>js/pages/dashboard.js"></script>
