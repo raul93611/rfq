@@ -444,18 +444,24 @@
                                     </li>
                                 </ul>
                             </li>
-
-                        <li class="nav-item">
-                            <a href="<?php echo NO_BID; ?>" class="nav-link
                             <?php
-                            if ($cotizacion == 'no_bid') {
-                                echo 'active';
+                            if($cargo <=3){
+                              ?>
+                              <li class="nav-item">
+                                  <a href="<?php echo NO_BID; ?>" class="nav-link
+                                  <?php
+                                  if ($cotizacion == 'no_bid') {
+                                      echo 'active';
+                                  }
+                                  ?>
+                                     ">
+                                      <p>No Bid</p>
+                                  </a>
+                              </li>
+                              <?php
                             }
                             ?>
-                               ">
-                                <p>No Bid</p>
-                            </a>
-                        </li>
+
                         <?php
                         if ($cargo <= 3) {
                             ?>

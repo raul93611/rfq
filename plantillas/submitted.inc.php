@@ -1,5 +1,7 @@
 <?php
-
+if($cargo == 4){
+  Redireccion::redirigir1(PERFIL);
+}
 switch ($cotizacion) {
     case 'gsa_buy_submitted':
         $canal = 'GSA-Buy';
@@ -27,5 +29,3 @@ switch ($cotizacion) {
         break;
 }
 ?>
-
-
