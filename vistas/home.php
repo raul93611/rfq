@@ -36,7 +36,7 @@ include_once 'plantillas/validacion_login.inc.php';
 
                     <form action="<?php echo SERVIDOR; ?>" method="post">
                         <div class="form-group has-feedback">
-                            <input type="text" class="form-control" name="nombre_usuario" placeholder="Username" autofocus required
+                            <input type="text" class="form-control <?php if(isset($_POST['iniciar_sesion'])){echo 'is-invalid';} ?>" name="nombre_usuario" placeholder="Username" autofocus required
                             <?php
                             if (isset($_POST['iniciar_sesion']) && isset($_POST['nombre_usuario']) && !empty($_POST['nombre_usuario'])) {
                                 echo 'value="' . $_POST['nombre_usuario'] . '"';
@@ -46,7 +46,7 @@ include_once 'plantillas/validacion_login.inc.php';
                             <span class="fa fa-user form-control-feedback" style="color: #BDC5CF !important;"></span>
                         </div>
                         <div class="form-group has-feedback">
-                            <input type="password" class="form-control" name="password" placeholder="Password" required>
+                            <input type="password" class="form-control <?php if(isset($_POST['iniciar_sesion'])){echo 'is-invalid';} ?>" name="password" placeholder="Password" required>
                             <span class="fa fa-lock form-control-feedback" style="color: #BDC5CF !important;"></span>
                             <?php
                             if (isset($_POST['iniciar_sesion'])) {
