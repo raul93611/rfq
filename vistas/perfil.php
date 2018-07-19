@@ -1,6 +1,6 @@
 <?php
 
-if (!ControlSesion::sesion_iniciada()) {
+if(!ControlSesion::sesion_iniciada()) {
     Redireccion::redirigir1(SERVIDOR);
 }
 
