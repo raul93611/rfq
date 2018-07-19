@@ -1,7 +1,4 @@
 <?php
-echo $cargo;
-echo $cotizacion_recuperada-> obtener_usuario_designado();
-echo $_SESSION['id_usuario'];
 if($cargo == 4 && $_SESSION['id_usuario'] != $cotizacion_recuperada-> obtener_usuario_designado()){
   Redireccion::redirigir1(PERFIL);
 }

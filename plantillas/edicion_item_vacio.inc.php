@@ -12,19 +12,9 @@
                 <label for="part_number_project">Part #:</label>
                 <input type="text" class="form-control" id="part_number_project" name="part_number_project" placeholder="Part # ..." value="<?php echo $item->obtener_part_number(); ?>">
             </div>
-            <!--<div class="form-group">
+            <div class="form-group">
                 <label for="description_project">Description:</label>
-                <textarea class="form-control" rows="5" placeholder="Enter description ..." id="description_project" name="description_project"></textarea>
-            </div>-->
-            <label for="description_project">Description:</label>
-            <div class="card card-outline card-info">
-              <!-- /.card-header -->
-              <div class="card-body pad">
-                <div class="mb-3">
-                  <textarea class="textarea" placeholder="Place some text here" name="description_project"
-                            style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"><?php echo $item->obtener_description_project(); ?></textarea>
-                </div>
-              </div>
+                <textarea class="form-control" rows="5" placeholder="Enter description ..." id="description_project" name="description_project"><?php echo $item->obtener_description_project(); ?></textarea>
             </div>
         </div>
         <div class="col">
@@ -37,19 +27,9 @@
                 <label for="part_number">Part #:</label>
                 <input type="text" class="form-control" id="part_number" name="part_number" placeholder="Part # ..." value="<?php echo $item->obtener_part_number(); ?>">
             </div>
-            <!--<div class="form-group">
+            <div class="form-group">
                 <label for="description">Description:</label>
-                <textarea class="form-control" rows="5" placeholder="Enter description ..." id="description" name="description"></textarea>
-            </div>-->
-            <label for="description">Description:</label>
-            <div class="card card-outline card-info">
-              <!-- /.card-header -->
-              <div class="card-body pad">
-                <div class="mb-3">
-                  <textarea class="textarea" placeholder="Place some text here" name="description"
-                            style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"><?php echo $item->obtener_description(); ?></textarea>
-                </div>
-              </div>
+                <textarea class="form-control" rows="5" placeholder="Enter description ..." id="description" name="description"><?php echo $item-> obtener_description(); ?></textarea>
             </div>
         </div>
     </div>
