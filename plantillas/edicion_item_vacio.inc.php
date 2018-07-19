@@ -1,5 +1,13 @@
 <input type="hidden" name="id_item" value="<?php echo $id_item; ?>">
 <input type="hidden" name="id_rfq" value="<?php echo $item->obtener_id_rfq(); ?>">
+<?php
+Conexion::abrir_conexion();
+$cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $item-> obtener_id_rfq());
+Conexion::cerrar_conexion();
+if($cargo == 4 && $_SESSION['id_usuario'] != $cotizacion_recuperada-> obtener_usuario_designado()){
+  Redireccion::redirigir1(PERFIL);
+}
+?>
 <div class="card-body">
     <div class="row">
         <div class="col">

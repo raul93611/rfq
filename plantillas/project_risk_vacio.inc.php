@@ -1,3 +1,11 @@
+<?php
+Conexion::abrir_conexion();
+$cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $cuestionario-> obtener_id_rfq());
+Conexion::cerrar_conexion();
+if($cargo == 4 && $_SESSION['id_usuario'] != $cotizacion_recuperada-> obtener_usuario_designado()){
+  Redireccion::redirigir1(PERFIL);
+}
+?>
 <input type="hidden" name="id_cuestionario" value="<?php echo $id_cuestionario; ?>">
 <div class="card-body">
     <div class="form-group">
