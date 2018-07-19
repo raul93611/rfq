@@ -57,7 +57,7 @@
 </div>
 <div class="card-footer">
     <button type="submit" class="btn btn-success" name="registrar_cuestionario"><i class="fa fa-check"></i> Save</button>
-    <a class="btn btn-danger" href="<?php echo EDITAR_COTIZACION . '/' . $cuestionario->obtener_id_rfq(); ?>"><i class="fa fa-times"></i> Cancel</a>
+    <a class="btn btn-primary" href="<?php echo EDITAR_COTIZACION . '/' . $cuestionario->obtener_id_rfq(); ?>"><i class="fa fa-backward"></i> Go back</a>
 </div>
 <div class="card-body">
     <h3 class="card-title">HIGH LEVEL REQUIREMENTS</h3>
