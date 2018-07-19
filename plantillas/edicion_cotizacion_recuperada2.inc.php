@@ -70,11 +70,11 @@ if ($cotizacion_recuperada->obtener_completado() && $cotizacion_recuperada->obte
   ?>
     <button type="submit" class="btn btn-success" name="guardar_cambios_cotizacion"><i class="fa fa-check"></i> Save</button>
 <?php
-if ($cotizacion_recuperada->obtener_award()) {
+if ($cotizacion_recuperada->obtener_award() && ($cotizacion_recuperada->obtener_comments() == 'No comments' || $cotizacion_recuperada->obtener_comments() == 'Working on it')) {
     echo '<a class="btn btn-primary" href="' . AWARD . $canal . '"><i class="fa fa-backward"></i> Go back</a>';
-} else if ($cotizacion_recuperada->obtener_status()) {
+} else if ($cotizacion_recuperada->obtener_status() && ($cotizacion_recuperada->obtener_comments() == 'No comments' || $cotizacion_recuperada->obtener_comments() == 'Working on it')) {
     echo '<a class="btn btn-primary" href="' . SUBMITTED . $canal . '"><i class="fa fa-backward"></i> Go back</a>';
-} else if ($cotizacion_recuperada->obtener_completado()) {
+} else if ($cotizacion_recuperada->obtener_completado() && ($cotizacion_recuperada->obtener_comments() == 'No comments' || $cotizacion_recuperada->obtener_comments() == 'Working on it')) {
     echo '<a class="btn btn-primary" href="' . COMPLETADOS . $canal . '"><i class="fa fa-backward"></i> Go back</a>';
 } else if ($cotizacion_recuperada->obtener_comments() != 'No comments' && $cotizacion_recuperada->obtener_comments() != 'Working on it') {
     echo '<a class="btn btn-primary" href="' . NO_BID . '"><i class="fa fa-backward"></i> Go back</a>';
