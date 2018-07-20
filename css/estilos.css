@@ -175,7 +175,11 @@ table{
 }
 
 #tabla_items .options{
-    width: 100px !important;
+    width: 150px !important;
+}
+
+#tabla_items .qty{
+  width: 100px !important;
 }
 
 .estrechar{

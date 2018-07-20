@@ -196,9 +196,9 @@ class RepositorioItem {
             echo '<th class="description">PROJECT SPECIFICATIONS</th>';
             echo '<th class="description">E-LOGIC PROPOSAL</th>';
             echo '<th class="options">WEBSITE</th>';
-            echo '<th class="options">QTY</th>';
+            echo '<th class="qty">QTY</th>';
             echo '<th id="provider">PROVIDERS</th>';
-            echo '<th class="options">ADDITIONAL</th>';
+            echo '<th class="qty">ADDITIONAL</th>';
             echo '<th class="options">BEST UNIT COST</th>';
             echo '<th class="options">TOTAL COST</th>';
             echo '<th class="options">PRICE FOR CLIENT</th>';
