@@ -1,7 +1,7 @@
 <?php
 define('NOMBRE_SERVIDOR', 'localhost');
 define('NOMBRE_USUARIO', 'root');
-define('PASSWORD', '');
+define('PASSWORD', 'raul93611');
 define('NOMBRE_BD', 'elogic');
 
 define('SERVIDOR', 'http://localhost/rfq/');
