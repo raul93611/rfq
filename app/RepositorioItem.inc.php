@@ -87,7 +87,7 @@ class RepositorioItem {
         $providers = RepositorioProvider::obtener_providers_por_id_item(Conexion::obtener_conexion(), $item->obtener_id());
         Conexion::cerrar_conexion();
         echo '<tr>';
-        echo '<td><a href="' . ADD_PROVIDER . '/' . $item->obtener_id() . '" class="btn btn-warning btn-block"><i class="fa fa-plus-circle"></i> Add Provider</a><br><a href="' . EDIT_ITEM . '/' . $item->obtener_id() . '" class="btn btn-warning btn-block"><i class="fa fa-edit"></i> Edit item</a></td>';
+        echo '<td><a href="' . ADD_PROVIDER . '/' . $item->obtener_id() . '" class="btn btn-warning btn-block"><i class="fa fa-plus-circle"></i> Add Provider</a><br><a href="' . EDIT_ITEM . '/' . $item->obtener_id() . '" class="btn btn-warning btn-block"><i class="fa fa-edit"></i> Edit item</a><br><a href="' . DELETE_ITEM . '/' . $item-> obtener_id() . '" class="btn btn-warning btn-block"><i class="fa fa-trash"></i> Delete</a></td>';
         echo '<td>' . $i . '</td>';
         echo '<td><b>Brand:</b> ' . $item->obtener_brand_project() . '<br><b>Part #:</b> ' . $item->obtener_part_number_project() . '<br><b>Description:</b> ' . nl2br(mb_substr($item->obtener_description_project(), 0, 100)) . ' ...</td>';
         echo '<td><b>Brand:</b> ' . $item->obtener_brand() . '<br><b>Part #:</b> ' . $item->obtener_part_number() . '<br><b>Description:</b> ' . nl2br(mb_substr($item->obtener_description(), 0, 100)) . ' ...</td>';
@@ -310,6 +310,27 @@ class RepositorioItem {
         return $item_editado;
     }
 
+    public static function delete_item($conexion, $id_item){
+        if(isset($conexion)){
+            try{
+                $conexion -> beginTransaction();
+                $sql1 = "DELETE FROM provider WHERE id_item = :id_item";
+                $sentencia1 = $conexion-> prepare($sql1);
+                $sentencia1-> bindParam(':id_item', $id_item, PDO::PARAM_STR);
+                $sentencia1-> execute();
+
+                $sql2 = "DELETE FROM item WHERE id = :id_item";
+                $sentencia2 = $conexion-> prepare($sql2);
+                $sentencia2-> bindParam(':id_item', $id_item, PDO::PARAM_STR);
+                $sentencia2-> execute();
+
+                $conexion-> commit();
+            } catch (PDOException $ex) {
+                print "ERROR:" . $ex->getMessage() . "<br>";
+                $conexion-> rollBack();
+            }
+        }
+    }
 }
 
 ?>

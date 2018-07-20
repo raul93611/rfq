@@ -45,6 +45,7 @@ define('DOCS', SERVIDOR . 'documentos/');
 define('PROPOSAL', SERVIDOR . 'proposal');
 define('PROPOSAL_GSA', SERVIDOR . 'proposal_gsa');
 define('ADD_ITEM', COTIZACIONES . 'add_item');
+define('DELETE_ITEM', COTIZACIONES . 'delete_item');
 define('ADD_PROVIDER', COTIZACIONES . 'add_provider');
 define('EDIT_ITEM', COTIZACIONES . 'edit_item');
 define('EDIT_PROVIDER', COTIZACIONES . 'edit_provider');

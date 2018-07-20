@@ -65,6 +65,9 @@ switch ($gestor_actual) {
                 Conexion::cerrar_conexion();
                 include_once 'plantillas/edit_item.inc.php';
                 break;
+            case 'delete_item':
+                include_once 'scripts/delete_item.php';
+                break;
             case 'edit_provider':
                 Conexion::abrir_conexion();
                 $provider = RepositorioProvider::obtener_provider_por_id(Conexion::obtener_conexion(), $id_provider);
