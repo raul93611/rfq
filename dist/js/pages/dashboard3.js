@@ -14,6 +14,7 @@ $(function () {
     var manufacturer_in_the_bid = document.getElementById('manufacturer_in_the_bid').value;
     var expired_due_date = document.getElementById('expired_due_date').value;
     var supplier_did_not_provide_a_quote = document.getElementById('supplier_did_not_provide_a_quote').value;
+    var others = document.getElementById('others').value;
 
     nombres_usuario = jQuery.parseJSON(nombres_usuario);
     cotizaciones_completadas = jQuery.parseJSON(cotizaciones_completadas);
@@ -28,6 +29,7 @@ $(function () {
     manufacturer_in_the_bid = jQuery.parseJSON(manufacturer_in_the_bid);
     expired_due_date = jQuery.parseJSON(expired_due_date);
     supplier_did_not_provide_a_quote = jQuery.parseJSON(supplier_did_not_provide_a_quote);
+    others = jQuery.parseJSON(others);
 
     var ticksStyle = {
         fontColor: '#495057',
@@ -366,11 +368,11 @@ $(function () {
     new Chart(document.getElementById("pie-chart"), {
         type: 'pie',
         data: {
-            labels: ["No Bid", "Manufacturer in the Bid", "Expired due date", "Supplier did not provide a quote"],
+            labels: ["No Bid", "Manufacturer in the Bid", "Expired due date", "Supplier did not provide a quote", "Others"],
             datasets: [{
                     label: "Population (millions)",
-                    backgroundColor: ["#ff2e00", "#edcf0e", "#0cd63f", "#0c8bd6"],
-                    data: [no_bid, manufacturer_in_the_bid, expired_due_date, supplier_did_not_provide_a_quote]
+                    backgroundColor: ["#ff2e00", "#edcf0e", "#0cd63f", "#0c8bd6", "#dc0fe0"],
+                    data: [no_bid, manufacturer_in_the_bid, expired_due_date, supplier_did_not_provide_a_quote, others]
                 }]
         },
         options: {

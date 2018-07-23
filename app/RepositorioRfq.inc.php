@@ -846,6 +846,7 @@ class RepositorioRfq {
         $manufacturer_in_the_bid = 0;
         $expired_due_date = 0;
         $supplier_did_not_provide_a_quote = 0;
+        $others = 0;
 
         if(isset($conexion)){
             try{
@@ -853,21 +854,25 @@ class RepositorioRfq {
                 $sql1 = 'SELECT COUNT(*) as manufacturer_in_bid FROM rfq WHERE comments = "Manufacturer in the Bid" AND YEAR(fecha_completado) = YEAR(CURDATE())';// AND YEAR(fecha_completado) = YEAR(CURDATE())
                 $sql2 = 'SELECT COUNT(*) as expired_due_date FROM rfq WHERE comments = "Expired due date" AND YEAR(fecha_completado) = YEAR(CURDATE())';
                 $sql3 = 'SELECT COUNT(*) as supplier_did_not_provide_a_quote FROM rfq WHERE comments = "Supplier did not provide a quote" AND YEAR(fecha_completado) = YEAR(CURDATE())';
+                $sql4 = 'SELECT COUNT(*) as others FROM rfq WHERE comments = "Others" AND YEAR(fecha_completado) = YEAR(CURDATE())';
 
                 $sentencia = $conexion-> prepare($sql);
                 $sentencia1 = $conexion-> prepare($sql1);
                 $sentencia2 = $conexion-> prepare($sql2);
                 $sentencia3 = $conexion-> prepare($sql3);
+                $sentencia4 = $conexion-> prepare($sql4);
 
                 $sentencia-> execute();
                 $sentencia1-> execute();
                 $sentencia2-> execute();
                 $sentencia3-> execute();
+                $sentencia4-> execute();
 
                 $resultado = $sentencia-> fetch();
                 $resultado1 = $sentencia1-> fetch();
                 $resultado2 = $sentencia2-> fetch();
                 $resultado3 = $sentencia3-> fetch();
+                $resultado4 = $sentencia4-> fetch();
 
                 if(!empty($resultado)){
                     $no_bid = $resultado['no_bid'];
@@ -884,11 +889,15 @@ class RepositorioRfq {
                 if(!empty($resultado3)){
                     $supplier_did_not_provide_a_quote = $resultado3['supplier_did_not_provide_a_quote'];
                 }
+
+                if(!empty($resultado4)){
+                  $others = $resultado4['others'];
+                }
             } catch (PDOException $ex) {
                 print 'ERROR:' . $ex->getMessage() . '<br>';
             }
         }
-        return array($no_bid, $manufacturer_in_the_bid, $expired_due_date, $supplier_did_not_provide_a_quote);
+        return array($no_bid, $manufacturer_in_the_bid, $expired_due_date, $supplier_did_not_provide_a_quote, $others);
     }
 
 }
