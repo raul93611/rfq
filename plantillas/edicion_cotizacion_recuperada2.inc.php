@@ -76,7 +76,7 @@ if ($cotizacion_recuperada->obtener_award() && ($cotizacion_recuperada->obtener_
     echo '<a class="btn btn-primary" href="' . SUBMITTED . $canal . '"><i class="fa fa-backward"></i> Go back</a>';
 } else if ($cotizacion_recuperada->obtener_completado() && ($cotizacion_recuperada->obtener_comments() == 'No comments' || $cotizacion_recuperada->obtener_comments() == 'Working on it')) {
     echo '<a class="btn btn-primary" href="' . COMPLETADOS . $canal . '"><i class="fa fa-backward"></i> Go back</a>';
-} else if ($cotizacion_recuperada->obtener_comments() != 'No comments' && $cotizacion_recuperada->obtener_comments() != 'Working on it') {
+} else if ($cotizacion_recuperada->obtener_comments() == 'No Bid' || $cotizacion_recuperada->obtener_comments() == 'Manufacturer in the Bid' || $cotizacion_recuperada->obtener_comments() == 'Expired due date' || $cotizacion_recuperada->obtener_comments() == 'Supplier did not provide a quote' || $cotizacion_recuperada->obtener_comments() == 'Others') {
     echo '<a class="btn btn-primary" href="' . NO_BID . '"><i class="fa fa-backward"></i> Go back</a>';
 }else{
   echo '<a class="btn btn-primary" href="' . COTIZACIONES . $canal . '"><i class="fa fa-backward"></i> Go back</a>';
