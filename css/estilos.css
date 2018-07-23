@@ -136,6 +136,60 @@ body{
   background-color: #5a6268 !important;
   border-color: #545b62 !important;
 }
+
+.btn-warning {
+  color: #1F2D3D;
+  background-color: #F0E714 !important;
+  border-color: #F0E714 !important;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+
+.btn-warning:hover {
+  color: #1F2D3D;
+  background-color: #F3EC43 !important;
+  border-color: #F3EC43 !important;
+}
+
+#go_back{
+  border-radius: 25px !important;
+  background-color: #B0B6BD !important;
+  border-color: #B0B6BD !important;
+}
+
+#go_back:hover{
+  background-color: #C0C5CA !important;
+  border-color: #C0C5CA !important;
+}
+
+#calculate{
+  background-color: #007AFF !important;
+  border-color: #007AFF !important;
+}
+
+#calculate:hover{
+  background-color: #3395FF !important;
+  border-color: #3395FF !important;
+}
+
+#save_item{
+  background-color: #03D3AB !important;
+  border-color: #03D3AB !important;
+}
+
+#save_item:hover{
+  background-color: #35DCBC !important;
+  border-color: #35DCBC !important;
+}
+
+.add_item_charter{
+  background-color: #40B7EE !important;
+  border-color: #40B7EE !important;
+}
+
+.add_item_charter:hover{
+  background-color: #66C5F1 !important;
+  border-color: #66C5F1 !important;
+}
 /*Aun no he usado
 .sidebar-dark-primary .user-panel a:hover {
   color: #ffffff !important;
@@ -167,7 +221,7 @@ table{
 }
 
 .list-group-item:hover{
-    background-color: #f9c416;
+    background-color: #F0E714;
 }
 
 #tabla_items .description{
