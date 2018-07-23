@@ -60,6 +60,10 @@ include_once 'plantillas/validacion_login.inc.php';
                             </div>
                         </div>
                     </form>
+                    <div class="social-auth-links text-center">
+                      <p>- OR -</p>
+                      <a href="http://www.elogicportal.com" class="btn btn-info btn-block btn-flat"><i class="fa fa-home"></i> Home</a>
+                    </div>
                 </div>
                 <!-- /.login-card-body -->
             </div>
