@@ -264,9 +264,6 @@
                                 </li>
                             </ul>
                         </li>
-                        <?php
-                        if ($cargo < 4) {
-                            ?>
                             <li class="nav-item has-treeview
                             <?php
                             if ($gestor_actual == 'submitted') {
@@ -354,9 +351,6 @@
                                     </li>
                                 </ul>
                             </li>
-                            <?php
-                        }
-                        ?>
                             <li class="nav-item has-treeview
                             <?php
                             if ($gestor_actual == 'award') {
