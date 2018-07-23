@@ -77,7 +77,6 @@ $(function () {
                         },
                         ticks: $.extend({
                             beginAtZero: true,
-                            stepSize: 1,
                             // Include a dollar sign in the ticks
                             callback: function (value, index, values) {
                                 if (value >= 1000) {
@@ -209,7 +208,6 @@ $(function () {
                         },
                         ticks: $.extend({
                             beginAtZero: true,
-                            stepSize: 1,
                             // Include a dollar sign in the ticks
                             callback: function (value, index, values) {
                                 if (value >= 1000) {
@@ -386,7 +384,7 @@ $(function () {
                 easing: 'easeInOutCubic',
                 duration: 1500
             }
-            
+
         }
     });
 
