@@ -73,8 +73,7 @@ if ($cotizacion_recuperada->obtener_award() && ($cotizacion_recuperada->obtener_
 }else{
   echo '<a class="btn btn-primary" id="go_back" href="' . COTIZACIONES . $canal . '"><i class="fa fa-reply"></i></a>';
 }
-?>
-<?php
+
   if(count($items)){
     ?>
     <button type="button" id="calculate" class="btn btn-info"><i class="fa fa-calculator"></i> Calculate</button>
