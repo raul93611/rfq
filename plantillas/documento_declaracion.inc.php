@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="Shortcut Icon" href="<?php echo RUTA_IMG; ?>favicon.png" type="image/x-icon" />
+        <link rel="Shortcut Icon" href="<?php echo RUTA_IMG; ?>favicon_e.png" type="image/x-icon" />
         <?php
         if (!isset($titulo) || empty($titulo)) {
             $titulo = Inicio;

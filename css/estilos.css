@@ -161,12 +161,13 @@ body{
   border-color: #C0C5CA !important;
 }
 
-#calculate{
+.calculate{
+  color: #ffffff !important;
   background-color: #007AFF !important;
   border-color: #007AFF !important;
 }
 
-#calculate:hover{
+.calculate:hover{
   background-color: #3395FF !important;
   border-color: #3395FF !important;
 }
@@ -193,6 +194,15 @@ body{
 
 .waiting_for{
   border-left: 5px solid #FBD200 !important;
+}
+
+.btn_home{
+  background-color: #39485A !important;
+  color: #ffffff !important;
+}
+
+.btn_home:hover{
+  background-color: #4f5359 !important;
 }
 /*Aun no he usado
 .sidebar-dark-primary .user-panel a:hover {

@@ -76,7 +76,7 @@ if ($cotizacion_recuperada->obtener_award() && ($cotizacion_recuperada->obtener_
 
   if(count($items)){
     ?>
-    <button type="button" id="calculate" class="btn btn-info"><i class="fa fa-calculator"></i> Calculate</button>
+    <button type="button" class="btn btn-info calculate" id="calculate"><i class="fa fa-calculator"></i> Calculate</button>
     <?php
   }
 ?>
