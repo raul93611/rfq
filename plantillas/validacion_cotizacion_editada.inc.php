@@ -128,12 +128,7 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
         }
         if ($submitted) {
             RepositorioRfq::actualizar_fecha_y_submitted(Conexion::obtener_conexion(), $_POST['id_rfq']);
-
-            if($cargo < 4){
-                Redireccion::redirigir1(SUBMITTED . $canal);
-            }else{
-                Redireccion::redirigir1(COTIZACIONES . $canal);
-            }
+            Redireccion::redirigir1(COMPLETADOS . $canal);
         }else{
             $cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $_POST['id_rfq']);
         }
