@@ -169,8 +169,12 @@ if($cargo == 4 && $_SESSION['id_usuario'] != $cotizacion_recuperada-> obtener_us
         <label for="shipping">Shipping:</label>
         <div class="col">
           <div class="form-group">
-              <input type="text" class="form-control" id="shipping" name="shipping" value="<?php echo $cotizacion_recuperada->obtener_shipping(); ?>">
+              <textarea class="form-control" rows="5" id="shipping" name="shipping" placeholder="Enter shipping ..."><?php echo $cotizacion_recuperada->obtener_shipping(); ?></textarea>
           </div>
+
+          <!--<div class="form-group">
+              <input type="text" class="form-control" id="shipping" name="shipping" value="<?php echo $cotizacion_recuperada->obtener_shipping(); ?>">
+          </div>-->
         </div>
         <div class="col">
           <div class="form-group">

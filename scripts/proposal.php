@@ -194,7 +194,7 @@ try{
       $html .= '
       <tr>
         <td style="border:none;"></td>
-        <td colspan="3" style="font-size:10pt;">' . $cotizacion->obtener_shipping() .'</td>
+        <td colspan="3" style="font-size:10pt;">' . nl2br($cotizacion->obtener_shipping()) .'</td>
         <td style="text-align:right;">$ ' . number_format($cotizacion->obtener_shipping_cost(), 2) .'</td>
       </tr>
       <tr>
