@@ -85,7 +85,11 @@ if ($partes_ruta[0] == 'rfq') {
             $ruta_elegida = 'scripts/proposal.php';
         }
     } else if (count($partes_ruta) == 4) {
-        if ($partes_ruta[1] == 'perfil' && $partes_ruta[2] == 'cotizaciones') {
+      if($partes_ruta[1] == 'delete_document'){
+        $id_rfq = $partes_ruta[2];
+        $archivo = $partes_ruta[3];
+        $ruta_elegida = 'scripts/delete_document.php';
+      }else if ($partes_ruta[1] == 'perfil' && $partes_ruta[2] == 'cotizaciones') {
             $gestor_actual = 'cotizaciones';
             $ruta_elegida = 'vistas/perfil.php';
             switch ($partes_ruta[3]) {

@@ -59,6 +59,7 @@ define('EDIT_HIGH_LEVEL_REQUIREMENT', COTIZACIONES . 'edit_high_level_requiremen
 define('EDIT_OUT_OF_SCOPE', COTIZACIONES . 'edit_out_of_scope');
 define('EDIT_PROJECT_RISK', COTIZACIONES . 'edit_project_risk');
 define('EDIT_PROJECT_MILESTONE', COTIZACIONES . 'edit_project_milestone');
+define('DELETE_DOCUMENT', SERVIDOR . 'delete_document');
 
 define('RUTA_CSS', SERVIDOR . 'css/');
 define('RUTA_JS', SERVIDOR . 'js/');
