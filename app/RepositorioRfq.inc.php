@@ -115,7 +115,7 @@ class RepositorioRfq {
             return;
         }
         ?>
-        <tr <?php if($cotizacion->obtener_comments() == 'Working on it'){echo 'style="background-color: rgba(255, 239, 73, 0.5);"';} ?>>
+        <tr <?php if($cotizacion->obtener_comments() == 'Working on it'){echo 'class="waiting_for"';} ?>>
             <td>
                 <a href="<?php echo EDITAR_COTIZACION . '/' . $cotizacion->obtener_id(); ?>" class="btn-block">
                     <?php echo $cotizacion->obtener_email_code(); ?>
