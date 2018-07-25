@@ -18,7 +18,7 @@ if($cargo == 4 && $_SESSION['id_usuario'] != $cotizacion_recuperada-> obtener_us
             </div>
             <div class="form-group">
                 <label for="part_number_project">Part #:</label>
-                <input type="text" class="form-control" id="part_number_project" name="part_number_project" placeholder="Part # ..." value="<?php echo $item->obtener_part_number(); ?>">
+                <input type="text" class="form-control" id="part_number_project" name="part_number_project" placeholder="Part # ..." value="<?php echo $item->obtener_part_number_project(); ?>">
             </div>
             <div class="form-group">
                 <label for="description_project">Description:</label>
