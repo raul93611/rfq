@@ -217,7 +217,8 @@ $(document).ready(function () {
     $('#footer_item').toggleClass('footer_item1');
   });
 
-
+  $('#completed_date').datepicker();
+  $('#expiration_date').datepicker();
 
     $('#issue_date').inputmask('mm/dd/yyyy', {'placeholder': 'mm/dd/yyyy'});
     $('#end_date').inputmask("datetime", {
@@ -227,8 +228,8 @@ $(document).ready(function () {
         separator: "/",
         alias: "mm/dd/yyyy"
     });
-    $('#completed_date').inputmask('mm/dd/yyyy', {'placeholder': 'mm/dd/yyyy'});
-    $('#expiration_date').inputmask('mm/dd/yyyy', {'placeholder': 'mm/dd/yyyy'});
+    //$('#completed_date').inputmask('mm/dd/yyyy', {'placeholder': 'mm/dd/yyyy'});
+    //$('#expiration_date').inputmask('mm/dd/yyyy', {'placeholder': 'mm/dd/yyyy'});
     $('#date_milestone').inputmask('mm/dd/yyyy', {'placeholder': 'mm/dd/yyyy'});
 
     //REALIZAR CALCULO DE LA TABLA DE ITEMS
