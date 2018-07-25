@@ -41,6 +41,7 @@ define('FBO_AWARD', AWARD . 'fbo');
 define('NUEVA_COTIZACION', COTIZACIONES . 'nuevo');
 define('NO_BID', COTIZACIONES . 'no_bid');
 define('EDITAR_COTIZACION', COTIZACIONES . 'editar_cotizacion');
+define('DELETE_QUOTE', COTIZACIONES . 'delete_quote');
 define('DOCS', SERVIDOR . 'documentos/');
 define('PROPOSAL', SERVIDOR . 'proposal');
 define('PROPOSAL_GSA', SERVIDOR . 'proposal_gsa');

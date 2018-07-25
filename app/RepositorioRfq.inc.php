@@ -110,7 +110,7 @@ class RepositorioRfq {
         return $cotizaciones;
     }
 
-    public static function escribir_cotizacion($cotizacion) {
+    public static function escribir_cotizacion($cotizacion, $cargo) {
         if (!isset($cotizacion)) {
             return;
         }
@@ -133,6 +133,13 @@ class RepositorioRfq {
             <td><?php echo $cotizacion->obtener_issue_date(); ?></td>
             <td><?php echo $cotizacion->obtener_end_date(); ?></td>
             <td><?php echo $cotizacion->obtener_id(); ?></td>
+            <?php
+            if($cargo < 4){
+              ?>
+              <td class="text-center"><a href="<?php echo DELETE_QUOTE . '/' . $cotizacion->obtener_id(); ?>" class="btn btn-sm btn-danger"><i class="fa fa-times"></i></a></td>
+              <?php
+            }
+            ?>
         </tr>
         <?php
     }
@@ -153,12 +160,14 @@ class RepositorioRfq {
                         <th>ISSUE DATE</th>
                         <th>END DATE</th>
                         <th>PROPOSAL</th>
+                        <?php if($cargo < 4){echo '<th>ELIMINAR</th>';} ?>
+
                     </tr>
                 </thead>
                 <tbody id="tabla_cotizaciones">
                     <?php
                     foreach ($cotizaciones as $cotizacion) {
-                        self::escribir_cotizacion($cotizacion);
+                        self::escribir_cotizacion($cotizacion, $cargo);
                     }
                     ?>
                 </tbody>
@@ -904,6 +913,20 @@ class RepositorioRfq {
             }
         }
         return array($no_bid, $manufacturer_in_the_bid, $expired_due_date, $supplier_did_not_provide_a_quote, $others);
+    }
+
+    public static function delete_quote($conexion, $id_rfq){
+      if(isset($conexion)){
+        try{
+          $sql = 'DELETE FROM rfq WHERE id = :id_rfq';
+          $sentencia= $conexion->prepare($sql);
+          $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+          $sentencia-> execute();
+
+        }catch(PDOException $ex){
+          print "ERROR:" . $ex->getMessage() . "<br>";
+        }
+      }
     }
 
 }

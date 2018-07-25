@@ -197,6 +197,10 @@ if ($partes_ruta[0] == 'rfq') {
                     $cotizacion = 'editar_cotizacion';
                     $id_rfq = $partes_ruta[4];
                     break;
+                case 'delete_quote':
+                    $cotizacion = 'delete_quote';
+                    $id_rfq = $partes_ruta[4];
+                    break;
                 case 'add_item':
                     $cotizacion = 'add_item';
                     $id_rfq = $partes_ruta[4];
