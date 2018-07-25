@@ -32,7 +32,7 @@ $(function () {
     others = jQuery.parseJSON(others);
 
     var ticksStyle = {
-        fontColor: '#495057',
+        fontColor: '#39485A',
         fontStyle: 'bold'
     };
 
@@ -46,13 +46,13 @@ $(function () {
             labels: nombres_usuario,
             datasets: [
                 {
-                    backgroundColor: '#007bff',
-                    borderColor: '#007bff',
+                    backgroundColor: '#13A8F0',
+                    borderColor: '#13A8F0',
                     data: cotizaciones_completadas
                 },
                 {
-                    backgroundColor: '#ced4da',
-                    borderColor: '#ced4da',
+                    backgroundColor: '#39485A',
+                    borderColor: '#39485A',
                     data: cotizaciones_completadas_pasadas
                 }
             ]
@@ -111,13 +111,13 @@ $(function () {
             labels: nombres_usuario,
             datasets: [
                 {
-                    backgroundColor: '#007bff',
-                    borderColor: '#007bff',
+                    backgroundColor: '#13A8F0',
+                    borderColor: '#13A8F0',
                     data: cotizaciones_ganadas
                 },
                 {
-                    backgroundColor: '#ced4da',
-                    borderColor: '#ced4da',
+                    backgroundColor: '#39485A',
+                    borderColor: '#39485A',
                     data: cotizaciones_ganadas_pasadas
                 }
             ]
@@ -177,13 +177,13 @@ $(function () {
             labels: nombres_usuario,
             datasets: [
                 {
-                    backgroundColor: '#007bff',
-                    borderColor: '#007bff',
+                    backgroundColor: '#13A8F0',
+                    borderColor: '#13A8F0',
                     data: cotizaciones_no_sometidas
                 },
                 {
-                    backgroundColor: '#ced4da',
-                    borderColor: '#ced4da',
+                    backgroundColor: '#39485A',
+                    borderColor: '#39485A',
                     data: cotizaciones_no_sometidas_pasadas
                 }
             ]
@@ -241,13 +241,13 @@ $(function () {
             labels: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
             datasets: [
                 {
-                    backgroundColor: '#007bff',
-                    borderColor: '#007bff',
+                    backgroundColor: '#13A8F0',
+                    borderColor: '#13A8F0',
                     data: cotizaciones_mes/*[1,2,3,4,5,6,7,8,9,1,2,0]*/
                 }/*,
                  {
-                 backgroundColor: '#ced4da',
-                 borderColor    : '#ced4da',
+                 backgroundColor: '#39485A',
+                 borderColor    : '#39485A',
                  data           : cotizaciones_completadas_pasadas
                  }*/
             ]
@@ -307,13 +307,13 @@ $(function () {
             labels: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
             datasets: [
                 {
-                    backgroundColor: '#007bff',
-                    borderColor: '#007bff',
+                    backgroundColor: '#13A8F0',
+                    borderColor: '#13A8F0',
                     data: monto_cotizaciones_mes/*[1,2,3,4,5,6,7,8,9,1,2,0]*/
                 }/*,
                  {
-                 backgroundColor: '#ced4da',
-                 borderColor    : '#ced4da',
+                 backgroundColor: '#39485A',
+                 borderColor    : '#39485A',
                  data           : cotizaciones_completadas_pasadas
                  }*/
             ]
@@ -371,7 +371,7 @@ $(function () {
             labels: ["No Bid", "Manufacturer in the Bid", "Expired due date", "Supplier did not provide a quote", "Others"],
             datasets: [{
                     label: "Population (millions)",
-                    backgroundColor: ["#ff2e00", "#edcf0e", "#0cd63f", "#0c8bd6", "#dc0fe0"],
+                    backgroundColor: ["#f75a6a", "#f8d200", "#0cd63f", "#13A8F0", "#9276e2"],
                     data: [no_bid, manufacturer_in_the_bid, expired_due_date, supplier_did_not_provide_a_quote, others]
                 }]
         },
