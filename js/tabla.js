@@ -39,6 +39,56 @@ function myFunction() {
     }
 }
 
+function myFunction1() {
+    var input, filter, table, tr, td, i, select;
+    select = document.getElementById("tipo");
+    var tipo = select.options[select.selectedIndex].value;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("tabla_cotizaciones_completados");
+    tr = table.getElementsByTagName("tr");
+
+    for (i = 0; i < tr.length; i++) {
+        switch (tipo) {
+            case 'Code':
+                td = tr[i].getElementsByTagName("a")[0];
+                break;
+            case 'Designated user':
+                td = tr[i].getElementsByTagName("td")[1];
+                break;
+            case 'Type of Bid':
+                td = tr[i].getElementsByTagName("td")[2];
+                break;
+            case 'Issue Date':
+                td = tr[i].getElementsByTagName("td")[3];
+                break;
+            case 'End Date':
+                td = tr[i].getElementsByTagName("td")[4];
+                break;
+            case 'Amount':
+                td = tr[i].getElementByTagName('td')[5];
+                break;
+            case 'Completed date':
+                td = tr[i].getElementByTagName('td')[6];
+                break;
+            case 'Proposal':
+                td = tr[i].getElementsByTagName("td")[7];
+                break;
+            case 'Comments':
+                td = tr[i].getElementByTagName('td')[8];
+                break;
+        }
+
+        if (td) {
+            if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+}
+
 function myFunction2() {
     var input, filter, table, tr, td, i, select;
     select = document.getElementById("tipo");
