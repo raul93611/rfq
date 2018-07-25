@@ -204,6 +204,14 @@ body{
 .btn_home:hover{
   background-color: #4f5359 !important;
 }
+
+.text-primary {
+  color: #13A8F0 !important;
+}
+
+a.text-primary:hover, a.text-primary:focus {
+  color: #0062cc !important;
+}
 /*Aun no he usado
 .sidebar-dark-primary .user-panel a:hover {
   color: #ffffff !important;
