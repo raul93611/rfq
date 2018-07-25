@@ -269,7 +269,10 @@ $(document).ready(function () {
     var partes_total_price = '';
     var unit_prices = '';
     var additional = '';
+    var total_quantity = 0;
     $('#items tr').each(function () {
+      total_quantity = total_quantity + Number($(this).find('td').eq(5).text());
+
         var add_cost = $('#add_cost' + j).val();
         if (i === 0) {
             additional = additional + add_cost;
@@ -330,6 +333,7 @@ $(document).ready(function () {
     $('#total_price').val(total2);
     $('#total1').html('$ ' + total1);
     $('#total2').html('$ ' + total2);
+    $('#total_quantity').html(total_quantity);
 
     $('#calculate').click(function () {
         var payment_terms = 0;

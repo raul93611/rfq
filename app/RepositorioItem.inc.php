@@ -211,7 +211,9 @@ class RepositorioItem {
                 $item = $items[$i];
                 self::escribir_item($item, $i + 1);
             }
-            echo '<td colspan="9" class="display-4"><b><h4>TOTAL:</h4></b></td>';
+            echo '<td colspan="5" class="display-4"><b><h4>TOTAL:</h4></b></td>';
+            echo '<td id="total_quantity"></td>';
+            echo '<td colspan="3"></td>';
             echo '<td id="total1"></td>';
             echo '<td></td>';
             echo '<td id="total2"></td>';
