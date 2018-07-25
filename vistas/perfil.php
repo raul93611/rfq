@@ -4,7 +4,7 @@ if(!ControlSesion::sesion_iniciada()) {
     Redireccion::redirigir1(SERVIDOR);
 }
 
-$titulo = 'Perfil';
+$titulo = 'Profile';
 
 Conexion::abrir_conexion();
 $usuario = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), $_SESSION['id_usuario']);

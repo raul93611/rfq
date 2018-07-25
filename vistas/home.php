@@ -12,7 +12,7 @@ include_once 'plantillas/validacion_login.inc.php';
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Inicio</title>
+        <title>Home</title>
 
         <!-- Font Awesome -->
         <link rel="stylesheet" href="<?php echo PLUGINS; ?>/font-awesome/css/font-awesome.min.css">
