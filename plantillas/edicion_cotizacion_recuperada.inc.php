@@ -4,7 +4,7 @@ if($cargo == 4 && $_SESSION['id_usuario'] != $cotizacion_recuperada-> obtener_us
 }
 ?>
 <input type="hidden" name="id_rfq" value="<?php echo $cotizacion_recuperada->obtener_id(); ?>">
-<div class="card-body table-responsive">
+<div class="card-body">
     <div class="row">
         <div class="col">
             <div class="form-group">
@@ -104,7 +104,7 @@ if($cargo == 4 && $_SESSION['id_usuario'] != $cotizacion_recuperada-> obtener_us
         }
         ?>
       </div>
-      
+
     </div>
 
 

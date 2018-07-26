@@ -188,6 +188,7 @@ class RepositorioItem {
             </div>';
 
             echo '</div></div><br>';
+            echo '<div class="table-responsive">';
             echo '<table id="tabla_items" class="table table-bordered table-hover">';
             echo '<thead>';
             echo '<tr>';
@@ -219,6 +220,7 @@ class RepositorioItem {
             echo '<td id="total2"></td>';
             echo '</tbody>';
             echo '</table>';
+            echo '</div>';
             $id_items = '';
             for($i = 0; $i < count($items); $i++){
                 $item = $items[$i];
