@@ -344,19 +344,27 @@ class RepositorioRfq {
             <td><?php echo $cotizacion->obtener_type_of_bid(); ?></td>
             <td><?php echo $cotizacion->obtener_issue_date(); ?></td>
             <td><?php echo $cotizacion->obtener_end_date(); ?></td>
-            <td><?php echo '$ ' . $cotizacion->obtener_total_price(); ?></td>
+            <?php
+            if($cotizacion-> obtener_canal() != 'FedBid'){
+              ?>
+              <td><?php echo '$ ' . $cotizacion->obtener_total_price(); ?></td>
+              <?php
+            }
+            ?>
             <td><?php echo $fecha_completado; ?></td>
             <td><?php echo $cotizacion->obtener_id(); ?></td>
             <td><?php echo $cotizacion->obtener_comments(); ?></td>
             <?php
-            if ($cotizacion->obtener_canal() != 'GSA-Buy') {
-                ?>
-                <td class="text-center"><a class="btn btn-sm calculate" href="<?php echo PROPOSAL . '/' . $cotizacion->obtener_id(); ?>" target="_blank"><i class="fa fa-copy"></i></a></td>
-                <?php
-            } else {
-                ?>
-                <td class="text-center"><a class="btn btn-sm calculate" href="<?php echo PROPOSAL . '/' . $cotizacion->obtener_id(); ?>" target="_blank"><i class="fa fa-copy"></i></a>&nbsp;&nbsp;<a class="btn btn-primary btn-sm" href="<?php echo PROPOSAL_GSA . '/' . $cotizacion->obtener_id(); ?>" target="_blank"><i class="fa fa-copy"></i></a></td>
-                <?php
+            if($cotizacion-> obtener_canal() != 'FedBid'){
+              if ($cotizacion->obtener_canal() != 'GSA-Buy') {
+                  ?>
+                  <td class="text-center"><a class="btn btn-sm calculate" href="<?php echo PROPOSAL . '/' . $cotizacion->obtener_id(); ?>" target="_blank"><i class="fa fa-copy"></i></a></td>
+                  <?php
+              } else {
+                  ?>
+                  <td class="text-center"><a class="btn btn-sm calculate" href="<?php echo PROPOSAL . '/' . $cotizacion->obtener_id(); ?>" target="_blank"><i class="fa fa-copy"></i></a>&nbsp;&nbsp;<a class="btn btn-primary btn-sm" href="<?php echo PROPOSAL_GSA . '/' . $cotizacion->obtener_id(); ?>" target="_blank"><i class="fa fa-copy"></i></a></td>
+                  <?php
+              }
             }
             ?>
         </tr>
@@ -378,11 +386,11 @@ class RepositorioRfq {
                         <th>TYPE OF BID</th>
                         <th>ISSUE DATE</th>
                         <th>END DATE</th>
-                        <th>AMOUNT</th>
+                        <?php if($canal != 'FedBid'){echo '<th>AMOUNT</th>';} ?>
                         <th>COMPLETED DATE</th>
                         <th>PROPOSAL</th>
                         <th>COMMENTS</th>
-                        <th>GENERATE PROPOSAL</th>
+                        <?php if($canal != 'FedBid'){echo '<th>GENERATE PROPOSAL</th>';} ?>
                     </tr>
                 </thead>
                 <tbody id="tabla_cotizaciones_completados">
@@ -451,19 +459,27 @@ class RepositorioRfq {
             <td><?php echo $cotizacion->obtener_type_of_bid(); ?></td>
             <td><?php echo $cotizacion->obtener_issue_date(); ?></td>
             <td><?php echo $cotizacion->obtener_end_date(); ?></td>
-            <td><?php echo '$ ' . $cotizacion->obtener_total_price(); ?></td>
+            <?php
+            if($cotizacion-> obtener_canal() != 'FedBid'){
+              ?>
+              <td><?php echo '$ ' . $cotizacion->obtener_total_price(); ?></td>
+              <?php
+            }
+            ?>
             <td><?php echo $fecha_submitted; ?></td>
             <td><?php echo $cotizacion->obtener_id(); ?></td>
             <td><?php echo $cotizacion->obtener_comments(); ?></td>
             <?php
-            if ($cotizacion->obtener_canal() != 'GSA-Buy') {
-                ?>
-                <td class="text-center"><a class="btn btn-sm calculate" href="<?php echo PROPOSAL . '/' . $cotizacion->obtener_id(); ?>" target="_blank"><i class="fa fa-copy"></i></a></td>
-                <?php
-            } else {
-                ?>
-                <td class="text-center"><a class="btn btn-sm calculate" href="<?php echo PROPOSAL . '/' . $cotizacion->obtener_id(); ?>" target="_blank"><i class="fa fa-copy"></i></a>&nbsp;&nbsp;<a class="btn btn-primary btn-sm" href="<?php echo PROPOSAL_GSA . '/' . $cotizacion->obtener_id(); ?>" target="_blank"><i class="fa fa-copy"></i></a></td>
-                <?php
+            if($cotizacion-> obtener_canal() != 'FedBid'){
+              if ($cotizacion->obtener_canal() != 'GSA-Buy') {
+                  ?>
+                  <td class="text-center"><a class="btn btn-sm calculate" href="<?php echo PROPOSAL . '/' . $cotizacion->obtener_id(); ?>" target="_blank"><i class="fa fa-copy"></i></a></td>
+                  <?php
+              } else {
+                  ?>
+                  <td class="text-center"><a class="btn btn-sm calculate" href="<?php echo PROPOSAL . '/' . $cotizacion->obtener_id(); ?>" target="_blank"><i class="fa fa-copy"></i></a>&nbsp;&nbsp;<a class="btn btn-primary btn-sm" href="<?php echo PROPOSAL_GSA . '/' . $cotizacion->obtener_id(); ?>" target="_blank"><i class="fa fa-copy"></i></a></td>
+                  <?php
+              }
             }
             ?>
         </tr>
@@ -480,16 +496,16 @@ class RepositorioRfq {
             <table class="table table-bordered table-striped table-responsive-md">
                 <thead>
                     <tr>
-                        <th>CODE</th>
-                        <th>DEDIGNATED USER</th>
-                        <th>TYPE OF BID</th>
-                        <th>ISSUE DATE</th>
-                        <th>END DATE</th>
-                        <th>AMOUNT</th>
-                        <th>SUBMITTED DATE</th>
-                        <th>PROPOSAL</th>
-                        <th>COMMENTS</th>
-                        <th>GENERATE PROPOSAL</th>
+                      <th>CODE</th>
+                      <th>DEDIGNATED USER</th>
+                      <th>TYPE OF BID</th>
+                      <th>ISSUE DATE</th>
+                      <th>END DATE</th>
+                      <?php if($canal != 'FedBid'){echo '<th>AMOUNT</th>';} ?>
+                      <th>COMPLETED DATE</th>
+                      <th>PROPOSAL</th>
+                      <th>COMMENTS</th>
+                      <?php if($canal != 'FedBid'){echo '<th>GENERATE PROPOSAL</th>';} ?>
                     </tr>
                 </thead>
                 <tbody id="tabla_cotizaciones_submitted">
@@ -559,7 +575,13 @@ class RepositorioRfq {
             <td><?php echo $cotizacion->obtener_type_of_bid(); ?></td>
             <td><?php echo $cotizacion->obtener_issue_date(); ?></td>
             <td><?php echo $cotizacion->obtener_end_date(); ?></td>
-            <td><?php echo '$ ' . $cotizacion->obtener_total_price(); ?></td>
+            <?php
+            if($cotizacion-> obtener_canal() != 'FedBid'){
+              ?>
+              <td><?php echo '$ ' . $cotizacion->obtener_total_price(); ?></td>
+              <?php
+            }
+            ?>
             <td><?php echo $fecha_award; ?></td>
             <td><?php echo $cotizacion->obtener_id(); ?></td>
             <td><?php echo $cotizacion->obtener_comments(); ?></td>
@@ -577,15 +599,15 @@ class RepositorioRfq {
             <table class="table table-bordered table-striped table-responsive-md">
                 <thead>
                     <tr>
-                        <th>CODE</th>
-                        <th>DEDIGNATED USER</th>
-                        <th>TYPE OF BID</th>
-                        <th>ISSUE DATE</th>
-                        <th>END DATE</th>
-                        <th>AMOUNT</th>
-                        <th>AWARD DATE</th>
-                        <th>PROPOSAL</th>
-                        <th>COMMENTS</th>
+                      <th>CODE</th>
+                      <th>DEDIGNATED USER</th>
+                      <th>TYPE OF BID</th>
+                      <th>ISSUE DATE</th>
+                      <th>END DATE</th>
+                      <?php if($canal != 'FedBid'){echo '<th>AMOUNT</th>';} ?>
+                      <th>COMPLETED DATE</th>
+                      <th>PROPOSAL</th>
+                      <th>COMMENTS</th>
                     </tr>
                 </thead>
                 <tbody id="tabla_cotizaciones_award">

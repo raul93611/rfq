@@ -35,7 +35,6 @@
                                         <option>Type of Bid</option>
                                         <option>Issue Date</option>
                                         <option>End Date</option>
-                                        <option>Amount</option>
                                         <option>Completed date</option>
                                         <option>Proposal</option>
                                         <option>Comments</option>
