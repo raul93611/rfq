@@ -17,7 +17,6 @@ include_once 'plantillas/barra_lateral.inc.php';
 ?>
 
 <?php
-
 switch ($gestor_actual) {
     case '':
         include_once 'plantillas/muro.inc.php';

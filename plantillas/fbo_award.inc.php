@@ -43,7 +43,7 @@
                             </div>
                             <br>
                             <?php
-                            RepositorioRfq::escribir_cotizaciones_award_por_canal($canal $_SESSION['id_usuario'], $cargo);
+                            RepositorioRfq::escribir_cotizaciones_award_por_canal($canal, $_SESSION['id_usuario'], $cargo);
                             ?>
                         </div>
                     </div>
