@@ -327,7 +327,7 @@ class RepositorioRfq {
         $partes_fecha_completado = explode('-', $cotizacion->obtener_fecha_completado());
         $fecha_completado = $partes_fecha_completado[1] . '/' . $partes_fecha_completado[2] . '/' . $partes_fecha_completado[0];
         ?>
-        <tr>
+        <tr <?php if($cotizacion->obtener_comments() == 'Working on it'){echo 'class="waiting_for"';} ?>>
             <td>
                 <a href="<?php echo EDITAR_COTIZACION . '/' . $cotizacion->obtener_id(); ?>" class="btn-block">
                     <?php echo $cotizacion->obtener_email_code(); ?>
