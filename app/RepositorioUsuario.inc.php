@@ -150,7 +150,7 @@ class RepositorioUsuario {
 
         if (isset($conexion)) {
             try {
-                $sql = "SELECT * FROM usuarios WHERE cargo != 1";
+                $sql = "SELECT * FROM usuarios WHERE cargo != 1 ORDER BY id";
 
                 $sentencia = $conexion->prepare($sql);
 
@@ -176,6 +176,7 @@ class RepositorioUsuario {
         }
         ?>
         <tr>
+            <td><?php echo $usuario-> obtener_id(); ?></td>
             <td><?php echo $usuario->obtener_nombres(); ?></td>
             <td><?php echo $usuario->obtener_apellidos(); ?></td>
             <td class='text-center'>
@@ -198,6 +199,7 @@ class RepositorioUsuario {
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr>
+                        <th>Id</th>
                         <th>First names</th>
                         <th>Last names</th>
                         <th>Options</th>

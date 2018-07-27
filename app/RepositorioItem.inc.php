@@ -89,7 +89,7 @@ class RepositorioItem {
         echo '<tr>';
         echo '<td><a href="' . ADD_PROVIDER . '/' . $item->obtener_id() . '" class="btn btn-warning btn-block"><i class="fa fa-plus-circle"></i> Add Provider</a><br><a href="' . EDIT_ITEM . '/' . $item->obtener_id() . '" class="btn btn-warning btn-block"><i class="fa fa-edit"></i> Edit item</a><br><a href="' . DELETE_ITEM . '/' . $item-> obtener_id() . '" class="btn btn-warning btn-block"><i class="fa fa-trash"></i> Delete</a></td>';
         echo '<td>' . $i . '</td>';
-        
+
         if(strlen($item-> obtener_description_project()) >= 100){
           echo '<td><b>Brand:</b> ' . $item->obtener_brand_project() . '<br><b>Part #:</b> ' . $item->obtener_part_number_project() . '<br><b>Description:</b> ' . nl2br(mb_substr($item->obtener_description_project(), 0, 100)) . ' ...</td>';
         }else{
@@ -349,6 +349,66 @@ class RepositorioItem {
                 $conexion-> rollBack();
             }
         }
+    }
+
+    public static function obtener_items($conexion) {
+        $items = [];
+        if (isset($conexion)) {
+            try {
+                $sql = 'SELECT * FROM item ORDER BY id_usuario';
+                $sentencia = $conexion->prepare($sql);
+                $sentencia->execute();
+
+                $resultado = $sentencia->fetchall();
+
+                if (count($resultado)) {
+                    foreach ($resultado as $fila) {
+                        $items[] = new Item($fila['id'], $fila['id_rfq'], $fila['id_usuario'], $fila['provider_menor'], $fila['brand'], $fila['brand_project'], $fila['part_number'], $fila['part_number_project'], $fila['description'], $fila['description_project'], $fila['quantity'], $fila['unit_price'], $fila['total_price'], $fila['comments'], $fila['website'], $fila['additional']);
+                    }
+                }
+            } catch (PDOException $ex) {
+                print 'ERROR:' . $ex->getMessage() . '<br>';
+            }
+        }
+        return $items;
+    }
+
+    public static function escribir_item_admin($item) {
+        if (!isset($item)) {
+            return;
+        }
+        ?>
+        <tr>
+            <td><?php echo $item->obtener_id_usuario(); ?></td>
+            <td><?php echo $item->obtener_id_rfq(); ?></td>
+        </tr>
+        <?php
+    }
+
+    public static function escribir_items_admin(){
+      Conexion::abrir_conexion();
+      $items = self::obtener_items(Conexion::obtener_conexion());
+      Conexion::cerrar_conexion();
+
+      if (count($items)) {
+          ?>
+          <table class="table table-bordered table-hover">
+              <thead>
+                  <tr>
+                      <th>User</th>
+                      <th>Proposal</th>
+                  </tr>
+              </thead>
+              <tbody id="tabla_extra">
+                  <?php
+                  foreach ($items as $item) {
+                      self::escribir_item_admin($item);
+                  }
+                  ?>
+              </tbody>
+          </table>
+          <?php
+      }
     }
 }
 

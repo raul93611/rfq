@@ -23,7 +23,7 @@
             <!-- Small boxes (Stat box) -->
             <div class="row">
                 <!--<div class="col-lg-3 col-6">
-                <!-- small box 
+                <!-- small box
                 <div class="small-box bg-info">
                     <div class="inner">
                         <h3>150</h3>
@@ -36,9 +36,9 @@
                     <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
                 </div>
             </div>
-                <!-- ./col 
+                <!-- ./col
                 <div class="col-lg-3 col-6">
-                <!-- small box 
+                <!-- small box
                 <div class="small-box bg-success">
                     <div class="inner">
                         <h3>53<sup style="font-size: 20px">%</sup></h3>
@@ -74,7 +74,7 @@
                 </div>
                 <!-- ./col -->
                 <!--<div class="col-lg-3 col-6">
-                <!-- small box 
+                <!-- small box
                 <div class="small-box bg-danger">
                     <div class="inner">
                         <h3>65</h3>
@@ -115,6 +115,28 @@
                             ?>
                         </div>
                     </div>
+                    <div class="card">
+                      <div class="card-header">
+                        <h3 class="card-title">Extra info</h3>
+                      </div>
+                      <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <input class="form-control" id="myInputadmin" type="text" onkeyup="myFunction6()" placeholder="Search.." autofocus>
+                            </div>
+                            <div class="col-md-4">
+                                <select class="form-control" id="tipo_extra">
+                                    <option>Rfq id</option>
+                                    <option>User</option>
+                                </select>
+                            </div>
+                        </div>
+                        <br>
+                        <?php
+                        RepositorioItem::escribir_items_admin();
+                        ?>
+                      </div>
+                    </div>
                 </section>
                 <!-- Left col -->
                 <!--<section class="col-lg-7 connectedSortable">
@@ -133,19 +155,19 @@
                                 <a class="nav-link" href="#sales-chart" data-toggle="tab">Donut</a>
                             </li>
                         </ul>
-                    </div><!-- /.card-header 
+                    </div><!-- /.card-header
                     <div class="card-body">
                         <div class="tab-content p-0">
-                <!-- Morris chart - Sales 
+                <!-- Morris chart - Sales
                 <div class="chart tab-pane active" id="revenue-chart"
                      style="position: relative; height: 300px;"></div>
                 <div class="chart tab-pane" id="sales-chart" style="position: relative; height: 300px;"></div>
             </div>
-        </div><!-- /.card-body 
+        </div><!-- /.card-body
     </div>
-                <!-- /.card 
+                <!-- /.card
 
-                <!-- DIRECT CHAT 
+                <!-- DIRECT CHAT
                 <div class="card direct-chat direct-chat-primary">
                     <div class="card-header">
                         <h3 class="card-title">Direct Chat</h3>
@@ -163,78 +185,78 @@
                             </button>
                         </div>
                     </div>
-                <!-- /.card-header 
+                <!-- /.card-header
                 <div class="card-body">
-                <!-- Conversations are loaded here 
+                <!-- Conversations are loaded here
                 <div class="direct-chat-messages">
-                <!-- Message. Default to the left 
+                <!-- Message. Default to the left
                 <div class="direct-chat-msg">
                     <div class="direct-chat-info clearfix">
                         <span class="direct-chat-name float-left">Alexander Pierce</span>
                         <span class="direct-chat-timestamp float-right">23 Jan 2:00 pm</span>
                     </div>
-                <!-- /.direct-chat-info 
+                <!-- /.direct-chat-info
                 <img class="direct-chat-img" src="<?php #echo DIST;    ?>img/user1-128x128.jpg" alt="message user image">
-                <!-- /.direct-chat-img 
+                <!-- /.direct-chat-img
                 <div class="direct-chat-text">
                     Is this template really for free? That's unbelievable!
                 </div>
-                <!-- /.direct-chat-text 
+                <!-- /.direct-chat-text
             </div>
                 <!-- /.direct-chat-msg -->
 
-                <!-- Message to the right 
+                <!-- Message to the right
                 <div class="direct-chat-msg right">
                     <div class="direct-chat-info clearfix">
                         <span class="direct-chat-name float-right">Sarah Bullock</span>
                         <span class="direct-chat-timestamp float-left">23 Jan 2:05 pm</span>
                     </div>
-                <!-- /.direct-chat-info 
+                <!-- /.direct-chat-info
                 <img class="direct-chat-img" src="<?php #echo DIST;    ?>img/user3-128x128.jpg" alt="message user image">
-                <!-- /.direct-chat-img 
+                <!-- /.direct-chat-img
                 <div class="direct-chat-text">
                     You better believe it!
                 </div>
-                <!-- /.direct-chat-text 
+                <!-- /.direct-chat-text
             </div>
                 <!-- /.direct-chat-msg -->
 
-                <!-- Message. Default to the left 
+                <!-- Message. Default to the left
                 <div class="direct-chat-msg">
                     <div class="direct-chat-info clearfix">
                         <span class="direct-chat-name float-left">Alexander Pierce</span>
                         <span class="direct-chat-timestamp float-right">23 Jan 5:37 pm</span>
                     </div>
-                <!-- /.direct-chat-info 
+                <!-- /.direct-chat-info
                 <img class="direct-chat-img" src="<?php #echo DIST;    ?>img/user1-128x128.jpg" alt="message user image">
-                <!-- /.direct-chat-img 
+                <!-- /.direct-chat-img
                 <div class="direct-chat-text">
                     Working with AdminLTE on a great new app! Wanna join?
                 </div>
-                <!-- /.direct-chat-text 
+                <!-- /.direct-chat-text
             </div>
                 <!-- /.direct-chat-msg -->
 
-                <!-- Message to the right 
+                <!-- Message to the right
                 <div class="direct-chat-msg right">
                     <div class="direct-chat-info clearfix">
                         <span class="direct-chat-name float-right">Sarah Bullock</span>
                         <span class="direct-chat-timestamp float-left">23 Jan 6:10 pm</span>
                     </div>
-                <!-- /.direct-chat-info 
+                <!-- /.direct-chat-info
                 <img class="direct-chat-img" src="<?php #echo DIST;    ?>img/user3-128x128.jpg" alt="message user image">
-                <!-- /.direct-chat-img 
+                <!-- /.direct-chat-img
                 <div class="direct-chat-text">
                     I would love to.
                 </div>
-                <!-- /.direct-chat-text 
+                <!-- /.direct-chat-text
             </div>
-                <!-- /.direct-chat-msg 
+                <!-- /.direct-chat-msg
 
             </div>
                 <!--/.direct-chat-messages-->
 
-                <!-- Contacts are loaded here 
+                <!-- Contacts are loaded here
                 <div class="direct-chat-contacts">
                     <ul class="contacts-list">
                         <li>
@@ -248,10 +270,10 @@
                                     </span>
                                     <span class="contacts-list-msg">How have you been? I was...</span>
                                 </div>
-                <!-- /.contacts-list-info 
+                <!-- /.contacts-list-info
             </a>
         </li>
-                <!-- End Contact Item 
+                <!-- End Contact Item
                 <li>
                     <a href="#">
                         <img class="contacts-list-img" src="<?php #echo DIST;    ?>img/user7-128x128.jpg">
@@ -263,10 +285,10 @@
                             </span>
                             <span class="contacts-list-msg">I will be waiting for...</span>
                         </div>
-                <!-- /.contacts-list-info 
+                <!-- /.contacts-list-info
             </a>
         </li>
-                <!-- End Contact Item 
+                <!-- End Contact Item
                 <li>
                     <a href="#">
                         <img class="contacts-list-img" src="<?php #echo DIST;    ?>img/user3-128x128.jpg">
@@ -278,10 +300,10 @@
                             </span>
                             <span class="contacts-list-msg">I'll call you back at...</span>
                         </div>
-                <!-- /.contacts-list-info 
+                <!-- /.contacts-list-info
             </a>
         </li>
-                <!-- End Contact Item 
+                <!-- End Contact Item
                 <li>
                     <a href="#">
                         <img class="contacts-list-img" src="<?php #echo DIST;    ?>img/user5-128x128.jpg">
@@ -293,10 +315,10 @@
                             </span>
                             <span class="contacts-list-msg">Where is your new...</span>
                         </div>
-                <!-- /.contacts-list-info 
+                <!-- /.contacts-list-info
             </a>
         </li>
-                <!-- End Contact Item 
+                <!-- End Contact Item
                 <li>
                     <a href="#">
                         <img class="contacts-list-img" src="<?php #echo DIST;    ?>img/user6-128x128.jpg">
@@ -308,10 +330,10 @@
                             </span>
                             <span class="contacts-list-msg">Can I take a look at...</span>
                         </div>
-                <!-- /.contacts-list-info 
+                <!-- /.contacts-list-info
             </a>
         </li>
-                <!-- End Contact Item 
+                <!-- End Contact Item
                 <li>
                     <a href="#">
                         <img class="contacts-list-img" src="<?php #echo DIST;    ?>img/user8-128x128.jpg">
@@ -323,16 +345,16 @@
                             </span>
                             <span class="contacts-list-msg">Never mind I found...</span>
                         </div>
-                <!-- /.contacts-list-info 
+                <!-- /.contacts-list-info
             </a>
         </li>
-                <!-- End Contact Item 
+                <!-- End Contact Item
             </ul>
-                <!-- /.contacts-list 
+                <!-- /.contacts-list
             </div>
-                <!-- /.direct-chat-pane 
+                <!-- /.direct-chat-pane
             </div>
-                <!-- /.card-body 
+                <!-- /.card-body
                 <div class="card-footer">
                     <form action="#" method="post">
                         <div class="input-group">
@@ -347,7 +369,7 @@
             </div>
                 <!--/.direct-chat -->
 
-                <!-- TO DO List 
+                <!-- TO DO List
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">
@@ -365,20 +387,20 @@
                             </ul>
                         </div>
                     </div>
-                <!-- /.card-header 
+                <!-- /.card-header
                 <div class="card-body">
                     <ul class="todo-list">
                         <li>
-                <!-- drag handle 
+                <!-- drag handle
                 <span class="handle">
                     <i class="fa fa-ellipsis-v"></i>
                     <i class="fa fa-ellipsis-v"></i>
                 </span>
-                <!-- checkbox 
+                <!-- checkbox
                 <input type="checkbox" value="" name="">
-                <!-- todo text 
+                <!-- todo text
                 <span class="text">Design a nice theme</span>
-                <!-- Emphasis label 
+                <!-- Emphasis label
                 <small class="badge badge-danger"><i class="fa fa-clock-o"></i> 2 mins</small>
                 <!-- General tools such as edit or delete
                 <div class="tools">
@@ -453,25 +475,25 @@
             </li>
         </ul>
     </div>
-                <!-- /.card-body 
+                <!-- /.card-body
                 <div class="card-footer clearfix">
                     <button type="button" class="btn btn-info float-right"><i class="fa fa-plus"></i> Add item</button>
                 </div>
             </div>
-                <!-- /.card 
+                <!-- /.card
             </section>
-                <!-- /.Left col 
+                <!-- /.Left col
                 <!-- right col (We are only adding the ID to make the widgets sortable)
                 <section class="col-lg-5 connectedSortable">
 
-                <!-- Map card 
+                <!-- Map card
                 <div class="card bg-primary-gradient">
                     <div class="card-header no-border">
                         <h3 class="card-title">
                             <i class="fa fa-map-marker mr-1"></i>
                             Visitors
                         </h3>
-                <!-- card tools 
+                <!-- card tools
                 <div class="card-tools">
                     <button type="button"
                             class="btn btn-primary btn-sm daterange"
@@ -487,7 +509,7 @@
                         <i class="fa fa-minus"></i>
                     </button>
                 </div>
-                <!-- /.card-tools 
+                <!-- /.card-tools
             </div>
             <div class="card-body">
                 <div id="world-map" style="height: 250px; width: 100%;"></div>
@@ -499,24 +521,24 @@
                             <div id="sparkline-1"></div>
                             <div class="text-white">Visitors</div>
                         </div>
-                <!-- ./col 
+                <!-- ./col
                 <div class="col-4 text-center">
                     <div id="sparkline-2"></div>
                     <div class="text-white">Online</div>
                 </div>
-                <!-- ./col 
+                <!-- ./col
                 <div class="col-4 text-center">
                     <div id="sparkline-3"></div>
                     <div class="text-white">Sales</div>
                 </div>
-                <!-- ./col 
+                <!-- ./col
             </div>
-                <!-- /.row 
+                <!-- /.row
             </div>
         </div>
                 <!-- /.card -->
 
-                <!-- solid sales graph 
+                <!-- solid sales graph
                 <div class="card bg-info-gradient">
                     <div class="card-header no-border">
                         <h3 class="card-title">
@@ -536,7 +558,7 @@
                     <div class="card-body">
                         <div class="chart" id="line-chart" style="height: 250px;"></div>
                     </div>
-                <!-- /.card-body 
+                <!-- /.card-body
                 <div class="card-footer bg-transparent">
                     <div class="row">
                         <div class="col-4 text-center">
@@ -545,29 +567,29 @@
 
                             <div class="text-white">Mail-Orders</div>
                         </div>
-                <!-- ./col 
+                <!-- ./col
                 <div class="col-4 text-center">
                     <input type="text" class="knob" data-readonly="true" value="50" data-width="60" data-height="60"
                            data-fgColor="#39CCCC">
 
                     <div class="text-white">Online</div>
                 </div>
-                <!-- ./col 
+                <!-- ./col
                 <div class="col-4 text-center">
                     <input type="text" class="knob" data-readonly="true" value="30" data-width="60" data-height="60"
                            data-fgColor="#39CCCC">
 
                     <div class="text-white">In-Store</div>
                 </div>
-                <!-- ./col 
+                <!-- ./col
             </div>
-                <!-- /.row 
+                <!-- /.row
             </div>
-                <!-- /.card-footer 
+                <!-- /.card-footer
             </div>
                 <!-- /.card -->
 
-                <!-- Calendar 
+                <!-- Calendar
                 <div class="card bg-success-gradient">
                     <div class="card-header no-border">
 
@@ -575,9 +597,9 @@
                             <i class="fa fa-calendar"></i>
                             Calendar
                         </h3>
-                <!-- tools card 
+                <!-- tools card
                 <div class="card-tools">
-                <!-- button with a dropdown 
+                <!-- button with a dropdown
                 <div class="btn-group">
                     <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-bars"></i></button>
@@ -595,16 +617,16 @@
                     <i class="fa fa-times"></i>
                 </button>
             </div>
-                <!-- /. tools 
+                <!-- /. tools
             </div>
-                <!-- /.card-header 
+                <!-- /.card-header
                 <div class="card-body p-0">
-                <!--The calendar 
+                <!--The calendar
                 <div id="calendar" style="width: 100%"></div>
             </div>
-                <!-- /.card-body 
+                <!-- /.card-body
             </div>
-                <!-- /.card 
+                <!-- /.card
             </section>
                 <!-- right col -->
             </div>

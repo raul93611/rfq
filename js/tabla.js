@@ -262,6 +262,35 @@ function myFunction5(){
   }
 }
 
+function myFunction6(){
+  var input, filter, table, tr, td, i, select;
+  select = document.getElementById("tipo_extra");
+  var tipo = select.options[select.selectedIndex].value;
+  input = document.getElementById("myInputadmin");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("tabla_extra");
+  tr = table.getElementsByTagName("tr");
+
+  for (i = 0; i < tr.length; i++) {
+      switch (tipo) {
+          case 'Rfq id':
+              td = tr[i].getElementsByTagName("td")[1];
+              break;
+          case 'User':
+              td = tr[i].getElementsByTagName("td")[0];
+              break;
+      }
+
+      if (td) {
+          if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+              tr[i].style.display = "";
+          } else {
+              tr[i].style.display = "none";
+          }
+      }
+  }
+}
+
 $(document).ready(function () {
   $('#sidebar_collapse').on('click', function(){
     $('#footer_item').toggleClass('footer_item1');
