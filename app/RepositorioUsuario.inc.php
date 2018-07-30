@@ -183,7 +183,9 @@ class RepositorioUsuario {
                 <form method="post" action="<?php echo ELIMINAR_USUARIO; ?>">
                     <input type="hidden" name="id_usuario" value="<?php echo $usuario->obtener_id(); ?>">
                     <button type="submit" class="btn btn-sm btn-warning" name="eliminar_usuario"><i class="fa fa-trash"></i> Delete</button>
+                    <a class="btn btn-sm btn-warning" href="<?php echo EDIT_USER . $usuario-> obtener_id(); ?>"><i class="fa fa-pencil"></i> Edit</a>
                 </form>
+
             </td>
         </tr>
         <?php
@@ -393,6 +395,27 @@ class RepositorioUsuario {
             }
         }
         return array($nombres_usuario, $cotizaciones_completadas, $cotizaciones_completadas_pasadas, $cotizaciones_ganadas, $cotizaciones_ganadas_pasadas, $cotizaciones_sometidas, $cotizaciones_sometidas_pasadas, $cotizaciones_no_sometidas, $cotizaciones_no_sometidas_pasadas);
+    }
+
+    public static function edit_user($conexion, $password, $id_user) {
+        $edited_user = false;
+        if (isset($conexion)) {
+            try {
+                $sql = "UPDATE usuarios SET password = :password WHERE id = :id_user";
+                $sentencia = $conexion->prepare($sql);
+                $sentencia->bindParam(':password', $password, PDO::PARAM_STR);
+                $sentencia->bindParam(':id_user', $id_user, PDO::PARAM_STR);
+
+                $sentencia->execute();
+
+                if ($sentencia) {
+                    $edited_user = true;
+                }
+            } catch (PDOException $ex) {
+                print 'ERROR:' . $ex->getMessage() . '<br>';
+            }
+        }
+        return $edited_user;
     }
 
 }

@@ -89,6 +89,10 @@ if ($partes_ruta[0] == 'rfq') {
         $id_rfq = $partes_ruta[2];
         $archivo = $partes_ruta[3];
         $ruta_elegida = 'scripts/delete_document.php';
+      }else if($partes_ruta[1] == 'perfil' && $partes_ruta[2] == 'edit_user'){
+        $id_user = $partes_ruta[3];
+        $gestor_actual = 'edit_user';
+        $ruta_elegida = 'vistas/perfil.php';
       }else if ($partes_ruta[1] == 'perfil' && $partes_ruta[2] == 'cotizaciones') {
             $gestor_actual = 'cotizaciones';
             $ruta_elegida = 'vistas/perfil.php';
