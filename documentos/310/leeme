@@ -1,0 +1,22 @@
+**borrar la carpeta de git y la de netbeans.
+**crear un directorio para el manejo de sesiones
+**cambiar la direccion de los servidores de la pagina y de la base de datos en el archivo config
+
+define('NOMBRE_SERVIDOR', 'elogicportalcom.globatmysql.com');
+define('NOMBRE_USUARIO', 'elogicdb');
+define('PASSWORD', 'elogicdb');
+define('NOMBRE_BD', 'elogicnewdb');
+
+define('SERVIDOR', 'http://www.elogicportal.com/rfq/');
+
+
+**agregar las lineas de:
+		session_save_path('temp');
+		session_start();
+	en el archivo index el nombre temp debe coincidir con la carpeta creada en el punto numero 1
+
+**dejar la carpeta "documentos" intacta para no borrar datos.
+**cambiar script "generar_usuario"
+
+**siempre activar el modulo mod_rewrite en PHP cuando se usa apache en linux.
+http://www.galisteocantero.com/activar-modulo-mod_rewrite-de-apache-en-linux-y-windows/

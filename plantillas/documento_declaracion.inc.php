@@ -11,7 +11,6 @@
         }
         echo "<title>$titulo</title>";
         ?>
-
         <link rel="stylesheet" href="<?php echo PLUGINS; ?>iCheck/flat/blue.css">
         <link rel="stylesheet" href="<?php echo PLUGINS; ?>morris/morris.css">
         <link rel="stylesheet" href="<?php echo PLUGINS; ?>jvectormap/jquery-jvectormap-1.2.2.css">
