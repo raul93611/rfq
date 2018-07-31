@@ -144,6 +144,11 @@ body{
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
 }
 
+.bg-warning{
+  background-color: #F0E714 !important;
+  border-color: #F0E714 !important;
+}
+
 .btn-warning:hover {
   color: #1F2D3D;
   background-color: #F3EC43 !important;
@@ -212,28 +217,6 @@ body{
 a.text-primary:hover, a.text-primary:focus {
   color: #0062cc !important;
 }
-/*Aun no he usado
-.sidebar-dark-primary .user-panel a:hover {
-  color: #ffffff !important;
-}
-.sidebar-dark-primary .user-panel .status {
-  color: #C2C7D0;
-  background: rgba(255, 255, 255, 0.1);
-}
-.sidebar-dark-primary .user-panel .status:hover, .sidebar-dark-primary .user-panel .status:focus, .sidebar-dark-primary .user-panel .status:active {
-  color: #ffffff;
-  background: rgba(247, 247, 247, 0.1);
-}
-.sidebar-dark-primary .user-panel .dropdown-menu {
-  border-color: rgba(242, 242, 242, 0.1);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-}
-
-.sidebar-dark-primary .user-panel .dropdown-item {
-  color: #212529;
-}
-*/
-
 
 table{
     font-size: 0.8em;
@@ -266,6 +249,13 @@ table{
     min-width: 20px !important;
 }
 
+#users #id{
+  width: 20px !important;
+}
+
+#users #options{
+  width: 140px !important; 
+}
 #tabla_items #provider{
     min-width: 200px !important;
 }

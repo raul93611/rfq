@@ -71,10 +71,6 @@ if ($partes_ruta[0] == 'rfq') {
                     $gestor_actual = 'registro_correcto';
                     $ruta_elegida = 'vistas/perfil.php';
                     break;
-                case 'eliminar_usuario':
-                    $gestor_actual = 'eliminar_usuario';
-                    $ruta_elegida = 'scripts/eliminar_usuario.php';
-                    break;
             }
         } else if ($partes_ruta[1] == 'proposal') {
             $id_rfq = $partes_ruta[2];

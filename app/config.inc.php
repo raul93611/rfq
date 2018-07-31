@@ -9,7 +9,6 @@ define('ERROR', SERVIDOR . 'error');
 define('PERFIL', SERVIDOR . 'perfil/');
 define('LOGOUT', SERVIDOR . 'logout');
 define('REGISTRO', PERFIL . 'registro');
-define('ELIMINAR_USUARIO', PERFIL . 'eliminar_usuario');
 define('EDIT_USER', PERFIL . 'edit_user/');
 define('COTIZACIONES', PERFIL . 'cotizaciones/');
 define('GSA_BUY', COTIZACIONES . 'gsa_buy');

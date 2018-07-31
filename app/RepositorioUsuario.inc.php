@@ -180,12 +180,7 @@ class RepositorioUsuario {
             <td><?php echo $usuario->obtener_nombres(); ?></td>
             <td><?php echo $usuario->obtener_apellidos(); ?></td>
             <td class='text-center'>
-                <form method="post" action="<?php echo ELIMINAR_USUARIO; ?>">
-                    <input type="hidden" name="id_usuario" value="<?php echo $usuario->obtener_id(); ?>">
-                    <button type="submit" class="btn btn-sm btn-warning" name="eliminar_usuario"><i class="fa fa-trash"></i> Delete</button>
-                    <a class="btn btn-sm btn-warning" href="<?php echo EDIT_USER . $usuario-> obtener_id(); ?>"><i class="fa fa-pencil"></i> Edit</a>
-                </form>
-
+              <a class="btn btn-sm btn-warning" href="<?php echo EDIT_USER . $usuario-> obtener_id(); ?>"><i class="fa fa-pencil"></i> Edit</a>
             </td>
         </tr>
         <?php
@@ -198,13 +193,13 @@ class RepositorioUsuario {
 
         if (count($usuarios)) {
             ?>
-            <table class="table table-bordered table-hover">
+            <table id="users" class="table table-bordered table-hover">
                 <thead>
                     <tr>
-                        <th>Id</th>
+                        <th id="id">Id</th>
                         <th>First names</th>
                         <th>Last names</th>
-                        <th>Options</th>
+                        <th id="options">Options</th>
                     </tr>
                 </thead>
                 <tbody id="tabla_usuarios">
@@ -217,27 +212,6 @@ class RepositorioUsuario {
             </table>
             <?php
         }
-    }
-
-    public static function eliminar_usuario($conexion, $id_usuario) {
-        $usuario_eliminado = false;
-        if (isset($conexion)) {
-            try {
-                $sql = "DELETE FROM usuarios WHERE id = :id_usuario";
-
-                $sentencia1 = $conexion->prepare($sql);
-                $sentencia1->bindParam(':id_usuario', $id_usuario, PDO::PARAM_STR);
-                $resultado = $sentencia1->execute();
-
-                if ($resultado) {
-                    $usuario_eliminado = true;
-                }
-            } catch (PDOException $ex) {
-                print 'ERROR:' . $ex->getMessage() . '<br>';
-            }
-        }
-
-        return $usuario_eliminado;
     }
 
     public static function obtener_usuarios_por_cargo($conexion, $cargo) {
@@ -397,15 +371,30 @@ class RepositorioUsuario {
         return array($nombres_usuario, $cotizaciones_completadas, $cotizaciones_completadas_pasadas, $cotizaciones_ganadas, $cotizaciones_ganadas_pasadas, $cotizaciones_sometidas, $cotizaciones_sometidas_pasadas, $cotizaciones_no_sometidas, $cotizaciones_no_sometidas_pasadas);
     }
 
-    public static function edit_user($conexion, $password, $id_user) {
+    public static function edit_user($conexion, $password, $username, $nombres, $apellidos, $cargo, $email, $id_user) {
         $edited_user = false;
         if (isset($conexion)) {
             try {
-                $sql = "UPDATE usuarios SET password = :password WHERE id = :id_user";
+              if(empty($password)){
+                $sql = "UPDATE usuarios SET nombre_usuario = :nombre_usuario, nombres = :nombres, apellidos = :apellidos, cargo = :cargo, email = :email WHERE id = :id_user";
+                $sentencia = $conexion->prepare($sql);
+                $sentencia-> bindParam(':nombre_usuario', $username, PDO::PARAM_STR);
+                $sentencia-> bindParam(':nombres', $nombres, PDO::PARAM_STR);
+                $sentencia-> bindParam(':apellidos', $apellidos, PDO::PARAM_STR);
+                $sentencia-> bindParam(':cargo', $cargo, PDO::PARAM_STR);
+                $sentencia-> bindParam(':email', $email, PDO::PARAM_STR);
+                $sentencia->bindParam(':id_user', $id_user, PDO::PARAM_STR);
+              }else{
+                $sql = "UPDATE usuarios SET password = :password, nombre_usuario = :nombre_usuario, nombres = :nombres, apellidos = :apellidos, cargo = :cargo, email = :email WHERE id = :id_user";
                 $sentencia = $conexion->prepare($sql);
                 $sentencia->bindParam(':password', $password, PDO::PARAM_STR);
+                $sentencia-> bindParam(':nombre_usuario', $username, PDO::PARAM_STR);
+                $sentencia-> bindParam(':nombres', $nombres, PDO::PARAM_STR);
+                $sentencia-> bindParam(':apellidos', $apellidos, PDO::PARAM_STR);
+                $sentencia-> bindParam(':cargo', $cargo, PDO::PARAM_STR);
+                $sentencia-> bindParam(':email', $email, PDO::PARAM_STR);
                 $sentencia->bindParam(':id_user', $id_user, PDO::PARAM_STR);
-
+              }
                 $sentencia->execute();
 
                 if ($sentencia) {
