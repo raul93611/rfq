@@ -219,16 +219,17 @@ class RepositorioRfq {
         return $cotizacion_editada;
     }
 
-    public static function actualizar_rfq_inicio($conexion, $email_code, $type_of_bid, $issue_date, $end_date, $id_rfq) {
+    public static function actualizar_rfq_inicio($conexion, $email_code, $type_of_bid, $issue_date, $end_date, $canal, $id_rfq) {
         $cotizacion_editada = false;
         if (isset($conexion)) {
             try {
-                $sql = "UPDATE rfq SET email_code = :email_code, type_of_bid = :type_of_bid, issue_date = :issue_date, end_date = :end_date WHERE id = :id_rfq";
+                $sql = "UPDATE rfq SET email_code = :email_code, type_of_bid = :type_of_bid, issue_date = :issue_date, end_date = :end_date, canal = :canal WHERE id = :id_rfq";
                 $sentencia = $conexion->prepare($sql);
                 $sentencia->bindParam(':email_code', $email_code, PDO::PARAM_STR);
                 $sentencia->bindParam(':type_of_bid', $type_of_bid, PDO::PARAM_STR);
                 $sentencia->bindParam(':issue_date', $issue_date, PDO::PARAM_STR);
                 $sentencia->bindParam(':end_date', $end_date, PDO::PARAM_STR);
+                $sentencia-> bindParam(':canal', $canal, PDO::PARAM_STR);
                 $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
 
                 $sentencia->execute();

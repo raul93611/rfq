@@ -60,6 +60,19 @@ if($cargo == 4 && $_SESSION['id_usuario'] != $cotizacion_recuperada-> obtener_us
         </div>
       </div>
       <div class="col">
+        <div class="form-group">
+          <label for="canal">Channel:</label>
+          <select class="form-control" name="canal" id="canal">
+              <option <?php if($cotizacion_recuperada-> obtener_canal() == 'GSA-Buy'){echo 'selected';} ?>>GSA-Buy</option>
+              <option <?php if($cotizacion_recuperada-> obtener_canal() == 'FedBid'){echo 'selected';} ?>>FedBid</option>
+              <option <?php if($cotizacion_recuperada-> obtener_canal() == 'E-mails'){echo 'selected';} ?>>E-mails</option>
+              <option <?php if($cotizacion_recuperada-> obtener_canal() == 'FindFRP'){echo 'selected';} ?>>FindFRP</option>
+              <option <?php if($cotizacion_recuperada-> obtener_canal() == 'Embassies'){echo 'selected';} ?>>Embassies</option>
+              <option <?php if($cotizacion_recuperada-> obtener_canal() == 'FBO'){echo 'selected';} ?>>FBO</option>
+          </select>
+        </div>
+      </div>
+      <div class="col">
         <?php
 
         if ($cotizacion_recuperada->obtener_completado() || $cotizacion_recuperada-> obtener_status()) {
