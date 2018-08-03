@@ -83,11 +83,11 @@ class RepositorioRfq {
         if (isset($conexion)) {
             try {
 
-                if ($cargo < 4) {
+                if ($id_usuario < 4 || $id_usuario == 8) {
                     $sql = "SELECT * FROM rfq WHERE canal = :canal AND completado = 0 AND status = 0 AND award = 0 AND (comments = 'Working on it' OR comments = 'No comments' OR comments = '') ORDER BY id DESC";
                     $sentencia = $conexion->prepare($sql);
                     $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
-                } else if ($cargo == 4) {
+                } else if ($cargo == 4 || $id_usuario == 5 || $id_usuario == 6 || $id_usuario == 7) {
                     $sql = "SELECT * FROM rfq WHERE canal = :canal AND usuario_designado = :id_usuario AND completado = 0 AND status = 0 AND award = 0 AND (comments = 'Working on it' OR comments = 'No comments' OR comments = '') ORDER BY id";
                     $sentencia = $conexion->prepare($sql);
                     $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
@@ -110,10 +110,11 @@ class RepositorioRfq {
         return $cotizaciones;
     }
 
-    public static function escribir_cotizacion($cotizacion, $cargo) {
+    public static function escribir_cotizacion($cotizacion, $cargo, $id_usuario) {
         if (!isset($cotizacion)) {
             return;
         }
+
         ?>
         <tr <?php if($cotizacion->obtener_comments() == 'Working on it'){echo 'class="waiting_for"';} ?>>
             <td>
@@ -134,7 +135,7 @@ class RepositorioRfq {
             <td><?php echo $cotizacion->obtener_end_date(); ?></td>
             <td><?php echo $cotizacion->obtener_id(); ?></td>
             <?php
-            if($cargo < 4){
+            if($id_usuario < 4){
               ?>
               <td class="text-center"><a href="<?php echo DELETE_QUOTE . '/' . $cotizacion->obtener_id(); ?>" class="btn btn-sm btn-danger"><i class="fa fa-times"></i></a></td>
               <?php
@@ -160,14 +161,14 @@ class RepositorioRfq {
                         <th>ISSUE DATE</th>
                         <th>END DATE</th>
                         <th>PROPOSAL</th>
-                        <?php if($cargo < 4){echo '<th>ELIMINAR</th>';} ?>
+                        <?php if($id_usuario < 4){echo '<th>ELIMINAR</th>';} ?>
 
                     </tr>
                 </thead>
                 <tbody id="tabla_cotizaciones">
                     <?php
                     foreach ($cotizaciones as $cotizacion) {
-                        self::escribir_cotizacion($cotizacion, $cargo);
+                        self::escribir_cotizacion($cotizacion, $cargo, $id_usuario);
                     }
                     ?>
                 </tbody>

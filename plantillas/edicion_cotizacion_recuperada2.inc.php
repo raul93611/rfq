@@ -38,7 +38,7 @@
         <select id="comments" class="form-control" name="comments">
             <option <?php if ($cotizacion_recuperada->obtener_comments() == 'No comments') {echo 'selected';} ?>>No comments</option>
             <?php
-            if($cargo < 4){
+            if($_SESSION['id_usuario'] < 4){
               ?>
               <option <?php if ($cotizacion_recuperada->obtener_comments() == 'No Bid') { echo 'selected';} ?>>No Bid</option>
               <option <?php if ($cotizacion_recuperada->obtener_comments() == 'Manufacturer in the Bid') {echo 'selected';} ?>>Manufacturer in the Bid</option>
