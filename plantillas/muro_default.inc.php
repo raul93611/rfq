@@ -121,7 +121,7 @@ Conexion::cerrar_conexion();
                         </div>
                     </div>-->
                     <?php
-                    if ($cargo != 4) {
+                    if ($_SESSION['id_usuario'] < 5 || $_SESSION['id_usuario'] > 7) {
                         ?>
                         <div class="card">
                             <div class="card-header no-border">
