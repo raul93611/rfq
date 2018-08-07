@@ -151,7 +151,7 @@ Conexion::cerrar_conexion();
                         <div class="card">
                             <div class="card-header no-border">
                                 <div class="d-flex justify-content-between">
-                                    <h3 class="card-title">No submitted</h3>
+                                    <h3 class="card-title">Not submitted</h3>
                                 </div>
                             </div>
                             <div class="card-body">

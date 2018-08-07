@@ -711,7 +711,7 @@ class RepositorioRfq {
 
         if (isset($conexion)) {
             try {
-                $sql = "SELECT * FROM rfq WHERE comments = 'No submitted' ORDER BY id DESC";
+                $sql = "SELECT * FROM rfq WHERE comments = 'Not submitted' ORDER BY id DESC";
                 $sentencia = $conexion->prepare($sql);
                 $sentencia->execute();
 

@@ -48,7 +48,7 @@
               <?php
             }
             ?>
-            <option <?php if($cotizacion_recuperada-> obtener_comments() == 'No submitted'){echo 'selected';} ?>>No submitted</option>
+            <option <?php if($cotizacion_recuperada-> obtener_comments() == 'Not submitted'){echo 'selected';} ?>>Not submitted</option>
             <option <?php if ($cotizacion_recuperada->obtener_comments() == 'Working on it'){echo 'selected';} ?>>Working on it</option>
         </select>
     </div>
