@@ -25,7 +25,7 @@ include_once 'plantillas/validacion_cotizacion_editada.inc.php';
                         <div class="card-header">
                             <h3 class="card-title"><i class="fa fa-pencil"></i> Enter the data</h3>
                         </div>
-                        <form role="form" method="post" enctype="multipart/form-data" action="<?php echo EDITAR_COTIZACION . '/' . $id_rfq; ?>">
+                        <form role="form" id="form_edited_quote" method="post" enctype="multipart/form-data" action="<?php echo EDITAR_COTIZACION . '/' . $id_rfq; ?>">
                             <?php
                             include_once 'plantillas/edicion_cotizacion_recuperada.inc.php';
                             include_once 'plantillas/edicion_cotizacion_recuperada2.inc.php';

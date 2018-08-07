@@ -112,12 +112,6 @@ if ($cotizacion_recuperada->obtener_award() && ($cotizacion_recuperada->obtener_
 }else{
   echo '<a class="btn btn-primary" id="go_back" href="' . COTIZACIONES . $canal . '"><i class="fa fa-reply"></i></a>';
 }
-
-  if(count($items)){
-    ?>
-    <button type="button" class="btn btn-info calculate" id="calculate"><i class="fa fa-calculator"></i> Calculate</button>
-    <?php
-  }
 ?>
 <button type="submit" class="btn btn-success" id="save_item" name="guardar_cambios_cotizacion"><i class="fa fa-check"></i> Save</button>
 <a class="btn btn-primary add_item_charter" href="<?php echo ADD_ITEM . '/' . $cotizacion_recuperada->obtener_id(); ?>"><i class="fa fa-plus-circle"></i> Add item</a>
