@@ -43,6 +43,9 @@ switch ($gestor_actual) {
             case 'no_bid':
                 include_once 'plantillas/no_bid.inc.php';
                 break;
+            case 'no_submitted':
+                include_once 'plantillas/no_submitted.inc.php';
+                break;
             case 'editar_cotizacion':
                 Conexion::abrir_conexion();
                 $cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);

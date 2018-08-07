@@ -439,7 +439,7 @@
                                 </ul>
                             </li>
                             <?php
-                            if($cargo <=3){
+                            if($_SESSION['id_usuario'] < 5 || $_SESSION['id_usuario'] > 7){
                               ?>
                               <li class="nav-item">
                                   <a href="<?php echo NO_BID; ?>" class="nav-link
@@ -455,9 +455,19 @@
                               <?php
                             }
                             ?>
-
+                            <li class="nav-item">
+                                <a href="<?php echo NO_SUBMITTED; ?>" class="nav-link
+                                <?php
+                                if ($cotizacion == 'no_submitted') {
+                                    echo 'active';
+                                }
+                                ?>
+                                   ">
+                                    <p>No submitted</p>
+                                </a>
+                            </li>
                         <?php
-                        if ($cargo <= 3) {
+                        if ($_SESSION['id_usuario'] < 5 || $_SESSION['id_usuario'] > 7) {
                             ?>
                             <li class="nav-item">
                                 <a href="<?php echo NUEVA_COTIZACION; ?>" id="new_quote" class="nav-link
