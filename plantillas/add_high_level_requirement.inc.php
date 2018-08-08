@@ -4,7 +4,6 @@ if (!ControlSesion::sesion_iniciada()) {
 }
 include_once 'plantillas/validacion_high_level_requirement.inc.php';
 ?>
-
 <div class="content-wrapper">
     <section class="content-header">
         <div class="container-fluid">

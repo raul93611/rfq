@@ -2,7 +2,6 @@
 class RepositorioProjectMilestone{
     public static function insertar_project_milestone($conexion, $project_milestone){
         $project_milestone_insertado = false;
-
         if (isset($conexion)) {
             try {
                 $sql = 'INSERT INTO project_milestones(id_cuestionario, date_milestone, description) VALUES(:id_cuestionario, :date_milestone, :description)';
@@ -10,9 +9,7 @@ class RepositorioProjectMilestone{
                 $sentencia->bindParam(':id_cuestionario', $project_milestone->obtener_id_cuestionario(), PDO::PARAM_STR);
                 $sentencia-> bindParam(':date_milestone', $project_milestone-> obtener_date_milestone(), PDO::PARAM_STR);
                 $sentencia->bindParam(':description', $project_milestone->obtener_description(), PDO::PARAM_STR);
-
                 $resultado = $sentencia->execute();
-
                 if ($resultado) {
                     $project_milestone_insertado = true;
                 }
@@ -30,11 +27,8 @@ class RepositorioProjectMilestone{
                 $sql = 'SELECT * FROM project_milestones WHERE id_cuestionario = :id_cuestionario';
                 $sentencia = $conexion->prepare($sql);
                 $sentencia->bindParam(':id_cuestionario', $id_cuestionario, PDO::PARAM_STR);
-
                 $sentencia->execute();
-
                 $resultado = $sentencia->fetchAll();
-
                 if (count($resultado)) {
                     foreach ($resultado as $fila) {
                         $project_milestones[] = new ProjectMilestone($fila['id'], $fila['id_cuestionario'], $fila['date_milestone'], $fila['description']);
@@ -65,7 +59,6 @@ class RepositorioProjectMilestone{
         Conexion::abrir_conexion();
         $project_milestones = self::obtener_project_milestones_de_un_cuestionario(Conexion::obtener_conexion(), $id_cuestionario);
         Conexion::cerrar_conexion();
-
         if (count($project_milestones)) {
             ?>
             <table class="table table-bordered table-striped table-hover">
@@ -92,16 +85,13 @@ class RepositorioProjectMilestone{
 
     public static function obtener_project_milestone_por_id($conexion, $id_project_milestone) {
         $project_milestone = null;
-
         if (isset($conexion)) {
             try {
                 $sql = 'SELECT * FROM project_milestones WHERE id = :id_project_milestone';
                 $sentencia = $conexion->prepare($sql);
                 $sentencia->bindParam(':id_project_milestone', $id_project_milestone, PDO::PARAM_STR);
                 $sentencia->execute();
-
                 $resultado = $sentencia->fetch();
-
                 if (!empty($resultado)) {
                     $project_milestone = new ProjectMilestone($resultado['id'], $resultado['id_cuestionario'], $resultado['date_milestone'], $resultado['description']);
                 }
@@ -122,7 +112,6 @@ class RepositorioProjectMilestone{
                 $sentencia-> bindParam(':description', $description, PDO::PARAM_STR);
                 $sentencia-> bindParam(':id_project_milestone', $id_project_milestone, PDO::PARAM_STR);
                 $sentencia-> execute();
-
                 if($sentencia){
                     $project_milestone_editado = true;
                 }

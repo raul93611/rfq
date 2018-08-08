@@ -1,9 +1,11 @@
+/****************************general styles**************************/
 body{
   font-family: 'Roboto', sans-serif;
   font-size: 11pt !important;
   color: #39485A !important;
 }
-
+/*************************************************************************/
+/*********************sidebar********************************************/
 .sidebar-dark-primary{
   background-color: #39485A !important;
 }
@@ -12,7 +14,6 @@ body{
   color: #C2C7D0 !important;
 }
 
-/*.sidebar-dark-primary .nav-sidebar > .nav-item.menu-open > .nav-link,*/
 .sidebar-dark-primary .nav-sidebar > .nav-item:hover > .nav-link {
   color: #ffffff !important;
   background-color: #485566 !important;
@@ -56,13 +57,8 @@ body{
 .sidebar-dark-primary .nav-treeview > .nav-item > .nav-link{
   padding-left: 47px !important;
 }
-
-#new_quote{
-  padding-left: 13px !important;
-  background-color: white !important;
-  color: #39485A !important;
-}
-
+/**********************************************************************************************/
+/***********************************buttons****************************************************/
 .btn-primary {
   color: #ffffff;
   background-color: #13A8F0 !important;
@@ -76,26 +72,10 @@ body{
   border-color: #40B7EE !important;
 }
 
-.alert-danger{
-  background-color: #DD355F !important;
-}
-
-.alert-danger:hover{
-  background-color: #E45D7F !important;
-}
-
-.card-primary:not(.card-outline) .card-header {
-  background-color: #E7E9EB !important;
-  border-bottom: 0;
-}
-
-.card-primary:not(.card-outline) .card-header,
-.card-primary:not(.card-outline) .card-header a {
+#new_quote{
+  padding-left: 13px !important;
+  background-color: white !important;
   color: #39485A !important;
-}
-
-.card-footer{
-  background-color: #E7E9EB !important;
 }
 
 .btn-success {
@@ -166,17 +146,6 @@ body{
   border-color: #C0C5CA !important;
 }
 
-.calculate{
-  color: #ffffff !important;
-  background-color: #007AFF !important;
-  border-color: #007AFF !important;
-}
-
-.calculate:hover{
-  background-color: #3395FF !important;
-  border-color: #3395FF !important;
-}
-
 #save_item{
   background-color: #03D3AB !important;
   border-color: #03D3AB !important;
@@ -197,10 +166,6 @@ body{
   border-color: #66C5F1 !important;
 }
 
-.waiting_for{
-  border-left: 5px solid #FBD200 !important;
-}
-
 .btn_home{
   background-color: #39485A !important;
   color: #ffffff !important;
@@ -208,6 +173,19 @@ body{
 
 .btn_home:hover{
   background-color: #4f5359 !important;
+}
+/*******************************tabel buttons************************/
+.btn-warning{
+    font-size: 0.9em !important;
+}
+/************************************************************************************************/
+/***************************************alerts****************************************************/
+.alert-danger{
+  background-color: #DD355F !important;
+}
+
+.alert-danger:hover{
+  background-color: #E45D7F !important;
 }
 
 .text-primary {
@@ -217,12 +195,29 @@ body{
 a.text-primary:hover, a.text-primary:focus {
   color: #0062cc !important;
 }
+/********************************************************************************************************/
+/*******************************************************card*********************************************/
+.card-primary:not(.card-outline) .card-header {
+  background-color: #E7E9EB !important;
+  border-bottom: 0;
+}
+
+.card-primary:not(.card-outline) .card-header,
+.card-primary:not(.card-outline) .card-header a {
+  color: #39485A !important;
+}
+
+.card-footer{
+  background-color: #E7E9EB !important;
+}
+/************************************************************************************************************/
+/**********************************************quotes table****************************************************/
+.waiting_for{
+  border-left: 5px solid #FBD200 !important;
+}
 
 table{
     font-size: 0.8em;
-}
-.btn-warning{
-    font-size: 0.9em !important;
 }
 
 .list-group-item:hover{
@@ -254,7 +249,7 @@ table{
 }
 
 #users #options{
-  width: 140px !important; 
+  width: 140px !important;
 }
 #tabla_items #provider{
     min-width: 200px !important;
@@ -271,10 +266,4 @@ table{
   background-color: #E7E9EB;
   border: 1px solid rgba(0, 0, 0, 0.125);
   border-radius: 0.25rem;
-  transition: width 0.3s;
-}
-
-.footer_item1{
-  width: 94.5% !important;
-  transition: width 0.3s;
 }

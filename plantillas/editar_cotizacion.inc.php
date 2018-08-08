@@ -15,7 +15,7 @@ include_once 'plantillas/validacion_cotizacion_editada.inc.php';
 
                 </div>
             </div>
-        </div><!-- /.container-fluid -->
+        </div>
     </section>
     <section class="content">
         <div class="container-fluid">

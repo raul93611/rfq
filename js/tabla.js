@@ -307,8 +307,7 @@ $(document).ready(function () {
         separator: "/",
         alias: "mm/dd/yyyy"
     });
-    //$('#completed_date').inputmask('mm/dd/yyyy', {'placeholder': 'mm/dd/yyyy'});
-    //$('#expiration_date').inputmask('mm/dd/yyyy', {'placeholder': 'mm/dd/yyyy'});
+
     $('#date_milestone').inputmask('mm/dd/yyyy', {'placeholder': 'mm/dd/yyyy'});
 
     //REALIZAR CALCULO DE LA TABLA DE ITEMS

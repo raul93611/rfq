@@ -179,6 +179,7 @@ class RepositorioUsuario {
             <td><?php echo $usuario-> obtener_id(); ?></td>
             <td><?php echo $usuario->obtener_nombres(); ?></td>
             <td><?php echo $usuario->obtener_apellidos(); ?></td>
+            <td><?php echo $usuario-> obtener_cargo(); ?></td>
             <td class='text-center'>
               <a class="btn btn-sm btn-warning" href="<?php echo EDIT_USER . $usuario-> obtener_id(); ?>"><i class="fa fa-pencil"></i> Edit</a>
             </td>
@@ -199,6 +200,7 @@ class RepositorioUsuario {
                         <th id="id">Id</th>
                         <th>First names</th>
                         <th>Last names</th>
+                        <th id="options">Level</th>
                         <th id="options">Options</th>
                     </tr>
                 </thead>
@@ -212,32 +214,6 @@ class RepositorioUsuario {
             </table>
             <?php
         }
-    }
-
-    public static function obtener_usuarios_por_cargo($conexion, $cargo) {
-        $usuarios = [];
-
-        if (isset($conexion)) {
-            try {
-                $sql = "SELECT * FROM usuarios WHERE cargo = :cargo";
-
-                $sentencia = $conexion->prepare($sql);
-                $sentencia->bindParam(':cargo', $cargo, PDO::PARAM_STR);
-
-                $sentencia->execute();
-
-                $resultado = $sentencia->fetchAll();
-
-                if (count($resultado)) {
-                    foreach ($resultado as $fila) {
-                        $usuarios [] = new Usuario($fila['id'], $fila['nombre_usuario'], $fila['password'], $fila['nombres'], $fila['apellidos'], $fila['cargo'], $fila['email']);
-                    }
-                }
-            } catch (PDOException $ex) {
-                print 'ERROR:' . $ex->getMessage() . '<br>';
-            }
-        }
-        return $usuarios;
     }
 
     public static function obtener_usuarios_rfq($conexion) {

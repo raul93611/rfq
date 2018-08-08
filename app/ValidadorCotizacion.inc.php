@@ -1,7 +1,5 @@
 <?php
-
 abstract class ValidadorCotizacion {
-
     protected $aviso_inicio;
     protected $aviso_cierre;
     protected $email_code;
@@ -15,7 +13,7 @@ abstract class ValidadorCotizacion {
     protected $error_end_date;
 
     public function __construct() {
-        
+
     }
 
     protected function variable_iniciada($variable) {
@@ -32,11 +30,9 @@ abstract class ValidadorCotizacion {
         } else {
             $this->email_code = $email_code;
         }
-        
         if(RepositorioRfq::email_code_existe($conexion, $email_code)){
             return 'E-mail Code already exists.';
         }
-
         return '';
     }
 
@@ -46,7 +42,6 @@ abstract class ValidadorCotizacion {
         } else {
             $this->issue_date = $issue_date;
         }
-
         return '';
     }
 
@@ -56,7 +51,6 @@ abstract class ValidadorCotizacion {
         } else {
             $this->end_date = $end_date;
         }
-
         return '';
     }
 
@@ -71,15 +65,15 @@ abstract class ValidadorCotizacion {
     public function obtener_end_date() {
         return $this->end_date;
     }
-    
+
     public function obtener_usuario_designado() {
         return $this->usuario_designado;
     }
-    
+
     public function obtener_type_of_bid() {
         return $this->type_of_bid;
     }
-    
+
     public function obtener_canal() {
         return $this->canal;
     }
@@ -101,13 +95,13 @@ abstract class ValidadorCotizacion {
             echo 'value="' . $this->email_code . '"';
         }
     }
-    
+
     public function mostrar_issue_date() {
         if ($this->issue_date != '') {
             echo 'value="' . $this->issue_date . '"';
         }
     }
-    
+
     public function mostrar_end_date() {
         if ($this->end_date != '') {
             echo 'value="' . $this->end_date . '"';
@@ -139,7 +133,5 @@ abstract class ValidadorCotizacion {
             return false;
         }
     }
-
 }
-
 ?>

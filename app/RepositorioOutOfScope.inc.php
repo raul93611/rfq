@@ -2,16 +2,13 @@
 class RepositorioOutOfScope{
     public static function insertar_out_of_scope($conexion, $out_of_scope){
         $out_of_scope_insertado = false;
-
         if (isset($conexion)) {
             try {
                 $sql = 'INSERT INTO out_of_scopes(id_cuestionario, requirement) VALUES(:id_cuestionario, :requirement)';
                 $sentencia = $conexion->prepare($sql);
                 $sentencia->bindParam(':id_cuestionario', $out_of_scope->obtener_id_cuestionario(), PDO::PARAM_STR);
                 $sentencia->bindParam(':requirement', $out_of_scope->obtener_requirement(), PDO::PARAM_STR);
-
                 $resultado = $sentencia->execute();
-
                 if ($resultado) {
                     $out_of_scope_insertado = true;
                 }
@@ -29,11 +26,8 @@ class RepositorioOutOfScope{
                 $sql = 'SELECT * FROM out_of_scopes WHERE id_cuestionario = :id_cuestionario';
                 $sentencia = $conexion->prepare($sql);
                 $sentencia->bindParam(':id_cuestionario', $id_cuestionario, PDO::PARAM_STR);
-
                 $sentencia->execute();
-
                 $resultado = $sentencia->fetchAll();
-
                 if (count($resultado)) {
                     foreach ($resultado as $fila) {
                         $out_of_scopes[] = new OutOfScope($fila['id'], $fila['id_cuestionario'], $fila['requirement']);
@@ -63,7 +57,6 @@ class RepositorioOutOfScope{
         Conexion::abrir_conexion();
         $out_of_scopes = self::obtener_out_of_scopes_de_un_cuestionario(Conexion::obtener_conexion(), $id_cuestionario);
         Conexion::cerrar_conexion();
-
         if (count($out_of_scopes)) {
             ?>
             <table class="table table-bordered table-striped table-hover">
@@ -89,16 +82,13 @@ class RepositorioOutOfScope{
 
     public static function obtener_out_of_scope_por_id($conexion, $id_out_of_scope) {
         $out_of_scope = null;
-
         if (isset($conexion)) {
             try {
                 $sql = 'SELECT * FROM out_of_scopes WHERE id = :id_out_of_scope';
                 $sentencia = $conexion->prepare($sql);
                 $sentencia->bindParam(':id_out_of_scope', $id_out_of_scope, PDO::PARAM_STR);
                 $sentencia->execute();
-
                 $resultado = $sentencia->fetch();
-
                 if (!empty($resultado)) {
                     $out_of_scope = new OutOfScope($resultado['id'], $resultado['id_cuestionario'], $resultado['requirement']);
                 }
@@ -118,7 +108,6 @@ class RepositorioOutOfScope{
                 $sentencia-> bindParam(':requirement', $requirement, PDO::PARAM_STR);
                 $sentencia-> bindParam(':id_out_of_scope', $id_out_of_scope, PDO::PARAM_STR);
                 $sentencia-> execute();
-
                 if($sentencia){
                     $out_of_scope_editado = true;
                 }

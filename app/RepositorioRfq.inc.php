@@ -1,16 +1,11 @@
 <?php
-
 class RepositorioRfq {
-
     public static function insertar_cotizacion($conexion, $cotizacion) {
         $cotizacion_insertada = false;
-
         if (isset($conexion)) {
             try {
                 $sql = 'INSERT INTO rfq(id_usuario, usuario_designado, canal, email_code, type_of_bid, issue_date, end_date, status, completado, total_cost, total_price, comments, award, fecha_completado, fecha_submitted, fecha_award, payment_terms, address, ship_to, expiration_date, ship_via, taxes, profit, additional, shipping, shipping_cost) VALUES(:id_usuario, :usuario_designado, :canal, :email_code, :type_of_bid, :issue_date, :end_date, :status, :completado, :total_cost, :total_price, :comments, :award, :fecha_completado, :fecha_submitted, :fecha_award, :payment_terms, :address, :ship_to, :expiration_date, :ship_via, :taxes, :profit, :additional, :shipping, :shipping_cost)';
-
                 $sentencia = $conexion->prepare($sql);
-
                 $sentencia->bindParam(':id_usuario', $cotizacion->obtener_id_usuario(), PDO::PARAM_STR);
                 $sentencia->bindParam(':usuario_designado', $cotizacion->obtener_usuario_designado(), PDO::PARAM_STR);
                 $sentencia->bindParam(':canal', $cotizacion->obtener_canal(), PDO::PARAM_STR);
@@ -37,11 +32,8 @@ class RepositorioRfq {
                 $sentencia->bindParam(':additional', $cotizacion->obtener_additional(), PDO::PARAM_STR);
                 $sentencia->bindParam(':shipping', $cotizacion->obtener_shipping(), PDO::PARAM_STR);
                 $sentencia->bindParam(':shipping_cost', $cotizacion->obtener_shipping_cost(), PDO::PARAM_STR);
-
                 $resultado = $sentencia->execute();
-
                 $id = $conexion->lastInsertId();
-
                 if ($resultado) {
                     $cotizacion_insertada = true;
                 }
@@ -49,7 +41,6 @@ class RepositorioRfq {
                 print 'ERROR:' . $ex->getMessage() . '<br>';
             }
         }
-
         return array($cotizacion_insertada, $id);
     }
 
@@ -58,13 +49,10 @@ class RepositorioRfq {
         if (isset($conexion)) {
             try {
                 $sql = 'SELECT * FROM rfq WHERE email_code = :email_code';
-
                 $sentencia = $conexion->prepare($sql);
                 $sentencia->bindParam(':email_code', $email_code, PDO::PARAM_STR);
-
                 $sentencia->execute();
                 $resultado = $sentencia->fetchall();
-
                 if (count($resultado)) {
                     $email_code_existe = true;
                 } else {
@@ -79,10 +67,8 @@ class RepositorioRfq {
 
     public static function obtener_cotizaciones_por_canal_usuario_cargo($conexion, $canal, $id_usuario, $cargo) {
         $cotizaciones = [];
-
         if (isset($conexion)) {
             try {
-
                 if ($cargo < 4) {
                     $sql = "SELECT * FROM rfq WHERE canal = :canal AND completado = 0 AND status = 0 AND award = 0 AND (comments = 'Working on it' OR comments = 'No comments' OR comments = '') ORDER BY id DESC";
                     $sentencia = $conexion->prepare($sql);
@@ -93,11 +79,8 @@ class RepositorioRfq {
                     $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
                     $sentencia->bindParam(':id_usuario', $id_usuario, PDO::PARAM_STR);
                 }
-
                 $sentencia->execute();
-
                 $resultado = $sentencia->fetchAll();
-
                 if (count($resultado)) {
                     foreach ($resultado as $fila) {
                         $cotizaciones [] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['total_cost'], $fila['total_price'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['fecha_submitted'], $fila['fecha_award'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via'], $fila['taxes'], $fila['profit'], $fila['additional'], $fila['shipping'], $fila['shipping_cost']);
@@ -114,7 +97,6 @@ class RepositorioRfq {
         if (!isset($cotizacion)) {
             return;
         }
-
         ?>
         <tr <?php if($cotizacion->obtener_comments() == 'Working on it'){echo 'class="waiting_for"';} ?>>
             <td>
@@ -149,7 +131,6 @@ class RepositorioRfq {
         Conexion::abrir_conexion();
         $cotizaciones = self::obtener_cotizaciones_por_canal_usuario_cargo(Conexion::obtener_conexion(), $canal, $id_usuario, $cargo);
         Conexion::cerrar_conexion();
-
         if (count($cotizaciones)) {
             ?>
             <table class="table table-bordered table-striped table-hover">
@@ -182,13 +163,10 @@ class RepositorioRfq {
         if (isset($conexion)) {
             try {
                 $sql = "SELECT * FROM rfq WHERE id = :id_rfq";
-
                 $sentencia = $conexion->prepare($sql);
                 $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
                 $sentencia->execute();
-
                 $resultado = $sentencia->fetch();
-
                 if (!empty($resultado)) {
                     $cotizacion_recuperada = new Rfq($resultado['id'], $resultado['id_usuario'], $resultado['usuario_designado'], $resultado['canal'], $resultado['email_code'], $resultado['type_of_bid'], $resultado['issue_date'], $resultado['end_date'], $resultado['status'], $resultado['completado'], $resultado['total_cost'], $resultado['total_price'], $resultado['comments'], $resultado['award'], $resultado['fecha_completado'], $resultado['fecha_submitted'], $resultado['fecha_award'], $resultado['payment_terms'], $resultado['address'], $resultado['ship_to'], $resultado['expiration_date'], $resultado['ship_via'], $resultado['taxes'], $resultado['profit'], $resultado['additional'], $resultado['shipping'], $resultado['shipping_cost']);
                 }
@@ -207,9 +185,7 @@ class RepositorioRfq {
                 $sentencia = $conexion->prepare($sql);
                 $sentencia->bindParam(':usuario_designado', $usuario_designado, PDO::PARAM_STR);
                 $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-
                 $sentencia->execute();
-
                 if ($sentencia) {
                     $cotizacion_editada = true;
                 }
@@ -232,9 +208,7 @@ class RepositorioRfq {
                 $sentencia->bindParam(':end_date', $end_date, PDO::PARAM_STR);
                 $sentencia-> bindParam(':canal', $canal, PDO::PARAM_STR);
                 $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-
                 $sentencia->execute();
-
                 if ($sentencia) {
                     $cotizacion_editada = true;
                 }
@@ -257,9 +231,7 @@ class RepositorioRfq {
                 $sentencia->bindParam(':total_price', $total_price, PDO::PARAM_STR);
                 $sentencia->bindParam(':additional', $additional, PDO::PARAM_STR);
                 $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-
                 $sentencia->execute();
-
                 if ($sentencia) {
                     $cotizacion_editada = true;
                 }
@@ -279,9 +251,7 @@ class RepositorioRfq {
                 $sentencia->bindParam(':shipping', $shipping, PDO::PARAM_STR);
                 $sentencia->bindParam(':shipping_cost', $shipping_cost, PDO::PARAM_STR);
                 $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-
                 $sentencia->execute();
-
                 if ($sentencia) {
                     $cotizacion_editada = true;
                 }
@@ -294,7 +264,6 @@ class RepositorioRfq {
 
     public static function obtener_cotizaciones_completadas_por_canal($conexion, $canal, $id_usuario, $cargo) {
         $cotizaciones = [];
-
         if (isset($conexion)) {
             try {
                 if ($cargo < 5) {
@@ -309,7 +278,6 @@ class RepositorioRfq {
                 }
                 $sentencia->execute();
                 $resultado = $sentencia->fetchAll();
-
                 if (count($resultado)) {
                     foreach ($resultado as $fila) {
                         $cotizaciones [] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['total_cost'], $fila['total_price'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['fecha_submitted'], $fila['fecha_award'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via'], $fila['taxes'], $fila['profit'], $fila['additional'], $fila['shipping'], $fila['shipping_cost']);
@@ -377,7 +345,6 @@ class RepositorioRfq {
         Conexion::abrir_conexion();
         $cotizaciones = self::obtener_cotizaciones_completadas_por_canal(Conexion::obtener_conexion(), $canal, $id_usuario, $cargo);
         Conexion::cerrar_conexion();
-
         if (count($cotizaciones)) {
             ?>
             <table class="table table-bordered table-striped table-responsive-md">
@@ -409,7 +376,6 @@ class RepositorioRfq {
 
     public static function obtener_cotizaciones_submitted_por_canal($conexion, $canal, $id_usuario, $cargo) {
         $cotizaciones = [];
-
         if (isset($conexion)) {
             try {
               if ($cargo < 5) {
@@ -492,7 +458,6 @@ class RepositorioRfq {
         Conexion::abrir_conexion();
         $cotizaciones = self::obtener_cotizaciones_submitted_por_canal(Conexion::obtener_conexion(), $canal, $id_usuario, $cargo);
         Conexion::cerrar_conexion();
-
         if (count($cotizaciones)) {
             ?>
             <table class="table table-bordered table-striped table-responsive-md">
@@ -524,7 +489,6 @@ class RepositorioRfq {
 
     public static function obtener_cotizaciones_award_por_canal($conexion, $canal, $id_usuario, $cargo) {
         $cotizaciones = [];
-
         if (isset($conexion)) {
             try {
               if ($cargo < 4) {
@@ -538,9 +502,7 @@ class RepositorioRfq {
                   $sentencia->bindParam(':id_usuario', $id_usuario, PDO::PARAM_STR);
               }
                 $sentencia->execute();
-
                 $resultado = $sentencia->fetchAll();
-
                 if (count($resultado)) {
                     foreach ($resultado as $fila) {
                         $cotizaciones [] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['total_cost'], $fila['total_price'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['fecha_submitted'], $fila['fecha_award'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via'], $fila['taxes'], $fila['profit'], $fila['additional'], $fila['shipping'], $fila['shipping_cost']);
@@ -595,7 +557,6 @@ class RepositorioRfq {
         Conexion::abrir_conexion();
         $cotizaciones = self::obtener_cotizaciones_award_por_canal(Conexion::obtener_conexion(), $canal, $id_usuario, $cargo);
         Conexion::cerrar_conexion();
-
         if (count($cotizaciones)) {
             ?>
             <table class="table table-bordered table-striped table-responsive-md">
@@ -632,9 +593,7 @@ class RepositorioRfq {
                 $sql = "SELECT * FROM rfq WHERE comments = 'No Bid' OR comments = 'Manufacturer in the Bid' OR comments = 'Expired due date' OR comments = 'Supplier did not provide a quote' OR comments = 'Others' ORDER BY id DESC";
                 $sentencia = $conexion->prepare($sql);
                 $sentencia->execute();
-
                 $resultado = $sentencia->fetchAll();
-
                 if (count($resultado)) {
                     foreach ($resultado as $fila) {
                         $cotizaciones [] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['total_cost'], $fila['total_price'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['fecha_submitted'], $fila['fecha_award'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via'], $fila['taxes'], $fila['profit'], $fila['additional'], $fila['shipping'], $fila['shipping_cost']);
@@ -679,7 +638,6 @@ class RepositorioRfq {
         Conexion::abrir_conexion();
         $cotizaciones = self::obtener_cotizaciones_no_bid(Conexion::obtener_conexion());
         Conexion::cerrar_conexion();
-
         if (count($cotizaciones)) {
             ?>
             <table class="table table-bordered table-striped table-responsive-md">
@@ -708,15 +666,12 @@ class RepositorioRfq {
 
     public static function obtener_cotizaciones_no_submitted($conexion) {
         $cotizaciones = [];
-
         if (isset($conexion)) {
             try {
                 $sql = "SELECT * FROM rfq WHERE comments = 'Not submitted' ORDER BY id DESC";
                 $sentencia = $conexion->prepare($sql);
                 $sentencia->execute();
-
                 $resultado = $sentencia->fetchAll();
-
                 if (count($resultado)) {
                     foreach ($resultado as $fila) {
                         $cotizaciones [] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['total_cost'], $fila['total_price'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['fecha_submitted'], $fila['fecha_award'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via'], $fila['taxes'], $fila['profit'], $fila['additional'], $fila['shipping'], $fila['shipping_cost']);
@@ -733,7 +688,6 @@ class RepositorioRfq {
       Conexion::abrir_conexion();
       $cotizaciones = self::obtener_cotizaciones_no_submitted(Conexion::obtener_conexion());
       Conexion::cerrar_conexion();
-
       if(count($cotizaciones)){
         ?>
         <table class="table table-bordered table-striped table-responsive-md">
@@ -762,7 +716,6 @@ class RepositorioRfq {
 
     public static function obtener_cotizaciones_ganadas_por_mes($conexion) {
         $cotizaciones_mes = array();
-
         if (isset($conexion)) {
             try {
                 for ($i = 1; $i <= 12; $i++) {
@@ -785,7 +738,6 @@ class RepositorioRfq {
 
     public static function obtener_monto_cotizaciones_ganadas_por_mes($conexion) {
         $monto_cotizaciones_mes = array();
-
         if (isset($conexion)) {
             try {
                 for ($i = 1; $i <= 12; $i++) {
@@ -818,9 +770,7 @@ class RepositorioRfq {
                 $sentencia->bindParam(':address', $address, PDO::PARAM_STR);
                 $sentencia->bindParam(':ship_to', $ship_to, PDO::PARAM_STR);
                 $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-
                 $sentencia->execute();
-
                 if ($sentencia) {
                     $rfq_editado = true;
                 }
@@ -838,9 +788,7 @@ class RepositorioRfq {
                 $sql = 'UPDATE rfq SET status = 1, fecha_submitted = NOW() WHERE id = :id_rfq';
                 $sentencia = $conexion->prepare($sql);
                 $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-
                 $sentencia->execute();
-
                 if ($sentencia) {
                     $rfq_editado = true;
                 }
@@ -859,9 +807,7 @@ class RepositorioRfq {
                 $sentencia = $conexion->prepare($sql);
                 $sentencia->bindParam(':payment_terms', $payment_terms, PDO::PARAM_STR);
                 $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-
                 $sentencia->execute();
-
                 if ($sentencia) {
                     $rfq_editado = true;
                 }
@@ -881,9 +827,7 @@ class RepositorioRfq {
                 $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
                 $sentencia->bindParam(':fecha_completado', $fecha_completado, PDO::PARAM_STR);
                 $sentencia->bindParam(':expiration_date', $expiration_date, PDO::PARAM_STR);
-
                 $sentencia->execute();
-
                 if ($sentencia) {
                     $rfq_editado = true;
                 }
@@ -901,9 +845,7 @@ class RepositorioRfq {
               $sql = 'UPDATE rfq SET completado = 1 WHERE id = :id_rfq';
               $sentencia = $conexion->prepare($sql);
               $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-
               $sentencia->execute();
-
               if ($sentencia) {
                   $rfq_editado = true;
               }
@@ -921,9 +863,7 @@ class RepositorioRfq {
                 $sql = 'UPDATE rfq SET award = 1, fecha_award = NOW() WHERE id = :id_rfq';
                 $sentencia = $conexion->prepare($sql);
                 $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-
                 $sentencia->execute();
-
                 if ($sentencia) {
                     $rfq_editado = true;
                 }
@@ -940,7 +880,6 @@ class RepositorioRfq {
         $expired_due_date = 0;
         $supplier_did_not_provide_a_quote = 0;
         $others = 0;
-
         if(isset($conexion)){
             try{
                 $sql = 'SELECT COUNT(*) as no_bid FROM rfq WHERE comments = "No Bid" AND YEAR(fecha_completado) = YEAR(CURDATE())';
@@ -948,41 +887,33 @@ class RepositorioRfq {
                 $sql2 = 'SELECT COUNT(*) as expired_due_date FROM rfq WHERE comments = "Expired due date" AND YEAR(fecha_completado) = YEAR(CURDATE())';
                 $sql3 = 'SELECT COUNT(*) as supplier_did_not_provide_a_quote FROM rfq WHERE comments = "Supplier did not provide a quote" AND YEAR(fecha_completado) = YEAR(CURDATE())';
                 $sql4 = 'SELECT COUNT(*) as others FROM rfq WHERE comments = "Others" AND YEAR(fecha_completado) = YEAR(CURDATE())';
-
                 $sentencia = $conexion-> prepare($sql);
                 $sentencia1 = $conexion-> prepare($sql1);
                 $sentencia2 = $conexion-> prepare($sql2);
                 $sentencia3 = $conexion-> prepare($sql3);
                 $sentencia4 = $conexion-> prepare($sql4);
-
                 $sentencia-> execute();
                 $sentencia1-> execute();
                 $sentencia2-> execute();
                 $sentencia3-> execute();
                 $sentencia4-> execute();
-
                 $resultado = $sentencia-> fetch();
                 $resultado1 = $sentencia1-> fetch();
                 $resultado2 = $sentencia2-> fetch();
                 $resultado3 = $sentencia3-> fetch();
                 $resultado4 = $sentencia4-> fetch();
-
                 if(!empty($resultado)){
                     $no_bid = $resultado['no_bid'];
                 }
-
                 if(!empty($resultado1)){
                     $manufacturer_in_the_bid = $resultado1['manufacturer_in_bid'];
                 }
-
                 if(!empty($resultado2)){
                     $expired_due_date = $resultado2['expired_due_date'];
                 }
-
                 if(!empty($resultado3)){
                     $supplier_did_not_provide_a_quote = $resultado3['supplier_did_not_provide_a_quote'];
                 }
-
                 if(!empty($resultado4)){
                   $others = $resultado4['others'];
                 }
@@ -1000,12 +931,10 @@ class RepositorioRfq {
           $sentencia= $conexion->prepare($sql);
           $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
           $sentencia-> execute();
-
         }catch(PDOException $ex){
           print "ERROR:" . $ex->getMessage() . "<br>";
         }
       }
     }
-
 }
 ?>

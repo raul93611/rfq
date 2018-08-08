@@ -1,7 +1,5 @@
 <?php
-
 class RepositorioItem {
-
     public static function insertar_item($conexion, $item) {
         $item_insertado = false;
         if (isset($conexion)) {
@@ -24,7 +22,6 @@ class RepositorioItem {
                 $sentencia->bindParam(':website', $item->obtener_website(), PDO::PARAM_STR);
                 $sentencia->bindParam(':additional', $item->obtener_additional(), PDO::PARAM_STR);
                 $resultado = $sentencia->execute();
-
                 if ($resultado) {
                     $item_insertado = true;
                 }
@@ -44,7 +41,6 @@ class RepositorioItem {
                 $sentencia-> bindParam(':provider_menor', $provider_menor, PDO::PARAM_STR);
                 $sentencia-> bindParam(':id_item', $id_item, PDO::PARAM_STR);
                 $sentencia-> execute();
-
                 if($sentencia){
                     $item_editado = true;
                 }
@@ -63,9 +59,7 @@ class RepositorioItem {
                 $sentencia = $conexion->prepare($sql);
                 $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
                 $sentencia->execute();
-
                 $resultado = $sentencia->fetchall();
-
                 if (count($resultado)) {
                     foreach ($resultado as $fila) {
                         $items[] = new Item($fila['id'], $fila['id_rfq'], $fila['id_usuario'], $fila['provider_menor'], $fila['brand'], $fila['brand_project'], $fila['part_number'], $fila['part_number_project'], $fila['description'], $fila['description_project'], $fila['quantity'], $fila['unit_price'], $fila['total_price'], $fila['comments'], $fila['website'], $fila['additional']);
@@ -89,19 +83,16 @@ class RepositorioItem {
         echo '<tr>';
         echo '<td><a href="' . ADD_PROVIDER . '/' . $item->obtener_id() . '" class="btn btn-warning btn-block"><i class="fa fa-plus-circle"></i> Add Provider</a><br><a href="' . EDIT_ITEM . '/' . $item->obtener_id() . '" class="btn btn-warning btn-block"><i class="fa fa-edit"></i> Edit item</a><br><a href="' . DELETE_ITEM . '/' . $item-> obtener_id() . '" class="btn btn-warning btn-block"><i class="fa fa-trash"></i> Delete</a></td>';
         echo '<td>' . $i . '</td>';
-
         if(strlen($item-> obtener_description_project()) >= 100){
           echo '<td><b>Brand:</b> ' . $item->obtener_brand_project() . '<br><b>Part #:</b> ' . $item->obtener_part_number_project() . '<br><b>Description:</b> ' . nl2br(mb_substr($item->obtener_description_project(), 0, 100)) . ' ...</td>';
         }else{
           echo '<td><b>Brand:</b> ' . $item->obtener_brand_project() . '<br><b>Part #:</b> ' . $item->obtener_part_number_project() . '<br><b>Description:</b> ' . nl2br($item->obtener_description_project()) . '</td>';
         }
-
         if(strlen($item-> obtener_description()) >= 100){
           echo '<td><b>Brand:</b> ' . $item->obtener_brand() . '<br><b>Part #:</b> ' . $item->obtener_part_number() . '<br><b>Description:</b> ' . nl2br(mb_substr($item->obtener_description(), 0, 100)) . ' ...</td>';
         }else{
           echo '<td><b>Brand:</b> ' . $item->obtener_brand() . '<br><b>Part #:</b> ' . $item->obtener_part_number() . '<br><b>Description:</b> ' . nl2br($item->obtener_description()) . '</td>';
         }
-
         echo '<td class="estrechar"><a target="_blank" href="'. $item-> obtener_website() .'">'. $item-> obtener_website() .'</a></td>';
         echo '<td>' . $item->obtener_quantity() . '</td>';
         echo '<td><div class="row"><div class="col-6">';
@@ -124,7 +115,6 @@ class RepositorioItem {
         }else{
             echo '<td><input type="text" id="add_cost'.$j.'" size="10" value="0"></td>';
         }
-
         echo '<td>';
         for ($i = 0; $i < count($providers); $i++) {
             $provider = $providers[$i];
@@ -154,7 +144,6 @@ class RepositorioItem {
         $cotizacion = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
         $items = self::obtener_items_por_id_rfq(Conexion::obtener_conexion(), $id_rfq);
         Conexion::cerrar_conexion();
-
         if (count($items)) {
             echo '<br><h2>Items:</h2>';
             echo '<div class="row">';
@@ -164,25 +153,19 @@ class RepositorioItem {
             } else {
                 echo '<label>Taxes (%):</label><input type="number" step=".01" name="taxes" id="taxes" class="form-control" value="0">';
             }
-
             echo '</div><div class="col">';
-
             if ($cotizacion->obtener_profit() != 0) {
                 echo '<label>Profit (%):</label><input type="number" step=".01" name="profit" id="profit" class="form-control" value="' . $cotizacion->obtener_profit() . '">';
             } else {
                 echo '<label>Profit (%):</label><input type="number" step=".01" name="profit" id="profit" class="form-control" value="0">';
             }
-
             echo '</div><div class="col">';
-
             if($cotizacion-> obtener_additional() != 0){
                 echo '<label>Additional general ($):</label><input type="text" name="additional_general" id="additional_general" class="form-control" value="' . $cotizacion->obtener_additional() . '">';
             }else{
                 echo '<label>Additional general ($):</label><input type="text" name="additional_general" id="additional_general" class="form-control" value="0">';
             }
-
             echo '</div><div class="col">';
-
             echo '<label>Payment terms:</label><div class="form-group">
                 <div class="form-check-inline">
                     <input class="form-check-input" type="radio" id="net_30" value="Net 30" name="payment_terms"';
@@ -197,11 +180,9 @@ class RepositorioItem {
                     if ($cotizacion->obtener_payment_terms() == 'Net 30/CC') {
                         echo 'checked';
                     }
-
             echo '><label class="form-check-label" for="net_30cc">Net 30/CC</label>
                 </div>
             </div>';
-
             echo '</div></div><br>';
             echo '<div class="table-responsive">';
             echo '<table id="tabla_items" class="table table-bordered table-hover">';
@@ -262,9 +243,7 @@ class RepositorioItem {
                 $sentencia = $conexion->prepare($sql);
                 $sentencia->bindParam(':id_item', $id_item, PDO::PARAM_STR);
                 $sentencia->execute();
-
                 $resultado = $sentencia->fetch();
-
                 if (!empty($resultado)) {
                     $item = new Item($resultado['id'], $resultado['id_rfq'], $resultado['id_usuario'], $resultado['provider_menor'], $resultado['brand'], $resultado['brand_project'], $resultado['part_number'], $resultado['part_number_project'], $resultado['description'], $resultado['description_project'], $resultado['quantity'], $resultado['unit_price'], $resultado['total_price'], $resultado['comments'], $resultado['website'], $resultado['additional']);
                 }
@@ -277,12 +256,10 @@ class RepositorioItem {
 
     public static function actualizar_item($conexion, $id_item, $brand, $brand_project, $part_number, $part_number_project, $description, $description_project, $quantity, $comments, $website) {
         $item_editado = false;
-
         if (isset($conexion)) {
             try {
                 $sql = 'UPDATE item SET brand = :brand, brand_project = :brand_project, part_number = :part_number, part_number_project = :part_number_project, description = :description, description_project = :description_project, quantity = :quantity, comments = :comments, website = :website WHERE id = :id_item';
                 $sentencia = $conexion->prepare($sql);
-
                 $sentencia->bindParam(':brand', $brand, PDO::PARAM_STR);
                 $sentencia->bindParam(':brand_project', $brand_project, PDO::PARAM_STR);
                 $sentencia->bindParam(':part_number', $part_number, PDO::PARAM_STR);
@@ -293,9 +270,7 @@ class RepositorioItem {
                 $sentencia->bindParam(':comments', $comments, PDO::PARAM_STR);
                 $sentencia->bindParam(':website', $website, PDO::PARAM_STR);
                 $sentencia->bindParam(':id_item', $id_item, PDO::PARAM_STR);
-
                 $sentencia->execute();
-
                 if ($sentencia) {
                     $item_editado = true;
                 }
@@ -316,9 +291,7 @@ class RepositorioItem {
                 $sentencia-> bindParam(':total_price', $total_price, PDO::PARAM_STR);
                 $sentencia-> bindParam(':additional', $additional, PDO::PARAM_STR);
                 $sentencia-> bindParam(':id_item', $id_item, PDO::PARAM_STR);
-
                 $sentencia-> execute();
-
                 if($sentencia){
                     $item_editado = true;
                 }
@@ -337,12 +310,10 @@ class RepositorioItem {
                 $sentencia1 = $conexion-> prepare($sql1);
                 $sentencia1-> bindParam(':id_item', $id_item, PDO::PARAM_STR);
                 $sentencia1-> execute();
-
                 $sql2 = "DELETE FROM item WHERE id = :id_item";
                 $sentencia2 = $conexion-> prepare($sql2);
                 $sentencia2-> bindParam(':id_item', $id_item, PDO::PARAM_STR);
                 $sentencia2-> execute();
-
                 $conexion-> commit();
             } catch (PDOException $ex) {
                 print "ERROR:" . $ex->getMessage() . "<br>";
@@ -358,9 +329,7 @@ class RepositorioItem {
                 $sql = 'SELECT * FROM item ORDER BY id_usuario';
                 $sentencia = $conexion->prepare($sql);
                 $sentencia->execute();
-
                 $resultado = $sentencia->fetchall();
-
                 if (count($resultado)) {
                     foreach ($resultado as $fila) {
                         $items[] = new Item($fila['id'], $fila['id_rfq'], $fila['id_usuario'], $fila['provider_menor'], $fila['brand'], $fila['brand_project'], $fila['part_number'], $fila['part_number_project'], $fila['description'], $fila['description_project'], $fila['quantity'], $fila['unit_price'], $fila['total_price'], $fila['comments'], $fila['website'], $fila['additional']);
@@ -389,7 +358,6 @@ class RepositorioItem {
       Conexion::abrir_conexion();
       $items = self::obtener_items(Conexion::obtener_conexion());
       Conexion::cerrar_conexion();
-
       if (count($items)) {
           ?>
           <table class="table table-bordered table-hover">
@@ -411,5 +379,4 @@ class RepositorioItem {
       }
     }
 }
-
 ?>

@@ -1,5 +1,4 @@
 <?php
-
 if (isset($_POST['guardar_cambios_cotizacion'])) {
     Conexion::abrir_conexion();
     $cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $_POST['id_rfq']);
@@ -11,7 +10,6 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
     for ($i = 0; $i < count($id_items); $i++) {
         RepositorioItem::insertar_calculos(Conexion::obtener_conexion(), $unit_prices[$i], $partes_total_price[$i], $additional[$i], $id_items[$i]);
     }
-
     $directorio = $_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $id_rfq;
     $documentos = array_filter($_FILES['documentos']['name']);
     $total = count($documentos);
@@ -23,7 +21,6 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
             move_uploaded_file($tmp_path, $new_path);
         }
     }
-
     switch($_POST['payment_terms']){
         case 'Net 30':
             $payment_terms = 'Net 30';
@@ -32,7 +29,6 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
             $payment_terms = 'Net 30/CC';
             break;
     }
-
     $usuario = RepositorioUsuario::obtener_usuario_por_nombre_usuario(Conexion::obtener_conexion(), $_POST['usuario_designado']);
     $usuario_designado = $usuario->obtener_id();
     $cotizacion_editada = RepositorioRfq::actualizar_usuario_designado(Conexion::obtener_conexion(), $usuario_designado, $_POST['id_rfq']);
@@ -65,18 +61,14 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
         Redireccion::redirigir1(COTIZACIONES . $canal);
     }
     Conexion::cerrar_conexion();
-//}
-//if (isset($_POST['guardar_cambios_cotizacion2'])) {
     Conexion::abrir_conexion();
     $cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $_POST['id_rfq']);
     RepositorioRfq::actualizar_rfq_2(Conexion::obtener_conexion(), $_POST['comments'], $_POST['ship_via'], htmlspecialchars($_POST['address']), htmlspecialchars($_POST['ship_to']), $_POST['id_rfq']);
-
     $expiration_date = $_POST['expiration_date'];
     $partes_expiration_date = explode('/', $expiration_date);
     $expiration_date = $partes_expiration_date[2] . '-' . $partes_expiration_date[0] . '-' . $partes_expiration_date[1];
     $expiration_date = strtotime($expiration_date);
     $expiration_date = date('Y-m-d', $expiration_date);
-
     $fecha_completado = $_POST['completed_date'];
     $partes_completed_date = explode('/', $fecha_completado);
     $fecha_completado = $partes_completed_date[2] . '-' . $partes_completed_date[0] . '-' . $partes_completed_date[1];
@@ -103,7 +95,6 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
             $canal = 'fbo';
             break;
     }
-
     if (!$cotizacion_recuperada->obtener_completado()) {
         if (isset($_POST['completado']) && $_POST['completado'] == 'si') {
             $completado = 1;

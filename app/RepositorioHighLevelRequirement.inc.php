@@ -1,10 +1,7 @@
 <?php
-
 class RepositorioHighLevelRequirement {
-
     public static function insertar_high_level_requirement($conexion, $high_level_requirement) {
         $high_level_requirement_insertado = false;
-
         if (isset($conexion)) {
             try {
                 $sql = 'INSERT INTO high_level_requirements(id_cuestionario, requirement) VALUES(:id_cuestionario, :requirement)';
@@ -31,11 +28,8 @@ class RepositorioHighLevelRequirement {
                 $sql = 'SELECT * FROM high_level_requirements WHERE id_cuestionario = :id_cuestionario';
                 $sentencia = $conexion->prepare($sql);
                 $sentencia->bindParam(':id_cuestionario', $id_cuestionario, PDO::PARAM_STR);
-
                 $sentencia->execute();
-
                 $resultado = $sentencia->fetchAll();
-
                 if (count($resultado)) {
                     foreach ($resultado as $fila) {
                         $high_level_requirements[] = new HighLevelRequirement($fila['id'], $fila['id_cuestionario'], $fila['requirement']);
@@ -65,7 +59,6 @@ class RepositorioHighLevelRequirement {
         Conexion::abrir_conexion();
         $high_level_requirements = self::obtener_high_level_requirements_de_un_cuestionario(Conexion::obtener_conexion(), $id_cuestionario);
         Conexion::cerrar_conexion();
-
         if (count($high_level_requirements)) {
             ?>
             <table class="table table-bordered table-striped table-hover">
@@ -97,9 +90,7 @@ class RepositorioHighLevelRequirement {
                 $sentencia = $conexion->prepare($sql);
                 $sentencia->bindParam(':id_high_level_requirement', $id_high_level_requirement, PDO::PARAM_STR);
                 $sentencia->execute();
-
                 $resultado = $sentencia->fetch();
-
                 if (!empty($resultado)) {
                     $high_level_requirement = new HighLevelRequirement($resultado['id'], $resultado['id_cuestionario'], $resultado['requirement']);
                 }
@@ -119,7 +110,6 @@ class RepositorioHighLevelRequirement {
                 $sentencia-> bindParam(':requirement', $requirement, PDO::PARAM_STR);
                 $sentencia-> bindParam(':id_high_level_requirement', $id_high_level_requirement, PDO::PARAM_STR);
                 $sentencia-> execute();
-
                 if($sentencia){
                     $high_level_requirement_editado = true;
                 }
@@ -129,6 +119,5 @@ class RepositorioHighLevelRequirement {
         }
         return $high_level_requirement_editado;
     }
-
 }
 ?>

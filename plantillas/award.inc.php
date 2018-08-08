@@ -1,5 +1,4 @@
 <?php
-
 switch ($cotizacion) {
     case 'gsa_buy_award':
         $canal = 'GSA-Buy';

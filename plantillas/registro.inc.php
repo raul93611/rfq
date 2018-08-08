@@ -12,7 +12,7 @@ include_once 'validacion_registro_usuario.inc.php';
 
                 </div>
             </div>
-        </div><!-- /.container-fluid -->
+        </div>
     </section>
     <section class="content">
         <div class="container-fluid">

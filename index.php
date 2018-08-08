@@ -1,5 +1,4 @@
 <?php
-
 include_once 'app/config.inc.php';
 include_once 'app/Conexion.inc.php';
 include_once 'app/ControlSesion.inc.php';
@@ -268,6 +267,5 @@ if ($partes_ruta[0] == 'rfq') {
         }
     }
 }
-
 include_once $ruta_elegida;
 ?>
