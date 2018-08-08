@@ -549,6 +549,19 @@ class RepositorioRfq {
             <td><?php echo $fecha_award; ?></td>
             <td><?php echo $cotizacion->obtener_id(); ?></td>
             <td><?php echo $cotizacion->obtener_comments(); ?></td>
+            <?php
+            if($cotizacion-> obtener_canal() != 'FedBid'){
+              if ($cotizacion->obtener_canal() != 'GSA-Buy') {
+                  ?>
+                  <td class="text-center"><a class="btn btn-sm calculate" href="<?php echo PROPOSAL . '/' . $cotizacion->obtener_id(); ?>" target="_blank"><i class="fa fa-copy"></i></a></td>
+                  <?php
+              } else {
+                  ?>
+                  <td class="text-center"><a class="btn btn-sm calculate" href="<?php echo PROPOSAL . '/' . $cotizacion->obtener_id(); ?>" target="_blank"><i class="fa fa-copy"></i></a>&nbsp;&nbsp;<a class="btn btn-primary btn-sm" href="<?php echo PROPOSAL_GSA . '/' . $cotizacion->obtener_id(); ?>" target="_blank"><i class="fa fa-copy"></i></a></td>
+                  <?php
+              }
+            }
+            ?>
         </tr>
         <?php
     }
@@ -571,6 +584,7 @@ class RepositorioRfq {
                       <th>COMPLETED DATE</th>
                       <th>PROPOSAL</th>
                       <th>COMMENTS</th>
+                      <?php if($canal != 'FedBid'){echo '<th>GENERATE PROPOSAL</th>';} ?>
                     </tr>
                 </thead>
                 <tbody id="tabla_cotizaciones_award">
