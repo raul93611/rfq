@@ -121,7 +121,7 @@ Conexion::cerrar_conexion();
                         </div>
                     </div>-->
                     <?php
-                    if ($_SESSION['id_usuario'] < 5 || $_SESSION['id_usuario'] > 7) {
+                    if ($cargo < 4) {
                         ?>
                         <div class="card">
                             <div class="card-header no-border">
@@ -210,7 +210,7 @@ Conexion::cerrar_conexion();
                 <!-- right col (We are only adding the ID to make the widgets sortable)-->
                 <section class="col-lg-6 connectedSortable">
                     <?php
-                    if ($cargo != 4) {
+                    if ($cargo < 4) {
                         ?>
                         <div class="card">
                             <div class="card-header no-border">

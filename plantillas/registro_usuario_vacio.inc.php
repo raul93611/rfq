@@ -26,9 +26,10 @@
     <div class="form-group">
         <label for="cargo">Position:</label>
         <select class="form-control" name="cargo" id="cargo">
-            <option>Jefe</option>
-            <option>Jefe de área</option>
-            <option>Usuario comun</option>
+            <option value="boss">Boss</option>
+            <option value="head_of_area">Head of area</option>
+            <option value="common_user">Common user</option>
+            <option value="rookie">Rookie</option>
         </select>
     </div>
 </div>

@@ -1,14 +1,17 @@
 <?php
 if(isset($_POST['edit_user'])){
   switch ($_POST['cargo']) {
-    case 'Jefe':
+    case 'boss':
       $cargo_nuevo = 2;
       break;
-    case 'Jefe de área':
+    case 'head_of_area':
       $cargo_nuevo = 3;
       break;
-    case 'Usuario comun':
+    case 'common_user':
       $cargo_nuevo = 4;
+      break;
+    case 'rookie':
+      $cargo_nuevo = 5;
       break;
     default:
       break;

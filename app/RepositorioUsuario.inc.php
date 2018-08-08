@@ -245,7 +245,7 @@ class RepositorioUsuario {
 
         if (isset($conexion)) {
             try {
-                $sql = "SELECT * FROM usuarios WHERE cargo = 4 OR cargo = 3 ";
+                $sql = "SELECT * FROM usuarios WHERE cargo > 2";
 
                 $sentencia = $conexion->prepare($sql);
 

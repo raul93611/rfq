@@ -1,5 +1,5 @@
 <?php
-if($cargo == 4 && $_SESSION['id_usuario'] != $cotizacion_recuperada-> obtener_usuario_designado()){
+if($cargo == 5 && $_SESSION['id_usuario'] != $cotizacion_recuperada-> obtener_usuario_designado()){
   Redireccion::redirigir1(PERFIL);
 }
 ?>

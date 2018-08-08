@@ -439,7 +439,7 @@
                                 </ul>
                             </li>
                             <?php
-                            if($_SESSION['id_usuario'] < 5 || $_SESSION['id_usuario'] > 7){
+                            if($cargo < 4){
                               ?>
                               <li class="nav-item">
                                   <a href="<?php echo NO_BID; ?>" class="nav-link
@@ -467,7 +467,7 @@
                                 </a>
                             </li>
                         <?php
-                        if ($_SESSION['id_usuario'] < 5 || $_SESSION['id_usuario'] > 7) {
+                        if ($cargo < 4) {
                             ?>
                             <li class="nav-item">
                                 <a href="<?php echo NUEVA_COTIZACION; ?>" id="new_quote" class="nav-link

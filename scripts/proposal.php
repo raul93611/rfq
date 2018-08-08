@@ -6,9 +6,6 @@ $cotizacion = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexi
 $usuario_designado = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), $cotizacion->obtener_usuario_designado());
 $items = RepositorioItem::obtener_items_por_id_rfq(Conexion::obtener_conexion(), $id_rfq);
 Conexion::cerrar_conexion();
-if($cargo == 4 && $_SESSION['id_usuario'] != $cotizacion-> obtener_usuario_designado()){
-  Redireccion::redirigir1(PERFIL);
-}
 $partes_fecha_completado = explode('-', $cotizacion->obtener_fecha_completado());
 $fecha_completado = $partes_fecha_completado[1] . '/' . $partes_fecha_completado[2] . '/' . $partes_fecha_completado[0];
 $partes_expiration_date = explode('-', $cotizacion->obtener_expiration_date());

@@ -23,9 +23,10 @@ if($cargo != 1){
   <div class="form-group">
     <label for="cargo">Level:</label>
     <select class="form-control" name="cargo" id="cargo">
-      <option <?php if($user-> obtener_cargo() == 2){echo 'selected';} ?>>Jefe</option>
-      <option <?php if($user-> obtener_cargo() == 3){echo 'selected';} ?>>Jefe de área</option>
-      <option <?php if($user-> obtener_cargo() == 4){echo 'selected';} ?>>Usuario comun</option>
+      <option value="boss" <?php if($user-> obtener_cargo() == 2){echo 'selected';} ?>>Boss</option>
+      <option value="head_of_area" <?php if($user-> obtener_cargo() == 3){echo 'selected';} ?>>Head of area</option>
+      <option value="common_user" <?php if($user-> obtener_cargo() == 4){echo 'selected';} ?>>Common user</option>
+      <option value="rookie" <?php if($user-> obtener_cargo() == 5){echo 'selected';} ?>>Rookie</option>
     </select>
   </div>
   <div class="form-group">
