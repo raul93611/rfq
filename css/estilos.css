@@ -66,6 +66,17 @@ body{
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
 }
 
+.calculate{
+  color: #ffffff !important;
+  background-color: #007AFF !important;
+  border-color: #007AFF !important;
+}
+
+.calculate:hover{
+  background-color: #3395FF !important;
+  border-color: #3395FF !important;
+}
+
 .btn-primary:hover {
   color: #ffffff;
   background-color: #40B7EE !important;
