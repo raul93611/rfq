@@ -6,7 +6,6 @@ if(isset($_POST['guardar_provider'])){
     $item = RepositorioItem::obtener_item_por_id(Conexion::obtener_conexion(), $provider-> obtener_id_item());
     $id_rfq = $item-> obtener_id_rfq();
     Conexion::cerrar_conexion();
-    
     if($provider_insertado){
         Redireccion::redirigir1(EDITAR_COTIZACION . '/' . $id_rfq);
     }

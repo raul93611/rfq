@@ -9,10 +9,9 @@ include_once 'plantillas/validacion_registro_cotizacion.inc.php';
                     <h1>New quote</h1>
                 </div>
                 <div class="col-sm-6">
-
                 </div>
             </div>
-        </div><!-- /.container-fluid -->
+        </div>
     </section>
     <section class="content">
         <div class="container-fluid">

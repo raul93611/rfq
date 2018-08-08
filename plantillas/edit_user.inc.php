@@ -12,7 +12,7 @@ include_once 'plantillas/validation_edit_user.inc.php';
 
                 </div>
             </div>
-        </div><!-- /.container-fluid -->
+        </div>
     </section>
     <section class="content">
         <div class="container-fluid">

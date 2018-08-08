@@ -1,5 +1,4 @@
 <?php
-
 include_once 'vendor/autoload.php';
 Conexion::abrir_conexion();
 $cotizacion = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
@@ -10,12 +9,9 @@ $partes_fecha_completado = explode('-', $cotizacion->obtener_fecha_completado())
 $fecha_completado = $partes_fecha_completado[1] . '/' . $partes_fecha_completado[2] . '/' . $partes_fecha_completado[0];
 $partes_expiration_date = explode('-', $cotizacion->obtener_expiration_date());
 $expiration_date = $partes_expiration_date[1] . '/' . $partes_expiration_date[2] . '/' . $partes_expiration_date[0];
-
-
 try{
   $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
   $fontDirs = $defaultConfig['fontDir'];
-
   $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
   $fontData = $defaultFontConfig['fontdata'];
   $mpdf = new \Mpdf\Mpdf(['format' => 'Letter', 'margin_footer' => '8',
@@ -99,14 +95,11 @@ try{
             <td style="text-align:center;">' . $expiration_date . '</td>
           </tr>
         </table>
-
-
       </td>
     </tr>
   </table>
   <div >
   </div>';
-
   $html .= '
   <br>
   <table id="tabla" style="width:100%">
@@ -136,7 +129,6 @@ try{
       <td style="text-align:center;">' . $cotizacion->obtener_payment_terms() . '</td>
     </tr>
   </table><br>';
-
   if (count($items)) {
       if ($encabezado) {
           $html .= '<table id="tabla" style="width:100%">
@@ -174,7 +166,6 @@ try{
             <th class="total_ancho">TOTAL</th>
           </tr>';
       }
-
       $a = 1;
       for ($i = 0; $i < count($items); $i++) {
           $item = $items[$i];
@@ -186,7 +177,6 @@ try{
                 <td style="text-align:right;">$ ' . number_format($item->obtener_total_price(), 2) . '</td>
               </tr>';
             $a++;
-
       }
       $html .= '
       <tr>
@@ -216,10 +206,7 @@ try{
   $mpdf->WriteHTML($html);
   $mpdf->Output($_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $cotizacion->obtener_id() . '/' . $cotizacion->obtener_email_code() . '.pdf', 'F');
   $mpdf->Output($cotizacion->obtener_email_code() . '.pdf', 'I');
-
-} catch (\Mpdf\MpdfException $e) { // Note: safer fully qualified exception name used for catch
-    // Process the exception, log, print etc.
+} catch (\Mpdf\MpdfException $e) {
     echo $e->getMessage();
 }
-
 ?>

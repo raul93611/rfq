@@ -117,10 +117,7 @@ if($cargo == 5 && $_SESSION['id_usuario'] != $cotizacion_recuperada-> obtener_us
         }
         ?>
       </div>
-
     </div>
-
-
     <label>Documents:</label>
     <?php
     $ruta = $_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $cotizacion_recuperada->obtener_id();
@@ -161,10 +158,6 @@ if($cargo == 5 && $_SESSION['id_usuario'] != $cotizacion_recuperada-> obtener_us
           <div class="form-group">
               <textarea class="form-control" rows="5" id="shipping" name="shipping" placeholder="Enter shipping ..."><?php echo $cotizacion_recuperada->obtener_shipping(); ?></textarea>
           </div>
-
-          <!--<div class="form-group">
-              <input type="text" class="form-control" id="shipping" name="shipping" value="<?php echo $cotizacion_recuperada->obtener_shipping(); ?>">
-          </div>-->
         </div>
         <div class="col">
           <div class="form-group">
@@ -195,19 +188,4 @@ if($cargo == 5 && $_SESSION['id_usuario'] != $cotizacion_recuperada-> obtener_us
             break;
     }
     ?>
-<!--</div>-->
 <hr>
-<!--<div class="card-footer">
-
-    <?php
-    /*if($cotizacion_recuperada-> obtener_award()){
-        echo '<a class="btn btn-primary" href="' . AWARD . $canal . '"><i class="fa fa-backward"></i> Go back</a>';
-    }else if($cotizacion_recuperada-> obtener_status()){
-        echo '<a class="btn btn-primary" href="' . SUBMITTED . $canal . '"><i class="fa fa-backward"></i> Go back</a>';
-    }else if($cotizacion_recuperada-> obtener_completado()){
-        echo '<a class="btn btn-primary" href="' . COMPLETADOS . $canal . '"><i class="fa fa-backward"></i> Go back</a>';
-    }else {
-        echo '<a class="btn btn-primary" href="' . COTIZACIONES . $canal . '"><i class="fa fa-backward"></i> Go back</a>';
-    }*/
-    ?>
-</div>-->

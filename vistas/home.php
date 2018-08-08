@@ -11,14 +11,9 @@ include_once 'plantillas/validacion_login.inc.php';
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
         <title>Home</title>
-
-        <!-- Font Awesome -->
         <link rel="stylesheet" href="<?php echo PLUGINS; ?>/font-awesome/css/font-awesome.min.css">
-        <!-- Theme style -->
         <link rel="stylesheet" href="<?php echo DIST; ?>css/adminlte.min.css">
-        <!-- iCheck -->
         <link rel="stylesheet" href="<?php echo RUTA_CSS; ?>estilos.css">
         <link rel="stylesheet" href="<?php echo PLUGINS; ?>iCheck/square/blue.css">
         <link rel="Shortcut Icon" href="<?php echo RUTA_IMG; ?>favicon_e.png" type="image/x-icon" />
@@ -29,11 +24,9 @@ include_once 'plantillas/validacion_login.inc.php';
             <div class="login-logo">
                 <img class="mb-4" src="<?php echo RUTA_IMG; ?>e_logo_home.png" alt="" width="100" height="100">
             </div>
-            <!-- /.login-logo -->
             <div class="card">
                 <div class="card-body login-card-body">
                     <p class="login-box-msg" style="color: #BDC5CF !important;">Please log in</p>
-
                     <form action="<?php echo SERVIDOR; ?>" method="post">
                         <div class="form-group has-feedback">
                             <input type="text" class="form-control <?php if(isset($_POST['iniciar_sesion'])){echo 'is-invalid';} ?>" name="nombre_usuario" placeholder="Username" autofocus required
@@ -41,8 +34,7 @@ include_once 'plantillas/validacion_login.inc.php';
                             if (isset($_POST['iniciar_sesion']) && isset($_POST['nombre_usuario']) && !empty($_POST['nombre_usuario'])) {
                                 echo 'value="' . $_POST['nombre_usuario'] . '"';
                             }
-                            ?>
-                                   >
+                            ?>>
                             <span class="fa fa-user form-control-feedback" style="color: #BDC5CF !important;"></span>
                         </div>
                         <div class="form-group has-feedback">
@@ -65,16 +57,10 @@ include_once 'plantillas/validacion_login.inc.php';
                       <a href="http://www.elogicportal.com" class="btn btn_home btn-block btn-flat"><i class="fa fa-home"></i> Home</a>
                     </div>
                 </div>
-                <!-- /.login-card-body -->
             </div>
         </div>
-        <!-- /.login-box -->
-
-        <!-- jQuery -->
         <script src="<?php echo PLUGINS; ?>jquery/jquery.min.js"></script>
-        <!-- Bootstrap 4 -->
         <script src="<?php echo PLUGINS; ?>bootstrap/js/bootstrap.bundle.min.js"></script>
-        <!-- iCheck -->
         <script src="<?php echo PLUGINS; ?>iCheck/icheck.min.js"></script>
     </body>
 </html>

@@ -1,5 +1,4 @@
 <input type="hidden" name="id_rfq" value="<?php echo $cotizacion_recuperada->obtener_id(); ?>">
-<!--<div class="card-body">-->
 <div class="row">
   <div class="col">
     <div class="form-group">
@@ -119,11 +118,4 @@ if ($cotizacion_recuperada->obtener_award() && ($cotizacion_recuperada->obtener_
 <button type="submit" class="btn btn-success" id="save_item" name="guardar_cambios_cotizacion"><i class="fa fa-check"></i> Save</button>
 <a class="btn btn-primary add_item_charter" href="<?php echo ADD_ITEM . '/' . $cotizacion_recuperada->obtener_id(); ?>"><i class="fa fa-plus-circle"></i> Add item</a>
 <a class="btn btn-info add_item_charter" href="<?php echo CUESTIONARIO . '/' . $cotizacion_recuperada->obtener_id(); ?>"><i class="fa fa-sticky-note"></i> Project charter</a>
-    <!--<button type="submit" class="btn btn-success" name="guardar_cambios_cotizacion"><i class="fa fa-save"></i> Save</button>-->
 </div>
-<!--
-<br>
-
-
-
--->

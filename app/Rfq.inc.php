@@ -1,7 +1,5 @@
 <?php
-
 class Rfq {
-
     private $id;
     private $id_usuario;
     private $usuario_designado;
@@ -168,5 +166,4 @@ class Rfq {
       return $this-> shipping_cost;
     }
 }
-
 ?>

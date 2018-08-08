@@ -2,13 +2,10 @@
 class RepositorioCuestionario{
     public static function insertar_cuestionario($conexion, $cuestionario){
         $cuestionario_insertado = false;
-
         if(isset($conexion)){
             try{
                 $sql = 'INSERT INTO cuestionario(id_rfq, reach_objectives, cost_objectives, time_objectives, quality_objectives, reach_goals, cost_goals, time_goals, quality_goals, locations) VALUES(:id_rfq, :reach_objectives, :cost_objectives, :time_objectives, :quality_objectives, :reach_goals, :cost_goals, :time_goals, :quality_goals, :locations)';
-
                 $sentencia = $conexion-> prepare($sql);
-
                 $sentencia-> bindParam(':id_rfq', $cuestionario-> obtener_id_rfq(), PDO::PARAM_STR);
                 $sentencia-> bindParam(':reach_objectives', $cuestionario-> obtener_reach_objectives(), PDO::PARAM_STR);
                 $sentencia-> bindParam(':cost_objectives', $cuestionario-> obtener_cost_objectives(), PDO::PARAM_STR);
@@ -19,9 +16,7 @@ class RepositorioCuestionario{
                 $sentencia-> bindParam(':time_goals', $cuestionario-> obtener_time_goals(), PDO::PARAM_STR);
                 $sentencia-> bindParam(':quality_goals', $cuestionario-> obtener_quality_goals(), PDO::PARAM_STR);
                 $sentencia-> bindParam(':locations', $cuestionario-> obtener_locations(), PDO::PARAM_STR);
-
                 $resultado = $sentencia-> execute();
-
                 if($resultado){
                     $cuestionario_insertado = true;
                 }
@@ -80,7 +75,6 @@ class RepositorioCuestionario{
             try{
                 $sql = 'UPDATE cuestionario SET reach_objectives = :reach_objectives, cost_objectives = :cost_objectives, time_objectives = :time_objectives, quality_objectives = :quality_objectives, reach_goals = :reach_goals, cost_goals = :cost_goals, time_goals = :time_goals, quality_goals = :quality_goals, locations = :locations WHERE id = :id_cuestionario';
                 $sentencia = $conexion-> prepare($sql);
-
                 $sentencia-> bindParam(':reach_objectives', $reach_objectives, PDO::PARAM_STR);
                 $sentencia-> bindParam(':cost_objectives', $cost_objectives, PDO::PARAM_STR);
                 $sentencia-> bindParam(':time_objectives', $time_objectives, PDO::PARAM_STR);
@@ -91,9 +85,7 @@ class RepositorioCuestionario{
                 $sentencia-> bindParam(':quality_goals', $quality_goals, PDO::PARAM_STR);
                 $sentencia-> bindParam(':locations', $locations, PDO::PARAM_STR);
                 $sentencia-> bindParam(':id_cuestionario', $id_cuestionario, PDO::PARAM_STR);
-
                 $sentencia-> execute();
-
                 if($sentencia){
                     $cuestionario_editado = true;
                 }
@@ -111,7 +103,6 @@ class RepositorioCuestionario{
           $sentencia= $conexion->prepare($sql);
           $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
           $sentencia-> execute();
-
         }catch(PDOException $ex){
           print "ERROR:" . $ex->getMessage() . "<br>";
         }
