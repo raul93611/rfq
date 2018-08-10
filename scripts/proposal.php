@@ -186,8 +186,8 @@ try{
                   <td></td>
                   <td><b>Brand name:</b> ' . $subitem-> obtener_brand() . '<br><b>Part number:</b> ' . $subitem-> obtener_part_number() . '<br><b>Item description:</b><br> ' . nl2br($subitem-> obtener_description()) . '</td>
                   <td style="text-align:right;">' . $subitem-> obtener_quantity() . '</td>
-                  <td style="text-align:right;">' . number_format($subitem-> obtener_unit_price(), 2) . '</td>
-                  <td style="text-align:right;">' . number_format($subitem-> obtener_total_price(), 2) . '</td>
+                  <td style="text-align:right;">$ ' . number_format($subitem-> obtener_unit_price(), 2) . '</td>
+                  <td style="text-align:right;">$ ' . number_format($subitem-> obtener_total_price(), 2) . '</td>
                 </tr>
               ';
             }
