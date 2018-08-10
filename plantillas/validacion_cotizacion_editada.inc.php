@@ -4,11 +4,19 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
     $cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $_POST['id_rfq']);
     $usuario_antiguo = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), $cotizacion_recuperada->obtener_usuario_designado());
     $id_items = explode(',', $_POST['id_items']);
+    $id_subitems = explode(',', $_POST['id_subitems']);
     $partes_total_price = explode(',', $_POST['partes_total_price']);
+    $partes_total_price_subitems = explode(',', $_POST['partes_total_price_subitems']);
     $unit_prices = explode(',', $_POST['unit_prices']);
+    $unit_prices_subitems = explode(',', $_POST['unit_prices_subitems']);
     $additional = explode(',', $_POST['additional']);
+    $additional_subitems = explode(',', $_POST['additional_subitems']);
     for ($i = 0; $i < count($id_items); $i++) {
         RepositorioItem::insertar_calculos(Conexion::obtener_conexion(), $unit_prices[$i], $partes_total_price[$i], $additional[$i], $id_items[$i]);
+    }
+
+    for($j = 0; $j < count($id_subitems); $j++){
+      RepositorioSubitem::insertar_calculos(Conexion::obtener_conexion(), $unit_prices_subitems[$j], $partes_total_price_subitems[$j], $additional_subitems[$j], $id_subitems[$j]);
     }
     $directorio = $_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $id_rfq;
     $documentos = array_filter($_FILES['documentos']['name']);

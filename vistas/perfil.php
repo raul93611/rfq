@@ -63,14 +63,35 @@ switch ($gestor_actual) {
                 Conexion::cerrar_conexion();
                 include_once 'plantillas/add_provider.inc.php';
                 break;
+            case 'add_provider_subitem':
+                Conexion::abrir_conexion();
+                $subitem = RepositorioSubitem::obtener_subitem_por_id(Conexion::obtener_conexion(), $id_subitem);
+                Conexion::cerrar_conexion();
+                include_once 'plantillas/add_provider_subitem.inc.php';
+                break;
+            case 'add_subitem':
+                Conexion::abrir_conexion();
+                $item = RepositorioItem::obtener_item_por_id(Conexion::obtener_conexion(), $id_item);
+                Conexion::cerrar_conexion();
+                include_once 'plantillas/add_subitem.inc.php';
+                break;
             case 'edit_item':
                 Conexion::abrir_conexion();
                 $item = RepositorioItem::obtener_item_por_id(Conexion::obtener_conexion(), $id_item);
                 Conexion::cerrar_conexion();
                 include_once 'plantillas/edit_item.inc.php';
                 break;
+            case 'edit_subitem':
+                Conexion::abrir_conexion();
+                $subitem = RepositorioSubitem::obtener_subitem_por_id(Conexion::obtener_conexion(), $id_subitem);
+                Conexion::cerrar_conexion();
+                include_once 'plantillas/edit_subitem.inc.php';
+                break;
             case 'delete_item':
                 include_once 'scripts/delete_item.php';
+                break;
+            case 'delete_subitem':
+                include_once 'scripts/delete_subitem.php';
                 break;
             case 'edit_provider':
                 Conexion::abrir_conexion();
@@ -79,8 +100,18 @@ switch ($gestor_actual) {
                 Conexion::cerrar_conexion();
                 include_once 'plantillas/edit_provider.inc.php';
                 break;
+            case 'edit_provider_subitem':
+                Conexion::abrir_conexion();
+                $provider_subitem = RepositorioProviderSubitem::obtener_provider_subitem_por_id(Conexion::obtener_conexion(), $id_provider_subitem);
+                $subitem = RepositorioSubitem::obtener_subitem_por_id(Conexion::obtener_conexion(), $provider_subitem-> obtener_id_subitem());
+                Conexion::cerrar_conexion();
+                include_once 'plantillas/edit_provider_subitem.inc.php';
+                break;
             case 'delete_provider':
                 include_once 'scripts/delete_provider.php';
+                break;
+            case 'delete_provider_subitem':
+                include_once 'scripts/delete_provider_subitem.php';
                 break;
             case 'cuestionario':
                 Conexion::abrir_conexion();

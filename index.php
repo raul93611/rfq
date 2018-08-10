@@ -36,6 +36,12 @@ include_once 'app/RepositorioProjectRisk.inc.php';
 include_once 'app/ProjectMilestone.inc.php';
 include_once 'app/RepositorioProjectMilestone.inc.php';
 
+include_once 'app/Subitem.inc.php';
+include_once 'app/RepositorioSubitem.inc.php';
+
+include_once 'app/ProviderSubitem.inc.php';
+include_once 'app/RepositorioProviderSubitem.inc.php';
+
 $componentes_url = parse_url($_SERVER['REQUEST_URI']);
 $ruta = $componentes_url['path'];
 
@@ -211,21 +217,45 @@ if ($partes_ruta[0] == 'rfq') {
                     $cotizacion = 'add_provider';
                     $id_item = $partes_ruta[4];
                     break;
+                case 'add_provider_subitem':
+                    $cotizacion = 'add_provider_subitem';
+                    $id_subitem = $partes_ruta[4];
+                    break;
+                case 'add_subitem':
+                    $cotizacion = 'add_subitem';
+                    $id_item = $partes_ruta[4];
+                    break;
                 case 'edit_item':
                     $cotizacion = 'edit_item';
                     $id_item = $partes_ruta[4];
+                    break;
+                case 'edit_subitem':
+                    $cotizacion = 'edit_subitem';
+                    $id_subitem = $partes_ruta[4];
                     break;
                 case 'delete_item':
                     $cotizacion = 'delete_item';
                     $id_item = $partes_ruta[4];
                     break;
+                case 'delete_subitem':
+                    $cotizacion = 'delete_subitem';
+                    $id_subitem = $partes_ruta[4];
+                    break;
                 case 'edit_provider':
                     $cotizacion = 'edit_provider';
                     $id_provider = $partes_ruta[4];
                     break;
+                case 'edit_provider_subitem':
+                    $cotizacion = 'edit_provider_subitem';
+                    $id_provider_subitem = $partes_ruta[4];
+                    break;
                 case 'delete_provider':
                     $cotizacion = 'delete_provider';
                     $id_provider = $partes_ruta[4];
+                    break;
+                case 'delete_provider_subitem':
+                    $cotizacion = 'delete_provider_subitem';
+                    $id_provider_subitem = $partes_ruta[4];
                     break;
                 case 'cuestionario':
                     $cotizacion = 'cuestionario';

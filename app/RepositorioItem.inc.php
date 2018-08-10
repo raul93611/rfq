@@ -72,7 +72,7 @@ class RepositorioItem {
         return $items;
     }
 
-    public static function escribir_item($item, $i) {
+    public static function escribir_item($item, $i, $numeracion) {
         if (!isset($item)) {
             return;
         }
@@ -81,8 +81,8 @@ class RepositorioItem {
         $providers = RepositorioProvider::obtener_providers_por_id_item(Conexion::obtener_conexion(), $item->obtener_id());
         Conexion::cerrar_conexion();
         echo '<tr>';
-        echo '<td><a href="' . ADD_PROVIDER . '/' . $item->obtener_id() . '" class="btn btn-warning btn-block"><i class="fa fa-plus-circle"></i> Add Provider</a><br><a href="' . EDIT_ITEM . '/' . $item->obtener_id() . '" class="btn btn-warning btn-block"><i class="fa fa-edit"></i> Edit item</a><br><a href="' . DELETE_ITEM . '/' . $item-> obtener_id() . '" class="btn btn-warning btn-block"><i class="fa fa-trash"></i> Delete</a></td>';
-        echo '<td>' . $i . '</td>';
+        echo '<td><a href="' . ADD_PROVIDER . '/' . $item->obtener_id() . '" class="btn btn-warning btn-block"><i class="fa fa-plus-circle"></i> Add Provider</a><br><a href="' . EDIT_ITEM . '/' . $item->obtener_id() . '" class="btn btn-warning btn-block"><i class="fa fa-edit"></i> Edit item</a><br><a href="' . DELETE_ITEM . '/' . $item-> obtener_id() . '" class="btn btn-warning btn-block"><i class="fa fa-trash"></i> Delete</a><br><a href="' . ADD_SUBITEM . '/' . $item-> obtener_id() . '" class="btn btn-warning btn-block"><i class="fa fa-plus-circle"></i> Add subitem</a></td>';
+        echo '<td>' . $numeracion . '</td>';
         if(strlen($item-> obtener_description_project()) >= 100){
           echo '<td><b>Brand:</b> ' . $item->obtener_brand_project() . '<br><b>Part #:</b> ' . $item->obtener_part_number_project() . '<br><b>Description:</b> ' . nl2br(mb_substr($item->obtener_description_project(), 0, 100)) . ' ...</td>';
         }else{
@@ -137,6 +137,8 @@ class RepositorioItem {
         echo '<td></td>';
         echo '<td>' . nl2br($item->obtener_comments()) . '</td>';
         echo '</tr>';
+        $j = RepositorioSubitem::escribir_subitems($item-> obtener_id(), $j);
+        return $j;
     }
 
     public static function escribir_items($id_rfq) {
@@ -204,9 +206,10 @@ class RepositorioItem {
             echo '</tr>';
             echo '</thead>';
             echo '<tbody id="items">';
+            $k = 1;
             for ($i = 0; $i < count($items); $i++) {
                 $item = $items[$i];
-                self::escribir_item($item, $i + 1);
+                $k = self::escribir_item($item, $k, $i+1);
             }
             echo '<td colspan="5" class="display-4"><b><h4>TOTAL:</h4></b></td>';
             echo '<td id="total_quantity"></td>';
@@ -218,6 +221,8 @@ class RepositorioItem {
             echo '</table>';
             echo '</div>';
             $id_items = '';
+            $id_subitems = '';
+            $contador_subitems = 0;
             for($i = 0; $i < count($items); $i++){
                 $item = $items[$i];
                 if($i == 0){
@@ -225,11 +230,27 @@ class RepositorioItem {
                 }else{
                     $id_items = $id_items . ',' . $item-> obtener_id();
                 }
+                Conexion::abrir_conexion();
+                $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Conexion::obtener_conexion(), $item-> obtener_id());
+                Conexion::cerrar_conexion();
+                for($j = 0; $j < count($subitems); $j++){
+                  $subitem = $subitems[$j];
+                  if($contador_subitems == 0){
+                    $id_subitems = $id_subitems . $subitem-> obtener_id();
+                  }else{
+                    $id_subitems = $id_subitems . ',' . $subitem-> obtener_id();
+                  }
+                  $contador_subitems++;
+                }
             }
             echo '<input type="hidden" id="id_items" name="id_items" value="'.$id_items.'">';
+            echo '<input type="hidden" id="id_subitems" name="id_subitems" value="'.$id_subitems.'">';
             echo '<input type="hidden" id="partes_total_price" name="partes_total_price" value="">';
+            echo '<input type="hidden" id="partes_total_price_subitems" name="partes_total_price_subitems" value="">';
             echo '<input type="hidden" id="additional" name="additional" value="">';
+            echo '<input type="hidden" id="additional_subitems" name="additional_subitems" value="">';
             echo '<input type="hidden" id="unit_prices" name="unit_prices" value="">';
+            echo '<input type="hidden" id="unit_prices_subitems" name="unit_prices_subitems" value="">';
             echo '<input type="hidden" id="total_cost" name="total_cost" value="">';
             echo '<input type="hidden" id="total_price" name="total_price" value="">';
         }

@@ -344,15 +344,17 @@ $(document).ready(function () {
       }else{
         var shipping_cost = 0;
       }
-
-
+      var contador_subitems = 0;
       var i = 0;
       var j = 1;
       var total1 = 0;
       var total2 = 0 + parseFloat(shipping_cost);
       var partes_total_price = '';
+      var partes_total_price_subitems = '';
       var unit_prices = '';
+      var unit_prices_subitems = '';
       var additional = '';
+      var additional_subitems = '';
       var total_quantity = 0;
       $('#items tr').each(function () {
         if(!isNaN($(this).find('td').eq(5).text())){
@@ -363,11 +365,20 @@ $(document).ready(function () {
         }else{
           var add_cost = 0;
         }
+        if($(this).hasClass('fila_subitem')){
+          if(contador_subitems === 0){
+            additional_subitems = additional_subitems + add_cost;
+          }else{
+            additional_subitems = additional_subitems + ',' + add_cost;
+          }
+        }else{
           if (i === 0) {
               additional = additional + add_cost;
           } else {
               additional = additional + ',' + add_cost;
           }
+        }
+
           var resul_taxes = parseFloat(additional_general) + parseFloat(add_cost) + ((1 + (taxes / 100)) * monto[i] * payment_terms);
           resul_taxes = resul_taxes.toFixed(2);
           $(this).find('td').eq(8).html('$ ' + resul_taxes);
@@ -375,17 +386,35 @@ $(document).ready(function () {
               var resul_profit = (1 + (profit / 100)) * resul_taxes;
               resul_profit = resul_profit.toFixed(2);
               $(this).find('td').eq(10).html('$ ' + resul_profit);
-              if (i === 0) {
-                  unit_prices = unit_prices + resul_profit;
-              } else {
-                  unit_prices = unit_prices + ',' + resul_profit;
+              if($(this).hasClass('fila_subitem')){
+                if (contador_subitems === 0) {
+                    unit_prices_subitems = unit_prices_subitems + resul_profit;
+                } else {
+                    unit_prices_subitems = unit_prices_subitems + ',' + resul_profit;
+                }
+
+              }else{
+                if (i === 0) {
+                    unit_prices = unit_prices + resul_profit;
+                } else {
+                    unit_prices = unit_prices + ',' + resul_profit;
+                }
               }
           } else {
               $(this).find('td').eq(10).html('$ ' + resul_taxes);
-              if (i === 0) {
-                  unit_prices = unit_prices + resul_taxes;
-              } else {
-                  unit_prices = unit_prices + ',' + resul_taxes;
+              if($(this).hasClass('fila_subitem')){
+                if (contador_subitems === 0) {
+                    unit_prices_subitems = unit_prices_subitems + resul_taxes;
+                } else {
+                    unit_prices_subitems = unit_prices_subitems + ',' + resul_taxes;
+                }
+
+              }else{
+                if (i === 0) {
+                    unit_prices = unit_prices + resul_taxes;
+                } else {
+                    unit_prices = unit_prices + ',' + resul_taxes;
+                }
               }
           }
           var total_cost = resul_taxes * quantity[i];
@@ -404,18 +433,30 @@ $(document).ready(function () {
           }
 
           $(this).find('td').eq(11).html('$ ' + total_price);
-
-          if (i === 0) {
-              partes_total_price = partes_total_price + total_price;
-          } else {
-              partes_total_price = partes_total_price + ',' + total_price;
+          if($(this).hasClass('fila_subitem')){
+            if(contador_subitems === 0){
+              partes_total_price_subitems = partes_total_price_subitems + total_price;
+            }else{
+              partes_total_price_subitems = partes_total_price_subitems + ',' + total_price;
+            }
+            contador_subitems++;
+          }else{
+            if (i === 0) {
+                partes_total_price = partes_total_price + total_price;
+            } else {
+                partes_total_price = partes_total_price + ',' + total_price;
+            }
           }
+
           i++;
           j++;
       });
       $('#additional').val(additional);
+      $('#additional_subitems').val(additional_subitems);
       $('#unit_prices').val(unit_prices);
+      $('#unit_prices_subitems').val(unit_prices_subitems);
       $('#partes_total_price').val(partes_total_price);
+      $('#partes_total_price_subitems').val(partes_total_price_subitems);
       total1 = total1.toFixed(2);
       total2 = total2.toFixed(2);
       $('#total_cost').val(total1);
@@ -442,15 +483,22 @@ $(document).ready(function () {
         var additional_general = 0;
       }
 
-      var shipping_cost = $('#shipping_cost').val();
-
+      if(!isNaN($('#shipping_cost').val()) && $('#shipping_cost').val() != ''){
+        var shipping_cost = $('#shipping_cost').val();
+      }else{
+        var shipping_cost = 0;
+      }
+      var contador_subitems = 0;
       var i = 0;
       var j = 1;
       var total1 = 0;
       var total2 = 0 + parseFloat(shipping_cost);
       var partes_total_price = '';
+      var partes_total_price_subitems = '';
       var unit_prices = '';
+      var unit_prices_subitems = '';
       var additional = '';
+      var additional_subitems = '';
       var total_quantity = 0;
       $('#items tr').each(function () {
         if(!isNaN($(this).find('td').eq(5).text())){
@@ -461,11 +509,20 @@ $(document).ready(function () {
         }else{
           var add_cost = 0;
         }
+        if($(this).hasClass('fila_subitem')){
+          if(contador_subitems === 0){
+            additional_subitems = additional_subitems + add_cost;
+          }else{
+            additional_subitems = additional_subitems + ',' + add_cost;
+          }
+        }else{
           if (i === 0) {
               additional = additional + add_cost;
           } else {
               additional = additional + ',' + add_cost;
           }
+        }
+
           var resul_taxes = parseFloat(additional_general) + parseFloat(add_cost) + ((1 + (taxes / 100)) * monto[i] * payment_terms);
           resul_taxes = resul_taxes.toFixed(2);
           $(this).find('td').eq(8).html('$ ' + resul_taxes);
@@ -473,17 +530,35 @@ $(document).ready(function () {
               var resul_profit = (1 + (profit / 100)) * resul_taxes;
               resul_profit = resul_profit.toFixed(2);
               $(this).find('td').eq(10).html('$ ' + resul_profit);
-              if (i === 0) {
-                  unit_prices = unit_prices + resul_profit;
-              } else {
-                  unit_prices = unit_prices + ',' + resul_profit;
+              if($(this).hasClass('fila_subitem')){
+                if (contador_subitems === 0) {
+                    unit_prices_subitems = unit_prices_subitems + resul_profit;
+                } else {
+                    unit_prices_subitems = unit_prices_subitems + ',' + resul_profit;
+                }
+
+              }else{
+                if (i === 0) {
+                    unit_prices = unit_prices + resul_profit;
+                } else {
+                    unit_prices = unit_prices + ',' + resul_profit;
+                }
               }
           } else {
               $(this).find('td').eq(10).html('$ ' + resul_taxes);
-              if (i === 0) {
-                  unit_prices = unit_prices + resul_taxes;
-              } else {
-                  unit_prices = unit_prices + ',' + resul_taxes;
+              if($(this).hasClass('fila_subitem')){
+                if (contador_subitems === 0) {
+                    unit_prices_subitems = unit_prices_subitems + resul_taxes;
+                } else {
+                    unit_prices_subitems = unit_prices_subitems + ',' + resul_taxes;
+                }
+
+              }else{
+                if (i === 0) {
+                    unit_prices = unit_prices + resul_taxes;
+                } else {
+                    unit_prices = unit_prices + ',' + resul_taxes;
+                }
               }
           }
           var total_cost = resul_taxes * quantity[i];
@@ -502,18 +577,30 @@ $(document).ready(function () {
           }
 
           $(this).find('td').eq(11).html('$ ' + total_price);
-
-          if (i === 0) {
-              partes_total_price = partes_total_price + total_price;
-          } else {
-              partes_total_price = partes_total_price + ',' + total_price;
+          if($(this).hasClass('fila_subitem')){
+            if(contador_subitems === 0){
+              partes_total_price_subitems = partes_total_price_subitems + total_price;
+            }else{
+              partes_total_price_subitems = partes_total_price_subitems + ',' + total_price;
+            }
+            contador_subitems++;
+          }else{
+            if (i === 0) {
+                partes_total_price = partes_total_price + total_price;
+            } else {
+                partes_total_price = partes_total_price + ',' + total_price;
+            }
           }
+
           i++;
           j++;
       });
       $('#additional').val(additional);
+      $('#additional_subitems').val(additional_subitems);
       $('#unit_prices').val(unit_prices);
+      $('#unit_prices_subitems').val(unit_prices_subitems);
       $('#partes_total_price').val(partes_total_price);
+      $('#partes_total_price_subitems').val(partes_total_price_subitems);
       total1 = total1.toFixed(2);
       total2 = total2.toFixed(2);
       $('#total_cost').val(total1);

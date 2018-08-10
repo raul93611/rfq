@@ -176,6 +176,21 @@ try{
                 <td style="text-align:right;">$ ' . number_format($item->obtener_unit_price(), 2) . '</td>
                 <td style="text-align:right;">$ ' . number_format($item->obtener_total_price(), 2) . '</td>
               </tr>';
+            Conexion::abrir_conexion();
+            $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Conexion::obtener_conexion(), $item-> obtener_id());
+            Conexion::cerrar_conexion();
+            for($j = 0; $j < count($subitems); $j++){
+              $subitem = $subitems[$j];
+              $html .= '
+                <tr>
+                  <td></td>
+                  <td><b>Brand name:</b> ' . $subitem-> obtener_brand() . '<br><b>Part number:</b> ' . $subitem-> obtener_part_number() . '<br><b>Item description:</b><br> ' . nl2br($subitem-> obtener_description()) . '</td>
+                  <td style="text-align:right;">' . $subitem-> obtener_quantity() . '</td>
+                  <td style="text-align:right;">' . number_format($subitem-> obtener_unit_price(), 2) . '</td>
+                  <td style="text-align:right;">' . number_format($subitem-> obtener_total_price(), 2) . '</td>
+                </tr>
+              ';
+            }
             $a++;
       }
       $html .= '
