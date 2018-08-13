@@ -72,8 +72,8 @@ if ($partes_ruta[0] == 'rfq') {
                     $gestor_actual = 'registro';
                     $ruta_elegida = 'vistas/perfil.php';
                     break;
-                case 'registro_correcto':
-                    $gestor_actual = 'registro_correcto';
+                case 'search_award_quotes':
+                    $gestor_actual = 'search_award_quotes';
                     $ruta_elegida = 'vistas/perfil.php';
                     break;
             }

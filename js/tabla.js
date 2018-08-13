@@ -291,6 +291,35 @@ function myFunction6(){
   }
 }
 
+function myFunction7(){
+  var input, filter, table, tr, td, i, select;
+  select = document.getElementById("tipo");
+  var tipo = select.options[select.selectedIndex].value;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("tabla_todas_cotizaciones_award");
+  tr = table.getElementsByTagName("tr");
+
+  for (i = 0; i < tr.length; i++) {
+      switch (tipo) {
+          case 'Proposal':
+              td = tr[i].getElementsByTagName("td")[7];
+              break;
+          case 'Code':
+              td = tr[i].getElementsByTagName("a")[0];
+              break;
+      }
+
+      if (td) {
+          if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+              tr[i].style.display = "";
+          } else {
+              tr[i].style.display = "none";
+          }
+      }
+  }
+}
+
 $(document).ready(function () {
   $('#sidebar_collapse').on('click', function(){
     $('#footer_item').toggleClass('footer_item1');
