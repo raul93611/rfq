@@ -354,6 +354,7 @@ $(document).ready(function () {
 
 
     var time = setInterval(function(){
+      var total_additional = 0;
       var payment_terms = 0;
       if ($('input:radio[name=payment_terms]:checked').val() === 'Net 30/CC') {
           payment_terms = 1.0215;
@@ -367,7 +368,7 @@ $(document).ready(function () {
       }else{
         var additional_general = 0;
       }
-
+      total_additional = parseFloat(additional_general);
       if(!isNaN($('#shipping_cost').val()) && $('#shipping_cost').val() != ''){
         var shipping_cost = $('#shipping_cost').val();
       }else{
@@ -394,6 +395,9 @@ $(document).ready(function () {
         }else{
           var add_cost = 0;
         }
+
+        total_additional = total_additional + parseFloat(add_cost);
+
         if($(this).hasClass('fila_subitem')){
           if(contador_subitems === 0){
             additional_subitems = additional_subitems + add_cost;
@@ -493,11 +497,13 @@ $(document).ready(function () {
       $('#total1').html('$ ' + total1);
       $('#total2').html('$ ' + total2);
       $('#total_quantity').html(total_quantity);
+      $('#total_additional').html('$ ' + total_additional);
     }, 500);
 
 
 
     $('#form_edited_quote').submit(function () {
+      var total_additional = 0;
       var payment_terms = 0;
       if ($('input:radio[name=payment_terms]:checked').val() === 'Net 30/CC') {
           payment_terms = 1.0215;
@@ -511,7 +517,7 @@ $(document).ready(function () {
       }else{
         var additional_general = 0;
       }
-
+      total_additional = parseFloat(additional_general);
       if(!isNaN($('#shipping_cost').val()) && $('#shipping_cost').val() != ''){
         var shipping_cost = $('#shipping_cost').val();
       }else{
@@ -538,6 +544,9 @@ $(document).ready(function () {
         }else{
           var add_cost = 0;
         }
+
+        total_additional = total_additional + parseFloat(add_cost);
+
         if($(this).hasClass('fila_subitem')){
           if(contador_subitems === 0){
             additional_subitems = additional_subitems + add_cost;
@@ -637,5 +646,6 @@ $(document).ready(function () {
       $('#total1').html('$ ' + total1);
       $('#total2').html('$ ' + total2);
       $('#total_quantity').html(total_quantity);
+      $('#total_additional').html('$ ' + total_additional);
     });
 });
