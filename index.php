@@ -42,6 +42,9 @@ include_once 'app/RepositorioSubitem.inc.php';
 include_once 'app/ProviderSubitem.inc.php';
 include_once 'app/RepositorioProviderSubitem.inc.php';
 
+include_once 'app/RfpConnection.inc.php';
+include_once 'app/RepositorioRfpConnection.inc.php';
+
 $componentes_url = parse_url($_SERVER['REQUEST_URI']);
 $ruta = $componentes_url['path'];
 
@@ -124,6 +127,9 @@ if ($partes_ruta[0] == 'rfq') {
                     break;
                 case 'no_submitted':
                     $cotizacion = 'no_submitted';
+                    break;
+                case 'rfp_quotes'.
+                    $cotizacion = 'rfp_quotes';
                     break;
             }
         } else if ($partes_ruta[1] == 'perfil' && $partes_ruta[2] == 'completados') {

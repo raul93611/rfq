@@ -111,8 +111,10 @@ if ($cotizacion_recuperada->obtener_award() && ($cotizacion_recuperada->obtener_
     echo '<a class="btn btn-primary" id="go_back" href="' . NO_BID . '"><i class="fa fa-reply"></i></a>';
 }else if($cotizacion_recuperada-> obtener_comments() == 'No submitted'){
   echo '<a class="btn btn-primary" id="go_back" href="' . NO_SUBMITTED . '"><i class="fa fa-reply"></i></a>';
-}else{
+}else if(!empty($cotizacion_recuperada-> obtener_canal())){
   echo '<a class="btn btn-primary" id="go_back" href="' . COTIZACIONES . $canal . '"><i class="fa fa-reply"></i></a>';
+}else{
+  echo '<a class="btn btn-primary" id="go_back" href="' . RFP_QUOTES . '"><i class="fa fa-reply"></i></a>';
 }
 ?>
 <button type="submit" class="btn btn-success" id="save_item" name="guardar_cambios_cotizacion"><i class="fa fa-check"></i> Save</button>

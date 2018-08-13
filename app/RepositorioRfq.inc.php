@@ -364,8 +364,23 @@ class RepositorioRfq {
                 </thead>
                 <tbody id="tabla_cotizaciones_completados">
                     <?php
-                    foreach ($cotizaciones as $cotizacion) {
-                        self::escribir_cotizacion_completada($cotizacion);
+                    $id_cotizaciones = [];
+                    $id_rfp_connections = [];
+                    Conexion::abrir_conexion();
+                    $rfp_connections = RepositorioRfpConnection::obtener_todos_rfp_connections(Conexion::obtener_conexion());
+                    Conexion::cerrar_conexion();
+                    foreach($cotizaciones as $cotizacion){
+                      $id_cotizaciones[] = $cotizacion-> obtener_id();
+                    }
+                    foreach($rfp_connections as $rfp_connection){
+                      $id_rfp_connections[] = $rfp_connection-> obtener_id_rfq();
+                    }
+                    $id_cotizaciones_comunes = array_diff($id_cotizaciones, $id_rfp_connections);
+                    foreach ($id_cotizaciones_comunes as $id_cotizacion_comun) {
+                      Conexion::abrir_conexion();
+                      $cotizacion_comun = self::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_cotizacion_comun);
+                      Conexion::cerrar_conexion();
+                      self::escribir_cotizacion_completada($cotizacion_comun);
                     }
                     ?>
                 </tbody>
@@ -477,8 +492,8 @@ class RepositorioRfq {
                 </thead>
                 <tbody id="tabla_cotizaciones_submitted">
                     <?php
-                    foreach ($cotizaciones as $cotizacion) {
-                        self::escribir_cotizacion_submitted($cotizacion);
+                    foreach($cotizaciones as $cotizacion){
+                      self::escribir_cotizacion_submitted($cotizacion);
                     }
                     ?>
                 </tbody>
@@ -669,6 +684,52 @@ class RepositorioRfq {
                 <tbody id="tabla_cotizaciones_no_bid">
                     <?php
                     foreach ($cotizaciones as $cotizacion) {
+                        self::escribir_cotizacion_no_bid($cotizacion);
+                    }
+                    ?>
+                </tbody>
+            </table>
+            <?php
+        }
+    }
+
+    public static function obtener_cotizaciones_rfp($conexion, $cargo, $id_usuario){
+      $rfp_quotes = [];
+      $rfp_connections = RepositorioRfpConnection::obtener_todos_rfp_connections($conexion);
+      foreach ($rfp_connections as $rfp_connection) {
+        $rfp_quote = RepositorioRfq::obtener_cotizacion_por_id($conexion, $rfp_connection-> obtener_id_rfq());
+        if(empty($rfp_quote-> obtener_canal())){
+          if($cargo < 4){
+            $rfp_quotes[] = $rfp_quote;
+          }else if($rfp_quote-> obtener_usuario_designado() == $id_usuario){
+            $rfp_quotes[] = $rfp_quote;
+          }
+        }
+      }
+      return $rfp_quotes;
+    }
+
+    public static function escribir_cotizaciones_rfp($cargo, $id_usuario) {
+        Conexion::abrir_conexion();
+        $cotizaciones_rfp = self::obtener_cotizaciones_rfp(Conexion::obtener_conexion(), $cargo, $id_usuario);
+        Conexion::cerrar_conexion();
+        if (count($cotizaciones_rfp)) {
+            ?>
+            <table class="table table-bordered table-striped table-responsive-md">
+                <thead>
+                    <tr>
+                        <th>CODE</th>
+                        <th>DEDIGNATED USER</th>
+                        <th>TYPE OF BID</th>
+                        <th>ISSUE DATE</th>
+                        <th>END DATE</th>
+                        <th>PROPOSAL</th>
+                        <th>COMMENTS</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla_cotizaciones_no_bid">
+                    <?php
+                    foreach ($cotizaciones_rfp as $cotizacion) {
                         self::escribir_cotizacion_no_bid($cotizacion);
                     }
                     ?>

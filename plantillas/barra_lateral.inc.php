@@ -415,6 +415,17 @@
                                     </li>
                                 </ul>
                             </li>
+                            <li class="nav-item">
+                                <a href="<?php echo RFP_QUOTES; ?>" class="nav-link
+                                <?php
+                                if ($cotizacion == 'rfp_quotes') {
+                                    echo 'active';
+                                }
+                                ?>
+                                   ">
+                                    <p>RFP Quotes</p>
+                                </a>
+                            </li>
                             <?php
                             if($cargo < 4){
                               ?>

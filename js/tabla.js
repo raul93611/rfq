@@ -396,7 +396,7 @@ $(document).ready(function () {
           var add_cost = 0;
         }
 
-        total_additional = total_additional + parseFloat(add_cost);
+        total_additional = total_additional + (parseFloat(add_cost)*quantity[i]);
 
         if($(this).hasClass('fila_subitem')){
           if(contador_subitems === 0){
@@ -545,7 +545,7 @@ $(document).ready(function () {
           var add_cost = 0;
         }
 
-        total_additional = total_additional + parseFloat(add_cost);
+        total_additional = total_additional + (parseFloat(add_cost)*quantity[i]);
 
         if($(this).hasClass('fila_subitem')){
           if(contador_subitems === 0){

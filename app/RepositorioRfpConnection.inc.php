@@ -32,5 +32,25 @@ class RepositorioRfpConnection{
     }
     return $rfp_connection;
   }
+
+  public static function obtener_todos_rfp_connections($conexion){
+    $rfp_connections = [];
+    if(isset($conexion)){
+      try{
+        $sql = 'SELECT * FROM rfp_connection';
+        $sentencia = $conexion-> prepare($sql);
+        $sentencia-> execute();
+        $resultado = $sentencia-> fetchAll(PDO::FETCH_ASSOC);
+        if(count($resultado)){
+          foreach($resultado as $fila){
+            $rfp_connections[] = new RfpConnection($fila['id'], $fila['id_rfq'], $fila['rfp']);
+          }
+        }
+      }catch(PDOException $ex){
+
+      }
+    }
+    return $rfp_connections;
+  }
 }
 ?>

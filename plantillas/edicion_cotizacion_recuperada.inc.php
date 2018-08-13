@@ -132,7 +132,8 @@ if($cargo == 5 && $_SESSION['id_usuario'] != $cotizacion_recuperada-> obtener_us
             $ruta_completa = $ruta . "/" . $archivo;
             if ($archivo != "." && $archivo != "..") {
                 $archivo_url = str_replace(' ', '%20', $archivo);
-                echo '<li class="list-group-item"><a download href="' . DOCS . $cotizacion_recuperada->obtener_id() . '/' . $archivo_url . '">' . $archivo . '</a><a href="' . DELETE_DOCUMENT . '/' . $cotizacion_recuperada->obtener_id() . '/' . $archivo . '" class="close"><span aria-hidden="true">&times;</span></a></li>';
+                $archivo_url = str_replace('#', '%23', $archivo_url);
+                echo '<li class="list-group-item"><a download href="' . DOCS . $cotizacion_recuperada->obtener_id() . '/' . $archivo_url . '">' . $archivo . '</a><a href="' . DELETE_DOCUMENT . '/' . $cotizacion_recuperada->obtener_id() . '/' . $archivo_url . '" class="close"><span aria-hidden="true">&times;</span></a></li>';
             }
         }
 

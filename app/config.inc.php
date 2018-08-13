@@ -42,6 +42,7 @@ define('FBO_AWARD', AWARD . 'fbo');
 define('NUEVA_COTIZACION', COTIZACIONES . 'nuevo');
 define('NO_BID', COTIZACIONES . 'no_bid');
 define('NO_SUBMITTED', COTIZACIONES . 'no_submitted');
+define('RFP_QUOTES', COTIZACIONES . 'rfp_quotes');
 define('EDITAR_COTIZACION', COTIZACIONES . 'editar_cotizacion');
 define('DELETE_QUOTE', COTIZACIONES . 'delete_quote');
 define('DOCS', SERVIDOR . 'documentos/');
