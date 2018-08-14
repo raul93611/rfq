@@ -149,6 +149,7 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
             $cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $_POST['id_rfq']);
         }
     }
+    $cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $_POST['id_rfq']);
     Conexion::cerrar_conexion();
 }
 ?>
