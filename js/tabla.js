@@ -368,7 +368,7 @@ $(document).ready(function () {
       }else{
         var additional_general = 0;
       }
-      total_additional = parseFloat(additional_general);
+
       if(!isNaN($('#shipping_cost').val()) && $('#shipping_cost').val() != ''){
         var shipping_cost = $('#shipping_cost').val();
       }else{
@@ -396,7 +396,7 @@ $(document).ready(function () {
           var add_cost = 0;
         }
 
-        total_additional = total_additional + (parseFloat(add_cost)*quantity[i]);
+        total_additional = total_additional + (parseFloat(add_cost)*quantity[i]) + (parseFloat(additional_general)*quantity[i]);
 
         if($(this).hasClass('fila_subitem')){
           if(contador_subitems === 0){
@@ -517,7 +517,7 @@ $(document).ready(function () {
       }else{
         var additional_general = 0;
       }
-      total_additional = parseFloat(additional_general);
+
       if(!isNaN($('#shipping_cost').val()) && $('#shipping_cost').val() != ''){
         var shipping_cost = $('#shipping_cost').val();
       }else{
@@ -545,7 +545,7 @@ $(document).ready(function () {
           var add_cost = 0;
         }
 
-        total_additional = total_additional + (parseFloat(add_cost)*quantity[i]);
+        total_additional = total_additional + (parseFloat(add_cost)*quantity[i]) + (parseFloat(additional_general)*quantity[i]);
 
         if($(this).hasClass('fila_subitem')){
           if(contador_subitems === 0){
