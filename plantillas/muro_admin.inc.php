@@ -55,7 +55,7 @@
                             ?>
                         </div>
                     </div>
-                    <div class="card">
+                    <!--<div class="card">
                       <div class="card-header">
                         <h3 class="card-title">Extra info</h3>
                       </div>
@@ -73,10 +73,10 @@
                         </div>
                         <br>
                         <?php
-                        RepositorioItem::escribir_items_admin();
+                        //RepositorioItem::escribir_items_admin();
                         ?>
                       </div>
-                    </div>
+                    </div>-->
                 </section>
             </div>
         </div>
