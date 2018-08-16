@@ -497,7 +497,7 @@ class RepositorioRfq {
                       <th>ISSUE DATE</th>
                       <th>END DATE</th>
                       <?php if($canal != 'FedBid'){echo '<th>AMOUNT</th>';} ?>
-                      <th>COMPLETED DATE</th>
+                      <th>SUBMITTED DATE</th>
                       <th>PROPOSAL</th>
                       <th>COMMENTS</th>
                       <?php if($canal != 'FedBid'){echo '<th>GENERATE PROPOSAL</th>';} ?>
@@ -609,7 +609,7 @@ class RepositorioRfq {
                       <th>ISSUE DATE</th>
                       <th>END DATE</th>
                       <?php if($canal != 'FedBid'){echo '<th>AMOUNT</th>';} ?>
-                      <th>COMPLETED DATE</th>
+                      <th>AWARD DATE</th>
                       <th>PROPOSAL</th>
                       <th>COMMENTS</th>
                       <?php if($canal != 'FedBid'){echo '<th>GENERATE PROPOSAL</th>';} ?>

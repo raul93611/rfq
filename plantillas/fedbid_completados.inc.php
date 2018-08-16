@@ -15,7 +15,7 @@
         <div class="container-fluid">
             <div class="row">
                 <section class="col-12">
-                    <div class="card">
+                    <div class="card card-primary">
                         <div class="card-header">
                             <h3 class="card-title">FedBid</h3>
                         </div>
