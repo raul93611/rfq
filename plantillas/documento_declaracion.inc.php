@@ -19,6 +19,7 @@
         <link rel="stylesheet" href="<?php echo PLUGINS; ?>bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
         <link rel="stylesheet" href="<?php echo PLUGINS; ?>font-awesome/css/font-awesome.min.css">
         <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+        <link rel="stylesheet" href="<?php echo PLUGINS; ?>datatables/jquery.dataTables.css">
         <link rel="stylesheet" href="<?php echo DIST; ?>css/adminlte.min.css">
         <link rel="stylesheet" href="<?php echo RUTA_CSS; ?>estilos.css">
         <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">

@@ -328,6 +328,8 @@ $(document).ready(function () {
   $('#completed_date').datepicker();
   $('#expiration_date').datepicker();
 
+  $('#tabla_submitted').DataTable();
+
     $('#issue_date').inputmask('mm/dd/yyyy', {'placeholder': 'mm/dd/yyyy'});
     $('#end_date').inputmask("datetime", {
         mask: "2/1/y h:s",

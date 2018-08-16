@@ -25,6 +25,7 @@
 <script src="<?php echo PLUGINS; ?>input-mask/jquery.inputmask.date.extensions.js"></script>
 <script src="<?php echo PLUGINS; ?>input-mask/jquery.inputmask.extensions.js"></script>
 <script src="<?php echo RUTA_JS; ?>moment.min.js"></script>
+<script src="<?php echo PLUGINS; ?>datatables/jquery.dataTables.js"></script>
 <script src="<?php echo PLUGINS; ?>daterangepicker/daterangepicker.js"></script>
 <script src="<?php echo PLUGINS; ?>datepicker/bootstrap-datepicker.js"></script>
 <script src="<?php echo PLUGINS; ?>ckeditor/ckeditor.js"></script>

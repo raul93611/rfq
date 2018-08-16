@@ -407,11 +407,11 @@ class RepositorioRfq {
         if (isset($conexion)) {
             try {
               if ($cargo < 5) {
-                $sql = "SELECT * FROM rfq WHERE completado = 1 AND status = 1 AND award = 0 AND canal = :canal AND comments = 'No comments' ORDER BY fecha_submitted DESC";
+                $sql = "SELECT * FROM rfq WHERE completado = 1 AND status = 1 AND award = 0 AND canal = :canal AND comments = 'No comments' ORDER BY fecha_submitted DESC, id DESC";
                   $sentencia = $conexion->prepare($sql);
                   $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
               } else if ($cargo > 4) {
-                  $sql = "SELECT * FROM rfq WHERE canal = :canal AND usuario_designado = :id_usuario AND completado = 1 AND status = 1 AND award = 0 AND comments = 'No comments' ORDER BY fecha_submitted DESC";
+                  $sql = "SELECT * FROM rfq WHERE canal = :canal AND usuario_designado = :id_usuario AND completado = 1 AND status = 1 AND award = 0 AND comments = 'No comments' ORDER BY fecha_submitted DESC, id DESC";
                   $sentencia = $conexion->prepare($sql);
                   $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
                   $sentencia->bindParam(':id_usuario', $id_usuario, PDO::PARAM_STR);
@@ -488,7 +488,7 @@ class RepositorioRfq {
         Conexion::cerrar_conexion();
         if (count($cotizaciones)) {
             ?>
-            <table class="table table-bordered table-striped table-responsive-md">
+            <table  id="tabla_submitted" class="table table-bordered table-striped table-responsive-md">
                 <thead>
                     <tr>
                       <th>CODE</th>
