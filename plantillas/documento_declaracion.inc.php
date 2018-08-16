@@ -11,6 +11,7 @@
         }
         echo "<title>$titulo</title>";
         ?>
+        <link rel="stylesheet" href="<?php echo PLUGINS; ?>bootstrap/bootstrap.css">
         <link rel="stylesheet" href="<?php echo PLUGINS; ?>iCheck/flat/blue.css">
         <link rel="stylesheet" href="<?php echo PLUGINS; ?>morris/morris.css">
         <link rel="stylesheet" href="<?php echo PLUGINS; ?>jvectormap/jquery-jvectormap-1.2.2.css">
@@ -19,7 +20,8 @@
         <link rel="stylesheet" href="<?php echo PLUGINS; ?>bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
         <link rel="stylesheet" href="<?php echo PLUGINS; ?>font-awesome/css/font-awesome.min.css">
         <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-        <link rel="stylesheet" href="<?php echo PLUGINS; ?>datatables/jquery.dataTables.css">
+        <!--<link rel="stylesheet" href="<?php #echo PLUGINS; ?>datatables/dataTables.css">-->
+        <link rel="stylesheet" href="<?php echo PLUGINS; ?>datatables/dataTables.bootstrap4.min.css">
         <link rel="stylesheet" href="<?php echo DIST; ?>css/adminlte.min.css">
         <link rel="stylesheet" href="<?php echo RUTA_CSS; ?>estilos.css">
         <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">

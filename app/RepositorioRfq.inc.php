@@ -488,7 +488,7 @@ class RepositorioRfq {
         Conexion::cerrar_conexion();
         if (count($cotizaciones)) {
             ?>
-            <table  id="tabla_submitted" class="table table-bordered table-striped table-responsive-md">
+            <table  id="tabla_submitted" class="table table-bordered table-hover table-responsive-md">
                 <thead>
                     <tr>
                       <th>CODE</th>
@@ -503,7 +503,7 @@ class RepositorioRfq {
                       <?php if($canal != 'FedBid'){echo '<th>GENERATE PROPOSAL</th>';} ?>
                     </tr>
                 </thead>
-                <tbody id="tabla_cotizaciones_submitted">
+                <tbody>
                     <?php
                     foreach($cotizaciones as $cotizacion){
                       self::escribir_cotizacion_submitted($cotizacion);
