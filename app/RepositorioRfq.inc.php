@@ -133,7 +133,7 @@ class RepositorioRfq {
         Conexion::cerrar_conexion();
         if (count($cotizaciones)) {
             ?>
-            <table class="table table-bordered table-striped table-hover">
+            <table id="tabla" class="table table-bordered table-hover">
                 <thead>
                     <tr>
                         <th>CODE</th>
@@ -146,7 +146,7 @@ class RepositorioRfq {
 
                     </tr>
                 </thead>
-                <tbody id="tabla_cotizaciones">
+                <tbody>
                     <?php
                     foreach ($cotizaciones as $cotizacion) {
                         self::escribir_cotizacion($cotizacion, $cargo, $id_usuario);
@@ -360,7 +360,7 @@ class RepositorioRfq {
         Conexion::cerrar_conexion();
         if (count($cotizaciones)) {
             ?>
-            <table class="table table-bordered table-striped table-responsive-md">
+            <table id="tabla" class="table table-bordered table-striped table-responsive-md">
                 <thead>
                     <tr>
                         <th>CODE</th>
@@ -375,7 +375,7 @@ class RepositorioRfq {
                         <?php if($canal != 'FedBid'){echo '<th>GENERATE PROPOSAL</th>';} ?>
                     </tr>
                 </thead>
-                <tbody id="tabla_cotizaciones_completados">
+                <tbody>
                     <?php
                     $id_cotizaciones = [];
                     $id_rfp_connections = [];
@@ -488,7 +488,7 @@ class RepositorioRfq {
         Conexion::cerrar_conexion();
         if (count($cotizaciones)) {
             ?>
-            <table  id="tabla_submitted" class="table table-bordered table-hover table-responsive-md">
+            <table  id="tabla" class="table table-bordered table-hover table-responsive-md">
                 <thead>
                     <tr>
                       <th>CODE</th>
@@ -600,7 +600,7 @@ class RepositorioRfq {
         Conexion::cerrar_conexion();
         if (count($cotizaciones)) {
             ?>
-            <table class="table table-bordered table-striped table-responsive-md">
+            <table id="tabla" class="table table-bordered table-striped table-responsive-md">
                 <thead>
                     <tr>
                       <th>CODE</th>
@@ -615,7 +615,7 @@ class RepositorioRfq {
                       <?php if($canal != 'FedBid'){echo '<th>GENERATE PROPOSAL</th>';} ?>
                     </tr>
                 </thead>
-                <tbody id="tabla_cotizaciones_award">
+                <tbody>
                     <?php
                     foreach ($cotizaciones as $cotizacion) {
                         self::escribir_cotizacion_award($cotizacion);
@@ -682,7 +682,7 @@ class RepositorioRfq {
         Conexion::cerrar_conexion();
         if (count($cotizaciones)) {
             ?>
-            <table class="table table-bordered table-striped table-responsive-md">
+            <table id="tabla" class="table table-bordered table-responsive-md">
                 <thead>
                     <tr>
                         <th>CODE</th>
@@ -694,7 +694,7 @@ class RepositorioRfq {
                         <th>COMMENTS</th>
                     </tr>
                 </thead>
-                <tbody id="tabla_cotizaciones_no_bid">
+                <tbody>
                     <?php
                     foreach ($cotizaciones as $cotizacion) {
                         self::escribir_cotizacion_no_bid($cotizacion);
@@ -728,7 +728,7 @@ class RepositorioRfq {
         Conexion::cerrar_conexion();
         if (count($cotizaciones_rfp)) {
             ?>
-            <table class="table table-bordered table-striped table-responsive-md">
+            <table id="tabla" class="table table-bordered table-responsive-md">
                 <thead>
                     <tr>
                         <th>CODE</th>
@@ -740,7 +740,7 @@ class RepositorioRfq {
                         <th>COMMENTS</th>
                     </tr>
                 </thead>
-                <tbody id="tabla_cotizaciones_no_bid">
+                <tbody>
                     <?php
                     foreach ($cotizaciones_rfp as $cotizacion) {
                         self::escribir_cotizacion_no_bid($cotizacion);
@@ -778,7 +778,7 @@ class RepositorioRfq {
       Conexion::cerrar_conexion();
       if(count($cotizaciones)){
         ?>
-        <table class="table table-bordered table-striped table-responsive-md">
+        <table id="tabla" class="table table-bordered table-responsive-md">
             <thead>
                 <tr>
                     <th>CODE</th>
@@ -790,7 +790,7 @@ class RepositorioRfq {
                     <th>COMMENTS</th>
                 </tr>
             </thead>
-            <tbody id="tabla_cotizaciones_no_bid">
+            <tbody>
                 <?php
                 foreach ($cotizaciones as $cotizacion) {
                     self::escribir_cotizacion_no_bid($cotizacion);
@@ -828,7 +828,7 @@ class RepositorioRfq {
         Conexion::cerrar_conexion();
         if (count($cotizaciones)) {
             ?>
-            <table class="table table-bordered table-striped table-responsive-md">
+            <table id="tabla" class="table table-bordered table-responsive-md">
                 <thead>
                     <tr>
                       <th>CODE</th>
@@ -843,7 +843,7 @@ class RepositorioRfq {
                       <?php if($canal != 'FedBid'){echo '<th>GENERATE PROPOSAL</th>';} ?>
                     </tr>
                 </thead>
-                <tbody id="tabla_todas_cotizaciones_award">
+                <tbody>
                     <?php
                     foreach ($cotizaciones as $cotizacion) {
                         self::escribir_cotizacion_award($cotizacion);

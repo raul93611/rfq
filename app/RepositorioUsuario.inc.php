@@ -194,7 +194,7 @@ class RepositorioUsuario {
 
         if (count($usuarios)) {
             ?>
-            <table id="users" class="table table-bordered table-hover">
+            <table id="tabla" class="table table-bordered table-hover">
                 <thead>
                     <tr>
                         <th id="id">Id</th>
@@ -204,7 +204,7 @@ class RepositorioUsuario {
                         <th id="options">Options</th>
                     </tr>
                 </thead>
-                <tbody id="tabla_usuarios">
+                <tbody>
                     <?php
                     foreach ($usuarios as $usuario) {
                         self::escribir_usuario($usuario);

@@ -20,24 +20,6 @@
                             <h3 class="card-title">FedBid</h3>
                         </div>
                         <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <input class="form-control" id="myInput" type="text" onkeyup="myFunction1()" placeholder="Search.." autofocus>
-                                </div>
-                                <div class="col-md-4">
-                                    <select class="form-control" id="tipo">
-                                        <option>Code</option>
-                                        <option>Designated user</option>
-                                        <option>Type of Bid</option>
-                                        <option>Issue Date</option>
-                                        <option>End Date</option>
-                                        <option>Completed date</option>
-                                        <option>Proposal</option>
-                                        <option>Comments</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <br>
                             <?php
                             RepositorioRfq::escribir_cotizaciones_completadas_por_canal($canal, $_SESSION['id_usuario'], $cargo);
                             ?>

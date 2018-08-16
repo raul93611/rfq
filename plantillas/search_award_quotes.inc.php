@@ -20,18 +20,6 @@
                             <h3 class="card-title">Awards</h3>
                         </div>
                         <div class="card-body">
-                          <div class="row">
-                              <div class="col-md-8">
-                                  <input class="form-control" id="myInput" type="text" onkeyup="myFunction7()" placeholder="Search.." autofocus>
-                              </div>
-                              <div class="col-md-4">
-                                  <select class="form-control" id="tipo">
-                                      <option>Proposal</option>
-                                      <option>Code</option>
-                                  </select>
-                              </div>
-                          </div>
-                          <br>
                           <?php
                           RepositorioRfq::escribir_todas_cotizaciones_awards();
                           ?>

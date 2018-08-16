@@ -38,45 +38,11 @@
                             <h3 class="card-title">Registered users</h3>
                         </div>
                         <div id="content" class="card-body table-responsive">
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <input class="form-control" id="myInput" type="text" onkeyup="myFunction4()" placeholder="Search.." autofocus>
-                                </div>
-                                <div class="col-md-4">
-                                    <select class="form-control" id="tipo">
-                                        <option>First names</option>
-                                        <option>Last names</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <br>
                             <?php
                             RepositorioUsuario::escribir_usuarios();
                             ?>
                         </div>
                     </div>
-                    <!--<div class="card">
-                      <div class="card-header">
-                        <h3 class="card-title">Extra info</h3>
-                      </div>
-                      <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-8">
-                                <input class="form-control" id="myInputadmin" type="text" onkeyup="myFunction6()" placeholder="Search.." autofocus>
-                            </div>
-                            <div class="col-md-4">
-                                <select class="form-control" id="tipo_extra">
-                                    <option>Rfq id</option>
-                                    <option>User</option>
-                                </select>
-                            </div>
-                        </div>
-                        <br>
-                        <?php
-                        //RepositorioItem::escribir_items_admin();
-                        ?>
-                      </div>
-                    </div>-->
                 </section>
             </div>
         </div>
