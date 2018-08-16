@@ -8,11 +8,25 @@ include_once 'plantillas/validacion_cotizacion_editada.inc.php';
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
-                <div class="col-sm-6">
+                <div class="col-sm-10">
                     <h1>Internal quote</h1>
                 </div>
-                <div class="col-sm-6">
-
+                <div class="col-sm-2">
+                  <?php
+                  if($cotizacion_recuperada-> obtener_completado() && $cotizacion_recuperada-> obtener_status() && $cotizacion_recuperada-> obtener_award()){
+                  ?>
+                    <h1 class="float-right text-success"><i class="fa fa-check"></i> Award</h1>
+                  <?php
+                  }else if($cotizacion_recuperada-> obtener_completado() && $cotizacion_recuperada-> obtener_status() && !$cotizacion_recuperada-> obtener_award()){
+                  ?>
+                    <h1 class="float-right text-success"><i class="fa fa-check"></i> Submitted</h1>
+                  <?php
+                  }else if($cotizacion_recuperada-> obtener_completado() && !$cotizacion_recuperada-> obtener_status() && !$cotizacion_recuperada-> obtener_award()){
+                    ?>
+                    <h1 class="float-right text-success"><i class="fa fa-check"></i> Completed</h1>
+                    <?php
+                  }
+                  ?>
                 </div>
             </div>
         </div>

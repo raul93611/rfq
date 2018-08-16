@@ -219,8 +219,8 @@ try{
   </div>
   ');
   $mpdf->WriteHTML($html);
-  $mpdf->Output($_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $cotizacion->obtener_id() . '/' . $cotizacion->obtener_email_code() . '.pdf', 'F');
-  $mpdf->Output($cotizacion->obtener_email_code() . '.pdf', 'I');
+  $mpdf->Output($_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $cotizacion->obtener_id() . '/' . str_replace('/', ' ', $cotizacion->obtener_email_code()) . '.pdf', 'F');
+  $mpdf->Output(str_replace('/', ' ', $cotizacion->obtener_email_code()) . '.pdf', 'I');
 } catch (\Mpdf\MpdfException $e) {
     echo $e->getMessage();
 }
