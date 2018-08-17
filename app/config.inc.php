@@ -6,6 +6,7 @@ define('NOMBRE_BD', 'elogic');
 
 define('SERVIDOR', 'http://localhost/rfq/');
 define('ERROR', SERVIDOR . 'error');
+define('COPY_QUOTE', SERVIDOR . 'copy_quote/');
 define('PERFIL', SERVIDOR . 'perfil/');
 define('LOGOUT', SERVIDOR . 'logout');
 define('REGISTRO', PERFIL . 'registro');

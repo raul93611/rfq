@@ -9,7 +9,15 @@ include_once 'plantillas/validacion_cotizacion_editada.inc.php';
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-10">
-                    <h1>Internal quote</h1>
+                    <h1>Internal quote
+                      <?php
+                      if($cotizacion_recuperada-> obtener_completado()){
+                      ?>
+                      <a class="btn btn-primary" href="<?php echo COPY_QUOTE . $cotizacion_recuperada-> obtener_id(); ?>"><i class="fa fa-copy"></i> Copy</a>
+                      <?php
+                      }
+                      ?>
+                    </h1>
                 </div>
                 <div class="col-sm-2">
                   <?php

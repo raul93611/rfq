@@ -87,6 +87,9 @@ if ($partes_ruta[0] == 'rfq') {
             $id_rfq = $partes_ruta[2];
             $encabezado = 1;
             $ruta_elegida = 'scripts/proposal.php';
+        }else if($partes_ruta[1] == 'copy_quote'){
+          $id_rfq = $partes_ruta[2];
+          $ruta_elegida = 'scripts/copy_quote.php';
         }
     } else if (count($partes_ruta) == 4) {
       if($partes_ruta[1] == 'delete_document'){
