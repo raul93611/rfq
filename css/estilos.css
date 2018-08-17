@@ -234,7 +234,7 @@ a.text-primary:hover, a.text-primary:focus {
 /************************************************************************************************************/
 /**********************************************quotes table****************************************************/
 .waiting_for{
-  border-left: 5px solid #FBD200 !important;
+  background-color: #fffcb7 !important;
 }
 
 table{
