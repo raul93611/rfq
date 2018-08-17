@@ -133,7 +133,7 @@ class RepositorioRfq {
         Conexion::cerrar_conexion();
         if (count($cotizaciones)) {
             ?>
-            <table id="tabla" class="table table-bordered table-hover">
+            <table id="tabla_quotes" class="table table-bordered table-hover">
                 <thead>
                     <tr>
                         <th>CODE</th>
@@ -360,7 +360,7 @@ class RepositorioRfq {
         Conexion::cerrar_conexion();
         if (count($cotizaciones)) {
             ?>
-            <table id="tabla" class="table table-bordered table-striped table-responsive-md">
+            <table <?php if($canal == 'FedBid'){echo 'id="tabla_fedbid"';}else{echo 'id="tabla"';} ?> class="table table-bordered table-striped table-responsive-md">
                 <thead>
                     <tr>
                         <th>CODE</th>

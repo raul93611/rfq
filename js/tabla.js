@@ -6,7 +6,20 @@ $(document).ready(function () {
   $('#completed_date').datepicker();
   $('#expiration_date').datepicker();
 
-  $('#tabla').DataTable();
+  $('#tabla').DataTable({
+    'pageLength': 50,
+    'order': [[6, 'desc']]
+  });
+
+  $('#tabla_fedbid').DataTable({
+    'pageLength': 50,
+    'order': [[5, 'desc']]
+  });
+
+  $('#tabla_quotes').DataTable({
+    'order': [[3, 'desc']],
+    'pageLength': 50
+  });
 
     $('#issue_date').inputmask('mm/dd/yyyy', {'placeholder': 'mm/dd/yyyy'});
     $('#end_date').inputmask("datetime", {
