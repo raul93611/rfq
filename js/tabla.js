@@ -21,6 +21,11 @@ $(document).ready(function () {
     'pageLength': 50
   });
 
+  $('#tabla_busqueda').DataTable({
+    'order': [[3, 'desc']],
+    'pageLength': 50
+  });
+
     $('#issue_date').inputmask('mm/dd/yyyy', {'placeholder': 'mm/dd/yyyy'});
     $('#end_date').inputmask("datetime", {
         mask: "2/1/y h:s",

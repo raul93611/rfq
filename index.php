@@ -79,6 +79,10 @@ if ($partes_ruta[0] == 'rfq') {
                     $gestor_actual = 'search_award_quotes';
                     $ruta_elegida = 'vistas/perfil.php';
                     break;
+                case 'search_quotes':
+                    $gestor_actual = 'search_quotes';
+                    $ruta_elegida = 'vistas/perfil.php';
+                    break;
             }
         } else if ($partes_ruta[1] == 'proposal') {
             $id_rfq = $partes_ruta[2];

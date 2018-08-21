@@ -493,6 +493,18 @@
                   <?php
                 }
                 ?>
+                <li class="nav-item has-treeview menu-open">
+                    <a href="<?php echo SEARCH_QUOTES; ?>" class="nav-link
+                    <?php
+                    if ($gestor_actual == 'search_quotes') {
+                        echo 'active';
+                    }
+                    ?>
+                       ">
+                        <i class="fa fa-search nav-icon"></i>
+                        <p>Search</p>
+                    </a>
+                </li>
             </ul>
         </nav>
     </div>
