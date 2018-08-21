@@ -951,12 +951,12 @@ class RepositorioRfq {
                 $sentencia-> bindParam(':termino_busqueda', $termino_busqueda, PDO::PARAM_STR);
                 $sentencia->execute();
                 $resultado = $sentencia-> fetchAll(PDO::FETCH_ASSOC);
-                $sql1 = 'SELECT * FROM rfq INNER JOIN item ON rfq.id = item.id_rfq WHERE (rfq.completado = 1 OR rfq.status = 1) AND (item.part_number LIKE :termino_busqueda OR item.part_number_project LIKE :termino_busqueda)';
+                $sql1 = 'SELECT * FROM rfq INNER JOIN item ON rfq.id = item.id_rfq WHERE (rfq.completado = 1 OR rfq.status = 1) AND (item.part_number LIKE :termino_busqueda OR item.part_number_project LIKE :termino_busqueda OR item.description LIKE :termino_busqueda OR item.description_project LIKE :termino_busqueda)';
                 $sentencia1 = $conexion-> prepare($sql1);
                 $sentencia1-> bindParam(':termino_busqueda', $termino_busqueda, PDO::PARAM_STR);
                 $sentencia1-> execute();
                 $resultado1 = $sentencia1-> fetchAll(PDO::FETCH_ASSOC);
-                $sql2 = 'SELECT * FROM rfq INNER JOIN item ON rfq.id = item.id_rfq INNER JOIN subitems ON item.id = subitems.id_item WHERE (rfq.completado = 1 OR rfq.status = 1) AND (subitems.part_number LIKE :termino_busqueda OR subitems.part_number_project LIKE :termino_busqueda)';
+                $sql2 = 'SELECT * FROM rfq INNER JOIN item ON rfq.id = item.id_rfq INNER JOIN subitems ON item.id = subitems.id_item WHERE (rfq.completado = 1 OR rfq.status = 1) AND (subitems.part_number LIKE :termino_busqueda OR subitems.part_number_project LIKE :termino_busqueda OR subitems.description LIKE :termino_busqueda OR subitems.description_project LIKE :termino_busqueda)';
                 $sentencia2 = $conexion-> prepare($sql2);
                 $sentencia2-> bindParam(':termino_busqueda', $termino_busqueda, PDO::PARAM_STR);
                 $sentencia2-> execute();
