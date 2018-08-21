@@ -850,6 +850,11 @@ class RepositorioRfq {
             <td><?php echo $cotizacion->obtener_id(); ?></td>
             <td><?php echo $cotizacion->obtener_comments(); ?></td>
             <?php
+            if($cotizacion-> obtener_canal() == 'FedBid'){
+              ?><td></td><?php
+            }else{
+              ?><td>$ <?php echo $cotizacion-> obtener_total_price(); ?></td><?php
+            }
             if($cotizacion-> obtener_canal() != 'FedBid'){
               if ($cotizacion->obtener_canal() != 'GSA-Buy') {
                   ?>
@@ -885,6 +890,7 @@ class RepositorioRfq {
                       <th>AWARD DATE</th>
                       <th>PROPOSAL</th>
                       <th>COMMENTS</th>
+                      <th>AMOUNT</th>
                       <th>GENERATE PROPOSAL</th>
                     </tr>
                 </thead>
