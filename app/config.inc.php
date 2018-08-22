@@ -10,7 +10,6 @@ define('COPY_QUOTE', SERVIDOR . 'copy_quote/');
 define('PERFIL', SERVIDOR . 'perfil/');
 define('LOGOUT', SERVIDOR . 'logout');
 define('REGISTRO', PERFIL . 'registro');
-define('SEARCH_AWARD_QUOTES', PERFIL . 'search_award_quotes');
 define('SEARCH_QUOTES', PERFIL . 'search_quotes');
 define('EDIT_USER', PERFIL . 'edit_user/');
 define('COTIZACIONES', PERFIL . 'cotizaciones/');

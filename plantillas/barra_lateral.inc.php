@@ -476,35 +476,23 @@
 
                 </li>
                 <?php
-                if($cargo < 3){
+                if($cargo < 5){
                   ?>
                   <li class="nav-item has-treeview menu-open">
-                      <a href="<?php echo SEARCH_AWARD_QUOTES; ?>" class="nav-link
+                      <a href="<?php echo SEARCH_QUOTES; ?>" class="nav-link
                       <?php
-                      if ($gestor_actual == 'search_award_quotes') {
+                      if ($gestor_actual == 'search_quotes') {
                           echo 'active';
                       }
                       ?>
                          ">
                           <i class="fa fa-search nav-icon"></i>
-                          <p>Search awards</p>
+                          <p>Search</p>
                       </a>
                   </li>
                   <?php
                 }
                 ?>
-                <li class="nav-item has-treeview menu-open">
-                    <a href="<?php echo SEARCH_QUOTES; ?>" class="nav-link
-                    <?php
-                    if ($gestor_actual == 'search_quotes') {
-                        echo 'active';
-                    }
-                    ?>
-                       ">
-                        <i class="fa fa-search nav-icon"></i>
-                        <p>Search</p>
-                    </a>
-                </li>
             </ul>
         </nav>
     </div>

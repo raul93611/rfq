@@ -21,9 +21,6 @@ switch ($gestor_actual) {
             include_once 'plantillas/muro.inc.php';
         }
         break;
-    case 'search_award_quotes':
-        include_once 'plantillas/search_award_quotes.inc.php';
-        break;
     case 'search_quotes':
         include_once 'plantillas/search_quotes.inc.php';
         break;

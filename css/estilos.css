@@ -237,6 +237,10 @@ a.text-primary:hover, a.text-primary:focus {
   background-color: #fffcb7 !important;
 }
 
+.quickbooks{
+  background-color: #c0f2b5 !important;
+}
+
 table{
     font-size: 0.8em;
 }

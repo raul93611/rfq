@@ -40,7 +40,7 @@ Conexion::cerrar_conexion();
                     <input type="hidden" id="others" <?php echo "value='" . json_encode($others) . "'"; ?>>
                 </div>
             </div>
-            <div class="row">
+            <div id="graficas" class="row">
                 <section class="col-lg-6 connectedSortable">
                     <?php
                     if ($cargo < 4) {

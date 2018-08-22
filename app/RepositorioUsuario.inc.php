@@ -194,7 +194,7 @@ class RepositorioUsuario {
 
         if (count($usuarios)) {
             ?>
-            <table id="tabla" class="table table-bordered table-hover">
+            <table id="tabla_usuarios" class="table table-bordered table-hover">
                 <thead>
                     <tr>
                         <th id="id">Id</th>

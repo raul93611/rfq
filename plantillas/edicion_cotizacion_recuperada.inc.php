@@ -126,7 +126,7 @@ if($cargo == 5 && $_SESSION['id_usuario'] != $cotizacion_recuperada-> obtener_us
         echo '<div class="list-group">';
         $carpeta = @scandir($ruta);
         if(count($carpeta) <= 2){
-          echo '<h3 class="text-center">No files!</h3>';
+          echo '<h3 class="text-center text-danger"><i class="fa fa-times"></i> No files!</h3>';
         }
         while (($archivo = readdir($gestor)) !== false) {
             $ruta_completa = $ruta . "/" . $archivo;
@@ -154,10 +154,9 @@ if($cargo == 5 && $_SESSION['id_usuario'] != $cotizacion_recuperada-> obtener_us
       ?>
       <br>
       <div class="row">
-        <label for="shipping">Shipping:</label>
         <div class="col">
           <div class="form-group">
-              <textarea class="form-control" rows="5" id="shipping" name="shipping" placeholder="Enter shipping ..."><?php echo $cotizacion_recuperada->obtener_shipping(); ?></textarea>
+              <textarea class="form-control" rows="3" id="shipping" name="shipping" placeholder="Enter shipping ..."><?php echo $cotizacion_recuperada->obtener_shipping(); ?></textarea>
           </div>
         </div>
         <div class="col">
@@ -189,4 +188,3 @@ if($cargo == 5 && $_SESSION['id_usuario'] != $cotizacion_recuperada-> obtener_us
             break;
     }
     ?>
-<hr>

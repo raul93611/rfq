@@ -26,6 +26,10 @@ $(document).ready(function () {
     'pageLength': 50
   });
 
+  $('#tabla_usuarios').DataTable({
+    
+  });
+
     $('#issue_date').inputmask('mm/dd/yyyy', {'placeholder': 'mm/dd/yyyy'});
     $('#end_date').inputmask("datetime", {
         mask: "2/1/y h:s",
