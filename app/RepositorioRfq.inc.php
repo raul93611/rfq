@@ -520,11 +520,11 @@ class RepositorioRfq {
         if (isset($conexion)) {
             try {
               if ($cargo < 4) {
-                  $sql = "SELECT * FROM rfq WHERE completado = 1 AND status = 1 AND award = 1 AND canal = :canal AND comments = 'No comments' ORDER BY fecha_award DESC";
+                  $sql = "SELECT * FROM rfq WHERE completado = 1 AND status = 1 AND award = 1 AND canal = :canal AND (comments = 'No comments' OR comments = 'QuickBooks') ORDER BY fecha_award DESC";
                   $sentencia = $conexion->prepare($sql);
                   $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
               } else if ($cargo > 3) {
-                $sql = "SELECT * FROM rfq WHERE usuario_designado = :id_usuario AND completado = 1 AND status = 1 AND award = 1 AND canal = :canal AND comments = 'No comments' ORDER BY fecha_award DESC";
+                $sql = "SELECT * FROM rfq WHERE usuario_designado = :id_usuario AND completado = 1 AND status = 1 AND award = 1 AND canal = :canal AND (comments = 'No comments' OR comments = 'QuickBooks') ORDER BY fecha_award DESC";
                   $sentencia = $conexion->prepare($sql);
                   $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
                   $sentencia->bindParam(':id_usuario', $id_usuario, PDO::PARAM_STR);
@@ -550,7 +550,7 @@ class RepositorioRfq {
         $partes_fecha_award = explode('-', $cotizacion->obtener_fecha_award());
         $fecha_award = $partes_fecha_award[1] . '/' . $partes_fecha_award[2] . '/' . $partes_fecha_award[0];
         ?>
-        <tr>
+        <tr <?php if($cotizacion->obtener_comments() == 'QuickBooks'){echo 'class="quickbooks"';} ?>>
             <td>
                 <a href="<?php echo EDITAR_COTIZACION . '/' . $cotizacion->obtener_id(); ?>" class="btn-block">
                     <?php echo $cotizacion->obtener_email_code(); ?>

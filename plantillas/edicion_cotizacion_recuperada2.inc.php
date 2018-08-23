@@ -39,7 +39,7 @@
           <select id="comments" class="form-control" name="comments">
               <option <?php if ($cotizacion_recuperada->obtener_comments() == 'No comments') {echo 'selected';} ?>>No comments</option>
               <?php
-              if($cargo < 3 && $cotizacion_recuperada-> obtener_award()){
+              if($cargo < 4 && $cotizacion_recuperada-> obtener_award()){
                 ?>
                 <option <?php if ($cotizacion_recuperada->obtener_comments() == 'QuickBooks') { echo 'selected';} ?>>QuickBooks</option>
                 <?php
