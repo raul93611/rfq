@@ -52,5 +52,26 @@ class RepositorioRfpConnection{
     }
     return $rfp_connections;
   }
+
+  public static function quote_rfq_exists($conexion, $id_project){
+    $quote_rfq_exists = true;
+    if(isset($conexion)){
+      try{
+        $sql = 'SELECT * FROM rfp_connection WHERE rfp = :id_project';
+        $sentencia = $conexion-> prepare($sql);
+        $sentencia-> bindParam(':id_project', $id_project, PDO::PARAM_STR);
+        $sentencia-> execute();
+        $resultado = $sentencia-> fetchAll(PDO::FETCH_ASSOC);
+        if(count($resultado)){
+          $quote_rfq_exists = true;
+        }else{
+          $quote_rfq_exists = false;
+        }
+      }catch(PDOException $ex){
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $quote_rfq_exists;
+  }
 }
 ?>

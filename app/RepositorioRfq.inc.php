@@ -196,6 +196,20 @@ class RepositorioRfq {
         return $cotizacion_editada;
     }
 
+    public static function actualizar_end_date($conexion, $end_date, $id_rfq){
+      if(isset($conexion)){
+        try{
+          $sql = 'UPDATE rfq SET end_date = :end_date WHERE id = :id_rfq';
+          $sentencia = $conexion-> prepare($sql);
+          $sentencia-> bindParam(':end_date', $end_date, PDO::PARAM_STR);
+          $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+          $sentencia-> execute();
+        }catch(PDOException $ex){
+          print 'ERROR:' . $ex->getMessage() . '<br>';
+        }
+      }
+    }
+
     public static function quitar_completado($conexion, $id_rfq){
       if(isset($conexion)){
         try{
