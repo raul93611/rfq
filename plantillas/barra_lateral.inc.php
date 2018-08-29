@@ -455,7 +455,7 @@
                                 </a>
                             </li>
                         <?php
-                        if ($cargo < 4) {
+                        if ($cargo < 5) {
                             ?>
                             <li class="nav-item">
                                 <a href="<?php echo NUEVA_COTIZACION; ?>" id="new_quote" class="nav-link
