@@ -107,7 +107,7 @@ define('GUARDAR_ADD_PROJECT_MILESTONE', SERVIDOR . 'guardar_add_project_mileston
 define('EDIT_PROJECT_MILESTONE', COTIZACIONES . 'edit_project_milestone');
 define('GUARDAR_EDIT_PROJECT_MILESTONE', SERVIDOR . 'guardar_edit_project_milestone/');
 /**************************************************************************************/
-
+define('PDF_REPORT', SERVIDOR . 'pdf_report');
 
 
 define('DELETE_DOCUMENT', SERVIDOR . 'delete_document');

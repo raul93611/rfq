@@ -11,9 +11,10 @@ Conexion::cerrar_conexion();
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0 text-dark">Home</h1>
+                  <h1 class="m-0 text-dark">Home</h1>
                 </div>
                 <div class="col-sm-6">
+                  <a href="<?php echo PDF_REPORT; ?>" target="_blank" class="btn btn-primary float-right"><i class="fas fa-chart-line"></i> Report</a>
                 </div>
             </div>
         </div>

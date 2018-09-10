@@ -67,6 +67,10 @@ if ($partes_ruta[0] == 'rfq') {
             case 'logout':
                 $ruta_elegida = 'scripts/logout.php';
                 break;
+            case 'pdf_report':
+                $gestor_actual = 'pdf_report';
+                $ruta_elegida = 'scripts/pdf_report.php';
+                break;
         }
     } else if (count($partes_ruta) == 3) {
         switch ($partes_ruta[1]) {
