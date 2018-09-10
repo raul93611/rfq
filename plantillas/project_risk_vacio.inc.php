@@ -10,7 +10,7 @@ if($cargo == 5 && $_SESSION['id_usuario'] != $cotizacion_recuperada-> obtener_us
 <div class="card-body">
     <div class="form-group">
         <label for="quantity">Description:</label>
-        <input type="text" class="form-control" name="description" autofocus required>
+        <input type="text" class="form-control form-control-sm" name="description" autofocus required>
     </div>
 </div>
 <div class="card-footer">

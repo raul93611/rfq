@@ -93,12 +93,6 @@ switch ($gestor_actual) {
                 Conexion::cerrar_conexion();
                 include_once 'plantillas/edit_subitem.inc.php';
                 break;
-            case 'delete_item':
-                include_once 'scripts/delete_item.php';
-                break;
-            case 'delete_subitem':
-                include_once 'scripts/delete_subitem.php';
-                break;
             case 'edit_provider':
                 Conexion::abrir_conexion();
                 $provider = RepositorioProvider::obtener_provider_por_id(Conexion::obtener_conexion(), $id_provider);
@@ -112,12 +106,6 @@ switch ($gestor_actual) {
                 $subitem = RepositorioSubitem::obtener_subitem_por_id(Conexion::obtener_conexion(), $provider_subitem-> obtener_id_subitem());
                 Conexion::cerrar_conexion();
                 include_once 'plantillas/edit_provider_subitem.inc.php';
-                break;
-            case 'delete_provider':
-                include_once 'scripts/delete_provider.php';
-                break;
-            case 'delete_provider_subitem':
-                include_once 'scripts/delete_provider_subitem.php';
                 break;
             case 'cuestionario':
                 Conexion::abrir_conexion();

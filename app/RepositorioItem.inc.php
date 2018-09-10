@@ -111,9 +111,9 @@ class RepositorioItem {
         }
         echo '</div></div></td>';
         if($item-> obtener_additional() != 0){
-            echo '<td><input type="text" id="add_cost'.$j.'" size="10" value="'.$item-> obtener_additional().'"></td>';
+            echo '<td><input type="text" class="form-control form-control-sm" id="add_cost'.$j.'" size="10" value="'.$item-> obtener_additional().'"></td>';
         }else{
-            echo '<td><input type="text" id="add_cost'.$j.'" size="10" value="0"></td>';
+            echo '<td><input type="text" class="form-control form-control-sm" id="add_cost'.$j.'" size="10" value="0"></td>';
         }
         echo '<td>';
         for ($i = 0; $i < count($providers); $i++) {
@@ -147,25 +147,25 @@ class RepositorioItem {
         $items = self::obtener_items_por_id_rfq(Conexion::obtener_conexion(), $id_rfq);
         Conexion::cerrar_conexion();
         if (count($items)) {
-            echo '<br><h2>Items:</h2>';
+            echo '<br><h2 id="caja_items">Items:</h2>';
             echo '<div class="row">';
             echo '<div class="col">';
             if ($cotizacion->obtener_taxes() != 0) {
-                echo '<label>Taxes (%):</label><input type="number" step=".01" name="taxes" id="taxes" class="form-control" value="' . $cotizacion->obtener_taxes() . '">';
+                echo '<label>Taxes (%):</label><input type="number" step=".01" name="taxes" id="taxes" class="form-control form-control-sm" value="' . $cotizacion->obtener_taxes() . '">';
             } else {
-                echo '<label>Taxes (%):</label><input type="number" step=".01" name="taxes" id="taxes" class="form-control" value="0">';
+                echo '<label>Taxes (%):</label><input type="number" step=".01" name="taxes" id="taxes" class="form-control form-control-sm" value="0">';
             }
             echo '</div><div class="col">';
             if ($cotizacion->obtener_profit() != 0) {
-                echo '<label>Profit (%):</label><input type="number" step=".01" name="profit" id="profit" class="form-control" value="' . $cotizacion->obtener_profit() . '">';
+                echo '<label>Profit (%):</label><input type="number" step=".01" name="profit" id="profit" class="form-control form-control-sm" value="' . $cotizacion->obtener_profit() . '">';
             } else {
-                echo '<label>Profit (%):</label><input type="number" step=".01" name="profit" id="profit" class="form-control" value="0">';
+                echo '<label>Profit (%):</label><input type="number" step=".01" name="profit" id="profit" class="form-control form-control-sm" value="0">';
             }
             echo '</div><div class="col">';
             if($cotizacion-> obtener_additional() != 0){
-                echo '<label>Additional general ($):</label><input type="text" name="additional_general" id="additional_general" class="form-control" value="' . $cotizacion->obtener_additional() . '">';
+                echo '<label>Additional general ($):</label><input type="text" name="additional_general" id="additional_general" class="form-control form-control-sm" value="' . $cotizacion->obtener_additional() . '">';
             }else{
-                echo '<label>Additional general ($):</label><input type="text" name="additional_general" id="additional_general" class="form-control" value="0">';
+                echo '<label>Additional general ($):</label><input type="text" name="additional_general" id="additional_general" class="form-control form-control-sm" value="0">';
             }
             echo '</div><div class="col">';
             echo '<label>Payment terms:</label><div class="form-group">

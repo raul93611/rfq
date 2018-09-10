@@ -2,7 +2,6 @@
 if (!ControlSesion::sesion_iniciada()) {
     Redireccion::redirigir1(SERVIDOR);
 }
-include_once 'plantillas/validacion_edicion_item.inc.php';
 ?>
 <div class="content-wrapper">
     <section class="content-header">
@@ -23,9 +22,9 @@ include_once 'plantillas/validacion_edicion_item.inc.php';
                 <div class="col-md-12">
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title"><i class="fa fa-pencil"></i> Enter the data</h3>
+                            <h3 class="card-title"><i class="fas fa-highlighter"></i> Enter the data</h3>
                         </div>
-                        <form role="form" method="post" action="<?php echo EDIT_ITEM . '/' . $id_item; ?>">
+                        <form role="form" method="post" action="<?php echo GUARDAR_EDIT_ITEM . $id_item; ?>">
                             <?php
                             include_once 'plantillas/edicion_item_vacio.inc.php';
                             ?>

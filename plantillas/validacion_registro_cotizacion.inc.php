@@ -16,10 +16,11 @@ if (isset($_POST['registrar_cotizacion'])) {
             $total = count($documentos);
             for ($i = 0; $i < $total; $i++) {
                 $tmp_path = $_FILES['documentos']['tmp_name'][$i];
-
+                $file = $_FILES['documentos']['name'][$i];
                 if ($tmp_path != '') {
-                    $new_path = $directorio . '/' . $_FILES['documentos']['name'][$i];
-                    move_uploaded_file($tmp_path, $new_path);
+                  $file = preg_replace('/[^a-z0-9-_\-\.]/i','_',$file);
+                  $new_path = $directorio . '/' . $file;
+                  move_uploaded_file($tmp_path, $new_path);
                 }
             }
             switch($cotizacion-> obtener_canal()){

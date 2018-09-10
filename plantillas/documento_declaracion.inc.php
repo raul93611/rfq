@@ -18,7 +18,7 @@
         <link rel="stylesheet" href="<?php echo PLUGINS; ?>datepicker/datepicker3.css">
         <link rel="stylesheet" href="<?php echo PLUGINS; ?>daterangepicker/daterangepicker-bs3.css">
         <link rel="stylesheet" href="<?php echo PLUGINS; ?>bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
-        <link rel="stylesheet" href="<?php echo PLUGINS; ?>font-awesome/css/font-awesome.min.css">
+        <link rel="stylesheet" href="<?php echo PLUGINS; ?>font-awesome/css/all.min.css">
         <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
         <link rel="stylesheet" href="<?php echo PLUGINS; ?>datatables/dataTables.bootstrap4.min.css">
         <link rel="stylesheet" href="<?php echo DIST; ?>css/adminlte.min.css">

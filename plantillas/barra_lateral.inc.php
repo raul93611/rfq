@@ -61,7 +61,7 @@
                     }
                     ?>
                        ">
-                        <i class="nav-icon fa fa-money"></i>
+                        <i class="nav-icon fas fa-tag"></i>
                         <p>
                             RFQ Team
                             <i class="right fa fa-angle-left"></i>

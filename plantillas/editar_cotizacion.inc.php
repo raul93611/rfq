@@ -2,7 +2,9 @@
 if (!ControlSesion::sesion_iniciada()) {
     Redireccion::redirigir1(SERVIDOR);
 }
-include_once 'plantillas/validacion_cotizacion_editada.inc.php';
+Conexion::abrir_conexion();
+$cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
+Conexion::cerrar_conexion();
 ?>
 <div class="content-wrapper">
     <section class="content-header">
@@ -45,9 +47,9 @@ include_once 'plantillas/validacion_cotizacion_editada.inc.php';
                 <div class="col-md-12">
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title"><i class="fa fa-pencil"></i> Enter the data</h3>
+                            <h3 class="card-title"><i class="fas fa-highlighter"></i> Enter the data</h3>
                         </div>
-                        <form role="form" id="form_edited_quote" method="post" enctype="multipart/form-data" action="<?php echo EDITAR_COTIZACION . '/' . $id_rfq; ?>">
+                        <form role="form" id="form_edited_quote" method="post" enctype="multipart/form-data" action="<?php echo GUARDAR_EDITAR_COTIZACION . $id_rfq; ?>">
                             <?php
                             include_once 'plantillas/edicion_cotizacion_recuperada.inc.php';
                             include_once 'plantillas/edicion_cotizacion_recuperada2.inc.php';

@@ -1,4 +1,12 @@
 $(document).ready(function () {
+  $('#file_input_info_create').change(function(e){
+    var fileName_create = [];
+    for (var i = 0; i < e.target.files.length; i++) {
+      fileName_create.push(e.target.files[i].name);
+    }
+    $('#label_file_create').html(fileName_create.join(', '));
+  });
+
   $('#sidebar_collapse').on('click', function(){
     $('#footer_item').toggleClass('footer_item1');
   });
@@ -27,7 +35,7 @@ $(document).ready(function () {
   });
 
   $('#tabla_usuarios').DataTable({
-    
+
   });
 
     $('#issue_date').inputmask('mm/dd/yyyy', {'placeholder': 'mm/dd/yyyy'});

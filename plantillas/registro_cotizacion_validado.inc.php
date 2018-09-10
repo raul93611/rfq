@@ -3,12 +3,12 @@
         <div class="col">
             <div class="form-group">
                 <label for="email_code">Code:</label>
-                <input type="text" class="form-control" id="email_code" name="email_code" placeholder="Code" autofocus required <?php $validador->mostrar_email_code(); ?>>
+                <input type="text" class="form-control form-control-sm" id="email_code" name="email_code" placeholder="Code" autofocus required <?php $validador->mostrar_email_code(); ?>>
                 <?php $validador->mostrar_error_email_code(); ?>
             </div>
             <div class="form-group">
                 <label for="issue_date">Issue date:</label>
-                <input type="text" class="form-control" id="issue_date" name="issue_date" placeholder="Issue date" required <?php $validador-> mostrar_issue_date(); ?>>
+                <input type="text" class="form-control form-control-sm" id="issue_date" name="issue_date" placeholder="Issue date" required <?php $validador-> mostrar_issue_date(); ?>>
                 <?php $validador->mostrar_error_issue_date(); ?>
             </div>
             <div class="form-group">
@@ -21,7 +21,7 @@
                 if (count($usuarios)) {
                     ?>
                     <label for="usuario_designado">Designated user:</label>
-                    <select id="usuario_designado" class="form-control" name="usuario_designado">
+                    <select id="usuario_designado" class="form-control form-control-sm" name="usuario_designado">
                         <?php
                         foreach ($usuarios as $usuario) {
                             ?>
@@ -38,7 +38,7 @@
         <div class="col">
             <div class="form-group">
                 <label for="type_of_bid">Type of bid:</label>
-                <select class="form-control" name="type_of_bid" id="type_of_bid">
+                <select class="form-control form-control-sm" name="type_of_bid" id="type_of_bid">
                     <option <?php if($validador-> obtener_type_of_bid() == 'Audio Visual'){echo 'selected';} ?>>Audio Visual</option>
                     <option <?php if($validador-> obtener_type_of_bid() == 'Back up Batteries'){echo 'selected';} ?>>Back up Batteries</option>
                     <option <?php if($validador-> obtener_type_of_bid() == 'Cameras'){echo 'selected';} ?>>Cameras</option>
@@ -63,12 +63,12 @@
             </div>
             <div class="form-group">
                 <label for="end_date">End date:</label>
-                <input type="text" class="form-control" id="end_date" name="end_date" placeholder="End date" required <?php $validador-> mostrar_end_date(); ?>>
+                <input type="text" class="form-control form-control-sm" id="end_date" name="end_date" placeholder="End date" required <?php $validador-> mostrar_end_date(); ?>>
                 <?php $validador->mostrar_error_end_date(); ?>
             </div>
             <div class="form-group">
                 <label for="canal">Channel:</label>
-                <select class="form-control" name="canal" id="canal">
+                <select class="form-control form-control-sm" name="canal" id="canal">
                     <option <?php if($validador-> obtener_canal() == 'GSA-Buy'){echo 'selected';} ?>>GSA-Buy</option>
                     <option <?php if($validador-> obtener_canal() == 'FedBid'){echo 'selected';} ?>>FedBid</option>
                     <option <?php if($validador-> obtener_canal() == 'E-mails'){echo 'selected';} ?>>E-mails</option>
@@ -80,7 +80,11 @@
         </div>
     </div>
     <div class="form-group">
-        <input type="file" name="documentos[]" multiple class="btn btn-secondary btn-block">
+      <label for="documents">Upload documents:</label><br>
+      <div class="custom-file">
+        <input type="file" name="documentos[]" multiple class="custom-file-input" id="file_input_info_create">
+        <label id="label_file_create" class="custom-file-label" for="file_input_info_create">Choose file</label>
+      </div>
     </div>
 </div>
 <div class="card-footer">

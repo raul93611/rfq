@@ -6,7 +6,7 @@
     </ul>
     <ul class="navbar-nav ml-auto">
         <li class="nav-item">
-            <a class="nav-link" href="<?php echo LOGOUT; ?>">Sign out <i class="fa fa-sign-out"></i></a>
+            <a class="nav-link" href="<?php echo LOGOUT; ?>">Log out <i class="fas fa-power-off"></i></a>
         </li>
     </ul>
 </nav>

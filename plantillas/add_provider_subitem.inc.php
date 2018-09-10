@@ -2,7 +2,6 @@
 if (!ControlSesion::sesion_iniciada()) {
     Redireccion::redirigir1(SERVIDOR);
 }
-include_once 'plantillas/validacion_registro_provider_subitem.inc.php';
 ?>
 <div class="content-wrapper">
     <section class="content-header">
@@ -23,9 +22,9 @@ include_once 'plantillas/validacion_registro_provider_subitem.inc.php';
                 <div class="col-md-12">
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title"><i class="fa fa-pencil"></i> Enter the data</h3>
+                            <h3 class="card-title"><i class="fas fa-highlighter"></i> Enter the data</h3>
                         </div>
-                        <form role="form" method="post" action="<?php echo ADD_PROVIDER_SUBITEM . '/' . $id_subitem;?>">
+                        <form role="form" method="post" action="<?php echo GUARDAR_ADD_PROVIDER_SUBITEM . $id_subitem;?>">
                             <?php
                             include_once 'plantillas/registro_provider_subitem_vacio.inc.php';
                             ?>

@@ -161,9 +161,9 @@ class RepositorioSubitem{
       }
       echo '</div></div></td>';
       if($subitem-> obtener_additional() != 0){
-          echo '<td><input type="text" id="add_cost'.$j.'" size="10" value="'.$subitem-> obtener_additional().'"></td>';
+          echo '<td><input type="text" class="form-control form-control-sm" id="add_cost'.$j.'" size="10" value="'.$subitem-> obtener_additional().'"></td>';
       }else{
-          echo '<td><input type="text" id="add_cost'.$j.'" size="10" value="0"></td>';
+          echo '<td><input type="text" class="form-control form-control-sm" id="add_cost'.$j.'" size="10" value="0"></td>';
       }
       echo '<td>';
       for ($i = 0; $i < count($providers_subitem); $i++) {

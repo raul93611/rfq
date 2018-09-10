@@ -181,7 +181,7 @@ class RepositorioUsuario {
             <td><?php echo $usuario->obtener_apellidos(); ?></td>
             <td><?php echo $usuario-> obtener_cargo(); ?></td>
             <td class='text-center'>
-              <a class="btn btn-sm btn-warning" href="<?php echo EDIT_USER . $usuario-> obtener_id(); ?>"><i class="fa fa-pencil"></i> Edit</a>
+              <a class="btn btn-sm btn-warning" href="<?php echo EDIT_USER . $usuario-> obtener_id(); ?>"><i class="fas fa-highlighter"></i> Edit</a>
             </td>
         </tr>
         <?php

@@ -3,7 +3,7 @@
   <div class="col">
     <div class="form-group">
         <label for="completed_date">Completed date:</label>
-        <input type="text" class="form-control" id="completed_date" name="completed_date"
+        <input type="text" class="form-control form-control-sm" id="completed_date" name="completed_date"
         <?php
         $hoy = getdate();
         $fecha_default = $hoy['mon'] . '/' . $hoy['mday'] . '/' . $hoy['year'];
@@ -20,7 +20,7 @@
   <div class="col">
     <div class="form-group">
         <label for="expiration_date">Expiration date:</label>
-        <input type="text" class="form-control" id="expiration_date" name="expiration_date"
+        <input type="text" class="form-control form-control-sm" id="expiration_date" name="expiration_date"
         <?php
         if($cotizacion_recuperada->obtener_expiration_date() != '0000-00-00'){
           $expiration_date_formato = date('m/d/Y', strtotime($cotizacion_recuperada->obtener_expiration_date()));
@@ -36,7 +36,7 @@
     <div class="col">
       <div class="form-group">
           <label for="comments">Comments:</label>
-          <select id="comments" class="form-control" name="comments">
+          <select id="comments" class="form-control form-control-sm" name="comments">
               <option <?php if ($cotizacion_recuperada->obtener_comments() == 'No comments') {echo 'selected';} ?>>No comments</option>
               <?php
               if($cargo < 4 && $cotizacion_recuperada-> obtener_award()){
@@ -60,20 +60,20 @@
       </div>
         <div class="form-group">
             <label for="address">Address:</label>
-            <textarea class="form-control" rows="5" placeholder="Enter address ..." id="address" name="address"><?php echo $cotizacion_recuperada->obtener_address(); ?></textarea>
+            <textarea class="form-control form-control-sm" rows="5" placeholder="Enter address ..." id="address" name="address"><?php echo $cotizacion_recuperada->obtener_address(); ?></textarea>
         </div>
     </div>
     <div class="col">
       <div class="form-group">
           <label for="ship_via">Ship via:</label>
-          <select id="ship_via" class="form-control" name="ship_via">
+          <select id="ship_via" class="form-control form-control-sm" name="ship_via">
               <option <?php if ($cotizacion_recuperada->obtener_ship_via() == 'GROUND') { echo 'selected';} ?>>GROUND</option>
               <option <?php if ($cotizacion_recuperada->obtener_ship_via() == 'BEST WAY') { echo 'selected';} ?>>BEST WAY</option>
           </select>
       </div>
         <div class="form-group">
             <label for="ship_to">Ship to:</label>
-            <textarea class="form-control" rows="5" placeholder="Enter ship to ..." id="ship_to" name="ship_to"><?php echo $cotizacion_recuperada->obtener_ship_to(); ?></textarea>
+            <textarea class="form-control form-control-sm" rows="5" placeholder="Enter ship to ..." id="ship_to" name="ship_to"><?php echo $cotizacion_recuperada->obtener_ship_to(); ?></textarea>
         </div>
     </div>
 </div>

@@ -10,11 +10,11 @@ if($cargo == 5 && $_SESSION['id_usuario'] != $cotizacion_recuperada-> obtener_us
 <div class="card-body">
     <div class="form-group">
         <label>Date:</label>
-        <input type="text" id="date_milestone" class="form-control" name="date_milestone" required>
+        <input type="text" id="date_milestone" class="form-control form-control-sm" name="date_milestone" required>
     </div>
     <div class="form-group">
         <label>Description:</label>
-        <input type="text" class="form-control" name="description" required>
+        <input type="text" class="form-control form-control-sm" name="description" required>
     </div>
 </div>
 <div class="card-footer">

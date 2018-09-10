@@ -73,6 +73,6 @@ if(count($items)){
     $i++;
   }
 }
-Redireccion::redirigir1(EDITAR_COTIZACION . '/' . $id_rfq_copia);
+Redireccion::redirigir(EDITAR_COTIZACION . '/' . $id_rfq_copia);
 Conexion::cerrar_conexion();
 ?>

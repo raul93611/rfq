@@ -2,7 +2,6 @@
 if (!ControlSesion::sesion_iniciada()) {
     Redireccion::redirigir1(SERVIDOR);
 }
-include_once 'plantillas/validacion_cuestionario.inc.php';
 Conexion::abrir_conexion();
 $cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
 Conexion::cerrar_conexion();
@@ -29,9 +28,9 @@ if($cargo == 5 && $_SESSION['id_usuario'] != $cotizacion_recuperada-> obtener_us
                 <div class="col-md-12">
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title"><i class="fa fa-pencil"></i> Enter the data</h3>
+                            <h3 class="card-title"><i class="fas fa-highlighter"></i> Enter the data</h3>
                         </div>
-                        <form role="form" method="post" action="<?php echo CUESTIONARIO . '/' . $id_rfq; ?>">
+                        <form role="form" method="post" action="<?php echo GUARDAR_CUESTIONARIO . $id_rfq; ?>">
                             <?php
                             include_once 'plantillas/cuestionario_recuperado.inc.php';
                             ?>

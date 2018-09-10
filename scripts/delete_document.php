@@ -2,6 +2,6 @@
 $archivo = str_replace('%20', ' ', $archivo);
 $archivo = str_replace('%23', '#', $archivo);
 if(unlink($_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $id_rfq . '/' . $archivo)){
-  Redireccion::redirigir1(EDITAR_COTIZACION . '/' . $id_rfq);
+  Redireccion::redirigir(EDITAR_COTIZACION . '/' . $id_rfq);
 }
 ?>

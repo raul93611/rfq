@@ -69,27 +69,126 @@ if ($partes_ruta[0] == 'rfq') {
                 break;
         }
     } else if (count($partes_ruta) == 3) {
-        if ($partes_ruta[1] == 'perfil') {
-            switch ($partes_ruta[2]) {
-                case 'registro':
-                    $gestor_actual = 'registro';
-                    $ruta_elegida = 'vistas/perfil.php';
-                    break;
-                case 'search_quotes':
-                    $gestor_actual = 'search_quotes';
-                    $ruta_elegida = 'vistas/perfil.php';
-                    break;
-            }
-        } else if ($partes_ruta[1] == 'proposal') {
-            $id_rfq = $partes_ruta[2];
-            $ruta_elegida = 'scripts/proposal.php';
-        }else if($partes_ruta[1] == 'proposal_gsa'){
-            $id_rfq = $partes_ruta[2];
-            $encabezado = 1;
-            $ruta_elegida = 'scripts/proposal.php';
-        }else if($partes_ruta[1] == 'copy_quote'){
-          $id_rfq = $partes_ruta[2];
-          $ruta_elegida = 'scripts/copy_quote.php';
+        switch ($partes_ruta[1]) {
+          case 'perfil':
+          switch ($partes_ruta[2]) {
+              case 'registro':
+                  $gestor_actual = 'registro';
+                  $ruta_elegida = 'vistas/perfil.php';
+                  break;
+              case 'search_quotes':
+                  $gestor_actual = 'search_quotes';
+                  $ruta_elegida = 'vistas/perfil.php';
+                  break;
+          }
+            break;
+          case 'proposal':
+              $id_rfq = $partes_ruta[2];
+              $ruta_elegida = 'scripts/proposal.php';
+              break;
+          case 'proposal_gsa':
+              $id_rfq = $partes_ruta[2];
+              $encabezado = 1;
+              $ruta_elegida = 'scripts/proposal.php';
+              break;
+          case 'copy_quote':
+              $id_rfq = $partes_ruta[2];
+              $ruta_elegida = 'scripts/copy_quote.php';
+              break;
+          case 'delete_quote':
+              $id_rfq = $partes_ruta[2];
+              $ruta_elegida = 'scripts/delete_quote.php';
+              break;
+          case 'guardar_editar_cotizacion':
+              $id_rfq = $partes_ruta[2];
+              $ruta_elegida = 'scripts/guardar_editar_cotizacion.php';
+              break;
+          case 'guardar_add_item':
+              $id_rfq = $partes_ruta[2];
+              $ruta_elegida = 'scripts/guardar_add_item.php';
+              break;
+          case 'guardar_add_provider':
+              $id_item = $partes_ruta[2];
+              $ruta_elegida = 'scripts/guardar_add_provider.php';
+              break;
+          case 'guardar_edit_item':
+              $id_item = $partes_ruta[2];
+              $ruta_elegida = 'scripts/guardar_edit_item.php';
+              break;
+          case 'delete_item':
+              $id_item = $partes_ruta[2];
+              $ruta_elegida = 'scripts/delete_item.php';
+              break;
+          case 'guardar_edit_provider':
+              $id_provider = $partes_ruta[2];
+              $ruta_elegida = 'scripts/guardar_edit_provider.php';
+              break;
+          case 'guardar_add_subitem':
+              $id_item = $partes_ruta[2];
+              $ruta_elegida = 'scripts/guardar_add_subitem.php';
+              break;
+          case 'guardar_add_provider_subitem':
+              $id_subitem = $partes_ruta[2];
+              $ruta_elegida = 'scripts/guardar_add_provider_subitem.php';
+              break;
+          case 'guardar_edit_subitem':
+              $id_subitem = $partes_ruta[2];
+              $ruta_elegida = 'scripts/guardar_edit_subitem.php';
+              break;
+          case 'guardar_edit_provider_subitem':
+              $id_provider_subitem = $partes_ruta[2];
+              $ruta_elegida = 'scripts/guardar_edit_provider_subitem.php';
+              break;
+          case 'delete_provider':
+              $id_provider = $partes_ruta[2];
+              $ruta_elegida = 'scripts/delete_provider.php';
+              break;
+          case 'delete_provider_subitem':
+              $id_provider_subitem = $partes_ruta[2];
+              $ruta_elegida = 'scripts/delete_provider_subitem.php';
+              break;
+          case 'delete_subitem':
+              $id_subitem = $partes_ruta[2];
+              $ruta_elegida = 'scripts/delete_subitem.php';
+              break;
+          case 'guardar_cuestionario':
+              $id_rfq = $partes_ruta[2];
+              $ruta_elegida = 'scripts/guardar_cuestionario.php';
+              break;
+          case 'guardar_add_high_level_requirement':
+              $id_cuestionario = $partes_ruta[2];
+              $ruta_elegida = 'scripts/guardar_add_high_level_requirement.php';
+              break;
+          case 'guardar_add_out_of_scope':
+              $id_cuestionario = $partes_ruta[2];
+              $ruta_elegida = 'scripts/guardar_add_out_of_scope.php';
+              break;
+          case 'guardar_add_project_risk':
+              $id_cuestionario = $partes_ruta[2];
+              $ruta_elegida = 'scripts/guardar_add_project_risk.php';
+              break;
+          case 'guardar_add_project_milestone':
+              $id_cuestionario = $partes_ruta[2];
+              $ruta_elegida = 'scripts/guardar_add_project_milestone.php';
+              break;
+          case 'guardar_edit_high_level_requirement':
+              $id_cuestionario = $partes_ruta[2];
+              $ruta_elegida = 'scripts/guardar_edit_high_level_requirement.php';
+              break;
+          case 'guardar_edit_out_of_scope':
+              $id_cuestionario = $partes_ruta[2];
+              $ruta_elegida = 'scripts/guardar_edit_out_of_scope.php';
+              break;
+          case 'guardar_edit_project_risk':
+              $id_cuestionario = $partes_ruta[2];
+              $ruta_elegida = 'scripts/guardar_edit_project_risk.php';
+              break;
+          case 'guardar_edit_project_milestone':
+              $id_cuestionario = $partes_ruta[2];
+              $ruta_elegida = 'scripts/guardar_edit_project_milestone.php';
+              break;
+          default:
+            break;
         }
     } else if (count($partes_ruta) == 4) {
       if($partes_ruta[1] == 'delete_document'){
@@ -214,10 +313,6 @@ if ($partes_ruta[0] == 'rfq') {
                     $cotizacion = 'editar_cotizacion';
                     $id_rfq = $partes_ruta[4];
                     break;
-                case 'delete_quote':
-                    $cotizacion = 'delete_quote';
-                    $id_rfq = $partes_ruta[4];
-                    break;
                 case 'add_item':
                     $cotizacion = 'add_item';
                     $id_rfq = $partes_ruta[4];
@@ -242,10 +337,6 @@ if ($partes_ruta[0] == 'rfq') {
                     $cotizacion = 'edit_subitem';
                     $id_subitem = $partes_ruta[4];
                     break;
-                case 'delete_item':
-                    $cotizacion = 'delete_item';
-                    $id_item = $partes_ruta[4];
-                    break;
                 case 'delete_subitem':
                     $cotizacion = 'delete_subitem';
                     $id_subitem = $partes_ruta[4];
@@ -256,14 +347,6 @@ if ($partes_ruta[0] == 'rfq') {
                     break;
                 case 'edit_provider_subitem':
                     $cotizacion = 'edit_provider_subitem';
-                    $id_provider_subitem = $partes_ruta[4];
-                    break;
-                case 'delete_provider':
-                    $cotizacion = 'delete_provider';
-                    $id_provider = $partes_ruta[4];
-                    break;
-                case 'delete_provider_subitem':
-                    $cotizacion = 'delete_provider_subitem';
                     $id_provider_subitem = $partes_ruta[4];
                     break;
                 case 'cuestionario':

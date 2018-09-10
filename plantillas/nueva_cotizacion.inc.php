@@ -19,7 +19,7 @@ include_once 'plantillas/validacion_registro_cotizacion.inc.php';
                 <div class="col-md-12">
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title"><i class="fa fa-pencil"></i> Enter the data</h3>
+                            <h3 class="card-title"><i class="fas fa-highlighter"></i> Enter the data</h3>
                         </div>
                         <form role="form" method="post" enctype="multipart/form-data" action="<?php echo NUEVA_COTIZACION; ?>">
                             <?php
