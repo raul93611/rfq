@@ -191,6 +191,10 @@ if ($partes_ruta[0] == 'rfq') {
               $id_cuestionario = $partes_ruta[2];
               $ruta_elegida = 'scripts/guardar_edit_project_milestone.php';
               break;
+          case 'pdf_project_charter':
+              $id_cuestionario = $partes_ruta[2];
+              $ruta_elegida = 'scripts/pdf_project_charter.php';
+              break;
           default:
             break;
         }

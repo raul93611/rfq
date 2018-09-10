@@ -112,6 +112,8 @@ try{
   ';
   $html .= '</table>';
 
+  $no_bids = $no_bid + $manufacturer_in_the_bid + $expired_due_date + $supplier_did_not_provide_a_quote + $others;
+
   $html .= '
   <h1 class="color">No Bid</h1>
   <table id="tabla" width="100%">
@@ -141,7 +143,7 @@ try{
     </tr>
     <tr>
       <td>TOTAL:</td>
-      <td style="text-align: right;">' . $no_bid + $manufacturer_in_the_bid + $expired_due_date + $supplier_did_not_provide_a_quote + $others . '</td>
+      <td style="text-align: right;">' . $no_bids . '</td>
     </tr>
   </table>';
 

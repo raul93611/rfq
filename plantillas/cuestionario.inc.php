@@ -17,7 +17,7 @@ if($cargo == 5 && $_SESSION['id_usuario'] != $cotizacion_recuperada-> obtener_us
                     <h1>Project charter</h1>
                 </div>
                 <div class="col-md-6">
-
+                  <a target="_blank" href="<?php echo PDF_PROJECT_CHARTER . $cuestionario-> obtener_id(); ?>" class="float-right btn btn-primary"><i class="fas fa-book-open"></i> PDF</a>
                 </div>
             </div>
         </div>

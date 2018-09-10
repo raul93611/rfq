@@ -108,6 +108,7 @@ define('EDIT_PROJECT_MILESTONE', COTIZACIONES . 'edit_project_milestone');
 define('GUARDAR_EDIT_PROJECT_MILESTONE', SERVIDOR . 'guardar_edit_project_milestone/');
 /**************************************************************************************/
 define('PDF_REPORT', SERVIDOR . 'pdf_report');
+define('PDF_PROJECT_CHARTER', SERVIDOR . 'pdf_project_charter/');
 
 
 define('DELETE_DOCUMENT', SERVIDOR . 'delete_document');

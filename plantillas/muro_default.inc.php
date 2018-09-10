@@ -14,7 +14,13 @@ Conexion::cerrar_conexion();
                   <h1 class="m-0 text-dark">Home</h1>
                 </div>
                 <div class="col-sm-6">
-                  <a href="<?php echo PDF_REPORT; ?>" target="_blank" class="btn btn-primary float-right"><i class="fas fa-chart-line"></i> Report</a>
+                  <?php
+                  if($cargo < 3){
+                    ?>
+                    <a href="<?php echo PDF_REPORT; ?>" target="_blank" class="btn btn-primary float-right"><i class="fas fa-chart-line"></i> Report</a>
+                    <?php
+                  }
+                  ?>
                 </div>
             </div>
         </div>
