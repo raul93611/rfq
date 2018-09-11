@@ -1,3 +1,19 @@
+<div class="modal modal-danger fade" id="error_alert">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title text-danger"><i class="fa fa-exclamation-triangle"></i> ALERT</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="form_uncompleted_body">
+        <h4 class="text-center text-danger">Code must be fill out</h4>
+      </div>
+    </div>
+  </div>
+</div>
+
 <footer class="main-footer">
     <strong>Copyright &copy; 2018.</strong>
     <div class="float-right d-none d-sm-inline-block">

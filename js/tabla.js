@@ -1,4 +1,15 @@
 $(document).ready(function () {
+  if($('#form_edited_quote').length != 0){
+    var form_edited_quote = $('#form_edited_quote');
+    form_edited_quote.submit(function(){
+      var email_code =  $('#email_code');
+      if(email_code.val() == ''){
+        $('#error_alert').modal();
+        return false;
+      }
+    });
+  }
+
   $('#file_input_info_create').change(function(e){
     var fileName_create = [];
     for (var i = 0; i < e.target.files.length; i++) {
