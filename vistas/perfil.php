@@ -27,6 +27,9 @@ switch ($gestor_actual) {
     case 'edit_user':
         include_once 'plantillas/edit_user.inc.php';
         break;
+    case 'historial_comments':
+        include_once 'plantillas/historial_comments.inc.php';
+        break;
     case 'cotizaciones':
         switch ($cotizacion) {
             case 'nuevo':

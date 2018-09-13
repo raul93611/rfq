@@ -45,6 +45,9 @@ include_once 'app/RepositorioProviderSubitem.inc.php';
 include_once 'app/RfpConnection.inc.php';
 include_once 'app/RepositorioRfpConnection.inc.php';
 
+include_once 'app/Comment.inc.php';
+include_once 'app/RepositorioComment.inc.php';
+
 $componentes_url = parse_url($_SERVER['REQUEST_URI']);
 $ruta = $componentes_url['path'];
 
@@ -70,6 +73,9 @@ if ($partes_ruta[0] == 'rfq') {
             case 'pdf_report':
                 $gestor_actual = 'pdf_report';
                 $ruta_elegida = 'scripts/pdf_report.php';
+                break;
+            case 'guardar_comment':
+                $ruta_elegida = 'scripts/guardar_comment.php';
                 break;
         }
     } else if (count($partes_ruta) == 3) {
@@ -206,6 +212,10 @@ if ($partes_ruta[0] == 'rfq') {
       }else if($partes_ruta[1] == 'perfil' && $partes_ruta[2] == 'edit_user'){
         $id_user = $partes_ruta[3];
         $gestor_actual = 'edit_user';
+        $ruta_elegida = 'vistas/perfil.php';
+      }if($partes_ruta[1] == 'perfil' && $partes_ruta[2] == 'historial_comments'){
+        $id_rfq = $partes_ruta[3];
+        $gestor_actual = 'historial_comments';
         $ruta_elegida = 'vistas/perfil.php';
       }else if ($partes_ruta[1] == 'perfil' && $partes_ruta[2] == 'cotizaciones') {
             $gestor_actual = 'cotizaciones';

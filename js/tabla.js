@@ -1,4 +1,10 @@
 $(document).ready(function () {
+  if($('#nuevo_comment').length != 0){
+    $('#add_comment').click(function(){
+      $('#nuevo_comment').modal();
+    });
+  }
+
   if($('#form_edited_quote').length != 0){
     var form_edited_quote = $('#form_edited_quote');
     form_edited_quote.submit(function(){

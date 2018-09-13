@@ -67,6 +67,19 @@ CREATE TABLE cuestionario(
             ON DELETE RESTRICT
 );
 
+CREATE TABLE comments(
+  id INT NOT NULL AUTO_INCREMENT UNIQUE,
+  id_rfq INT NOT NULL,
+  id_usuario INT NOT NULL,
+  comment TEXT CHARACTER SET utf8 NOT NULL,
+  fecha_comment DATETIME,
+  PRIMARY KEY(id),
+  FOREIGN KEY(id_rfq)
+    REFERENCES rfq(id)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT
+);
+
 CREATE TABLE high_level_requirements(
         id INT NOT NULL AUTO_INCREMENT UNIQUE,
         id_cuestionario INT NOT NULL,
