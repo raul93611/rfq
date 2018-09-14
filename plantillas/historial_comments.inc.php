@@ -18,6 +18,9 @@
             <?php
             RepositorioComment::escribir_comments($id_rfq);
             ?>
+            <div class="card-footer footer_item">
+              <a href="<?php echo EDITAR_COTIZACION . '/' . $id_rfq; ?>" class="btn btn-primary" id="go_back"><i class="fa fa-reply"></i></a>
+            </div>
           </div>
         </div>
       </div>
