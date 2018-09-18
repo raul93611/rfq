@@ -4,6 +4,9 @@ body{
   font-size: 11pt !important;
   color: #39485A !important;
 }
+#disable_user{
+  width: 100px !important;
+}
 /*************************************************************************/
 /*********************sidebar********************************************/
 .sidebar-dark-primary{

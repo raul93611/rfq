@@ -201,6 +201,14 @@ if ($partes_ruta[0] == 'rfq') {
               $id_cuestionario = $partes_ruta[2];
               $ruta_elegida = 'scripts/pdf_project_charter.php';
               break;
+          case 'enable_user':
+              $id_usuario = $partes_ruta[2];
+              $ruta_elegida = 'scripts/enable_user.php';
+              break;
+          case 'disable_user':
+              $id_usuario = $partes_ruta[2];
+              $ruta_elegida = 'scripts/disable_user.php';
+              break;
           default:
             break;
         }

@@ -7,7 +7,7 @@ class RepositorioUsuario {
 
         if (isset($conexion)) {
             try {
-                $sql = 'INSERT INTO usuarios(nombre_usuario, password, nombres, apellidos, cargo, email) VALUES(:nombre_usuario, :password, :nombres, :apellidos, :cargo, :email)';
+                $sql = 'INSERT INTO usuarios(nombre_usuario, password, nombres, apellidos, cargo, email, status) VALUES(:nombre_usuario, :password, :nombres, :apellidos, :cargo, :email, :status)';
 
                 $sentencia = $conexion->prepare($sql);
 
@@ -17,6 +17,7 @@ class RepositorioUsuario {
                 $sentencia->bindParam(':apellidos', $usuario->obtener_apellidos(), PDO::PARAM_STR);
                 $sentencia->bindParam(':cargo', $usuario->obtener_cargo(), PDO::PARAM_STR);
                 $sentencia->bindParam(':email', $usuario->obtener_email(), PDO::PARAM_STR);
+                $sentencia-> bindParam(':status', $usuario-> obtener_status(), PDO::PARAM_STR);
 
                 $resultado = $sentencia->execute();
 
@@ -44,7 +45,7 @@ class RepositorioUsuario {
                 $resultado = $sentencia->fetch();
 
                 if (!empty($resultado)) {
-                    $usuario = new Usuario($resultado['id'], $resultado['nombre_usuario'], $resultado['password'], $resultado['nombres'], $resultado['apellidos'], $resultado['cargo'], $resultado['email']);
+                    $usuario = new Usuario($resultado['id'], $resultado['nombre_usuario'], $resultado['password'], $resultado['nombres'], $resultado['apellidos'], $resultado['cargo'], $resultado['email'], $resultado['status']);
                 }
             } catch (PDOException $ex) {
                 print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -66,7 +67,7 @@ class RepositorioUsuario {
                 $resultado = $sentencia->fetch();
 
                 if (!empty($resultado)) {
-                    $usuario = new Usuario($resultado['id'], $resultado['nombre_usuario'], $resultado['password'], $resultado['nombres'], $resultado['apellidos'], $resultado['cargo'], $resultado['email']);
+                    $usuario = new Usuario($resultado['id'], $resultado['nombre_usuario'], $resultado['password'], $resultado['nombres'], $resultado['apellidos'], $resultado['cargo'], $resultado['email'], $resultado['status']);
                 }
             } catch (PDOException $ex) {
                 print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -160,7 +161,7 @@ class RepositorioUsuario {
 
                 if (count($resultado)) {
                     foreach ($resultado as $fila) {
-                        $usuarios [] = new Usuario($fila['id'], $fila['nombre_usuario'], $fila['password'], $fila['nombres'], $fila['apellidos'], $fila['cargo'], $fila['email']);
+                        $usuarios [] = new Usuario($fila['id'], $fila['nombre_usuario'], $fila['password'], $fila['nombres'], $fila['apellidos'], $fila['cargo'], $fila['email'], $fila['status']);
                     }
                 }
             } catch (PDOException $ex) {
@@ -177,14 +178,67 @@ class RepositorioUsuario {
         ?>
         <tr>
             <td><?php echo $usuario-> obtener_id(); ?></td>
-            <td><?php echo $usuario->obtener_nombres(); ?></td>
-            <td><?php echo $usuario->obtener_apellidos(); ?></td>
+            <td><?php echo $usuario-> obtener_cargo(); ?></td>
+            <td><?php echo $usuario-> obtener_nombres(); ?></td>
+            <td><?php echo $usuario-> obtener_apellidos(); ?></td>
             <td><?php echo $usuario-> obtener_cargo(); ?></td>
             <td class='text-center'>
-              <a class="btn btn-sm btn-warning" href="<?php echo EDIT_USER . $usuario-> obtener_id(); ?>"><i class="fas fa-highlighter"></i> Edit</a>
+              <?php
+              if($usuario-> obtener_status()){
+                echo '<a href="' . DISABLE_USER . $usuario-> obtener_id() . '" class="btn btn-block btn-sm btn-danger"><i class="fa fa-ban"></i> Disable</a>';
+              }else{
+                echo '<a href="' . ENABLE_USER . $usuario-> obtener_id() . '" class="btn btn-block btn-sm btn-success"><i class="fa fa-check"></i> Enable</a>';
+              }
+              ?>
+              <br>
+              <a class="btn btn-sm btn-block btn-info" href="<?php echo EDIT_USER . $usuario-> obtener_id(); ?>"><i class="fas fa-highlighter"></i> Edit</a>
             </td>
         </tr>
         <?php
+    }
+
+    public static function disable_user($conexion, $id_usuario){
+      $usuario_editado = false;
+
+      if(isset($conexion)){
+        try{
+          $sql = 'UPDATE usuarios SET status = 0 WHERE id = :id_usuario';
+          $sentencia = $conexion-> prepare($sql);
+          $sentencia-> bindParam(':id_usuario', $id_usuario, PDO::PARAM_STR);
+
+          $resultado = $sentencia-> execute();
+
+          if($resultado){
+            $usuario_editado = true;
+          }
+
+        }catch(PDOException $ex){
+          print 'ERROR:' . $ex->getMessage() . '<br>';
+        }
+      }
+      return $usuario_editado;
+    }
+
+    public static function enable_user($conexion, $id_usuario){
+      $usuario_editado = false;
+
+      if(isset($conexion)){
+        try{
+          $sql = 'UPDATE usuarios SET status = 1 WHERE id = :id_usuario';
+          $sentencia = $conexion-> prepare($sql);
+          $sentencia-> bindParam(':id_usuario', $id_usuario, PDO::PARAM_STR);
+
+          $resultado = $sentencia-> execute();
+
+          if($resultado){
+            $usuario_editado = true;
+          }
+
+        }catch(PDOException $ex){
+          print 'ERROR:' . $ex->getMessage() . '<br>';
+        }
+      }
+      return $usuario_editado;
     }
 
     public static function escribir_usuarios() {
@@ -198,10 +252,11 @@ class RepositorioUsuario {
                 <thead>
                     <tr>
                         <th id="id">Id</th>
+                        <th>Level</th>
                         <th>First names</th>
                         <th>Last names</th>
-                        <th id="options">Level</th>
-                        <th id="options">Options</th>
+                        <th>Level</th>
+                        <th id="disable_user">Options</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -221,7 +276,7 @@ class RepositorioUsuario {
 
         if (isset($conexion)) {
             try {
-                $sql = "SELECT * FROM usuarios WHERE cargo > 2";
+                $sql = "SELECT * FROM usuarios WHERE cargo > 2 AND status = 1";
 
                 $sentencia = $conexion->prepare($sql);
 
@@ -231,7 +286,7 @@ class RepositorioUsuario {
 
                 if (count($resultado)) {
                     foreach ($resultado as $fila) {
-                        $usuarios [] = new Usuario($fila['id'], $fila['nombre_usuario'], $fila['password'], $fila['nombres'], $fila['apellidos'], $fila['cargo'], $fila['email']);
+                        $usuarios [] = new Usuario($fila['id'], $fila['nombre_usuario'], $fila['password'], $fila['nombres'], $fila['apellidos'], $fila['cargo'], $fila['email'], $fila['status']);
                     }
                 }
             } catch (PDOException $ex) {

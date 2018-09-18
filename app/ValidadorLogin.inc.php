@@ -12,7 +12,7 @@ class ValidadorLogin extends ValidadorUsuario {
             $this->error = 'Debes introducir tus datos.';
         } else {
             $this->usuario = RepositorioUsuario::obtener_usuario_por_nombre_usuario($conexion, $nombre_usuario);
-            if (is_null($this->usuario) || !password_verify($password, $this->usuario->obtener_password())) {
+            if (is_null($this->usuario) || !password_verify($password, $this->usuario->obtener_password()) || !$this-> usuario-> obtener_status()) {
                 $this->error = 'Los datos introducidos son incorrectos.';
             }
         }

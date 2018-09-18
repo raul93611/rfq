@@ -7,8 +7,9 @@ class Usuario{
     private $apellidos;
     private $cargo;
     private $email;
+    private $status;
 
-    public function __construct($id, $nombre_usuario, $password, $nombres, $apellidos, $cargo, $email){
+    public function __construct($id, $nombre_usuario, $password, $nombres, $apellidos, $cargo, $email, $status){
         $this-> id = $id;
         $this-> nombre_usuario = $nombre_usuario;
         $this-> password = $password;
@@ -16,6 +17,7 @@ class Usuario{
         $this-> apellidos = $apellidos;
         $this-> cargo = $cargo;
         $this-> email = $email;
+        $this-> status = $status;
     }
 
     public function obtener_id(){
@@ -44,6 +46,10 @@ class Usuario{
 
     public function obtener_email(){
         return $this-> email;
+    }
+
+    public function obtener_status(){
+      return $this-> status;
     }
 }
 ?>

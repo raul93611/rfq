@@ -11,7 +11,8 @@ define('PERFIL', SERVIDOR . 'perfil/');
 define('LOGOUT', SERVIDOR . 'logout');
 define('REGISTRO', PERFIL . 'registro');
 define('EDIT_USER', PERFIL . 'edit_user/');
-
+define('DISABLE_USER', SERVIDOR . 'disable_user/');
+define('ENABLE_USER', SERVIDOR . 'enable_user/');
 /********************************QUOTES*****************************************/
 define('SEARCH_QUOTES', PERFIL . 'search_quotes');
 define('COTIZACIONES', PERFIL . 'cotizaciones/');
