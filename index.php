@@ -42,9 +42,6 @@ include_once 'app/RepositorioSubitem.inc.php';
 include_once 'app/ProviderSubitem.inc.php';
 include_once 'app/RepositorioProviderSubitem.inc.php';
 
-include_once 'app/RfpConnection.inc.php';
-include_once 'app/RepositorioRfpConnection.inc.php';
-
 include_once 'app/Comment.inc.php';
 include_once 'app/RepositorioComment.inc.php';
 

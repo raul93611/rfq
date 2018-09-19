@@ -10,6 +10,7 @@ CREATE TABLE usuarios(
         apellidos VARCHAR(100) NOT NULL,
         cargo TINYINT NOT NULL,
         email VARCHAR(100) NOT NULL UNIQUE,
+        status TINYINT NOT NULL,
         PRIMARY KEY(id)
 );
 
@@ -41,6 +42,7 @@ CREATE TABLE rfq(
         additional VARCHAR(100) NOT NULL,
         shipping_cost DECIMAL(10,2) NOT NULL,
         shipping VARCHAR(100) NOT NULL,
+        rfp INT NOT NULL,
         PRIMARY KEY(id),
         FOREIGN KEY(id_usuario)
             REFERENCES usuarios(id)
