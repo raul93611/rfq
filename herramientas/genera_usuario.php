@@ -27,7 +27,7 @@ $email = 'pedro@puma';
 $usuario = new Usuario('', $nombre_usuario, $password, $nombres, $apellidos, $cargo, $email, 1);
 RepositorioUsuario::insertar_usuario(Conexion::obtener_conexion(), $usuario);
 
-$nombre_usuario = 'ppablo1234';
+$nombre_usuario = 'pablo1234';
 $password = password_hash('123456', PASSWORD_DEFAULT);
 $nombres = 'pablo';
 $apellidos = 'paredes';
