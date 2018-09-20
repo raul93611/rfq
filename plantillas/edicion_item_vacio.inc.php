@@ -51,7 +51,7 @@ if($cargo == 5 && $_SESSION['id_usuario'] != $cotizacion_recuperada-> obtener_us
     </div>
     <div class="form-group">
         <label for="website">Website:</label>
-        <input type="text" class="form-control form-control-sm" id="website" name="website" placeholder="Website ..." value="<?php echo $item->obtener_website(); ?>">
+        <input type="url" class="form-control form-control-sm" id="website" name="website" placeholder="Website ..." value="<?php echo $item->obtener_website(); ?>">
     </div>
 </div>
 <div class="card-footer">

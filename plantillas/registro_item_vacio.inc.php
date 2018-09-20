@@ -42,7 +42,7 @@
     </div>
     <div class="form-group">
         <label for="website">Website:</label>
-        <input type="text" class="form-control form-control-sm" id="website" name="website" placeholder="Website ...">
+        <input type="url" class="form-control form-control-sm" id="website" name="website" placeholder="Website ...">
     </div>
 </div>
 <div class="card-footer">
