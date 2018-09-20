@@ -3,7 +3,7 @@ $cotizaciones = [];
 if(isset($_POST['buscar'])){
   echo $_POST['termino_busqueda'];
   Conexion::abrir_conexion();
-  $cotizaciones = RepositorioRfq::obtener_resultados_busqueda(Conexion::obtener_conexion(), $_POST['termino_busqueda']);
+  $cotizaciones = RepositorioRfq::obtener_resultados_busqueda(Conexion::obtener_conexion(), $_POST['termino_busqueda'], $cargo, $_SESSION['id_usuario']);
   Conexion::cerrar_conexion();
 }
 ?>
@@ -26,7 +26,7 @@ if(isset($_POST['buscar'])){
                 <div class="col-md-12">
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title">Quotes</h3>
+                            <h3 class="card-title"><i class="fas fa-search"></i> Quotes</h3>
                         </div>
                         <div class="card-body">
                           <div class="row">
@@ -49,7 +49,7 @@ if(isset($_POST['buscar'])){
                     </div>
                     <div class="card card-primary">
                       <div class="card-header">
-                          <h3 class="card-title">Quotes</h3>
+                          <h3 class="card-title"><i class="fas fa-search"></i> Quotes</h3>
                       </div>
                       <div class="card-body">
                         <?php

@@ -840,55 +840,100 @@ class RepositorioRfq {
         <?php
     }
 
-    public static function obtener_resultados_busqueda($conexion, $termino_busqueda) {
-        $cotizaciones = [];
-        $termino_busqueda = '%' . $termino_busqueda . '%';
-        if (isset($conexion)) {
-            try {
-                $sql = 'SELECT * FROM rfq WHERE (completado = 1 OR status = 1) AND (id LIKE :termino_busqueda OR email_code LIKE :termino_busqueda OR total_price LIKE :termino_busqueda)';
-                $sentencia = $conexion-> prepare($sql);
-                $sentencia-> bindParam(':termino_busqueda', $termino_busqueda, PDO::PARAM_STR);
-                $sentencia->execute();
-                $resultado = $sentencia-> fetchAll(PDO::FETCH_ASSOC);
-                $sql1 = 'SELECT * FROM rfq INNER JOIN item ON rfq.id = item.id_rfq WHERE (rfq.completado = 1 OR rfq.status = 1) AND (item.part_number LIKE :termino_busqueda OR item.part_number_project LIKE :termino_busqueda OR item.description LIKE :termino_busqueda OR item.description_project LIKE :termino_busqueda)';
-                $sentencia1 = $conexion-> prepare($sql1);
-                $sentencia1-> bindParam(':termino_busqueda', $termino_busqueda, PDO::PARAM_STR);
-                $sentencia1-> execute();
-                $resultado1 = $sentencia1-> fetchAll(PDO::FETCH_ASSOC);
-                $sql2 = 'SELECT * FROM rfq INNER JOIN item ON rfq.id = item.id_rfq INNER JOIN subitems ON item.id = subitems.id_item WHERE (rfq.completado = 1 OR rfq.status = 1) AND (subitems.part_number LIKE :termino_busqueda OR subitems.part_number_project LIKE :termino_busqueda OR subitems.description LIKE :termino_busqueda OR subitems.description_project LIKE :termino_busqueda)';
-                $sentencia2 = $conexion-> prepare($sql2);
-                $sentencia2-> bindParam(':termino_busqueda', $termino_busqueda, PDO::PARAM_STR);
-                $sentencia2-> execute();
-                $resultado2 = $sentencia2-> fetchAll(PDO::FETCH_ASSOC);
+    public static function obtener_resultados_busqueda($conexion, $termino_busqueda, $cargo, $usuario_designado) {
+      $cotizaciones = [];
+      $termino_busqueda = '%' . $termino_busqueda . '%';
+      if (isset($conexion)) {
+        try {
+          if($cargo <= 3){
+            $sql = 'SELECT * FROM rfq WHERE (id LIKE :termino_busqueda OR email_code LIKE :termino_busqueda OR total_price LIKE :termino_busqueda)';
+            $sentencia = $conexion-> prepare($sql);
+            $sentencia-> bindParam(':termino_busqueda', $termino_busqueda, PDO::PARAM_STR);
+            $sentencia->execute();
+            $resultado = $sentencia-> fetchAll(PDO::FETCH_ASSOC);
+            $sql1 = 'SELECT * FROM rfq INNER JOIN item ON rfq.id = item.id_rfq WHERE (item.part_number LIKE :termino_busqueda OR item.part_number_project LIKE :termino_busqueda OR item.description LIKE :termino_busqueda OR item.description_project LIKE :termino_busqueda)';
+            $sentencia1 = $conexion-> prepare($sql1);
+            $sentencia1-> bindParam(':termino_busqueda', $termino_busqueda, PDO::PARAM_STR);
+            $sentencia1-> execute();
+            $resultado1 = $sentencia1-> fetchAll(PDO::FETCH_ASSOC);
+            $sql2 = 'SELECT * FROM rfq INNER JOIN item ON rfq.id = item.id_rfq INNER JOIN subitems ON item.id = subitems.id_item WHERE (subitems.part_number LIKE :termino_busqueda OR subitems.part_number_project LIKE :termino_busqueda OR subitems.description LIKE :termino_busqueda OR subitems.description_project LIKE :termino_busqueda)';
+            $sentencia2 = $conexion-> prepare($sql2);
+            $sentencia2-> bindParam(':termino_busqueda', $termino_busqueda, PDO::PARAM_STR);
+            $sentencia2-> execute();
+            $resultado2 = $sentencia2-> fetchAll(PDO::FETCH_ASSOC);
 
-                if (count($resultado)) {
-                    foreach ($resultado as $fila) {
-                        $cotizaciones [] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['total_cost'], $fila['total_price'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['fecha_submitted'], $fila['fecha_award'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via'], $fila['taxes'], $fila['profit'], $fila['additional'], $fila['shipping'], $fila['shipping_cost'], $fila['rfp']);
-                    }
-                }
-
-                if(count($resultado1)){
-                  foreach ($resultado1 as $fila1) {
-                    Conexion::abrir_conexion();
-                    $cotizacion = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $fila1['id_rfq']);
-                    Conexion::cerrar_conexion();
-                    $cotizaciones[] = new Rfq($cotizacion-> obtener_id(), $cotizacion-> obtener_id_usuario(), $cotizacion-> obtener_usuario_designado(), $cotizacion-> obtener_canal(), $cotizacion-> obtener_email_code(), $cotizacion-> obtener_type_of_bid(), $cotizacion-> obtener_issue_date(), $cotizacion-> obtener_end_date(), $cotizacion-> obtener_status(), $cotizacion-> obtener_completado(), $cotizacion-> obtener_total_cost(), $cotizacion-> obtener_total_price(), $cotizacion-> obtener_comments(), $cotizacion-> obtener_award(), $cotizacion-> obtener_fecha_completado(), $cotizacion-> obtener_fecha_submitted(), $cotizacion-> obtener_fecha_award(), $cotizacion-> obtener_payment_terms(), $cotizacion-> obtener_address(), $cotizacion-> obtener_ship_to(), $cotizacion-> obtener_expiration_date(), $cotizacion-> obtener_ship_via(), $cotizacion-> obtener_taxes(), $cotizacion-> obtener_profit(), $cotizacion-> obtener_additional(), $cotizacion-> obtener_shipping(), $cotizacion-> obtener_shipping_cost());
-                  }
-                }
-
-                if(count($resultado2)){
-                  foreach ($resultado2 as $fila2) {
-                    Conexion::abrir_conexion();
-                    $cotizacion = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $fila2['id_rfq']);
-                    Conexion::cerrar_conexion();
-                    $cotizaciones[] = new Rfq($cotizacion-> obtener_id(), $cotizacion-> obtener_id_usuario(), $cotizacion-> obtener_usuario_designado(), $cotizacion-> obtener_canal(), $cotizacion-> obtener_email_code(), $cotizacion-> obtener_type_of_bid(), $cotizacion-> obtener_issue_date(), $cotizacion-> obtener_end_date(), $cotizacion-> obtener_status(), $cotizacion-> obtener_completado(), $cotizacion-> obtener_total_cost(), $cotizacion-> obtener_total_price(), $cotizacion-> obtener_comments(), $cotizacion-> obtener_award(), $cotizacion-> obtener_fecha_completado(), $cotizacion-> obtener_fecha_submitted(), $cotizacion-> obtener_fecha_award(), $cotizacion-> obtener_payment_terms(), $cotizacion-> obtener_address(), $cotizacion-> obtener_ship_to(), $cotizacion-> obtener_expiration_date(), $cotizacion-> obtener_ship_via(), $cotizacion-> obtener_taxes(), $cotizacion-> obtener_profit(), $cotizacion-> obtener_additional(), $cotizacion-> obtener_shipping(), $cotizacion-> obtener_shipping_cost());
-                  }
-                }
-            } catch (PDOException $ex) {
-                print 'ERROR:' . $ex->getMessage() . '<br>';
+            if (count($resultado)) {
+              foreach ($resultado as $fila) {
+                $cotizaciones [] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['total_cost'], $fila['total_price'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['fecha_submitted'], $fila['fecha_award'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via'], $fila['taxes'], $fila['profit'], $fila['additional'], $fila['shipping'], $fila['shipping_cost'], $fila['rfp']);
+              }
             }
+
+            if(count($resultado1)){
+              foreach ($resultado1 as $fila1) {
+                Conexion::abrir_conexion();
+                $cotizacion = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $fila1['id_rfq']);
+                Conexion::cerrar_conexion();
+                $cotizaciones[] = new Rfq($cotizacion-> obtener_id(), $cotizacion-> obtener_id_usuario(), $cotizacion-> obtener_usuario_designado(), $cotizacion-> obtener_canal(), $cotizacion-> obtener_email_code(), $cotizacion-> obtener_type_of_bid(), $cotizacion-> obtener_issue_date(), $cotizacion-> obtener_end_date(), $cotizacion-> obtener_status(), $cotizacion-> obtener_completado(), $cotizacion-> obtener_total_cost(), $cotizacion-> obtener_total_price(), $cotizacion-> obtener_comments(), $cotizacion-> obtener_award(), $cotizacion-> obtener_fecha_completado(), $cotizacion-> obtener_fecha_submitted(), $cotizacion-> obtener_fecha_award(), $cotizacion-> obtener_payment_terms(), $cotizacion-> obtener_address(), $cotizacion-> obtener_ship_to(), $cotizacion-> obtener_expiration_date(), $cotizacion-> obtener_ship_via(), $cotizacion-> obtener_taxes(), $cotizacion-> obtener_profit(), $cotizacion-> obtener_additional(), $cotizacion-> obtener_shipping(), $cotizacion-> obtener_shipping_cost());
+              }
+            }
+
+            if(count($resultado2)){
+              foreach ($resultado2 as $fila2) {
+                Conexion::abrir_conexion();
+                $cotizacion = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $fila2['id_rfq']);
+                Conexion::cerrar_conexion();
+                $cotizaciones[] = new Rfq($cotizacion-> obtener_id(), $cotizacion-> obtener_id_usuario(), $cotizacion-> obtener_usuario_designado(), $cotizacion-> obtener_canal(), $cotizacion-> obtener_email_code(), $cotizacion-> obtener_type_of_bid(), $cotizacion-> obtener_issue_date(), $cotizacion-> obtener_end_date(), $cotizacion-> obtener_status(), $cotizacion-> obtener_completado(), $cotizacion-> obtener_total_cost(), $cotizacion-> obtener_total_price(), $cotizacion-> obtener_comments(), $cotizacion-> obtener_award(), $cotizacion-> obtener_fecha_completado(), $cotizacion-> obtener_fecha_submitted(), $cotizacion-> obtener_fecha_award(), $cotizacion-> obtener_payment_terms(), $cotizacion-> obtener_address(), $cotizacion-> obtener_ship_to(), $cotizacion-> obtener_expiration_date(), $cotizacion-> obtener_ship_via(), $cotizacion-> obtener_taxes(), $cotizacion-> obtener_profit(), $cotizacion-> obtener_additional(), $cotizacion-> obtener_shipping(), $cotizacion-> obtener_shipping_cost());
+              }
+            }
+          }else if($cargo >= 4){
+            $sql = 'SELECT * FROM rfq WHERE (completado = 1 OR status = 1 OR usuario_designado = :usuario_designado) AND (id LIKE :termino_busqueda OR email_code LIKE :termino_busqueda OR total_price LIKE :termino_busqueda)';
+            $sentencia = $conexion-> prepare($sql);
+            $sentencia-> bindParam(':termino_busqueda', $termino_busqueda, PDO::PARAM_STR);
+            $sentencia-> bindParam(':usuario_designado', $usuario_designado, PDO::PARAM_STR);
+            $sentencia->execute();
+            $resultado = $sentencia-> fetchAll(PDO::FETCH_ASSOC);
+            $sql1 = 'SELECT * FROM rfq INNER JOIN item ON rfq.id = item.id_rfq WHERE (rfq.completado = 1 OR rfq.status = 1 OR rfq.usuario_designado = :usuario_designado) AND (item.part_number LIKE :termino_busqueda OR item.part_number_project LIKE :termino_busqueda OR item.description LIKE :termino_busqueda OR item.description_project LIKE :termino_busqueda)';
+            $sentencia1 = $conexion-> prepare($sql1);
+            $sentencia1-> bindParam(':termino_busqueda', $termino_busqueda, PDO::PARAM_STR);
+            $sentencia1-> bindParam(':usuario_designado', $usuario_designado, PDO::PARAM_STR);
+            $sentencia1-> execute();
+            $resultado1 = $sentencia1-> fetchAll(PDO::FETCH_ASSOC);
+            $sql2 = 'SELECT * FROM rfq INNER JOIN item ON rfq.id = item.id_rfq INNER JOIN subitems ON item.id = subitems.id_item WHERE (rfq.completado = 1 OR rfq.status = 1 OR rfq.usuario_designado = :usuario_designado) AND (subitems.part_number LIKE :termino_busqueda OR subitems.part_number_project LIKE :termino_busqueda OR subitems.description LIKE :termino_busqueda OR subitems.description_project LIKE :termino_busqueda)';
+            $sentencia2 = $conexion-> prepare($sql2);
+            $sentencia2-> bindParam(':termino_busqueda', $termino_busqueda, PDO::PARAM_STR);
+            $sentencia2-> bindParam(':usuario_designado', $usuario_designado, PDO::PARAM_STR);
+            $sentencia2-> execute();
+            $resultado2 = $sentencia2-> fetchAll(PDO::FETCH_ASSOC);
+
+            if (count($resultado)) {
+              foreach ($resultado as $fila) {
+                $cotizaciones [] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['total_cost'], $fila['total_price'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['fecha_submitted'], $fila['fecha_award'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via'], $fila['taxes'], $fila['profit'], $fila['additional'], $fila['shipping'], $fila['shipping_cost'], $fila['rfp']);
+              }
+            }
+
+            if(count($resultado1)){
+              foreach ($resultado1 as $fila1) {
+                Conexion::abrir_conexion();
+                $cotizacion = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $fila1['id_rfq']);
+                Conexion::cerrar_conexion();
+                $cotizaciones[] = new Rfq($cotizacion-> obtener_id(), $cotizacion-> obtener_id_usuario(), $cotizacion-> obtener_usuario_designado(), $cotizacion-> obtener_canal(), $cotizacion-> obtener_email_code(), $cotizacion-> obtener_type_of_bid(), $cotizacion-> obtener_issue_date(), $cotizacion-> obtener_end_date(), $cotizacion-> obtener_status(), $cotizacion-> obtener_completado(), $cotizacion-> obtener_total_cost(), $cotizacion-> obtener_total_price(), $cotizacion-> obtener_comments(), $cotizacion-> obtener_award(), $cotizacion-> obtener_fecha_completado(), $cotizacion-> obtener_fecha_submitted(), $cotizacion-> obtener_fecha_award(), $cotizacion-> obtener_payment_terms(), $cotizacion-> obtener_address(), $cotizacion-> obtener_ship_to(), $cotizacion-> obtener_expiration_date(), $cotizacion-> obtener_ship_via(), $cotizacion-> obtener_taxes(), $cotizacion-> obtener_profit(), $cotizacion-> obtener_additional(), $cotizacion-> obtener_shipping(), $cotizacion-> obtener_shipping_cost());
+              }
+            }
+
+            if(count($resultado2)){
+              foreach ($resultado2 as $fila2) {
+                Conexion::abrir_conexion();
+                $cotizacion = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $fila2['id_rfq']);
+                Conexion::cerrar_conexion();
+                $cotizaciones[] = new Rfq($cotizacion-> obtener_id(), $cotizacion-> obtener_id_usuario(), $cotizacion-> obtener_usuario_designado(), $cotizacion-> obtener_canal(), $cotizacion-> obtener_email_code(), $cotizacion-> obtener_type_of_bid(), $cotizacion-> obtener_issue_date(), $cotizacion-> obtener_end_date(), $cotizacion-> obtener_status(), $cotizacion-> obtener_completado(), $cotizacion-> obtener_total_cost(), $cotizacion-> obtener_total_price(), $cotizacion-> obtener_comments(), $cotizacion-> obtener_award(), $cotizacion-> obtener_fecha_completado(), $cotizacion-> obtener_fecha_submitted(), $cotizacion-> obtener_fecha_award(), $cotizacion-> obtener_payment_terms(), $cotizacion-> obtener_address(), $cotizacion-> obtener_ship_to(), $cotizacion-> obtener_expiration_date(), $cotizacion-> obtener_ship_via(), $cotizacion-> obtener_taxes(), $cotizacion-> obtener_profit(), $cotizacion-> obtener_additional(), $cotizacion-> obtener_shipping(), $cotizacion-> obtener_shipping_cost());
+              }
+            }
+          }
+        } catch (PDOException $ex) {
+          print 'ERROR:' . $ex->getMessage() . '<br>';
         }
-        return $cotizaciones;
+      }
+      return $cotizaciones;
     }
 
     public static function escribir_resultados_busqueda($cotizaciones) {
