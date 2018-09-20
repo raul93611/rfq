@@ -1,4 +1,17 @@
 <input type="hidden" name="id_rfq" value="<?php echo $cotizacion_recuperada->obtener_id(); ?>">
+<?php
+if($cotizacion_recuperada-> obtener_canal() == 'FedBid'){
+  ?>
+  <div class="row">
+    <div class="col-12">
+      <label for="total_price">Total price:</label>
+      <input type="number" step=".01" name="total_price_fedbid" class="form-control form-control-sm" value="<?php echo $cotizacion_recuperada-> obtener_total_price(); ?>">
+    </div>
+  </div>
+  <br>
+  <?php
+}
+?>
 <div class="row">
   <div class="col">
     <div class="form-group">
@@ -122,7 +135,13 @@ if ($cotizacion_recuperada->obtener_completado() && $cotizacion_recuperada->obte
   }
   ?>
   <button type="submit" class="btn btn-success" id="save_item" name="guardar_cambios_cotizacion"><i class="fa fa-check"></i> Save</button>
-  <a class="btn btn-primary add_item_charter" href="<?php echo ADD_ITEM . '/' . $cotizacion_recuperada->obtener_id(); ?>"><i class="fa fa-plus-circle"></i> Add item</a>
+  <?php
+  if($cotizacion_recuperada-> obtener_canal() != 'FedBid'){
+    ?>
+    <a class="btn btn-primary add_item_charter" href="<?php echo ADD_ITEM . '/' . $cotizacion_recuperada->obtener_id(); ?>"><i class="fa fa-plus-circle"></i> Add item</a>
+    <?php
+  }
+  ?>
   <a class="btn btn-info add_item_charter" href="<?php echo CUESTIONARIO . '/' . $cotizacion_recuperada->obtener_id(); ?>"><i class="fa fa-sticky-note"></i> Project charter</a>
   <a href="#" id="add_comment" class="btn btn-primary add_item_charter"><i class="fas fa-plus"></i> Add comment</a>
 </div>

@@ -1175,6 +1175,20 @@ class RepositorioRfq {
         return $rfq_editado;
     }
 
+    public static function guardar_total_price_fedbid($conexion, $total_price_fedbid, $id_rfq){
+      if(isset($conexion)){
+        try{
+          $sql = 'UPDATE rfq SET total_price = :total_price_fedbid WHERE id = :id_rfq';
+          $sentencia = $conexion-> prepare($sql);
+          $sentencia-> bindParam(':total_price_fedbid', $total_price_fedbid, PDO::PARAM_STR);
+          $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+          $sentencia-> execute();
+        }catch(PDOException $ex){
+          print 'ERROR:' . $ex->getMessage() . '<br>';
+        }
+      }
+    }
+
     public static function delete_quote($conexion, $id_rfq){
       if(isset($conexion)){
         try{

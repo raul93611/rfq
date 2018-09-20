@@ -70,6 +70,14 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
         Redireccion::redirigir(COTIZACIONES . $canal);
     }
     $cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $_POST['id_rfq']);
+    /*****************************************************************************************************************************/
+    /********************************************************GUARDAR TOTAL_PRICE EN FEDBID****************************************/
+    /*****************************************************************************************************************************/
+    if($cotizacion_recuperada-> obtener_canal() == 'FedBid'){
+      RepositorioRfq::guardar_total_price_fedbid(Conexion::obtener_conexion(), $_POST['total_price_fedbid'], $_POST['id_rfq']);
+    }
+    /*****************************************************************************************************************************/
+    /*****************************************************************************************************************************/
     RepositorioRfq::actualizar_rfq_2(Conexion::obtener_conexion(), $_POST['comments'], $_POST['ship_via'], htmlspecialchars($_POST['address']), htmlspecialchars($_POST['ship_to']), $_POST['id_rfq']);
     $expiration_date = $_POST['expiration_date'];
     $partes_expiration_date = explode('/', $expiration_date);
