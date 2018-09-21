@@ -68,8 +68,26 @@ $(document).ready(function () {
     $('#footer_item').toggleClass('footer_item1');
   });
 /**************************************DATEPICKER PARA CAMPOS TIPO DATE*********************/
-  $('#completed_date').datepicker();
-  $('#expiration_date').datepicker();
+  $('#completed_date').daterangepicker({
+    singleDatePicker: true
+  });
+  $('#expiration_date').daterangepicker({
+    singleDatePicker: true
+  });
+  $('#issue_date').daterangepicker({
+    singleDatePicker: true
+  });
+  $('#end_date').daterangepicker({
+    timePicker: true,
+    singleDatePicker: true,
+    timePicker24Hour: true,
+    locale: {
+      format: 'MM/DD/YYYY HH:mm'
+    }
+  });
+  $('#date_milestone').daterangepicker({
+    singleDatePicker: true
+  });
 /************************************DATETABLES JQUERY PARA TABLAS**************************/
   $('#tabla').DataTable({
     'pageLength': 50,
@@ -89,17 +107,6 @@ $(document).ready(function () {
   $('#tabla_usuarios').DataTable({
 
   });
-/************************************INPUTMASK PARA ALGUNOS CAMPOS TIPO FECHAS*****************/
-    $('#issue_date').inputmask('mm/dd/yyyy', {'placeholder': 'mm/dd/yyyy'});
-    $('#end_date').inputmask("datetime", {
-        mask: "2/1/y h:s",
-        placeholder: "mm/dd/yyyy hh:mm",
-        leapday: "02/29/",
-        separator: "/",
-        alias: "mm/dd/yyyy"
-    });
-
-    $('#date_milestone').inputmask('mm/dd/yyyy', {'placeholder': 'mm/dd/yyyy'});
 /****************************************************************************************************/
 /**********************************CALCULOS EN LA TABLA DE ITEMS***********************************/
 /****************************************************************************************************/
