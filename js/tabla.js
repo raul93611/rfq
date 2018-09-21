@@ -1,10 +1,50 @@
 $(document).ready(function () {
+/***********************************VARIABLES INICIALES PARA EL BORRADO*********************/
+  var link_to_delete;
+  var alert_delete_system = $('#alert_delete_system');
+  var continue_button = $('#continue_button');
+  function habilitar_continue_button(boton){
+    alert_delete_system.modal();
+    link_to_delete = boton.attr('href');
+    continue_button.attr('href', link_to_delete);
+  }
+  /***********************************ALERT EN BOTONES PARA BORRAR ITEMS******************/
+  $('.delete_item_button').click(function(){
+    habilitar_continue_button($(this));
+    return false;
+  });
+  /**********************************ALERT EN BOTONES PARA BORRAR SUBITEMS******************/
+  $('.delete_subitem_button').click(function(){
+    habilitar_continue_button($(this));
+    return false;
+  });
+  /******************************ALERT EN BOTONES PARA BORRAR PROVIDER DE ITEMS**************/
+  $('.delete_provider_item_button').click(function(){
+    habilitar_continue_button($(this));
+    return false;
+  });
+  /******************************ALERT EN BOTONES PARA BORRAR PROVIDER SUBITEMS*************/
+  $('.delete_provider_subitem_button').click(function(){
+    habilitar_continue_button($(this));
+    return false;
+  });
+  /******************************ALERT EN BOTONES PARA BORRAR DOCUMENTOS********************/
+  $('.delete_document_button').click(function(){
+    habilitar_continue_button($(this));
+    return false;
+  });
+  /****************************ALERT EN BOTONES PARA BORRAR QUOTES**************************/
+  $('.delete_quote_button').click(function(){
+    habilitar_continue_button($(this));
+    return false;
+  });
+  /*************************************NUEVO COMENTARIO***********************************/
   if($('#nuevo_comment').length != 0){
     $('#add_comment').click(function(){
       $('#nuevo_comment').modal();
     });
   }
-
+/*************************************VERIFICAR SI CODE ESTA VACIO****************************/
   if($('#form_edited_quote').length != 0){
     var form_edited_quote = $('#form_edited_quote');
     form_edited_quote.submit(function(){
@@ -15,7 +55,7 @@ $(document).ready(function () {
       }
     });
   }
-
+/*************************************INPUT FILE MEJORADO************************************/
   $('#file_input_info_create').change(function(e){
     var fileName_create = [];
     for (var i = 0; i < e.target.files.length; i++) {
@@ -23,22 +63,17 @@ $(document).ready(function () {
     }
     $('#label_file_create').html(fileName_create.join(', '));
   });
-
+/************************************TOGGLE BUTTON PARA LA BARRA LATERAL*********************/
   $('#sidebar_collapse').on('click', function(){
     $('#footer_item').toggleClass('footer_item1');
   });
-
+/**************************************DATEPICKER PARA CAMPOS TIPO DATE*********************/
   $('#completed_date').datepicker();
   $('#expiration_date').datepicker();
-
+/************************************DATETABLES JQUERY PARA TABLAS**************************/
   $('#tabla').DataTable({
     'pageLength': 50,
     'order': [[6, 'desc']]
-  });
-
-  $('#tabla_fedbid').DataTable({
-    'pageLength': 50,
-    'order': [[5, 'desc']]
   });
 
   $('#tabla_quotes').DataTable({
@@ -54,7 +89,7 @@ $(document).ready(function () {
   $('#tabla_usuarios').DataTable({
 
   });
-
+/************************************INPUTMASK PARA ALGUNOS CAMPOS TIPO FECHAS*****************/
     $('#issue_date').inputmask('mm/dd/yyyy', {'placeholder': 'mm/dd/yyyy'});
     $('#end_date').inputmask("datetime", {
         mask: "2/1/y h:s",
@@ -65,8 +100,9 @@ $(document).ready(function () {
     });
 
     $('#date_milestone').inputmask('mm/dd/yyyy', {'placeholder': 'mm/dd/yyyy'});
-
-    //REALIZAR CALCULO DE LA TABLA DE ITEMS
+/****************************************************************************************************/
+/**********************************CALCULOS EN LA TABLA DE ITEMS***********************************/
+/****************************************************************************************************/
     var monto = [];
     var quantity = [];
 

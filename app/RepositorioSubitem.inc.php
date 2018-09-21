@@ -131,7 +131,7 @@ class RepositorioSubitem{
       $providers_subitem = RepositorioProviderSubitem::obtener_providers_subitem_por_id_subitem(Conexion::obtener_conexion(), $subitem->obtener_id());
       Conexion::cerrar_conexion();
       echo '<tr class="fila_subitem">';
-      echo '<td><a href="' . ADD_PROVIDER_SUBITEM . '/' . $subitem->obtener_id() . '" class="btn btn-warning btn-block subitem"><i class="fa fa-plus-circle"></i> Add Provider</a><br><a href="' . EDIT_SUBITEM . '/' . $subitem->obtener_id() . '" class="btn btn-warning btn-block subitem"><i class="fa fa-edit"></i> Edit subitem</a><br><a href="' . DELETE_SUBITEM . '/' . $subitem-> obtener_id() . '" class="btn btn-warning btn-block subitem"><i class="fa fa-trash"></i> Delete</a></td>';
+      echo '<td><a href="' . ADD_PROVIDER_SUBITEM . '/' . $subitem->obtener_id() . '" class="btn btn-warning btn-block subitem"><i class="fa fa-plus-circle"></i> Add Provider</a><br><a href="' . EDIT_SUBITEM . '/' . $subitem->obtener_id() . '" class="btn btn-warning btn-block subitem"><i class="fa fa-edit"></i> Edit subitem</a><br><a href="' . DELETE_SUBITEM . '/' . $subitem-> obtener_id() . '" class="delete_subitem_button btn btn-warning btn-block subitem"><i class="fa fa-trash"></i> Delete</a></td>';
       echo '<td></td>';
       if(strlen($subitem-> obtener_description_project()) >= 100){
         echo '<td><b>Brand:</b> ' . $subitem->obtener_brand_project() . '<br><b>Part #:</b> ' . $subitem->obtener_part_number_project() . '<br><b>Description:</b> ' . nl2br(mb_substr($subitem->obtener_description_project(), 0, 100)) . ' ...</td>';

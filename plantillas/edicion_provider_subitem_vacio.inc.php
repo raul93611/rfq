@@ -30,5 +30,5 @@ if($cargo == 5 && $_SESSION['id_usuario'] != $cotizacion_recuperada-> obtener_us
 <div class="card-footer">
     <button type="submit" class="btn btn-success" name="guardar_cambios_provider_subitem"><i class="fa fa-check"></i> Save</button>
     <a href="<?php echo EDITAR_COTIZACION . '/' . $item-> obtener_id_rfq(); ?>" class="btn btn-info"><i class="fa fa-times"></i> Cancel</a>
-    <a href="<?php echo DELETE_PROVIDER_SUBITEM . '/' . $id_provider_subitem; ?>" class="btn btn-danger"><i class="fa fa-trash"></i> Delete</a>
+    <a href="<?php echo DELETE_PROVIDER_SUBITEM . '/' . $id_provider_subitem; ?>" class="delete_provider_subitem_button btn btn-danger"><i class="fa fa-trash"></i> Delete</a>
 </div>

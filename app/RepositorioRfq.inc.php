@@ -122,7 +122,7 @@ class RepositorioRfq {
             <?php
             if($cargo < 4){
               ?>
-              <td class="text-center"><a href="<?php echo DELETE_QUOTE . '/' . $cotizacion->obtener_id(); ?>" class="btn btn-sm btn-danger"><i class="fa fa-times"></i></a></td>
+              <td class="text-center"><a href="<?php echo DELETE_QUOTE . '/' . $cotizacion->obtener_id(); ?>" class="delete_quote_button btn btn-sm btn-danger"><i class="fa fa-times"></i></a></td>
               <?php
             }
             ?>
@@ -374,13 +374,7 @@ class RepositorioRfq {
             <td><?php echo $cotizacion->obtener_type_of_bid(); ?></td>
             <td><?php echo $cotizacion->obtener_issue_date(); ?></td>
             <td><?php echo $cotizacion->obtener_end_date(); ?></td>
-            <?php
-            if($cotizacion-> obtener_canal() != 'FedBid'){
-              ?>
-              <td><?php echo '$ ' . $cotizacion->obtener_total_price(); ?></td>
-              <?php
-            }
-            ?>
+            <td><?php echo '$ ' . $cotizacion->obtener_total_price(); ?></td>
             <td><?php echo $fecha_completado; ?></td>
             <td><?php echo $cotizacion->obtener_id(); ?></td>
             <td><?php echo $cotizacion->obtener_comments(); ?></td>
@@ -407,7 +401,7 @@ class RepositorioRfq {
         Conexion::cerrar_conexion();
         if (count($cotizaciones)) {
             ?>
-            <table <?php if($canal == 'FedBid'){echo 'id="tabla_fedbid"';}else{echo 'id="tabla"';} ?> class="table table-bordered table-striped table-responsive-md">
+            <table id="tabla" class="table table-bordered table-striped table-responsive-md">
                 <thead>
                     <tr>
                         <th>CODE</th>
@@ -415,7 +409,7 @@ class RepositorioRfq {
                         <th>TYPE OF BID</th>
                         <th>ISSUE DATE</th>
                         <th>END DATE</th>
-                        <?php if($canal != 'FedBid'){echo '<th>AMOUNT</th>';} ?>
+                        <th>AMOUNT</th>
                         <th>COMPLETED DATE</th>
                         <th>PROPOSAL</th>
                         <th>COMMENTS</th>
@@ -489,13 +483,7 @@ class RepositorioRfq {
             <td><?php echo $cotizacion->obtener_type_of_bid(); ?></td>
             <td><?php echo $cotizacion->obtener_issue_date(); ?></td>
             <td><?php echo $cotizacion->obtener_end_date(); ?></td>
-            <?php
-            if($cotizacion-> obtener_canal() != 'FedBid'){
-              ?>
-              <td><?php echo '$ ' . $cotizacion->obtener_total_price(); ?></td>
-              <?php
-            }
-            ?>
+            <td><?php echo '$ ' . $cotizacion->obtener_total_price(); ?></td>
             <td><?php echo $fecha_submitted; ?></td>
             <td><?php echo $cotizacion->obtener_id(); ?></td>
             <td><?php echo $cotizacion->obtener_comments(); ?></td>
@@ -530,7 +518,7 @@ class RepositorioRfq {
                       <th>TYPE OF BID</th>
                       <th>ISSUE DATE</th>
                       <th>END DATE</th>
-                      <?php if($canal != 'FedBid'){echo '<th>AMOUNT</th>';} ?>
+                      <th>AMOUNT</th>
                       <th>SUBMITTED DATE</th>
                       <th>PROPOSAL</th>
                       <th>COMMENTS</th>
@@ -603,13 +591,7 @@ class RepositorioRfq {
             <td><?php echo $cotizacion->obtener_type_of_bid(); ?></td>
             <td><?php echo $cotizacion->obtener_issue_date(); ?></td>
             <td><?php echo $cotizacion->obtener_end_date(); ?></td>
-            <?php
-            if($cotizacion-> obtener_canal() != 'FedBid'){
-              ?>
-              <td><?php echo '$ ' . $cotizacion->obtener_total_price(); ?></td>
-              <?php
-            }
-            ?>
+            <td><?php echo '$ ' . $cotizacion->obtener_total_price(); ?></td>
             <td><?php echo $fecha_award; ?></td>
             <td><?php echo $cotizacion->obtener_id(); ?></td>
             <td><?php echo $cotizacion->obtener_comments(); ?></td>
@@ -644,7 +626,7 @@ class RepositorioRfq {
                       <th>TYPE OF BID</th>
                       <th>ISSUE DATE</th>
                       <th>END DATE</th>
-                      <?php if($canal != 'FedBid'){echo '<th>AMOUNT</th>';} ?>
+                      <th>AMOUNT</th>
                       <th>AWARD DATE</th>
                       <th>PROPOSAL</th>
                       <th>COMMENTS</th>

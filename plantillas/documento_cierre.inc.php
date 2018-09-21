@@ -1,3 +1,23 @@
+<!--*************************************************ALERT MODAL***************************************************************-->
+<div class="modal fade" id="alert_delete_system" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title text-danger"><i class="fa fa-exclamation-triangle"></i> ALERT</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="alert_delete_body">
+        <h4 class="text-center text-danger">Do you want to continue the action?</h4>
+      </div>
+      <div class="modal-footer">
+        <a href="#" class="btn btn-success" id="continue_button"><i class="fas fa-check"></i> Continue</a>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="modal modal-danger fade" id="error_alert">
   <div class="modal-dialog">
     <div class="modal-content">
