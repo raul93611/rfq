@@ -824,7 +824,7 @@ class RepositorioRfq {
 
     public static function obtener_resultados_busqueda($conexion, $termino_busqueda, $cargo, $usuario_designado) {
       $cotizaciones = [];
-      $termino_busqueda = '%' . $termino_busqueda . '%';
+      $termino_busqueda = '%' . trim($termino_busqueda) . '%';
       if (isset($conexion)) {
         try {
           if($cargo <= 3){
