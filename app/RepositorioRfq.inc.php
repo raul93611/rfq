@@ -374,7 +374,7 @@ class RepositorioRfq {
             <td><?php echo $cotizacion->obtener_type_of_bid(); ?></td>
             <td><?php echo $cotizacion->obtener_issue_date(); ?></td>
             <td><?php echo $cotizacion->obtener_end_date(); ?></td>
-            <td><?php echo '$ ' . $cotizacion->obtener_total_price(); ?></td>
+            <td><?php echo '$ ' . number_format($cotizacion->obtener_total_price(), 2); ?></td>
             <td><?php echo $fecha_completado; ?></td>
             <td><?php echo $cotizacion->obtener_id(); ?></td>
             <td><?php echo $cotizacion->obtener_comments(); ?></td>
@@ -483,7 +483,7 @@ class RepositorioRfq {
             <td><?php echo $cotizacion->obtener_type_of_bid(); ?></td>
             <td><?php echo $cotizacion->obtener_issue_date(); ?></td>
             <td><?php echo $cotizacion->obtener_end_date(); ?></td>
-            <td><?php echo '$ ' . $cotizacion->obtener_total_price(); ?></td>
+            <td><?php echo '$ ' . number_format($cotizacion->obtener_total_price(), 2); ?></td>
             <td><?php echo $fecha_submitted; ?></td>
             <td><?php echo $cotizacion->obtener_id(); ?></td>
             <td><?php echo $cotizacion->obtener_comments(); ?></td>
@@ -591,7 +591,7 @@ class RepositorioRfq {
             <td><?php echo $cotizacion->obtener_type_of_bid(); ?></td>
             <td><?php echo $cotizacion->obtener_issue_date(); ?></td>
             <td><?php echo $cotizacion->obtener_end_date(); ?></td>
-            <td><?php echo '$ ' . $cotizacion->obtener_total_price(); ?></td>
+            <td><?php echo '$ ' . number_format($cotizacion->obtener_total_price(), 2); ?></td>
             <td><?php echo $fecha_award; ?></td>
             <td><?php echo $cotizacion->obtener_id(); ?></td>
             <td><?php echo $cotizacion->obtener_comments(); ?></td>
