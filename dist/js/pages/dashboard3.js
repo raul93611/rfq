@@ -327,7 +327,12 @@ $(function () {
               maintainAspectRatio: false,
               tooltips: {
                   mode: mode,
-                  intersect: intersect
+                  intersect: intersect,
+                  callbacks: {
+                    label: function(tooltipItem, data) {
+                        return tooltipItem.yLabel.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    },
+                  }
               },
               hover: {
                   mode: mode,
