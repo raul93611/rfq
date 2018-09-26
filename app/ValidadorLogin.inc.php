@@ -9,11 +9,11 @@ class ValidadorLogin extends ValidadorUsuario {
         $this->error = '';
         if (!$this->variable_iniciada($nombre_usuario) || !$this->variable_iniciada($password)) {
             $this->usuario = null;
-            $this->error = 'Debes introducir tus datos.';
+            $this->error = 'Must be filled out.';
         } else {
             $this->usuario = RepositorioUsuario::obtener_usuario_por_nombre_usuario($conexion, $nombre_usuario);
             if (is_null($this->usuario) || !password_verify($password, $this->usuario->obtener_password()) || !$this-> usuario-> obtener_status()) {
-                $this->error = 'Los datos introducidos son incorrectos.';
+                $this->error = 'Wrong values.';
             }
         }
     }
