@@ -241,10 +241,10 @@ class RepositorioRfq {
       }
     }
 
-    public static function quitar_completado($conexion, $id_rfq){
+    public static function quitar_checks($conexion, $id_rfq){
       if(isset($conexion)){
         try{
-          $sql = 'UPDATE rfq SET completado = 0 WHERE id = :id_rfq';
+          $sql = 'UPDATE rfq SET completado = 0, status = 0, award = 0 WHERE id = :id_rfq';
           $sentencia = $conexion-> prepare($sql);
           $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
           $sentencia-> execute();
