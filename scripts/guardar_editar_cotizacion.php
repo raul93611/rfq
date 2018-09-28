@@ -142,7 +142,34 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
         }
         if($award){
             RepositorioRfq::actualizar_fecha_y_award(Conexion::obtener_conexion(), $_POST['id_rfq']);
-
+            $to = $usuario-> obtener_email();
+            $subject = "Awarded quote";
+            $headers = "MIME-Version: 1.0\r\n";
+            $headers .= "Content-type: text/html; charset=UTF-8\r\n";
+            $message = '
+            <html>
+            <body style="margin:0;border-radius: 10px; padding:10px; width:600px;" bgcolor="#343e4f">
+            <table align="center" border="0" cellpadding="0" cellspacing="0" style="width:100%;padding:10px;border-radius: 10px; border-collapse: separate;" bgcolor="#FFFFFF">
+              <tr>
+                <td align="center" style="padding: 10px;">
+                  <img src="http://www.elogicportal.com/congratulation_img.png" alt="Logo" style="width:400px;border:0;"/>
+                </td>
+              </tr>
+              <tr>
+                <td align="center" style="color: #333538; padding: 10px; font-size: 25px;">
+                  <span>You just won the proposal:<br>' . $cotizacion_recuperada-> obtener_id() . '</span>
+                </td>
+              </tr>
+              <tr>
+                <td align="center" style="padding: 10px;">
+                  <img src="http://www.elogicportal.com/rfp/img/e_logo_home.png" alt="Logo" style="width:50px;border:0;"/>
+                </td>
+              </tr>
+            </table>
+            </body>
+            </html>
+            ';
+            mail($to, $subject, $message, $headers);
             if($cargo < 5){
                 Redireccion::redirigir(AWARD . $canal);
             }else{
