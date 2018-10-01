@@ -157,7 +157,7 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
               </tr>
               <tr>
                 <td align="center" style="color: #333538; padding: 10px; font-size: 25px;">
-                  <span>You just won the proposal:<br>' . $cotizacion_recuperada-> obtener_id() . '</span>
+                  <span>Your proposal# ' . $cotizacion_recuperada-> obtener_id() . ' has been accepted by:<br>' . nl2br($_POST['address']) . '</span>
                 </td>
               </tr>
               <tr>
