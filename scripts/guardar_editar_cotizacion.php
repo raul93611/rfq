@@ -148,11 +148,11 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
             $headers .= "Content-type: text/html; charset=UTF-8\r\n";
             $message = '
             <html>
-            <body style="margin:0;border-radius: 10px; padding:10px; width:600px;" bgcolor="#343e4f">
-            <table align="center" border="0" cellpadding="0" cellspacing="0" style="width:100%;padding:10px;border-radius: 10px; border-collapse: separate;" bgcolor="#FFFFFF">
+            <body style="margin:0;border-radius: 10px; padding:10px; width:600px;" bgcolor="white">
+            <table align="center" border="0" cellpadding="0" cellspacing="0" style="box-shadow: 5px 10px 8px #888888;width:400px;padding:10px;border-radius: 10px; border-collapse: separate;" bgcolor="#FFFFFF">
               <tr>
                 <td align="center" style="padding: 10px;">
-                  <img src="http://www.elogicportal.com/congratulation_img.png" alt="Logo" style="width:400px;border:0;"/>
+                  <img src="http://www.elogicportal.com/congratulation_img.png" alt="Logo" style="width:300px;border:0;"/>
                 </td>
               </tr>
               <tr>
