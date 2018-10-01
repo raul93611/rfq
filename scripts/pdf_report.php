@@ -6,6 +6,7 @@ $cotizaciones_mes = RepositorioRfq::obtener_cotizaciones_ganadas_por_mes(Conexio
 $monto_cotizaciones_mes = RepositorioRfq::obtener_monto_cotizaciones_ganadas_por_mes(Conexion::obtener_conexion());
 list($no_bid, $manufacturer_in_the_bid, $expired_due_date, $supplier_did_not_provide_a_quote, $others) = RepositorioRfq::obtener_comments(Conexion::obtener_conexion());
 Conexion::cerrar_conexion();
+$hoy = date("F, Y");
 try{
   $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
   $fontDirs = $defaultConfig['fontDir'];
@@ -86,7 +87,8 @@ try{
   </div>';
 
   $html .= '
-  <h1 class="color">Quotes</h1>
+  <h1 class="color">' . $hoy . '</h1>
+  <h2 class="color">Quotes</h2>
   <table id="tabla" width="100%">
     <tr>
       <th>USERNAME</th>
@@ -115,7 +117,7 @@ try{
   $no_bids = $no_bid + $manufacturer_in_the_bid + $expired_due_date + $supplier_did_not_provide_a_quote + $others;
 
   $html .= '
-  <h1 class="color">No Bid</h1>
+  <h2 class="color">No Bid - Current year</h2>
   <table id="tabla" width="100%">
     <tr>
       <th>COMMENTS</th>
