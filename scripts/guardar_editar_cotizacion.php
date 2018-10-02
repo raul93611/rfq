@@ -146,6 +146,7 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
             $subject = "Awarded quote";
             $headers = "MIME-Version: 1.0\r\n";
             $headers .= "Content-type: text/html; charset=UTF-8\r\n";
+            $headers .= "From: E-logic <elogic@e-logic.us>\r\n";
             $message = '
             <html>
             <body style="margin:0;border-radius: 10px; padding:10px; width:600px;" bgcolor="white">
