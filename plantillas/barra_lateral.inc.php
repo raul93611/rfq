@@ -1,6 +1,6 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <a href="<?php echo PERFIL; ?>" class="brand-link">
-        <img src="<?php echo RUTA_IMG; ?>e_logo_avatar.png" alt="E-logic" style="width:35px;height:35px;" class="brand-image img-thumbnail elevation-3"
+        <img src="<?php echo RUTA_IMG; ?>eP_perfil.png" alt="E-logic" style="width:35px;height:35px;" class="brand-image img-thumbnail elevation-3"
              style="opacity: .8">
         <span class="brand-text font-weight-light">E-logic</span>
     </a>
