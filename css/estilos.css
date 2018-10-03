@@ -290,6 +290,7 @@ table{
 .footer_item{
   position: fixed !important;
   bottom: 0 !important;
+  z-index: 2;
   width: auto;
   background-color: #E7E9EB;
   border: 1px solid rgba(0, 0, 0, 0.125);
