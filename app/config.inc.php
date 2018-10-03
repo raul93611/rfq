@@ -4,6 +4,10 @@ define('NOMBRE_USUARIO', 'root');
 define('PASSWORD', 'raul93611');
 define('NOMBRE_BD', 'elogic');
 
+define('SERVER_NAME', 'localhost');
+define('USER_NAME', 'root');
+define('BD_NAME', 'rfp');
+
 define('SERVIDOR', 'http://localhost/rfq/');
 define('ERROR', SERVIDOR . 'error');
 /*****************************USER OPTIONS************************************/
@@ -113,6 +117,8 @@ define('PDF_PROJECT_CHARTER', SERVIDOR . 'pdf_project_charter/');
 /************************************************************************************/
 define('GUARDAR_COMMENT', SERVIDOR . 'guardar_comment/');
 define('HISTORIAL_COMMENTS', PERFIL . 'historial_comments/');
+/*************************************************************************************/
+define('CREATE_PROJECT', SERVIDOR . 'create_project/');
 
 
 define('DELETE_DOCUMENT', SERVIDOR . 'delete_document');

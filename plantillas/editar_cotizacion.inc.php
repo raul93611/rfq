@@ -10,11 +10,16 @@ Conexion::cerrar_conexion();
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
-                <div class="col-sm-5">
+                <div class="col-sm-4">
                     <h1>Internal quote</h1>
                 </div>
-                <div class="col-sm-5">
+                <div class="col-sm-6">
                   <?php
+                  if(!$cotizacion_recuperada-> obtener_rfp()){
+                    ?>
+                    <a class="btn btn-info" href="<?php echo CREATE_PROJECT . $cotizacion_recuperada-> obtener_id(); ?>"><i class="fas fa-plus"></i> Create project</a>
+                    <?php
+                  }
                   if($cotizacion_recuperada-> obtener_completado()){
                   ?>
                   <a class="btn btn-primary" href="<?php echo COPY_QUOTE . $cotizacion_recuperada-> obtener_id(); ?>"><i class="fa fa-copy"></i> Copy</a>

@@ -4,6 +4,17 @@ include_once 'app/Conexion.inc.php';
 include_once 'app/ControlSesion.inc.php';
 include_once 'app/Redireccion.inc.php';
 
+include_once '../rfp/app/Connection.inc.php';
+
+include_once '../rfp/app/User.inc.php';
+include_once '../rfp/app/UserRepository.inc.php';
+
+include_once '../rfp/app/Project.inc.php';
+include_once '../rfp/app/ProjectRepository.inc.php';
+
+include_once '../rfp/app/Service.inc.php';
+include_once '../rfp/app/ServiceRepository.inc.php';
+
 include_once 'app/RepositorioUsuario.inc.php';
 include_once 'app/Usuario.inc.php';
 include_once 'app/ValidadorUsuario.inc.php';
@@ -205,6 +216,10 @@ if ($partes_ruta[0] == 'rfq') {
           case 'disable_user':
               $id_usuario = $partes_ruta[2];
               $ruta_elegida = 'scripts/disable_user.php';
+              break;
+          case 'create_project':
+              $id_rfq = $partes_ruta[2];
+              $ruta_elegida = 'scripts/create_project.php';
               break;
           default:
             break;

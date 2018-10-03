@@ -201,6 +201,20 @@ class RepositorioRfq {
         return $cotizacion_editada;
     }
 
+    public static function establecer_id_rfp($conexion, $id_project, $id_rfq){
+      if(isset($conexion)){
+        try{
+          $sql = 'UPDATE rfq SET rfp = :id_project WHERE id = :id_rfq';
+          $sentencia = $conexion-> prepare($sql);
+          $sentencia-> bindParam(':id_project', $id_project, PDO::PARAM_STR);
+          $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+          $sentencia-> execute();
+        }catch(PDOException $ex){
+          print 'ERROR:' . $ex->getMessage() . '<br>';
+        }
+      }
+    }
+
     public static function establecer_no_bid($conexion, $id_rfq){
       if(isset($conexion)){
         try{
