@@ -5,15 +5,18 @@ $cotizacion = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexi
 Conexion::cerrar_conexion();
 $end_date = RepositorioComment::english_format_to_mysql_datetime($cotizacion-> obtener_end_date());
 Connection::open_connection();
-$users = UserRepository::get_users_3_4(Connection::get_connection());
+$users = UserRepository::get_all_users_enabled(Connection::get_connection());
 $array_id_users = [];
 foreach ($users as $user) {
-  $array_id_users[] = $user-> get_id();
+  if($user-> get_level() == 3){
+    $array_id_users[] = $user-> get_id();
+  }
 }
+$members = implode('|', $array_id_users);
 $designated_user_index = array_rand($array_id_users);
 $designated_user = $array_id_users[$designated_user_index];
 $user = UserRepository::get_user_by_id(Connection::get_connection(), $designated_user);
-$project = new Project('', $designated_user, '', $cotizacion-> obtener_email_code(), 'RFQ project', '', $end_date, '', '', '', 'services_and_equipment', 0, $designated_user, 0, '', '', '', 0, '', 0, 0, 0, '', '', 1,'', '', '', '', '', '', '', '', '', 0);
+$project = new Project('', $designated_user, '', $cotizacion-> obtener_email_code(), 'RFQ project', '', $end_date, '', '', '', 'services_and_equipment', 0, $designated_user, 0, '', '', '', 0, '', 0, 0, 0, '', '', 1,'', '', '', '', '', '', '', '', '', 0, $members);
 $id_project = ProjectRepository::insert_project(Connection::get_connection(), $project);
 $service = New Service('', $id_project, 0, 0);
 ServiceRepository::insert_service(Connection::get_connection(), $service);
