@@ -422,8 +422,8 @@ class RepositorioRfq {
                         <th>DEDIGNATED USER</th>
                         <th>TYPE OF BID</th>
                         <th>ISSUE DATE</th>
-                        <th>END DATE</th>
-                        <th>AMOUNT</th>
+                        <th class="end_date_table">END DATE</th>
+                        <th class="cantidad">AMOUNT</th>
                         <th>COMPLETED DATE</th>
                         <th>PROPOSAL</th>
                         <th>COMMENTS</th>
@@ -531,8 +531,8 @@ class RepositorioRfq {
                       <th>DEDIGNATED USER</th>
                       <th>TYPE OF BID</th>
                       <th>ISSUE DATE</th>
-                      <th>END DATE</th>
-                      <th>AMOUNT</th>
+                      <th class="end_date_table">END DATE</th>
+                      <th class="cantidad">AMOUNT</th>
                       <th>SUBMITTED DATE</th>
                       <th>PROPOSAL</th>
                       <th>COMMENTS</th>
@@ -639,8 +639,8 @@ class RepositorioRfq {
                       <th>DEDIGNATED USER</th>
                       <th>TYPE OF BID</th>
                       <th>ISSUE DATE</th>
-                      <th>END DATE</th>
-                      <th>AMOUNT</th>
+                      <th class="end_date_table">END DATE</th>
+                      <th class="cantidad">AMOUNT</th>
                       <th>AWARD DATE</th>
                       <th>PROPOSAL</th>
                       <th>COMMENTS</th>

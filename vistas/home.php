@@ -35,6 +35,11 @@ include_once 'plantillas/validacion_login.inc.php';
         border-radius: 20px !important;
         width: 200px !important;
       }
+      @media only screen and (max-width: 1400px){
+        .login-box{
+          width: 35% !important;
+        }
+      }
     </style>
   </head>
   <body class="hold-transition login-page">
