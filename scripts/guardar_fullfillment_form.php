@@ -41,7 +41,7 @@ if(isset($_POST['guardar_fullfillment_form'])){
   Conexion::cerrar_conexion();
 
   $fullfillment_directory = $_SERVER['DOCUMENT_ROOT'] . '/fullfillment/documents/rfq_team/' . $_POST['id_rfq'];
-  $rfq_directory = $_SERVER['DOCUMENT_ROOT'] . '/rfp/documents/' . $_POST['id_rfq'];
+  $rfq_directory = $_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $_POST['id_rfq'];
   mkdir($fullfillment_directory, 0777);
   if(is_dir($rfq_directory)){
     $manager = opendir($rfq_directory);
