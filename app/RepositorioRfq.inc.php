@@ -165,7 +165,15 @@ class RepositorioRfq {
       <?php
       if($cargo < 4){
         ?>
-        <td class="text-center"><a href="<?php echo DELETE_QUOTE . '/' . $cotizacion->obtener_id(); ?>" class="delete_quote_button btn btn-sm btn-danger"><i class="fa fa-times"></i></a></td>
+        <td class="text-center">
+          <?php
+          if(!$cotizacion-> obtener_rfp()){
+            ?>
+            <a href="<?php echo DELETE_QUOTE . '/' . $cotizacion->obtener_id(); ?>" class="delete_quote_button btn btn-sm btn-danger"><i class="fa fa-times"></i></a>
+            <?php
+          }
+          ?>
+        </td>
         <?php
       }
       ?>
