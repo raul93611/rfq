@@ -39,5 +39,20 @@ if(isset($_POST['guardar_fullfillment_form'])){
   RepositorioFullFillmentComment::insertar_comment(ConnectionFullFillment::get_connection(), $comment);
   ConnectionFullFillment::close_connection();
   Conexion::cerrar_conexion();
+
+  $fullfillment_directory = $_SERVER['DOCUMENT_ROOT'] . '/fullfillment/documents/rfq_team/' . $_POST['id_rfq'];
+  $rfq_directory = $_SERVER['DOCUMENT_ROOT'] . '/rfp/documents/' . $_POST['id_rfq'];
+  mkdir($fullfillment_directory, 0777);
+  if(is_dir($rfq_directory)){
+    $manager = opendir($rfq_directory);
+    $folder = @scandir($rfq_directory);
+    while(($file = readdir($manager)) !== false){
+      if($file != '.' && $file != '..'){
+        copy($rfq_directory . '/' . $file, $fullfillment_directory . '/' . $file);
+      }
+    }
+    closedir($manager);
+  }
+  Redireccion::redirigir(EDITAR_COTIZACION . '/' . $_POST['id_rfq']);
 }
 ?>
