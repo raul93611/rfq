@@ -245,23 +245,23 @@ a.text-primary:hover, a.text-primary:focus {
 }
 
 table{
-    font-size: 0.8em;
+  font-size: 0.8em;
 }
 
 .list-group-item:hover{
-    background-color: #F0E714;
+  background-color: #F0E714;
 }
 
 #tabla_items .description{
-    width: 150px !important;
+  width: 150px !important;
 }
 
 #tabla_items .options{
-    min-width: 130px !important;
+  min-width: 130px !important;
 }
 
 #tabla_items .qty{
-    min-width: 80px !important;
+  min-width: 80px !important;
 }
 
 .estrechar{
@@ -269,7 +269,7 @@ table{
 }
 
 #tabla_items #numeracion{
-    min-width: 20px !important;
+  min-width: 20px !important;
 }
 
 #users #id{
@@ -280,11 +280,11 @@ table{
   width: 140px !important;
 }
 #tabla_items #provider{
-    min-width: 200px !important;
+  min-width: 200px !important;
 }
 
 .cuestionario{
-    width: 50px !important;
+  width: 50px !important;
 }
 
 .cantidad{

@@ -16,24 +16,24 @@ RepositorioCuestionario::delete_cuestionario_por_id_rfq(Conexion::obtener_conexi
 RepositorioRfq::delete_quote(Conexion::obtener_conexion(), $cotizacion-> obtener_id());
 Conexion::cerrar_conexion();
 switch ($cotizacion-> obtener_canal()) {
-    case 'GSA-Buy':
-        $canal = 'gsa_buy';
-        break;
-    case 'FedBid':
-        $canal = 'fedbid';
-        break;
-    case 'E-mails':
-        $canal = 'emails';
-        break;
-    case 'FindFRP':
-        $canal = 'findfrp';
-        break;
-    case 'Embassies':
-        $canal = 'embassies';
-        break;
-    case 'FBO':
-        $canal = 'fbo';
-        break;
+  case 'GSA-Buy':
+    $canal = 'gsa_buy';
+    break;
+  case 'FedBid':
+    $canal = 'fedbid';
+    break;
+  case 'E-mails':
+    $canal = 'emails';
+    break;
+  case 'FindFRP':
+    $canal = 'findfrp';
+    break;
+  case 'Embassies':
+    $canal = 'embassies';
+    break;
+  case 'FBO':
+    $canal = 'fbo';
+    break;
 }
 Redireccion::redirigir(COTIZACIONES . $canal);
 ?>

@@ -46,86 +46,86 @@ if($cotizacion_recuperada-> obtener_canal() == 'FedBid'){
   </div>
 </div>
 <div class="row">
-    <div class="col">
-      <div class="form-group">
-          <label for="comments">Comments:</label>
-          <select id="comments" class="form-control form-control-sm" name="comments">
-              <option <?php if ($cotizacion_recuperada->obtener_comments() == 'No comments') {echo 'selected';} ?>>No comments</option>
-              <?php
-              if($cargo < 4 && $cotizacion_recuperada-> obtener_award()){
-                ?>
-                <option <?php if ($cotizacion_recuperada->obtener_comments() == 'QuickBooks') { echo 'selected';} ?>>QuickBooks</option>
-                <?php
-              }
-              if($cargo < 4){
-                ?>
-                <option <?php if ($cotizacion_recuperada->obtener_comments() == 'No Bid') { echo 'selected';} ?>>No Bid</option>
-                <option <?php if ($cotizacion_recuperada->obtener_comments() == 'Manufacturer in the Bid') {echo 'selected';} ?>>Manufacturer in the Bid</option>
-                <option <?php if ($cotizacion_recuperada->obtener_comments() == 'Expired due date') { echo 'selected';} ?>>Expired due date</option>
-                <option <?php if ($cotizacion_recuperada->obtener_comments() == 'Supplier did not provide a quote') { echo 'selected';} ?>>Supplier did not provide a quote</option>
-                <option <?php if($cotizacion_recuperada->obtener_comments() == 'Others'){echo 'selected';} ?>>Others</option>
-                <?php
-              }
-              ?>
-              <option <?php if($cotizacion_recuperada-> obtener_comments() == 'Not submitted'){echo 'selected';} ?>>Not submitted</option>
-              <option <?php if ($cotizacion_recuperada->obtener_comments() == 'Working on it'){echo 'selected';} ?>>Working on it</option>
-          </select>
-      </div>
-        <div class="form-group">
-            <label for="address">Address:</label>
-            <textarea class="form-control form-control-sm" rows="5" placeholder="Enter address ..." id="address" name="address"><?php echo $cotizacion_recuperada->obtener_address(); ?></textarea>
-        </div>
+  <div class="col">
+    <div class="form-group">
+      <label for="comments">Comments:</label>
+      <select id="comments" class="form-control form-control-sm" name="comments">
+        <option <?php if ($cotizacion_recuperada->obtener_comments() == 'No comments') {echo 'selected';} ?>>No comments</option>
+        <?php
+        if($cargo < 4 && $cotizacion_recuperada-> obtener_award()){
+          ?>
+          <option <?php if ($cotizacion_recuperada->obtener_comments() == 'QuickBooks') { echo 'selected';} ?>>QuickBooks</option>
+          <?php
+        }
+        if($cargo < 4){
+          ?>
+          <option <?php if ($cotizacion_recuperada->obtener_comments() == 'No Bid') { echo 'selected';} ?>>No Bid</option>
+          <option <?php if ($cotizacion_recuperada->obtener_comments() == 'Manufacturer in the Bid') {echo 'selected';} ?>>Manufacturer in the Bid</option>
+          <option <?php if ($cotizacion_recuperada->obtener_comments() == 'Expired due date') { echo 'selected';} ?>>Expired due date</option>
+          <option <?php if ($cotizacion_recuperada->obtener_comments() == 'Supplier did not provide a quote') { echo 'selected';} ?>>Supplier did not provide a quote</option>
+          <option <?php if($cotizacion_recuperada->obtener_comments() == 'Others'){echo 'selected';} ?>>Others</option>
+          <?php
+        }
+        ?>
+        <option <?php if($cotizacion_recuperada-> obtener_comments() == 'Not submitted'){echo 'selected';} ?>>Not submitted</option>
+        <option <?php if ($cotizacion_recuperada->obtener_comments() == 'Working on it'){echo 'selected';} ?>>Working on it</option>
+      </select>
     </div>
-    <div class="col">
       <div class="form-group">
-          <label for="ship_via">Ship via:</label>
-          <select id="ship_via" class="form-control form-control-sm" name="ship_via">
-              <option <?php if ($cotizacion_recuperada->obtener_ship_via() == 'GROUND') { echo 'selected';} ?>>GROUND</option>
-              <option <?php if ($cotizacion_recuperada->obtener_ship_via() == 'BEST WAY') { echo 'selected';} ?>>BEST WAY</option>
-          </select>
+        <label for="address">Address:</label>
+        <textarea class="form-control form-control-sm" rows="5" placeholder="Enter address ..." id="address" name="address"><?php echo $cotizacion_recuperada->obtener_address(); ?></textarea>
       </div>
-        <div class="form-group">
-            <label for="ship_to">Ship to:</label>
-            <textarea class="form-control form-control-sm" rows="5" placeholder="Enter ship to ..." id="ship_to" name="ship_to"><?php echo $cotizacion_recuperada->obtener_ship_to(); ?></textarea>
-        </div>
+  </div>
+  <div class="col">
+    <div class="form-group">
+      <label for="ship_via">Ship via:</label>
+      <select id="ship_via" class="form-control form-control-sm" name="ship_via">
+        <option <?php if ($cotizacion_recuperada->obtener_ship_via() == 'GROUND') { echo 'selected';} ?>>GROUND</option>
+        <option <?php if ($cotizacion_recuperada->obtener_ship_via() == 'BEST WAY') { echo 'selected';} ?>>BEST WAY</option>
+      </select>
     </div>
+      <div class="form-group">
+        <label for="ship_to">Ship to:</label>
+        <textarea class="form-control form-control-sm" rows="5" placeholder="Enter ship to ..." id="ship_to" name="ship_to"><?php echo $cotizacion_recuperada->obtener_ship_to(); ?></textarea>
+      </div>
+  </div>
 </div>
 <?php
 if ($cotizacion_recuperada->obtener_completado() && $cotizacion_recuperada->obtener_status() && !$cotizacion_recuperada->obtener_award() && $cargo < 4) {
-    ?>
-        <div class="form-check">
-            <input type="checkbox" class="form-check-input" name="award" value="si" <?php if ($cotizacion_recuperada->obtener_award()) { echo 'checked'; } ?> id="award">
-            <label class="form-check-label" for="award">Award</label>
-        </div>
+  ?>
+    <div class="form-check">
+      <input type="checkbox" class="form-check-input" name="award" value="si" <?php if ($cotizacion_recuperada->obtener_award()) { echo 'checked'; } ?> id="award">
+      <label class="form-check-label" for="award">Award</label>
+    </div>
 
-        <?php
-    } else if ($cotizacion_recuperada->obtener_completado() && !$cotizacion_recuperada->obtener_status() && !$cotizacion_recuperada->obtener_award() && $cargo < 5) {
-        ?>
-        <div class="form-check">
-            <input type="checkbox" class="form-check-input" name="status" value="si" <?php if ($cotizacion_recuperada->obtener_status()) { echo 'checked'; } ?> id="status">
-            <label class="form-check-label" for="status">Submitted</label>
-        </div>
-        <?php
-    } else if (!$cotizacion_recuperada->obtener_completado() && !$cotizacion_recuperada->obtener_status() && !$cotizacion_recuperada->obtener_award()) {
-        ?>
-        <div class="form-check">
-            <input type="checkbox" class="form-check-input" name="completado" value="si" <?php if ($cotizacion_recuperada->obtener_completado()) { echo 'checked';} ?> id="completado">
-            <label class="form-check-label" for="completado">Completed</label>
-        </div>
     <?php
+  } else if ($cotizacion_recuperada->obtener_completado() && !$cotizacion_recuperada->obtener_status() && !$cotizacion_recuperada->obtener_award() && $cargo < 5) {
+    ?>
+    <div class="form-check">
+      <input type="checkbox" class="form-check-input" name="status" value="si" <?php if ($cotizacion_recuperada->obtener_status()) { echo 'checked'; } ?> id="status">
+      <label class="form-check-label" for="status">Submitted</label>
+    </div>
+    <?php
+  } else if (!$cotizacion_recuperada->obtener_completado() && !$cotizacion_recuperada->obtener_status() && !$cotizacion_recuperada->obtener_award()) {
+    ?>
+    <div class="form-check">
+      <input type="checkbox" class="form-check-input" name="completado" value="si" <?php if ($cotizacion_recuperada->obtener_completado()) { echo 'checked';} ?> id="completado">
+      <label class="form-check-label" for="completado">Completed</label>
+    </div>
+  <?php
 }
 ?>
 </div>
 <div class="card-footer footer_item">
   <?php
   if ($cotizacion_recuperada->obtener_award() && ($cotizacion_recuperada->obtener_comments() == 'No comments' || $cotizacion_recuperada->obtener_comments() == 'Working on it' || $cotizacion_recuperada-> obtener_comments() == 'QuickBooks')) {
-      echo '<a class="btn btn-primary" id="go_back" href="' . AWARD . $canal . '"><i class="fa fa-reply"></i></a>';
+    echo '<a class="btn btn-primary" id="go_back" href="' . AWARD . $canal . '"><i class="fa fa-reply"></i></a>';
   } else if ($cotizacion_recuperada->obtener_status() && ($cotizacion_recuperada->obtener_comments() == 'No comments' || $cotizacion_recuperada->obtener_comments() == 'Working on it' || $cotizacion_recuperada-> obtener_comments() == 'QuickBooks')) {
-      echo '<a class="btn btn-primary" id="go_back" href="' . SUBMITTED . $canal . '"><i class="fa fa-reply"></i></a>';
+    echo '<a class="btn btn-primary" id="go_back" href="' . SUBMITTED . $canal . '"><i class="fa fa-reply"></i></a>';
   } else if ($cotizacion_recuperada->obtener_completado() && ($cotizacion_recuperada->obtener_comments() == 'No comments' || $cotizacion_recuperada->obtener_comments() == 'Working on it' || $cotizacion_recuperada-> obtener_comments() == 'QuickBooks')) {
-      echo '<a class="btn btn-primary" id="go_back" href="' . COMPLETADOS . $canal . '"><i class="fa fa-reply"></i></a>';
+    echo '<a class="btn btn-primary" id="go_back" href="' . COMPLETADOS . $canal . '"><i class="fa fa-reply"></i></a>';
   } else if ($cotizacion_recuperada->obtener_comments() == 'No Bid' || $cotizacion_recuperada->obtener_comments() == 'Manufacturer in the Bid' || $cotizacion_recuperada->obtener_comments() == 'Expired due date' || $cotizacion_recuperada->obtener_comments() == 'Supplier did not provide a quote' || $cotizacion_recuperada->obtener_comments() == 'Others') {
-      echo '<a class="btn btn-primary" id="go_back" href="' . NO_BID . '"><i class="fa fa-reply"></i></a>';
+    echo '<a class="btn btn-primary" id="go_back" href="' . NO_BID . '"><i class="fa fa-reply"></i></a>';
   }else if($cotizacion_recuperada-> obtener_comments() == 'No submitted'){
     echo '<a class="btn btn-primary" id="go_back" href="' . NO_SUBMITTED . '"><i class="fa fa-reply"></i></a>';
   }else if(!empty($cotizacion_recuperada-> obtener_canal())){
@@ -144,5 +144,11 @@ if ($cotizacion_recuperada->obtener_completado() && $cotizacion_recuperada->obte
   ?>
   <a class="btn btn-info add_item_charter" href="<?php echo CUESTIONARIO . '/' . $cotizacion_recuperada->obtener_id(); ?>"><i class="fa fa-sticky-note"></i> Project charter</a>
   <a href="#" id="add_comment" class="btn btn-primary add_item_charter"><i class="fas fa-plus"></i> Add comment</a>
-  <a href="#" id="fullfillment" class="btn btn-primary"><i class="fas fa-share-square"></i> Full-fillment</a>
+  <?php
+  if(!$cotizacion_recuperada-> obtener_fullfillment() && $cotizacion_recuperada-> obtener_award()){
+    ?>
+    <a href="#" id="fullfillment" class="btn btn-primary"><i class="fas fa-share-square"></i> Full-fillment</a>
+    <?php
+  }
+  ?>
 </div>

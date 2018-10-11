@@ -1,6 +1,6 @@
 <?php
 if (ControlSesion::sesion_iniciada()) {
-    Redireccion::redirigir1(PERFIL);
+  Redireccion::redirigir1(PERFIL);
 }
 include_once 'plantillas/validacion_login.inc.php';
 ?>

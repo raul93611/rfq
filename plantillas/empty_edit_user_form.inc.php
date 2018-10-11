@@ -33,11 +33,11 @@ if($cargo != 1){
     <label for="email">Email:</label>
     <input type="email" class="form-control" id="email" name="email" placeholder="Email ..." required value="<?php echo $user-> obtener_email(); ?>">
   </div>
-    <div class="form-group">
-        <label for="password1">Password:</label>
-        <input type="password" class="form-control" id="password1" name="password1" placeholder="Password">
-    </div>
+  <div class="form-group">
+    <label for="password1">Password:</label>
+    <input type="password" class="form-control" id="password1" name="password1" placeholder="Password">
+  </div>
 </div>
 <div class="card-footer">
-    <button type="submit" class="btn btn-success" name="edit_user"><i class="fa fa-check"></i> Sign in</button>
+  <button type="submit" class="btn btn-success" name="edit_user"><i class="fa fa-check"></i> Sign in</button>
 </div>

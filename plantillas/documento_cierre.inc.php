@@ -37,7 +37,7 @@
 <footer class="main-footer">
     <strong>Copyright &copy; 2018.</strong>
     <div class="float-right d-none d-sm-inline-block">
-        <b>Version</b> 1.0
+      <b>Version</b> 1.0
     </div>
 </footer>
 </div>
@@ -49,7 +49,7 @@
 <script src="<?php echo DIST; ?>js/demo.js"></script>
 <script src="<?php echo PLUGINS; ?>jQueryUI/jquery-ui.min.js"></script>
 <script>
-    $.widget.bridge('uibutton', $.ui.button)
+  $.widget.bridge('uibutton', $.ui.button)
 </script>
 <script src="<?php echo RUTA_JS; ?>raphael-min.js"></script>
 <script src="<?php echo PLUGINS; ?>morris/morris.min.js"></script>

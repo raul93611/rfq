@@ -31,31 +31,30 @@ try{
   <head>
   <style>
   body{
-      font-family: roboto;
-
+    font-family: roboto;
   }
   th{
-      color: #004A97;
-      background-color: #DEE8F2;
+    color: #004A97;
+    background-color: #DEE8F2;
   }
   #tabla th,#tabla td {
-      border: 1px solid #DEE8F2;
+    border: 1px solid #DEE8F2;
 
-      padding-left: 10px;
-      padding-right: 10px;
-      padding-top: 5px;
-      padding-bottom: 5px;
-      font-size: 9pt;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 9pt;
   }
   table, th, td{
-      border-collapse: collapse;
+    border-collapse: collapse;
   }
   td{
-      color: #3B3B3B;
+    color: #3B3B3B;
   }
 
   .quantity{
-      width: 20px;
+    width: 20px;
   }
 
   .total_ancho{
@@ -63,11 +62,11 @@ try{
   }
 
   .letra_chiquita{
-      font-size: 8pt;
+    font-size: 8pt;
   }
 
   .color{
-      color: #004A97;
+    color: #004A97;
   }
   .letra_grande{
     font-size: 25pt;
@@ -210,7 +209,7 @@ try{
       $html .= '</table>';
   }
   if ($cotizacion->obtener_payment_terms() == 'Net 30') {
-      $html .= '<br><div class="color letra_chiquita"><b>PAYMENT TERMS</b><br><b>NET TERMS: </b>30 Days<br><b>CREDIT CARD PAYMENT: </b>Please add an additional 2.1% to process credit card payments.</div>';
+    $html .= '<br><div class="color letra_chiquita"><b>PAYMENT TERMS</b><br><b>NET TERMS: </b>30 Days<br><b>CREDIT CARD PAYMENT: </b>Please add an additional 2.1% to process credit card payments.</div>';
   }
   $html .= '</body></html>';
   $mpdf->SetHTMLFooter('
@@ -222,6 +221,6 @@ try{
   $mpdf->Output($_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $cotizacion->obtener_id() . '/' . preg_replace('/[^a-z0-9-_\-\.]/i','_', $cotizacion-> obtener_email_code()) . '(proposal)' . '.pdf', 'F');
   $mpdf->Output(preg_replace('/[^a-z0-9-_\-\.]/i','_', $cotizacion-> obtener_email_code()) . '.pdf', 'I');
 } catch (\Mpdf\MpdfException $e) {
-    echo $e->getMessage();
+  echo $e->getMessage();
 }
 ?>

@@ -8,6 +8,11 @@ define('SERVER_NAME', 'localhost');
 define('USER_NAME', 'root');
 define('BD_NAME', 'rfp');
 
+define('SERVERNAME_FULLFILLMENT', 'localhost');
+define('BD_NAME_FULLFILLMENT', 'fullfillment');
+define('USERNAME_FULLFILLMENT', 'root');
+define('PASSWORD_FULLFILLMENT', 'raul93611');
+
 define('SERVIDOR', 'http://localhost/rfq/');
 define('ERROR', SERVIDOR . 'error');
 /*****************************USER OPTIONS************************************/
@@ -119,6 +124,8 @@ define('GUARDAR_COMMENT', SERVIDOR . 'guardar_comment/');
 define('HISTORIAL_COMMENTS', PERFIL . 'historial_comments/');
 /*************************************************************************************/
 define('CREATE_PROJECT', SERVIDOR . 'create_project/');
+/***********************************************************************************/
+define('GUARDAR_FULLFILLMENT_FORM', SERVIDOR . 'guardar_fullfillment_form');
 
 
 define('DELETE_DOCUMENT', SERVIDOR . 'delete_document');

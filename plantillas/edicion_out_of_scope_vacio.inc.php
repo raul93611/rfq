@@ -10,12 +10,12 @@ if($cargo == 5 && $_SESSION['id_usuario'] != $cotizacion_recuperada-> obtener_us
 }
 ?>
 <div class="card-body">
-    <div class="form-group">
-        <label>Requirement:</label>
-        <input type="text" class="form-control form-control-sm" name="requirement" autofocus required value="<?php echo $out_of_scope-> obtener_requirement(); ?>">
-    </div>
+  <div class="form-group">
+    <label>Requirement:</label>
+    <input type="text" class="form-control form-control-sm" name="requirement" autofocus required value="<?php echo $out_of_scope-> obtener_requirement(); ?>">
+  </div>
 </div>
 <div class="card-footer">
-    <button type="submit" class="btn btn-success" name="editar_out_of_scope"><i class="fa fa-check"></i> Save</button>
-    <a href="<?php echo CUESTIONARIO . '/' . $cuestionario-> obtener_id_rfq(); ?>" class="btn btn-danger"><i class="fa fa-times"></i> Cancel</a>
+  <button type="submit" class="btn btn-success" name="editar_out_of_scope"><i class="fa fa-check"></i> Save</button>
+  <a href="<?php echo CUESTIONARIO . '/' . $cuestionario-> obtener_id_rfq(); ?>" class="btn btn-danger"><i class="fa fa-times"></i> Cancel</a>
 </div>

@@ -29,31 +29,30 @@ try{
   <head>
   <style>
   body{
-      font-family: roboto;
-
+    font-family: roboto;
   }
   th{
-      color: #004A97;
-      background-color: #DEE8F2;
+    color: #004A97;
+    background-color: #DEE8F2;
   }
   #tabla th,#tabla td {
-      border: 1px solid #DEE8F2;
+    border: 1px solid #DEE8F2;
 
-      padding-left: 10px;
-      padding-right: 10px;
-      padding-top: 5px;
-      padding-bottom: 5px;
-      font-size: 9pt;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 9pt;
   }
   table, th, td{
-      border-collapse: collapse;
+    border-collapse: collapse;
   }
   td{
-      color: #3B3B3B;
+    color: #3B3B3B;
   }
 
   .quantity{
-      width: 20px;
+    width: 20px;
   }
 
   .total_ancho{
@@ -61,11 +60,11 @@ try{
   }
 
   .letra_chiquita{
-      font-size: 8pt;
+    font-size: 8pt;
   }
 
   .color{
-      color: #004A97;
+    color: #004A97;
   }
   .letra_grande{
     font-size: 25pt;
@@ -153,6 +152,6 @@ try{
   $mpdf->WriteHTML($html);
   $mpdf->Output('report.pdf', 'I');
 } catch (\Mpdf\MpdfException $e) {
-    echo $e->getMessage();
+  echo $e->getMessage();
 }
 ?>
