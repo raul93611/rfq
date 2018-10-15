@@ -37,8 +37,29 @@ if(isset($_POST['guardar_fullfillment_form'])){
   }
   $comment = new CommentRfqFullFillment('', $_POST['id_rfq'], $_SESSION['nombre_usuario'], $_POST['fullfillment_comment'], '');
   RepositorioRfqFullFillmentComment::insertar_comment(ConnectionFullFillment::get_connection(), $comment);
+  $fullfillment_users = UserFullFillmentRepository::get_all_users_enabled(ConnectionFullFillment::get_connection());
   ConnectionFullFillment::close_connection();
   Conexion::cerrar_conexion();
+
+  foreach ($users as $user) {
+    $to = $fullfillment_users-> get_email();
+    $subject = 'New quote: proposal ' . $cotizacion-> obtener_id();
+    $headers = "MIME-Version: 1.0\r\n";
+    $headers .= "Content-type: text/html; charset=UTF-8\r\n";
+    $headers .= "From:" .  $_SESSION['nombre_usuario']  . " <elogic@e-logic.us>\r\n";
+    $message = '
+    <html>
+    <body>
+    <h3>Details:</h3>
+    <h5>Quote:</h5>
+    <p><a href="http://www.elogicportal.com/fullfillment/profile/edit_quote/' . $cotizacion-> obtener_id() . '">' . $cotizacion-> obtener_id() . '</a></p>
+    <h5>Comment:</h5>
+    <p>New quote in fullfillment.</p>
+    </body>
+    </html>
+    ';
+    mail($to, $subject, $message, $headers);
+  }
 
   $fullfillment_directory = $_SERVER['DOCUMENT_ROOT'] . '/fullfillment/documents/rfq_team/' . $_POST['id_rfq'];
   $rfq_directory = $_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $_POST['id_rfq'];
@@ -53,6 +74,7 @@ if(isset($_POST['guardar_fullfillment_form'])){
     }
     closedir($manager);
   }
+
   Redireccion::redirigir(EDITAR_COTIZACION . '/' . $_POST['id_rfq']);
 }
 ?>
