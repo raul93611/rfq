@@ -232,6 +232,10 @@ if ($partes_ruta[0] == 'rfq') {
         $id_rfq = $partes_ruta[2];
         $ruta_elegida = 'scripts/create_project.php';
         break;
+      case 'pdf_tabla_items';
+        $id_rfq = $partes_ruta[2];
+        $ruta_elegida = 'scripts/pdf_tabla_items.php';
+        break;
       default:
       break;
     }

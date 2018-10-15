@@ -126,6 +126,8 @@ define('HISTORIAL_COMMENTS', PERFIL . 'historial_comments/');
 define('CREATE_PROJECT', SERVIDOR . 'create_project/');
 /***********************************************************************************/
 define('GUARDAR_FULLFILLMENT_FORM', SERVIDOR . 'guardar_fullfillment_form');
+/**********************************************************************************/
+define('PDF_TABLA_ITEMS', SERVIDOR . 'pdf_tabla_items/');
 
 
 define('DELETE_DOCUMENT', SERVIDOR . 'delete_document');
