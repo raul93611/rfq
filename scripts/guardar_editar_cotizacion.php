@@ -118,6 +118,32 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
     }
     if ($completado) {
       RepositorioRfq::check_completed(Conexion::obtener_conexion(), $_POST['id_rfq']);
+      if($cotizacion_recuperada-> obtener_rfp()){
+        $members = [];
+        Connection::open_connection();
+        $project = ProjectRepository::get_project_by_id(Connection::get_connection(), $cotizacion_recuperada-> obtener_rfp());
+        $designated_user_rfp = UserRepository::get_user_by_id(Connection::get_connection(), $project-> get_designated_user());
+        Connection::close_connection();
+        foreach ($members as $member) {
+          $to = $designated_user_rfp-> get_email();
+          $subject = $project-> get_project_name();
+          $headers = "MIME-Version: 1.0\r\n";
+          $headers .= "Content-type: text/html; charset=UTF-8\r\n";
+          $headers .= "From:" .  $_SESSION['nombre_usuario']  . " <elogic@e-logic.us>\r\n";
+          $message = '
+          <html>
+          <body>
+          <h3>Project details:</h3>
+          <h5>Project:</h5>
+          <p><a href="http://www.elogicportal.com/rfp/profile/info_project_and_services/' . $project-> get_id() . '">' . $project-> get_project_name() . '</a></p>
+          <h5>Comment:</h5>
+          <p>The quote is completed.</p>
+          </body>
+          </html>
+          ';
+          mail($to, $subject, $message, $headers);
+        }
+      }
       if ($cargo < 5) {
         Redireccion::redirigir(COMPLETADOS . $canal);
       } else {
