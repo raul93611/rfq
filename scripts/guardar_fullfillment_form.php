@@ -35,8 +35,8 @@ if(isset($_POST['guardar_fullfillment_form'])){
       }
     }
   }
-  $comment = new Comment('', $_POST['id_rfq'], $_SESSION['id_usuario'], $_POST['fullfillment_comment'], '');
-  RepositorioFullFillmentComment::insertar_comment(ConnectionFullFillment::get_connection(), $comment);
+  $comment = new CommentRfqFullFillment('', $_POST['id_rfq'], $_SESSION['nombre_usuario'], $_POST['fullfillment_comment'], '');
+  RepositorioRfqFullFillmentComment::insertar_comment(ConnectionFullFillment::get_connection(), $comment);
   ConnectionFullFillment::close_connection();
   Conexion::cerrar_conexion();
 
