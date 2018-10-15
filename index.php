@@ -23,6 +23,8 @@ include_once '../fullfillment/app/RepositorioSubitemFullFillment.inc.php';
 include_once '../fullfillment/app/RepositorioProviderSubitemFullFillment.inc.php';
 include_once '../fullfillment/app/CommentRfqFullFillment.inc.php';
 include_once '../fullfillment/app/RepositorioRfqFullFillmentComment.inc.php';
+include_once '../fullfillment/app/RfqFullFillmentPart.inc.php';
+include_once '../fullfillment/app/RfqFullFillmentPartRepository.inc.php';
 include_once '../fullfillment/app/UserFullFillmentRepository.inc.php';
 
 include_once 'app/RepositorioUsuario.inc.php';
