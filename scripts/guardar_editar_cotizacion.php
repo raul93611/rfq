@@ -189,7 +189,7 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
         </tr>
         <tr>
           <td align="center" style="padding: 10px;">
-            <img src="http://www.elogicportal.com/rfp/img/e_logo_home.png" alt="Logo" style="width:50px;border:0;"/>
+            <img src="http://www.elogicportal.com/rfp/img/eP_logo_home.png" alt="Logo" style="width:50px;border:0;"/>
           </td>
         </tr>
       </table>
