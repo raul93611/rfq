@@ -9,6 +9,7 @@ $out_of_scopes = RepositorioOutOfScope::obtener_out_of_scopes_de_un_cuestionario
 $project_risks = RepositorioProjectRisk::obtener_project_risks_de_un_cuestionario(Conexion::obtener_conexion(), $id_cuestionario);
 $project_milestones = RepositorioProjectMilestone::obtener_project_milestones_de_un_cuestionario(Conexion::obtener_conexion(), $id_cuestionario);
 Conexion::cerrar_conexion();
+$hoy = getdate();
 try{
   $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
   $fontDirs = $defaultConfig['fontDir'];
@@ -86,10 +87,12 @@ try{
           <tr>
             <th>PROPOSAL #</th>
             <th>SALES REP</th>
+            <th>DATE</th>
           </tr>
           <tr>
             <td style="text-align:center;">' . $cotizacion-> obtener_id() . '</td>
             <td style="text-align:center;">' . $usuario-> obtener_nombres() . ' ' . $usuario-> obtener_apellidos() . '</td>
+            <td style="text-align:center;">' . $hoy['mon'] . '/' . $hoy['mday'] . '/' . $hoy['year'] . '</td>
           </tr>
         </table>
       </td>
@@ -139,7 +142,7 @@ try{
   $html .= '
     <h3 class="color">Location: <small>' . $locations . '</small></h3>
   ';
-
+if(count($high_level_requirements)){
   $html .= '
   <h2 class="color">High level requirements</h2>
   <table id="tabla" width="100%">
@@ -160,7 +163,9 @@ try{
     $a++;
   }
   $html .= '</table>';
+}
 
+if(count($out_of_scopes)){
   $html .= '
   <h2 class="color">Out of scope</h2>
   <table id="tabla" width="100%">
@@ -181,7 +186,9 @@ try{
     $a++;
   }
   $html .= '</table>';
+}
 
+if(count($project_risks)){
   $html .= '
   <h2 class="color">Project risks</h2>
   <table id="tabla" width="100%">
@@ -202,7 +209,9 @@ try{
     $a++;
   }
   $html .= '</table>';
+}
 
+if(count($project_milestones)){
   $html .= '
   <h2 class="color">Project milestones</h2>
   <table id="tabla" width="100%">
@@ -225,6 +234,8 @@ try{
     $a++;
   }
   $html .= '</table>';
+}
+
   $html .= '</body></html>';
   $mpdf->WriteHTML($html);
   $mpdf->Output($_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $cotizacion->obtener_id() . '/' . 'project_charter.pdf', 'F');
