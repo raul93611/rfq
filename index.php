@@ -100,6 +100,9 @@ if ($partes_ruta[0] == 'rfq') {
       case 'guardar_fullfillment_form':
         $ruta_elegida = 'scripts/guardar_fullfillment_form.php';
         break;
+      case 'excel_report':
+        $ruta_elegida = 'scripts/excel_report.php';
+        break;
     }
   } else if (count($partes_ruta) == 3) {
     switch ($partes_ruta[1]) {

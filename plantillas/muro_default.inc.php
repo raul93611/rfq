@@ -24,6 +24,7 @@ Conexion::cerrar_conexion();
             <?php
           }
           ?>
+          <a href="<?php echo EXCEL_REPORT; ?>" class="btn btn-primary float-right"><i class="fas fa-chart-line"></i> Report</a>
         </div>
       </div>
     </div>

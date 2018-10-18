@@ -128,7 +128,8 @@ define('CREATE_PROJECT', SERVIDOR . 'create_project/');
 define('GUARDAR_FULLFILLMENT_FORM', SERVIDOR . 'guardar_fullfillment_form');
 /**********************************************************************************/
 define('PDF_TABLA_ITEMS', SERVIDOR . 'pdf_tabla_items/');
-
+/**********************************************************************************/
+define('EXCEL_REPORT', SERVIDOR . 'excel_report');
 
 define('DELETE_DOCUMENT', SERVIDOR . 'delete_document');
 

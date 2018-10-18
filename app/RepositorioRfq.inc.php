@@ -108,6 +108,25 @@ class RepositorioRfq {
     }
     return $email_code_existe;
   }
+  public static function obtener_todos_quotes_sometidos($conexion){
+    $todos_sometidos = [];
+    if(isset($conexion)){
+      try{
+        $sql = 'SELECT * FROM rfq WHERE status = 1 AND completado = 1';
+        $sentencia = $conexion-> prepare($sql);
+        $sentencia-> execute();
+        $resultado = $sentencia-> fetchAll(PDO::FETCH_ASSOC);
+        if (count($resultado)) {
+          foreach ($resultado as $fila) {
+            $todos_sometidos [] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['total_cost'], $fila['total_price'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['fecha_submitted'], $fila['fecha_award'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via'], $fila['taxes'], $fila['profit'], $fila['additional'], $fila['shipping'], $fila['shipping_cost'], $fila['rfp'], $fila['fullfillment']);
+          }
+        }
+      }catch(PDOException $ex){
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $todos_sometidos;
+  }
 /*****************************************************************************************************************************/
 /*****************************************************QUOTES*******************************************************************/
 /*****************************************************************************************************************************/
