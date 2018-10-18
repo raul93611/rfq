@@ -43,8 +43,8 @@ if(isset($_POST['guardar_fullfillment_form'])){
   ConnectionFullFillment::close_connection();
   Conexion::cerrar_conexion();
 
-  foreach ($users as $user) {
-    $to = $fullfillment_users-> get_email();
+  foreach ($fullfillment_users as $fullfillment_user) {
+    $to = $fullfillment_user-> get_email();
     $subject = 'New quote: proposal ' . $cotizacion-> obtener_id();
     $headers = "MIME-Version: 1.0\r\n";
     $headers .= "Content-type: text/html; charset=UTF-8\r\n";
