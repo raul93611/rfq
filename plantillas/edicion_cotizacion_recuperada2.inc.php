@@ -150,10 +150,6 @@ if ($cotizacion_recuperada->obtener_completado() && $cotizacion_recuperada->obte
     <a href="#" id="fullfillment" class="btn btn-primary"><i class="fas fa-share-square"></i> Full-fillment</a>
     <?php
   }
-  if($cotizacion_recuperada-> obtener_award()){
-    ?>
-    <a href="<?php echo PDF_TABLA_ITEMS . $cotizacion_recuperada-> obtener_id(); ?>" target="_blank" class="btn btn-primary"><i class="fas fa-file"></i> PDF</a>
-    <?php
-  }
   ?>
+  <a href="<?php echo PDF_TABLA_ITEMS . $cotizacion_recuperada-> obtener_id(); ?>" target="_blank" class="btn btn-primary"><i class="fas fa-file"></i> PDF</a>
 </div>
