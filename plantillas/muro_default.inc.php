@@ -4,6 +4,9 @@ Conexion::abrir_conexion();
 $cotizaciones_mes = RepositorioRfq::obtener_cotizaciones_ganadas_por_mes(Conexion::obtener_conexion());
 $monto_cotizaciones_mes = RepositorioRfq::obtener_monto_cotizaciones_ganadas_por_mes(Conexion::obtener_conexion());
 list($no_bid, $manufacturer_in_the_bid, $expired_due_date, $supplier_did_not_provide_a_quote, $others) = RepositorioRfq::obtener_comments(Conexion::obtener_conexion());
+$cotizaciones_completadas_anual_usuarios = RepositorioUsuario::obtener_cotizaciones_completadas_por_usuario_y_mes(Conexion::obtener_conexion());
+$cotizaciones_ganadas_anual_usuarios = RepositorioUsuario::obtener_cotizaciones_ganadas_por_usuario_y_mes(Conexion::obtener_conexion());
+$cotizaciones_not_submitted_anual_usuarios = RepositorioUsuario::obtener_cotizaciones_not_submitted_por_usuario_y_mes(Conexion::obtener_conexion());
 Conexion::cerrar_conexion();
 ?>
 <div class="content-wrapper">
@@ -45,6 +48,9 @@ Conexion::cerrar_conexion();
           <input type="hidden" id="expired_due_date" <?php echo "value='" . json_encode($expired_due_date) . "'"; ?>>
           <input type="hidden" id="supplier_did_not_provide_a_quote" <?php echo "value='" . json_encode($supplier_did_not_provide_a_quote) . "'"; ?>>
           <input type="hidden" id="others" <?php echo "value='" . json_encode($others) . "'"; ?>>
+          <input type="hidden" id="cotizaciones_completadas_anual_usuarios" <?php echo "value='" . json_encode($cotizaciones_completadas_anual_usuarios) . "'"; ?>>
+          <input type="hidden" id="cotizaciones_ganadas_anual_usuarios" <?php echo "value='" . json_encode($cotizaciones_ganadas_anual_usuarios) . "'"; ?>>
+          <input type="hidden" id="cotizaciones_not_submitted_anual_usuarios" <?php echo "value='" . json_encode($cotizaciones_not_submitted_anual_usuarios) . "'"; ?>>
         </div>
       </div>
       <div id="graficas" class="row">
@@ -177,6 +183,59 @@ Conexion::cerrar_conexion();
             </div>
           </div>
         </section>
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header no-border">
+              <div class="d-flex justify-content-between">
+                <h3 class="card-title">Completed</h3>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="position-relative mb-4">
+                <canvas id="user_by_month_completed" style="height:400px;"></canvas>
+              </div>
+              <div class="d-flex flex-row justify-content-end">
+                <span class="mr-2">
+                  Current year
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header no-border">
+              <div class="d-flex justify-content-between">
+                <h3 class="card-title">Award</h3>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="position-relative mb-4">
+                <canvas id="user_by_month_award" style="height:400px;"></canvas>
+              </div>
+              <div class="d-flex flex-row justify-content-end">
+                <span class="mr-2">
+                  Current year
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header no-border">
+              <div class="d-flex justify-content-between">
+                <h3 class="card-title">Not submitted</h3>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="position-relative mb-4">
+                <canvas id="user_by_month_not_submitted" style="height:400px;"></canvas>
+              </div>
+              <div class="d-flex flex-row justify-content-end">
+                <span class="mr-2">
+                  Current year
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>

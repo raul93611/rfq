@@ -438,5 +438,91 @@ class RepositorioUsuario {
     return $edited_user;
   }
 
+  public static function obtener_cotizaciones_completadas_por_usuario_y_mes($conexion){
+    $usuarios = self::obtener_usuarios_rfq($conexion);
+    $cotizaciones_completadas_anual_usuarios = [];
+    if(isset($conexion)){
+      try{
+        foreach ($usuarios as $usuario) {
+          $cotizaciones_completadas_anual_por_usuario = [];
+          $id_usuario = $usuario-> obtener_id();
+          for($i = 1; $i <= 12; $i++){
+            $sql = 'SELECT COUNT(*) as cotizaciones_completadas_usuario_mes FROM rfq WHERE usuario_designado = :id_usuario  AND completado = 1 AND MONTH(fecha_completado) = ' . $i . ' AND YEAR(fecha_completado) = YEAR(NOW())';
+            $sentencia = $conexion-> prepare($sql);
+            $sentencia-> bindParam(':id_usuario', $id_usuario, PDO::PARAM_STR);
+            $sentencia-> execute();
+            $resultado = $sentencia-> fetch(PDO::FETCH_ASSOC);
+            if (!empty($resultado)) {
+              $cotizaciones_completadas_anual_por_usuario[$i - 1] = $resultado['cotizaciones_completadas_usuario_mes'];
+            } else {
+              $cotizaciones_completadas_anual_por_usuario[$i - 1] = 0;
+            }
+          }
+          $cotizaciones_completadas_anual_usuarios[] = $cotizaciones_completadas_anual_por_usuario;
+        }
+      }catch(PDOException $ex){
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $cotizaciones_completadas_anual_usuarios;
+  }
+
+  public static function obtener_cotizaciones_ganadas_por_usuario_y_mes($conexion){
+    $usuarios = self::obtener_usuarios_rfq($conexion);
+    $cotizaciones_ganadas_anual_usuarios = [];
+    if(isset($conexion)){
+      try{
+        foreach ($usuarios as $usuario) {
+          $cotizaciones_ganadas_anual_por_usuario = [];
+          $id_usuario = $usuario-> obtener_id();
+          for($i = 1; $i <= 12; $i++){
+            $sql = 'SELECT COUNT(*) as cotizaciones_ganadas_usuario_mes FROM rfq WHERE usuario_designado = :id_usuario  AND award = 1 AND MONTH(fecha_award) = ' . $i . ' AND YEAR(fecha_award) = YEAR(NOW())';
+            $sentencia = $conexion-> prepare($sql);
+            $sentencia-> bindParam(':id_usuario', $id_usuario, PDO::PARAM_STR);
+            $sentencia-> execute();
+            $resultado = $sentencia-> fetch(PDO::FETCH_ASSOC);
+            if (!empty($resultado)) {
+              $cotizaciones_ganadas_anual_por_usuario[$i - 1] = $resultado['cotizaciones_ganadas_usuario_mes'];
+            } else {
+              $cotizaciones_ganadas_anual_por_usuario[$i - 1] = 0;
+            }
+          }
+          $cotizaciones_ganadas_anual_usuarios[] = $cotizaciones_ganadas_anual_por_usuario;
+        }
+      }catch(PDOException $ex){
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $cotizaciones_ganadas_anual_usuarios;
+  }
+
+  public static function obtener_cotizaciones_not_submitted_por_usuario_y_mes($conexion){
+    $usuarios = self::obtener_usuarios_rfq($conexion);
+    $cotizaciones_not_submitted_anual_usuarios = [];
+    if(isset($conexion)){
+      try{
+        foreach ($usuarios as $usuario) {
+          $cotizaciones_not_submitted_anual_por_usuario = [];
+          $id_usuario = $usuario-> obtener_id();
+          for($i = 1; $i <= 12; $i++){
+            $sql = 'SELECT COUNT(*) as cotizaciones_not_submitted_usuario_mes FROM rfq WHERE usuario_designado = :id_usuario  AND comments = "Not submitted" AND MONTH(fecha_completado) = ' . $i . ' AND YEAR(fecha_completado) = YEAR(NOW())';
+            $sentencia = $conexion-> prepare($sql);
+            $sentencia-> bindParam(':id_usuario', $id_usuario, PDO::PARAM_STR);
+            $sentencia-> execute();
+            $resultado = $sentencia-> fetch(PDO::FETCH_ASSOC);
+            if (!empty($resultado)) {
+              $cotizaciones_not_submitted_anual_por_usuario[$i - 1] = $resultado['cotizaciones_not_submitted_usuario_mes'];
+            } else {
+              $cotizaciones_not_submitted_anual_por_usuario[$i - 1] = 0;
+            }
+          }
+          $cotizaciones_not_submitted_anual_usuarios[] = $cotizaciones_not_submitted_anual_por_usuario;
+        }
+      }catch(PDOException $ex){
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $cotizaciones_not_submitted_anual_usuarios;
+  }
 }
 ?>

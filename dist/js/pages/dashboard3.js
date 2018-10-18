@@ -16,6 +16,10 @@ $(function () {
       var supplier_did_not_provide_a_quote = document.getElementById('supplier_did_not_provide_a_quote').value;
       var others = document.getElementById('others').value;
 
+      var cotizaciones_completadas_anual_usuarios = $('#cotizaciones_completadas_anual_usuarios').val();
+      var cotizaciones_ganadas_anual_usuarios = $('#cotizaciones_ganadas_anual_usuarios').val();
+      var cotizaciones_not_submitted_anual_usuarios = $('#cotizaciones_not_submitted_anual_usuarios').val();
+
       nombres_usuario = jQuery.parseJSON(nombres_usuario);
       cotizaciones_completadas = jQuery.parseJSON(cotizaciones_completadas);
       cotizaciones_completadas_pasadas = jQuery.parseJSON(cotizaciones_completadas_pasadas);
@@ -30,6 +34,10 @@ $(function () {
       expired_due_date = jQuery.parseJSON(expired_due_date);
       supplier_did_not_provide_a_quote = jQuery.parseJSON(supplier_did_not_provide_a_quote);
       others = jQuery.parseJSON(others);
+
+      cotizaciones_completadas_anual_usuarios = jQuery.parseJSON(cotizaciones_completadas_anual_usuarios);
+      cotizaciones_ganadas_anual_usuarios = jQuery.parseJSON(cotizaciones_ganadas_anual_usuarios);
+      cotizaciones_not_submitted_anual_usuarios = jQuery.parseJSON(cotizaciones_not_submitted_anual_usuarios);
 
       var ticksStyle = {
           fontColor: '#39485A',
@@ -386,6 +394,138 @@ $(function () {
                   }]
           },
           options: {
+              maintainAspectRatio: false,
+              title: {
+                  display: false,
+                  text: 'Predicted world population (millions) in 2050'
+              },
+              cutoutPercentage: 3,
+              animation:{
+                  easing: 'easeInOutCubic',
+                  duration: 1500
+              }
+
+          }
+      });
+
+      var user_by_month_completed_data = [];
+      for(var i = 0; i < nombres_usuario.length; i++){
+        var color = Math.floor(Math.random()*16777215).toString(16);
+        user_by_month_completed_data.push('{'+
+          '"label":"' + nombres_usuario[i] + '" ,' +
+          '"backgroundColor": "#' + color + '",' +
+          '"borderColor": "#' + color + '",' +
+          '"fill": "false",' +
+          '"data": [' + cotizaciones_completadas_anual_usuarios[i] + ']' +
+        '}');
+      }
+      user_by_month_completed_data = user_by_month_completed_data.join(',');
+      user_by_month_completed_data = '['+user_by_month_completed_data+']';
+      user_by_month_completed_data = jQuery.parseJSON(user_by_month_completed_data);
+      new Chart(document.getElementById("user_by_month_completed"), {
+          type: 'line',
+          data: {
+              labels: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
+              datasets: user_by_month_completed_data
+          },
+          options: {
+              elements:{
+                line: {
+                  tension: 0.2,
+                }
+              },
+              tooltips:{
+        				mode: 'index',
+        				intersect: false,
+        			},
+              maintainAspectRatio: false,
+              title: {
+                  display: false,
+                  text: 'Predicted world population (millions) in 2050'
+              },
+              cutoutPercentage: 3,
+              animation:{
+                  easing: 'easeInOutCubic',
+                  duration: 1500
+              }
+
+          }
+      });
+
+      var user_by_month_award_data = [];
+      for(var i = 0; i < nombres_usuario.length; i++){
+        var color = Math.floor(Math.random()*16777215).toString(16);
+        user_by_month_award_data.push('{'+
+          '"label":"' + nombres_usuario[i] + '" ,' +
+          '"backgroundColor": "#' + color + '",' +
+          '"borderColor": "#' + color + '",' +
+          '"fill": "false",' +
+          '"data": [' + cotizaciones_ganadas_anual_usuarios[i] + ']' +
+        '}');
+      }
+      user_by_month_award_data = user_by_month_award_data.join(',');
+      user_by_month_award_data = '['+user_by_month_award_data+']';
+      user_by_month_award_data = jQuery.parseJSON(user_by_month_award_data);
+      new Chart(document.getElementById("user_by_month_award"), {
+          type: 'line',
+          data: {
+              labels: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
+              datasets: user_by_month_award_data
+          },
+          options: {
+              elements:{
+                line: {
+                  tension: 0.2,
+                }
+              },
+              tooltips:{
+        				mode: 'index',
+        				intersect: false,
+        			},
+              maintainAspectRatio: false,
+              title: {
+                  display: false,
+                  text: 'Predicted world population (millions) in 2050'
+              },
+              cutoutPercentage: 3,
+              animation:{
+                  easing: 'easeInOutCubic',
+                  duration: 1500
+              }
+
+          }
+      });
+
+      var user_by_month_not_submitted_data = [];
+      for(var i = 0; i < nombres_usuario.length; i++){
+        var color = Math.floor(Math.random()*16777215).toString(16);
+        user_by_month_not_submitted_data.push('{'+
+          '"label":"' + nombres_usuario[i] + '" ,' +
+          '"backgroundColor": "#' + color + '",' +
+          '"borderColor": "#' + color + '",' +
+          '"fill": "false",' +
+          '"data": [' + cotizaciones_not_submitted_anual_usuarios[i] + ']' +
+        '}');
+      }
+      user_by_month_not_submitted_data = user_by_month_not_submitted_data.join(',');
+      user_by_month_not_submitted_data = '['+user_by_month_not_submitted_data+']';
+      user_by_month_not_submitted_data = jQuery.parseJSON(user_by_month_not_submitted_data);
+      new Chart(document.getElementById("user_by_month_not_submitted"), {
+          type: 'line',
+          data: {
+              labels: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
+              datasets: user_by_month_not_submitted_data
+          },
+          options: {
+              elements:{
+                line: {
+                  tension: 0.2,
+                }
+              },
+              tooltips:{
+        				mode: 'index',
+        				intersect: false,
+        			},
               maintainAspectRatio: false,
               title: {
                   display: false,
