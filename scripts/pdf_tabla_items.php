@@ -147,14 +147,19 @@ try{
                 <td style="text-align:right;">' . $item->obtener_quantity() . '</td>
                 <td>';
             Conexion::abrir_conexion();
-            $provider = RepositorioProvider::obtener_provider_por_id(Conexion::obtener_conexion(), $item-> obtener_provider_menor());
+            $providers = RepositorioProvider::obtener_providers_por_id_item(Conexion::obtener_conexion(), $item-> obtener_id());
+            $provider_menor = RepositorioProvider::obtener_provider_por_id(Conexion::obtener_conexion(), $item-> obtener_provider_menor());
             Conexion::cerrar_conexion();
-            $html .= '<b>' . $provider-> obtener_provider() . ':</b><br>$ ' . $provider-> obtener_price();
+            if(count($providers)){
+              foreach ($providers as $provider) {
+                $html .= '<b>' . $provider-> obtener_provider() . ':</b><br>$ ' . number_format($provider-> obtener_price(), 2) . '<br>';
+              }
+            }
             $html .= '
                 </td>
                 <td>$ ' . number_format($item-> obtener_additional(), 2) . '</td>
                 <td>$ ';
-            $best_unit_price = $provider-> obtener_price()*$payment_terms*(1+($cotizacion-> obtener_taxes()/100)) + $item-> obtener_additional() + $cotizacion-> obtener_additional();
+            $best_unit_price = $provider_menor-> obtener_price()*$payment_terms*(1+($cotizacion-> obtener_taxes()/100)) + $item-> obtener_additional() + $cotizacion-> obtener_additional();
                 $html .= number_format($best_unit_price, 2);
                 $html .= '</td>
                 <td>$ ' . number_format(round($best_unit_price, 2) * $item-> obtener_quantity(), 2) . '</td>
@@ -174,14 +179,19 @@ try{
                   <td style="text-align:right;">' . $subitem-> obtener_quantity() . '</td>
                   <td>';
                   Conexion::abrir_conexion();
-                  $provider_subitem = RepositorioProviderSubitem::obtener_provider_subitem_por_id(Conexion::obtener_conexion(), $subitem-> obtener_provider_menor());
+                  $providers_subitem = RepositorioProviderSubitem::obtener_providers_subitem_por_id_subitem(Conexion::obtener_conexion(), $subitem-> obtener_id());
+                  $provider_subitem_menor = RepositorioProviderSubitem::obtener_provider_subitem_por_id(Conexion::obtener_conexion(), $subitem-> obtener_provider_menor());
                   Conexion::cerrar_conexion();
-                  $html .= '<b>' . $provider_subitem-> obtener_provider()  . ':</b><br>$ ' . $provider_subitem-> obtener_price();
+                  if(count($providers_subitem)){
+                    foreach ($providers_subitem as $provider_subitem) {
+                      $html .= '<b>' . $provider_subitem-> obtener_provider()  . ':</b><br>$ ' . number_format($provider_subitem-> obtener_price(), 2) . '<br>';
+                    }
+                  }
               $html .= '
                   </td>
                   <td>$ ' . number_format($subitem-> obtener_additional(), 2) . '</td>
                   <td>$ ';
-              $best_unit_price = $provider_subitem-> obtener_price()*$payment_terms*(1+($cotizacion-> obtener_taxes()/100)) + $subitem-> obtener_additional() + $cotizacion-> obtener_additional();
+              $best_unit_price = $provider_subitem_menor-> obtener_price()*$payment_terms*(1+($cotizacion-> obtener_taxes()/100)) + $subitem-> obtener_additional() + $cotizacion-> obtener_additional();
                   $html .= number_format($best_unit_price, 2);
                   $html .= '</td>
                   <td>$ ' . number_format(round($best_unit_price, 2) * $subitem-> obtener_quantity(), 2) . '</td>

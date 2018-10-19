@@ -13,10 +13,10 @@ Conexion::cerrar_conexion();
   <div class="content-header">
     <div class="container-fluid">
       <div class="row mb-2">
-        <div class="col-sm-6">
+        <div class="col-sm-8">
           <h1 class="m-0 text-dark">Home</h1>
         </div>
-        <div class="col-sm-6">
+        <div class="col-sm-2">
           <?php
           if($cargo < 3){
             ?>
@@ -24,7 +24,9 @@ Conexion::cerrar_conexion();
             <?php
           }
           ?>
-          <a href="<?php echo EXCEL_REPORT; ?>" class="btn btn-primary float-right"><i class="fas fa-chart-line"></i> Report</a>
+        </div>
+        <div class="col-sm-2">
+          <a href="<?php echo EXCEL_REPORT; ?>" class="btn btn-primary float-right"><i class="fas fa-chart-line"></i> Excel report</a>
         </div>
       </div>
     </div>
