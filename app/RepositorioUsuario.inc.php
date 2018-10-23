@@ -470,30 +470,43 @@ class RepositorioUsuario {
   public static function obtener_cotizaciones_ganadas_por_usuario_y_mes($conexion){
     $usuarios = self::obtener_usuarios_rfq($conexion);
     $cotizaciones_ganadas_anual_usuarios = [];
+    $cotizaciones_ganadas_anual_usuarios_monto = [];
     if(isset($conexion)){
       try{
         foreach ($usuarios as $usuario) {
           $cotizaciones_ganadas_anual_por_usuario = [];
+          $cotizaciones_ganadas_anual_por_usuario_monto = [];
           $id_usuario = $usuario-> obtener_id();
           for($i = 1; $i <= 12; $i++){
             $sql = 'SELECT COUNT(*) as cotizaciones_ganadas_usuario_mes FROM rfq WHERE usuario_designado = :id_usuario  AND award = 1 AND MONTH(fecha_award) = ' . $i . ' AND YEAR(fecha_award) = YEAR(NOW())';
+            $sql1 = 'SELECT SUM(total_price) as monto FROM rfq WHERE usuario_designado = :id_usuario AND award = 1 AND MONTH(fecha_award) = ' . $i . ' AND YEAR(fecha_award) = YEAR(NOW())';
             $sentencia = $conexion-> prepare($sql);
+            $sentencia1 = $conexion-> prepare($sql1);
             $sentencia-> bindParam(':id_usuario', $id_usuario, PDO::PARAM_STR);
+            $sentencia1-> bindParam(':id_usuario', $id_usuario, PDO::PARAM_STR);
             $sentencia-> execute();
+            $sentencia1-> execute();
             $resultado = $sentencia-> fetch(PDO::FETCH_ASSOC);
+            $resultado1 = $sentencia1-> fetch(PDO::FETCH_ASSOC);
             if (!empty($resultado)) {
               $cotizaciones_ganadas_anual_por_usuario[$i - 1] = $resultado['cotizaciones_ganadas_usuario_mes'];
             } else {
               $cotizaciones_ganadas_anual_por_usuario[$i - 1] = 0;
             }
+            if(is_null($resultado1['monto'])){
+              $cotizaciones_ganadas_anual_por_usuario_monto[$i - 1] = 0;
+            }else{
+              $cotizaciones_ganadas_anual_por_usuario_monto[$i - 1] = $resultado1['monto'];
+            }
           }
           $cotizaciones_ganadas_anual_usuarios[] = $cotizaciones_ganadas_anual_por_usuario;
+          $cotizaciones_ganadas_anual_usuarios_monto[] = $cotizaciones_ganadas_anual_por_usuario_monto;
         }
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
-    return $cotizaciones_ganadas_anual_usuarios;
+    return array($cotizaciones_ganadas_anual_usuarios, $cotizaciones_ganadas_anual_usuarios_monto);
   }
 
   public static function obtener_cotizaciones_not_submitted_por_usuario_y_mes($conexion){

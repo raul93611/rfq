@@ -18,6 +18,7 @@ $(function () {
 
       var cotizaciones_completadas_anual_usuarios = $('#cotizaciones_completadas_anual_usuarios').val();
       var cotizaciones_ganadas_anual_usuarios = $('#cotizaciones_ganadas_anual_usuarios').val();
+      var cotizaciones_ganadas_anual_usuarios_monto = $('#cotizaciones_ganadas_anual_usuarios_monto').val();
       var cotizaciones_not_submitted_anual_usuarios = $('#cotizaciones_not_submitted_anual_usuarios').val();
 
       nombres_usuario = jQuery.parseJSON(nombres_usuario);
@@ -37,11 +38,11 @@ $(function () {
 
       cotizaciones_completadas_anual_usuarios = jQuery.parseJSON(cotizaciones_completadas_anual_usuarios);
       cotizaciones_ganadas_anual_usuarios = jQuery.parseJSON(cotizaciones_ganadas_anual_usuarios);
+      cotizaciones_ganadas_anual_usuarios_monto = jQuery.parseJSON(cotizaciones_ganadas_anual_usuarios_monto);
       cotizaciones_not_submitted_anual_usuarios = jQuery.parseJSON(cotizaciones_not_submitted_anual_usuarios);
 
       var ticksStyle = {
-          fontColor: '#39485A',
-          fontStyle: 'bold'
+          fontColor: '#39485A'
       };
 
       var mode = 'index';
@@ -481,6 +482,69 @@ $(function () {
               tooltips:{
         				mode: 'index',
         				intersect: false,
+        			},
+              maintainAspectRatio: false,
+              title: {
+                  display: false,
+                  text: 'Predicted world population (millions) in 2050'
+              },
+              cutoutPercentage: 3,
+              animation:{
+                  easing: 'easeInOutCubic',
+                  duration: 1500
+              }
+
+          }
+      });
+
+      var user_by_month_award_amount_data = [];
+      for(var i = 0; i < nombres_usuario.length; i++){
+        var color = Math.floor(Math.random()*16777215).toString(16);
+        user_by_month_award_amount_data.push('{'+
+          '"label":"' + nombres_usuario[i] + '" ,' +
+          '"backgroundColor": "#' + color + '",' +
+          '"borderColor": "#' + color + '",' +
+          '"fill": "false",' +
+          '"data": [' + cotizaciones_ganadas_anual_usuarios_monto[i] + ']' +
+        '}');
+      }
+      user_by_month_award_amount_data = user_by_month_award_amount_data.join(',');
+      user_by_month_award_amount_data = '['+user_by_month_award_amount_data+']';
+      user_by_month_award_amount_data = jQuery.parseJSON(user_by_month_award_amount_data);
+      new Chart(document.getElementById("user_by_month_award_amount"), {
+          type: 'line',
+          data: {
+              labels: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
+              datasets: user_by_month_award_amount_data
+          },
+          options: {
+              scales: {
+                yAxes: [{
+                  ticks: $.extend({
+                    beginAtZero:true,
+                    callback: function (value, index, values) {
+                        if (value >= 1000) {
+                            value /= 1000;
+                            value += 'k';
+                        }
+                        return '$'+value;
+                    }
+                  },ticksStyle)
+                }]
+              },
+              elements:{
+                line: {
+                  tension: 0.2,
+                }
+              },
+              tooltips:{
+        				mode: 'index',
+        				intersect: false,
+                callbacks: {
+                  label: function(tooltipItem, data) {
+                      return data.datasets[tooltipItem.datasetIndex].label + ': ' + tooltipItem.yLabel.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                  },
+                }
         			},
               maintainAspectRatio: false,
               title: {
