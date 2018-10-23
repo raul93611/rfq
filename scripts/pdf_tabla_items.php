@@ -233,7 +233,7 @@ try{
   </div>
   ');
   $mpdf->WriteHTML($html);
-  $mpdf->Output(preg_replace('/[^a-z0-9-_\-\.]/i','_', $cotizacion-> obtener_email_code()) . '.pdf', 'I');
+  $mpdf->Output(preg_replace('/[^a-z0-9-_\-\.]/i','_', $cotizacion-> obtener_email_code()) . '(items_table).pdf', 'I');
 } catch (\Mpdf\MpdfException $e) {
   echo $e->getMessage();
 }
