@@ -323,12 +323,14 @@ class RepositorioRfq {
     }
   }
 
-  public static function actualizar_end_date($conexion, $end_date, $id_rfq){
+  public static function actualizar_end_date_address_ship_to($conexion, $end_date, $address, $ship_to, $id_rfq){
     if(isset($conexion)){
       try{
-        $sql = 'UPDATE rfq SET end_date = :end_date WHERE id = :id_rfq';
+        $sql = 'UPDATE rfq SET end_date = :end_date, address = :address, ship_to = :ship_to WHERE id = :id_rfq';
         $sentencia = $conexion-> prepare($sql);
         $sentencia-> bindParam(':end_date', $end_date, PDO::PARAM_STR);
+        $sentencia-> bindParam(':address', $address, PDO::PARAM_STR);
+        $sentencia-> bindParam(':ship_to', $ship_to, PDO::PARAM_STR);
         $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia-> execute();
       }catch(PDOException $ex){
