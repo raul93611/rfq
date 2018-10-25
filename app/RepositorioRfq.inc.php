@@ -1252,11 +1252,12 @@ class RepositorioRfq {
     return $rfq_editado;
   }
 
-  public static function guardar_total_price_fedbid($conexion, $total_price_fedbid, $id_rfq){
+  public static function guardar_total_price_total_cost_fedbid($conexion, $total_cost_fedbid, $total_price_fedbid, $id_rfq){
     if(isset($conexion)){
       try{
-        $sql = 'UPDATE rfq SET total_price = :total_price_fedbid WHERE id = :id_rfq';
+        $sql = 'UPDATE rfq SET total_cost = :total_cost_fedbid, total_price = :total_price_fedbid WHERE id = :id_rfq';
         $sentencia = $conexion-> prepare($sql);
+        $sentencia-> bindParam(':total_cost_fedbid', $total_cost_fedbid,PDO::PARAM_STR);
         $sentencia-> bindParam(':total_price_fedbid', $total_price_fedbid, PDO::PARAM_STR);
         $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia-> execute();

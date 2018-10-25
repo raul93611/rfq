@@ -74,7 +74,7 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
   /********************************************************GUARDAR TOTAL_PRICE EN FEDBID****************************************/
   /*****************************************************************************************************************************/
   if($cotizacion_recuperada-> obtener_canal() == 'FedBid'){
-    RepositorioRfq::guardar_total_price_fedbid(Conexion::obtener_conexion(), $_POST['total_price_fedbid'], $_POST['id_rfq']);
+    RepositorioRfq::guardar_total_price_total_cost_fedbid(Conexion::obtener_conexion(), $_POST['total_cost_fedbid'], $_POST['total_price_fedbid'], $_POST['id_rfq']);
   }
   /*****************************************************************************************************************************/
   /*****************************************************************************************************************************/

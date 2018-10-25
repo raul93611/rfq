@@ -3,8 +3,12 @@
 if($cotizacion_recuperada-> obtener_canal() == 'FedBid'){
   ?>
   <div class="row">
-    <div class="col-12">
-      <label for="total_price">Total price:</label>
+    <div class="col-md-6">
+      <label for="total_cost_fedbid">Total cost:</label>
+      <input type="number" step=".01" name="total_cost_fedbid" class="form-control form-control-sm" value="<?php echo $cotizacion_recuperada-> obtener_total_cost(); ?>">
+    </div>
+    <div class="col-md-6">
+      <label for="total_price_fedbid">Total price:</label>
       <input type="number" step=".01" name="total_price_fedbid" class="form-control form-control-sm" value="<?php echo $cotizacion_recuperada-> obtener_total_price(); ?>">
     </div>
   </div>
