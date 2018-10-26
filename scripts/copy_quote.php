@@ -1,4 +1,6 @@
 <?php
+//error_reporting(E_ALL);
+//ini_set('display_errors', 1);
 session_start();
 Conexion::abrir_conexion();
 $cotizacion = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
@@ -10,7 +12,7 @@ RepositorioCuestionario::insertar_cuestionario(Conexion::obtener_conexion(), $cu
 $rfq_directory = $_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $id_rfq;
 $rfq_copia_directory = $_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $id_rfq_copia;
 mkdir($rfq_copia_directory, 0777);
-if(is_dir($rfp_directory)){
+if(is_dir($rfq_directory)){
   $manager = opendir($rfq_directory);
   $folder = @scandir($rfq_directory);
   while(($file = readdir($manager)) !== false){
@@ -22,11 +24,11 @@ if(is_dir($rfp_directory)){
 }
 
 $items = RepositorioItem::obtener_items_por_id_rfq(Conexion::obtener_conexion(), $id_rfq);
-$items_copias = [];
-$providers_copias = [];
-$subitems_copias = [];
-$providers_subitem_copias = [];
+
+
+
 if(count($items)){
+  $items_copias = [];
   foreach ($items as $item) {
     $items_copias[] = new Item('', $id_rfq_copia, $item-> obtener_id_usuario(), $item-> obtener_provider_menor(), $item-> obtener_brand(), $item-> obtener_brand_project(), $item-> obtener_part_number(), $item-> obtener_part_number_project(), $item-> obtener_description(), $item-> obtener_description_project(), $item-> obtener_quantity(), $item-> obtener_unit_price(), $item-> obtener_total_price(), $item-> obtener_comments(), $item-> obtener_website(), $item-> obtener_additional());
   }
@@ -34,11 +36,11 @@ if(count($items)){
     RepositorioItem::insertar_item(Conexion::obtener_conexion(), $item_copia);
   }
   $items_copias = RepositorioItem::obtener_items_por_id_rfq(Conexion::obtener_conexion(), $id_rfq_copia);
-  $i = 0;
-  foreach ($items as $item) {
+  foreach ($items as $i=> $item) {
     $item_copia = $items_copias[$i];
     $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Conexion::obtener_conexion(), $item-> obtener_id());
     if(count($subitems)){
+      $subitems_copias = [];
       foreach ($subitems as $subitem) {
         $subitems_copias[] = new Subitem('', $item_copia-> obtener_id(), $subitem-> obtener_provider_menor(), $subitem-> obtener_brand(), $subitem-> obtener_brand_project(), $subitem-> obtener_part_number(), $subitem-> obtener_part_number_project(), $subitem-> obtener_description(), $subitem-> obtener_description_project(), $subitem-> obtener_quantity(), $subitem-> obtener_unit_price(), $subitem-> obtener_total_price(), $subitem-> obtener_comments(), $subitem-> obtener_website(), $subitem-> obtener_additional());
       }
@@ -46,23 +48,24 @@ if(count($items)){
         RepositorioSubitem::insertar_subitem(Conexion::obtener_conexion(), $subitem_copia);
       }
       $subitems_copias = RepositorioSubitem::obtener_subitems_por_id_item(Conexion::obtener_conexion(), $item_copia-> obtener_id());
-      $j = 0;
-      foreach ($subitems as $subitem) {
+      foreach ($subitems as $j=> $subitem) {
         $subitem_copia = $subitems_copias[$j];
         $providers_subitem = RepositorioProviderSubitem::obtener_providers_subitem_por_id_subitem(Conexion::obtener_conexion(), $subitem-> obtener_id());
         if(count($providers_subitem)){
+          $providers_subitem_copias = [];
           foreach ($providers_subitem as $provider_subitem) {
             $providers_subitem_copias[] = new ProviderSubitem('', $subitem_copia-> obtener_id(), $provider_subitem-> obtener_provider(), $provider_subitem-> obtener_price());
           }
           foreach ($providers_subitem_copias as $provider_subitem_copia) {
             RepositorioProviderSubitem::insertar_provider_subitem(Conexion::obtener_conexion(), $provider_subitem_copia);
           }
+          echo count($providers_subitem_copias);
         }
-        $j++;
       }
     }
     $providers = RepositorioProvider::obtener_providers_por_id_item(Conexion::obtener_conexion(), $item-> obtener_id());
     if(count($providers)){
+      $providers_copias = [];
       foreach ($providers as $provider) {
         $providers_copias[] = new Provider('', $item_copia-> obtener_id(), $provider-> obtener_provider(), $provider-> obtener_price());
       }
@@ -70,7 +73,6 @@ if(count($items)){
         RepositorioProvider::insertar_provider(Conexion::obtener_conexion(), $provider_copia);
       }
     }
-    $i++;
   }
 }
 Redireccion::redirigir(EDITAR_COTIZACION . '/' . $id_rfq_copia);
