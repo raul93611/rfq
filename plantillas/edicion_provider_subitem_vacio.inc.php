@@ -17,12 +17,14 @@ if($cargo == 5 && $_SESSION['id_usuario'] != $cotizacion_recuperada-> obtener_us
       <div class="form-group">
         <label for="provider">Provider:</label>
         <input type="text" class="form-control form-control-sm" id="provider" name="provider" placeholder="Provider ..." autofocus required value="<?php echo $provider_subitem-> obtener_provider(); ?>">
+        <input type="hidden" name="provider_original" value="<?php echo $provider_subitem-> obtener_provider(); ?>">
       </div>
     </div>
     <div class="col">
       <div class="form-group">
         <label for="price">Price:</label>
         <input type="number" step=".01" class="form-control form-control-sm" id="price" name="price" required value="<?php echo $provider_subitem-> obtener_price(); ?>">
+        <input type="hidden" name="price_original" value="<?php echo $provider_subitem-> obtener_price(); ?>">
       </div>
     </div>
   </div>

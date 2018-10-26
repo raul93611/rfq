@@ -10,6 +10,7 @@ if($cargo == 5 && $_SESSION['id_usuario'] != $cotizacion_recuperada-> obtener_us
       <div class="form-group">
         <label for="email_code">Code:</label>
         <input type="text" class="form-control form-control-sm" id="email_code" name="email_code" value="<?php echo $cotizacion_recuperada->obtener_email_code(); ?>">
+        <input type="hidden" name="email_code_original" value="<?php echo $cotizacion_recuperada-> obtener_email_code(); ?>">
       </div>
     </div>
     <div class="col">
@@ -161,11 +162,13 @@ if($cargo == 5 && $_SESSION['id_usuario'] != $cotizacion_recuperada-> obtener_us
       <div class="col">
         <div class="form-group">
           <textarea class="form-control form-control-sm" rows="3" id="shipping" name="shipping" placeholder="Enter shipping ..."><?php echo $cotizacion_recuperada->obtener_shipping(); ?></textarea>
+          <input type="hidden" name="shipping_original" value="<?php echo $cotizacion_recuperada->obtener_shipping(); ?>">
         </div>
       </div>
       <div class="col">
         <div class="form-group">
           <input type="number" step=".01" class="form-control form-control-sm" id="shipping_cost" name="shipping_cost" value="<?php echo $cotizacion_recuperada->obtener_shipping_cost(); ?>">
+          <input type="hidden" name="shipping_cost_original" value="<?php echo $cotizacion_recuperada->obtener_shipping_cost(); ?>">
         </div>
       </div>
     </div>

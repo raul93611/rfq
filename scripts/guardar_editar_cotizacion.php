@@ -1,4 +1,5 @@
 <?php
+session_start();
 if (isset($_POST['guardar_cambios_cotizacion'])) {
   Conexion::abrir_conexion();
   $cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $_POST['id_rfq']);
@@ -144,6 +145,9 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
           mail($to, $subject, $message, $headers);
         }
       }
+      $descripcion = 'The quote was completed.';
+      $comment = new Comment('', $cotizacion_recuperada-> obtener_id(), $_SESSION['id_usuario'], $descripcion, '');
+      RepositorioComment::insertar_comment(Conexion::obtener_conexion(), $comment);
       if ($cargo < 5) {
         Redireccion::redirigir(COMPLETADOS . $canal);
       } else {
@@ -157,6 +161,9 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
       $submitted = 0;
     }
     if ($submitted) {
+      $descripcion = 'The quote was submitted.';
+      $comment = new Comment('', $cotizacion_recuperada-> obtener_id(), $_SESSION['id_usuario'], $descripcion, '');
+      RepositorioComment::insertar_comment(Conexion::obtener_conexion(), $comment);
       RepositorioRfq::actualizar_fecha_y_submitted(Conexion::obtener_conexion(), $_POST['id_rfq']);
       Redireccion::redirigir(COMPLETADOS . $canal);
     }
@@ -197,12 +204,58 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
       </html>
       ';
       mail($to, $subject, $message, $headers);
+      $descripcion = 'The quote was awarded.';
+      $comment = new Comment('', $cotizacion_recuperada-> obtener_id(), $_SESSION['id_usuario'], $descripcion, '');
+      RepositorioComment::insertar_comment(Conexion::obtener_conexion(), $comment);
       if($cargo < 5){
         Redireccion::redirigir(AWARD . $canal);
       }else{
         Redireccion::redirigir(COTIZACIONES . $canal);
       }
     }
+  }
+  $cambios = [];
+  if($_POST['taxes'] != $_POST['taxes_original']){
+    $cambios[] = 'taxes';
+  }
+
+  if($_POST['profit'] != $_POST['profit_original']){
+    $cambios[] = 'profit';
+  }
+
+  if($_POST['additional_general'] != $_POST['additional_general_original']){
+    $cambios[] = 'additional_general';
+  }
+
+  if($_POST['shipping'] != $_POST['shipping_original']){
+    $cambios[] = 'shipping';
+  }
+
+  if($_POST['shipping_cost'] != $_POST['shipping_cost_original']){
+    $cambios[] = 'shipping_cost';
+  }
+  
+  if($_POST['email_code'] != $_POST['email_code_original']){
+    $cambios[] = 'code';
+  }
+
+  if($_POST['comments'] != $_POST['comments_original']){
+    $cambios[] = 'comments';
+  }
+
+  if($_POST['address'] != $_POST['address_original']){
+    $cambios[] = 'address';
+  }
+
+  if($_POST['ship_to'] != $_POST['ship_to_original']){
+    $cambios[] = 'ship_to';
+  }
+
+  if(count($cambios)){
+    $cambios = implode(',', $cambios);
+    $descripcion = 'The following fields were modified: <b>' . $cambios . '</b>';
+    $comment = new Comment('', $cotizacion_recuperada-> obtener_id(), $_SESSION['id_usuario'], $descripcion, '');
+    RepositorioComment::insertar_comment(Conexion::obtener_conexion(), $comment);
   }
   Conexion::cerrar_conexion();
   Redireccion::redirigir(EDITAR_COTIZACION . '/' . $_POST['id_rfq']);

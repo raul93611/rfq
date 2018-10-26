@@ -26,7 +26,7 @@ Conexion::cerrar_conexion();
           <?php
           }
           ?>
-          <a href="<?php echo HISTORIAL_COMMENTS . $cotizacion_recuperada-> obtener_id(); ?>" class="btn btn-info"><i class="fas fa-comment"></i> Comments</a>
+          <a href="#" id="mostrar_comentarios" class="btn btn-info"><i class="fas fa-comment"></i> Comments</a>
         </div>
         <div class="col-sm-2">
           <?php
@@ -116,6 +116,18 @@ Conexion::cerrar_conexion();
       <div class="modal-footer">
         <button type="submit" name="guardar_fullfillment_form" form="fullfillment_form" class="btn btn-success"><i class="fa fa-check"></i> Save</button>
         <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-ban"></i> Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--*************************************************MODAL TO SHOW COMMENTS*************************************************************-->
+<div class="modal fade" id="todos_commentarios_quote" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <?php
+        RepositorioComment::escribir_comments($cotizacion_recuperada-> obtener_id());
+        ?>
       </div>
     </div>
   </div>

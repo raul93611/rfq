@@ -6,6 +6,14 @@ if(isset($_POST['guardar_subitem'])){
   RepositorioSubitem::insertar_subitem(Conexion::obtener_conexion(), $subitem);
   $item = RepositorioItem::obtener_item_por_id(Conexion::obtener_conexion(), $subitem-> obtener_id_item());
   $id_rfq = $item-> obtener_id_rfq();
+  $description_comment = 'A new subitem was created for the item:
+    <b>Project specifications</b>
+    <b>Brand:</b>
+    ' . $item-> obtener_brand_project() . '
+    <b>Part number:</b>
+    ' . $item-> obtener_part_number_project();
+  $comment = new Comment('', $id_rfq, $_SESSION['id_usuario'], $description_comment, '');
+  RepositorioComment::insertar_comment(Conexion::obtener_conexion(), $comment);
   Conexion::cerrar_conexion();
   Redireccion::redirigir(EDITAR_COTIZACION . '/' . $id_rfq . '#caja_items');
 }

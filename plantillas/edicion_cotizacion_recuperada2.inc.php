@@ -74,10 +74,12 @@ if($cotizacion_recuperada-> obtener_canal() == 'FedBid'){
         <option <?php if($cotizacion_recuperada-> obtener_comments() == 'Not submitted'){echo 'selected';} ?>>Not submitted</option>
         <option <?php if ($cotizacion_recuperada->obtener_comments() == 'Working on it'){echo 'selected';} ?>>Working on it</option>
       </select>
+      <input type="hidden" name="comments_original" value="<?php echo $cotizacion_recuperada-> obtener_comments(); ?>">
     </div>
       <div class="form-group">
         <label for="address">Address:</label>
         <textarea class="form-control form-control-sm" rows="5" placeholder="Enter address ..." id="address" name="address"><?php echo $cotizacion_recuperada->obtener_address(); ?></textarea>
+        <input type="hidden" name="address_original" value="<?php echo $cotizacion_recuperada-> obtener_address(); ?>">
       </div>
   </div>
   <div class="col">
@@ -91,6 +93,7 @@ if($cotizacion_recuperada-> obtener_canal() == 'FedBid'){
       <div class="form-group">
         <label for="ship_to">Ship to:</label>
         <textarea class="form-control form-control-sm" rows="5" placeholder="Enter ship to ..." id="ship_to" name="ship_to"><?php echo $cotizacion_recuperada->obtener_ship_to(); ?></textarea>
+        <input type="hidden" name="ship_to_original" value="<?php echo $cotizacion_recuperada-> obtener_ship_to(); ?>">
       </div>
   </div>
 </div>

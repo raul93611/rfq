@@ -1,4 +1,8 @@
 $(document).ready(function () {
+  /**************************************BOTON MOSTRAT COMENTARIOS************************/
+  $('#mostrar_comentarios').click(function(){
+    $('#todos_commentarios_quote').modal();
+  });
   /**************************************BOTON PARA FULLFILLMENT****************************/
   $('#fullfillment').click(function(){
     $('#fullfillment_modal').modal();

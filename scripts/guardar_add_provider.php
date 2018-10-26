@@ -6,6 +6,14 @@ if(isset($_POST['guardar_provider'])){
   $provider_insertado = RepositorioProvider::insertar_provider(Conexion::obtener_conexion(), $provider);
   $item = RepositorioItem::obtener_item_por_id(Conexion::obtener_conexion(), $provider-> obtener_id_item());
   $id_rfq = $item-> obtener_id_rfq();
+  $description_comment = 'A new provider was created for the Item:
+    <b>Project specifications</b>
+    <b>Brand:</b>
+    ' . $item-> obtener_brand_project() . '
+    <b>Part number:</b>
+    ' . $item-> obtener_part_number_project();
+  $comment = new Comment('', $id_rfq, $_SESSION['id_usuario'], $description_comment, '');
+  RepositorioComment::insertar_comment(Conexion::obtener_conexion(), $comment);
   Conexion::cerrar_conexion();
   if($provider_insertado){
     Redireccion::redirigir(EDITAR_COTIZACION . '/' . $id_rfq . '#caja_items');
