@@ -15,6 +15,25 @@ class RepositorioComment{
     }
   }
 
+  public static function contar_todos_comentarios_quote($conexion, $id_rfq){
+    $todos_comentarios_quote = 0;
+    if(isset($conexion)){
+      try{
+        $sql = 'SELECT COUNT(*) as todos_comentarios_quote FROM comments WHERE id_rfq = :id_rfq';
+        $sentencia = $conexion-> prepare($sql);
+        $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia-> execute();
+        $resultado = $sentencia-> fetch(PDO::FETCH_ASSOC);
+        if(!empty($resultado)){
+          $todos_comentarios_quote = $resultado['todos_comentarios_quote'];
+        }
+      }catch(PDOException $ex){
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $todos_comentarios_quote;
+  }
+
   public static function obtener_comments_de_un_rfq($conexion, $id_rfq){
     $comments = [];
     if(isset($conexion)){

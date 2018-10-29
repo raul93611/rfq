@@ -25,8 +25,11 @@ Conexion::cerrar_conexion();
           <a class="btn btn-primary" href="<?php echo COPY_QUOTE . $cotizacion_recuperada-> obtener_id(); ?>"><i class="fa fa-copy"></i> Copy</a>
           <?php
           }
+          Conexion::abrir_conexion();
+          $cantidad_de_comentarios = RepositorioComment::contar_todos_comentarios_quote(Conexion::obtener_conexion(), $cotizacion_recuperada-> obtener_id());
+          Conexion::cerrar_conexion();
           ?>
-          <a href="#" id="mostrar_comentarios" class="btn btn-info"><i class="fas fa-comment"></i> Comments</a>
+          <a href="#" id="mostrar_comentarios" class="btn btn-info"><i class="fas fa-comment"></i> Comments(<?php echo $cantidad_de_comentarios; ?>)</a>
         </div>
         <div class="col-sm-2">
           <?php
