@@ -296,6 +296,31 @@ class RepositorioUsuario {
     return $usuarios;
   }
 
+  public static function obtener_usuarios_rfq_sin_importar_estado($conexion) {
+    $usuarios = [];
+
+    if (isset($conexion)) {
+      try {
+        $sql = "SELECT * FROM usuarios WHERE cargo > 2";
+
+        $sentencia = $conexion->prepare($sql);
+
+        $sentencia->execute();
+
+        $resultado = $sentencia->fetchAll(PDO::FETCH_ASSOC);
+
+        if (count($resultado)) {
+          foreach ($resultado as $fila) {
+            $usuarios [] = new Usuario($fila['id'], $fila['nombre_usuario'], $fila['password'], $fila['nombres'], $fila['apellidos'], $fila['cargo'], $fila['email'], $fila['status']);
+          }
+        }
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $usuarios;
+  }
+
   public static function obtener_cotizaciones_por_usuario($conexion, $id_usuario, $tipo) {
     $cotizaciones = 0;
     $cotizaciones_pasadas = 0;
@@ -384,7 +409,7 @@ class RepositorioUsuario {
     $cotizaciones_no_sometidas = array();
     $cotizaciones_no_sometidas_pasadas = array();
     Conexion::abrir_conexion();
-    $usuarios = self::obtener_usuarios_rfq(Conexion::obtener_conexion());
+    $usuarios = self::obtener_usuarios_rfq_sin_importar_estado(Conexion::obtener_conexion());
     Conexion::cerrar_conexion();
 
     if (count($usuarios)) {
@@ -439,7 +464,7 @@ class RepositorioUsuario {
   }
 
   public static function obtener_cotizaciones_completadas_por_usuario_y_mes($conexion){
-    $usuarios = self::obtener_usuarios_rfq($conexion);
+    $usuarios = self::obtener_usuarios_rfq_sin_importar_estado($conexion);
     $cotizaciones_completadas_anual_usuarios = [];
     if(isset($conexion)){
       try{
@@ -468,7 +493,7 @@ class RepositorioUsuario {
   }
 
   public static function obtener_cotizaciones_ganadas_por_usuario_y_mes($conexion){
-    $usuarios = self::obtener_usuarios_rfq($conexion);
+    $usuarios = self::obtener_usuarios_rfq_sin_importar_estado($conexion);
     $cotizaciones_ganadas_anual_usuarios = [];
     $cotizaciones_ganadas_anual_usuarios_monto = [];
     if(isset($conexion)){
@@ -510,7 +535,7 @@ class RepositorioUsuario {
   }
 
   public static function obtener_cotizaciones_not_submitted_por_usuario_y_mes($conexion){
-    $usuarios = self::obtener_usuarios_rfq($conexion);
+    $usuarios = self::obtener_usuarios_rfq_sin_importar_estado($conexion);
     $cotizaciones_not_submitted_anual_usuarios = [];
     if(isset($conexion)){
       try{

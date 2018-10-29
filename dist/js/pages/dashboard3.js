@@ -422,6 +422,7 @@ $(function () {
       }
       user_by_month_completed_data = user_by_month_completed_data.join(',');
       user_by_month_completed_data = '['+user_by_month_completed_data+']';
+      console.log(user_by_month_completed_data);
       user_by_month_completed_data = jQuery.parseJSON(user_by_month_completed_data);
       new Chart(document.getElementById("user_by_month_completed"), {
           type: 'line',
