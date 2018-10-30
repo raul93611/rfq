@@ -37,7 +37,7 @@ if(isset($_POST['guardar_fullfillment_form'])){
   }
   $comment = new CommentRfqFullFillment('', $_POST['id_rfq'], $_SESSION['nombre_usuario'], $_POST['fullfillment_comment'], '');
   RepositorioRfqFullFillmentComment::insertar_comment(ConnectionFullFillment::get_connection(), $comment);
-  $rfq_fullfillment_part = new RfqFullFillmentPart('', $_POST['id_rfq'], '', '', '', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, '', 0, '', 0, '');
+  $rfq_fullfillment_part = new RfqFullFillmentPart('', $_POST['id_rfq'], '', '', '', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, '', 0, '', 0, '', '');
   RfqFullFillmentPartRepository::insert_rfq_fullfillment_part(ConnectionFullFillment::get_connection(), $rfq_fullfillment_part);
   $fullfillment_users = UserFullFillmentRepository::get_all_users_enabled(ConnectionFullFillment::get_connection());
   ConnectionFullFillment::close_connection();
