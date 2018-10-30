@@ -21,7 +21,7 @@ Conexion::cerrar_conexion();
           <?php
           if($cargo < 3){
             ?>
-            <a href="<?php echo PDF_REPORT; ?>" target="_blank" class="btn btn-primary float-right"><i class="fas fa-chart-line"></i> Report</a>
+            <a href="#" id="boton_mostrar_modal" class="btn btn-primary float-right"><i class="fas fa-chart-line"></i> Reports</a>
             <?php
           }
           ?>
@@ -261,4 +261,45 @@ Conexion::cerrar_conexion();
       </div>
     </div>
   </section>
+</div>
+<!--*********************************************************MODAL FULLFILLMENT*******************************************************-->
+<div class="modal fade" id="reports_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Reports</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <?php
+        $ruta = $_SERVER['DOCUMENT_ROOT'] . '/rfq/reports/';
+        if (is_dir($ruta)) {
+          $gestor = opendir($ruta);
+          echo '<div class="list-group">';
+          $carpeta = @scandir($ruta);
+          if(count($carpeta) <= 2){
+            echo '<h3 class="text-center text-danger"><i class="fa fa-times"></i> No files!</h3>';
+          }
+          while (($archivo = readdir($gestor)) !== false) {
+            $ruta_completa = $ruta . "/" . $archivo;
+            if ($archivo != "." && $archivo != "..") {
+              $archivo_url = str_replace(' ', '%20', $archivo);
+              $archivo_url = str_replace('#', '%23', $archivo_url);
+              echo '<li class="list-group-item"><a download href="' . REPORTS_DOCS . $archivo_url . '">' . $archivo . '</a></li>';
+            }
+          }
+
+          closedir($gestor);
+          echo "</div>";
+        }
+        ?>
+      </div>
+      <div class="modal-footer">
+        <a href="<?php echo PDF_REPORT; ?>" target="_blank" class="btn btn-primary float-right"><i class="fas fa-chart-line"></i> Report</a>
+        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-ban"></i> Cancel</button>
+      </div>
+    </div>
+  </div>
 </div>

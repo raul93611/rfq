@@ -133,6 +133,7 @@ define('EXCEL_REPORT', SERVIDOR . 'excel_report');
 
 define('DELETE_DOCUMENT', SERVIDOR . 'delete_document');
 
+define('REPORTS_DOCS', SERVIDOR . 'reports/');
 define('DOCS', SERVIDOR . 'documentos/');
 define('RUTA_CSS', SERVIDOR . 'css/');
 define('RUTA_JS', SERVIDOR . 'js/');

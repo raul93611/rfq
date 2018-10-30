@@ -150,7 +150,8 @@ try{
 
   $html .= '</body></html>';
   $mpdf->WriteHTML($html);
-  $mpdf->Output('report.pdf', 'I');
+  $mpdf->Output($_SERVER['DOCUMENT_ROOT'] . '/rfq/reports/' . date('Y-m') . '.pdf', 'F');
+  $mpdf->Output(date('Y-m') . '.pdf', 'I');
 } catch (\Mpdf\MpdfException $e) {
   echo $e->getMessage();
 }
