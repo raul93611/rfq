@@ -43,7 +43,8 @@ if (isset($_POST['guardar_cambios_subitem'])) {
   if(count($cambios)){
     $cambios = implode(',', $cambios);
     $description_comment = 'A subitem was modified. The fields: <b>' . $cambios . '</b><br>'
-    . '<b>Brand:</b><br>'
+    . '<b>ELOGIC PROPOSAL</b>
+    <b>Brand:</b><br>'
     . $_POST['brand'] . '<br>' .
     '<b>Part number:</b><br>'
      . $_POST['part_number'];

@@ -17,11 +17,11 @@ if (isset($_POST['guardar_cambios_provider'])) {
   if(count($cambios)){
     $cambios = implode(',', $cambios);
     $description_comment = 'A provider was modified. The fields: <b>' . $cambios . '</b>
-    <b>Project specifications</b>
+    <b>ELOGIC PROPOSAL</b>
     <b>Brand:</b>
-    ' . $item-> obtener_brand_project() . '
+    ' . $item-> obtener_brand() . '
     <b>Part number:</b>
-    ' . $item-> obtener_part_number_project();
+    ' . $item-> obtener_part_number();
     $comment = new Comment('', $_POST['id_rfq'], $_SESSION['id_usuario'], $description_comment, '');
     RepositorioComment::insertar_comment(Conexion::obtener_conexion(), $comment);
   }

@@ -10,11 +10,11 @@ if(count($subitems)){
   }
 }
 $description_comment = 'An item was deleted:
-<b>Project Especifications</b>
+<b>ELOGIC PROPOSAL</b>
 <b>Brand:</b>
-' . $item-> obtener_brand_project() . '
+' . $item-> obtener_brand() . '
 <b>Part number:</b>
-' . $item-> obtener_part_number_project() . '
+' . $item-> obtener_part_number() . '
 ';
 $comment = new Comment('', $id_rfq, $_SESSION['id_usuario'], $description_comment, '');
 RepositorioComment::insertar_comment(Conexion::obtener_conexion(), $comment);

@@ -42,6 +42,7 @@ if (isset($_POST['guardar_cambios_item'])) {
   if(count($cambios)){
     $cambios = implode(',', $cambios);
     $description_comment = 'An item was modified. The fields: <b>' . $cambios . '</b>
+    <b>ELOGIC PROPOSAL</b>
     <b>Brand:</b><br>'
     . $_POST['brand'] . '<br>' .
     '<b>Part number:</b><br>'

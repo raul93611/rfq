@@ -214,46 +214,93 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
       }
     }
   }
-  $cambios = [];
+  $cambios_especificos = [];
   if($_POST['taxes'] != $_POST['taxes_original']){
-    $cambios[] = 'taxes';
+    $cambios_especificos[] = '
+    <b>TAXES</b>
+    <b>Before:</b><br>'
+    . $_POST['taxes_original'] . '
+    <b>Later:</b><br>'
+     . $_POST['taxes'];
   }
 
   if($_POST['profit'] != $_POST['profit_original']){
-    $cambios[] = 'profit';
+    $cambios_especificos[] = '
+    <b>PROFIT</b>
+    <b>Before:</b><br>'
+    . $_POST['profit_original'] . '
+    <b>Later:</b><br>'
+     . $_POST['profit'];
   }
 
   if($_POST['additional_general'] != $_POST['additional_general_original']){
-    $cambios[] = 'additional_general';
+    $cambios_especificos[] = '
+    <b>ADDITIONAL GENERAL</b>
+    <b>Before:</b><br>'
+    . $_POST['additional_general_original'] . '
+    <b>Later:</b><br>'
+     . $_POST['additional_general'];
   }
 
   if($_POST['shipping'] != $_POST['shipping_original']){
-    $cambios[] = 'shipping';
+    $cambios_especificos[] = '
+    <b>SHIPPING</b>
+    <b>Before:</b><br>'
+    . $_POST['shipping_original'] . '
+    <b>Later:</b><br>'
+     . $_POST['shipping'];
   }
 
   if($_POST['shipping_cost'] != $_POST['shipping_cost_original']){
-    $cambios[] = 'shipping_cost';
+    $cambios_especificos[] = '
+    <b>SHIPPING COST</b>
+    <b>Before:</b><br>'
+    . $_POST['shipping_cost_original'] . '
+    <b>Later:</b><br>'
+     . $_POST['shipping_cost'];
   }
-  
+
   if($_POST['email_code'] != $_POST['email_code_original']){
-    $cambios[] = 'code';
+    $cambios_especificos[] = '
+    <b>CODE</b>
+    <b>Before:</b><br>'
+    . $_POST['email_code_original'] . '
+    <b>Later:</b><br>'
+     . $_POST['email_code'];
   }
 
   if($_POST['comments'] != $_POST['comments_original']){
-    $cambios[] = 'comments';
+    $cambios_especificos[] = '
+    <b>COMMENTS</b>
+    <b>Before:</b><br>'
+    . $_POST['comments_original'] . '
+    <b>Later:</b><br>'
+     . $_POST['comments'];
   }
 
   if($_POST['address'] != $_POST['address_original']){
-    $cambios[] = 'address';
+    $cambios_especificos[] = '
+    <b>ADDRESS</b>
+    <b>Before:</b><br>'
+    . $_POST['address_original'] . '
+    <b>Later:</b><br>'
+     . $_POST['address'];
   }
 
   if($_POST['ship_to'] != $_POST['ship_to_original']){
-    $cambios[] = 'ship_to';
+    $cambios_especificos[] = '
+    <b>SHIP TO</b>
+    <b>Before:</b><br>'
+    . $_POST['ship_to_original'] . '
+    <b>Later:</b><br>'
+     . $_POST['ship_to'];
   }
 
-  if(count($cambios)){
-    $cambios = implode(',', $cambios);
-    $descripcion = 'The following fields were modified: <b>' . $cambios . '</b>';
+  if(count($cambios_especificos)){
+    $descripcion = 'The following fields were modified:';
+    foreach ($cambios_especificos as $i=> $cambio_especifico) {
+      $descripcion .= $cambio_especifico;
+    }
     $comment = new Comment('', $cotizacion_recuperada-> obtener_id(), $_SESSION['id_usuario'], $descripcion, '');
     RepositorioComment::insertar_comment(Conexion::obtener_conexion(), $comment);
   }
