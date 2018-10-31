@@ -181,7 +181,6 @@ class RepositorioUsuario {
       <td><?php echo $usuario-> obtener_cargo(); ?></td>
       <td><?php echo $usuario-> obtener_nombres(); ?></td>
       <td><?php echo $usuario-> obtener_apellidos(); ?></td>
-      <td><?php echo $usuario-> obtener_cargo(); ?></td>
       <td class='text-center'>
         <?php
         if($usuario-> obtener_status()){
@@ -255,7 +254,6 @@ class RepositorioUsuario {
             <th>Level</th>
             <th>First names</th>
             <th>Last names</th>
-            <th>Level</th>
             <th id="disable_user">Options</th>
           </tr>
         </thead>
