@@ -15,6 +15,9 @@ include_once '../rfp/app/ProjectRepository.inc.php';
 include_once '../rfp/app/Service.inc.php';
 include_once '../rfp/app/ServiceRepository.inc.php';
 
+include_once '../rfp/app/ContactList.inc.php';
+include_once '../rfp/app/ContactListRepository.inc.php';
+
 include_once '../fullfillment/app/ConnectionFullFillment.inc.php';
 include_once '../fullfillment/app/RepositorioRfqFullFillment.inc.php';
 include_once '../fullfillment/app/RepositorioItemFullFillment.inc.php';

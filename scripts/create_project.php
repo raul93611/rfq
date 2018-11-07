@@ -20,6 +20,8 @@ $project = new Project('', $designated_user, '', $cotizacion-> obtener_email_cod
 $id_project = ProjectRepository::insert_project(Connection::get_connection(), $project);
 $service = new Service('', $id_project, 0, '', 0);
 ServiceRepository::insert_service(Connection::get_connection(), $service);
+$contact = new ContactList('', $id_project, '', '', '', '');
+ContactListRepository::insert_contact(Connection::get_connection(), $contact);
 Connection::close_connection();
 Conexion::abrir_conexion();
 RepositorioRfq::establecer_id_rfp(Conexion::obtener_conexion(), $id_project, $id_rfq);
