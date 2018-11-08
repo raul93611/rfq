@@ -36,6 +36,9 @@ if (isset($_POST['registrar_cotizacion'])) {
         case 'E-mails':
           $canal = 'emails';
           break;
+        case 'Mailbox':
+          $canal = 'Mailbox';
+          break;
         case 'FindFRP':
           $canal = 'findfrp';
           break;

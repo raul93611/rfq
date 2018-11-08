@@ -275,6 +275,9 @@ if ($partes_ruta[0] == 'rfq') {
         case 'emails':
           $cotizacion = 'emails';
           break;
+        case 'mailbox':
+          $cotizacion = 'mailbox';
+          break;
         case 'findfrp':
           $cotizacion = 'findfrp';
           break;
@@ -310,6 +313,9 @@ if ($partes_ruta[0] == 'rfq') {
           case 'emails':
             $cotizacion = 'emails_completados';
             break;
+          case 'mailbox':
+            $cotizacion = 'mailbox_completados';
+            break;
           case 'findfrp':
             $cotizacion = 'findfrp_completados';
             break;
@@ -333,6 +339,9 @@ if ($partes_ruta[0] == 'rfq') {
           case 'emails':
             $cotizacion = 'emails_submitted';
             break;
+          case 'mailbox':
+            $cotizacion = 'mailbox_submitted';
+            break;
           case 'findfrp':
             $cotizacion = 'findfrp_submitted';
             break;
@@ -355,6 +364,9 @@ if ($partes_ruta[0] == 'rfq') {
             break;
           case 'emails':
             $cotizacion = 'emails_award';
+            break;
+          case 'mailbox':
+            $cotizacion = 'mailbox_award';
             break;
           case 'findfrp':
             $cotizacion = 'findfrp_award';

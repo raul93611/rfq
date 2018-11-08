@@ -58,6 +58,9 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
       case 'E-mails':
         $canal = 'emails';
         break;
+      case 'Mailbox':
+        $canal = 'mailbox';
+        break;
       case 'FindFRP':
         $canal = 'findfrp';
         break;
@@ -100,6 +103,9 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
       break;
     case 'E-mails':
       $canal = 'emails';
+      break;
+    case 'Mailbox':
+      $canal = 'mailbox';
       break;
     case 'FindFRP':
       $canal = 'findfrp';

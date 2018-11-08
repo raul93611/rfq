@@ -120,6 +120,17 @@
                   </a>
                 </li>
                 <li class="nav-item">
+                  <a href="<?php echo MAILBOX; ?>" class="nav-link
+                  <?php
+                  if ($cotizacion == 'mailbox') {
+                    echo 'active';
+                  }
+                  ?>
+                     ">
+                    <p>Mailbox</p>
+                  </a>
+                </li>
+                <li class="nav-item">
                   <a href="<?php echo FINDFRP; ?>" class="nav-link
                   <?php
                   if ($cotizacion == 'findfrp') {
@@ -205,6 +216,17 @@
                   ?>
                      ">
                     <p>E-mails</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="<?php echo MAILBOX_COMPLETADOS; ?>" class="nav-link
+                  <?php
+                  if ($cotizacion == 'mailbox_completados') {
+                    echo 'active';
+                  }
+                  ?>
+                     ">
+                    <p>Mailbox</p>
                   </a>
                 </li>
                 <li class="nav-item">
@@ -294,6 +316,17 @@
                     </a>
                   </li>
                   <li class="nav-item">
+                    <a href="<?php echo MAILBOX_SUBMITTED; ?>" class="nav-link
+                    <?php
+                    if ($cotizacion == 'mailbox_submitted') {
+                        echo 'active';
+                    }
+                    ?>
+                       ">
+                      <p>Mailbox</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
                     <a href="<?php echo FINDFRP_SUBMITTED; ?>" class="nav-link
                     <?php
                     if ($cotizacion == 'findfrp_submitted') {
@@ -377,6 +410,17 @@
                     ?>
                        ">
                       <p>E-mails</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="<?php echo MAILBOX_AWARD; ?>" class="nav-link
+                    <?php
+                    if ($cotizacion == 'mailbox_award') {
+                        echo 'active';
+                    }
+                    ?>
+                       ">
+                      <p>Mailbox</p>
                     </a>
                   </li>
                   <li class="nav-item">

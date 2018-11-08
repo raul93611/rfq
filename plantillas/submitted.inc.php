@@ -12,6 +12,10 @@ switch ($cotizacion) {
     $canal = 'E-mails';
     include_once 'plantillas/emails_submitted.inc.php';
     break;
+  case 'mailbox_submitted':
+    $canal = 'Mailbox';
+    include_once 'plantillas/mailbox_submitted.inc.php';
+    break;
   case 'findfrp_submitted':
     $canal = 'FindFRP';
     include_once 'plantillas/findfrp_submitted.inc.php';

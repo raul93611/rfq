@@ -69,6 +69,7 @@
           <option>GSA-Buy</option>
           <option>FedBid</option>
           <option>E-mails</option>
+          <option>Mailbox</option>
           <option>FindFRP</option>
           <option>Embassies</option>
           <option>FBO</option>

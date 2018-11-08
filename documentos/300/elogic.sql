@@ -43,6 +43,7 @@ CREATE TABLE rfq(
         shipping_cost DECIMAL(10,2) NOT NULL,
         shipping VARCHAR(100) NOT NULL,
         rfp INT NOT NULL,
+        fullfillment TINYINT NOT NULL,
         PRIMARY KEY(id),
         FOREIGN KEY(id_usuario)
             REFERENCES usuarios(id)
