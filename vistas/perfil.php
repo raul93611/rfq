@@ -24,6 +24,9 @@ switch ($gestor_actual) {
   case 'search_quotes':
     include_once 'plantillas/search_quotes.inc.php';
     break;
+  case 'employee_docs_page':
+    include_once 'plantillas/employee_docs_page.inc.php';
+    break;
   case 'edit_user':
     include_once 'plantillas/edit_user.inc.php';
     break;

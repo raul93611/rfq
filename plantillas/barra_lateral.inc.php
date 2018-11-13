@@ -535,6 +535,18 @@
           <?php
         }
         ?>
+        <li class="nav-item has-treeview menu-open">
+          <a href="<?php echo EMPLOYEE_DOCS_PAGE; ?>" class="nav-link
+          <?php
+          if ($gestor_actual == 'employee_docs') {
+            echo 'active';
+          }
+          ?>
+             ">
+            <i class="fas fa-file nav-icon"></i>
+            <p>Employee docs</p>
+          </a>
+        </li>
       </ul>
     </nav>
   </div>

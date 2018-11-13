@@ -119,6 +119,10 @@ if ($partes_ruta[0] == 'rfq') {
           $gestor_actual = 'search_quotes';
           $ruta_elegida = 'vistas/perfil.php';
           break;
+        case 'employee_docs_page':
+          $gestor_actual = 'employee_docs_page';
+          $ruta_elegida = 'vistas/perfil.php';
+          break;
       }
       break;
       case 'proposal':
