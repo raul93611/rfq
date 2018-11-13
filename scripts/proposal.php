@@ -167,28 +167,122 @@ try{
       }
       $a = 1;
       for ($i = 0; $i < count($items); $i++) {
+        $item_description = '';
           $item = $items[$i];
-            $html .= '<tr>
-                <td>' . $a . '</td>
-                <td><b>Brand name:</b> ' . $item->obtener_brand() . '<br><b>Part number:</b> ' . $item->obtener_part_number() . '<br><b> Item description:</b><br> ' . nl2br(wordwrap($item->obtener_description(), 70, '<br>', true)) . '</td>
-                <td style="text-align:right;">' . $item->obtener_quantity() . '</td>
-                <td style="text-align:right;">$ ' . number_format($item->obtener_unit_price(), 2) . '</td>
-                <td style="text-align:right;">$ ' . number_format($item->obtener_total_price(), 2) . '</td>
-              </tr>';
+                if (strlen($item-> obtener_description()) >= 300) {
+                  $indice = 300;
+                  while($item-> obtener_description()[$indice] != ' '){
+                    $indice = $indice + 1;
+                  }
+                  $item_description = substr($item-> obtener_description(), $indice);
+                  $html .= '<tr>
+                      <td style="border-bottom: 0;">' . $a . '</td>
+                      <td style="border-bottom: 0;"><b>Brand name:</b> ' . $item->obtener_brand() . '<br><b>Part number:</b> ' . $item->obtener_part_number() . '<br><b> Item description:</b><br> ';
+                  $html .= nl2br(wordwrap(substr($item-> obtener_description(), 0, $indice), 70, '<br>', true));
+                  //$html .= nl2br(substr(wordwrap($item->obtener_description(), 70, '<br>', true), 0, 350));
+                  $html .= '</td>
+                  <td style="text-align:right;border-bottom: 0;">' . $item->obtener_quantity() . '</td>
+                  <td style="text-align:right;border-bottom: 0;">$ ' . number_format($item->obtener_unit_price(), 2) . '</td>
+                  <td style="text-align:right;border-bottom: 0;">$ ' . number_format($item->obtener_total_price(), 2) . '</td>
+                </tr>';
+                  while(strlen($item_description) >= 300){
+                    $indice = 300;
+                    while($item_description[$indice] != ' '){
+                      $indice = $indice + 1;
+                    }
+                    $html .= '
+                    <tr style="border-top: 0;">
+                      <td style="border-bottom: 0;border-top: 0;"></td>
+                      <td style="border-bottom: 0;border-top: 0;">' . nl2br(wordwrap(substr($item_description, 0, $indice), 70, '<br>', true)) . '</td>
+                      <td style="border-bottom: 0;border-top: 0;"></td>
+                      <td style="border-bottom: 0;border-top: 0;"></td>
+                      <td style="border-bottom: 0;border-top: 0;"></td>
+                    </tr>
+                    ';
+                    $item_description = substr($item_description, $indice);
+                  }
+                  if(strlen($item_description)){
+                    $html .= '
+                    <tr>
+                      <td style="border-top: 0;"></td>
+                      <td style="border-top: 0;">' . nl2br(wordwrap($item_description, 70, '<br>', true)) . '</td>
+                      <td style="border-top: 0;"></td>
+                      <td style="border-top: 0;"></td>
+                      <td style="border-top: 0;"></td>
+                    </tr>
+                    ';
+                  }
+                }else{
+                  $html .= '<tr>
+                      <td>' . $a . '</td>
+                      <td><b>Brand name:</b> ' . $item->obtener_brand() . '<br><b>Part number:</b> ' . $item->obtener_part_number() . '<br><b> Item description:</b><br> ';
+                  $html .= nl2br(wordwrap($item->obtener_description(), 70, '<br>', true));
+                  $html .= '</td>
+                  <td style="text-align:right;">' . $item->obtener_quantity() . '</td>
+                  <td style="text-align:right;">$ ' . number_format($item->obtener_unit_price(), 2) . '</td>
+                  <td style="text-align:right;">$ ' . number_format($item->obtener_total_price(), 2) . '</td>
+                </tr>';
+                }
             Conexion::abrir_conexion();
             $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Conexion::obtener_conexion(), $item-> obtener_id());
             Conexion::cerrar_conexion();
             for($j = 0; $j < count($subitems); $j++){
+              $subitem_description = '';
               $subitem = $subitems[$j];
-              $html .= '
-                <tr>
-                  <td></td>
-                  <td><b>Brand name:</b> ' . $subitem-> obtener_brand() . '<br><b>Part number:</b> ' . $subitem-> obtener_part_number() . '<br><b>Item description:</b><br> ' . nl2br(wordwrap($subitem->obtener_description(), 70, '<br>', true)) . '</td>
-                  <td style="text-align:right;">' . $subitem-> obtener_quantity() . '</td>
-                  <td style="text-align:right;">$ ' . number_format($subitem-> obtener_unit_price(), 2) . '</td>
-                  <td style="text-align:right;">$ ' . number_format($subitem-> obtener_total_price(), 2) . '</td>
-                </tr>
-              ';
+              if (strlen($subitem-> obtener_description()) >= 300) {
+                $indice = 300;
+                while($subitem-> obtener_description()[$indice] != ' '){
+                  $indice = $indice + 1;
+                }
+                $subitem_description = substr($subitem-> obtener_description(), $indice);
+                $html .= '<tr>
+                    <td style="border-bottom: 0;"></td>
+                    <td style="border-bottom: 0;"><b>Brand name:</b> ' . $subitem->obtener_brand() . '<br><b>Part number:</b> ' . $subitem->obtener_part_number() . '<br><b> Item description:</b><br> ';
+                $html .= nl2br(wordwrap(substr($subitem-> obtener_description(), 0, $indice), 70, '<br>', true));
+                //$html .= nl2br(substr(wordwrap($item->obtener_description(), 70, '<br>', true), 0, 350));
+                $html .= '</td>
+                <td style="text-align:right;border-bottom: 0;">' . $subitem->obtener_quantity() . '</td>
+                <td style="text-align:right;border-bottom: 0;">$ ' . number_format($subitem->obtener_unit_price(), 2) . '</td>
+                <td style="text-align:right;border-bottom: 0;">$ ' . number_format($subitem->obtener_total_price(), 2) . '</td>
+              </tr>';
+                while(strlen($subitem_description) >= 300){
+                  $indice = 300;
+                  while($subitem_description[$indice] != ' '){
+                    $indice = $indice + 1;
+                  }
+                  $html .= '
+                  <tr style="border-top: 0;">
+                    <td style="border-bottom: 0;border-top: 0;"></td>
+                    <td style="border-bottom: 0;border-top: 0;">' . nl2br(wordwrap(substr($subitem_description, 0, $indice), 70, '<br>', true)) . '</td>
+                    <td style="border-bottom: 0;border-top: 0;"></td>
+                    <td style="border-bottom: 0;border-top: 0;"></td>
+                    <td style="border-bottom: 0;border-top: 0;"></td>
+                  </tr>
+                  ';
+                  $subitem_description = substr($subitem_description, $indice);
+                }
+                if(strlen($subitem_description)){
+                  $html .= '
+                  <tr>
+                    <td style="border-top: 0;"></td>
+                    <td style="border-top: 0;">' . nl2br(wordwrap($subitem_description, 70, '<br>', true)) . '</td>
+                    <td style="border-top: 0;"></td>
+                    <td style="border-top: 0;"></td>
+                    <td style="border-top: 0;"></td>
+                  </tr>
+                  ';
+                }
+              }else{
+                $html .= '<tr>
+                    <td></td>
+                    <td><b>Brand name:</b> ' . $subitem->obtener_brand() . '<br><b>Part number:</b> ' . $subitem->obtener_part_number() . '<br><b> Item description:</b><br> ';
+                $html .= nl2br(wordwrap($subitem->obtener_description(), 70, '<br>', true));
+                $html .= '</td>
+                <td style="text-align:right;">' . $subitem->obtener_quantity() . '</td>
+                <td style="text-align:right;">$ ' . number_format($subitem->obtener_unit_price(), 2) . '</td>
+                <td style="text-align:right;">$ ' . number_format($subitem->obtener_total_price(), 2) . '</td>
+              </tr>';
+              }
             }
             $a++;
       }
