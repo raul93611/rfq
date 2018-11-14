@@ -249,7 +249,7 @@ table{
 }
 
 .list-group-item:hover{
-  background-color: #F0E714;
+  background-color: #f4f6f9;
 }
 
 #tabla_items .description{
@@ -303,4 +303,20 @@ table{
   background-color: #E7E9EB;
   border: 1px solid rgba(0, 0, 0, 0.125);
   border-radius: 0.25rem;
+}
+
+.card-documents{
+  height: 500px !important;
+}
+
+.card-documents .list-group-item{
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
+  border-bottom: 1px solid #ccc !important;
+  margin-bottom: 1px !important;
+}
+
+.card-documents .close{
+  color: #13A8F0 !important;
 }
