@@ -822,6 +822,58 @@ class RepositorioRfq {
       <?php
     }
   }
+/*************************************************************************************************************/
+/*******************************************CANCELLED************************************************************/
+/*************************************************************************************************************/
+  public static function obtener_cotizaciones_cancelled($conexion) {
+    $cotizaciones = [];
+    if (isset($conexion)) {
+      try {
+        $sql = "SELECT * FROM rfq WHERE comments = 'Cancelled' ORDER BY id DESC";
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(PDO::FETCH_ASSOC);
+        if (count($resultado)) {
+          foreach ($resultado as $fila) {
+            $cotizaciones [] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['total_cost'], $fila['total_price'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['fecha_submitted'], $fila['fecha_award'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via'], $fila['taxes'], $fila['profit'], $fila['additional'], $fila['shipping'], $fila['shipping_cost'], $fila['rfp'], $fila['fullfillment']);
+          }
+        }
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $cotizaciones;
+  }
+
+  public static function escribir_cotizaciones_cancelled() {
+    Conexion::abrir_conexion();
+    $cotizaciones = self::obtener_cotizaciones_cancelled(Conexion::obtener_conexion());
+    Conexion::cerrar_conexion();
+    if (count($cotizaciones)) {
+      ?>
+      <table id="tabla" class="table table-bordered table-responsive-md">
+        <thead>
+          <tr>
+            <th>CODE</th>
+            <th>DEDIGNATED USER</th>
+            <th>TYPE OF BID</th>
+            <th>ISSUE DATE</th>
+            <th>END DATE</th>
+            <th>PROPOSAL</th>
+            <th>COMMENTS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php
+          foreach ($cotizaciones as $cotizacion) {
+            self::escribir_cotizacion_no_bid($cotizacion);
+          }
+          ?>
+        </tbody>
+      </table>
+      <?php
+    }
+  }
 /**************************************************************************************************************************/
 /****************************************************NO SUBMITTED**********************************************************/
 /**************************************************************************************************************************/

@@ -497,6 +497,17 @@
                   <p>No submitted</p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="<?php echo CANCELLED; ?>" class="nav-link
+                <?php
+                if ($cotizacion == 'cancelled') {
+                  echo 'active';
+                }
+                ?>
+                   ">
+                  <p>Cancelled</p>
+                </a>
+              </li>
             <?php
             if ($cargo < 5) {
               ?>

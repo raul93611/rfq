@@ -69,7 +69,7 @@ define('GUARDAR_EDITAR_COTIZACION', SERVIDOR . 'guardar_editar_cotizacion/');
 define('NO_BID', COTIZACIONES . 'no_bid');
 define('NO_SUBMITTED', COTIZACIONES . 'no_submitted');
 define('RFP_QUOTES', COTIZACIONES . 'rfp_quotes');
-
+define('CANCELLED', COTIZACIONES . 'cancelled');
 /***************************PROPOSAL********************************************/
 define('PROPOSAL', SERVIDOR . 'proposal');
 define('PROPOSAL_GSA', SERVIDOR . 'proposal_gsa');

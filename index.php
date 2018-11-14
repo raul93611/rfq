@@ -300,8 +300,11 @@ if ($partes_ruta[0] == 'rfq') {
         case 'no_submitted':
           $cotizacion = 'no_submitted';
           break;
-        case 'rfp_quotes'.
+        case 'rfp_quotes':
           $cotizacion = 'rfp_quotes';
+          break;
+        case 'cancelled':
+          $cotizacion = 'cancelled';
           break;
       }
       } else if ($partes_ruta[1] == 'perfil' && $partes_ruta[2] == 'completados') {

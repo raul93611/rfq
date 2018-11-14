@@ -51,6 +51,9 @@ switch ($gestor_actual) {
       case 'rfp_quotes':
         include_once 'plantillas/rfp_quotes.inc.php';
         break;
+      case 'cancelled':
+        include_once 'plantillas/cancelled.inc.php';
+        break;
       case 'editar_cotizacion':
         Conexion::abrir_conexion();
         $cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
