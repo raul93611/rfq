@@ -538,7 +538,7 @@
         <li class="nav-item has-treeview menu-open">
           <a href="<?php echo EMPLOYEE_DOCS_PAGE; ?>" class="nav-link
           <?php
-          if ($gestor_actual == 'employee_docs') {
+          if ($gestor_actual == 'employee_docs_page') {
             echo 'active';
           }
           ?>
