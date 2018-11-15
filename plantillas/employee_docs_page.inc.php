@@ -48,7 +48,7 @@
           </div>
           <div class="card-documents card card-primary">
             <div class="card-header">
-              <h3 class="card-title"><i class="fas fa-file"></i> Brand name</h3>
+              <h3 class="card-title"><i class="fas fa-file"></i> Branding</h3>
             </div>
             <div class="card-body">
               <?php
