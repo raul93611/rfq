@@ -76,6 +76,7 @@
           <option <?php if($validador-> obtener_canal() == 'FindFRP'){echo 'selected';} ?>>FindFRP</option>
           <option <?php if($validador-> obtener_canal() == 'Embassies'){echo 'selected';} ?>>Embassies</option>
           <option <?php if($validador-> obtener_canal() == 'FBO'){echo 'selected';} ?>>FBO</option>
+          <option <?php if($validador-> obtener_canal() == 'Chemonics'){echo 'selected';} ?>>Chemonics</option>
         </select>
       </div>
     </div>

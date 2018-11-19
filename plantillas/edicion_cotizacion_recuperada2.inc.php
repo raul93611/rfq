@@ -15,6 +15,17 @@ if($cotizacion_recuperada-> obtener_canal() == 'FedBid'){
   <br>
   <?php
 }
+if($cotizacion_recuperada-> obtener_canal() == 'Chemonics'){
+  ?>
+  <div class="row">
+    <div class="col-md-12">
+      <label for="total_price_chemonics">Total price:</label>
+      <input type="number" step=".01" name="total_price_chemonics" class="form-control form-control-sm" value="<?php echo $cotizacion_recuperada-> obtener_total_price(); ?>">
+    </div>
+  </div>
+  <br>
+  <?php
+}
 ?>
 <div class="row">
   <div class="col">
@@ -99,28 +110,39 @@ if($cotizacion_recuperada-> obtener_canal() == 'FedBid'){
   </div>
 </div>
 <?php
-if ($cotizacion_recuperada->obtener_completado() && $cotizacion_recuperada->obtener_status() && !$cotizacion_recuperada->obtener_award() && $cargo < 4) {
-  ?>
+if($cotizacion_recuperada-> obtener_canal() == 'Chemonics'){
+  if(!$cotizacion_recuperada->obtener_award()){
+    ?>
     <div class="form-check">
       <input type="checkbox" class="form-check-input" name="award" value="si" <?php if ($cotizacion_recuperada->obtener_award()) { echo 'checked'; } ?> id="award">
       <label class="form-check-label" for="award">Award</label>
     </div>
+    <?php
+  }
+}else{
+  if ($cotizacion_recuperada->obtener_completado() && $cotizacion_recuperada->obtener_status() && !$cotizacion_recuperada->obtener_award() && $cargo < 4) {
+    ?>
+      <div class="form-check">
+        <input type="checkbox" class="form-check-input" name="award" value="si" <?php if ($cotizacion_recuperada->obtener_award()) { echo 'checked'; } ?> id="award">
+        <label class="form-check-label" for="award">Award</label>
+      </div>
 
+      <?php
+    } else if ($cotizacion_recuperada->obtener_completado() && !$cotizacion_recuperada->obtener_status() && !$cotizacion_recuperada->obtener_award() && $cargo < 5) {
+      ?>
+      <div class="form-check">
+        <input type="checkbox" class="form-check-input" name="status" value="si" <?php if ($cotizacion_recuperada->obtener_status()) { echo 'checked'; } ?> id="status">
+        <label class="form-check-label" for="status">Submitted</label>
+      </div>
+      <?php
+    } else if (!$cotizacion_recuperada->obtener_completado() && !$cotizacion_recuperada->obtener_status() && !$cotizacion_recuperada->obtener_award()) {
+      ?>
+      <div class="form-check">
+        <input type="checkbox" class="form-check-input" name="completado" value="si" <?php if ($cotizacion_recuperada->obtener_completado()) { echo 'checked';} ?> id="completado">
+        <label class="form-check-label" for="completado">Completed</label>
+      </div>
     <?php
-  } else if ($cotizacion_recuperada->obtener_completado() && !$cotizacion_recuperada->obtener_status() && !$cotizacion_recuperada->obtener_award() && $cargo < 5) {
-    ?>
-    <div class="form-check">
-      <input type="checkbox" class="form-check-input" name="status" value="si" <?php if ($cotizacion_recuperada->obtener_status()) { echo 'checked'; } ?> id="status">
-      <label class="form-check-label" for="status">Submitted</label>
-    </div>
-    <?php
-  } else if (!$cotizacion_recuperada->obtener_completado() && !$cotizacion_recuperada->obtener_status() && !$cotizacion_recuperada->obtener_award()) {
-    ?>
-    <div class="form-check">
-      <input type="checkbox" class="form-check-input" name="completado" value="si" <?php if ($cotizacion_recuperada->obtener_completado()) { echo 'checked';} ?> id="completado">
-      <label class="form-check-label" for="completado">Completed</label>
-    </div>
-  <?php
+  }
 }
 ?>
 </div>

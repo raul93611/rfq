@@ -163,6 +163,17 @@
                     <p>FBO</p>
                   </a>
                 </li>
+                <li class="nav-item">
+                  <a href="<?php echo CHEMONICS; ?>" class="nav-link
+                  <?php
+                  if ($cotizacion == 'chemonics') {
+                    echo 'active';
+                  }
+                  ?>
+                     ">
+                    <p>Chemonics</p>
+                  </a>
+                </li>
               </ul>
             </li>
 
@@ -454,6 +465,17 @@
                     ?>
                        ">
                       <p>FBO</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="<?php echo CHEMONICS_AWARD; ?>" class="nav-link
+                    <?php
+                    if ($cotizacion == 'chemonics_award') {
+                        echo 'active';
+                    }
+                    ?>
+                       ">
+                      <p>Chemonics</p>
                     </a>
                   </li>
                 </ul>

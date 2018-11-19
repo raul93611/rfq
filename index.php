@@ -291,6 +291,9 @@ if ($partes_ruta[0] == 'rfq') {
         case 'fbo':
           $cotizacion = 'fbo';
           break;
+        case 'chemonics':
+          $cotizacion = 'chemonics';
+          break;
         case 'nuevo':
           $cotizacion = 'nuevo';
           break;
@@ -383,6 +386,9 @@ if ($partes_ruta[0] == 'rfq') {
             break;
           case 'fbo':
             $cotizacion = 'fbo_award';
+            break;
+          case 'chemonics':
+            $cotizacion = 'chemonics_award';
             break;
         }
       }

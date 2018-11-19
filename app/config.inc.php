@@ -32,6 +32,7 @@ define('MAILBOX', COTIZACIONES . 'mailbox');
 define('FINDFRP', COTIZACIONES . 'findfrp');
 define('EMBASSIES', COTIZACIONES . 'embassies');
 define('FBO', COTIZACIONES . 'fbo');
+define('CHEMONICS', COTIZACIONES . 'chemonics');
 /*********************************COMPLETED*************************************/
 define('COMPLETADOS', PERFIL . 'completados/');
 define('GSA_BUY_COMPLETADOS', COMPLETADOS . 'gsa_buy');
@@ -59,6 +60,7 @@ define('MAILBOX_AWARD', AWARD . 'mailbox');
 define('FINDFRP_AWARD', AWARD . 'findfrp');
 define('EMBASSIES_AWARD', AWARD . 'embassies');
 define('FBO_AWARD', AWARD . 'fbo');
+define('CHEMONICS_AWARD', AWARD . 'chemonics');
 /***************************QUOTES OPTIONS**************************************/
 define('COPY_QUOTE', SERVIDOR . 'copy_quote/');
 define('NUEVA_COTIZACION', COTIZACIONES . 'nuevo');

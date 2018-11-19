@@ -28,5 +28,9 @@ switch ($cotizacion) {
     $canal = 'FBO';
     include_once 'plantillas/fbo_award.inc.php';
     break;
+  case 'chemonics_award':
+    $canal = 'Chemonics';
+    include_once 'plantillas/chemonics_award.inc.php';
+    break;
 }
 ?>

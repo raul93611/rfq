@@ -48,6 +48,9 @@ if (isset($_POST['registrar_cotizacion'])) {
         case 'FBO':
           $canal = 'fbo';
           break;
+        case 'Chemonics':
+          $canal = 'chemonics';
+          break;
       }
       Redireccion::redirigir1(COTIZACIONES . $canal);
     }

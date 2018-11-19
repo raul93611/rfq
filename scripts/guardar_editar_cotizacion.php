@@ -80,6 +80,10 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
   if($cotizacion_recuperada-> obtener_canal() == 'FedBid'){
     RepositorioRfq::guardar_total_price_total_cost_fedbid(Conexion::obtener_conexion(), $_POST['total_cost_fedbid'], $_POST['total_price_fedbid'], $_POST['id_rfq']);
   }
+  echo $_POST['total_price_chemonics'];
+  if($cotizacion_recuperada-> obtener_canal() == 'Chemonics'){
+    RepositorioRfq::guardar_total_price_chemonics(Conexion::obtener_conexion(), $_POST['total_price_chemonics'], $_POST['id_rfq']);
+  }
   /*****************************************************************************************************************************/
   /*****************************************************************************************************************************/
   RepositorioRfq::actualizar_rfq_2(Conexion::obtener_conexion(), $_POST['comments'], $_POST['ship_via'], htmlspecialchars($_POST['address']), htmlspecialchars($_POST['ship_to']), $_POST['id_rfq']);
@@ -116,110 +120,123 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
     case 'FBO':
       $canal = 'fbo';
       break;
+    case 'Chemonics':
+      $canal = 'chemonics';
+      break;
   }
-  if (!$cotizacion_recuperada->obtener_completado()) {
-    if (isset($_POST['completado']) && $_POST['completado'] == 'si') {
-      $completado = 1;
-    } else {
-      $completado = 0;
-    }
-    if ($completado) {
+  if($cotizacion_recuperada-> obtener_canal() == 'Chemonics'){
+    if(isset($_POST['award']) && $_POST['award'] == 'si'){
       RepositorioRfq::check_completed(Conexion::obtener_conexion(), $_POST['id_rfq']);
-      if($cotizacion_recuperada-> obtener_rfp()){
-        $members = [];
-        Connection::open_connection();
-        $project = ProjectRepository::get_project_by_id(Connection::get_connection(), $cotizacion_recuperada-> obtener_rfp());
-        $designated_user_rfp = UserRepository::get_user_by_id(Connection::get_connection(), $project-> get_designated_user());
-        Connection::close_connection();
-        foreach ($members as $member) {
-          $to = $designated_user_rfp-> get_email();
-          $subject = $project-> get_project_name();
-          $headers = "MIME-Version: 1.0\r\n";
-          $headers .= "Content-type: text/html; charset=UTF-8\r\n";
-          $headers .= "From:" .  $_SESSION['nombre_usuario']  . " <elogic@e-logic.us>\r\n";
-          $message = '
-          <html>
-          <body>
-          <h3>Project details:</h3>
-          <h5>Project:</h5>
-          <p><a href="http://www.elogicportal.com/rfp/profile/info_project_and_services/' . $project-> get_id() . '">' . $project-> get_project_name() . '</a></p>
-          <h5>Comment:</h5>
-          <p>The quote is completed.</p>
-          </body>
-          </html>
-          ';
-          mail($to, $subject, $message, $headers);
+      RepositorioRfq::actualizar_fecha_y_submitted(Conexion::obtener_conexion(), $_POST['id_rfq']);
+      RepositorioRfq::actualizar_fecha_y_award(Conexion::obtener_conexion(), $_POST['id_rfq']);
+      Redireccion::redirigir(AWARD . $canal);
+    }
+  }else{
+    if (!$cotizacion_recuperada->obtener_completado()) {
+      if (isset($_POST['completado']) && $_POST['completado'] == 'si') {
+        $completado = 1;
+      } else {
+        $completado = 0;
+      }
+      if ($completado) {
+        RepositorioRfq::check_completed(Conexion::obtener_conexion(), $_POST['id_rfq']);
+        if($cotizacion_recuperada-> obtener_rfp()){
+          $members = [];
+          Connection::open_connection();
+          $project = ProjectRepository::get_project_by_id(Connection::get_connection(), $cotizacion_recuperada-> obtener_rfp());
+          $designated_user_rfp = UserRepository::get_user_by_id(Connection::get_connection(), $project-> get_designated_user());
+          Connection::close_connection();
+          foreach ($members as $member) {
+            $to = $designated_user_rfp-> get_email();
+            $subject = $project-> get_project_name();
+            $headers = "MIME-Version: 1.0\r\n";
+            $headers .= "Content-type: text/html; charset=UTF-8\r\n";
+            $headers .= "From:" .  $_SESSION['nombre_usuario']  . " <elogic@e-logic.us>\r\n";
+            $message = '
+            <html>
+            <body>
+            <h3>Project details:</h3>
+            <h5>Project:</h5>
+            <p><a href="http://www.elogicportal.com/rfp/profile/info_project_and_services/' . $project-> get_id() . '">' . $project-> get_project_name() . '</a></p>
+            <h5>Comment:</h5>
+            <p>The quote is completed.</p>
+            </body>
+            </html>
+            ';
+            mail($to, $subject, $message, $headers);
+          }
+        }
+        $descripcion = 'The quote was completed.';
+        $comment = new Comment('', $cotizacion_recuperada-> obtener_id(), $_SESSION['id_usuario'], $descripcion, '');
+        RepositorioComment::insertar_comment(Conexion::obtener_conexion(), $comment);
+        if ($cargo < 5) {
+          Redireccion::redirigir(COMPLETADOS . $canal);
+        } else {
+          Redireccion::redirigir(COTIZACIONES . $canal);
         }
       }
-      $descripcion = 'The quote was completed.';
-      $comment = new Comment('', $cotizacion_recuperada-> obtener_id(), $_SESSION['id_usuario'], $descripcion, '');
-      RepositorioComment::insertar_comment(Conexion::obtener_conexion(), $comment);
-      if ($cargo < 5) {
-        Redireccion::redirigir(COMPLETADOS . $canal);
+    } else if (!$cotizacion_recuperada->obtener_status()) {
+      if (isset($_POST['status']) && $_POST['status'] == 'si') {
+        $submitted = 1;
       } else {
-        Redireccion::redirigir(COTIZACIONES . $canal);
+        $submitted = 0;
       }
-    }
-  } else if (!$cotizacion_recuperada->obtener_status()) {
-    if (isset($_POST['status']) && $_POST['status'] == 'si') {
-      $submitted = 1;
-    } else {
-      $submitted = 0;
-    }
-    if ($submitted) {
-      $descripcion = 'The quote was submitted.';
-      $comment = new Comment('', $cotizacion_recuperada-> obtener_id(), $_SESSION['id_usuario'], $descripcion, '');
-      RepositorioComment::insertar_comment(Conexion::obtener_conexion(), $comment);
-      RepositorioRfq::actualizar_fecha_y_submitted(Conexion::obtener_conexion(), $_POST['id_rfq']);
-      Redireccion::redirigir(COMPLETADOS . $canal);
-    }
-  }else if(!$cotizacion_recuperada-> obtener_award()){
-    if(isset($_POST['award']) && $_POST['award'] == 'si'){
-      $award = 1;
-    }else{
-      $award = 0;
-    }
-    if($award){
-      RepositorioRfq::actualizar_fecha_y_award(Conexion::obtener_conexion(), $_POST['id_rfq']);
-      $to = $usuario-> obtener_email();
-      $subject = "Awarded quote";
-      $headers = "MIME-Version: 1.0\r\n";
-      $headers .= "Content-type: text/html; charset=UTF-8\r\n";
-      $headers .= "From: E-logic <elogic@e-logic.us>\r\n";
-      $message = '
-      <html>
-      <body style="margin:0;border-radius: 10px; padding:10px; width:600px;" bgcolor="white">
-      <table align="center" border="0" cellpadding="0" cellspacing="0" style="box-shadow: 5px 10px 8px #888888;width:400px;padding:10px;border-radius: 10px; border-collapse: separate;" bgcolor="#FFFFFF">
-        <tr>
-          <td align="center" style="padding: 10px;">
-            <img src="http://www.elogicportal.com/congratulation_img.png" alt="Logo" style="width:300px;border:0;"/>
-          </td>
-        </tr>
-        <tr>
-          <td align="center" style="color: #333538; padding: 10px; font-size: 25px;">
-            <span>Your proposal# ' . $cotizacion_recuperada-> obtener_id() . ' has been accepted by:<br>' . nl2br($_POST['address']) . '</span>
-          </td>
-        </tr>
-        <tr>
-          <td align="center" style="padding: 10px;">
-            <img src="http://www.elogicportal.com/rfp/img/eP_logo_home.png" alt="Logo" style="width:50px;border:0;"/>
-          </td>
-        </tr>
-      </table>
-      </body>
-      </html>
-      ';
-      mail($to, $subject, $message, $headers);
-      $descripcion = 'The quote was awarded.';
-      $comment = new Comment('', $cotizacion_recuperada-> obtener_id(), $_SESSION['id_usuario'], $descripcion, '');
-      RepositorioComment::insertar_comment(Conexion::obtener_conexion(), $comment);
-      if($cargo < 5){
-        Redireccion::redirigir(AWARD . $canal);
+      if ($submitted) {
+        $descripcion = 'The quote was submitted.';
+        $comment = new Comment('', $cotizacion_recuperada-> obtener_id(), $_SESSION['id_usuario'], $descripcion, '');
+        RepositorioComment::insertar_comment(Conexion::obtener_conexion(), $comment);
+        RepositorioRfq::actualizar_fecha_y_submitted(Conexion::obtener_conexion(), $_POST['id_rfq']);
+        Redireccion::redirigir(COMPLETADOS . $canal);
+      }
+    }else if(!$cotizacion_recuperada-> obtener_award()){
+      if(isset($_POST['award']) && $_POST['award'] == 'si'){
+        $award = 1;
       }else{
-        Redireccion::redirigir(COTIZACIONES . $canal);
+        $award = 0;
+      }
+      if($award){
+        RepositorioRfq::actualizar_fecha_y_award(Conexion::obtener_conexion(), $_POST['id_rfq']);
+        $to = $usuario-> obtener_email();
+        $subject = "Awarded quote";
+        $headers = "MIME-Version: 1.0\r\n";
+        $headers .= "Content-type: text/html; charset=UTF-8\r\n";
+        $headers .= "From: E-logic <elogic@e-logic.us>\r\n";
+        $message = '
+        <html>
+        <body style="margin:0;border-radius: 10px; padding:10px; width:600px;" bgcolor="white">
+        <table align="center" border="0" cellpadding="0" cellspacing="0" style="box-shadow: 5px 10px 8px #888888;width:400px;padding:10px;border-radius: 10px; border-collapse: separate;" bgcolor="#FFFFFF">
+          <tr>
+            <td align="center" style="padding: 10px;">
+              <img src="http://www.elogicportal.com/congratulation_img.png" alt="Logo" style="width:300px;border:0;"/>
+            </td>
+          </tr>
+          <tr>
+            <td align="center" style="color: #333538; padding: 10px; font-size: 25px;">
+              <span>Your proposal# ' . $cotizacion_recuperada-> obtener_id() . ' has been accepted by:<br>' . nl2br($_POST['address']) . '</span>
+            </td>
+          </tr>
+          <tr>
+            <td align="center" style="padding: 10px;">
+              <img src="http://www.elogicportal.com/rfp/img/eP_logo_home.png" alt="Logo" style="width:50px;border:0;"/>
+            </td>
+          </tr>
+        </table>
+        </body>
+        </html>
+        ';
+        mail($to, $subject, $message, $headers);
+        $descripcion = 'The quote was awarded.';
+        $comment = new Comment('', $cotizacion_recuperada-> obtener_id(), $_SESSION['id_usuario'], $descripcion, '');
+        RepositorioComment::insertar_comment(Conexion::obtener_conexion(), $comment);
+        if($cargo < 5){
+          Redireccion::redirigir(AWARD . $canal);
+        }else{
+          Redireccion::redirigir(COTIZACIONES . $canal);
+        }
       }
     }
   }
+
   $cambios_especificos = [];
   if($_POST['taxes'] != $_POST['taxes_original']){
     $cambios_especificos[] = '

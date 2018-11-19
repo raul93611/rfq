@@ -694,7 +694,7 @@ class RepositorioRfq {
       <td><?php echo $cotizacion->obtener_id(); ?></td>
       <td><?php echo $cotizacion->obtener_comments(); ?></td>
       <?php
-      if($cotizacion-> obtener_canal() != 'FedBid'){
+      if($cotizacion-> obtener_canal() != 'FedBid' && $cotizacion-> obtener_canal() != 'Chemonics'){
         if ($cotizacion->obtener_canal() != 'GSA-Buy') {
           ?>
           <td class="text-center"><a class="btn btn-sm calculate" href="<?php echo PROPOSAL . '/' . $cotizacion->obtener_id(); ?>" target="_blank"><i class="fa fa-copy"></i></a></td>
@@ -728,7 +728,7 @@ class RepositorioRfq {
             <th>AWARD DATE</th>
             <th>PROPOSAL</th>
             <th>COMMENTS</th>
-            <?php if($canal != 'FedBid'){echo '<th>GENERATE PROPOSAL</th>';} ?>
+            <?php if($canal != 'FedBid' && $canal != 'Chemonics'){echo '<th>GENERATE PROPOSAL</th>';} ?>
           </tr>
         </thead>
         <tbody>
@@ -1313,6 +1313,20 @@ class RepositorioRfq {
         $sentencia = $conexion-> prepare($sql);
         $sentencia-> bindParam(':total_cost_fedbid', $total_cost_fedbid,PDO::PARAM_STR);
         $sentencia-> bindParam(':total_price_fedbid', $total_price_fedbid, PDO::PARAM_STR);
+        $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia-> execute();
+      }catch(PDOException $ex){
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+  }
+
+  public static function guardar_total_price_chemonics($conexion, $total_price_chemonics, $id_rfq){
+    if(isset($conexion)){
+      try{
+        $sql = 'UPDATE rfq SET total_price = :total_price_chemonics WHERE id = :id_rfq';
+        $sentencia = $conexion-> prepare($sql);
+        $sentencia-> bindParam(':total_price_chemonics', $total_price_chemonics, PDO::PARAM_STR);
         $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia-> execute();
       }catch(PDOException $ex){
