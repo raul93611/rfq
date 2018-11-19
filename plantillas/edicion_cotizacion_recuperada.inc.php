@@ -120,6 +120,18 @@ if($cargo == 5 && $_SESSION['id_usuario'] != $cotizacion_recuperada-> obtener_us
       }
       ?>
     </div>
+    <?php
+    if($cotizacion_recuperada-> obtener_rfp()){
+      ?>
+      <div class="col">
+        <div class="form-group">
+          <label for="rfp">Proposal RFP:</label>
+          <input type="text" class="form-control form-control-sm" disabled value="<?php echo $cotizacion_recuperada-> obtener_rfp(); ?>">
+        </div>
+      </div>
+      <?php
+    }
+    ?>
   </div>
   <label>Documents:</label>
   <?php
