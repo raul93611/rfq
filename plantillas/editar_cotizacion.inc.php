@@ -5,6 +5,9 @@ if (!ControlSesion::sesion_iniciada()) {
 Conexion::abrir_conexion();
 $cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
 Conexion::cerrar_conexion();
+if(is_null($cotizacion_recuperada)){
+  Redireccion::redirigir1(SERVIDOR);
+}
 ?>
 <div class="content-wrapper">
   <section class="content-header">
