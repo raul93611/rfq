@@ -104,6 +104,20 @@ class RepositorioComment{
       <?php
   }
 
+  public static function delete_all_comments($conexion, $id_rfq){
+    if(isset($conexion)){
+      try{
+        $sql = 'DELETE FROM comments WHERE id_rfq = :id_rfq';
+        $sentencia = $conexion-> prepare($sql);
+        $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia-> execute();
+        echo 'asdsadsa' . $id_rfq;
+      }catch(PDOException $ex){
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+  }
+
   public static function mysql_date_to_english_format($mysql_date){
     $parts_mysql_date = explode('-', $mysql_date);
     $english_format = $parts_mysql_date[1] . '/' . $parts_mysql_date[2] . '/' . $parts_mysql_date[0];
