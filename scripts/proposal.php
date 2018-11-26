@@ -171,6 +171,7 @@ try{
           $item = $items[$i];
                 if (strlen($item-> obtener_description()) >= 300) {
                   $indice = 300;
+                  echo strlen($item-> obtener_description());
                   while($item-> obtener_description()[$indice] != ' ' && $indice < strlen($item-> obtener_description())){
                     $indice = $indice + 1;
                   }
@@ -188,7 +189,7 @@ try{
                 echo strlen($item_description);
                   while(strlen($item_description) >= 300){
                     $indice = 300;
-                    while($item_description[$indice] != ' '){
+                    while($item_description[$indice] != ' ' && $indice < strlen($item_description)){
                       $indice = $indice + 1;
                     }
                     $html .= '
@@ -248,7 +249,7 @@ try{
               </tr>';
                 while(strlen($subitem_description) >= 300){
                   $indice = 300;
-                  while($subitem_description[$indice] != ' '){
+                  while($subitem_description[$indice] != ' ' && $indice < strlen($subitem_description)){
                     $indice = $indice + 1;
                   }
                   $html .= '
