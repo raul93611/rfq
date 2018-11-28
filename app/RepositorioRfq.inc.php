@@ -533,11 +533,11 @@ class RepositorioRfq {
     if (isset($conexion)) {
       try {
         if ($cargo < 5) {
-          $sql = "SELECT * FROM rfq WHERE completado = 1 AND status = 1 AND award = 0 AND canal = :canal AND comments = 'No comments' ORDER BY fecha_submitted DESC, id DESC";
+          $sql = "SELECT * FROM rfq WHERE completado = 1 AND status = 1 AND award = 0 AND canal = :canal AND comments = 'No comments' AND rfp = 0 ORDER BY fecha_submitted DESC, id DESC";
           $sentencia = $conexion->prepare($sql);
           $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
         } else if ($cargo > 4) {
-          $sql = "SELECT * FROM rfq WHERE canal = :canal AND usuario_designado = :id_usuario AND completado = 1 AND status = 1 AND award = 0 AND comments = 'No comments' ORDER BY fecha_submitted DESC, id DESC";
+          $sql = "SELECT * FROM rfq WHERE canal = :canal AND usuario_designado = :id_usuario AND completado = 1 AND status = 1 AND award = 0 AND comments = 'No comments' AND rfp = 0 ORDER BY fecha_submitted DESC, id DESC";
           $sentencia = $conexion->prepare($sql);
           $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
           $sentencia->bindParam(':id_usuario', $id_usuario, PDO::PARAM_STR);
@@ -642,11 +642,11 @@ class RepositorioRfq {
     if (isset($conexion)) {
       try {
         if ($cargo < 4) {
-          $sql = "SELECT * FROM rfq WHERE completado = 1 AND status = 1 AND award = 1 AND canal = :canal AND (comments = 'No comments' OR comments = 'QuickBooks') ORDER BY fecha_award DESC";
+          $sql = "SELECT * FROM rfq WHERE completado = 1 AND status = 1 AND award = 1 AND canal = :canal AND rfp = 0 AND (comments = 'No comments' OR comments = 'QuickBooks') ORDER BY fecha_award DESC";
           $sentencia = $conexion->prepare($sql);
           $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
         } else if ($cargo > 3) {
-          $sql = "SELECT * FROM rfq WHERE usuario_designado = :id_usuario AND completado = 1 AND status = 1 AND award = 1 AND canal = :canal AND (comments = 'No comments' OR comments = 'QuickBooks') ORDER BY fecha_award DESC";
+          $sql = "SELECT * FROM rfq WHERE usuario_designado = :id_usuario AND completado = 1 AND status = 1 AND award = 1 AND canal = :canal AND rfp = 0 AND (comments = 'No comments' OR comments = 'QuickBooks') ORDER BY fecha_award DESC";
           $sentencia = $conexion->prepare($sql);
           $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
           $sentencia->bindParam(':id_usuario', $id_usuario, PDO::PARAM_STR);

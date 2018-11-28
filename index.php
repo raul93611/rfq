@@ -250,6 +250,10 @@ if ($partes_ruta[0] == 'rfq') {
         $id_rfq = $partes_ruta[2];
         $ruta_elegida = 'scripts/pdf_tabla_items.php';
         break;
+      case 'load_img':
+        $id_rfq = $partes_ruta[2];
+        $ruta_elegida = 'scripts/load_img.php';
+        break;
       default:
       break;
     }

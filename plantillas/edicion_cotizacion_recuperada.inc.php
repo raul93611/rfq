@@ -138,32 +138,25 @@ if($cargo == 5 && $_SESSION['id_usuario'] != $cotizacion_recuperada-> obtener_us
   $ruta = $_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $cotizacion_recuperada->obtener_id();
   if (is_dir($ruta)) {
     $gestor = opendir($ruta);
-    echo '<div class="list-group">';
     $carpeta = @scandir($ruta);
     if(count($carpeta) <= 2){
-      echo '<h3 class="text-center text-danger"><i class="fa fa-times"></i> No files!</h3>';
     }
+    $archivos = [];
     while (($archivo = readdir($gestor)) !== false) {
       $ruta_completa = $ruta . "/" . $archivo;
       if ($archivo != "." && $archivo != "..") {
-        $archivo_url = str_replace(' ', '%20', $archivo);
-        $archivo_url = str_replace('#', '%23', $archivo_url);
-        echo '<li class="list-group-item"><a download href="' . DOCS . $cotizacion_recuperada->obtener_id() . '/' . $archivo_url . '">' . $archivo . '</a><a href="' . DELETE_DOCUMENT . '/' . $cotizacion_recuperada->obtener_id() . '/' . $archivo_url . '" class="delete_document_button close"><span aria-hidden="true">&times;</span></a></li>';
+        $archivos[] = $archivo;
       }
     }
-
+    $archivos = implode(',', $archivos);
+    ?>
+    <input type="hidden" id="archivos" value="<?php echo $archivos; ?>">
+    <?php
     closedir($gestor);
-    echo "</div>";
   }
   ?>
+  <input type="file" id="archivos_ejemplo" multiple name="archivos_ejemplo[]">
   <br>
-  <div class="form-group">
-    <label for="documents">Upload documents:</label><br>
-    <div class="custom-file">
-      <input type="file" name="documentos[]" multiple class="custom-file-input" id="file_input_info_create">
-      <label id="label_file_create" class="custom-file-label" for="file_input_info_create">Choose file</label>
-    </div>
-  </div>
   <?php
   RepositorioItem::escribir_items($cotizacion_recuperada->obtener_id());
   Conexion::abrir_conexion();

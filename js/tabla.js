@@ -1,4 +1,51 @@
 $(document).ready(function () {
+  $('#archivos_crear').fileinput({
+    theme: 'explorer-fas',
+    initialPreviewAsData: true,
+    showUpload: false,
+    overwriteInitial: false,
+    fileActionSettings:
+    {
+      showZoom: false,
+      showUpload: false,
+      showRemove: false
+    }
+  });
+
+  if($('#archivos_ejemplo').length != 0){
+    var archivos = $('#archivos').val();
+    var array_div_archivos = [];
+    var array_opciones = [];
+    if(archivos != ''){
+      archivos = archivos.split(',');
+
+      for (var i = 0; i < archivos.length; i++) {
+        array_div_archivos.push('"<h3>' + "<i class='" + "fas fa-file" + "'></i>" + '</h3>"');
+        array_opciones.push('{"previewAsData": false, "caption": "' + archivos[i] + '", "url": "' + 'http://' + document.location.hostname + '/rfq/delete_document/' + $('input[name="id_rfq"]').val() + '/' + archivos[i] + '", "downloadUrl": "' + 'http://' + document.location.hostname + '/rfq/documentos/' + $('input[name="id_rfq"]').val() + '/' + archivos[i] + '", "key": ' + i + '}');
+      }
+      array_div_archivos.join(',');
+      array_div_archivos = '[' + array_div_archivos + ']';
+      console.log(array_div_archivos);
+      array_div_archivos = jQuery.parseJSON(array_div_archivos);
+      array_opciones.join(',');
+      array_opciones = '[' + array_opciones + ']';
+      array_opciones = jQuery.parseJSON(array_opciones);
+      console.log(array_div_archivos);
+      console.log(array_opciones);
+    }
+    $('#archivos_ejemplo').fileinput({
+      theme: 'explorer-fas',
+      uploadUrl: 'http://' + document.location.hostname + '/rfq/load_img/' + $('input[name="id_rfq"]').val(),
+      overwriteInitial: false,
+      initialPreviewAsData: true,
+      initialPreview: array_div_archivos,
+      initialPreviewConfig: array_opciones,
+      fileActionSettings:
+      {
+        showZoom: false
+      }
+    });
+  }
   /**************************************BOTON MOSTRAR REPORTES MODAL***********************/
   $('#boton_mostrar_modal').click(function(){
     $('#reports_modal').modal();

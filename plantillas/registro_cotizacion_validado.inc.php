@@ -82,11 +82,7 @@
     </div>
   </div>
   <div class="form-group">
-    <label for="documents">Upload documents:</label><br>
-    <div class="custom-file">
-      <input type="file" name="documentos[]" multiple class="custom-file-input" id="file_input_info_create">
-      <label id="label_file_create" class="custom-file-label" for="file_input_info_create">Choose file</label>
-    </div>
+    <input type="file" id="archivos_crear" multiple name="documentos[]">
   </div>
 </div>
 <div class="card-footer">
