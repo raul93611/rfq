@@ -12,6 +12,8 @@ if(isset($_POST['guardar_fullfillment_form'])){
     foreach ($items as $item) {
       $item_fullfillment = new Item('', $_POST['id_rfq'], $item-> obtener_id_usuario(), $item-> obtener_provider_menor(), $item-> obtener_brand(), $item-> obtener_brand_project(), $item-> obtener_part_number(), $item-> obtener_part_number_project(), $item-> obtener_description(), $item-> obtener_description_project(), $item-> obtener_quantity(), $item-> obtener_unit_price(), $item-> obtener_total_price(), $item-> obtener_comments(), $item-> obtener_website(), $item-> obtener_additional());
       $id_item_fullfillment = RepositorioItemFullFillment::insertar_item(ConnectionFullFillment::get_connection(), $item_fullfillment);
+      $extra_item = new ExtraItem('', $id_item_fullfillment, '');
+      ExtraItemRepository::insert_extra_item(ConnectionFullFillment::get_connection(), $extra_item);
       $providers = RepositorioProvider::obtener_providers_por_id_item(Conexion::obtener_conexion(), $item-> obtener_id());
       if(count($providers)){
         foreach ($providers as $provider) {
@@ -24,6 +26,8 @@ if(isset($_POST['guardar_fullfillment_form'])){
         foreach ($subitems as $subitem) {
           $subitem_fullfillment = new Subitem('', $id_item_fullfillment, $subitem-> obtener_provider_menor(), $subitem-> obtener_brand(), $subitem-> obtener_brand_project(), $subitem-> obtener_part_number(), $subitem-> obtener_part_number_project(), $subitem-> obtener_description(), $subitem-> obtener_description_project(), $subitem-> obtener_quantity(), $subitem-> obtener_unit_price(), $subitem-> obtener_total_price(), $subitem-> obtener_comments(), $subitem-> obtener_website(), $subitem-> obtener_additional());
           $id_subitem_fullfillment = RepositorioSubitemFullFillment::insertar_subitem(ConnectionFullFillment::get_connection(), $subitem_fullfillment);
+          $extra_subitem = new ExtraSubitem('', $id_subitem_fullfillment, '');
+          ExtraSubitemRepository::insert_extra_subitem(ConnectionFullFillment::get_connection(), $extra_subitem);
           $providers_subitem = RepositorioProviderSubitem::obtener_providers_subitem_por_id_subitem(Conexion::obtener_conexion(), $subitem-> obtener_id());
           if(count($providers_subitem)){
             foreach ($providers_subitem as $provider_subitem) {
@@ -37,7 +41,7 @@ if(isset($_POST['guardar_fullfillment_form'])){
   }
   $comment = new CommentRfqFullFillment('', $_POST['id_rfq'], $_SESSION['nombre_usuario'], $_POST['fullfillment_comment'], '');
   RepositorioRfqFullFillmentComment::insertar_comment(ConnectionFullFillment::get_connection(), $comment);
-  $rfq_fullfillment_part = new RfqFullFillmentPart('', $_POST['id_rfq'], '', '', '', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, '', 0, '', 0, '', '');
+  $rfq_fullfillment_part = new RfqFullFillmentPart('', $_POST['id_rfq'], '', '', '', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, '', 0, '', 0, '');
   RfqFullFillmentPartRepository::insert_rfq_fullfillment_part(ConnectionFullFillment::get_connection(), $rfq_fullfillment_part);
   $fullfillment_users = UserFullFillmentRepository::get_all_users_enabled(ConnectionFullFillment::get_connection());
   ConnectionFullFillment::close_connection();

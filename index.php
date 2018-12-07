@@ -29,6 +29,10 @@ include_once '../fullfillment/app/RepositorioRfqFullFillmentComment.inc.php';
 include_once '../fullfillment/app/RfqFullFillmentPart.inc.php';
 include_once '../fullfillment/app/RfqFullFillmentPartRepository.inc.php';
 include_once '../fullfillment/app/UserFullFillmentRepository.inc.php';
+include_once '../fullfillment/app/ExtraItem.inc.php';
+include_once '../fullfillment/app/ExtraSubitem.inc.php';
+include_once '../fullfillment/app/ExtraItemRepository.inc.php';
+include_once '../fullfillment/app/ExtraSubitemRepository.inc.php';
 
 include_once 'app/RepositorioUsuario.inc.php';
 include_once 'app/Usuario.inc.php';
@@ -105,6 +109,9 @@ if ($partes_ruta[0] == 'rfq') {
         break;
       case 'excel_report':
         $ruta_elegida = 'scripts/excel_report.php';
+        break;
+      case 'recover_password_form':
+        $ruta_elegida = 'herramientas/recover_password_form.php';
         break;
     }
   } else if (count($partes_ruta) == 3) {
@@ -253,6 +260,10 @@ if ($partes_ruta[0] == 'rfq') {
       case 'load_img':
         $id_rfq = $partes_ruta[2];
         $ruta_elegida = 'scripts/load_img.php';
+        break;
+      case 'restart_password':
+        $url_secreta = $partes_ruta[2];
+        $ruta_elegida = 'herramientas/restart_password.php';
         break;
       default:
       break;

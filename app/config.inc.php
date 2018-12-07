@@ -140,6 +140,9 @@ define('EXCEL_REPORT', SERVIDOR . 'excel_report');
 define('EMPLOYEE_DOCS_PAGE', PERFIL . 'employee_docs_page/');
 /********************************************************************************/
 define('DELETE_DOCUMENT', SERVIDOR . 'delete_document');
+/********************************************************************************/
+define('RECOVER_PASSWORD_FORM', SERVIDOR . 'recover_password_form');
+define('RESTART_PASSWORD', SERVIDOR . 'restart_password/');
 
 define('EMPLOYEE_DOCS', SERVIDOR . 'employee_docs/');
 define('REPORTS_DOCS', SERVIDOR . 'reports/');

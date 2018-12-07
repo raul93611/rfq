@@ -7,7 +7,7 @@ class RepositorioUsuario {
 
     if (isset($conexion)) {
       try {
-        $sql = 'INSERT INTO usuarios(nombre_usuario, password, nombres, apellidos, cargo, email, status) VALUES(:nombre_usuario, :password, :nombres, :apellidos, :cargo, :email, :status)';
+        $sql = 'INSERT INTO usuarios(nombre_usuario, password, nombres, apellidos, cargo, email, status, hash_recover_email) VALUES(:nombre_usuario, :password, :nombres, :apellidos, :cargo, :email, :status, :hash_recover_email)';
 
         $sentencia = $conexion->prepare($sql);
 
@@ -18,6 +18,7 @@ class RepositorioUsuario {
         $sentencia->bindParam(':cargo', $usuario->obtener_cargo(), PDO::PARAM_STR);
         $sentencia->bindParam(':email', $usuario->obtener_email(), PDO::PARAM_STR);
         $sentencia-> bindParam(':status', $usuario-> obtener_status(), PDO::PARAM_STR);
+        $sentencia-> bindParam(':hash_recover_email', $usuario-> obtener_hash_recover_email(), PDO::PARAM_STR);
 
         $resultado = $sentencia->execute();
 
@@ -45,7 +46,78 @@ class RepositorioUsuario {
         $resultado = $sentencia->fetch(PDO::FETCH_ASSOC);
 
         if (!empty($resultado)) {
-          $usuario = new Usuario($resultado['id'], $resultado['nombre_usuario'], $resultado['password'], $resultado['nombres'], $resultado['apellidos'], $resultado['cargo'], $resultado['email'], $resultado['status']);
+          $usuario = new Usuario($resultado['id'], $resultado['nombre_usuario'], $resultado['password'], $resultado['nombres'], $resultado['apellidos'], $resultado['cargo'], $resultado['email'], $resultado['status'], $resultado['hash_recover_email']);
+        }
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $usuario;
+  }
+
+  public static function obtener_usuario_por_email($conexion, $email) {
+    $usuario = null;
+    if (isset($conexion)) {
+      try {
+        $sql = "SELECT * FROM usuarios WHERE email LIKE :email";
+
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindParam(':email', $email, PDO::PARAM_STR);
+        $sentencia->execute();
+
+        $resultado = $sentencia->fetch(PDO::FETCH_ASSOC);
+
+        if (!empty($resultado)) {
+          $usuario = new Usuario($resultado['id'], $resultado['nombre_usuario'], $resultado['password'], $resultado['nombres'], $resultado['apellidos'], $resultado['cargo'], $resultado['email'], $resultado['status'], $resultado['hash_recover_email']);
+        }
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $usuario;
+  }
+
+  public static function eliminar_hash_recover_email($conexion, $id_usuario){
+    if(isset($conexion)){
+      try{
+        $sql = 'UPDATE usuarios SET hash_recover_email = "" WHERE id = :id_usuario';
+        $sentencia = $conexion-> prepare($sql);
+        $sentencia-> bindParam(':id_usuario', $id_usuario, PDO::PARAM_STR);
+        $sentencia-> execute();
+      }catch(PDOException $ex){
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+  }
+
+  public static function actualizar_clave($conexion, $password, $id_usuario){
+    if(isset($conexion)){
+      try{
+        $sql = 'UPDATE usuarios SET password = :password WHERE id = :id_usuario';
+        $sentencia = $conexion-> prepare($sql);
+        $sentencia-> bindParam(':password', $password, PDO::PARAM_STR);
+        $sentencia-> bindParam(':id_usuario', $id_usuario, PDO::PARAM_STR);
+        $sentencia-> execute();
+      }catch(PDOException $ex){
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+  }
+
+  public static function obtener_usuario_por_url_secreta($conexion, $url_secreta) {
+    $usuario = null;
+    if (isset($conexion)) {
+      try {
+        $sql = "SELECT * FROM usuarios WHERE hash_recover_email = :hash_recover_email";
+
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindParam(':hash_recover_email', $url_secreta, PDO::PARAM_STR);
+        $sentencia->execute();
+
+        $resultado = $sentencia->fetch(PDO::FETCH_ASSOC);
+
+        if (!empty($resultado)) {
+          $usuario = new Usuario($resultado['id'], $resultado['nombre_usuario'], $resultado['password'], $resultado['nombres'], $resultado['apellidos'], $resultado['cargo'], $resultado['email'], $resultado['status'], $resultado['hash_recover_email']);
         }
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -67,7 +139,7 @@ class RepositorioUsuario {
         $resultado = $sentencia->fetch(PDO::FETCH_ASSOC);
 
         if (!empty($resultado)) {
-          $usuario = new Usuario($resultado['id'], $resultado['nombre_usuario'], $resultado['password'], $resultado['nombres'], $resultado['apellidos'], $resultado['cargo'], $resultado['email'], $resultado['status']);
+          $usuario = new Usuario($resultado['id'], $resultado['nombre_usuario'], $resultado['password'], $resultado['nombres'], $resultado['apellidos'], $resultado['cargo'], $resultado['email'], $resultado['status'], $resultado['hash_recover_email']);
         }
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -98,6 +170,68 @@ class RepositorioUsuario {
       }
     }
     return $nombre_usuario_existe;
+  }
+
+  public static function email_existe($conexion, $email) {
+    $email_existe = true;
+    if (isset($conexion)) {
+      try {
+        $sql = "SELECT * FROM usuarios WHERE email LIKE :email";
+
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindParam(':email', $email, PDO::PARAM_STR);
+        $sentencia->execute();
+
+        $resultado = $sentencia->fetchAll(PDO::FETCH_ASSOC);
+
+        if (count($resultado)) {
+          $email_existe = true;
+        } else {
+          $email_existe = false;
+        }
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $email_existe;
+  }
+
+  public static function url_secreta_existe($conexion, $url_secreta) {
+    $url_secreta_existe = true;
+    if (isset($conexion)) {
+      try {
+        $sql = "SELECT * FROM usuarios WHERE hash_recover_email = :hash_recover_email";
+
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindParam(':hash_recover_email', $url_secreta, PDO::PARAM_STR);
+        $sentencia->execute();
+
+        $resultado = $sentencia->fetchAll(PDO::FETCH_ASSOC);
+
+        if (count($resultado)) {
+          $url_secreta_existe = true;
+        } else {
+          $url_secreta_existe = false;
+        }
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $url_secreta_existe;
+  }
+
+  public static function guardar_url_secreta($conexion, $id_usuario, $url_secreta){
+    if(isset($conexion)){
+      try{
+        $sql = 'UPDATE usuarios SET hash_recover_email = :hash_recover_email WHERE id = :id_usuario';
+        $sentencia = $conexion-> prepare($sql);
+        $sentencia-> bindParam(':hash_recover_email', $url_secreta, PDO::PARAM_STR);
+        $sentencia-> bindParam(':id_usuario', $id_usuario, PDO::PARAM_STR);
+        $sentencia-> execute();
+      }catch(PDOException $ex){
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
   }
 
   public static function nombre_completo_existe($conexion, $apellidos, $nombres) {
@@ -161,7 +295,7 @@ class RepositorioUsuario {
 
         if (count($resultado)) {
           foreach ($resultado as $fila) {
-            $usuarios [] = new Usuario($fila['id'], $fila['nombre_usuario'], $fila['password'], $fila['nombres'], $fila['apellidos'], $fila['cargo'], $fila['email'], $fila['status']);
+            $usuarios [] = new Usuario($fila['id'], $fila['nombre_usuario'], $fila['password'], $fila['nombres'], $fila['apellidos'], $fila['cargo'], $fila['email'], $fila['status'], $fila['hash_recover_email']);
           }
         }
       } catch (PDOException $ex) {
@@ -284,7 +418,7 @@ class RepositorioUsuario {
 
         if (count($resultado)) {
           foreach ($resultado as $fila) {
-            $usuarios [] = new Usuario($fila['id'], $fila['nombre_usuario'], $fila['password'], $fila['nombres'], $fila['apellidos'], $fila['cargo'], $fila['email'], $fila['status']);
+            $usuarios [] = new Usuario($fila['id'], $fila['nombre_usuario'], $fila['password'], $fila['nombres'], $fila['apellidos'], $fila['cargo'], $fila['email'], $fila['status'], $fila['hash_recover_email']);
           }
         }
       } catch (PDOException $ex) {
@@ -309,7 +443,7 @@ class RepositorioUsuario {
 
         if (count($resultado)) {
           foreach ($resultado as $fila) {
-            $usuarios [] = new Usuario($fila['id'], $fila['nombre_usuario'], $fila['password'], $fila['nombres'], $fila['apellidos'], $fila['cargo'], $fila['email'], $fila['status']);
+            $usuarios [] = new Usuario($fila['id'], $fila['nombre_usuario'], $fila['password'], $fila['nombres'], $fila['apellidos'], $fila['cargo'], $fila['email'], $fila['status'], $fila['hash_recover_email']);
           }
         }
       } catch (PDOException $ex) {

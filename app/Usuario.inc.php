@@ -8,8 +8,9 @@ class Usuario{
   private $cargo;
   private $email;
   private $status;
+  private $hash_recover_email;
 
-  public function __construct($id, $nombre_usuario, $password, $nombres, $apellidos, $cargo, $email, $status){
+  public function __construct($id, $nombre_usuario, $password, $nombres, $apellidos, $cargo, $email, $status, $hash_recover_email){
     $this-> id = $id;
     $this-> nombre_usuario = $nombre_usuario;
     $this-> password = $password;
@@ -18,6 +19,7 @@ class Usuario{
     $this-> cargo = $cargo;
     $this-> email = $email;
     $this-> status = $status;
+    $this-> hash_recover_email = $hash_recover_email;
   }
 
   public function obtener_id(){
@@ -50,6 +52,10 @@ class Usuario{
 
   public function obtener_status(){
     return $this-> status;
+  }
+
+  public function obtener_hash_recover_email(){
+    return $this-> hash_recover_email;
   }
 }
 ?>

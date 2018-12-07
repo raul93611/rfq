@@ -79,11 +79,11 @@ if($cotizacion_recuperada-> obtener_canal() == 'Chemonics'){
           <option <?php if ($cotizacion_recuperada->obtener_comments() == 'Expired due date') { echo 'selected';} ?>>Expired due date</option>
           <option <?php if ($cotizacion_recuperada->obtener_comments() == 'Supplier did not provide a quote') { echo 'selected';} ?>>Supplier did not provide a quote</option>
           <option <?php if($cotizacion_recuperada->obtener_comments() == 'Others'){echo 'selected';} ?>>Others</option>
+          <option <?php if($cotizacion_recuperada-> obtener_comments() == 'Not submitted'){echo 'selected';} ?>>Not submitted</option>
           <?php
         }
         ?>
         <option <?php if($cotizacion_recuperada-> obtener_comments() == 'Cancelled'){ echo 'selected'; } ?>>Cancelled</option>
-        <option <?php if($cotizacion_recuperada-> obtener_comments() == 'Not submitted'){echo 'selected';} ?>>Not submitted</option>
         <option <?php if ($cotizacion_recuperada-> obtener_comments() == 'Working on it'){echo 'selected';} ?>>Working on it</option>
       </select>
       <input type="hidden" name="comments_original" value="<?php echo $cotizacion_recuperada-> obtener_comments(); ?>">
@@ -128,7 +128,7 @@ if($cotizacion_recuperada-> obtener_canal() == 'Chemonics'){
       </div>
 
       <?php
-    } else if ($cotizacion_recuperada->obtener_completado() && !$cotizacion_recuperada->obtener_status() && !$cotizacion_recuperada->obtener_award() && $cargo < 5) {
+    } else if ($cotizacion_recuperada->obtener_completado() && !$cotizacion_recuperada->obtener_status() && !$cotizacion_recuperada->obtener_award() && $cargo < 4) {
       ?>
       <div class="form-check">
         <input type="checkbox" class="form-check-input" name="status" value="si" <?php if ($cotizacion_recuperada->obtener_status()) { echo 'checked'; } ?> id="status">

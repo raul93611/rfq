@@ -1,8 +1,5 @@
 <?php
-if (ControlSesion::sesion_iniciada()) {
-  Redireccion::redirigir1(PERFIL);
-}
-include_once 'plantillas/validacion_login.inc.php';
+include_once 'plantillas/validacion_restart_password_form.inc.php';
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -17,7 +14,7 @@ include_once 'plantillas/validacion_login.inc.php';
     <link rel="stylesheet" href="<?php echo PLUGINS; ?>iCheck/square/blue.css">
     <link rel="Shortcut Icon" href="<?php echo RUTA_IMG; ?>eP_favicon.png" type="image/x-icon" />
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-    <link rel="stylesheet" id="fondo" href="css/fondo1.css">
+    <link rel="stylesheet" id="fondo" href="<?php echo RUTA_CSS; ?>fondo1.css">
     <style>
       body{
         font-family: 'Roboto', sans-serif;
@@ -49,39 +46,41 @@ include_once 'plantillas/validacion_login.inc.php';
       </div>
       <hr>
       <div class="card-body login-card-body">
-        <p class="login-box-msg" style="color: #BDC5CF !important;">Please log in</p>
-        <form action="<?php echo SERVIDOR; ?>" method="post">
+        <p class="login-box-msg" style="color: #BDC5CF !important;">Please, provide your password</p>
+        <form action="<?php echo RESTART_PASSWORD . $url_secreta; ?>" method="post">
           <div class="form-group has-feedback">
-            <input type="text" class="form-control <?php if(isset($_POST['iniciar_sesion'])){echo 'is-invalid';} ?>" name="nombre_usuario" placeholder="Username" autofocus required
-            <?php
-            if (isset($_POST['iniciar_sesion']) && isset($_POST['nombre_usuario']) && !empty($_POST['nombre_usuario'])) {
-              echo 'value="' . $_POST['nombre_usuario'] . '"';
-            }
-            ?>>
-            <span class="fa fa-user form-control-feedback" style="color: #BDC5CF !important;"></span>
+            <input type="password" class="form-control" name="password1" placeholder="Password" autofocus required>
+            <span class="fa fa-lock form-control-feedback" style="color: #BDC5CF !important;"></span>
           </div>
           <div class="form-group has-feedback">
-            <input type="password" class="form-control <?php if(isset($_POST['iniciar_sesion'])){echo 'is-invalid';} ?>" name="password" placeholder="Password" required>
+            <input type="password" class="form-control" name="password2" placeholder="Confirm password" required>
             <span class="fa fa-lock form-control-feedback" style="color: #BDC5CF !important;"></span>
             <?php
-            if (isset($_POST['iniciar_sesion'])) {
-              $validador->mostrar_error();
+            if(isset($_POST['send'])){
+              if($error){
+                ?>
+                <div class="alert alert-danger" role="alert">
+                  Error, try again.
+                </div>
+                <?php
+              }else{
+                ?>
+                <div class="alert alert-success" role="alert">
+                  Successful process!.<a href="<?php echo SERVIDOR; ?>"> Log in.</a>
+                </div>
+                <?php
+              }
             }
             ?>
           </div>
+
+          <input type="hidden" name="url_secreta" value="<?php echo $url_secreta; ?>">
           <div class="row">
             <div class="col-12 text-center">
-              <button type="submit" class="btn btn-primary btn-flat" name="iniciar_sesion">Log in</button>
+              <button type="submit" class="btn btn-primary btn-flat" name="send">Send</button>
             </div>
           </div>
         </form>
-        <div class="social-auth-links text-center">
-          <p>- OR -</p>
-          <a href="http://www.elogicportal.com" class="btn btn_home btn-flat">Home</a>
-        </div>
-        <div class="social-auth-links text-center">
-          <a href="http://www.elogicportal.com/rfq/recover_password_form" class="">Did you forget your password?</a>
-        </div>
       </div>
     </div>
     <script src="<?php echo PLUGINS; ?>jquery/jquery.min.js"></script>
@@ -91,7 +90,7 @@ include_once 'plantillas/validacion_login.inc.php';
       $(document).ready(function(){
         var a = 1;
         var intervalo = setInterval(function(){
-          $('#fondo').attr('href', 'css/fondo' + a + '.css');
+          $('#fondo').attr('href', 'http://www-elogicportal.com/rfq/css/fondo' + a + '.css');
           if(a == 3){
             a = 0;
           }
