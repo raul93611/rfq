@@ -171,7 +171,6 @@ try{
           $item = $items[$i];
                 if (strlen($item-> obtener_description()) >= 300) {
                   $indice = 300;
-                  echo strlen($item-> obtener_description());
                   while($item-> obtener_description()[$indice] != ' ' && $indice < strlen($item-> obtener_description())){
                     $indice = $indice + 1;
                   }
@@ -180,13 +179,11 @@ try{
                       <td style="border-bottom: 0;">' . $a . '</td>
                       <td style="border-bottom: 0;"><b>Brand name:</b> ' . $item->obtener_brand() . '<br><b>Part number:</b> ' . $item->obtener_part_number() . '<br><b> Item description:</b><br> ';
                   $html .= nl2br(wordwrap(substr($item-> obtener_description(), 0, $indice), 70, '<br>', true));
-                  //$html .= nl2br(substr(wordwrap($item->obtener_description(), 70, '<br>', true), 0, 350));
                   $html .= '</td>
                   <td style="text-align:right;border-bottom: 0;">' . $item->obtener_quantity() . '</td>
                   <td style="text-align:right;border-bottom: 0;">$ ' . number_format($item->obtener_unit_price(), 2) . '</td>
                   <td style="text-align:right;border-bottom: 0;">$ ' . number_format($item->obtener_total_price(), 2) . '</td>
                 </tr>';
-                echo strlen($item_description);
                   while(strlen($item_description) >= 300){
                     $indice = 300;
                     while($item_description[$indice] != ' ' && $indice < strlen($item_description)){
@@ -241,7 +238,6 @@ try{
                     <td style="border-bottom: 0;"></td>
                     <td style="border-bottom: 0;"><b>Brand name:</b> ' . $subitem->obtener_brand() . '<br><b>Part number:</b> ' . $subitem->obtener_part_number() . '<br><b> Item description:</b><br> ';
                 $html .= nl2br(wordwrap(substr($subitem-> obtener_description(), 0, $indice), 70, '<br>', true));
-                //$html .= nl2br(substr(wordwrap($item->obtener_description(), 70, '<br>', true), 0, 350));
                 $html .= '</td>
                 <td style="text-align:right;border-bottom: 0;">' . $subitem->obtener_quantity() . '</td>
                 <td style="text-align:right;border-bottom: 0;">$ ' . number_format($subitem->obtener_unit_price(), 2) . '</td>
