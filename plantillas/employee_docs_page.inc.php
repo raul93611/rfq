@@ -18,7 +18,7 @@
   <section class="content">
     <div class="container-fluid">
       <div class="row">
-        <div class="col-lg-6 col-6">
+        <div class="col-md-6">
           <div class="card-documents card card-primary">
             <div class="card-header">
               <h3 class="card-title"><i class="fas fa-file"></i> Administration</h3>
@@ -74,7 +74,7 @@
             </div>
           </div>
         </div>
-        <div class="col-lg-6 col-6">
+        <div class="col-md-6">
           <div class="card-documents card card-primary">
             <div class="card-header">
               <h3 class="card-title"><i class="fas fa-file"></i> Accounting</h3>
