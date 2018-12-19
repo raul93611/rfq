@@ -11,6 +11,7 @@ CREATE TABLE usuarios(
         cargo TINYINT NOT NULL,
         email VARCHAR(100) NOT NULL UNIQUE,
         status TINYINT NOT NULL,
+        hash_recover_email VARCHAR(255) NOT NULL,
         PRIMARY KEY(id)
 );
 
