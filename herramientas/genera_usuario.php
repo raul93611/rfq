@@ -6,7 +6,7 @@ $nombres = 'leonardo';
 $apellidos = 'velasco';
 $cargo = 1;
 $email = 'asdsadas@asdads';
-$usuario = new Usuario('', $nombre_usuario, $password, $nombres, $apellidos, $cargo, $email, 1);
+$usuario = new Usuario('', $nombre_usuario, $password, $nombres, $apellidos, $cargo, $email, 1, '');
 RepositorioUsuario::insertar_usuario(Conexion::obtener_conexion(), $usuario);
 
 $nombre_usuario = 'pepe1234';
@@ -15,7 +15,7 @@ $nombres = 'jose';
 $apellidos = 'peres';
 $cargo = 4;
 $email = 'jose@peres';
-$usuario = new Usuario('', $nombre_usuario, $password, $nombres, $apellidos, $cargo, $email, 1);
+$usuario = new Usuario('', $nombre_usuario, $password, $nombres, $apellidos, $cargo, $email, 1, '');
 RepositorioUsuario::insertar_usuario(Conexion::obtener_conexion(), $usuario);
 
 $nombre_usuario = 'pedro1234';
@@ -24,7 +24,7 @@ $nombres = 'pedro';
 $apellidos = 'puma';
 $cargo = 4;
 $email = 'pedro@puma';
-$usuario = new Usuario('', $nombre_usuario, $password, $nombres, $apellidos, $cargo, $email, 1);
+$usuario = new Usuario('', $nombre_usuario, $password, $nombres, $apellidos, $cargo, $email, 1, '');
 RepositorioUsuario::insertar_usuario(Conexion::obtener_conexion(), $usuario);
 
 $nombre_usuario = 'pablo1234';
@@ -33,7 +33,7 @@ $nombres = 'pablo';
 $apellidos = 'paredes';
 $cargo = 3;
 $email = 'pablo@paredes';
-$usuario = new Usuario('', $nombre_usuario, $password, $nombres, $apellidos, $cargo, $email, 1);
+$usuario = new Usuario('', $nombre_usuario, $password, $nombres, $apellidos, $cargo, $email, 1, '');
 RepositorioUsuario::insertar_usuario(Conexion::obtener_conexion(), $usuario);
 Conexion::cerrar_conexion();
 ?>

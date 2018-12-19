@@ -1,7 +1,7 @@
 <?php
 define('NOMBRE_SERVIDOR', 'localhost');
 define('NOMBRE_USUARIO', 'root');
-define('PASSWORD', 'raul93611');
+define('PASSWORD', '');
 define('NOMBRE_BD', 'elogic');
 
 define('SERVER_NAME', 'localhost');
@@ -11,7 +11,7 @@ define('BD_NAME', 'rfp');
 define('SERVERNAME_FULLFILLMENT', 'localhost');
 define('BD_NAME_FULLFILLMENT', 'fullfillment');
 define('USERNAME_FULLFILLMENT', 'root');
-define('PASSWORD_FULLFILLMENT', 'raul93611');
+define('PASSWORD_FULLFILLMENT', '');
 
 define('SERVIDOR', 'http://localhost/rfq/');
 define('ERROR', SERVIDOR . 'error');
