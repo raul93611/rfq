@@ -1,6 +1,6 @@
 <div class="card-body">
   <div class="row">
-    <div class="col">
+    <div class="col-md-6">
       <div class="form-group">
         <label for="email_code">Code:</label>
         <input type="text" class="form-control form-control-sm" id="email_code" name="email_code" placeholder="Code" autofocus required <?php $validador->mostrar_email_code(); ?>>
@@ -35,7 +35,7 @@
         ?>
       </div>
     </div>
-    <div class="col">
+    <div class="col-md-6">
       <div class="form-group">
         <label for="type_of_bid">Type of bid:</label>
         <select class="form-control form-control-sm" name="type_of_bid" id="type_of_bid">

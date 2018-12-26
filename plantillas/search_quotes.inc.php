@@ -30,10 +30,10 @@ if(isset($_POST['buscar'])){
             </div>
             <div class="card-body">
               <div class="row">
-                <div class="col-4">
+                <div class="col-md-4">
 
                 </div>
-                <div class="col-4">
+                <div class="col-md-4">
                   <form role="form" method="post" action="<?php echo SEARCH_QUOTES; ?>">
                     <div class="form-group">
                       <input type="search" name="termino_busqueda" class="form-control" placeholder="Search ..." required autofocus <?php if(isset($_POST['buscar'])){echo 'value="' . $_POST['termino_busqueda'] . '"';} ?>>
@@ -41,7 +41,7 @@ if(isset($_POST['buscar'])){
                     <button type="submit" class="btn btn-primary btn-block" name="buscar">Search</button>
                   </form>
                 </div>
-                <div class="col-4">
+                <div class="col-md-4">
 
                 </div>
               </div>

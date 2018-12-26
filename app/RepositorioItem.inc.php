@@ -149,25 +149,25 @@ class RepositorioItem {
     if (count($items)) {
       echo '<br><h2 id="caja_items">Items:</h2>';
       echo '<div class="row">';
-      echo '<div class="col">';
+      echo '<div class="col-md-3">';
       if ($cotizacion->obtener_taxes() != 0) {
         echo '<label>Taxes (%):</label><input type="hidden" name="taxes_original" value="' . $cotizacion->obtener_taxes() . '"><input type="number" step=".01" name="taxes" id="taxes" class="form-control form-control-sm" value="' . $cotizacion->obtener_taxes() . '">';
       } else {
         echo '<label>Taxes (%):</label><input type="hidden" name="taxes_original" value="' . $cotizacion->obtener_taxes() . '"><input type="number" step=".01" name="taxes" id="taxes" class="form-control form-control-sm" value="0">';
       }
-      echo '</div><div class="col">';
+      echo '</div><div class="col-md-3">';
       if ($cotizacion->obtener_profit() != 0) {
         echo '<label>Profit (%):</label><input type="hidden" name="profit_original" value="' . $cotizacion->obtener_profit() . '"><input type="number" step=".01" name="profit" id="profit" class="form-control form-control-sm" value="' . $cotizacion->obtener_profit() . '">';
       } else {
         echo '<label>Profit (%):</label><input type="hidden" name="profit_original" value="' . $cotizacion->obtener_profit() . '"><input type="number" step=".01" name="profit" id="profit" class="form-control form-control-sm" value="0">';
       }
-      echo '</div><div class="col">';
+      echo '</div><div class="col-md-3">';
       if($cotizacion-> obtener_additional() != 0){
         echo '<label>Additional general ($):</label><input type="hidden" name="additional_general_original" value="' . $cotizacion->obtener_additional() . '"><input type="text" name="additional_general" id="additional_general" class="form-control form-control-sm" value="' . $cotizacion->obtener_additional() . '">';
       }else{
         echo '<label>Additional general ($):</label><input type="hidden" name="additional_general_original" value="' . $cotizacion->obtener_additional() . '"><input type="text" name="additional_general" id="additional_general" class="form-control form-control-sm" value="0">';
       }
-      echo '</div><div class="col">';
+      echo '</div><div class="col-md-3">';
       echo '<label>Payment terms:</label><div class="form-group">
           <div class="form-check-inline">
               <input class="form-check-input" type="radio" id="net_30" value="Net 30" name="payment_terms"';

@@ -10,7 +10,7 @@ if($cargo == 5 && $_SESSION['id_usuario'] != $cotizacion_recuperada-> obtener_us
 ?>
 <div class="card-body">
   <div class="row">
-    <div class="col">
+    <div class="col-md-6">
       <h2>Project specifications</h2>
       <div class="form-group">
         <label for="brand_project">Brand:</label>
@@ -25,7 +25,7 @@ if($cargo == 5 && $_SESSION['id_usuario'] != $cotizacion_recuperada-> obtener_us
         <textarea class="form-control form-control-sm" rows="5" placeholder="Enter description ..." id="description_project" name="description_project" ></textarea>
       </div>
     </div>
-    <div class="col">
+    <div class="col-md-6">
       <h2>E-logic proposal</h2>
       <div class="form-group">
         <label for="brand">Brand:</label>

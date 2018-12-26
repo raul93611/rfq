@@ -320,3 +320,14 @@ table{
 .card-documents .close{
   color: #13A8F0 !important;
 }
+
+@media only screen and (max-width: 1000px){
+  #footer_lg .btn{
+    display: block !important;
+    width: 100% !important;
+    margin-bottom: 5px;
+  }
+  #footer_lg{
+    position: static !important;
+  }
+}

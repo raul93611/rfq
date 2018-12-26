@@ -13,10 +13,10 @@ if(is_null($cotizacion_recuperada)){
   <section class="content-header">
     <div class="container-fluid">
       <div class="row mb-2">
-        <div class="col-sm-2">
+        <div class="col-md-2">
           <h1>Internal quote</h1>
         </div>
-        <div class="col-sm-8 text-center">
+        <div class="col-md-8 text-center">
           <?php
           if(!$cotizacion_recuperada-> obtener_rfp()){
             ?>
@@ -34,7 +34,7 @@ if(is_null($cotizacion_recuperada)){
           ?>
           <a href="#" id="mostrar_comentarios" class="btn btn-info"><i class="fas fa-comment"></i> Comments(<?php echo $cantidad_de_comentarios; ?>)</a>
         </div>
-        <div class="col-sm-2">
+        <div class="col-md-2">
           <?php
           if($cotizacion_recuperada-> obtener_completado() && $cotizacion_recuperada-> obtener_status() && $cotizacion_recuperada-> obtener_award()){
           ?>
@@ -130,6 +130,12 @@ if(is_null($cotizacion_recuperada)){
 <div class="modal fade" id="todos_commentarios_quote" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Comments</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
       <div class="modal-body">
         <?php
         RepositorioComment::escribir_comments($cotizacion_recuperada-> obtener_id());

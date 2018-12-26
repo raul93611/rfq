@@ -80,6 +80,6 @@ if(isset($_POST['guardar_fullfillment_form'])){
     }
     closedir($manager);
   }
-  Redireccion::redirigir(EDITAR_COTIZACION . '/' . $_POST['id_rfq']);
+  Redireccion::redirigir1(EDITAR_COTIZACION . '/' . $_POST['id_rfq']);
 }
 ?>

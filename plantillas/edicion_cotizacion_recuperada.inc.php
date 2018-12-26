@@ -6,14 +6,14 @@ if($cargo == 5 && $_SESSION['id_usuario'] != $cotizacion_recuperada-> obtener_us
 <input type="hidden" name="id_rfq" value="<?php echo $cotizacion_recuperada->obtener_id(); ?>">
 <div class="card-body">
   <div class="row">
-    <div class="col">
+    <div class="col-md-3">
       <div class="form-group">
         <label for="email_code">Code:</label>
         <input type="text" class="form-control form-control-sm" id="email_code" name="email_code" value="<?php echo $cotizacion_recuperada->obtener_email_code(); ?>">
         <input type="hidden" name="email_code_original" value="<?php echo $cotizacion_recuperada-> obtener_email_code(); ?>">
       </div>
     </div>
-    <div class="col">
+    <div class="col-md-3">
       <div class="form-group">
         <label for="type_of_bid">Type of bid:</label>
         <select class="form-control form-control-sm" name="type_of_bid" id="type_of_bid">
@@ -40,13 +40,13 @@ if($cargo == 5 && $_SESSION['id_usuario'] != $cotizacion_recuperada-> obtener_us
         </select>
       </div>
     </div>
-    <div class="col">
+    <div class="col-md-3">
       <div class="form-group">
         <label for="issue_date">Issue date:</label>
         <input type="text" class="form-control form-control-sm" id="issue_date" name="issue_date" value="<?php echo $cotizacion_recuperada->obtener_issue_date(); ?>">
       </div>
     </div>
-    <div class="col">
+    <div class="col-md-3">
       <div class="form-group">
         <label for="end_date">End date:</label>
         <input type="text" class="form-control form-control-sm" id="end_date" name="end_date" value="<?php echo $cotizacion_recuperada->obtener_end_date(); ?>">
@@ -54,13 +54,29 @@ if($cargo == 5 && $_SESSION['id_usuario'] != $cotizacion_recuperada-> obtener_us
     </div>
   </div>
   <div class="row">
-    <div class="col">
+    <div class="
+    <?php
+    if($cotizacion_recuperada-> obtener_rfp()){
+      echo 'col-md-3';
+    }else{
+      echo 'col-md-4';
+    }
+    ?>
+    ">
       <div class="form-group">
         <label for="id">Proposal:</label>
         <input type="text" class="form-control form-control-sm" disabled value="<?php echo $cotizacion_recuperada->obtener_id(); ?>">
       </div>
     </div>
-    <div class="col">
+    <div class="
+    <?php
+    if($cotizacion_recuperada-> obtener_rfp()){
+      echo 'col-md-3';
+    }else{
+      echo 'col-md-4';
+    }
+    ?>
+    ">
       <div class="form-group">
         <label for="canal">Channel:</label>
         <select class="form-control form-control-sm" name="canal" id="canal">
@@ -75,7 +91,15 @@ if($cargo == 5 && $_SESSION['id_usuario'] != $cotizacion_recuperada-> obtener_us
         </select>
       </div>
     </div>
-    <div class="col">
+    <div class="
+    <?php
+    if($cotizacion_recuperada-> obtener_rfp()){
+      echo 'col-md-3';
+    }else{
+      echo 'col-md-4';
+    }
+    ?>
+    ">
       <?php
 
       if ($cotizacion_recuperada->obtener_completado() || $cotizacion_recuperada-> obtener_status()) {
@@ -123,7 +147,7 @@ if($cargo == 5 && $_SESSION['id_usuario'] != $cotizacion_recuperada-> obtener_us
     <?php
     if($cotizacion_recuperada-> obtener_rfp()){
       ?>
-      <div class="col">
+      <div class="col-md-3">
         <div class="form-group">
           <label for="rfp">Proposal RFP:</label>
           <input type="text" class="form-control form-control-sm" disabled value="<?php echo $cotizacion_recuperada-> obtener_rfp(); ?>">
@@ -166,13 +190,13 @@ if($cargo == 5 && $_SESSION['id_usuario'] != $cotizacion_recuperada-> obtener_us
     ?>
     <br>
     <div class="row">
-      <div class="col">
+      <div class="col-md-6">
         <div class="form-group">
           <textarea class="form-control form-control-sm" rows="3" id="shipping" name="shipping" placeholder="Enter shipping ..."><?php echo $cotizacion_recuperada->obtener_shipping(); ?></textarea>
           <input type="hidden" name="shipping_original" value="<?php echo $cotizacion_recuperada->obtener_shipping(); ?>">
         </div>
       </div>
-      <div class="col">
+      <div class="col-md-6">
         <div class="form-group">
           <input type="number" step=".01" class="form-control form-control-sm" id="shipping_cost" name="shipping_cost" value="<?php echo $cotizacion_recuperada->obtener_shipping_cost(); ?>">
           <input type="hidden" name="shipping_cost_original" value="<?php echo $cotizacion_recuperada->obtener_shipping_cost(); ?>">

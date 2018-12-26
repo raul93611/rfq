@@ -28,7 +28,7 @@ if($cotizacion_recuperada-> obtener_canal() == 'Chemonics'){
 }
 ?>
 <div class="row">
-  <div class="col">
+  <div class="col-md-6">
     <div class="form-group">
         <label for="completed_date">Completed date:</label>
         <input type="text" class="form-control form-control-sm" id="completed_date" name="completed_date"
@@ -45,7 +45,7 @@ if($cotizacion_recuperada-> obtener_canal() == 'Chemonics'){
         ?>>
     </div>
   </div>
-  <div class="col">
+  <div class="col-md-6">
     <div class="form-group">
         <label for="expiration_date">Expiration date:</label>
         <input type="text" class="form-control form-control-sm" id="expiration_date" name="expiration_date"
@@ -61,7 +61,7 @@ if($cotizacion_recuperada-> obtener_canal() == 'Chemonics'){
   </div>
 </div>
 <div class="row">
-  <div class="col">
+  <div class="col-md-6">
     <div class="form-group">
       <label for="comments">Comments:</label>
       <select id="comments" class="form-control form-control-sm" name="comments">
@@ -94,7 +94,7 @@ if($cotizacion_recuperada-> obtener_canal() == 'Chemonics'){
         <input type="hidden" name="address_original" value="<?php echo $cotizacion_recuperada-> obtener_address(); ?>">
       </div>
   </div>
-  <div class="col">
+  <div class="col-md-6">
     <div class="form-group">
       <label for="ship_via">Ship via:</label>
       <select id="ship_via" class="form-control form-control-sm" name="ship_via">
@@ -146,7 +146,7 @@ if($cotizacion_recuperada-> obtener_canal() == 'Chemonics'){
 }
 ?>
 </div>
-<div class="card-footer footer_item">
+<div class="card-footer footer_item" id="footer_lg">
   <?php
   if ($cotizacion_recuperada->obtener_award() && ($cotizacion_recuperada->obtener_comments() == 'No comments' || $cotizacion_recuperada->obtener_comments() == 'Working on it' || $cotizacion_recuperada-> obtener_comments() == 'QuickBooks')) {
     echo '<a class="btn btn-primary" id="go_back" href="' . AWARD . $canal . '"><i class="fa fa-reply"></i></a>';
