@@ -45,6 +45,7 @@ CREATE TABLE rfq(
         shipping VARCHAR(100) NOT NULL,
         rfp INT NOT NULL,
         fullfillment TINYINT NOT NULL,
+        contract_number VARCHAR(255) NOT NULL,
         PRIMARY KEY(id),
         FOREIGN KEY(id_usuario)
             REFERENCES usuarios(id)
