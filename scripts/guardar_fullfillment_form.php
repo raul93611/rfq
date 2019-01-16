@@ -57,6 +57,7 @@ if(isset($_POST['guardar_fullfillment_form'])){
     <html>
     <body>
     <h3>Details:</h3>
+    <p>' . $_POST['fullfillment_comment'] . '</p>
     <h5>Quote:</h5>
     <p><a href="http://www.elogicportal.com/fullfillment/profile/edit_quote/' . $cotizacion-> obtener_id() . '">' . $cotizacion-> obtener_id() . '</a></p>
     <h5>Comment:</h5>
