@@ -5,6 +5,20 @@ if($cargo == 5 && $_SESSION['id_usuario'] != $cotizacion_recuperada-> obtener_us
 ?>
 <input type="hidden" name="id_rfq" value="<?php echo $cotizacion_recuperada->obtener_id(); ?>">
 <div class="card-body">
+  <?php
+  if($cotizacion_recuperada-> obtener_award()){
+    ?>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label for="contract_number">Contract number:</label>
+          <input type="text" class="form-control form-control-sm" name="contract_number" value="<?php echo $cotizacion_recuperada-> obtener_contract_number(); ?>">
+        </div>
+      </div>
+    </div>
+    <?php
+  }
+  ?>
   <div class="row">
     <div class="col-md-3">
       <div class="form-group">
