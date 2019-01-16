@@ -980,7 +980,7 @@ class RepositorioRfq {
     if (isset($conexion)) {
       try {
         if($cargo <= 3){
-          $sql = 'SELECT * FROM rfq WHERE (id LIKE :termino_busqueda OR email_code LIKE :termino_busqueda OR total_price LIKE :termino_busqueda OR address LIKE :termino_busqueda OR ship_to LIKE :termino_busqueda)';
+          $sql = 'SELECT * FROM rfq WHERE (contract_number LIKE :termino_busqueda OR id LIKE :termino_busqueda OR email_code LIKE :termino_busqueda OR total_price LIKE :termino_busqueda OR address LIKE :termino_busqueda OR ship_to LIKE :termino_busqueda)';
           $sentencia = $conexion-> prepare($sql);
           $sentencia-> bindParam(':termino_busqueda', $termino_busqueda, PDO::PARAM_STR);
           $sentencia->execute();
