@@ -77,6 +77,24 @@ class RepositorioUsuario {
     return $usuario;
   }
 
+  public static function obtener_usuario_0($conexion) {
+    $usuario = null;
+    if (isset($conexion)) {
+      try {
+        $sql = "SELECT * FROM usuarios WHERE cargo = 0";
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetch(PDO::FETCH_ASSOC);
+        if (!empty($resultado)) {
+          $usuario = new Usuario($resultado['id'], $resultado['nombre_usuario'], $resultado['password'], $resultado['nombres'], $resultado['apellidos'], $resultado['cargo'], $resultado['email'], $resultado['status'], $resultado['hash_recover_email']);
+        }
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $usuario;
+  }
+
   public static function eliminar_hash_recover_email($conexion, $id_usuario){
     if(isset($conexion)){
       try{

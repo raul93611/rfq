@@ -8,6 +8,9 @@ include_once 'app/Redireccion.inc.php';
 
 include_once '../rfp/app/Connection.inc.php';
 
+include_once 'app/RfpComment.inc.php';
+include_once '../rfp/app/CommentRepository.inc.php';
+
 include_once '../rfp/app/User.inc.php';
 include_once '../rfp/app/UserRepository.inc.php';
 
