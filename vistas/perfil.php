@@ -14,6 +14,33 @@ switch ($gestor_actual) {
   case '':
     include_once 'plantillas/muro.inc.php';
     break;
+  case 're_quote':
+    include_once 'plantillas/re_quote.inc.php';
+    break;
+  case 'add_re_quote_item':
+    include_once 'plantillas/add_re_quote_item.inc.php';
+    break;
+  case 'edit_re_quote_item':
+    include_once 'plantillas/edit_re_quote_item.inc.php';
+    break;
+  case 'add_re_quote_provider':
+    include_once 'plantillas/add_re_quote_provider.inc.php';
+    break;
+  case 'edit_re_quote_provider':
+    include_once 'plantillas/edit_re_quote_provider.inc.php';
+    break;
+  case 'add_re_quote_subitem':
+    include_once 'plantillas/add_re_quote_subitem.inc.php';
+    break;
+  case 'edit_re_quote_subitem':
+    include_once 'plantillas/edit_re_quote_subitem.inc.php';
+    break;
+  case 'add_re_quote_subitem_provider':
+    include_once 'plantillas/add_re_quote_subitem_provider.inc.php';
+    break;
+  case 'edit_re_quote_subitem_provider':
+    include_once 'plantillas/edit_re_quote_subitem_provider.inc.php';
+    break;
   case 'registro':
     if ($cargo == 1) {
       include_once 'plantillas/registro.inc.php';

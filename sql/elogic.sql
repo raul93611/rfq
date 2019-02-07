@@ -205,4 +205,90 @@ CREATE TABLE provider_subitems(
             ON DELETE RESTRICT
 );
 
+CREATE TABLE re_quotes(
+  id INT NOT NULL AUTO_INCREMENT UNIQUE,
+  id_rfq INT NOT NULL,
+  total_cost DECIMAL(20,2) NOT NULL,
+  total_price DECIMAL(20,2) NOT NULL,
+  payment_terms VARCHAR(255) NOT NULL,
+  taxes DECIMAL(20,2) NOT NULL,
+  profit DECIMAL(20,2) NOT NULL,
+  additional DECIMAL(20,2) NOT NULL,
+  shipping_cost DECIMAL (20,2) NOT NULL,
+  shipping VARCHAR(255) NOT NULL,
+  PRIMARY KEY(id),
+  FOREIGN KEY(id_rfq)
+    REFERENCES rfq(id)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT
+);
+
+CREATE TABLE re_quote_items(
+  id INT NOT NULL AUTO_INCREMENT UNIQUE,
+  id_re_quote INT NOT NULL,
+  brand TEXT CHARACTER SET utf8 NOT NULL,
+  brand_project TEXT CHARACTER SET utf8 NOT NULL,
+  part_number TEXT CHARACTER SET utf8 NOT NULL,
+  part_number_project TEXT CHARACTER SET utf8 NOT NULL,
+  description TEXT CHARACTER SET utf8 NOT NULL,
+  description_project TEXT CHARACTER SET utf8 NOT NULL,
+  quantity INT NOT NULL,
+  unit_price DECIMAL(20,2) NOT NULL,
+  total_price DECIMAL(20,2) NOT NULL,
+  comments TEXT CHARACTER SET utf8 NOT NULL,
+  website VARCHAR(255) NOT NULL,
+  additional DECIMAL(20,2) NOT NULL,
+  PRIMARY KEY(id),
+  FOREIGN KEY(id_re_quote)
+    REFERENCES re_quotes(id)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT
+);
+
+CREATE TABLE re_quote_providers(
+  id INT NOT NULL AUTO_INCREMENT UNIQUE,
+  id_re_quote_item INT NOT NULL,
+  provider VARCHAR(255) NOT NULL,
+  price DECIMAL(20,2) NOT NULL,
+  PRIMARY KEY(id),
+  FOREIGN KEY(id_re_quote_item)
+    REFERENCES re_quote_items(id)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT
+);
+
+CREATE TABLE re_quote_subitems(
+  id INT NOT NULL AUTO_INCREMENT UNIQUE,
+  id_re_quote_item INT NOT NULL,
+  brand TEXT CHARACTER SET utf8 NOT NULL,
+  brand_project TEXT CHARACTER SET utf8 NOT NULL,
+  part_number TEXT CHARACTER SET utf8 NOT NULL,
+  part_number_project TEXT CHARACTER SET utf8 NOT NULL,
+  description TEXT CHARACTER SET utf8 NOT NULL,
+  description_project TEXT CHARACTER SET utf8 NOT NULL,
+  quantity INT NOT NULL,
+  unit_price DECIMAL(20,2) NOT NULL,
+  total_price DECIMAL(20,2) NOT NULL,
+  comments TEXT CHARACTER SET utf8 NOT NULL,
+  website VARCHAR(255) NOT NULL,
+  additional DECIMAL(20,2) NOT NULL,
+  PRIMARY KEY(id),
+  FOREIGN KEY(id_re_quote_item)
+    REFERENCES re_quote_items(id)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT
+);
+
+CREATE TABLE re_quote_subitem_providers(
+  id INT NOT NULL AUTO_INCREMENT UNIQUE,
+  id_re_quote_subitem INT NOT NULL,
+  provider VARCHAR(255) NOT NULL,
+  price DECIMAL(20,2) NOT NULL,
+  PRIMARY KEY(id),
+  FOREIGN KEY(id_re_quote_subitem)
+    REFERENCES re_quote_subitems(id)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT
+);
+
 ALTER TABLE rfq AUTO_INCREMENT = 300;

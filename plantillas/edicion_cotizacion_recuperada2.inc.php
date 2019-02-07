@@ -175,10 +175,20 @@ if($cotizacion_recuperada-> obtener_canal() == 'Chemonics'){
   <a class="btn btn-info add_item_charter" href="<?php echo CUESTIONARIO . '/' . $cotizacion_recuperada->obtener_id(); ?>"><i class="fa fa-sticky-note"></i> Project charter</a>
   <a href="#" id="add_comment" class="btn btn-primary add_item_charter"><i class="fas fa-plus"></i> Add comment</a>
   <?php
-  if(!$cotizacion_recuperada-> obtener_fullfillment() && $cotizacion_recuperada-> obtener_award()){
-    ?>
-    <a href="#" id="fullfillment" class="btn btn-primary"><i class="fas fa-share-square"></i> Full-fillment</a>
-    <?php
+  if($cotizacion_recuperada-> obtener_canal() != 'Chemonics'){
+    if($cotizacion_recuperada-> obtener_award()){
+      ?>
+      <a href="<?php echo RE_QUOTE . $cotizacion_recuperada-> obtener_id(); ?>" class="btn btn-primary"><i class="fas fa-plus"></i> Re-quote</a>
+      <?php
+    }
+    Conexion::abrir_conexion();
+    $re_quote_exists = ReQuoteRepository::re_quote_exists(Conexion::obtener_conexion(), $cotizacion_recuperada-> obtener_id());
+    Conexion::cerrar_conexion();
+    if(!$cotizacion_recuperada-> obtener_fullfillment() && $cotizacion_recuperada-> obtener_award() && $re_quote_exists){
+      ?>
+      <a href="#" id="fullfillment" class="btn btn-primary"><i class="fas fa-share-square"></i> Full-fillment</a>
+      <?php
+    }
   }
   ?>
   <a href="<?php echo PDF_TABLA_ITEMS . $cotizacion_recuperada-> obtener_id(); ?>" target="_blank" class="btn btn-primary"><i class="fas fa-file"></i> PDF</a>

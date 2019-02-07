@@ -1451,5 +1451,215 @@ class RepositorioRfq {
       <?php
     }
   }
+
+  public static function print_final_quote($id_rfq){
+    Conexion::abrir_conexion();
+    $cotizacion = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
+    $items = RepositorioItem::obtener_items_por_id_rfq(Conexion::obtener_conexion(), $id_rfq);
+    Conexion::cerrar_conexion();
+    if($cotizacion-> obtener_canal() == 'FedBid'){
+      ?>
+      <div class="row">
+        <div class="col-md-6">
+          <label>Total cost:</label>
+        </div>
+        <div class="col-md-6">
+          $ <?php echo $cotizacion-> obtener_total_cost(); ?>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <label>Total price:</label>
+        </div>
+        <div class="col-md-6">
+          $ <?php echo $cotizacion-> obtener_total_price(); ?>
+        </div>
+      </div>
+      <?php
+    }else{
+      ?>
+      <div class="row">
+        <div class="col-md-3">
+          <b>Taxes:</b> <?php echo $cotizacion-> obtener_taxes(); ?>%<br>
+        </div>
+        <div class="col-md-3">
+          <b>Profit:</b> <?php echo $cotizacion-> obtener_profit(); ?>%<br>
+        </div>
+        <div class="col-md-3">
+          <b>Additional general:</b> $ <?php echo $cotizacion-> obtener_additional(); ?>
+        </div>
+        <div class="col-md-3">
+          <b>Payment terms:</b> <?php echo $cotizacion-> obtener_payment_terms(); ?>
+        </div>
+      </div>
+      <br>
+      <?php
+      if (count($items)) {
+        ?>
+        <table class="table table-bordered" style="width:100%;">
+          <tr>
+            <th class="quantity">#</th>
+            <th>PROJECT ESPC.</th>
+            <th>E-LOGIC PROP.</th>
+            <th class="quantity">QTY</th>
+            <th>PROVIDER</th>
+            <th>ADDITIONAL</th>
+            <th>BEST UNIT COST</th>
+            <th>TOTAL COST</th>
+            <th>PRICE FOR CLIENT</th>
+            <th>TOTAL PRICE</th>
+          </tr>
+        <?php
+        $a = 1;
+        if($cotizacion-> obtener_payment_terms() == 'Net 30/CC'){
+          $payment_terms = 1.0215;
+        }else{
+          $payment_terms = 1;
+        }
+        for ($i = 0; $i < count($items); $i++) {
+          $item = $items[$i];
+          ?>
+          <tr>
+            <td><?php echo $a; ?></td>
+            <td><b>Brand name:</b><?php echo $item-> obtener_brand_project(); ?><br><b>Part number:</b><?php echo $item-> obtener_part_number_project(); ?><br><b>Item description:</b><?php echo nl2br(mb_substr($item-> obtener_description_project(), 0, 150)); ?></td>
+            <td><b>Brand name:</b><?php echo $item->obtener_brand(); ?><br><b>Part number:</b><?php echo $item->obtener_part_number(); ?><br><b> Item description:</b><br><?php echo nl2br(mb_substr($item->obtener_description(), 0, 150)); ?></td>
+            <td style="text-align:right;"><?php echo $item->obtener_quantity(); ?></td>
+            <td style="width: 200px;">
+          <?php
+          Conexion::abrir_conexion();
+          $providers = RepositorioProvider::obtener_providers_por_id_item(Conexion::obtener_conexion(), $item-> obtener_id());
+          Conexion::cerrar_conexion();
+          if(count($providers)){
+            Conexion::abrir_conexion();
+            $provider_menor = RepositorioProvider::obtener_provider_por_id(Conexion::obtener_conexion(), $item-> obtener_provider_menor());
+            Conexion::cerrar_conexion();
+            if(count($providers)){
+              foreach ($providers as $provider) {
+                ?>
+                <div class="row">
+                  <div class="col-md-6">
+                    <b><?php echo $provider-> obtener_provider(); ?>:</b>
+                  </div>
+                  <div class="col-md-6">
+                    $ <?php echo number_format($provider-> obtener_price(), 2); ?>
+                  </div>
+                </div>
+                <?php
+              }
+            }
+            ?>
+            </td>
+            <td>$ <?php echo number_format($item-> obtener_additional(), 2); ?></td>
+            <td>$
+            <?php
+            $best_unit_price = $provider_menor-> obtener_price()*$payment_terms*(1+($cotizacion-> obtener_taxes()/100)) + $item-> obtener_additional() + $cotizacion-> obtener_additional();
+            echo number_format($best_unit_price, 2);
+            ?>
+            </td>
+            <td>$ <?php echo number_format(round($best_unit_price, 2) * $item-> obtener_quantity(), 2); ?></td>
+            <td style="text-align:right;">$ <?php echo number_format($item->obtener_unit_price(), 2); ?></td>
+            <td style="text-align:right;">$ <?php echo number_format($item->obtener_total_price(), 2); ?></td>
+            <?php
+          }else{
+            ?>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <?php
+          }
+          ?>
+        </tr>
+          <?php
+          Conexion::abrir_conexion();
+          $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Conexion::obtener_conexion(), $item-> obtener_id());
+          Conexion::cerrar_conexion();
+          for($j = 0; $j < count($subitems); $j++){
+            $subitem = $subitems[$j];
+            ?>
+        <tr>
+          <td></td>
+          <td><b>Brand name:</b><?php echo $subitem-> obtener_brand_project(); ?><br><b>Part number:</b><?php echo $subitem-> obtener_part_number_project(); ?><br><b>Item description:</b><br><?php echo nl2br(mb_substr($subitem->obtener_description_project(), 0, 150)); ?></td>
+          <td><b>Brand name:</b><?php echo $subitem->obtener_brand(); ?><br><b>Part number:</b> <?php echo $item->obtener_part_number(); ?><br><b> Item description:</b><br> <?php echo nl2br(mb_substr($item->obtener_description(), 0, 150)); ?></td>
+          <td style="text-align:right;"><?php echo $subitem-> obtener_quantity(); ?></td>
+            <?php
+              Conexion::abrir_conexion();
+              $providers_subitem = RepositorioProviderSubitem::obtener_providers_subitem_por_id_subitem(Conexion::obtener_conexion(), $subitem-> obtener_id());
+              Conexion::cerrar_conexion();
+              if(count($providers_subitem)){
+                ?>
+          <td>
+                <?php
+                  Conexion::abrir_conexion();
+                  $provider_subitem_menor = RepositorioProviderSubitem::obtener_provider_subitem_por_id(Conexion::obtener_conexion(), $subitem-> obtener_provider_menor());
+                  Conexion::cerrar_conexion();
+                  if(count($providers_subitem)){
+                    foreach ($providers_subitem as $provider_subitem) {
+                      ?>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <b><?php echo $provider_subitem-> obtener_provider(); ?>:</b>
+                        </div>
+                        <div class="col-md-6">
+                          $ <?php echo $provider_subitem-> obtener_price(); ?>
+                        </div>
+                      </div>
+                      <?php
+                    }
+                  }
+                  ?>
+          </td>
+          <td>$ <?php echo number_format($subitem-> obtener_additional(), 2); ?></td>
+          <td>$
+                  <?php
+                  $best_unit_price = $provider_subitem_menor-> obtener_price()*$payment_terms*(1+($cotizacion-> obtener_taxes()/100)) + $subitem-> obtener_additional() + $cotizacion-> obtener_additional();
+                  echo number_format($best_unit_price, 2);
+                  ?>
+          </td>
+          <td>$ <?php echo number_format(round($best_unit_price, 2) * $subitem-> obtener_quantity(), 2); ?></td>
+          <td style="text-align:right;">$ <?php echo number_format($subitem-> obtener_unit_price(), 2); ?></td>
+          <td style="text-align:right;">$ <?php echo number_format($subitem-> obtener_total_price(), 2); ?></td>
+                  <?php
+                }else{
+                  ?>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+                  <?php
+                }
+                ?>
+        </tr>
+                <?php
+              }
+              $a++;
+            }
+      ?>
+        <tr>
+          <td style="border:none;"></td>
+          <td colspan="8" style="font-size:10pt;"><?php echo nl2br($cotizacion->obtener_shipping()); ?></td>
+          <td style="text-align:right;">$ <?php echo number_format($cotizacion->obtener_shipping_cost(), 2); ?></td>
+        </tr>
+        <tr>
+          <td style="border:none;"></td>
+          <td style="border:none;"></td>
+          <td style="border:none;"></td>
+          <td style="border:none;"></td>
+          <td style="border:none;"></td>
+          <td style="border:none;"></td>
+          <td style="font-size:12pt;">TOTAL:</td>
+          <td>$ <?php echo number_format($cotizacion-> obtener_total_cost(), 2); ?></td>
+          <td></td>
+          <td style="font-size:12pt;text-align:right;">$ <?php echo number_format($cotizacion->obtener_total_price(), 2); ?></td>
+        </tr>
+      </table>
+      <?php
+      }
+    }
+  }
 }
 ?>

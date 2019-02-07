@@ -77,6 +77,21 @@ include_once 'app/RepositorioProviderSubitem.inc.php';
 include_once 'app/Comment.inc.php';
 include_once 'app/RepositorioComment.inc.php';
 
+include_once 'app/ReQuote.inc.php';
+include_once 'app/ReQuoteRepository.inc.php';
+
+include_once 'app/ReQuoteItem.inc.php';
+include_once 'app/ReQuoteItemRepository.inc.php';
+
+include_once 'app/ReQuoteProvider.inc.php';
+include_once 'app/ReQuoteProviderRepository.inc.php';
+
+include_once 'app/ReQuoteSubitem.inc.php';
+include_once 'app/ReQuoteSubitemRepository.inc.php';
+
+include_once 'app/ReQuoteSubitemProvider.inc.php';
+include_once 'app/ReQuoteSubitemProviderRepository.inc.php';
+
 $componentes_url = parse_url($_SERVER['REQUEST_URI']);
 $ruta = $componentes_url['path'];
 
@@ -114,6 +129,33 @@ if ($partes_ruta[0] == 'rfq') {
         break;
       case 'recover_password_form':
         $ruta_elegida = 'herramientas/recover_password_form.php';
+        break;
+      case 'save_re_quote_item':
+        $ruta_elegida = 'scripts/save_re_quote_item.php';
+        break;
+      case 'save_edit_re_quote_item':
+        $ruta_elegida = 'scripts/save_edit_re_quote_item.php';
+        break;
+      case 'save_re_quote_provider':
+        $ruta_elegida = 'scripts/save_re_quote_provider.php';
+        break;
+      case 'save_edit_re_quote_provider':
+        $ruta_elegida = 'scripts/save_edit_re_quote_provider.inc.php';
+        break;
+      case 'save_re_quote_subitem':
+        $ruta_elegida = 'scripts/save_re_quote_subitem.php';
+        break;
+      case 'save_edit_re_quote_subitem':
+        $ruta_elegida = 'scripts/save_edit_re_quote_subitem.php';
+        break;
+      case 'save_re_quote_subitem_provider':
+        $ruta_elegida = 'scripts/save_re_quote_subitem_provider.php';
+        break;
+      case 'save_edit_re_quote_subitem_provider':
+        $ruta_elegida = 'scripts/save_edit_re_quote_subitem_provider.php';
+        break;
+      case 'save_re_quote':
+        $ruta_elegida = 'scripts/save_re_quote.php';
         break;
     }
   } else if (count($partes_ruta) == 3) {
@@ -267,6 +309,22 @@ if ($partes_ruta[0] == 'rfq') {
         $url_secreta = $partes_ruta[2];
         $ruta_elegida = 'herramientas/restart_password.php';
         break;
+      case 'delete_re_quote_provider':
+        $ruta_elegida = 'scripts/delete_re_quote_provider.php';
+        $id_re_quote_provider = $partes_ruta[2];
+        break;
+      case 'delete_re_quote_subitem_provider':
+        $ruta_elegida = 'scripts/delete_re_quote_subitem_provider.php';
+        $id_re_quote_subitem_provider = $partes_ruta[2];
+        break;
+      case 'delete_re_quote_subitem':
+        $ruta_elegida = 'scripts/delete_re_quote_subitem.php';
+        $id_re_quote_subitem = $partes_ruta[2];
+        break;
+      case 'delete_re_quote_item':
+        $ruta_elegida = 'scripts/delete_re_quote_item.php';
+        $id_re_quote_item = $partes_ruta[2];
+        break;
       default:
       break;
     }
@@ -275,220 +333,268 @@ if ($partes_ruta[0] == 'rfq') {
       $id_rfq = $partes_ruta[2];
       $archivo = $partes_ruta[3];
       $ruta_elegida = 'scripts/delete_document.php';
-    }else if($partes_ruta[1] == 'perfil' && $partes_ruta[2] == 'edit_user'){
-      $id_user = $partes_ruta[3];
-      $gestor_actual = 'edit_user';
+    }else if($partes_ruta[1] == 'perfil'){
       $ruta_elegida = 'vistas/perfil.php';
-    }if($partes_ruta[1] == 'perfil' && $partes_ruta[2] == 'historial_comments'){
-      $id_rfq = $partes_ruta[3];
-      $gestor_actual = 'historial_comments';
-      $ruta_elegida = 'vistas/perfil.php';
-    }else if ($partes_ruta[1] == 'perfil' && $partes_ruta[2] == 'cotizaciones') {
-      $gestor_actual = 'cotizaciones';
-      $ruta_elegida = 'vistas/perfil.php';
-      switch ($partes_ruta[3]) {
-        case 'gsa_buy':
-          $cotizacion = 'gsa_buy';
+      switch ($partes_ruta[2]) {
+        case 'add_re_quote_item':
+          $gestor_actual = 'add_re_quote_item';
+          $id_re_quote = $partes_ruta[3];
           break;
-        case 'fedbid':
-          $cotizacion = 'fedbid';
+        case 'edit_re_quote_item':
+          $gestor_actual = 'edit_re_quote_item';
+          $id_re_quote_item = $partes_ruta[3];
           break;
-        case 'emails':
-          $cotizacion = 'emails';
+        case 'add_re_quote_provider':
+          $gestor_actual = 'add_re_quote_provider';
+          $id_re_quote_item = $partes_ruta[3];
           break;
-        case 'mailbox':
-          $cotizacion = 'mailbox';
+        case 'edit_re_quote_provider':
+          $gestor_actual = 'edit_re_quote_provider';
+          $id_re_quote_provider = $partes_ruta[3];
           break;
-        case 'findfrp':
-          $cotizacion = 'findfrp';
+        case 'add_re_quote_subitem':
+          $gestor_actual = 'add_re_quote_subitem';
+          $id_re_quote_item = $partes_ruta[3];
           break;
-        case 'embassies':
-          $cotizacion = 'embassies';
+        case 'edit_re_quote_subitem':
+          $gestor_actual = 'edit_re_quote_subitem';
+          $id_re_quote_subitem = $partes_ruta[3];
           break;
-        case 'fbo':
-          $cotizacion = 'fbo';
+        case 'add_re_quote_subitem_provider':
+          $gestor_actual = 'add_re_quote_subitem_provider';
+          $id_re_quote_subitem = $partes_ruta[3];
           break;
-        case 'chemonics':
-          $cotizacion = 'chemonics';
+        case 'edit_re_quote_subitem_provider':
+          $gestor_actual = 'edit_re_quote_subitem_provider';
+          $id_re_quote_subitem_provider = $partes_ruta[3];
           break;
-        case 'nuevo':
-          $cotizacion = 'nuevo';
+        case 'cotizaciones':
+          $gestor_actual = 'cotizaciones';
+          switch ($partes_ruta[3]) {
+            case 'gsa_buy':
+              $cotizacion = 'gsa_buy';
+              break;
+            case 'fedbid':
+              $cotizacion = 'fedbid';
+              break;
+            case 'emails':
+              $cotizacion = 'emails';
+              break;
+            case 'mailbox':
+              $cotizacion = 'mailbox';
+              break;
+            case 'findfrp':
+              $cotizacion = 'findfrp';
+              break;
+            case 'embassies':
+              $cotizacion = 'embassies';
+              break;
+            case 'fbo':
+              $cotizacion = 'fbo';
+              break;
+            case 'chemonics':
+              $cotizacion = 'chemonics';
+              break;
+            case 'nuevo':
+              $cotizacion = 'nuevo';
+              break;
+            case 'no_bid':
+              $cotizacion = 'no_bid';
+              break;
+            case 'no_submitted':
+              $cotizacion = 'no_submitted';
+              break;
+            case 'rfp_quotes':
+              $cotizacion = 'rfp_quotes';
+              break;
+            case 'cancelled':
+              $cotizacion = 'cancelled';
+              break;
+          }
           break;
-        case 'no_bid':
-          $cotizacion = 'no_bid';
+        case 'completados':
+          $gestor_actual = 'completados';
+          switch ($partes_ruta[3]) {
+            case 'gsa_buy':
+              $cotizacion = 'gsa_buy_completados';
+              break;
+            case 'fedbid':
+              $cotizacion = 'fedbid_completados';
+              break;
+            case 'emails':
+              $cotizacion = 'emails_completados';
+              break;
+            case 'mailbox':
+              $cotizacion = 'mailbox_completados';
+              break;
+            case 'findfrp':
+              $cotizacion = 'findfrp_completados';
+              break;
+            case 'embassies':
+              $cotizacion = 'embassies_completados';
+              break;
+            case 'fbo':
+              $cotizacion = 'fbo_completados';
+              break;
+          }
           break;
-        case 'no_submitted':
-          $cotizacion = 'no_submitted';
+        case 'submitted':
+          $gestor_actual = 'submitted';
+          switch ($partes_ruta[3]){
+            case 'gsa_buy':
+              $cotizacion = 'gsa_buy_submitted';
+              break;
+            case 'fedbid':
+              $cotizacion = 'fedbid_submitted';
+              break;
+            case 'emails':
+              $cotizacion = 'emails_submitted';
+              break;
+            case 'mailbox':
+              $cotizacion = 'mailbox_submitted';
+              break;
+            case 'findfrp':
+              $cotizacion = 'findfrp_submitted';
+              break;
+            case 'embassies':
+              $cotizacion = 'embassies_submitted';
+              break;
+            case 'fbo':
+              $cotizacion = 'fbo_submitted';
+              break;
+          }
           break;
-        case 'rfp_quotes':
-          $cotizacion = 'rfp_quotes';
+        case 'award':
+          $gestor_actual = 'award';
+          switch ($partes_ruta[3]){
+            case 'gsa_buy':
+              $cotizacion = 'gsa_buy_award';
+              break;
+            case 'fedbid':
+              $cotizacion = 'fedbid_award';
+              break;
+            case 'emails':
+              $cotizacion = 'emails_award';
+              break;
+            case 'mailbox':
+              $cotizacion = 'mailbox_award';
+              break;
+            case 'findfrp':
+              $cotizacion = 'findfrp_award';
+              break;
+            case 'embassies':
+              $cotizacion = 'embassies_award';
+              break;
+            case 'fbo':
+              $cotizacion = 'fbo_award';
+              break;
+            case 'chemonics':
+              $cotizacion = 'chemonics_award';
+              break;
+          }
           break;
-        case 'cancelled':
-          $cotizacion = 'cancelled';
+        case 'edit_user':
+          $id_user = $partes_ruta[3];
+          $gestor_actual = 'edit_user';
+          break;
+        case 'historial_comments':
+          $id_rfq = $partes_ruta[3];
+          $gestor_actual = 'historial_comments';
+          break;
+        case 're_quote':
+          $gestor_actual = 're_quote';
+          $id_rfq = $partes_ruta[3];
+          break;
+        default:
           break;
       }
-      } else if ($partes_ruta[1] == 'perfil' && $partes_ruta[2] == 'completados') {
-        $gestor_actual = 'completados';
-        $ruta_elegida = 'vistas/perfil.php';
-        switch ($partes_ruta[3]) {
-          case 'gsa_buy':
-            $cotizacion = 'gsa_buy_completados';
-            break;
-          case 'fedbid':
-            $cotizacion = 'fedbid_completados';
-            break;
-          case 'emails':
-            $cotizacion = 'emails_completados';
-            break;
-          case 'mailbox':
-            $cotizacion = 'mailbox_completados';
-            break;
-          case 'findfrp':
-            $cotizacion = 'findfrp_completados';
-            break;
-          case 'embassies':
-            $cotizacion = 'embassies_completados';
-            break;
-          case 'fbo':
-            $cotizacion = 'fbo_completados';
-            break;
-        }
-      }else if($partes_ruta[1] == 'perfil' && $partes_ruta[2] == 'submitted'){
-        $gestor_actual = 'submitted';
-        $ruta_elegida = 'vistas/perfil.php';
-        switch ($partes_ruta[3]){
-          case 'gsa_buy':
-            $cotizacion = 'gsa_buy_submitted';
-            break;
-          case 'fedbid':
-            $cotizacion = 'fedbid_submitted';
-            break;
-          case 'emails':
-            $cotizacion = 'emails_submitted';
-            break;
-          case 'mailbox':
-            $cotizacion = 'mailbox_submitted';
-            break;
-          case 'findfrp':
-            $cotizacion = 'findfrp_submitted';
-            break;
-          case 'embassies':
-            $cotizacion = 'embassies_submitted';
-            break;
-          case 'fbo':
-            $cotizacion = 'fbo_submitted';
-            break;
-        }
-      }else if ($partes_ruta[1] == 'perfil' && $partes_ruta[2] == 'award') {
-        $gestor_actual = 'award';
-        $ruta_elegida = 'vistas/perfil.php';
-        switch ($partes_ruta[3]){
-          case 'gsa_buy':
-            $cotizacion = 'gsa_buy_award';
-            break;
-          case 'fedbid':
-            $cotizacion = 'fedbid_award';
-            break;
-          case 'emails':
-            $cotizacion = 'emails_award';
-            break;
-          case 'mailbox':
-            $cotizacion = 'mailbox_award';
-            break;
-          case 'findfrp':
-            $cotizacion = 'findfrp_award';
-            break;
-          case 'embassies':
-            $cotizacion = 'embassies_award';
-            break;
-          case 'fbo':
-            $cotizacion = 'fbo_award';
-            break;
-          case 'chemonics':
-            $cotizacion = 'chemonics_award';
-            break;
-        }
-      }
+    }
   } else if (count($partes_ruta) == 5) {
-    if ($partes_ruta[1] == 'perfil' && $partes_ruta[2] == 'cotizaciones') {
-      $gestor_actual = 'cotizaciones';
+    if ($partes_ruta[1] == 'perfil') {
       $ruta_elegida = 'vistas/perfil.php';
-      switch ($partes_ruta[3]) {
-        case 'editar_cotizacion':
-          $cotizacion = 'editar_cotizacion';
-          $id_rfq = $partes_ruta[4];
+      switch ($partes_ruta[2]) {
+        case 'cotizaciones':
+          $gestor_actual = 'cotizaciones';
+          switch ($partes_ruta[3]) {
+            case 'editar_cotizacion':
+              $cotizacion = 'editar_cotizacion';
+              $id_rfq = $partes_ruta[4];
+              break;
+            case 'add_item':
+              $cotizacion = 'add_item';
+              $id_rfq = $partes_ruta[4];
+              break;
+            case 'add_provider':
+              $cotizacion = 'add_provider';
+              $id_item = $partes_ruta[4];
+              break;
+            case 'add_provider_subitem':
+              $cotizacion = 'add_provider_subitem';
+              $id_subitem = $partes_ruta[4];
+              break;
+            case 'add_subitem':
+              $cotizacion = 'add_subitem';
+              $id_item = $partes_ruta[4];
+              break;
+            case 'edit_item':
+              $cotizacion = 'edit_item';
+              $id_item = $partes_ruta[4];
+              break;
+            case 'edit_subitem':
+              $cotizacion = 'edit_subitem';
+              $id_subitem = $partes_ruta[4];
+              break;
+            case 'delete_subitem':
+              $cotizacion = 'delete_subitem';
+              $id_subitem = $partes_ruta[4];
+              break;
+            case 'edit_provider':
+              $cotizacion = 'edit_provider';
+              $id_provider = $partes_ruta[4];
+              break;
+            case 'edit_provider_subitem':
+              $cotizacion = 'edit_provider_subitem';
+              $id_provider_subitem = $partes_ruta[4];
+              break;
+            case 'cuestionario':
+              $cotizacion = 'cuestionario';
+              $id_rfq = $partes_ruta[4];
+              break;
+            case 'add_high_level_requirement':
+              $cotizacion = 'add_high_level_requirement';
+              $id_cuestionario = $partes_ruta[4];
+              break;
+            case 'add_out_of_scope':
+              $cotizacion = 'add_out_of_scope';
+              $id_cuestionario = $partes_ruta[4];
+              break;
+            case 'add_project_risk':
+              $cotizacion = 'add_project_risk';
+              $id_cuestionario = $partes_ruta[4];
+              break;
+            case 'add_project_milestone':
+              $cotizacion = 'add_project_milestone';
+              $id_cuestionario = $partes_ruta[4];
+              break;
+            case 'edit_high_level_requirement':
+              $cotizacion = 'edit_high_level_requirement';
+              $id_high_level_requirement = $partes_ruta[4];
+              break;
+            case 'edit_out_of_scope':
+              $cotizacion = 'edit_out_of_scope';
+              $id_out_of_scope = $partes_ruta[4];
+              break;
+            case 'edit_project_risk':
+              $cotizacion = 'edit_project_risk';
+              $id_project_risk = $partes_ruta[4];
+              break;
+            case 'edit_project_milestone':
+              $cotizacion = 'edit_project_milestone';
+              $id_project_milestone = $partes_ruta[4];
+              break;
+          }
           break;
-        case 'add_item':
-          $cotizacion = 'add_item';
-          $id_rfq = $partes_ruta[4];
-          break;
-        case 'add_provider':
-          $cotizacion = 'add_provider';
-          $id_item = $partes_ruta[4];
-          break;
-        case 'add_provider_subitem':
-          $cotizacion = 'add_provider_subitem';
-          $id_subitem = $partes_ruta[4];
-          break;
-        case 'add_subitem':
-          $cotizacion = 'add_subitem';
-          $id_item = $partes_ruta[4];
-          break;
-        case 'edit_item':
-          $cotizacion = 'edit_item';
-          $id_item = $partes_ruta[4];
-          break;
-        case 'edit_subitem':
-          $cotizacion = 'edit_subitem';
-          $id_subitem = $partes_ruta[4];
-          break;
-        case 'delete_subitem':
-          $cotizacion = 'delete_subitem';
-          $id_subitem = $partes_ruta[4];
-          break;
-        case 'edit_provider':
-          $cotizacion = 'edit_provider';
-          $id_provider = $partes_ruta[4];
-          break;
-        case 'edit_provider_subitem':
-          $cotizacion = 'edit_provider_subitem';
-          $id_provider_subitem = $partes_ruta[4];
-          break;
-        case 'cuestionario':
-          $cotizacion = 'cuestionario';
-          $id_rfq = $partes_ruta[4];
-          break;
-        case 'add_high_level_requirement':
-          $cotizacion = 'add_high_level_requirement';
-          $id_cuestionario = $partes_ruta[4];
-          break;
-        case 'add_out_of_scope':
-          $cotizacion = 'add_out_of_scope';
-          $id_cuestionario = $partes_ruta[4];
-          break;
-        case 'add_project_risk':
-          $cotizacion = 'add_project_risk';
-          $id_cuestionario = $partes_ruta[4];
-          break;
-        case 'add_project_milestone':
-          $cotizacion = 'add_project_milestone';
-          $id_cuestionario = $partes_ruta[4];
-          break;
-        case 'edit_high_level_requirement':
-          $cotizacion = 'edit_high_level_requirement';
-          $id_high_level_requirement = $partes_ruta[4];
-          break;
-        case 'edit_out_of_scope':
-          $cotizacion = 'edit_out_of_scope';
-          $id_out_of_scope = $partes_ruta[4];
-          break;
-        case 'edit_project_risk':
-          $cotizacion = 'edit_project_risk';
-          $id_project_risk = $partes_ruta[4];
-          break;
-        case 'edit_project_milestone':
-          $cotizacion = 'edit_project_milestone';
-          $id_project_milestone = $partes_ruta[4];
+        default:
           break;
       }
     }
