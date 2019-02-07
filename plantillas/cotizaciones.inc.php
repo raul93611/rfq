@@ -32,5 +32,9 @@ switch ($cotizacion) {
     $canal = 'Chemonics';
     include_once 'plantillas/chemonics.inc.php';
     break;
+  case 'ebay_amazon':
+    $canal = 'Ebay & Amazon';
+    include_once 'plantillas/ebay_amazon.inc.php';
+    break;
 }
 ?>

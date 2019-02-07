@@ -398,6 +398,9 @@ if ($partes_ruta[0] == 'rfq') {
             case 'chemonics':
               $cotizacion = 'chemonics';
               break;
+            case 'ebay_amazon':
+              $cotizacion = 'ebay_amazon';
+              break;
             case 'nuevo':
               $cotizacion = 'nuevo';
               break;
@@ -493,6 +496,9 @@ if ($partes_ruta[0] == 'rfq') {
               break;
             case 'chemonics':
               $cotizacion = 'chemonics_award';
+              break;
+            case 'ebay_amazon':
+              $cotizacion = 'ebay_amazon_award';
               break;
           }
           break;

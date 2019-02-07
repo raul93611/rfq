@@ -77,6 +77,7 @@
           <option <?php if($validador-> obtener_canal() == 'Embassies'){echo 'selected';} ?>>Embassies</option>
           <option <?php if($validador-> obtener_canal() == 'FBO'){echo 'selected';} ?>>FBO</option>
           <option <?php if($validador-> obtener_canal() == 'Chemonics'){echo 'selected';} ?>>Chemonics</option>
+          <option <?php if($validador-> obtener_canal() == 'Ebay & Amazon'){echo 'selected';} ?>>Ebay & Amazon</option>
         </select>
       </div>
     </div>

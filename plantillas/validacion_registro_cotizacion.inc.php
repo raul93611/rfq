@@ -51,6 +51,9 @@ if (isset($_POST['registrar_cotizacion'])) {
         case 'Chemonics':
           $canal = 'chemonics';
           break;
+        case 'Ebay & Amazon':
+          $canal = 'ebay_amazon';
+          break;
       }
       Redireccion::redirigir1(COTIZACIONES . $canal);
     }

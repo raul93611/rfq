@@ -697,7 +697,7 @@ class RepositorioRfq {
       <td><?php echo $cotizacion->obtener_id(); ?></td>
       <td><?php echo $cotizacion->obtener_comments(); ?></td>
       <?php
-      if($cotizacion-> obtener_canal() != 'FedBid' && $cotizacion-> obtener_canal() != 'Chemonics'){
+      if($cotizacion-> obtener_canal() != 'FedBid' && $cotizacion-> obtener_canal() != 'Chemonics' && $cotizacion-> obtener_canal() != 'Ebay & Amazon'){
         if ($cotizacion->obtener_canal() != 'GSA-Buy') {
           ?>
           <td class="text-center"><a class="btn btn-sm calculate" href="<?php echo PROPOSAL . '/' . $cotizacion->obtener_id(); ?>" target="_blank"><i class="fa fa-copy"></i></a></td>
@@ -731,7 +731,7 @@ class RepositorioRfq {
             <th>AWARD DATE</th>
             <th>PROPOSAL</th>
             <th>COMMENTS</th>
-            <?php if($canal != 'FedBid' && $canal != 'Chemonics'){echo '<th>GENERATE PROPOSAL</th>';} ?>
+            <?php if($canal != 'FedBid' && $canal != 'Chemonics' && $canal != 'Ebay & Amazon'){echo '<th>GENERATE PROPOSAL</th>';} ?>
           </tr>
         </thead>
         <tbody>

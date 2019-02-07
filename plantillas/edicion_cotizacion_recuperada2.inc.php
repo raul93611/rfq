@@ -15,7 +15,7 @@ if($cotizacion_recuperada-> obtener_canal() == 'FedBid'){
   <br>
   <?php
 }
-if($cotizacion_recuperada-> obtener_canal() == 'Chemonics'){
+if($cotizacion_recuperada-> obtener_canal() == 'Chemonics' || $cotizacion_recuperada-> obtener_canal() == 'Ebay & Amazon'){
   ?>
   <div class="row">
     <div class="col-md-12">
@@ -110,7 +110,7 @@ if($cotizacion_recuperada-> obtener_canal() == 'Chemonics'){
   </div>
 </div>
 <?php
-if($cotizacion_recuperada-> obtener_canal() == 'Chemonics'){
+if($cotizacion_recuperada-> obtener_canal() == 'Chemonics' || $cotizacion_recuperada-> obtener_canal() == 'Ebay & Amazon'){
   if(!$cotizacion_recuperada->obtener_award()){
     ?>
     <div class="form-check">
@@ -166,7 +166,7 @@ if($cotizacion_recuperada-> obtener_canal() == 'Chemonics'){
   ?>
   <button type="submit" class="btn btn-success" id="save_item" name="guardar_cambios_cotizacion"><i class="fa fa-check"></i> Save</button>
   <?php
-  if($cotizacion_recuperada-> obtener_canal() != 'FedBid'){
+  if($cotizacion_recuperada-> obtener_canal() != 'FedBid' && $cotizacion_recuperada-> obtener_canal() != 'Chemonics' && $cotizacion_recuperada-> obtener_canal() != 'Ebay & Amazon'){
     ?>
     <a class="btn btn-primary add_item_charter" href="<?php echo ADD_ITEM . '/' . $cotizacion_recuperada->obtener_id(); ?>"><i class="fa fa-plus-circle"></i> Add item</a>
     <?php
@@ -175,7 +175,7 @@ if($cotizacion_recuperada-> obtener_canal() == 'Chemonics'){
   <a class="btn btn-info add_item_charter" href="<?php echo CUESTIONARIO . '/' . $cotizacion_recuperada->obtener_id(); ?>"><i class="fa fa-sticky-note"></i> Project charter</a>
   <a href="#" id="add_comment" class="btn btn-primary add_item_charter"><i class="fas fa-plus"></i> Add comment</a>
   <?php
-  if($cotizacion_recuperada-> obtener_canal() != 'Chemonics'){
+  if($cotizacion_recuperada-> obtener_canal() != 'Chemonics' && $cotizacion_recuperada-> obtener_canal() != 'Ebay & Amazon'){
     if($cotizacion_recuperada-> obtener_award()){
       ?>
       <a href="<?php echo RE_QUOTE . $cotizacion_recuperada-> obtener_id(); ?>" class="btn btn-primary"><i class="fas fa-plus"></i> Re-quote</a>
@@ -190,6 +190,10 @@ if($cotizacion_recuperada-> obtener_canal() == 'Chemonics'){
       <?php
     }
   }
+  if($cotizacion_recuperada-> obtener_canal() != 'FedBid' && $cotizacion_recuperada-> obtener_canal() != 'Chemonics' && $cotizacion_recuperada-> obtener_canal() != 'Ebay & Amazon'){
+    ?>
+    <a href="<?php echo PDF_TABLA_ITEMS . $cotizacion_recuperada-> obtener_id(); ?>" target="_blank" class="btn btn-primary"><i class="fas fa-file"></i> PDF</a>
+    <?php
+  }
   ?>
-  <a href="<?php echo PDF_TABLA_ITEMS . $cotizacion_recuperada-> obtener_id(); ?>" target="_blank" class="btn btn-primary"><i class="fas fa-file"></i> PDF</a>
 </div>

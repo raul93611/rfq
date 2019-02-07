@@ -174,6 +174,17 @@
                     <p>Chemonics</p>
                   </a>
                 </li>
+                <li class="nav-item">
+                  <a href="<?php echo EBAY_AMAZON; ?>" class="nav-link
+                  <?php
+                  if ($cotizacion == 'ebay_amazon') {
+                    echo 'active';
+                  }
+                  ?>
+                     ">
+                    <p>Ebay & Amazon</p>
+                  </a>
+                </li>
               </ul>
             </li>
 
@@ -476,6 +487,17 @@
                     ?>
                        ">
                       <p>Chemonics</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="<?php echo EBAY_AMAZON_AWARD; ?>" class="nav-link
+                    <?php
+                    if ($cotizacion == 'ebay_amazon_award') {
+                        echo 'active';
+                    }
+                    ?>
+                       ">
+                      <p>Ebay & Amazon</p>
                     </a>
                   </li>
                 </ul>
