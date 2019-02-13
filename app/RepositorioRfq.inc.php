@@ -110,24 +110,49 @@ class RepositorioRfq {
     }
     return $email_code_existe;
   }
-  public static function obtener_todos_quotes_sometidos($conexion){
-    $todos_sometidos = [];
+
+  public static function get_all_submitted_quotes_between_dates($conexion, $date_from, $date_to){
+    $quotes = [];
     if(isset($conexion)){
       try{
-        $sql = 'SELECT * FROM rfq WHERE status = 1 AND completado = 1';
+        $sql = 'SELECT * FROM rfq WHERE status = 1 AND completado = 1 AND fecha_submitted BETWEEN :date_from AND :date_to';
         $sentencia = $conexion-> prepare($sql);
+        $sentencia-> bindParam(':date_from', $date_from, PDO::PARAM_STR);
+        $sentencia-> bindParam(':date_to', $date_to, PDO::PARAM_STR);
         $sentencia-> execute();
         $resultado = $sentencia-> fetchAll(PDO::FETCH_ASSOC);
         if (count($resultado)) {
           foreach ($resultado as $fila) {
-            $todos_sometidos [] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['total_cost'], $fila['total_price'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['fecha_submitted'], $fila['fecha_award'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via'], $fila['taxes'], $fila['profit'], $fila['additional'], $fila['shipping'], $fila['shipping_cost'], $fila['rfp'], $fila['fullfillment'], $fila['contract_number']);
+            $quotes[] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['total_cost'], $fila['total_price'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['fecha_submitted'], $fila['fecha_award'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via'], $fila['taxes'], $fila['profit'], $fila['additional'], $fila['shipping'], $fila['shipping_cost'], $fila['rfp'], $fila['fullfillment'], $fila['contract_number']);
           }
         }
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
-    return $todos_sometidos;
+    return $quotes;
+  }
+
+  public static function get_all_award_quotes_between_dates($conexion, $date_from, $date_to){
+    $quotes = [];
+    if(isset($conexion)){
+      try{
+        $sql = 'SELECT * FROM rfq WHERE award =1 AND status = 1 AND completado = 1 AND fecha_award BETWEEN :date_from AND :date_to';
+        $sentencia = $conexion-> prepare($sql);
+        $sentencia-> bindParam(':date_from', $date_from, PDO::PARAM_STR);
+        $sentencia-> bindParam(':date_to', $date_to, PDO::PARAM_STR);
+        $sentencia-> execute();
+        $resultado = $sentencia-> fetchAll(PDO::FETCH_ASSOC);
+        if (count($resultado)) {
+          foreach ($resultado as $fila) {
+            $quotes[] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['total_cost'], $fila['total_price'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['fecha_submitted'], $fila['fecha_award'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via'], $fila['taxes'], $fila['profit'], $fila['additional'], $fila['shipping'], $fila['shipping_cost'], $fila['rfp'], $fila['fullfillment'], $fila['contract_number']);
+          }
+        }
+      }catch(PDOException $ex){
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $quotes;
   }
 /*****************************************************************************************************************************/
 /*****************************************************QUOTES*******************************************************************/

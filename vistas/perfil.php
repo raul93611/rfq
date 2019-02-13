@@ -211,6 +211,9 @@ switch ($gestor_actual) {
   case 'award':
     include_once 'plantillas/award.inc.php';
     break;
+  case 'excel_reports':
+    include_once 'plantillas/excel_reports.inc.php';
+    break;
 }
 include_once 'plantillas/documento_cierre.inc.php';
 ?>

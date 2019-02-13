@@ -127,9 +127,6 @@ if ($partes_ruta[0] == 'rfq') {
       case 'guardar_fullfillment_form':
         $ruta_elegida = 'scripts/guardar_fullfillment_form.php';
         break;
-      case 'excel_report':
-        $ruta_elegida = 'scripts/excel_report.php';
-        break;
       case 'recover_password_form':
         $ruta_elegida = 'herramientas/recover_password_form.php';
         break;
@@ -160,6 +157,9 @@ if ($partes_ruta[0] == 'rfq') {
       case 'save_re_quote':
         $ruta_elegida = 'scripts/save_re_quote.php';
         break;
+      case 'generate_excel_report':
+        $ruta_elegida = 'scripts/generate_excel_report.php';
+        break;
     }
   } else if (count($partes_ruta) == 3) {
     switch ($partes_ruta[1]) {
@@ -175,6 +175,10 @@ if ($partes_ruta[0] == 'rfq') {
           break;
         case 'employee_docs_page':
           $gestor_actual = 'employee_docs_page';
+          $ruta_elegida = 'vistas/perfil.php';
+          break;
+        case 'excel_reports':
+          $gestor_actual = 'excel_reports';
           $ruta_elegida = 'vistas/perfil.php';
           break;
       }

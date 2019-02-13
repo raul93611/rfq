@@ -1,4 +1,5 @@
 $(document).ready(function () {
+  /************************************************************/
   $('#archivos_crear').fileinput({
     theme: 'explorer-fas',
     initialPreviewAsData: true,
@@ -127,7 +128,7 @@ $(document).ready(function () {
     $('#footer_item').toggleClass('footer_item1');
   });
 /**************************************DATEPICKER PARA CAMPOS TIPO DATE*********************/
-  $('#completed_date').daterangepicker({
+  $('#completed_date, .date').daterangepicker({
     singleDatePicker: true
   });
   $('#expiration_date').daterangepicker({

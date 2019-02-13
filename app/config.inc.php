@@ -137,7 +137,8 @@ define('GUARDAR_FULLFILLMENT_FORM', SERVIDOR . 'guardar_fullfillment_form');
 /**********************************************************************************/
 define('PDF_TABLA_ITEMS', SERVIDOR . 'pdf_tabla_items/');
 /**********************************************************************************/
-define('EXCEL_REPORT', SERVIDOR . 'excel_report');
+define('EXCEL_REPORTS', PERFIL . 'excel_reports');
+define('GENERATE_EXCEL_REPORT', SERVIDOR . 'generate_excel_report');
 /*************************************************************************************/
 define('EMPLOYEE_DOCS_PAGE', PERFIL . 'employee_docs_page/');
 /********************************************************************************/
