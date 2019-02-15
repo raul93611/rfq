@@ -670,11 +670,11 @@ class RepositorioRfq {
     if (isset($conexion)) {
       try {
         if ($cargo < 4) {
-          $sql = "SELECT * FROM rfq WHERE completado = 1 AND status = 1 AND award = 1 AND canal = :canal AND rfp = 0 AND (comments = 'No comments' OR comments = 'QuickBooks') ORDER BY fecha_award DESC";
+          $sql = "SELECT * FROM rfq WHERE completado = 1 AND status = 1 AND award = 1 AND fullfillment = 0 AND canal = :canal AND rfp = 0 AND (comments = 'No comments' OR comments = 'QuickBooks') ORDER BY fecha_award DESC";
           $sentencia = $conexion->prepare($sql);
           $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
         } else if ($cargo > 3) {
-          $sql = "SELECT * FROM rfq WHERE usuario_designado = :id_usuario AND completado = 1 AND status = 1 AND award = 1 AND canal = :canal AND rfp = 0 AND (comments = 'No comments' OR comments = 'QuickBooks') ORDER BY fecha_award DESC";
+          $sql = "SELECT * FROM rfq WHERE usuario_designado = :id_usuario AND completado = 1 AND status = 1 AND award = 1 AND fullfillment = 0 AND canal = :canal AND rfp = 0 AND (comments = 'No comments' OR comments = 'QuickBooks') ORDER BY fecha_award DESC";
           $sentencia = $conexion->prepare($sql);
           $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
           $sentencia->bindParam(':id_usuario', $id_usuario, PDO::PARAM_STR);
@@ -1685,6 +1685,75 @@ class RepositorioRfq {
       <?php
       }
     }
+  }
+
+  public static function print_fulfillment_quotes(){
+    Conexion::abrir_conexion();
+    $quotes = self::get_all_fulfillment_quotes(Conexion::obtener_conexion());
+    Conexion::cerrar_conexion();
+    if(count($quotes)){
+      ?>
+      <table class="fulfillment_table table table-bordered">
+        <thead>
+          <tr>
+            <th>PROPOSAL</th>
+            <th>CODE</th>
+            <th>CHANNEL</th>
+            <th>FULFILLMENT DATE</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php
+          foreach ($quotes as $quote) {
+            self::print_fulfillment_quote($quote);
+          }
+          ?>
+        </tbody>
+      </table>
+      <?php
+    }
+  }
+
+  public static function print_fulfillment_quote($quote){
+    if(!isset($quote)){
+      return;
+    }
+    ConnectionFullFillment::open_connection();
+    $rfq_fullfillment_part = RfqFullFillmentPartRepository::get_rfq_fullfillment_part_by_id_rfq(ConnectionFullFillment::get_connection(), $quote-> obtener_id());
+    ConnectionFullFillment::close_connection();
+    $fulfillment_date = RepositorioRfqFullFillmentComment::mysql_datetime_to_english_format($rfq_fullfillment_part-> get_fullfillment_date());
+    ?>
+    <tr>
+      <td>
+        <a href="<?php echo EDITAR_COTIZACION . '/' . $quote-> obtener_id(); ?>" class="btn-block">
+          <?php echo $quote-> obtener_id(); ?>
+        </a>
+      </td>
+      <td><?php echo $quote-> obtener_email_code(); ?></td>
+      <td><?php echo $quote-> obtener_canal(); ?></td>
+      <td><?php echo $fulfillment_date; ?></td>
+    </tr>
+    <?php
+  }
+
+  public static function get_all_fulfillment_quotes($connection){
+    $quotes = [];
+    if(isset($connection)){
+      try{
+        $sql = 'SELECT * FROM rfq WHERE fullfillment = 1';
+        $sentence = $connection-> prepare($sql);
+        $sentence-> execute();
+        $result = $sentence-> fetchAll(PDO::FETCH_ASSOC);
+        if(count($result)){
+          foreach ($result as $key => $row) {
+            $quotes[] = new Rfq($row['id'], $row['id_usuario'], $row['usuario_designado'], $row['canal'], $row['email_code'], $row['type_of_bid'], $row['issue_date'], $row['end_date'], $row['status'], $row['completado'], $row['total_cost'], $row['total_price'], $row['comments'], $row['award'], $row['fecha_completado'], $row['fecha_submitted'], $row['fecha_award'], $row['payment_terms'], $row['address'], $row['ship_to'], $row['expiration_date'], $row['ship_via'], $row['taxes'], $row['profit'], $row['additional'], $row['shipping'], $row['shipping_cost'], $row['rfp'], $row['fullfillment'], $row['contract_number']);
+          }
+        }
+      }catch(PDOException $ex){
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $quotes;
   }
 }
 ?>

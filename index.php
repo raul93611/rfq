@@ -164,22 +164,22 @@ if ($partes_ruta[0] == 'rfq') {
   } else if (count($partes_ruta) == 3) {
     switch ($partes_ruta[1]) {
       case 'perfil':
+      $ruta_elegida = 'vistas/perfil.php';
       switch ($partes_ruta[2]) {
         case 'registro':
           $gestor_actual = 'registro';
-          $ruta_elegida = 'vistas/perfil.php';
           break;
         case 'search_quotes':
           $gestor_actual = 'search_quotes';
-          $ruta_elegida = 'vistas/perfil.php';
           break;
         case 'employee_docs_page':
           $gestor_actual = 'employee_docs_page';
-          $ruta_elegida = 'vistas/perfil.php';
           break;
         case 'excel_reports':
           $gestor_actual = 'excel_reports';
-          $ruta_elegida = 'vistas/perfil.php';
+          break;
+        case 'fulfillment_quotes':
+          $gestor_actual = 'fulfillment_quotes';
           break;
       }
       break;

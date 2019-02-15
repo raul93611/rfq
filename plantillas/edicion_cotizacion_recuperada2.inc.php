@@ -148,7 +148,9 @@ if($cotizacion_recuperada-> obtener_canal() == 'Chemonics' || $cotizacion_recupe
 </div>
 <div class="card-footer footer_item" id="footer_lg">
   <?php
-  if ($cotizacion_recuperada->obtener_award() && ($cotizacion_recuperada->obtener_comments() == 'No comments' || $cotizacion_recuperada->obtener_comments() == 'Working on it' || $cotizacion_recuperada-> obtener_comments() == 'QuickBooks')) {
+  if($cotizacion_recuperada-> obtener_fullfillment()){
+    echo '<a class="btn btn-primary" id="go_back" href="' . FULFILLMENT_QUOTES . '"><i class="fa fa-reply"></i></a>';
+  }else if ($cotizacion_recuperada->obtener_award() && ($cotizacion_recuperada->obtener_comments() == 'No comments' || $cotizacion_recuperada->obtener_comments() == 'Working on it' || $cotizacion_recuperada-> obtener_comments() == 'QuickBooks')) {
     echo '<a class="btn btn-primary" id="go_back" href="' . AWARD . $canal . '"><i class="fa fa-reply"></i></a>';
   } else if ($cotizacion_recuperada->obtener_status() && ($cotizacion_recuperada->obtener_comments() == 'No comments' || $cotizacion_recuperada->obtener_comments() == 'Working on it' || $cotizacion_recuperada-> obtener_comments() == 'QuickBooks')) {
     echo '<a class="btn btn-primary" id="go_back" href="' . SUBMITTED . $canal . '"><i class="fa fa-reply"></i></a>';

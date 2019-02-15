@@ -169,6 +169,8 @@ define('SAVE_RE_QUOTE_SUBITEM_PROVIDER', SERVIDOR . 'save_re_quote_subitem_provi
 define('EDIT_RE_QUOTE_SUBITEM_PROVIDER', PERFIL . 'edit_re_quote_subitem_provider/');
 define('SAVE_EDIT_RE_QUOTE_SUBITEM_PROVIDER', SERVIDOR . 'save_edit_re_quote_subitem_provider');
 define('DELETE_RE_QUOTE_SUBITEM_PROVIDER', SERVIDOR . 'delete_re_quote_subitem_provider/');
+/***********************************************************************************/
+define('FULFILLMENT_QUOTES', PERFIL . 'fulfillment_quotes');
 
 define('EMPLOYEE_DOCS', SERVIDOR . 'employee_docs/');
 define('REPORTS_DOCS', SERVIDOR . 'reports/');

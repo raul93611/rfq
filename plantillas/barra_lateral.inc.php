@@ -503,6 +503,17 @@
                 </ul>
               </li>
               <li class="nav-item">
+                <a href="<?php echo FULFILLMENT_QUOTES; ?>" class="nav-link
+                <?php
+                if ($cotizacion == 'fulfillment_quotes') {
+                  echo 'active';
+                }
+                ?>
+                   ">
+                  <p>Fulfillment Quotes</p>
+                </a>
+              </li>
+              <li class="nav-item">
                 <a href="<?php echo RFP_QUOTES; ?>" class="nav-link
                 <?php
                 if ($cotizacion == 'rfp_quotes') {

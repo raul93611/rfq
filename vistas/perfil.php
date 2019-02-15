@@ -214,6 +214,9 @@ switch ($gestor_actual) {
   case 'excel_reports':
     include_once 'plantillas/excel_reports.inc.php';
     break;
+  case 'fulfillment_quotes':
+    include_once 'plantillas/fulfillment_quotes.inc.php';
+    break;
 }
 include_once 'plantillas/documento_cierre.inc.php';
 ?>

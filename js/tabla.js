@@ -164,7 +164,7 @@ $(document).ready(function () {
     'pageLength': 50
   });
 
-  $('#tabla_usuarios').DataTable({
+  $('#tabla_usuarios, .fulfillment_table').DataTable({
 
   });
 /****************************************************************************************************/
