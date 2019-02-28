@@ -161,11 +161,11 @@ class RepositorioRfq {
     $cotizaciones = [];
     if (isset($conexion)) {
       try {
-        if ($cargo < 4) {
+        if ($cargo < 5) {
           $sql = "SELECT * FROM rfq WHERE canal = :canal AND completado = 0 AND status = 0 AND award = 0 AND (comments = 'Working on it' OR comments = 'No comments' OR comments = '') ORDER BY id DESC";
           $sentencia = $conexion->prepare($sql);
           $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
-        } else if ($cargo > 3) {
+        } else if ($cargo > 4) {
           $sql = "SELECT * FROM rfq WHERE canal = :canal AND usuario_designado = :id_usuario AND completado = 0 AND status = 0 AND award = 0 AND (comments = 'Working on it' OR comments = 'No comments' OR comments = '') ORDER BY id";
           $sentencia = $conexion->prepare($sql);
           $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
@@ -242,7 +242,7 @@ class RepositorioRfq {
             <th>ISSUE DATE</th>
             <th>END DATE</th>
             <th>PROPOSAL</th>
-            <?php if($cargo < 4){echo '<th>ELIMINAR</th>';} ?>
+            <?php if($cargo < 5){echo '<th>ELIMINAR</th>';} ?>
           </tr>
         </thead>
         <tbody>
@@ -669,11 +669,11 @@ class RepositorioRfq {
     $cotizaciones = [];
     if (isset($conexion)) {
       try {
-        if ($cargo < 4) {
+        if ($cargo < 5) {
           $sql = "SELECT * FROM rfq WHERE completado = 1 AND status = 1 AND award = 1 AND fullfillment = 0 AND canal = :canal AND rfp = 0 AND (comments = 'No comments' OR comments = 'QuickBooks') ORDER BY fecha_award DESC";
           $sentencia = $conexion->prepare($sql);
           $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
-        } else if ($cargo > 3) {
+        } else if ($cargo > 4) {
           $sql = "SELECT * FROM rfq WHERE usuario_designado = :id_usuario AND completado = 1 AND status = 1 AND award = 1 AND fullfillment = 0 AND canal = :canal AND rfp = 0 AND (comments = 'No comments' OR comments = 'QuickBooks') ORDER BY fecha_award DESC";
           $sentencia = $conexion->prepare($sql);
           $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
