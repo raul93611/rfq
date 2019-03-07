@@ -323,7 +323,7 @@ class RepositorioUsuario {
 
     if (isset($conexion)) {
       try {
-        $sql = "SELECT * FROM usuarios WHERE cargo != 1 ORDER BY id";
+        $sql = "SELECT * FROM usuarios WHERE cargo != 1 AND cargo != 0 ORDER BY id";
 
         $sentencia = $conexion->prepare($sql);
 
