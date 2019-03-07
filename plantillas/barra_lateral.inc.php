@@ -563,9 +563,6 @@
                   <p>Cancelled</p>
                 </a>
               </li>
-            <?php
-            if ($cargo < 5) {
-              ?>
               <li class="nav-item">
                 <a href="<?php echo NUEVA_COTIZACION; ?>" id="new_quote" class="nav-link
                 <?php
@@ -578,9 +575,6 @@
                   <p>New quote</p>
                 </a>
               </li>
-              <?php
-            }
-            ?>
           </ul>
         </li>
         <li class="nav-item has-treeview menu-open">
