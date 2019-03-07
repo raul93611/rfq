@@ -5,9 +5,6 @@ if (!ControlSesion::sesion_iniciada()) {
 Conexion::abrir_conexion();
 $cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
 Conexion::cerrar_conexion();
-if($cargo == 5 && $_SESSION['id_usuario'] != $cotizacion_recuperada-> obtener_usuario_designado()){
-  Redireccion::redirigir1(PERFIL);
-}
 ?>
 <div class="content-wrapper">
   <section class="content-header">

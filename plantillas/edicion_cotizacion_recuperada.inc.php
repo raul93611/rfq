@@ -1,8 +1,3 @@
-<?php
-if($cargo == 5 && $_SESSION['id_usuario'] != $cotizacion_recuperada-> obtener_usuario_designado()){
-  Redireccion::redirigir1(PERFIL);
-}
-?>
 <input type="hidden" name="id_rfq" value="<?php echo $cotizacion_recuperada->obtener_id(); ?>">
 <div class="card-body">
   <?php

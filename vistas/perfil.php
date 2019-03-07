@@ -63,11 +63,7 @@ switch ($gestor_actual) {
   case 'cotizaciones':
     switch ($cotizacion) {
       case 'nuevo':
-        if ($cargo <= 4) {
-            include_once 'plantillas/nueva_cotizacion.inc.php';
-        } else {
-            Redireccion::redirigir1(PERFIL);
-        }
+        include_once 'plantillas/nueva_cotizacion.inc.php';
         break;
       case 'no_bid':
         include_once 'plantillas/no_bid.inc.php';

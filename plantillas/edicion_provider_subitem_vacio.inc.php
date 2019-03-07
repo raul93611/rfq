@@ -4,9 +4,6 @@ $provider_subitem = RepositorioProviderSubitem::obtener_provider_subitem_por_id(
 $item = RepositorioItem::obtener_item_por_id(Conexion::obtener_conexion(), $subitem-> obtener_id_item());
 $cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $item-> obtener_id_rfq());
 Conexion::cerrar_conexion();
-if($cargo == 5 && $_SESSION['id_usuario'] != $cotizacion_recuperada-> obtener_usuario_designado()){
-  Redireccion::redirigir1(PERFIL);
-}
 ?>
 <input type="hidden" name="id_provider_subitem" value="<?php echo $id_provider_subitem; ?>">
 <input type="hidden" name="id_rfq" value="<?php echo $item-> obtener_id_rfq(); ?>">

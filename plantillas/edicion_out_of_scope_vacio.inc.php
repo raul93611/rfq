@@ -5,9 +5,6 @@ Conexion::abrir_conexion();
 $cuestionario = RepositorioCuestionario::obtener_cuestionario_por_id(Conexion::obtener_conexion(), $out_of_scope-> obtener_id_cuestionario());
 $cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $cuestionario-> obtener_id_rfq());
 Conexion::cerrar_conexion();
-if($cargo == 5 && $_SESSION['id_usuario'] != $cotizacion_recuperada-> obtener_usuario_designado()){
-  Redireccion::redirigir1(PERFIL);
-}
 ?>
 <div class="card-body">
   <div class="form-group">

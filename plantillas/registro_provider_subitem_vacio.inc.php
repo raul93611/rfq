@@ -5,9 +5,6 @@ $subitem = RepositorioSubitem::obtener_subitem_por_id(Conexion::obtener_conexion
 $item = RepositorioItem::obtener_item_por_id(Conexion::obtener_conexion(), $subitem-> obtener_id_item());
 $cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $item-> obtener_id_rfq());
 Conexion::cerrar_conexion();
-if($cargo == 5 && $_SESSION['id_usuario'] != $cotizacion_recuperada-> obtener_usuario_designado()){
-  Redireccion::redirigir1(PERFIL);
-}
 ?>
 <div class="card-body">
   <div class="row">

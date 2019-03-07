@@ -172,11 +172,7 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
         $descripcion = 'The quote was completed.';
         $comment = new Comment('', $cotizacion_recuperada-> obtener_id(), $_SESSION['id_usuario'], $descripcion, '');
         RepositorioComment::insertar_comment(Conexion::obtener_conexion(), $comment);
-        if ($cargo < 5) {
-          Redireccion::redirigir(COMPLETADOS . $canal);
-        } else {
-          Redireccion::redirigir(COTIZACIONES . $canal);
-        }
+        Redireccion::redirigir(COMPLETADOS . $canal);
       }
     } else if (!$cotizacion_recuperada->obtener_status()) {
       if (isset($_POST['status']) && $_POST['status'] == 'si') {
@@ -231,11 +227,7 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
         $descripcion = 'The quote was awarded.';
         $comment = new Comment('', $cotizacion_recuperada-> obtener_id(), $_SESSION['id_usuario'], $descripcion, '');
         RepositorioComment::insertar_comment(Conexion::obtener_conexion(), $comment);
-        if($cargo < 5){
-          Redireccion::redirigir(AWARD . $canal);
-        }else{
-          Redireccion::redirigir(COTIZACIONES . $canal);
-        }
+        Redireccion::redirigir(AWARD . $canal);
       }
     }
   }
