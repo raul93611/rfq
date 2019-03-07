@@ -219,6 +219,7 @@ class RepositorioItem {
       echo '<td id="total1"></td>';
       echo '<td></td>';
       echo '<td id="total2"></td>';
+      echo '<td id="dif_total"></td>';
       echo '</tbody>';
       echo '</table>';
       echo '</div>';

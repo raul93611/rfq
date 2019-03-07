@@ -314,6 +314,8 @@ $(document).ready(function () {
         i++;
         j++;
     });
+    var dif_total = total2 - total1;
+    dif_total = dif_total.toFixed(2);
     $('#additional').val(additional);
     $('#additional_subitems').val(additional_subitems);
     $('#unit_prices').val(unit_prices);
@@ -326,6 +328,7 @@ $(document).ready(function () {
     $('#total_price').val(total2);
     $('#total1').html('$ ' + total1);
     $('#total2').html('$ ' + total2);
+    $('#dif_total').html('$ ' + dif_total);
     $('#total_quantity').html(total_quantity);
     $('#total_additional').html('$ ' + total_additional);
   }, 500);
@@ -463,6 +466,8 @@ $(document).ready(function () {
         i++;
         j++;
     });
+    var dif_total = total2 - total1;
+    dif_total = dif_total.toFixed(2);
     $('#additional').val(additional);
     $('#additional_subitems').val(additional_subitems);
     $('#unit_prices').val(unit_prices);
@@ -475,6 +480,7 @@ $(document).ready(function () {
     $('#total_price').val(total2);
     $('#total1').html('$ ' + total1);
     $('#total2').html('$ ' + total2);
+    $('#dif_total').html('$ ' + dif_total);
     $('#total_quantity').html(total_quantity);
     $('#total_additional').html('$ ' + total_additional);
   });
