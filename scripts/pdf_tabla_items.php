@@ -195,7 +195,7 @@ try{
                   Conexion::abrir_conexion();
                   $providers_subitem = RepositorioProviderSubitem::obtener_providers_subitem_por_id_subitem(Conexion::obtener_conexion(), $subitem-> obtener_id());
                   Conexion::cerrar_conexion();
-                  if(count($provider_subitem)){
+                  if(count($providers_subitem)){
                     $html .= '<td>';
                     Conexion::abrir_conexion();
                     $provider_subitem_menor = RepositorioProviderSubitem::obtener_provider_subitem_por_id(Conexion::obtener_conexion(), $subitem-> obtener_provider_menor());

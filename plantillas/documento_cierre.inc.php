@@ -73,6 +73,7 @@
 <script src="<?php echo SERVIDOR; ?>bower_components/bootstrap-fileinput/js/plugins/purify.min.js"></script>
 <script src="<?php echo SERVIDOR; ?>bower_components/bootstrap-fileinput/js/fileinput.min.js"></script>
 <script src="<?php echo SERVIDOR; ?>bower_components/bootstrap-fileinput/themes/explorer-fas/theme.min.js"></script>
+<script src="<?php echo RUTA_JS; ?>moment_datatable.js"></script>
 <script src="<?php echo RUTA_JS; ?>tabla.js"></script>
 <script src="<?php echo DIST; ?>js/pages/dashboard3.js"></script>
 </body>

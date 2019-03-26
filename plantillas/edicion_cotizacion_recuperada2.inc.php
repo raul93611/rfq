@@ -182,7 +182,7 @@ if($cotizacion_recuperada-> obtener_canal() == 'Chemonics' || $cotizacion_recupe
     Conexion::abrir_conexion();
     $re_quote_exists = ReQuoteRepository::re_quote_exists(Conexion::obtener_conexion(), $cotizacion_recuperada-> obtener_id());
     Conexion::cerrar_conexion();
-    if(!$cotizacion_recuperada-> obtener_fullfillment() && $cotizacion_recuperada-> obtener_award() && $re_quote_exists){
+    if(!$cotizacion_recuperada-> obtener_fullfillment() && $cotizacion_recuperada-> obtener_award() && $re_quote_exists && !$cotizacion_recuperada-> obtener_rfp()){
       ?>
       <a href="#" id="fullfillment" class="btn btn-primary"><i class="fas fa-share-square"></i> Full-fillment</a>
       <?php

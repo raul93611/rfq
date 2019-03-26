@@ -171,6 +171,8 @@ define('SAVE_EDIT_RE_QUOTE_SUBITEM_PROVIDER', SERVIDOR . 'save_edit_re_quote_sub
 define('DELETE_RE_QUOTE_SUBITEM_PROVIDER', SERVIDOR . 'delete_re_quote_subitem_provider/');
 /***********************************************************************************/
 define('FULFILLMENT_QUOTES', PERFIL . 'fulfillment_quotes');
+/******************************************************************************/
+define('REMOVE_AWARD', SERVIDOR . 'remove_award/');
 
 define('EMPLOYEE_DOCS', SERVIDOR . 'employee_docs/');
 define('REPORTS_DOCS', SERVIDOR . 'reports/');

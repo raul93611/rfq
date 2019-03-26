@@ -1,6 +1,6 @@
 /****************************general styles**************************/
 body{
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Nunito', sans-serif;
   font-size: 11pt !important;
   color: #39485A !important;
 }
@@ -292,7 +292,7 @@ table{
 }
 
 .end_date_table{
-  width: 90px !important;
+  width: 100px !important;
 }
 
 .footer_item{

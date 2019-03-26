@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="<?php echo PLUGINS; ?>datatables/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="<?php echo DIST; ?>css/adminlte.min.css">
     <link rel="stylesheet" href="<?php echo RUTA_CSS; ?>estilos.css">
-    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:300,400,700,900" rel="stylesheet">
     <link rel="stylesheet" href="<?php echo SERVIDOR; ?>bower_components/bootstrap-fileinput/css/fileinput.min.css">
     <link rel="stylesheet" href="<?php echo SERVIDOR; ?>bower_components/bootstrap-fileinput/themes/explorer-fas/theme.min.css">
   </head>

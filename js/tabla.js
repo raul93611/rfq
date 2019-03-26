@@ -149,24 +149,27 @@ $(document).ready(function () {
     singleDatePicker: true
   });
 /************************************DATETABLES JQUERY PARA TABLAS**************************/
-  $('#tabla').DataTable({
-    'pageLength': 50,
-    'order': [[6, 'desc']]
-  });
+$.fn.dataTable.moment('M/D/YYYY');
+$.fn.dataTable.moment('M/D/YYYY HH:mm');
 
-  $('#tabla_quotes').DataTable({
-    'order': [[3, 'desc']],
-    'pageLength': 50
-  });
+$('#tabla').DataTable({
+  'pageLength': 50,
+  'order': [[ 4, "desc" ]]
+});
 
-  $('#tabla_busqueda').DataTable({
-    'order': [[3, 'desc']],
-    'pageLength': 50
-  });
+$('#tabla_quotes').DataTable({
+  'pageLength': 50,
+  'order': [[ 3, "desc" ]]
+});
 
-  $('#tabla_usuarios, .fulfillment_table').DataTable({
+$('#tabla_busqueda').DataTable({
+  'pageLength': 50
+});
 
-  });
+$('#tabla_usuarios, .fulfillment_table').DataTable({
+  'order': [[ 3, "desc" ]],
+  'pageLength': 50
+});
 /****************************************************************************************************/
 /**********************************CALCULOS EN LA TABLA DE ITEMS***********************************/
 /****************************************************************************************************/

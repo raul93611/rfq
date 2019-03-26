@@ -166,7 +166,7 @@ class RepositorioRfq {
           $sentencia = $conexion->prepare($sql);
           $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
         } else if ($cargo > 4) {
-          $sql = "SELECT * FROM rfq WHERE canal = :canal AND usuario_designado = :id_usuario AND completado = 0 AND status = 0 AND award = 0 AND (comments = 'Working on it' OR comments = 'No comments' OR comments = '') ORDER BY id";
+          $sql = "SELECT * FROM rfq WHERE canal = :canal AND usuario_designado = :id_usuario AND completado = 0 AND status = 0 AND award = 0 AND (comments = 'Working on it' OR comments = 'No comments' OR comments = '') ORDER BY id DESC";
           $sentencia = $conexion->prepare($sql);
           $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
           $sentencia->bindParam(':id_usuario', $id_usuario, PDO::PARAM_STR);
@@ -453,7 +453,7 @@ class RepositorioRfq {
     if (isset($conexion)) {
       try {
         if ($cargo < 5) {
-          $sql = "SELECT * FROM rfq WHERE canal = :canal AND completado = 1 AND status = 0 AND award = 0 AND (comments = 'No comments' OR comments = 'Working on it') AND rfp = 0 ORDER BY fecha_completado DESC";
+          $sql = "SELECT * FROM rfq WHERE canal = :canal AND completado = 1 AND status = 0 AND award = 0 AND (comments = 'No comments' OR comments = 'Working on it') ORDER BY fecha_completado DESC";
           $sentencia = $conexion->prepare($sql);
           $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
         } else if ($cargo > 4) {
@@ -497,7 +497,6 @@ class RepositorioRfq {
         echo $usuario->obtener_nombre_usuario();
         ?>
       </td>
-      <td><?php echo $cotizacion->obtener_type_of_bid(); ?></td>
       <td><?php echo $cotizacion->obtener_issue_date(); ?></td>
       <td><?php echo $cotizacion->obtener_end_date(); ?></td>
       <td><?php echo '$ ' . number_format($cotizacion->obtener_total_price(), 2); ?></td>
@@ -517,6 +516,7 @@ class RepositorioRfq {
         }
       }
       ?>
+      <td><?php if($cotizacion-> obtener_rfp()){echo '<span class="text-info">Yes</span>';}else{echo '<span class="text-danger">No</span>';} ?></td>
     </tr>
     <?php
   }
@@ -527,12 +527,11 @@ class RepositorioRfq {
     Conexion::cerrar_conexion();
     if (count($cotizaciones)) {
       ?>
-      <table id="tabla" class="table table-bordered table-striped table-responsive-md">
+      <table id="tabla" class="table table-bordered table-responsive-md">
         <thead>
           <tr>
             <th>CODE</th>
             <th>DEDIGNATED USER</th>
-            <th>TYPE OF BID</th>
             <th>ISSUE DATE</th>
             <th class="end_date_table">END DATE</th>
             <th class="cantidad">AMOUNT</th>
@@ -540,6 +539,7 @@ class RepositorioRfq {
             <th>PROPOSAL</th>
             <th>COMMENTS</th>
             <?php if($canal != 'FedBid'){echo '<th>GENERATE PROPOSAL</th>';} ?>
+            <td>RFP</td>
           </tr>
         </thead>
         <tbody>
@@ -561,7 +561,7 @@ class RepositorioRfq {
     if (isset($conexion)) {
       try {
         if ($cargo < 5) {
-          $sql = "SELECT * FROM rfq WHERE completado = 1 AND status = 1 AND award = 0 AND canal = :canal AND comments = 'No comments' AND rfp = 0 ORDER BY fecha_submitted DESC, id DESC";
+          $sql = "SELECT * FROM rfq WHERE completado = 1 AND status = 1 AND award = 0 AND canal = :canal AND comments = 'No comments' ORDER BY fecha_submitted DESC";
           $sentencia = $conexion->prepare($sql);
           $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
         } else if ($cargo > 4) {
@@ -606,7 +606,6 @@ class RepositorioRfq {
         echo $usuario->obtener_nombre_usuario();
         ?>
       </td>
-      <td><?php echo $cotizacion->obtener_type_of_bid(); ?></td>
       <td><?php echo $cotizacion->obtener_issue_date(); ?></td>
       <td><?php echo $cotizacion->obtener_end_date(); ?></td>
       <td><?php echo '$ ' . number_format($cotizacion->obtener_total_price(), 2); ?></td>
@@ -626,6 +625,7 @@ class RepositorioRfq {
         }
       }
       ?>
+      <td><?php if($cotizacion-> obtener_rfp()){echo '<span class="text-info">Yes</span>';}else{echo '<span class="text-danger">No</span>';} ?></td>
     </tr>
     <?php
   }
@@ -636,12 +636,11 @@ class RepositorioRfq {
     Conexion::cerrar_conexion();
     if (count($cotizaciones)) {
       ?>
-      <table  id="tabla" class="table table-bordered table-hover table-responsive-md">
+      <table  id="tabla" class="table table-bordered table-responsive-md">
         <thead>
           <tr>
             <th>CODE</th>
             <th>DEDIGNATED USER</th>
-            <th>TYPE OF BID</th>
             <th>ISSUE DATE</th>
             <th class="end_date_table">END DATE</th>
             <th class="cantidad">AMOUNT</th>
@@ -649,6 +648,7 @@ class RepositorioRfq {
             <th>PROPOSAL</th>
             <th>COMMENTS</th>
             <?php if($canal != 'FedBid'){echo '<th>GENERATE PROPOSAL</th>';} ?>
+            <td>RFP</td>
           </tr>
         </thead>
         <tbody>
@@ -670,11 +670,11 @@ class RepositorioRfq {
     if (isset($conexion)) {
       try {
         if ($cargo < 5) {
-          $sql = "SELECT * FROM rfq WHERE completado = 1 AND status = 1 AND award = 1 AND fullfillment = 0 AND canal = :canal AND rfp = 0 AND (comments = 'No comments' OR comments = 'QuickBooks') ORDER BY fecha_award DESC";
+          $sql = "SELECT * FROM rfq WHERE completado = 1 AND status = 1 AND award = 1 AND fullfillment = 0 AND canal = :canal AND (comments = 'No comments' OR comments = 'QuickBooks') ORDER BY fecha_award DESC";
           $sentencia = $conexion->prepare($sql);
           $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
         } else if ($cargo > 4) {
-          $sql = "SELECT * FROM rfq WHERE usuario_designado = :id_usuario AND completado = 1 AND status = 1 AND award = 1 AND fullfillment = 0 AND canal = :canal AND rfp = 0 AND (comments = 'No comments' OR comments = 'QuickBooks') ORDER BY fecha_award DESC";
+          $sql = "SELECT * FROM rfq WHERE usuario_designado = :id_usuario AND completado = 1 AND status = 1 AND award = 1 AND fullfillment = 0 AND canal = :canal AND (comments = 'No comments' OR comments = 'QuickBooks') ORDER BY fecha_award DESC";
           $sentencia = $conexion->prepare($sql);
           $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
           $sentencia->bindParam(':id_usuario', $id_usuario, PDO::PARAM_STR);
@@ -714,7 +714,6 @@ class RepositorioRfq {
         echo $usuario->obtener_nombre_usuario();
         ?>
       </td>
-      <td><?php echo $cotizacion->obtener_type_of_bid(); ?></td>
       <td><?php echo $cotizacion->obtener_issue_date(); ?></td>
       <td><?php echo $cotizacion->obtener_end_date(); ?></td>
       <td><?php echo '$ ' . number_format($cotizacion->obtener_total_price(), 2); ?></td>
@@ -734,6 +733,7 @@ class RepositorioRfq {
         }
       }
       ?>
+      <td><?php if($cotizacion-> obtener_rfp()){echo '<span class="text-info">Yes</span>';}else{echo '<span class="text-danger">No</span>';} ?></td>
     </tr>
     <?php
   }
@@ -744,12 +744,11 @@ class RepositorioRfq {
     Conexion::cerrar_conexion();
     if (count($cotizaciones)) {
       ?>
-      <table id="tabla" class="table table-bordered table-striped table-responsive-md">
+      <table id="tabla" class="table table-bordered table-responsive-md">
         <thead>
           <tr>
             <th>CODE</th>
             <th>DEDIGNATED USER</th>
-            <th>TYPE OF BID</th>
             <th>ISSUE DATE</th>
             <th class="end_date_table">END DATE</th>
             <th class="cantidad">AMOUNT</th>
@@ -757,6 +756,7 @@ class RepositorioRfq {
             <th>PROPOSAL</th>
             <th>COMMENTS</th>
             <?php if($canal != 'FedBid' && $canal != 'Chemonics' && $canal != 'Ebay & Amazon'){echo '<th>GENERATE PROPOSAL</th>';} ?>
+            <th>RFP</th>
           </tr>
         </thead>
         <tbody>
@@ -1700,6 +1700,7 @@ class RepositorioRfq {
             <th>CODE</th>
             <th>CHANNEL</th>
             <th>FULFILLMENT DATE</th>
+            <th>RFP</th>
           </tr>
         </thead>
         <tbody>
@@ -1732,6 +1733,7 @@ class RepositorioRfq {
       <td><?php echo $quote-> obtener_email_code(); ?></td>
       <td><?php echo $quote-> obtener_canal(); ?></td>
       <td><?php echo $fulfillment_date; ?></td>
+      <td><?php if($quote-> obtener_rfp()){echo '<span class="text-info">Yes</span>';}else{echo '<span class="text-danger">No</span>';} ?></td>
     </tr>
     <?php
   }
@@ -1754,6 +1756,19 @@ class RepositorioRfq {
       }
     }
     return $quotes;
+  }
+
+  public static function remove_award($conexion, $id_rfq){
+    if(isset($conexion)){
+      try{
+        $sql = 'UPDATE rfq SET award = 0 WHERE id = :id_rfq';
+        $sentencia = $conexion-> prepare($sql);
+        $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia-> execute();
+      }catch(PDOException $ex){
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
   }
 }
 ?>

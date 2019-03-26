@@ -13,29 +13,11 @@ if(isset($_POST['guardar_fullfillment_form'])){
     foreach ($re_quote_items as $re_quote_item) {
       $item_fullfillment = new Item('', $_POST['id_rfq'], 0, 0, $re_quote_item-> get_brand(), $re_quote_item-> get_brand_project(), $re_quote_item-> get_part_number(), $re_quote_item-> get_part_number_project(), $re_quote_item-> get_description(), $re_quote_item-> get_description_project(), $re_quote_item-> get_quantity(), $re_quote_item-> get_unit_price(), $re_quote_item-> get_total_price(), $re_quote_item-> get_comments(), $re_quote_item-> get_website(), $re_quote_item-> get_additional());
       $id_item_fullfillment = RepositorioItemFullFillment::insertar_item(ConnectionFullFillment::get_connection(), $item_fullfillment);
-      $extra_item = new ExtraItem('', $id_item_fullfillment, '');
-      ExtraItemRepository::insert_extra_item(ConnectionFullFillment::get_connection(), $extra_item);
-      $re_quote_providers = ReQuoteProviderRepository::get_re_quote_providers_by_id_re_quote_item(Conexion::obtener_conexion(), $re_quote_item-> get_id());
-      if(count($re_quote_providers)){
-        foreach ($re_quote_providers as $re_quote_provider) {
-          $provider_fullfillment = new Provider('', $id_item_fullfillment, $re_quote_provider-> get_provider(), $re_quote_provider-> get_price());
-          RepositorioProviderFullFillment::insertar_provider(ConnectionFullFillment::get_connection(), $provider_fullfillment);
-        }
-      }
       $re_quote_subitems = ReQuoteSubitemRepository::get_re_quote_subitems_by_id_re_quote_item(Conexion::obtener_conexion(), $re_quote_item-> get_id());
       if(count($re_quote_subitems)){
         foreach ($re_quote_subitems as $re_quote_subitem) {
           $subitem_fullfillment = new Subitem('', $id_item_fullfillment, 0, $re_quote_subitem-> get_brand(), $re_quote_subitem-> get_brand_project(), $re_quote_subitem-> get_part_number(), $re_quote_subitem-> get_part_number_project(), $re_quote_subitem-> get_description(), $re_quote_subitem-> get_description_project(), $re_quote_subitem-> get_quantity(), $re_quote_subitem-> get_unit_price(), $re_quote_subitem-> get_total_price(), $re_quote_subitem-> get_comments(), $re_quote_subitem-> get_website(), $re_quote_subitem-> get_additional());
           $id_subitem_fullfillment = RepositorioSubitemFullFillment::insertar_subitem(ConnectionFullFillment::get_connection(), $subitem_fullfillment);
-          $extra_subitem = new ExtraSubitem('', $id_subitem_fullfillment, '');
-          ExtraSubitemRepository::insert_extra_subitem(ConnectionFullFillment::get_connection(), $extra_subitem);
-          $re_quote_subitem_providers = ReQuoteSubitemProviderRepository::get_re_quote_subitem_providers_by_id_re_quote_subitem(Conexion::obtener_conexion(), $re_quote_subitem-> get_id());
-          if(count($re_quote_subitem_providers)){
-            foreach ($re_quote_subitem_providers as $re_quote_subitem_provider) {
-              $provider_subitem_fullfillment = new ProviderSubitem('', $id_subitem_fullfillment, $re_quote_subitem_provider-> get_provider(), $re_quote_subitem_provider-> get_price());
-              RepositorioProviderSubitemFullfillment::insertar_provider_subitem(ConnectionFullFillment::get_connection(), $provider_subitem_fullfillment);
-            }
-          }
         }
       }
     }
