@@ -154,12 +154,12 @@ $.fn.dataTable.moment('M/D/YYYY HH:mm');
 
 $('#tabla').DataTable({
   'pageLength': 50,
-  'order': [[ 4, "desc" ]]
+  'order': [[ 3, "desc" ]]
 });
 
 $('#tabla_quotes').DataTable({
   'pageLength': 50,
-  'order': [[ 3, "desc" ]]
+  'order': [[ 4, "desc" ]]
 });
 
 $('#tabla_busqueda').DataTable({
