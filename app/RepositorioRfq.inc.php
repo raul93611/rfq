@@ -452,16 +452,9 @@ class RepositorioRfq {
     $cotizaciones = [];
     if (isset($conexion)) {
       try {
-        if ($cargo < 5) {
-          $sql = "SELECT * FROM rfq WHERE canal = :canal AND completado = 1 AND status = 0 AND award = 0 AND (comments = 'No comments' OR comments = 'Working on it') ORDER BY fecha_completado DESC";
-          $sentencia = $conexion->prepare($sql);
-          $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
-        } else if ($cargo > 4) {
-          $sql = "SELECT * FROM rfq WHERE canal = :canal AND usuario_designado = :id_usuario AND completado = 1 AND status = 0 AND award = 0 AND (comments = 'No comments' OR comments = 'Working on it') AND rfp = 0 ORDER BY fecha_completado DESC";
-          $sentencia = $conexion->prepare($sql);
-          $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
-          $sentencia->bindParam(':id_usuario', $id_usuario, PDO::PARAM_STR);
-        }
+        $sql = "SELECT * FROM rfq WHERE canal = :canal AND completado = 1 AND status = 0 AND award = 0 AND (comments = 'No comments' OR comments = 'Working on it') ORDER BY fecha_completado DESC";
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(PDO::FETCH_ASSOC);
         if (count($resultado)) {
@@ -564,16 +557,9 @@ class RepositorioRfq {
     $cotizaciones = [];
     if (isset($conexion)) {
       try {
-        if ($cargo < 5) {
-          $sql = "SELECT * FROM rfq WHERE completado = 1 AND status = 1 AND award = 0 AND canal = :canal AND comments = 'No comments' ORDER BY fecha_submitted DESC";
-          $sentencia = $conexion->prepare($sql);
-          $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
-        } else if ($cargo > 4) {
-          $sql = "SELECT * FROM rfq WHERE canal = :canal AND usuario_designado = :id_usuario AND completado = 1 AND status = 1 AND award = 0 AND comments = 'No comments' AND rfp = 0 ORDER BY fecha_submitted DESC, id DESC";
-          $sentencia = $conexion->prepare($sql);
-          $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
-          $sentencia->bindParam(':id_usuario', $id_usuario, PDO::PARAM_STR);
-        }
+        $sql = "SELECT * FROM rfq WHERE completado = 1 AND status = 1 AND award = 0 AND canal = :canal AND comments = 'No comments' ORDER BY fecha_submitted DESC";
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(PDO::FETCH_ASSOC);
 
@@ -677,16 +663,9 @@ class RepositorioRfq {
     $cotizaciones = [];
     if (isset($conexion)) {
       try {
-        if ($cargo < 5) {
-          $sql = "SELECT * FROM rfq WHERE completado = 1 AND status = 1 AND award = 1 AND fullfillment = 0 AND canal = :canal AND (comments = 'No comments' OR comments = 'QuickBooks') ORDER BY fecha_award DESC";
-          $sentencia = $conexion->prepare($sql);
-          $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
-        } else if ($cargo > 4) {
-          $sql = "SELECT * FROM rfq WHERE usuario_designado = :id_usuario AND completado = 1 AND status = 1 AND award = 1 AND fullfillment = 0 AND canal = :canal AND (comments = 'No comments' OR comments = 'QuickBooks') ORDER BY fecha_award DESC";
-          $sentencia = $conexion->prepare($sql);
-          $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
-          $sentencia->bindParam(':id_usuario', $id_usuario, PDO::PARAM_STR);
-        }
+        $sql = "SELECT * FROM rfq WHERE completado = 1 AND status = 1 AND award = 1 AND fullfillment = 0 AND canal = :canal AND (comments = 'No comments' OR comments = 'QuickBooks') ORDER BY fecha_award DESC";
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(PDO::FETCH_ASSOC);
         if (count($resultado)) {
