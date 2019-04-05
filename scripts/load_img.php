@@ -1,5 +1,4 @@
 <?php
-echo $id_rfq;
 $directorio = $_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $id_rfq;
 $documentos = array_filter($_FILES['archivos_ejemplo']['name']);
 $total = count($documentos);
@@ -12,5 +11,4 @@ for ($i = 0; $i < $total; $i++) {
     move_uploaded_file($tmp_path, $new_path);
   }
 }
-//Redireccion::redirigir(EDITAR_COTIZACION . $id_rfq);
 ?>

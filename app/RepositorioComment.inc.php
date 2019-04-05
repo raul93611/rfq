@@ -111,7 +111,6 @@ class RepositorioComment{
         $sentencia = $conexion-> prepare($sql);
         $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia-> execute();
-        echo 'asdsadsa' . $id_rfq;
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }

@@ -80,7 +80,6 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
   if($cotizacion_recuperada-> obtener_canal() == 'FedBid'){
     RepositorioRfq::guardar_total_price_total_cost_fedbid(Conexion::obtener_conexion(), $_POST['total_cost_fedbid'], $_POST['total_price_fedbid'], $_POST['id_rfq']);
   }
-  echo $_POST['total_price_chemonics'];
   if($cotizacion_recuperada-> obtener_canal() == 'Chemonics' || $cotizacion_recuperada-> obtener_canal() == 'Ebay & Amazon'){
     RepositorioRfq::guardar_total_price_chemonics(Conexion::obtener_conexion(), $_POST['total_price_chemonics'], $_POST['id_rfq']);
   }

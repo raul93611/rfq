@@ -35,6 +35,7 @@ if(count($items)){
   foreach ($items_copias as $item_copia) {
     RepositorioItem::insertar_item(Conexion::obtener_conexion(), $item_copia);
   }
+
   $items_copias = RepositorioItem::obtener_items_por_id_rfq(Conexion::obtener_conexion(), $id_rfq_copia);
   foreach ($items as $i=> $item) {
     $item_copia = $items_copias[$i];
@@ -59,7 +60,6 @@ if(count($items)){
           foreach ($providers_subitem_copias as $provider_subitem_copia) {
             RepositorioProviderSubitem::insertar_provider_subitem(Conexion::obtener_conexion(), $provider_subitem_copia);
           }
-          echo count($providers_subitem_copias);
         }
       }
     }

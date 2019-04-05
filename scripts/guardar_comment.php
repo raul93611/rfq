@@ -33,7 +33,6 @@ if(isset($_POST['guardar_comment'])){
   }
 
   if($cotizacion-> obtener_rfp()){
-    echo $cotizacion-> obtener_rfp();
     Connection::open_connection();
     $user_0 = UserRepository::get_user_level_0(Connection::get_connection());
     $comment = new RfpComment('', $cotizacion-> obtener_rfp(), $user_0-> get_id(), '', $_POST['comment_rfq']);
