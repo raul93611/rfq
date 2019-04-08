@@ -149,8 +149,8 @@ $(document).ready(function () {
     singleDatePicker: true
   });
 /************************************DATETABLES JQUERY PARA TABLAS**************************/
-$.fn.dataTable.moment('M/D/YYYY');
-$.fn.dataTable.moment('M/D/YYYY HH:mm');
+$.fn.dataTable.moment('MM/DD/YYYY');
+$.fn.dataTable.moment('MM/DD/YYYY HH:mm');
 
 $('#tabla').DataTable({
   'pageLength': 50,

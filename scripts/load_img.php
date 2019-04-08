@@ -1,4 +1,5 @@
 <?php
+header('Content-Type: application/json');
 $directorio = $_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $id_rfq;
 $documentos = array_filter($_FILES['archivos_ejemplo']['name']);
 $total = count($documentos);
@@ -11,4 +12,7 @@ for ($i = 0; $i < $total; $i++) {
     move_uploaded_file($tmp_path, $new_path);
   }
 }
+echo json_encode(array(
+  'result'=> '1'
+));
 ?>
