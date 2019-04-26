@@ -336,6 +336,10 @@ if ($partes_ruta[0] == 'rfq') {
         $id_rfq = $partes_ruta[2];
         $ruta_elegida = 'scripts/remove_award.php';
         break;
+      case 'remove_fulfillment':
+        $id_rfq = $partes_ruta[2];
+        $ruta_elegida = 'scripts/remove_fulfillment.php';
+        break;
       default:
       break;
     }

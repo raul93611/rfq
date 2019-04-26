@@ -141,6 +141,7 @@ class ReQuoteItemRepository{
             <td id="total1"></td>
             <td></td>
             <td id="total2"></td>
+            <td id="dif_total"></td>
           </tbody>
         </table>
       </div>

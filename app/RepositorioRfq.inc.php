@@ -98,7 +98,7 @@ class RepositorioRfq {
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindParam(':email_code', $email_code, PDO::PARAM_STR);
         $sentencia->execute();
-        $resultado = $sentencia->fetchall(PDO::FETCH_ASSOC);
+        $resultado = $sentencia->fetchAll(PDO::FETCH_ASSOC);
         if (count($resultado)) {
           $email_code_existe = true;
         } else {
@@ -1397,6 +1397,26 @@ class RepositorioRfq {
     return $rfp_quote;
   }
 
+  public static function obtener_todas_cotizaciones_rfp($conexion){
+    $rfp_quotes = [];
+    if(isset($conexion)){
+      try{
+        $sql = 'SELECT * FROM rfq WHERE rfp != 0 AND fullfillment = 1';
+        $sentencia = $conexion-> prepare($sql);
+        $sentencia-> execute();
+        $resultado = $sentencia-> fetchAll(PDO::FETCH_ASSOC);
+        if(count($resultado)){
+          foreach ($resultado as $fila) {
+            $rfp_quotes[] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['total_cost'], $fila['total_price'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['fecha_submitted'], $fila['fecha_award'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via'], $fila['taxes'], $fila['profit'], $fila['additional'], $fila['shipping'], $fila['shipping_cost'], $fila['rfp'], $fila['fullfillment'], $fila['contract_number']);
+          }
+        }
+      }catch(PDOException $ex){
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $rfp_quotes;
+  }
+
     /*****************************************************************************************************************************************/
     /*****************************************************COTIZACIONES RFP********************************************************************/
     /*****************************************************************************************************************************************/
@@ -1741,6 +1761,19 @@ class RepositorioRfq {
     if(isset($conexion)){
       try{
         $sql = 'UPDATE rfq SET award = 0 WHERE id = :id_rfq';
+        $sentencia = $conexion-> prepare($sql);
+        $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia-> execute();
+      }catch(PDOException $ex){
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+  }
+
+  public static function remove_fulfillment($conexion, $id_rfq){
+    if(isset($conexion)){
+      try{
+        $sql = 'UPDATE rfq SET fullfillment = 0 WHERE id = :id_rfq';
         $sentencia = $conexion-> prepare($sql);
         $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia-> execute();
