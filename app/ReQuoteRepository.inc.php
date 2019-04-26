@@ -82,17 +82,12 @@ class ReQuoteRepository{
     return $re_quote;
   }
 
-  public static function update_re_quote($connection, $taxes, $profit, $total_cost, $total_price, $additional, $payment_terms, $shipping, $shipping_cost, $id_re_quote){
+  public static function update_re_quote($connection, $total_cost, $shipping, $shipping_cost, $id_re_quote){
     if(isset($connection)){
       try{
-        $sql = 'UPDATE re_quotes SET taxes = :taxes, profit = :profit, total_cost = :total_cost, total_price = :total_price, additional = :additional, payment_terms = :payment_terms, shipping = :shipping, shipping_cost = :shipping_cost WHERE id = :id_re_quote';
+        $sql = 'UPDATE re_quotes SET total_cost = :total_cost, shipping = :shipping, shipping_cost = :shipping_cost WHERE id = :id_re_quote';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':taxes', $taxes, PDO::PARAM_STR);
-        $sentence-> bindParam(':profit', $profit, PDO::PARAM_STR);
         $sentence-> bindParam(':total_cost', $total_cost, PDO::PARAM_STR);
-        $sentence-> bindParam(':total_price', $total_price, PDO::PARAM_STR);
-        $sentence-> bindParam(':additional', $additional, PDO::PARAM_STR);
-        $sentence-> bindParam(':payment_terms', $payment_terms, PDO::PARAM_STR);
         $sentence-> bindParam(':shipping', $shipping, PDO::PARAM_STR);
         $sentence-> bindParam(':shipping_cost', $shipping_cost, PDO::PARAM_STR);
         $sentence-> bindParam(':id_re_quote', $id_re_quote, PDO::PARAM_STR);
@@ -108,24 +103,8 @@ class ReQuoteRepository{
     $cotizacion = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
     $re_quote = self::get_re_quote_by_id_rfq(Conexion::obtener_conexion(), $id_rfq);
     $re_quote_items = ReQuoteItemRepository::get_re_quote_items_by_id_re_quote(Conexion::obtener_conexion(), $re_quote-> get_id());
+    $items = RepositorioItem::obtener_items_por_id_rfq(Conexion::obtener_conexion(), $id_rfq);
     Conexion::cerrar_conexion();
-    ?>
-    <div class="row">
-      <div class="col-md-3">
-        <b>Taxes:</b> <?php echo $re_quote-> get_taxes(); ?>%<br>
-      </div>
-      <div class="col-md-3">
-        <b>Profit:</b> <?php echo $re_quote-> get_profit(); ?>%<br>
-      </div>
-      <div class="col-md-3">
-        <b>Additional general:</b> $ <?php echo $re_quote-> get_additional(); ?>
-      </div>
-      <div class="col-md-3">
-        <b>Payment terms:</b> <?php echo $re_quote-> get_payment_terms(); ?>
-      </div>
-    </div>
-    <br>
-    <?php
     if (count($re_quote_items)) {
       ?>
       <table class="table table-bordered" style="width:100%;">
@@ -135,7 +114,6 @@ class ReQuoteRepository{
           <th>E-LOGIC PROP.</th>
           <th class="quantity">QTY</th>
           <th>PROVIDER</th>
-          <th>ADDITIONAL</th>
           <th>BEST UNIT COST</th>
           <th>TOTAL COST</th>
           <th>PRICE FOR CLIENT</th>
@@ -143,13 +121,9 @@ class ReQuoteRepository{
         </tr>
       <?php
       $a = 1;
-      if($re_quote-> get_payment_terms() == 'Net 30/CC'){
-        $payment_terms = 1.0215;
-      }else{
-        $payment_terms = 1;
-      }
       for ($i = 0; $i < count($re_quote_items); $i++) {
         $re_quote_item = $re_quote_items[$i];
+        $item = $items[$i];
         ?>
         <tr>
           <td><?php echo $a; ?></td>
@@ -178,16 +152,15 @@ class ReQuoteRepository{
           }
           ?>
           </td>
-          <td>$ <?php echo number_format($re_quote_item-> get_additional(), 2); ?></td>
           <td>$
           <?php
-          $best_unit_price = min($prices)*$payment_terms*(1+($re_quote-> get_taxes()/100)) + $re_quote_item-> get_additional() + $re_quote-> get_additional();
+          $best_unit_price = min($prices);
           echo number_format($best_unit_price, 2);
           ?>
           </td>
           <td>$ <?php echo number_format(round($best_unit_price, 2) * $re_quote_item-> get_quantity(), 2); ?></td>
-          <td style="text-align:right;">$ <?php echo number_format($re_quote_item-> get_unit_price(), 2); ?></td>
-          <td style="text-align:right;">$ <?php echo number_format($re_quote_item-> get_total_price(), 2); ?></td>
+          <td style="text-align:right;">$ <?php echo number_format($item-> obtener_unit_price(), 2); ?></td>
+          <td style="text-align:right;">$ <?php echo number_format($item-> obtener_total_price(), 2); ?></td>
           <?php
         }else{
           ?>
@@ -204,9 +177,11 @@ class ReQuoteRepository{
         <?php
         Conexion::abrir_conexion();
         $re_quote_subitems = ReQuoteSubitemRepository::get_re_quote_subitems_by_id_re_quote_item(Conexion::obtener_conexion(), $re_quote_item-> get_id());
+        $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Conexion::obtener_conexion(), $item-> obtener_id());
         Conexion::cerrar_conexion();
         for($j = 0; $j < count($re_quote_subitems); $j++){
           $re_quote_subitem = $re_quote_subitems[$j];
+          $subitem = $subitems[$j];
           ?>
       <tr>
         <td></td>
@@ -239,16 +214,15 @@ class ReQuoteRepository{
               }
               ?>
         </td>
-        <td>$ <?php echo number_format($re_quote_subitem-> get_additional(), 2); ?></td>
         <td>$
                 <?php
-                $best_unit_price = min($prices)*$payment_terms*(1+($re_quote-> get_taxes()/100)) + $re_quote_subitem-> get_additional() + $re_quote-> get_additional();
+                $best_unit_price = min($prices);
                 echo number_format($best_unit_price, 2);
                 ?>
         </td>
         <td>$ <?php echo number_format(round($best_unit_price, 2) * $re_quote_subitem-> get_quantity(), 2); ?></td>
-        <td style="text-align:right;">$ <?php echo number_format($re_quote_subitem-> get_unit_price(), 2); ?></td>
-        <td style="text-align:right;">$ <?php echo number_format($re_quote_subitem-> get_total_price(), 2); ?></td>
+        <td style="text-align:right;">$ <?php echo number_format($subitem-> obtener_unit_price(), 2); ?></td>
+        <td style="text-align:right;">$ <?php echo number_format($subitem-> obtener_total_price(), 2); ?></td>
                 <?php
               }else{
                 ?>
@@ -269,11 +243,12 @@ class ReQuoteRepository{
     ?>
       <tr>
         <td style="border:none;"></td>
-        <td colspan="8" style="font-size:10pt;"><?php echo nl2br($re_quote-> get_shipping()); ?></td>
+        <td colspan="5" style="font-size:10pt;"><?php echo nl2br($re_quote-> get_shipping()); ?></td>
         <td style="text-align:right;">$ <?php echo number_format($re_quote-> get_shipping_cost(), 2); ?></td>
+        <td></td>
+        <td style="text-align:right;">$ <?php echo number_format($cotizacion-> obtener_shipping_cost(), 2); ?></td>
       </tr>
       <tr>
-        <td style="border:none;"></td>
         <td style="border:none;"></td>
         <td style="border:none;"></td>
         <td style="border:none;"></td>

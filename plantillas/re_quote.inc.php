@@ -54,7 +54,7 @@ Conexion::cerrar_conexion();
       <div class="row">
         <div class="col-md-12">
           <div class="card card-primary">
-            <form class="" action="<?php echo SAVE_RE_QUOTE; ?>" method="post">
+            <form class="" id="re_quote_form" action="<?php echo SAVE_RE_QUOTE; ?>" method="post">
               <input type="hidden" name="id_re_quote" value="<?php echo $re_quote-> get_id(); ?>">
               <div class="card-header">
                 <h3 class="card-title"><i class="fas fa-highlighter"></i> Enter the data</h3>

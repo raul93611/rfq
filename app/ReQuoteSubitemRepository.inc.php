@@ -48,21 +48,23 @@ class ReQuoteSubitemRepository{
     return $re_quote_subitems;
   }
 
-  public static function print_re_quote_subitems($id_re_quote_item, $j) {
+  public static function print_re_quote_subitems($id_re_quote_item, $id_item, $j) {
     $j++;
     Conexion::abrir_conexion();
     $re_quote_subitems = self::get_re_quote_subitems_by_id_re_quote_item(Conexion::obtener_conexion(), $id_re_quote_item);
+    $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Conexion::obtener_conexion(), $id_item);
     Conexion::cerrar_conexion();
     if (count($re_quote_subitems)) {
       foreach ($re_quote_subitems as $key => $re_quote_subitem) {
-        self::print_re_quote_subitem($re_quote_subitem, $j);
+        $subitem = $subitems[$key];
+        self::print_re_quote_subitem($re_quote_subitem, $subitem, $j);
         $j++;
       }
     }
     return $j;
   }
 
-  public static function print_re_quote_subitem($re_quote_subitem, $i) {
+  public static function print_re_quote_subitem($re_quote_subitem, $subitem, $i) {
     if (!isset($re_quote_subitem)) {
       return;
     }
@@ -171,19 +173,6 @@ class ReQuoteSubitemRepository{
         </div>
       </td>
     <?php
-    if($re_quote_subitem-> get_additional() != 0){
-      ?>
-      <td>
-        <input type="text" class="form-control form-control-sm" id="add_cost<?php echo $j; ?>" size="10" value="<?php echo $re_quote_subitem-> get_additional(); ?>">
-      </td>
-      <?php
-    }else{
-      ?>
-      <td>
-        <input type="text" class="form-control form-control-sm" id="add_cost<?php echo $j; ?>" size="10" value="0">
-      </td>
-      <?php
-    }
     echo '<td>';
     if(count($re_quote_subitem_providers)){
       foreach ($re_quote_subitem_providers as $key => $re_quote_subitem_provider) {
@@ -195,9 +184,9 @@ class ReQuoteSubitemRepository{
       echo '$ ' . $best_unit_price;
     }
     echo '</td>';
-    echo '<td></td>';
-    echo '<td></td>';
-    echo '<td></td>';
+    echo '<td>$ ' . $best_unit_price * $subitem-> obtener_quantity() . '</td>';
+    echo '<td>$ ' . $subitem-> obtener_unit_price() . '</td>';
+    echo '<td>$ ' . $subitem-> obtener_total_price() . '</td>';
     echo '<td>' . nl2br($re_quote_subitem-> get_comments()) . '</td>';
     echo '</tr>';
   }

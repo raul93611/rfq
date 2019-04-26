@@ -170,6 +170,60 @@ $('#tabla_usuarios, .fulfillment_table').DataTable({
   'order': [[ 3, "desc" ]],
   'pageLength': 50
 });
+/***************************************************************************************************/
+var time2 = setInterval(function(){
+  var totales = [];
+  $('#re_quote_data tr').each(function(){
+    if (!isNaN($(this).find('td').eq(8).text().split(' ')[1])) {
+      totales.push($(this).find('td').eq(8).text().split(' ')[1]);
+    } else {
+      totales.push(0);
+    }
+  });
+  if(!isNaN($('#shipping_cost_rq').val()) && $('#shipping_cost_rq').val() != ''){
+    var shipping_cost_rq = $('#shipping_cost_rq').val();
+  }else{
+    var shipping_cost_rq = 0;
+  }
+  var total = 0;
+  total = total + parseFloat(shipping_cost_rq);
+  for (var i = 0; i < totales.length; i++) {
+    total = total + parseFloat(totales[i]);
+  }
+
+  $('#total_re_quote').html('$ ' + total);
+  $('#total_cost').val(total);
+  var profit_rq = parseFloat($('#total_ganado').html().split(' ')[1]) - total;
+  var percentage_profit_rq = ((profit_rq/total)*100).toFixed(2);
+  $('#profit_rq').html('$ ' + profit_rq + '<br>' + percentage_profit_rq + '%');
+}, 500);
+
+$('#re_quote_form').submit(function () {
+  var totales = [];
+  $('#re_quote_data tr').each(function(){
+    if (!isNaN($(this).find('td').eq(8).text().split(' ')[1])) {
+      totales.push($(this).find('td').eq(8).text().split(' ')[1]);
+    } else {
+      totales.push(0);
+    }
+  });
+  if(!isNaN($('#shipping_cost_rq').val()) && $('#shipping_cost_rq').val() != ''){
+    var shipping_cost_rq = $('#shipping_cost_rq').val();
+  }else{
+    var shipping_cost_rq = 0;
+  }
+  var total = 0;
+  total = total + parseFloat(shipping_cost_rq);
+  for (var i = 0; i < totales.length; i++) {
+    total = total + parseFloat(totales[i]);
+  }
+
+  $('#total_re_quote').html('$ ' + total);
+  $('#total_cost').val(total);
+  var profit_rq = parseFloat($('#total_ganado').html().split(' ')[1]) - total;
+  var percentage_profit_rq = ((profit_rq/total)*100).toFixed(2);
+  $('#profit_rq').html('$ ' + profit_rq + '<br>' + percentage_profit_rq + '%');
+});
 /****************************************************************************************************/
 /**********************************CALCULOS EN LA TABLA DE ITEMS***********************************/
 /****************************************************************************************************/
@@ -327,11 +381,12 @@ $('#tabla_usuarios, .fulfillment_table').DataTable({
     $('#partes_total_price_subitems').val(partes_total_price_subitems);
     total1 = total1.toFixed(2);
     total2 = total2.toFixed(2);
+    var percentage_profit = ((dif_total/total1)*100).toFixed(2);
     $('#total_cost').val(total1);
     $('#total_price').val(total2);
     $('#total1').html('$ ' + total1);
     $('#total2').html('$ ' + total2);
-    $('#dif_total').html('$ ' + dif_total);
+    $('#dif_total').html('$ ' + dif_total + '<br>' + percentage_profit + '%');
     $('#total_quantity').html(total_quantity);
     $('#total_additional').html('$ ' + total_additional);
   }, 500);
@@ -479,11 +534,12 @@ $('#tabla_usuarios, .fulfillment_table').DataTable({
     $('#partes_total_price_subitems').val(partes_total_price_subitems);
     total1 = total1.toFixed(2);
     total2 = total2.toFixed(2);
+    var percentage_profit = ((dif_total/total1)*100).toFixed(2);
     $('#total_cost').val(total1);
     $('#total_price').val(total2);
     $('#total1').html('$ ' + total1);
     $('#total2').html('$ ' + total2);
-    $('#dif_total').html('$ ' + dif_total);
+    $('#dif_total').html('$ ' + dif_total + '<br>' + percentage_profit + '%');
     $('#total_quantity').html(total_quantity);
     $('#total_additional').html('$ ' + total_additional);
   });

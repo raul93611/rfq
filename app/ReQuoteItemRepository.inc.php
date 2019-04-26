@@ -30,85 +30,16 @@ class ReQuoteItemRepository{
   public static function print_re_quote_items($id_re_quote) {
     Conexion::abrir_conexion();
     $re_quote = ReQuoteRepository::get_re_quote_by_id(Conexion::obtener_conexion(), $id_re_quote);
+    $quote = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $re_quote-> get_id_rfq());
     $re_quote_items = self::get_re_quote_items_by_id_re_quote(Conexion::obtener_conexion(), $id_re_quote);
+    $items = RepositorioItem::obtener_items_por_id_rfq(Conexion::obtener_conexion(), $re_quote-> get_id_rfq());
     Conexion::cerrar_conexion();
     if (count($re_quote_items)) {
       ?>
       <br>
-      <h2 id="caja_items">Items:</h2>
-      <div class="row">
-        <div class="col-md-3">
-        <?php
-        if ($re_quote-> get_taxes() != 0) {
-          ?>
-          <label>Taxes (%):</label>
-          <input type="number" step=".01" name="taxes" id="taxes" class="form-control form-control-sm" value="<?php echo $re_quote-> get_taxes(); ?>">
-          <?php
-        } else {
-          ?>
-          <label>Taxes (%):</label>
-          <input type="number" step=".01" name="taxes" id="taxes" class="form-control form-control-sm" value="0">
-          <?php
-        }
-        ?>
-        </div>
-        <div class="col-md-3">
-        <?php
-        if ($re_quote-> get_profit() != 0) {
-          ?>
-          <label>Profit (%):</label>
-          <input type="number" step=".01" name="profit" id="profit" class="form-control form-control-sm" value="<?php echo $re_quote-> get_profit(); ?>">
-          <?php
-        } else {
-          ?>
-          <label>Profit (%):</label>
-          <input type="number" step=".01" name="profit" id="profit" class="form-control form-control-sm" value="0">
-          <?php
-        }
-        ?>
-        </div>
-        <div class="col-md-3">
-        <?php
-        if($re_quote-> get_additional() != 0){
-          ?>
-          <label>Additional general ($):</label>
-          <input type="number" step=".01" name="additional_general" id="additional_general" class="form-control form-control-sm" value="<?php echo $re_quote-> get_additional(); ?>">
-          <?php
-        }else{
-          ?>
-          <label>Additional general ($):</label>
-          <input type="number" step=".01" name="additional_general" id="additional_general" class="form-control form-control-sm" value="0">
-          <?php
-        }
-        ?>
-        </div>
-        <div class="col-md-3">
-          <label>Payment terms:</label>
-          <div class="form-group">
-            <div class="form-check-inline">
-              <input class="form-check-input" type="radio" id="net_30" value="Net 30" name="payment_terms"
-              <?php
-              if ($re_quote-> get_payment_terms() == 'Net 30') {
-                echo 'checked';
-              }
-              ?>
-              ><label class="form-check-label" for="net_30">Net 30</label>
-            </div>
-            <div class="form-check-inline">
-              <input class="form-check-input" type="radio" id="net_30cc" value="Net 30/CC" name="payment_terms"
-              <?php
-              if ($re_quote-> get_payment_terms() == 'Net 30/CC') {
-                echo 'checked';
-              }
-              ?>
-              ><label class="form-check-label" for="net_30cc">Net 30/CC</label>
-            </div>
-          </div>
-        </div>
-      </div>
-      <br>
+      <h2>Items:</h2>
       <div class="table-responsive">
-        <table id="tabla_items" class="table table-bordered table-hover">
+        <table class="table table-bordered table-hover">
           <thead>
             <tr>
               <th class="options">Options</th>
@@ -118,7 +49,6 @@ class ReQuoteItemRepository{
               <th class="options">WEBSITE</th>
               <th class="qty">QTY</th>
               <th id="provider">PROVIDERS</th>
-              <th class="qty">ADDITIONAL</th>
               <th class="options">BEST UNIT COST</th>
               <th class="options">TOTAL COST</th>
               <th class="options">PRICE FOR CLIENT</th>
@@ -126,22 +56,22 @@ class ReQuoteItemRepository{
               <th class="description">COMMENTS</th>
             </tr>
           </thead>
-          <tbody id="items">
+          <tbody id="re_quote_data">
             <?php
             $k = 1;
             foreach ($re_quote_items as $key => $re_quote_item) {
-              $k = self::print_re_quote_item($re_quote_item, $k, $key + 1);
+              $item = $items[$key];
+              $k = self::print_re_quote_item($re_quote_item, $item, $k, $key + 1);
             }
             ?>
             <td colspan="5" class="display-4"><b><h4>TOTAL:</h4></b></td>
-            <td id="total_quantity"></td>
             <td></td>
-            <td id="total_additional"></td>
             <td></td>
-            <td id="total1"></td>
             <td></td>
-            <td id="total2"></td>
-            <td id="dif_total"></td>
+            <td id="total_re_quote"></td>
+            <td></td>
+            <td id="total_ganado"><?php echo '$ ' . $quote-> obtener_total_price(); ?></td>
+            <td id="profit_rq"></td>
           </tbody>
         </table>
       </div>
@@ -161,25 +91,35 @@ class ReQuoteItemRepository{
       $id_items = implode(',', $id_items);
       $id_subitems = implode(',', $id_subitems);
       ?>
-      <input type="hidden" id="id_re_quote_items" name="id_re_quote_items" value="<?php echo $id_items; ?>">
-      <input type="hidden" id="id_re_quote_subitems" name="id_re_quote_subitems" value="<?php echo $id_subitems; ?>">
-      <input type="hidden" id="partes_total_price" name="partes_total_price" value="">
-      <input type="hidden" id="partes_total_price_subitems" name="partes_total_price_subitems" value="">
-      <input type="hidden" id="additional" name="additional" value="">
-      <input type="hidden" id="additional_subitems" name="additional_subitems" value="">
-      <input type="hidden" id="unit_prices" name="unit_prices" value="">
-      <input type="hidden" id="unit_prices_subitems" name="unit_prices_subitems" value="">
       <input type="hidden" id="total_cost" name="total_cost" value="">
-      <input type="hidden" id="total_price" name="total_price" value="">
       <div class="row">
         <div class="col-md-6">
-          <div class="form-group">
-            <textarea class="form-control form-control-sm" rows="3" name="shipping" id="shipping" placeholder="Enter shipping ..."><?php echo $re_quote-> get_shipping(); ?></textarea>
-          </div>
+          <h5>Shipping Re-Quote</h5>
         </div>
         <div class="col-md-6">
+          <h5>Shipping Quote</h5>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-3">
           <div class="form-group">
-            <input type="number" step=".01" class="form-control form-control-sm" id="shipping_cost" name="shipping_cost" value="<?php echo $re_quote-> get_shipping_cost(); ?>">
+            <textarea class="form-control form-control-sm" rows="1" name="shipping" id="shipping_rq" placeholder="Enter shipping ..."><?php echo $re_quote-> get_shipping(); ?></textarea>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <input type="number" step=".01" class="form-control form-control-sm" id="shipping_cost_rq" name="shipping_cost" value="<?php echo $re_quote-> get_shipping_cost(); ?>">
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="form-group">
+            <textarea class="form-control form-control-sm" rows="1" name="shipping" id="shipping" disabled placeholder="Enter shipping ..."><?php echo $quote-> obtener_shipping(); ?></textarea>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <input type="number" step=".01" class="form-control form-control-sm" id="shipping_cost" disabled name="shipping_cost" value="<?php echo $quote-> obtener_shipping_cost(); ?>">
           </div>
         </div>
       </div>
@@ -187,7 +127,7 @@ class ReQuoteItemRepository{
     }
   }
 
-  public static function print_re_quote_item($re_quote_item, $i, $number) {
+  public static function print_re_quote_item($re_quote_item,$item, $i, $number) {
     if (!isset($re_quote_item)) {
       return;
     }
@@ -301,19 +241,6 @@ class ReQuoteItemRepository{
         </div>
       </td>
     <?php
-    if($re_quote_item-> get_additional() != 0){
-      ?>
-      <td>
-        <input type="text" class="form-control form-control-sm" id="add_cost<?php echo $j; ?>" size="10" value="<?php echo $re_quote_item-> get_additional(); ?>">
-      </td>
-      <?php
-    }else{
-      ?>
-      <td>
-        <input type="text" class="form-control form-control-sm" id="add_cost<?php echo $j; ?>" size="10" value="0">
-      </td>
-      <?php
-    }
     echo '<td>';
     $prices = [];
     if(count($re_quote_providers)){
@@ -327,13 +254,13 @@ class ReQuoteItemRepository{
     }
     echo '</td>';
     ?>
-      <td></td>
-      <td></td>
-      <td></td>
+      <td><?php echo '$ ' . $best_unit_price * $re_quote_item-> get_quantity(); ?></td>
+      <td><?php echo '$ ' . $item-> obtener_unit_price(); ?></td>
+      <td><?php echo '$ ' . $item-> obtener_total_price(); ?></td>
       <td><?php echo nl2br($re_quote_item-> get_comments()); ?></td>
     </tr>
     <?php
-    $j = ReQuoteSubitemRepository::print_re_quote_subitems($re_quote_item-> get_id(), $j);
+    $j = ReQuoteSubitemRepository::print_re_quote_subitems($re_quote_item-> get_id(), $item-> obtener_id(), $j);
     return $j;
   }
 
