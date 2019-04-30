@@ -48,12 +48,12 @@ class ReQuoteItemRepository{
               <th class="description">E-LOGIC PROPOSAL</th>
               <th class="options">WEBSITE</th>
               <th class="qty">QTY</th>
-              <th id="provider">PROVIDERS</th>
-              <th class="options">BEST UNIT COST</th>
-              <th class="options">TOTAL COST</th>
-              <th class="options">PRICE FOR CLIENT</th>
-              <th class="options">TOTAL PRICE</th>
-              <th class="description">COMMENTS</th>
+              <th style="width: 200px;">PROVIDERS</th>
+              <th style="width: 100px;">BEST UNIT COST</th>
+              <th style="width: 100px;">TOTAL COST</th>
+              <th style="width: 100px;">PRICE FOR CLIENT</th>
+              <th style="width: 100px;">TOTAL PRICE</th>
+              <th style="width: 100px;">COMMENTS</th>
             </tr>
           </thead>
           <tbody id="re_quote_data">
