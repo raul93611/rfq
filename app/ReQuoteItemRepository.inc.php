@@ -255,12 +255,16 @@ class ReQuoteItemRepository{
     echo '</td>';
     ?>
       <td><?php echo '$ ' . $best_unit_price * $re_quote_item-> get_quantity(); ?></td>
-      <td><?php echo '$ ' . $item-> obtener_unit_price(); ?></td>
-      <td><?php echo '$ ' . $item-> obtener_total_price(); ?></td>
+      <td><?php if(!is_null($item)){echo '$ ' . $item-> obtener_unit_price();} ?></td>
+      <td><?php if(!is_null($item)){echo '$ ' . $item-> obtener_total_price();} ?></td>
       <td><?php echo nl2br($re_quote_item-> get_comments()); ?></td>
     </tr>
     <?php
-    $j = ReQuoteSubitemRepository::print_re_quote_subitems($re_quote_item-> get_id(), $item-> obtener_id(), $j);
+    if(!is_null($item)){
+      $j = ReQuoteSubitemRepository::print_re_quote_subitems($re_quote_item-> get_id(), $item-> obtener_id(), $j);
+    }else{
+      $j = ReQuoteSubitemRepository::print_re_quote_subitems($re_quote_item-> get_id(), '', $j);
+    }
     return $j;
   }
 

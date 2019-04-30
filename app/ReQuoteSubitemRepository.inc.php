@@ -49,6 +49,7 @@ class ReQuoteSubitemRepository{
   }
 
   public static function print_re_quote_subitems($id_re_quote_item, $id_item, $j) {
+    echo 'asdsadsadsad';
     $j++;
     Conexion::abrir_conexion();
     $re_quote_subitems = self::get_re_quote_subitems_by_id_re_quote_item(Conexion::obtener_conexion(), $id_re_quote_item);
@@ -65,6 +66,7 @@ class ReQuoteSubitemRepository{
   }
 
   public static function print_re_quote_subitem($re_quote_subitem, $subitem, $i) {
+    echo 'sadsadsadasd';
     if (!isset($re_quote_subitem)) {
       return;
     }
@@ -184,9 +186,9 @@ class ReQuoteSubitemRepository{
       echo '$ ' . $best_unit_price;
     }
     echo '</td>';
-    echo '<td>$ ' . $best_unit_price * $subitem-> obtener_quantity() . '</td>';
-    echo '<td>$ ' . $subitem-> obtener_unit_price() . '</td>';
-    echo '<td>$ ' . $subitem-> obtener_total_price() . '</td>';
+    echo '<td>$ ' . $best_unit_price * $re_quote_subitem-> get_quantity() . '</td>';
+    if(!is_null($subitem)){echo '<td>$ ' . $subitem-> obtener_unit_price() . '</td>';}else{echo '<td></td>';}
+    if(!is_null($subitem)){echo '<td>$ ' . $subitem-> obtener_total_price() . '</td>';}else{echo '<td></td>';}
     echo '<td>' . nl2br($re_quote_subitem-> get_comments()) . '</td>';
     echo '</tr>';
   }

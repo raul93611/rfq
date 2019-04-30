@@ -159,8 +159,8 @@ class ReQuoteRepository{
           ?>
           </td>
           <td>$ <?php echo number_format(round($best_unit_price, 2) * $re_quote_item-> get_quantity(), 2); ?></td>
-          <td style="text-align:right;">$ <?php echo number_format($item-> obtener_unit_price(), 2); ?></td>
-          <td style="text-align:right;">$ <?php echo number_format($item-> obtener_total_price(), 2); ?></td>
+          <td style="text-align:right;">$ <?php if(!is_null($item)){echo number_format($item-> obtener_unit_price(), 2);} ?></td>
+          <td style="text-align:right;">$ <?php if(!is_null($item)){echo number_format($item-> obtener_total_price(), 2);} ?></td>
           <?php
         }else{
           ?>
@@ -177,7 +177,11 @@ class ReQuoteRepository{
         <?php
         Conexion::abrir_conexion();
         $re_quote_subitems = ReQuoteSubitemRepository::get_re_quote_subitems_by_id_re_quote_item(Conexion::obtener_conexion(), $re_quote_item-> get_id());
-        $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Conexion::obtener_conexion(), $item-> obtener_id());
+        if(!is_null($item)){
+          $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Conexion::obtener_conexion(), $item-> obtener_id());
+        }else{
+          $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Conexion::obtener_conexion(), '');
+        }
         Conexion::cerrar_conexion();
         for($j = 0; $j < count($re_quote_subitems); $j++){
           $re_quote_subitem = $re_quote_subitems[$j];
@@ -221,8 +225,8 @@ class ReQuoteRepository{
                 ?>
         </td>
         <td>$ <?php echo number_format(round($best_unit_price, 2) * $re_quote_subitem-> get_quantity(), 2); ?></td>
-        <td style="text-align:right;">$ <?php echo number_format($subitem-> obtener_unit_price(), 2); ?></td>
-        <td style="text-align:right;">$ <?php echo number_format($subitem-> obtener_total_price(), 2); ?></td>
+        <td style="text-align:right;">$ <?php if(!is_null($subitem)){echo number_format($subitem-> obtener_unit_price(), 2);} ?></td>
+        <td style="text-align:right;">$ <?php if(!is_null($subitem)){echo number_format($subitem-> obtener_total_price(), 2);} ?></td>
                 <?php
               }else{
                 ?>
@@ -257,7 +261,7 @@ class ReQuoteRepository{
         <td style="font-size:12pt;">TOTAL:</td>
         <td>$ <?php echo number_format($re_quote-> get_total_cost(), 2); ?></td>
         <td></td>
-        <td style="font-size:12pt;text-align:right;">$ <?php echo number_format($re_quote-> get_total_price(), 2); ?></td>
+        <td style="font-size:12pt;text-align:right;">$ <?php echo number_format($cotizacion-> obtener_total_price(), 2); ?></td>
       </tr>
     </table>
     <?php
