@@ -191,9 +191,9 @@ var time2 = setInterval(function(){
     total = total + parseFloat(totales[i]);
   }
 
-  $('#total_re_quote').html('$ ' + total);
+  $('#total_re_quote').html('$ ' + total.toFixed(2));
   $('#total_cost').val(total);
-  var profit_rq = parseFloat($('#total_ganado').html().split(' ')[1]) - total;
+  var profit_rq = (parseFloat($('#total_ganado').html().split(' ')[1]) - total).toFixed(2);
   var percentage_profit_rq = ((profit_rq/total)*100).toFixed(2);
   $('#profit_rq').html('$ ' + profit_rq + '<br>' + percentage_profit_rq + '%');
 }, 500);

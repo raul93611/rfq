@@ -49,7 +49,6 @@ class ReQuoteSubitemRepository{
   }
 
   public static function print_re_quote_subitems($id_re_quote_item, $id_item, $j) {
-    echo 'asdsadsadsad';
     $j++;
     Conexion::abrir_conexion();
     $re_quote_subitems = self::get_re_quote_subitems_by_id_re_quote_item(Conexion::obtener_conexion(), $id_re_quote_item);
