@@ -190,7 +190,15 @@ if($cotizacion_recuperada-> obtener_canal() == 'Chemonics' || $cotizacion_recupe
   }
   if($cotizacion_recuperada-> obtener_canal() != 'FedBid' && $cotizacion_recuperada-> obtener_canal() != 'Chemonics' && $cotizacion_recuperada-> obtener_canal() != 'Ebay & Amazon'){
     ?>
-    <a href="<?php echo PDF_TABLA_ITEMS . $cotizacion_recuperada-> obtener_id(); ?>" target="_blank" class="btn btn-primary"><i class="fas fa-file"></i> PDF</a>
+    <div class="btn-group dropup">
+      <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        PDF
+      </button>
+      <div class="dropdown-menu">
+        <a href="<?php echo PDF_TABLA_ITEMS . $cotizacion_recuperada-> obtener_id(); ?>" target="_blank" class="dropdown-item"><i class="fas fa-file"></i> Quote</a>
+        <a href="<?php echo PDF_RE_QUOTE . $cotizacion_recuperada-> obtener_id(); ?>" target="_blank" class="dropdown-item"><i class="fas fa-file"></i> Re-Quote</a>
+      </div>
+    </div>
     <?php
   }
   ?>

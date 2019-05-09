@@ -65,7 +65,6 @@ class ReQuoteSubitemRepository{
   }
 
   public static function print_re_quote_subitem($re_quote_subitem, $subitem, $i) {
-    echo 'sadsadsadasd';
     if (!isset($re_quote_subitem)) {
       return;
     }
