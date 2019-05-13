@@ -260,6 +260,28 @@ try{
         <td></td>
         <td style="font-size:12pt;text-align:right;">$ ' . number_format($cotizacion-> obtener_total_price(), 2) . '</td>
         </tr>
+        <tr>
+        <td style="border:none;"></td>
+        <td style="border:none;"></td>
+        <td style="border:none;"></td>
+        <td style="border:none;"></td>
+        <td style="border:none;"></td>
+        <td style="border:none;"></td>
+        <td style="border:none;"></td>
+        <td style="font-size:12pt;">PROFIT:</td>
+        <td style="font-size:12pt;text-align:right;">$ ' . number_format($cotizacion-> obtener_total_price() - $re_quote-> get_total_cost(), 2) . '</td>
+        </tr>
+        <tr>
+        <td style="border:none;"></td>
+        <td style="border:none;"></td>
+        <td style="border:none;"></td>
+        <td style="border:none;"></td>
+        <td style="border:none;"></td>
+        <td style="border:none;"></td>
+        <td style="border:none;"></td>
+        <td style="border:none;"></td>
+        <td style="font-size:12pt;text-align:right;">' . number_format((($cotizacion-> obtener_total_price() - $re_quote-> get_total_cost())/$re_quote-> get_total_cost())*100, 2) . ' %</td>
+        </tr>
         </table>
         ';
         if ($cotizacion->obtener_payment_terms() == 'Net 30') {
