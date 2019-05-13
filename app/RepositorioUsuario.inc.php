@@ -579,7 +579,7 @@ class RepositorioUsuario {
     $cotizaciones_no_sometidas = array();
     $cotizaciones_no_sometidas_pasadas = array();
     Conexion::abrir_conexion();
-    $usuarios = self::obtener_usuarios_rfq_sin_importar_estado(Conexion::obtener_conexion());
+    $usuarios = self::obtener_usuarios_rfq(Conexion::obtener_conexion());
     Conexion::cerrar_conexion();
 
     if (count($usuarios)) {
