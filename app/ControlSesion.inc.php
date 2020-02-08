@@ -1,7 +1,7 @@
 <?php
 class ControlSesion{
   public static function iniciar_sesion($id_usuario, $nombre_usuario){
-    if(session_id() === ''){
+    if(session_id() == ''){
       session_start();
     }
 
@@ -10,7 +10,7 @@ class ControlSesion{
   }
 
   public static function cerrar_sesion(){
-    if(session_id() === ''){
+    if(session_id() == ''){
       session_start();
     }
 
@@ -26,7 +26,7 @@ class ControlSesion{
   }
 
   public static function sesion_iniciada(){
-    if(session_id() === ''){
+    if(session_id() == ''){
       session_start();
     }
 
