@@ -77,7 +77,7 @@ try{
   <table border=0 width="100%">
     <tr>
       <td width="400">
-      <img style="width:350px;height:130px;" src="' . RUTA_IMG . '/logo_proposal.jpg">
+      <img style="width:350px;height:130px;" src="img/logo_proposal.jpg">
       </td>
       <td align="right">
         <span class="color letra_grande">PROPOSAL</span>
@@ -309,6 +309,7 @@ try{
   EIN: 51-0629765, DUNS: 786-965876, CAGE:4QTF4<br>SBA 8(a) and HUBZone certified
   </div>
   ');
+  $mpdf->showImageErrors = true;
   $mpdf->WriteHTML($html);
   $mpdf->Output($_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $cotizacion->obtener_id() . '/' . preg_replace('/[^a-z0-9-_\-\.]/i','_', $cotizacion-> obtener_email_code()) . '(proposal)' . '.pdf', 'F');
   $mpdf->Output(preg_replace('/[^a-z0-9-_\-\.]/i','_', $cotizacion-> obtener_email_code()) . '.pdf', 'I');
