@@ -1698,8 +1698,9 @@ class RepositorioRfq {
             <th>PROPOSAL</th>
             <th>CODE</th>
             <th>CHANNEL</th>
-            <th>AMOUNT</th>
+            <th>AMOUNT(RE-QUOTE)</th>
             <th>FULFILLMENT DATE</th>
+            <th>AWARD DATE</th>
             <th>RFP</th>
           </tr>
         </thead>
@@ -1737,6 +1738,7 @@ class RepositorioRfq {
       <td><?php echo $quote-> obtener_canal(); ?></td>
       <td>$ <?php echo $re_quote-> get_total_price() ?></td>
       <td><?php echo $fulfillment_date; ?></td>
+      <td><?php echo $quote-> obtener_fecha_award(); ?></td>
       <td><?php if($quote-> obtener_rfp()){echo '<span class="text-info">Yes</span>';}else{echo '<span class="text-danger">No</span>';} ?></td>
     </tr>
     <?php
