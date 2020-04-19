@@ -166,7 +166,7 @@ try{
           </tr>';
       }
       $a = 1;
-      $limit = 400;
+      $limit = 350;
       $limit_row = 100;
       for ($i = 0; $i < count($items); $i++) {
         $item_description = '';
@@ -180,7 +180,7 @@ try{
                   $html .= '<tr>
                       <td style="border-bottom: 0;">' . $a . '</td>
                       <td style="border-bottom: 0;"><b>Brand name:</b> ' . $item->obtener_brand() . '<br><b>Part number:</b> ' . $item->obtener_part_number() . '<br><b> Item description:</b><br> ';
-                  $html .= nl2br(substr($item-> obtener_description(), 0, $indice));
+                  $html .= nl2br(wordwrap(substr($item-> obtener_description(), 0, $indice), $limit_row, '<br>', true));
                   $html .= '</td>
                   <td style="text-align:right;border-bottom: 0;">' . $item->obtener_quantity() . '</td>
                   <td style="text-align:right;border-bottom: 0;">$ ' . number_format($item->obtener_unit_price(), 2) . '</td>
@@ -194,7 +194,7 @@ try{
                     $html .= '
                     <tr style="border-top: 0;">
                       <td style="border-bottom: 0;border-top: 0;"></td>
-                      <td style="border-bottom: 0;border-top: 0;">' . nl2br(substr($item_description, 0, $indice)) . '</td>
+                      <td style="border-bottom: 0;border-top: 0;">' . nl2br(wordwrap(substr($item_description, 0, $indice), $limit_row, '<br>', true)) . '</td>
                       <td style="border-bottom: 0;border-top: 0;"></td>
                       <td style="border-bottom: 0;border-top: 0;"></td>
                       <td style="border-bottom: 0;border-top: 0;"></td>
@@ -206,7 +206,7 @@ try{
                     $html .= '
                     <tr>
                       <td style="border-top: 0;"></td>
-                      <td style="border-top: 0;">' . nl2br($item_description) . '</td>
+                      <td style="border-top: 0;">' . nl2br(wordwrap($item_description, $limit_row, '<br>', true)) . '</td>
                       <td style="border-top: 0;"></td>
                       <td style="border-top: 0;"></td>
                       <td style="border-top: 0;"></td>
@@ -217,7 +217,7 @@ try{
                   $html .= '<tr>
                       <td>' . $a . '</td>
                       <td><b>Brand name:</b> ' . $item->obtener_brand() . '<br><b>Part number:</b> ' . $item->obtener_part_number() . '<br><b> Item description:</b><br> ';
-                  $html .= nl2br($item->obtener_description());
+                  $html .= nl2br(wordwrap($item->obtener_description(), $limit_row, '<br>', true));
                   $html .= '</td>
                   <td style="text-align:right;">' . $item->obtener_quantity() . '</td>
                   <td style="text-align:right;">$ ' . number_format($item->obtener_unit_price(), 2) . '</td>
@@ -239,7 +239,7 @@ try{
                 $html .= '<tr>
                     <td style="border-bottom: 0;"></td>
                     <td style="border-bottom: 0;"><b>Brand name:</b> ' . $subitem->obtener_brand() . '<br><b>Part number:</b> ' . $subitem->obtener_part_number() . '<br><b> Item description:</b><br> ';
-                $html .= nl2br(substr($subitem-> obtener_description(), 0, $indice));
+                $html .= nl2br(wordwrap(substr($subitem-> obtener_description(), 0, $indice), $limit_row, '<br>', true));
                 $html .= '</td>
                 <td style="text-align:right;border-bottom: 0;">' . $subitem->obtener_quantity() . '</td>
                 <td style="text-align:right;border-bottom: 0;">$ ' . number_format($subitem->obtener_unit_price(), 2) . '</td>
@@ -253,7 +253,7 @@ try{
                   $html .= '
                   <tr style="border-top: 0;">
                     <td style="border-bottom: 0;border-top: 0;"></td>
-                    <td style="border-bottom: 0;border-top: 0;">' . nl2br(substr($subitem_description, 0, $indice)) . '</td>
+                    <td style="border-bottom: 0;border-top: 0;">' . nl2br(wordwrap(substr($subitem_description, 0, $indice), $limit_row, '<br>', true)) . '</td>
                     <td style="border-bottom: 0;border-top: 0;"></td>
                     <td style="border-bottom: 0;border-top: 0;"></td>
                     <td style="border-bottom: 0;border-top: 0;"></td>
@@ -265,7 +265,7 @@ try{
                   $html .= '
                   <tr>
                     <td style="border-top: 0;"></td>
-                    <td style="border-top: 0;">' . nl2br($subitem_description) . '</td>
+                    <td style="border-top: 0;">' . nl2br(wordwrap($subitem_description, $limit_row, '<br>', true)) . '</td>
                     <td style="border-top: 0;"></td>
                     <td style="border-top: 0;"></td>
                     <td style="border-top: 0;"></td>
@@ -276,7 +276,7 @@ try{
                 $html .= '<tr>
                     <td></td>
                     <td><b>Brand name:</b> ' . $subitem->obtener_brand() . '<br><b>Part number:</b> ' . $subitem->obtener_part_number() . '<br><b> Item description:</b><br> ';
-                $html .= nl2br($subitem->obtener_description());
+                $html .= nl2br(wordwrap($subitem->obtener_description(), $limit_row, '<br>', true));
                 $html .= '</td>
                 <td style="text-align:right;">' . $subitem->obtener_quantity() . '</td>
                 <td style="text-align:right;">$ ' . number_format($subitem->obtener_unit_price(), 2) . '</td>
