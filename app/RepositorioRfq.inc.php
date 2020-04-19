@@ -1698,6 +1698,7 @@ class RepositorioRfq {
             <th>PROPOSAL</th>
             <th>CODE</th>
             <th>CHANNEL</th>
+            <th>AMOUNT</th>
             <th>FULFILLMENT DATE</th>
             <th>RFP</th>
           </tr>
@@ -1721,6 +1722,9 @@ class RepositorioRfq {
     ConnectionFullFillment::open_connection();
     $rfq_fullfillment_part = RfqFullFillmentPartRepository::get_rfq_fullfillment_part_by_id_rfq(ConnectionFullFillment::get_connection(), $quote-> obtener_id());
     ConnectionFullFillment::close_connection();
+    Conexion::abrir_conexion();
+    $re_quote = ReQuoteRepository::get_re_quote_by_id_rfq(Conexion::obtener_conexion(), $quote-> obtener_id());
+    Conexion::cerrar_conexion();
     $fulfillment_date = RepositorioRfqFullFillmentComment::mysql_datetime_to_english_format($rfq_fullfillment_part-> get_fullfillment_date());
     ?>
     <tr>
@@ -1731,6 +1735,7 @@ class RepositorioRfq {
       </td>
       <td><?php echo $quote-> obtener_email_code(); ?></td>
       <td><?php echo $quote-> obtener_canal(); ?></td>
+      <td>$ <?php echo $re_quote-> get_total_price() ?></td>
       <td><?php echo $fulfillment_date; ?></td>
       <td><?php if($quote-> obtener_rfp()){echo '<span class="text-info">Yes</span>';}else{echo '<span class="text-danger">No</span>';} ?></td>
     </tr>

@@ -166,8 +166,13 @@ $('#tabla_busqueda').DataTable({
   'pageLength': 50
 });
 
-$('#tabla_usuarios, .fulfillment_table').DataTable({
+$('#tabla_usuarios').DataTable({
   'order': [[ 3, "desc" ]],
+  'pageLength': 50
+});
+
+$('.fulfillment_table').DataTable({
+  'order': [[ 4, "desc" ]],
   'pageLength': 50
 });
 /***************************************************************************************************/
