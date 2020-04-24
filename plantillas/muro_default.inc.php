@@ -8,7 +8,6 @@ $cotizaciones_completadas_anual_usuarios = RepositorioUsuario::obtener_cotizacio
 list($cotizaciones_ganadas_anual_usuarios, $cotizaciones_ganadas_anual_usuarios_monto) = RepositorioUsuario::obtener_cotizaciones_ganadas_por_usuario_y_mes(Conexion::obtener_conexion());
 $cotizaciones_not_submitted_anual_usuarios = RepositorioUsuario::obtener_cotizaciones_not_submitted_por_usuario_y_mes(Conexion::obtener_conexion());
 Conexion::cerrar_conexion();
-//print_r($cotizaciones_ganadas_anual_usuarios_monto);
 ?>
 <div class="content-wrapper">
   <div class="content-header">
@@ -48,54 +47,48 @@ Conexion::cerrar_conexion();
       </div>
       <div id="graficas" class="row">
         <section class="col-lg-6 connectedSortable">
-          <?php
-          if ($cargo < 4) {
-            ?>
-            <div class="card">
-              <div class="card-header no-border">
-                <div class="d-flex justify-content-between">
-                  <h3 class="card-title">Completed</h3>
-                </div>
-              </div>
-              <div class="card-body">
-                <div class="position-relative mb-4">
-                  <canvas id="completados-chart" height="200"></canvas>
-                </div>
-
-                <div class="d-flex flex-row justify-content-end">
-                  <span class="mr-2">
-                    <i class="fa fa-square text-primary"></i> Current month
-                  </span>
-
-                  <span>
-                    <i class="fa fa-square text-gray"></i> Last month
-                  </span>
-                </div>
+          <div class="card">
+            <div class="card-header no-border">
+              <div class="d-flex justify-content-between">
+                <h3 class="card-title">Completed</h3>
               </div>
             </div>
-            <div class="card">
-              <div class="card-header no-border">
-                <div class="d-flex justify-content-between">
-                  <h3 class="card-title">Not submitted</h3>
-                </div>
+            <div class="card-body">
+              <div class="position-relative mb-4">
+                <canvas id="completados-chart" height="200"></canvas>
               </div>
-              <div class="card-body">
-                <div class="position-relative mb-4">
-                  <canvas id="sometidas-chart" height="200"></canvas>
-                </div>
-                <div class="d-flex flex-row justify-content-end">
-                  <span class="mr-2">
-                    <i class="fa fa-square text-primary"></i> Current month
-                  </span>
-                  <span>
-                    <i class="fa fa-square text-gray"></i> Last month
-                  </span>
-                </div>
+
+              <div class="d-flex flex-row justify-content-end">
+                <span class="mr-2">
+                  <i class="fa fa-square text-primary"></i> Current month
+                </span>
+
+                <span>
+                  <i class="fa fa-square text-gray"></i> Last month
+                </span>
               </div>
             </div>
-            <?php
-          }
-          ?>
+          </div>
+          <div class="card">
+            <div class="card-header no-border">
+              <div class="d-flex justify-content-between">
+                <h3 class="card-title">Not submitted</h3>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="position-relative mb-4">
+                <canvas id="sometidas-chart" height="200"></canvas>
+              </div>
+              <div class="d-flex flex-row justify-content-end">
+                <span class="mr-2">
+                  <i class="fa fa-square text-primary"></i> Current month
+                </span>
+                <span>
+                  <i class="fa fa-square text-gray"></i> Last month
+                </span>
+              </div>
+            </div>
+          </div>
           <div class="card">
             <div class="card-header no-border">
               <div class="d-flex justify-content-between">
@@ -115,32 +108,26 @@ Conexion::cerrar_conexion();
           </div>
         </section>
         <section class="col-lg-6 connectedSortable">
-          <?php
-          if ($cargo < 4) {
-            ?>
-            <div class="card">
-              <div class="card-header no-border">
-                <div class="d-flex justify-content-between">
-                  <h3 class="card-title">Awards</h3>
-                </div>
-              </div>
-              <div class="card-body">
-                <div class="position-relative mb-4">
-                  <canvas id="ganadas-chart" height="200"></canvas>
-                </div>
-                <div class="d-flex flex-row justify-content-end">
-                  <span class="mr-2">
-                    <i class="fa fa-square text-primary"></i> Current month
-                  </span>
-                  <span>
-                    <i class="fa fa-square text-gray"></i> Last month
-                  </span>
-                </div>
+          <div class="card">
+            <div class="card-header no-border">
+              <div class="d-flex justify-content-between">
+                <h3 class="card-title">Awards</h3>
               </div>
             </div>
-            <?php
-          }
-          ?>
+            <div class="card-body">
+              <div class="position-relative mb-4">
+                <canvas id="ganadas-chart" height="200"></canvas>
+              </div>
+              <div class="d-flex flex-row justify-content-end">
+                <span class="mr-2">
+                  <i class="fa fa-square text-primary"></i> Current month
+                </span>
+                <span>
+                  <i class="fa fa-square text-gray"></i> Last month
+                </span>
+              </div>
+            </div>
+          </div>
           <div class="card">
             <div class="card-header no-border">
               <div class="d-flex justify-content-between">

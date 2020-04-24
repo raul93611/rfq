@@ -634,7 +634,7 @@ class RepositorioUsuario {
   }
 
   public static function obtener_cotizaciones_completadas_por_usuario_y_mes($conexion){
-    $usuarios = self::obtener_usuarios_rfq_sin_importar_estado($conexion);
+    $usuarios = self::obtener_usuarios_rfq($conexion);
     $cotizaciones_completadas_anual_usuarios = [];
     if(isset($conexion)){
       try{
@@ -663,7 +663,7 @@ class RepositorioUsuario {
   }
 
   public static function obtener_cotizaciones_ganadas_por_usuario_y_mes($conexion){
-    $usuarios = self::obtener_usuarios_rfq_sin_importar_estado($conexion);
+    $usuarios = self::obtener_usuarios_rfq($conexion);
     $cotizaciones_ganadas_anual_usuarios = [];
     $cotizaciones_ganadas_anual_usuarios_monto = [];
     if(isset($conexion)){
@@ -705,7 +705,7 @@ class RepositorioUsuario {
   }
 
   public static function obtener_cotizaciones_not_submitted_por_usuario_y_mes($conexion){
-    $usuarios = self::obtener_usuarios_rfq_sin_importar_estado($conexion);
+    $usuarios = self::obtener_usuarios_rfq($conexion);
     $cotizaciones_not_submitted_anual_usuarios = [];
     if(isset($conexion)){
       try{
