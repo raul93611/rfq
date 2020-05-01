@@ -176,8 +176,14 @@ $('.fulfillment_table').DataTable({
   'pageLength': 50
 });
 /***************************************************************************************************/
-  if($('#re_quote_data').length != 0){
+  if($('#re_quote_form').length != 0){
     var time2 = setInterval(function(){
+      var payment_terms = 1;
+      if ($('input:radio[name=payment_terms]:checked').val() === 'net_30_cc') {
+        payment_terms = 1.029;
+      } else {
+        payment_terms = 1;
+      }
       var totales = [];
       $('#re_quote_data tr').each(function(){
         if (!isNaN($(this).find('td').eq(8).text().split(' ')[1])) {
@@ -192,20 +198,29 @@ $('.fulfillment_table').DataTable({
         var shipping_cost_rq = 0;
       }
       var total = 0;
-      total = total + parseFloat(shipping_cost_rq);
+
       for (var i = 0; i < totales.length; i++) {
         total = total + parseFloat(totales[i]);
       }
+
+      total = total*payment_terms;
+      total = total + parseFloat(shipping_cost_rq);
 
       $('#total_re_quote').html('$ ' + total.toFixed(2));
       $('#total_cost').val(total);
       var profit_rq = (parseFloat($('#total_ganado').html().split(' ')[1]) - total).toFixed(2);
       var percentage_profit_rq = ((profit_rq/total)*100).toFixed(2);
       $('#profit_rq').html('$ ' + profit_rq + '<br>' + percentage_profit_rq + '%');
-    }, 500);
+    }, 1000);
   }
 
 $('#re_quote_form').submit(function () {
+  var payment_terms = 1;
+  if ($('input:radio[name=payment_terms]:checked').val() === 'net_30_cc') {
+    payment_terms = 1.029;
+  } else {
+    payment_terms = 1;
+  }
   var totales = [];
   $('#re_quote_data tr').each(function(){
     if (!isNaN($(this).find('td').eq(8).text().split(' ')[1])) {
@@ -220,14 +235,18 @@ $('#re_quote_form').submit(function () {
     var shipping_cost_rq = 0;
   }
   var total = 0;
-  total = total + parseFloat(shipping_cost_rq);
+
   for (var i = 0; i < totales.length; i++) {
     total = total + parseFloat(totales[i]);
   }
 
-  $('#total_re_quote').html('$ ' + total);
+  total = total*payment_terms;
+  total = total + parseFloat(shipping_cost_rq);
+
+  $('#total_re_quote').html('$ ' + total.toFixed(2));
   $('#total_cost').val(total);
-  var profit_rq = parseFloat($('#total_ganado').html().split(' ')[1]) - total;
+
+  var profit_rq = (parseFloat($('#total_ganado').html().split(' ')[1]) - total).toFixed(2);
   var percentage_profit_rq = ((profit_rq/total)*100).toFixed(2);
   $('#profit_rq').html('$ ' + profit_rq + '<br>' + percentage_profit_rq + '%');
 });
@@ -246,12 +265,12 @@ $('#re_quote_form').submit(function () {
     }
   });
 
-
+if($('#form_edited_quote').length != 0){
   var time = setInterval(function(){
     var total_additional = 0;
     var payment_terms = 0;
     if ($('input:radio[name=payment_terms]:checked').val() === 'Net 30/CC') {
-      payment_terms = 1.0215;
+      payment_terms = 1.0299;
     } else {
       payment_terms = 1;
     }
@@ -397,6 +416,7 @@ $('#re_quote_form').submit(function () {
     $('#total_quantity').html(total_quantity);
     $('#total_additional').html('$ ' + total_additional);
   }, 500);
+}
 
 
 

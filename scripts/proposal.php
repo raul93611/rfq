@@ -188,7 +188,7 @@ try{
       $html .= '</table>';
   }
   if ($cotizacion->obtener_payment_terms() == 'Net 30') {
-    $html .= '<br><div class="color letra_chiquita"><b>PAYMENT TERMS</b><br><b>NET TERMS: </b>30 Days<br><b>CREDIT CARD PAYMENT: </b>Please add an additional 2.1% to process credit card payments.</div>';
+    $html .= '<br><div class="color letra_chiquita"><b>PAYMENT TERMS</b><br><b>NET TERMS: </b>30 Days<br><b>CREDIT CARD PAYMENT: </b>Please add an additional 3% to process credit card payments.</div>';
   }
   $html .= '</body></html>';
   $mpdf->SetHTMLFooter('

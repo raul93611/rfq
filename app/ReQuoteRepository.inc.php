@@ -82,11 +82,13 @@ class ReQuoteRepository{
     return $re_quote;
   }
 
-  public static function update_re_quote($connection, $total_cost, $shipping, $shipping_cost, $id_re_quote){
+  public static function update_re_quote($connection, $payment_terms, $total_cost, $shipping, $shipping_cost, $id_re_quote){
     if(isset($connection)){
+      echo $total_cost;
       try{
-        $sql = 'UPDATE re_quotes SET total_cost = :total_cost, shipping = :shipping, shipping_cost = :shipping_cost WHERE id = :id_re_quote';
+        $sql = 'UPDATE re_quotes SET payment_terms = :payment_terms, total_cost = :total_cost, shipping = :shipping, shipping_cost = :shipping_cost WHERE id = :id_re_quote';
         $sentence = $connection-> prepare($sql);
+        $sentence-> bindParam(':payment_terms', $payment_terms, PDO::PARAM_STR);
         $sentence-> bindParam(':total_cost', $total_cost, PDO::PARAM_STR);
         $sentence-> bindParam(':shipping', $shipping, PDO::PARAM_STR);
         $sentence-> bindParam(':shipping_cost', $shipping_cost, PDO::PARAM_STR);

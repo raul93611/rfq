@@ -38,6 +38,16 @@ class ReQuoteItemRepository{
       ?>
       <br>
       <h2>Items:</h2>
+      <div class="p-3">
+        <div class="custom-control custom-radio">
+          <input type="radio" id="net_30" name="payment_terms" class="custom-control-input" value="net_30" <?php if($re_quote-> get_payment_terms() == 'net_30'){echo 'checked';} ?>>
+          <label class="custom-control-label" for="net_30">Net 30</label>
+        </div>
+        <div class="custom-control custom-radio">
+          <input type="radio" id="net_30_cc" name="payment_terms" class="custom-control-input" value="net_30_cc" <?php if($re_quote-> get_payment_terms() == 'net_30_cc'){echo 'checked';} ?>>
+          <label class="custom-control-label" for="net_30_cc">Net 30/CC</label>
+        </div>
+      </div>
       <div class="table-responsive">
         <table class="table table-bordered table-hover">
           <thead>
