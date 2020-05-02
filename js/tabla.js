@@ -211,7 +211,7 @@ $('.fulfillment_table').DataTable({
       var profit_rq = (parseFloat($('#total_ganado').html().split(' ')[1]) - total).toFixed(2);
       var percentage_profit_rq = ((profit_rq/total)*100).toFixed(2);
       $('#profit_rq').html('$ ' + profit_rq + '<br>' + percentage_profit_rq + '%');
-    }, 1000);
+    }, 100);
   }
 
 $('#re_quote_form').submit(function () {
@@ -415,7 +415,7 @@ if($('#form_edited_quote').length != 0){
     $('#dif_total').html('$ ' + dif_total + '<br>' + percentage_profit + '%');
     $('#total_quantity').html(total_quantity);
     $('#total_additional').html('$ ' + total_additional);
-  }, 500);
+  }, 100);
 }
 
 
@@ -424,7 +424,7 @@ if($('#form_edited_quote').length != 0){
     var total_additional = 0;
     var payment_terms = 0;
     if ($('input:radio[name=payment_terms]:checked').val() === 'Net 30/CC') {
-      payment_terms = 1.0215;
+      payment_terms = 1.0299;
     } else {
       payment_terms = 1;
     }
