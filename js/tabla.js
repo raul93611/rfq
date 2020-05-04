@@ -179,10 +179,11 @@ $('.fulfillment_table').DataTable({
   if($('#re_quote_form').length != 0){
     var time2 = setInterval(function(){
       var payment_terms = 1;
+      var total_ganado = parseFloat($('#total_ganado').html().split(' ')[1]);
       if ($('input:radio[name=payment_terms]:checked').val() === 'net_30_cc') {
-        payment_terms = 1.029;
+        payment_terms = total_ganado*0.029;
       } else {
-        payment_terms = 1;
+        payment_terms = 0;
       }
       var totales = [];
       $('#re_quote_data tr').each(function(){
@@ -203,12 +204,12 @@ $('.fulfillment_table').DataTable({
         total = total + parseFloat(totales[i]);
       }
 
-      total = total*payment_terms;
+      total = total + payment_terms;
       total = total + parseFloat(shipping_cost_rq);
 
       $('#total_re_quote').html('$ ' + total.toFixed(2));
       $('#total_cost').val(total);
-      var profit_rq = (parseFloat($('#total_ganado').html().split(' ')[1]) - total).toFixed(2);
+      var profit_rq = (total_ganado - total).toFixed(2);
       var percentage_profit_rq = ((profit_rq/total)*100).toFixed(2);
       $('#profit_rq').html('$ ' + profit_rq + '<br>' + percentage_profit_rq + '%');
     }, 100);
@@ -216,10 +217,11 @@ $('.fulfillment_table').DataTable({
 
 $('#re_quote_form').submit(function () {
   var payment_terms = 1;
+  var total_ganado = parseFloat($('#total_ganado').html().split(' ')[1]);
   if ($('input:radio[name=payment_terms]:checked').val() === 'net_30_cc') {
-    payment_terms = 1.029;
+    payment_terms = total_ganado*0.029;
   } else {
-    payment_terms = 1;
+    payment_terms = 0;
   }
   var totales = [];
   $('#re_quote_data tr').each(function(){
@@ -240,13 +242,13 @@ $('#re_quote_form').submit(function () {
     total = total + parseFloat(totales[i]);
   }
 
-  total = total*payment_terms;
+  total = total + payment_terms;
   total = total + parseFloat(shipping_cost_rq);
 
   $('#total_re_quote').html('$ ' + total.toFixed(2));
   $('#total_cost').val(total);
 
-  var profit_rq = (parseFloat($('#total_ganado').html().split(' ')[1]) - total).toFixed(2);
+  var profit_rq = (total_ganado - total).toFixed(2);
   var percentage_profit_rq = ((profit_rq/total)*100).toFixed(2);
   $('#profit_rq').html('$ ' + profit_rq + '<br>' + percentage_profit_rq + '%');
 });
