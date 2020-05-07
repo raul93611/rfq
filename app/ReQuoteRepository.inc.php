@@ -107,13 +107,22 @@ class ReQuoteRepository{
     $re_quote_items = ReQuoteItemRepository::get_re_quote_items_by_id_re_quote(Conexion::obtener_conexion(), $re_quote-> get_id());
     $items = RepositorioItem::obtener_items_por_id_rfq(Conexion::obtener_conexion(), $id_rfq);
     Conexion::cerrar_conexion();
+    ?>
+    <div class="row">
+      <div class="col-md-12">
+        <b>Payment terms:</b> <?php if($re_quote-> get_payment_terms() == 'net_30_cc'){echo 'Net 30/CC';}else{echo 'Net 30';}; ?>
+      </div>
+    </div>
+    <br>
+    <?php
     if (count($re_quote_items)) {
       ?>
       <table class="table table-bordered" style="width:100%;">
         <tr>
           <th class="quantity">#</th>
-          <th>PROJECT ESPC.</th>
-          <th>E-LOGIC PROP.</th>
+          <th style="width:200px;">PROJECT ESPC.</th>
+          <th style="width:200px;">E-LOGIC PROP.</th>
+          <th>WEBSITE</th>
           <th class="quantity">QTY</th>
           <th>PROVIDER</th>
           <th>BEST UNIT COST</th>
@@ -131,6 +140,7 @@ class ReQuoteRepository{
           <td><?php echo $a; ?></td>
           <td><b>Brand name:</b><?php echo $re_quote_item-> get_brand_project(); ?><br><b>Part number:</b><?php echo $re_quote_item-> get_part_number_project(); ?><br><b>Item description:</b><?php echo nl2br(mb_substr($re_quote_item-> get_description_project(), 0, 150)); ?></td>
           <td><b>Brand name:</b><?php echo $re_quote_item-> get_brand(); ?><br><b>Part number:</b><?php echo $re_quote_item-> get_part_number(); ?><br><b> Item description:</b><br><?php echo nl2br(mb_substr($re_quote_item-> get_description(), 0, 150)); ?></td>
+          <td><a target="_blank" href="<?php echo $re_quote_item-> get_website(); ?>">Provider Website</a></td>
           <td style="text-align:right;"><?php echo $re_quote_item-> get_quantity(); ?></td>
           <td style="width: 200px;">
         <?php
@@ -193,6 +203,7 @@ class ReQuoteRepository{
         <td></td>
         <td><b>Brand name:</b><?php echo $re_quote_subitem-> get_brand_project(); ?><br><b>Part number:</b><?php echo $re_quote_subitem-> get_part_number_project(); ?><br><b>Item description:</b><br><?php echo nl2br(mb_substr($re_quote_subitem-> get_description_project(), 0, 150)); ?></td>
         <td><b>Brand name:</b><?php echo $re_quote_subitem-> get_brand(); ?><br><b>Part number:</b> <?php echo $re_quote_item-> get_part_number(); ?><br><b> Item description:</b><br> <?php echo nl2br(mb_substr($re_quote_item-> get_description(), 0, 150)); ?></td>
+        <td><a target="_blank" href="<?php echo $re_quote_subitem-> get_website(); ?>">Provider Website</a></td>
         <td style="text-align:right;"><?php echo $re_quote_subitem-> get_quantity(); ?></td>
           <?php
             Conexion::abrir_conexion();

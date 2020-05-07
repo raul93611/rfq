@@ -1523,8 +1523,9 @@ class RepositorioRfq {
         <table class="table table-bordered" style="width:100%;">
           <tr>
             <th class="quantity">#</th>
-            <th>PROJECT ESPC.</th>
-            <th>E-LOGIC PROP.</th>
+            <th style="width:200px;">PROJECT ESPC.</th>
+            <th style="width:200px;">E-LOGIC PROP.</th>
+            <th>WEBSITE</th>
             <th class="quantity">QTY</th>
             <th>PROVIDER</th>
             <th>ADDITIONAL</th>
@@ -1536,7 +1537,7 @@ class RepositorioRfq {
         <?php
         $a = 1;
         if($cotizacion-> obtener_payment_terms() == 'Net 30/CC'){
-          $payment_terms = 1.0215;
+          $payment_terms = 1.0299;
         }else{
           $payment_terms = 1;
         }
@@ -1547,6 +1548,7 @@ class RepositorioRfq {
             <td><?php echo $a; ?></td>
             <td><b>Brand name:</b><?php echo $item-> obtener_brand_project(); ?><br><b>Part number:</b><?php echo $item-> obtener_part_number_project(); ?><br><b>Item description:</b><?php echo nl2br(mb_substr($item-> obtener_description_project(), 0, 150)); ?></td>
             <td><b>Brand name:</b><?php echo $item->obtener_brand(); ?><br><b>Part number:</b><?php echo $item->obtener_part_number(); ?><br><b> Item description:</b><br><?php echo nl2br(mb_substr($item->obtener_description(), 0, 150)); ?></td>
+            <td><a target="_blank" href="<?php echo $item-> obtener_website(); ?>">Provider Website</a></td>
             <td style="text-align:right;"><?php echo $item->obtener_quantity(); ?></td>
             <td style="width: 200px;">
           <?php
@@ -1607,6 +1609,7 @@ class RepositorioRfq {
           <td></td>
           <td><b>Brand name:</b><?php echo $subitem-> obtener_brand_project(); ?><br><b>Part number:</b><?php echo $subitem-> obtener_part_number_project(); ?><br><b>Item description:</b><br><?php echo nl2br(mb_substr($subitem->obtener_description_project(), 0, 150)); ?></td>
           <td><b>Brand name:</b><?php echo $subitem->obtener_brand(); ?><br><b>Part number:</b> <?php echo $item->obtener_part_number(); ?><br><b> Item description:</b><br> <?php echo nl2br(mb_substr($item->obtener_description(), 0, 150)); ?></td>
+          <td><a target="_blank" href="<?php echo $subitem-> obtener_website(); ?>">Provider Website</a></td>
           <td style="text-align:right;"><?php echo $subitem-> obtener_quantity(); ?></td>
             <?php
               Conexion::abrir_conexion();
