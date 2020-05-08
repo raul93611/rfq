@@ -152,7 +152,7 @@ try{
           $prices[] = $re_quote_provider-> get_price();
           $html .= '
           <b>' . $re_quote_provider-> get_provider() . ':</b><br>
-          $ ' . number_format($re_quote_provider-> get_price(), 2) . '
+          $ ' . number_format($re_quote_provider-> get_price(), 2) . '<br>
           ';
         }
         $html .= '
@@ -207,7 +207,7 @@ try{
                 $prices[] = $re_quote_subitem_provider-> get_price();
                 $html .= '
                 <b>' . $re_quote_subitem_provider-> get_provider() . ':</b><br>
-                $ ' . $re_quote_subitem_provider-> get_price() . '
+                $ ' . $re_quote_subitem_provider-> get_price() . '<br>
                 ';
               }
             }
