@@ -97,6 +97,8 @@ include_once 'app/ReQuoteSubitemProviderRepository.inc.php';
 
 include_once 'app/ProposalRepository.inc.php';
 
+include_once 'app/Input.inc.php';
+
 $componentes_url = parse_url($_SERVER['REQUEST_URI']);
 $ruta = $componentes_url['path'];
 

@@ -193,7 +193,7 @@ class RepositorioRfq {
     <tr <?php if($cotizacion->obtener_comments() == 'Working on it'){echo 'class="waiting_for"';} ?>>
       <td>
         <a href="<?php echo EDITAR_COTIZACION . '/' . $cotizacion->obtener_id(); ?>" class="btn-block">
-            <?php echo $cotizacion->obtener_email_code(); ?>
+            <?php echo $cotizacion->obtener_id(); ?>
         </a>
       </td>
       <td>
@@ -207,22 +207,16 @@ class RepositorioRfq {
       <td><?php echo $cotizacion->obtener_type_of_bid(); ?></td>
       <td><?php echo $cotizacion->obtener_issue_date(); ?></td>
       <td><?php echo $cotizacion->obtener_end_date(); ?></td>
-      <td><?php echo $cotizacion->obtener_id(); ?></td>
-      <?php
-      if($cargo < 4){
-        ?>
-        <td class="text-center">
-          <?php
-          if(!$cotizacion-> obtener_rfp()){
-            ?>
-            <a href="<?php echo DELETE_QUOTE . '/' . $cotizacion->obtener_id(); ?>" class="delete_quote_button btn btn-sm btn-danger"><i class="fa fa-times"></i></a>
-            <?php
-          }
-          ?>
-        </td>
+      <td><?php echo $cotizacion->obtener_email_code(); ?></td>
+      <td class="text-center">
         <?php
-      }
-      ?>
+        if(!$cotizacion-> obtener_rfp()){
+          ?>
+          <a href="<?php echo DELETE_QUOTE . '/' . $cotizacion->obtener_id(); ?>" class="delete_quote_button text-danger"><i class="fa fa-times"></i> Delete</a>
+          <?php
+        }
+        ?>
+      </td>
     </tr>
     <?php
   }
@@ -236,13 +230,13 @@ class RepositorioRfq {
       <table id="tabla_quotes" class="table table-bordered table-hover">
         <thead>
           <tr>
-            <th>CODE</th>
+            <th>PROPOSAL</th>
             <th>DESIGNATED USER</th>
             <th>TYPE OF BID</th>
             <th>ISSUE DATE</th>
             <th>END DATE</th>
-            <th>PROPOSAL</th>
-            <?php if($cargo < 5){echo '<th>ELIMINAR</th>';} ?>
+            <th>CODE</th>
+            <th>OPTIONS</th>
           </tr>
         </thead>
         <tbody>

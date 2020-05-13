@@ -147,7 +147,11 @@ class RepositorioItem {
     $items = self::obtener_items_por_id_rfq(Conexion::obtener_conexion(), $id_rfq);
     Conexion::cerrar_conexion();
     if (count($items)) {
-      echo '<br><h2 id="caja_items">Items:</h2>';
+      ?>
+      <br>
+      <a target="_blank" href="<?php echo PDF_TABLA_ITEMS . $id_rfq; ?>" class="float-right btn btn-primary"><i class="fa fa-file"></i> PDF</a>
+      <?php
+      echo '<h2 id="caja_items">Items:</h2>';
       echo '<div class="row">';
       echo '<div class="col-md-3">';
       if ($cotizacion->obtener_taxes() != 0) {
@@ -169,20 +173,20 @@ class RepositorioItem {
       }
       echo '</div><div class="col-md-3">';
       echo '<label>Payment terms:</label><div class="form-group">
-          <div class="form-check-inline">
-              <input class="form-check-input" type="radio" id="net_30" value="Net 30" name="payment_terms"';
+          <div class="form-check-inline custom-control custom-radio">
+              <input class="custom-control-input" type="radio" id="net_30" value="Net 30" name="payment_terms"';
               if ($cotizacion->obtener_payment_terms() == 'Net 30') {
                 echo 'checked';
               }
-              echo '><label class="form-check-label" for="net_30">Net 30</label>
+              echo '><label class="custom-control-label" for="net_30">Net 30</label>
           </div>
-          <div class="form-check-inline">
-              <input class="form-check-input" type="radio" id="net_30cc" value="Net 30/CC" name="payment_terms"';
+          <div class="form-check-inline custom-control custom-radio">
+              <input class="custom-control-input" type="radio" id="net_30cc" value="Net 30/CC" name="payment_terms"';
 
               if ($cotizacion->obtener_payment_terms() == 'Net 30/CC') {
                 echo 'checked';
               }
-      echo '><label class="form-check-label" for="net_30cc">Net 30/CC</label>
+      echo '><label class="custom-control-label" for="net_30cc">Net 30/CC</label>
           </div>
       </div>';
       echo '</div></div><br>';
@@ -256,6 +260,23 @@ class RepositorioItem {
       echo '<input type="hidden" id="unit_prices_subitems" name="unit_prices_subitems" value="">';
       echo '<input type="hidden" id="total_cost" name="total_cost" value="">';
       echo '<input type="hidden" id="total_price" name="total_price" value="">';
+      ?>
+      <br>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <textarea class="form-control form-control-sm" rows="3" id="shipping" name="shipping" placeholder="Enter shipping ..."><?php echo $cotizacion->obtener_shipping(); ?></textarea>
+            <input type="hidden" name="shipping_original" value="<?php echo $cotizacion->obtener_shipping(); ?>">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <input type="number" step=".01" class="form-control form-control-sm" id="shipping_cost" name="shipping_cost" value="<?php echo $cotizacion->obtener_shipping_cost(); ?>">
+            <input type="hidden" name="shipping_cost_original" value="<?php echo $cotizacion->obtener_shipping_cost(); ?>">
+          </div>
+        </div>
+      </div>
+      <?php
     }
   }
 

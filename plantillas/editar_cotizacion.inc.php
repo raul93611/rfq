@@ -14,7 +14,7 @@ if(is_null($cotizacion_recuperada)){
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-md-2">
-          <h1>Internal quote</h1>
+          <h1>Proposal # <?php echo $cotizacion_recuperada-> obtener_id(); ?></h1>
         </div>
         <div class="col-md-8 text-center">
           <?php
@@ -75,7 +75,6 @@ if(is_null($cotizacion_recuperada)){
             <form role="form" id="form_edited_quote" method="post" enctype="multipart/form-data" action="<?php echo GUARDAR_EDITAR_COTIZACION . $id_rfq; ?>">
               <?php
               include_once 'plantillas/edicion_cotizacion_recuperada.inc.php';
-              include_once 'plantillas/edicion_cotizacion_recuperada2.inc.php';
               ?>
             </form>
           </div>
