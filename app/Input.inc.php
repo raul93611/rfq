@@ -70,6 +70,19 @@ class Input{
     }
   }
 
+  public static function get_designated_user($quote){
+    Conexion::abrir_conexion();
+    $usuarios = RepositorioUsuario::obtener_usuarios_rfq(Conexion::obtener_conexion());
+    Conexion::cerrar_conexion();
+    foreach ($usuarios as $usuario) {
+      if ($usuario->obtener_id() == $quote->obtener_usuario_designado()) {
+        $designated_user = $usuario-> obtener_nombre_usuario();
+      }
+    }
+
+    return $designated_user;
+  }
+
   public static function translate_channel($channel){
     switch ($channel) {
       case 'GSA-Buy':

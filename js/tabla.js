@@ -1,4 +1,7 @@
 $(document).ready(function () {
+  $('#quote_info_button').click(function(){
+    $('#quote_info_modal').modal();
+  });
   /************************************************************/
   $('#archivos_crear').fileinput({
     theme: 'explorer-fas',

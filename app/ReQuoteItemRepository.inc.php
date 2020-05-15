@@ -37,7 +37,7 @@ class ReQuoteItemRepository{
     if (count($re_quote_items)) {
       ?>
       <br>
-      <a href="<?php echo PDF_RE_QUOTE . $re_quote-> get_id_rfq(); ?>" class="btn btn-primary float-right"><i class="fa fa-file"></i> PDF</a>
+      <a target="_blank" href="<?php echo PDF_RE_QUOTE . $re_quote-> get_id_rfq(); ?>" class="btn btn-primary float-right"><i class="fa fa-file"></i> PDF</a>
       <h2>Items:</h2>
       <div class="p-3">
         <div class="custom-control custom-radio">

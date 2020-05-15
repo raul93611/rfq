@@ -134,7 +134,7 @@ try{
       </tr>';
       $a = 1;
       if($cotizacion-> obtener_payment_terms() == 'Net 30/CC'){
-        $payment_terms = 1.0215;
+        $payment_terms = 1.0299;
       }else{
         $payment_terms = 1;
       }

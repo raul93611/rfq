@@ -69,6 +69,7 @@ define('NUEVA_COTIZACION', COTIZACIONES . 'nuevo');
 define('EDITAR_COTIZACION', COTIZACIONES . 'editar_cotizacion');
 define('DELETE_QUOTE', SERVIDOR . 'delete_quote');
 define('GUARDAR_EDITAR_COTIZACION', SERVIDOR . 'guardar_editar_cotizacion/');
+define('SAVE_QUOTE_INFO', SERVIDOR . 'save_quote_info');
 /***************************OTHER SECTIONS**************************************/
 define('NO_BID', COTIZACIONES . 'no_bid');
 define('NO_SUBMITTED', COTIZACIONES . 'no_submitted');

@@ -373,20 +373,27 @@ class RepositorioRfq {
     }
   }
 
-  public static function actualizar_rfq_inicio($conexion, $email_code, $type_of_bid, $issue_date, $end_date, $canal, $contract_number, $id_rfq) {
+  public static function actualizar_rfq_inicio($conexion, $expiration_date, $fecha_completado, $ship_to, $address, $ship_via, $comments, $designated_user, $email_code, $type_of_bid, $issue_date, $end_date, $canal, $contract_number, $id_rfq) {
     $cotizacion_editada = false;
     if (isset($conexion)) {
       try {
-        $sql = "UPDATE rfq SET email_code = :email_code, type_of_bid = :type_of_bid, issue_date = :issue_date, end_date = :end_date, canal = :canal, contract_number = :contract_number WHERE id = :id_rfq";
+        $sql = "UPDATE rfq SET expiration_date = :expiration_date, fecha_completado = :fecha_completado, ship_to = :ship_to, address = :address, ship_via = :ship_via, comments = :comments, usuario_designado = :usuario_designado, email_code = :email_code, type_of_bid = :type_of_bid, issue_date = :issue_date, end_date = :end_date, canal = :canal, contract_number = :contract_number WHERE id = :id_rfq";
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':email_code', $email_code, PDO::PARAM_STR);
-        $sentencia->bindParam(':type_of_bid', $type_of_bid, PDO::PARAM_STR);
-        $sentencia->bindParam(':issue_date', $issue_date, PDO::PARAM_STR);
-        $sentencia->bindParam(':end_date', $end_date, PDO::PARAM_STR);
+        $sentencia-> bindParam(':usuario_designado', $designated_user, PDO::PARAM_STR);
+        $sentencia-> bindParam(':comments', $comments, PDO::PARAM_STR);
+        $sentencia-> bindParam(':ship_via', $ship_via, PDO::PARAM_STR);
+        $sentencia-> bindParam(':address', $address, PDO::PARAM_STR);
+        $sentencia-> bindParam(':ship_to', $ship_to, PDO::PARAM_STR);
+        $sentencia-> bindParam(':fecha_completado', $fecha_completado, PDO::PARAM_STR);
+        $sentencia-> bindParam(':expiration_date', $expiration_date, PDO::PARAM_STR);
+        $sentencia-> bindParam(':email_code', $email_code, PDO::PARAM_STR);
+        $sentencia-> bindParam(':type_of_bid', $type_of_bid, PDO::PARAM_STR);
+        $sentencia-> bindParam(':issue_date', $issue_date, PDO::PARAM_STR);
+        $sentencia-> bindParam(':end_date', $end_date, PDO::PARAM_STR);
         $sentencia-> bindParam(':canal', $canal, PDO::PARAM_STR);
         $sentencia-> bindParam(':contract_number', $contract_number, PDO::PARAM_STR);
-        $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-        $sentencia->execute();
+        $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia-> execute();
         if ($sentencia) {
           $cotizacion_editada = true;
         }

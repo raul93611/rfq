@@ -98,6 +98,7 @@ include_once 'app/ReQuoteSubitemProviderRepository.inc.php';
 include_once 'app/ProposalRepository.inc.php';
 
 include_once 'app/Input.inc.php';
+include_once 'app/Email.inc.php';
 
 $componentes_url = parse_url($_SERVER['REQUEST_URI']);
 $ruta = $componentes_url['path'];
@@ -163,6 +164,9 @@ if ($partes_ruta[0] == 'rfq') {
         break;
       case 'generate_excel_report':
         $ruta_elegida = 'scripts/generate_excel_report.php';
+        break;
+      case 'save_quote_info':
+        $ruta_elegida = 'scripts/save_quote_info.php';
         break;
     }
   } else if (count($partes_ruta) == 3) {
