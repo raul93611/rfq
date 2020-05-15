@@ -68,7 +68,7 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
     }else if(!$cotizacion_recuperada-> obtener_award()){
       if(isset($_POST['award']) && $_POST['award'] == 'si'){
         RepositorioRfq::actualizar_fecha_y_award(Conexion::obtener_conexion(), $_POST['id_rfq']);
-        $usuario = RepositorioUsuario::obtener_usuario_por_nombre_usuario(Conexion::obtener_conexion(), $cotizacion_recuperada-> obtener_usuario_designado());
+        $usuario = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), $cotizacion_recuperada-> obtener_usuario_designado());
         Email::send_email_quote_awarded($usuario-> obtener_email(), $cotizacion_recuperada-> obtener_id(), nl2br($_POST['address']));
         $descripcion = 'The quote was awarded.';
         $comment = new Comment('', $cotizacion_recuperada-> obtener_id(), $_SESSION['id_usuario'], $descripcion, '');
