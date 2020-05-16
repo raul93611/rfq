@@ -86,5 +86,217 @@ class ProposalRepository{
 
     return $html;
   }
+
+  public static function print_item_pdf($quote, $item, $a, $payment_terms){
+    $html .= '<tr>
+      <td>' . $a . '</td>
+      <td><b>Brand name:</b> ' . $item-> obtener_brand_project() . '<br><b>Part number:</b> ' . $item-> obtener_part_number_project() . '<br><b>Item description:</b> ' . nl2br(wordwrap(mb_substr($item-> obtener_description_project(), 0, 150), 70, '<br>', true)) . '</td>
+      <td><b>Brand name:</b> ' . $item->obtener_brand() . '<br><b>Part number:</b> ' . $item->obtener_part_number() . '<br><b> Item description:</b><br> ' . nl2br(wordwrap(mb_substr($item->obtener_description(), 0, 150), 70, '<br>', true)) . '</td>
+      <td style="text-align:right;">' . $item->obtener_quantity() . '</td>
+      <td>';
+    Conexion::abrir_conexion();
+    $providers = RepositorioProvider::obtener_providers_por_id_item(Conexion::obtener_conexion(), $item-> obtener_id());
+    Conexion::cerrar_conexion();
+    if(count($providers)){
+      Conexion::abrir_conexion();
+      $provider_menor = RepositorioProvider::obtener_provider_por_id(Conexion::obtener_conexion(), $item-> obtener_provider_menor());
+      Conexion::cerrar_conexion();
+      if(count($providers)){
+        foreach ($providers as $provider) {
+          $html .= '<b>' . $provider-> obtener_provider() . ':</b><br>$ ' . number_format($provider-> obtener_price(), 2) . '<br>';
+        }
+      }
+      $html .= '
+      </td>
+      <td>$ ' . number_format($item-> obtener_additional(), 2) . '</td>
+      <td>$ ';
+      $best_unit_price = $provider_menor-> obtener_price()*$payment_terms*(1+($quote-> obtener_taxes()/100)) + $item-> obtener_additional() + $quote-> obtener_additional();
+      $html .= number_format($best_unit_price, 2);
+      $html .= '</td>
+      <td>$ ' . number_format(round($best_unit_price, 2) * $item-> obtener_quantity(), 2) . '</td>
+      <td style="text-align:right;">$ ' . number_format($item->obtener_unit_price(), 2) . '</td>
+      <td style="text-align:right;">$ ' . number_format($item->obtener_total_price(), 2) . '</td>
+      ';
+    }else{
+      $html .= '
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      ';
+    }
+    $html .= '</tr>';
+    Conexion::abrir_conexion();
+    $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Conexion::obtener_conexion(), $item-> obtener_id());
+    Conexion::cerrar_conexion();
+    foreach ($subitems as $key => $subitem) {
+      $html .= self::print_subitem_pdf($quote, $subitem, $payment_terms);
+    }
+
+    return $html;
+  }
+
+  public static function print_subitem_pdf($quote, $subitem, $payment_terms){
+    $html .= '
+      <tr>
+      <td></td>
+      <td><b>Brand name:</b> ' . $subitem-> obtener_brand_project() . '<br><b>Part number:</b> ' . $subitem-> obtener_part_number_project() . '<br><b>Item description:</b><br> ' . nl2br(wordwrap(mb_substr($subitem->obtener_description_project(), 0, 150), 70, '<br>', true)) . '</td>}
+      <td><b>Brand name:</b> ' . $subitem->obtener_brand() . '<br><b>Part number:</b> ' . $subitem->obtener_part_number() . '<br><b> Item description:</b><br> ' . nl2br(wordwrap(mb_substr($subitem->obtener_description(), 0, 150), 70, '<br>', true)) . '</td>
+      <td style="text-align:right;">' . $subitem-> obtener_quantity() . '</td>';
+      Conexion::abrir_conexion();
+      $providers_subitem = RepositorioProviderSubitem::obtener_providers_subitem_por_id_subitem(Conexion::obtener_conexion(), $subitem-> obtener_id());
+      Conexion::cerrar_conexion();
+      if(count($providers_subitem)){
+        $html .= '<td>';
+        Conexion::abrir_conexion();
+        $provider_subitem_menor = RepositorioProviderSubitem::obtener_provider_subitem_por_id(Conexion::obtener_conexion(), $subitem-> obtener_provider_menor());
+        Conexion::cerrar_conexion();
+        if(count($providers_subitem)){
+          foreach ($providers_subitem as $provider_subitem) {
+            $html .= '<b>' . $provider_subitem-> obtener_provider()  . ':</b><br>$ ' . number_format($provider_subitem-> obtener_price(), 2) . '<br>';
+          }
+        }
+        $html .= '
+        </td>
+        <td>$ ' . number_format($subitem-> obtener_additional(), 2) . '</td>
+        <td>$ ';
+        $best_unit_price = $provider_subitem_menor-> obtener_price()*$payment_terms*(1+($quote-> obtener_taxes()/100)) + $subitem-> obtener_additional() + $quote-> obtener_additional();
+        $html .= number_format($best_unit_price, 2);
+        $html .= '</td>
+        <td>$ ' . number_format(round($best_unit_price, 2) * $subitem-> obtener_quantity(), 2) . '</td>
+        <td style="text-align:right;">$ ' . number_format($subitem-> obtener_unit_price(), 2) . '</td>
+        <td style="text-align:right;">$ ' . number_format($subitem-> obtener_total_price(), 2) . '</td>
+        ';
+      }else{
+        $html .= '
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        ';
+      }
+      $html .= '</tr>';
+
+    return $html;
+  }
+
+  public static function print_item_pdf_re_quote($re_quote_item, $items, $a, $i){
+    $item = $items[$i];
+    $html .= '
+    <tr>
+    <td>' . $a . '</td>
+    <td><b>Brand name:</b>' . $re_quote_item-> get_brand_project() . '<br><b>Part number:</b>' . $re_quote_item-> get_part_number_project() . '<br><b>Item description:</b>' . nl2br(mb_substr($re_quote_item-> get_description_project(), 0, 150)) . '</td>
+    <td><b>Brand name:</b>' . $re_quote_item-> get_brand() . '<br><b>Part number:</b>' . $re_quote_item-> get_part_number() . '<br><b> Item description:</b><br>' . nl2br(mb_substr($re_quote_item-> get_description(), 0, 150)) . '</td>
+    <td style="text-align:right;">' . $re_quote_item-> get_quantity() . '</td>
+    <td style="width: 200px;">
+    ';
+    Conexion::abrir_conexion();
+    $re_quote_providers = ReQuoteProviderRepository::get_re_quote_providers_by_id_re_quote_item(Conexion::obtener_conexion(), $re_quote_item-> get_id());
+    Conexion::cerrar_conexion();
+    $prices = [];
+    if(count($re_quote_providers)){
+      foreach ($re_quote_providers as $re_quote_provider) {
+        $prices[] = $re_quote_provider-> get_price();
+        $html .= '
+        <b>' . $re_quote_provider-> get_provider() . ':</b><br>
+        $ ' . number_format($re_quote_provider-> get_price(), 2) . '<br>
+        ';
+      }
+      $html .= '
+      </td>
+      <td>$
+      ';
+      $best_unit_price = min($prices);
+      $html .= number_format($best_unit_price, 2);
+      $html .= '
+      </td>
+      <td>$ ' . number_format(round($best_unit_price, 2) * $re_quote_item-> get_quantity(), 2) . '</td>
+      <td style="text-align:right;">$ ' . number_format($item-> obtener_unit_price(), 2) . '</td>
+      <td style="text-align:right;">$ ' . number_format($item-> obtener_total_price(), 2) . '</td>
+      ';
+    }else{
+      $html .= '
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      ';
+    }
+    $html .= '
+    </tr>
+    ';
+    Conexion::abrir_conexion();
+    $re_quote_subitems = ReQuoteSubitemRepository::get_re_quote_subitems_by_id_re_quote_item(Conexion::obtener_conexion(), $re_quote_item-> get_id());
+    $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Conexion::obtener_conexion(), $item-> obtener_id());
+    Conexion::cerrar_conexion();
+    foreach ($re_quote_subitems as $key => $re_quote_subitem) {
+      $html .= self::print_subitem_pdf_re_quote($re_quote_subitem, $key, $subitems);
+    }
+
+    return $html;
+  }
+
+  public static function print_subitem_pdf_re_quote($re_quote_subitem, $j, $subitems){
+    $subitem = $subitems[$j];
+    $html .= '
+    <tr>
+    <td></td>
+    <td><b>Brand name:</b>' . $re_quote_subitem-> get_brand_project() . '<br><b>Part number:</b>' . $re_quote_subitem-> get_part_number_project() . '<br><b>Item description:</b><br>' . nl2br(mb_substr($re_quote_subitem-> get_description_project(), 0, 150)) . '</td>
+    <td><b>Brand name:</b>' . $re_quote_subitem-> get_brand() . '<br><b>Part number:</b> ' . $re_quote_subitem-> get_part_number() . '<br><b> Item description:</b><br> ' . nl2br(mb_substr($re_quote_subitem-> get_description(), 0, 150)) . '</td>
+    <td style="text-align:right;">' . $re_quote_subitem-> get_quantity() . '</td>
+    ';
+    Conexion::abrir_conexion();
+    $re_quote_subitem_providers = ReQuoteSubitemProviderRepository::get_re_quote_subitem_providers_by_id_re_quote_subitem(Conexion::obtener_conexion(), $re_quote_subitem-> get_id());
+    Conexion::cerrar_conexion();
+    if(count($re_quote_subitem_providers)){
+      $html .= '
+      <td>
+      ';
+      $prices = [];
+      if(count($re_quote_subitem_providers)){
+        foreach ($re_quote_subitem_providers as $re_quote_subitem_provider) {
+          $prices[] = $re_quote_subitem_provider-> get_price();
+          $html .= '
+          <b>' . $re_quote_subitem_provider-> get_provider() . ':</b><br>
+          $ ' . $re_quote_subitem_provider-> get_price() . '<br>
+          ';
+        }
+      }
+      $html .= '
+      </td>
+      ';
+      $html .= '
+      <td>$
+      ';
+        $best_unit_price = min($prices);
+        $html .= number_format($best_unit_price, 2);
+        $html .= '
+        </td>
+        <td>$ ' . number_format(round($best_unit_price, 2) * $re_quote_subitem-> get_quantity(), 2) . '</td>
+        <td style="text-align:right;">$ ' . number_format($subitem-> obtener_unit_price(), 2) . '</td>
+        <td style="text-align:right;">$ ' . number_format($subitem-> obtener_total_price(), 2) . '</td>
+        ';
+    }else{
+      $html .= '
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      ';
+    }
+    $html .= '
+    </tr>
+    ';
+
+    return $html;
+  }
 }
 ?>

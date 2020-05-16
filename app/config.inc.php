@@ -102,29 +102,6 @@ define('EDIT_PROVIDER_SUBITEM', COTIZACIONES . 'edit_provider_subitem');
 define('DELETE_PROVIDER_SUBITEM', SERVIDOR . 'delete_provider_subitem');
 define('GUARDAR_ADD_PROVIDER_SUBITEM', SERVIDOR . 'guardar_add_provider_subitem/');
 define('GUARDAR_EDIT_PROVIDER_SUBITEM', SERVIDOR . 'guardar_edit_provider_subitem/');
-/******************************CUESTIONARIO**************************************/
-define('CUESTIONARIO', COTIZACIONES . 'cuestionario');
-define('GUARDAR_CUESTIONARIO', SERVIDOR . 'guardar_cuestionario/');
-/**********************************************************************************/
-define('ADD_HIGH_LEVEL_REQUIREMENT', COTIZACIONES . 'add_high_level_requirement');
-define('GUARDAR_ADD_HIGH_LEVEL_REQUIREMENT', SERVIDOR . 'guardar_add_high_level_requirement/');
-define('EDIT_HIGH_LEVEL_REQUIREMENT', COTIZACIONES . 'edit_high_level_requirement');
-define('GUARDAR_EDIT_HIGH_LEVEL_REQUIREMENT', SERVIDOR . 'guardar_edit_high_level_requirement/');
-/*********************************************************************************/
-define('ADD_OUT_OF_SCOPE', COTIZACIONES . 'add_out_of_scope');
-define('GUARDAR_ADD_OUT_OF_SCOPE', SERVIDOR . 'guardar_add_out_of_scope/');
-define('EDIT_OUT_OF_SCOPE', COTIZACIONES . 'edit_out_of_scope');
-define('GUARDAR_EDIT_OUT_OF_SCOPE', SERVIDOR . 'guardar_edit_out_of_scope/');
-/**********************************************************************************/
-define('ADD_PROJECT_RISK', COTIZACIONES . 'add_project_risk');
-define('GUARDAR_ADD_PROJECT_RISK', SERVIDOR . 'guardar_add_project_risk/');
-define('EDIT_PROJECT_RISK', COTIZACIONES . 'edit_project_risk');
-define('GUARDAR_EDIT_PROJECT_RISK', SERVIDOR . 'guardar_edit_project_risk/');
-/***********************************************************************************/
-define('ADD_PROJECT_MILESTONE', COTIZACIONES . 'add_project_milestone');
-define('GUARDAR_ADD_PROJECT_MILESTONE', SERVIDOR . 'guardar_add_project_milestone/');
-define('EDIT_PROJECT_MILESTONE', COTIZACIONES . 'edit_project_milestone');
-define('GUARDAR_EDIT_PROJECT_MILESTONE', SERVIDOR . 'guardar_edit_project_milestone/');
 /**************************************************************************************/
 define('PDF_REPORT', SERVIDOR . 'pdf_report');
 define('PDF_PROJECT_CHARTER', SERVIDOR . 'pdf_project_charter/');

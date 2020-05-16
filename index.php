@@ -56,21 +56,6 @@ include_once 'app/RepositorioItem.inc.php';
 include_once 'app/Provider.inc.php';
 include_once 'app/RepositorioProvider.inc.php';
 
-include_once 'app/Cuestionario.inc.php';
-include_once 'app/RepositorioCuestionario.inc.php';
-
-include_once 'app/HighLevelRequirement.inc.php';
-include_once 'app/RepositorioHighLevelRequirement.inc.php';
-
-include_once 'app/OutOfScope.inc.php';
-include_once 'app/RepositorioOutOfScope.inc.php';
-
-include_once 'app/ProjectRisk.inc.php';
-include_once 'app/RepositorioProjectRisk.inc.php';
-
-include_once 'app/ProjectMilestone.inc.php';
-include_once 'app/RepositorioProjectMilestone.inc.php';
-
 include_once 'app/Subitem.inc.php';
 include_once 'app/RepositorioSubitem.inc.php';
 
@@ -259,46 +244,6 @@ if ($partes_ruta[0] == 'rfq') {
       case 'delete_subitem':
         $id_subitem = $partes_ruta[2];
         $ruta_elegida = 'scripts/delete_subitem.php';
-        break;
-      case 'guardar_cuestionario':
-        $id_rfq = $partes_ruta[2];
-        $ruta_elegida = 'scripts/guardar_cuestionario.php';
-        break;
-      case 'guardar_add_high_level_requirement':
-        $id_cuestionario = $partes_ruta[2];
-        $ruta_elegida = 'scripts/guardar_add_high_level_requirement.php';
-        break;
-      case 'guardar_add_out_of_scope':
-        $id_cuestionario = $partes_ruta[2];
-        $ruta_elegida = 'scripts/guardar_add_out_of_scope.php';
-        break;
-      case 'guardar_add_project_risk':
-        $id_cuestionario = $partes_ruta[2];
-        $ruta_elegida = 'scripts/guardar_add_project_risk.php';
-        break;
-      case 'guardar_add_project_milestone':
-        $id_cuestionario = $partes_ruta[2];
-        $ruta_elegida = 'scripts/guardar_add_project_milestone.php';
-        break;
-      case 'guardar_edit_high_level_requirement':
-        $id_cuestionario = $partes_ruta[2];
-        $ruta_elegida = 'scripts/guardar_edit_high_level_requirement.php';
-        break;
-      case 'guardar_edit_out_of_scope':
-        $id_cuestionario = $partes_ruta[2];
-        $ruta_elegida = 'scripts/guardar_edit_out_of_scope.php';
-        break;
-      case 'guardar_edit_project_risk':
-        $id_cuestionario = $partes_ruta[2];
-        $ruta_elegida = 'scripts/guardar_edit_project_risk.php';
-        break;
-      case 'guardar_edit_project_milestone':
-        $id_cuestionario = $partes_ruta[2];
-        $ruta_elegida = 'scripts/guardar_edit_project_milestone.php';
-        break;
-      case 'pdf_project_charter':
-        $id_cuestionario = $partes_ruta[2];
-        $ruta_elegida = 'scripts/pdf_project_charter.php';
         break;
       case 'enable_user':
         $id_usuario = $partes_ruta[2];
@@ -588,42 +533,6 @@ if ($partes_ruta[0] == 'rfq') {
             case 'edit_provider_subitem':
               $cotizacion = 'edit_provider_subitem';
               $id_provider_subitem = $partes_ruta[4];
-              break;
-            case 'cuestionario':
-              $cotizacion = 'cuestionario';
-              $id_rfq = $partes_ruta[4];
-              break;
-            case 'add_high_level_requirement':
-              $cotizacion = 'add_high_level_requirement';
-              $id_cuestionario = $partes_ruta[4];
-              break;
-            case 'add_out_of_scope':
-              $cotizacion = 'add_out_of_scope';
-              $id_cuestionario = $partes_ruta[4];
-              break;
-            case 'add_project_risk':
-              $cotizacion = 'add_project_risk';
-              $id_cuestionario = $partes_ruta[4];
-              break;
-            case 'add_project_milestone':
-              $cotizacion = 'add_project_milestone';
-              $id_cuestionario = $partes_ruta[4];
-              break;
-            case 'edit_high_level_requirement':
-              $cotizacion = 'edit_high_level_requirement';
-              $id_high_level_requirement = $partes_ruta[4];
-              break;
-            case 'edit_out_of_scope':
-              $cotizacion = 'edit_out_of_scope';
-              $id_out_of_scope = $partes_ruta[4];
-              break;
-            case 'edit_project_risk':
-              $cotizacion = 'edit_project_risk';
-              $id_project_risk = $partes_ruta[4];
-              break;
-            case 'edit_project_milestone':
-              $cotizacion = 'edit_project_milestone';
-              $id_project_milestone = $partes_ruta[4];
               break;
           }
           break;
