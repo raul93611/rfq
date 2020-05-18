@@ -14,7 +14,6 @@ if(!$cotizacion-> obtener_rfp()){
     RepositorioItem::delete_item(Conexion::obtener_conexion(), $item->obtener_id());
   }
   RepositorioComment::delete_all_comments(Conexion::obtener_conexion(), $cotizacion-> obtener_id());
-  RepositorioCuestionario::delete_cuestionario_por_id_rfq(Conexion::obtener_conexion(), $cotizacion-> obtener_id());
   RepositorioRfq::delete_quote(Conexion::obtener_conexion(), $cotizacion-> obtener_id());
 }
 Conexion::cerrar_conexion();
