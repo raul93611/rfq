@@ -12,47 +12,10 @@ if (isset($_POST['registrar_cotizacion'])) {
     Conexion::cerrar_conexion();
     if ($cotizacion_insertada) {
       $directorio = $_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $id_rfq;
-      mkdir($directorio, 0777);
-      $documentos = array_filter($_FILES['documentos']['name']);
-      $total = count($documentos);
-      for ($i = 0; $i < $total; $i++) {
-        $tmp_path = $_FILES['documentos']['tmp_name'][$i];
-        $file = $_FILES['documentos']['name'][$i];
-        if ($tmp_path != '') {
-          $file = preg_replace('/[^a-z0-9-_\-\.]/i','_',$file);
-          $new_path = $directorio . '/' . $file;
-          move_uploaded_file($tmp_path, $new_path);
-        }
-      }
-      switch($cotizacion-> obtener_canal()){
-        case 'GSA-Buy':
-          $canal = 'gsa_buy';
-          break;
-        case 'FedBid':
-          $canal = 'fedbid';
-          break;
-        case 'E-mails':
-          $canal = 'emails';
-          break;
-        case 'Mailbox':
-          $canal = 'Mailbox';
-          break;
-        case 'FindFRP':
-          $canal = 'findfrp';
-          break;
-        case 'Embassies':
-          $canal = 'embassies';
-          break;
-        case 'FBO':
-          $canal = 'fbo';
-          break;
-        case 'Chemonics':
-          $canal = 'chemonics';
-          break;
-        case 'Ebay & Amazon':
-          $canal = 'ebay_amazon';
-          break;
-      }
+      $documentos = $_FILES['documentos']['name'];
+      $temp_documents = $_FILES['documentos']['tmp_name'];
+      Input::save_files($directorio, $documentos, $temp_documents);
+      $canal = Input::translate_channel($cotizacion-> obtener_canal());
       Redireccion::redirigir1(COTIZACIONES . $canal);
     }
   }

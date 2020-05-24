@@ -21,7 +21,7 @@
             </div>
             <div class="card-body">
               <?php
-              RepositorioRfq::escribir_cotizaciones_completadas_por_canal($canal, $_SESSION['id_usuario'], $cargo);
+              RepositorioRfq::escribir_cotizaciones_completadas_por_canal($canal, $_SESSION['id_usuario'], $_SESSION['cargo']);
               ?>
             </div>
           </div>

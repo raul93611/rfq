@@ -69,33 +69,6 @@ class RepositorioCuestionario{
     return $cuestionario;
   }
 
-  public static function actualizar_cuestionario($conexion, $id_cuestionario, $reach_objectives, $cost_objectives, $time_objectives, $quality_objectives, $reach_goals, $cost_goals, $time_goals, $quality_goals, $locations){
-    $cuestionario_editado = false;
-    if(isset($conexion)){
-      try{
-        $sql = 'UPDATE cuestionario SET reach_objectives = :reach_objectives, cost_objectives = :cost_objectives, time_objectives = :time_objectives, quality_objectives = :quality_objectives, reach_goals = :reach_goals, cost_goals = :cost_goals, time_goals = :time_goals, quality_goals = :quality_goals, locations = :locations WHERE id = :id_cuestionario';
-        $sentencia = $conexion-> prepare($sql);
-        $sentencia-> bindParam(':reach_objectives', $reach_objectives, PDO::PARAM_STR);
-        $sentencia-> bindParam(':cost_objectives', $cost_objectives, PDO::PARAM_STR);
-        $sentencia-> bindParam(':time_objectives', $time_objectives, PDO::PARAM_STR);
-        $sentencia-> bindParam(':quality_objectives', $quality_objectives, PDO::PARAM_STR);
-        $sentencia-> bindParam(':reach_goals', $reach_goals, PDO::PARAM_STR);
-        $sentencia-> bindParam(':cost_goals', $cost_goals, PDO::PARAM_STR);
-        $sentencia-> bindParam(':time_goals', $time_goals, PDO::PARAM_STR);
-        $sentencia-> bindParam(':quality_goals', $quality_goals, PDO::PARAM_STR);
-        $sentencia-> bindParam(':locations', $locations, PDO::PARAM_STR);
-        $sentencia-> bindParam(':id_cuestionario', $id_cuestionario, PDO::PARAM_STR);
-        $sentencia-> execute();
-        if($sentencia){
-          $cuestionario_editado = true;
-        }
-      } catch (PDOException $ex) {
-        print 'ERROR:' . $ex->getMessage() . '<br>';
-      }
-    }
-    return $cuestionario_editado;
-  }
-
   public static function delete_cuestionario_por_id_rfq($conexion, $id_rfq){
     if(isset($conexion)){
       try{

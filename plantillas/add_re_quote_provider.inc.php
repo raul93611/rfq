@@ -21,7 +21,7 @@
             </div>
             <form role="form" method="post" action="<?php echo SAVE_RE_QUOTE_PROVIDER;?>">
               <?php
-              include_once 'plantillas/add_re_quote_provider_form.inc.php';
+              include_once 'forms/add_re_quote_provider_form.inc.php';
               ?>
             </form>
           </div>

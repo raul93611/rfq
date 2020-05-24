@@ -1,5 +1,5 @@
 <?php
-switch($cargo){
+switch($_SESSION['cargo']){
   case 1:
     include_once 'plantillas/muro_admin.inc.php';
     break;

@@ -171,8 +171,8 @@ class ReQuoteRepository{
           ?>
           </td>
           <td>$ <?php echo number_format(round($best_unit_price, 2) * $re_quote_item-> get_quantity(), 2); ?></td>
-          <td style="text-align:right;">$ <?php if(!is_null($item)){echo number_format($item-> obtener_unit_price(), 2);} ?></td>
-          <td style="text-align:right;">$ <?php if(!is_null($item)){echo number_format($item-> obtener_total_price(), 2);} ?></td>
+          <td style="text-align:right;"><?php if(!is_null($item)){echo '$ ' . number_format($item-> obtener_unit_price(), 2);} ?></td>
+          <td style="text-align:right;"><?php if(!is_null($item)){echo '$ ' . number_format($item-> obtener_total_price(), 2);} ?></td>
           <?php
         }else{
           ?>
@@ -238,8 +238,8 @@ class ReQuoteRepository{
                 ?>
         </td>
         <td>$ <?php echo number_format(round($best_unit_price, 2) * $re_quote_subitem-> get_quantity(), 2); ?></td>
-        <td style="text-align:right;">$ <?php if(!is_null($subitem)){echo number_format($subitem-> obtener_unit_price(), 2);} ?></td>
-        <td style="text-align:right;">$ <?php if(!is_null($subitem)){echo number_format($subitem-> obtener_total_price(), 2);} ?></td>
+        <td style="text-align:right;"><?php if(!is_null($subitem)){echo '$ ' . number_format($subitem-> obtener_unit_price(), 2);} ?></td>
+        <td style="text-align:right;"><?php if(!is_null($subitem)){echo '$ ' . number_format($subitem-> obtener_total_price(), 2);} ?></td>
                 <?php
               }else{
                 ?>
@@ -260,12 +260,13 @@ class ReQuoteRepository{
     ?>
       <tr>
         <td style="border:none;"></td>
-        <td colspan="5" style="font-size:10pt;"><?php echo nl2br($re_quote-> get_shipping()); ?></td>
+        <td colspan="6" style="font-size:10pt;"><?php echo nl2br($re_quote-> get_shipping()); ?></td>
         <td style="text-align:right;">$ <?php echo number_format($re_quote-> get_shipping_cost(), 2); ?></td>
         <td></td>
         <td style="text-align:right;">$ <?php echo number_format($cotizacion-> obtener_shipping_cost(), 2); ?></td>
       </tr>
       <tr>
+        <td style="border:none;"></td>
         <td style="border:none;"></td>
         <td style="border:none;"></td>
         <td style="border:none;"></td>

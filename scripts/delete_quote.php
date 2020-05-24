@@ -1,5 +1,4 @@
 <?php
-session_start();
 Conexion::abrir_conexion();
 $cotizacion = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
 if(!$cotizacion-> obtener_rfp()){
@@ -14,28 +13,13 @@ if(!$cotizacion-> obtener_rfp()){
     RepositorioItem::delete_item(Conexion::obtener_conexion(), $item->obtener_id());
   }
   RepositorioComment::delete_all_comments(Conexion::obtener_conexion(), $cotizacion-> obtener_id());
+  $cuestionario = RepositorioCuestionario::obtener_cuestionario_por_id_rfq(Conexion::obtener_conexion(), $cotizacion-> obtener_id());
+  if(!is_null($cuestionario)){
+    RepositorioCuestionario::delete_cuestionario_por_id_rfq(Conexion::obtener_conexion(), $cotizacion-> obtener_id());
+  }
   RepositorioRfq::delete_quote(Conexion::obtener_conexion(), $cotizacion-> obtener_id());
 }
 Conexion::cerrar_conexion();
-switch ($cotizacion-> obtener_canal()) {
-  case 'GSA-Buy':
-  $canal = 'gsa_buy';
-  break;
-  case 'FedBid':
-  $canal = 'fedbid';
-  break;
-  case 'E-mails':
-  $canal = 'emails';
-  break;
-  case 'FindFRP':
-  $canal = 'findfrp';
-  break;
-  case 'Embassies':
-  $canal = 'embassies';
-  break;
-  case 'FBO':
-  $canal = 'fbo';
-  break;
-}
+$canal = Input::translate_channel($cotizacion-> obtener_canal());
 Redireccion::redirigir(COTIZACIONES . $canal);
 ?>

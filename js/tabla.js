@@ -50,10 +50,6 @@ $(document).ready(function () {
       }
     });
   }
-  /**************************************BOTON MOSTRAR REPORTES MODAL***********************/
-  $('#boton_mostrar_modal').click(function(){
-    $('#reports_modal').modal();
-  });
   /**************************************BOTON MOSTRAT COMENTARIOS************************/
   $('#mostrar_comentarios').click(function(){
     $('#todos_commentarios_quote').modal();

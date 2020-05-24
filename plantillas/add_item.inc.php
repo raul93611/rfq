@@ -29,7 +29,7 @@ Conexion::cerrar_conexion();
             </div>
             <form role="form" method="post" action="<?php echo GUARDAR_ADD_ITEM . $id_rfq; ?>">
               <?php
-              include_once 'plantillas/registro_item_vacio.inc.php';
+              include_once 'forms/registro_item_vacio.inc.php';
               ?>
             </form>
           </div>

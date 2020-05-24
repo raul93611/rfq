@@ -115,5 +115,34 @@ class Input{
     }
     return $canal;
   }
+
+  public static function save_files($path, $files, $temp_files){
+    mkdir($path, 0777);
+    $documentos = array_filter($files);
+    $total = count($documentos);
+    for ($i = 0; $i < $total; $i++) {
+      $tmp_path = $temp_files[$i];
+      $file = $files[$i];
+      if ($tmp_path != '') {
+        $file = preg_replace('/[^a-z0-9-_\-\.]/i','_',$file);
+        $new_path = $path . '/' . $file;
+        move_uploaded_file($tmp_path, $new_path);
+      }
+    }
+  }
+
+  public static function copy_files($initial_path, $destination_path){
+    mkdir($destination_path, 0777);
+    if(is_dir($initial_path)){
+      $manager = opendir($initial_path);
+      $folder = @scandir($initial_path);
+      while(($file = readdir($manager)) !== false){
+        if($file != '.' && $file != '..'){
+          copy($initial_path . '/' . $file, $destination_path . '/' . $file);
+        }
+      }
+      closedir($manager);
+    }
+  }
 }
 ?>

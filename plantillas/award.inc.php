@@ -33,7 +33,6 @@ switch ($cotizacion) {
     include_once 'plantillas/chemonics_award.inc.php';
     break;
   case 'ebay_amazon_award':
-    echo 'asdsadsad';
     $canal = 'Ebay & Amazon';
     include_once 'plantillas/ebay_amazon_award.inc.php';
     break;

@@ -74,7 +74,7 @@ if(is_null($cotizacion_recuperada)){
             </div>
             <form role="form" id="form_edited_quote" method="post" enctype="multipart/form-data" action="<?php echo GUARDAR_EDITAR_COTIZACION . $id_rfq; ?>">
               <?php
-              include_once 'plantillas/edicion_cotizacion_recuperada.inc.php';
+              include_once 'forms/edicion_cotizacion_recuperada.inc.php';
               ?>
             </form>
           </div>

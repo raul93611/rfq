@@ -107,7 +107,6 @@ define('PDF_REPORT', SERVIDOR . 'pdf_report');
 define('PDF_PROJECT_CHARTER', SERVIDOR . 'pdf_project_charter/');
 /************************************************************************************/
 define('GUARDAR_COMMENT', SERVIDOR . 'guardar_comment/');
-define('HISTORIAL_COMMENTS', PERFIL . 'historial_comments/');
 /*************************************************************************************/
 define('CREATE_PROJECT', SERVIDOR . 'create_project/');
 /***********************************************************************************/

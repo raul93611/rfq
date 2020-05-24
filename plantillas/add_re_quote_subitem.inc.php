@@ -21,7 +21,7 @@
             </div>
             <form role="form" method="post" action="<?php echo SAVE_RE_QUOTE_SUBITEM;?>">
               <?php
-              include_once 'plantillas/add_re_quote_subitem_form.inc.php';
+              include_once 'forms/add_re_quote_subitem_form.inc.php';
               ?>
             </form>
           </div>

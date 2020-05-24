@@ -3,10 +3,12 @@ if(!ControlSesion::sesion_iniciada()) {
   Redireccion::redirigir1(SERVIDOR);
 }
 $titulo = 'Profile';
+/*
 Conexion::abrir_conexion();
 $usuario = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), $_SESSION['id_usuario']);
 Conexion::cerrar_conexion();
 $cargo = $usuario->obtener_cargo();
+*/
 include_once 'plantillas/documento_declaracion.inc.php';
 include_once 'plantillas/navbar.inc.php';
 include_once 'plantillas/barra_lateral.inc.php';
@@ -56,9 +58,6 @@ switch ($gestor_actual) {
     break;
   case 'edit_user':
     include_once 'plantillas/edit_user.inc.php';
-    break;
-  case 'historial_comments':
-    include_once 'plantillas/historial_comments.inc.php';
     break;
   case 'cotizaciones':
     switch ($cotizacion) {
@@ -138,60 +137,6 @@ switch ($gestor_actual) {
         $subitem = RepositorioSubitem::obtener_subitem_por_id(Conexion::obtener_conexion(), $provider_subitem-> obtener_id_subitem());
         Conexion::cerrar_conexion();
         include_once 'plantillas/edit_provider_subitem.inc.php';
-        break;
-      case 'cuestionario':
-        Conexion::abrir_conexion();
-        $cuestionario = RepositorioCuestionario::obtener_cuestionario_por_id_rfq(Conexion::obtener_conexion(), $id_rfq);
-        Conexion::cerrar_conexion();
-        include_once 'plantillas/cuestionario.inc.php';
-        break;
-      case 'add_high_level_requirement':
-        Conexion::abrir_conexion();
-        $cuestionario = RepositorioCuestionario::obtener_cuestionario_por_id(Conexion::obtener_conexion(), $id_cuestionario);
-        Conexion::cerrar_conexion();
-        include_once 'plantillas/add_high_level_requirement.inc.php';
-        break;
-      case 'add_out_of_scope':
-        Conexion::abrir_conexion();
-        $cuestionario = RepositorioCuestionario::obtener_cuestionario_por_id(Conexion::obtener_conexion(), $id_cuestionario);
-        Conexion::cerrar_conexion();
-        include_once 'plantillas/add_out_of_scope.inc.php';
-        break;
-      case 'add_project_risk':
-        Conexion::abrir_conexion();
-        $cuestionario = RepositorioCuestionario::obtener_cuestionario_por_id(Conexion::obtener_conexion(), $id_cuestionario);
-        Conexion::cerrar_conexion();
-        include_once 'plantillas/add_project_risk.inc.php';
-        break;
-      case 'add_project_milestone':
-        Conexion::abrir_conexion();
-        $cuestionario = RepositorioCuestionario::obtener_cuestionario_por_id(Conexion::obtener_conexion(), $id_cuestionario);
-        Conexion::cerrar_conexion();
-        include_once 'plantillas/add_project_milestone.inc.php';
-        break;
-      case 'edit_high_level_requirement':
-        Conexion::abrir_conexion();
-        $high_level_requirement = RepositorioHighLevelRequirement::obtener_high_level_requirement_por_id(Conexion::obtener_conexion(), $id_high_level_requirement);
-        Conexion::cerrar_conexion();
-        include_once 'plantillas/edit_high_level_requirement.inc.php';
-        break;
-      case 'edit_out_of_scope':
-        Conexion::abrir_conexion();
-        $out_of_scope = RepositorioOutOfScope::obtener_out_of_scope_por_id(Conexion::obtener_conexion(), $id_out_of_scope);
-        Conexion::cerrar_conexion();
-        include_once 'plantillas/edit_out_of_scope.inc.php';
-        break;
-      case 'edit_project_risk':
-        Conexion::abrir_conexion();
-        $project_risk = RepositorioProjectRisk::obtener_project_risk_por_id(Conexion::obtener_conexion(), $id_project_risk);
-        Conexion::cerrar_conexion();
-        include_once 'plantillas/edit_project_risk.inc.php';
-        break;
-      case 'edit_project_milestone':
-        Conexion::abrir_conexion();
-        $project_milestone = RepositorioProjectMilestone::obtener_project_milestone_por_id(Conexion::obtener_conexion(), $id_project_milestone);
-        Conexion::cerrar_conexion();
-        include_once 'plantillas/edit_project_milestone.inc.php';
         break;
       default :
         include_once 'plantillas/cotizaciones.inc.php';

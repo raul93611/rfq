@@ -154,9 +154,7 @@ class RepositorioRfq {
     }
     return $quotes;
   }
-/*****************************************************************************************************************************/
-/*****************************************************QUOTES*******************************************************************/
-/*****************************************************************************************************************************/
+
   public static function obtener_cotizaciones_por_canal_usuario_cargo($conexion, $canal, $id_usuario, $cargo) {
     $cotizaciones = [];
     if (isset($conexion)) {
@@ -250,9 +248,7 @@ class RepositorioRfq {
       <?php
     }
   }
-/******************************************************************************************************************/
-/******************************************************************************************************************/
-/******************************************************************************************************************/
+
   public static function obtener_cotizacion_por_id($conexion, $id_rfq) {
     $cotizacion_recuperada = null;
     if (isset($conexion)) {
@@ -270,25 +266,6 @@ class RepositorioRfq {
       }
     }
     return $cotizacion_recuperada;
-  }
-
-  public static function actualizar_usuario_designado($conexion, $usuario_designado, $id_rfq) {
-    $cotizacion_editada = false;
-    if (isset($conexion)) {
-      try {
-        $sql = "UPDATE rfq SET usuario_designado = :usuario_designado WHERE id = :id_rfq";
-        $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':usuario_designado', $usuario_designado, PDO::PARAM_STR);
-        $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-        $sentencia->execute();
-        if ($sentencia) {
-          $cotizacion_editada = true;
-        }
-      } catch (PDOException $ex) {
-        print 'ERROR:' . $ex->getMessage() . '<br>';
-      }
-    }
-    return $cotizacion_editada;
   }
 
   public static function check_fullfillment($conexion, $id_rfq){
@@ -310,61 +287,6 @@ class RepositorioRfq {
         $sql = 'UPDATE rfq SET rfp = :id_project WHERE id = :id_rfq';
         $sentencia = $conexion-> prepare($sql);
         $sentencia-> bindParam(':id_project', $id_project, PDO::PARAM_STR);
-        $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-        $sentencia-> execute();
-      }catch(PDOException $ex){
-        print 'ERROR:' . $ex->getMessage() . '<br>';
-      }
-    }
-  }
-
-  public static function establecer_no_bid($conexion, $id_rfq){
-    if(isset($conexion)){
-      try{
-        $sql = 'UPDATE rfq SET comments = "No Bid" WHERE id = :id_rfq';
-        $sentencia = $conexion-> prepare($sql);
-        $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-        $sentencia-> execute();
-      }catch(PDOException $ex){
-        print 'ERROR:' . $ex->getMessage() . '<br>';
-      }
-    }
-  }
-
-  public static function establecer_no_comments($conexion, $id_rfq){
-    if(isset($conexion)){
-      try{
-        $sql = 'UPDATE rfq SET comments = "No comments" WHERE id = :id_rfq';
-        $sentencia = $conexion-> prepare($sql);
-        $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-        $sentencia-> execute();
-      }catch(PDOException $ex){
-        print 'ERROR:' . $ex->getMessage() . '<br>';
-      }
-    }
-  }
-
-  public static function actualizar_end_date_address_ship_to($conexion, $end_date, $address, $ship_to, $id_rfq){
-    if(isset($conexion)){
-      try{
-        $sql = 'UPDATE rfq SET end_date = :end_date, address = :address, ship_to = :ship_to WHERE id = :id_rfq';
-        $sentencia = $conexion-> prepare($sql);
-        $sentencia-> bindParam(':end_date', $end_date, PDO::PARAM_STR);
-        $sentencia-> bindParam(':address', $address, PDO::PARAM_STR);
-        $sentencia-> bindParam(':ship_to', $ship_to, PDO::PARAM_STR);
-        $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-        $sentencia-> execute();
-      }catch(PDOException $ex){
-        print 'ERROR:' . $ex->getMessage() . '<br>';
-      }
-    }
-  }
-
-  public static function quitar_checks($conexion, $id_rfq){
-    if(isset($conexion)){
-      try{
-        $sql = 'UPDATE rfq SET completado = 0, status = 0, award = 0 WHERE id = :id_rfq';
-        $sentencia = $conexion-> prepare($sql);
         $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia-> execute();
       }catch(PDOException $ex){
@@ -446,9 +368,7 @@ class RepositorioRfq {
     }
     return $cotizacion_editada;
   }
-/***********************************************************************************************************************/
-/**************************************************COMPLETADOS************************************************************/
-/***********************************************************************************************************************/
+
   public static function obtener_cotizaciones_completadas_por_canal($conexion, $canal, $id_usuario, $cargo) {
     $cotizaciones = [];
     if (isset($conexion)) {
@@ -547,9 +467,7 @@ class RepositorioRfq {
       <?php
     }
   }
-/***************************************************************************************************************************************/
-/********************************************************SOMETIDOS**********************************************************************/
-/***************************************************************************************************************************************/
+
   public static function obtener_cotizaciones_submitted_por_canal($conexion, $canal, $id_usuario, $cargo) {
     $cotizaciones = [];
     if (isset($conexion)) {
@@ -649,9 +567,7 @@ class RepositorioRfq {
       <?php
     }
   }
-/***********************************************************************************************************************/
-/**************************************************GANADOS**************************************************************/
-/***********************************************************************************************************************/
+
   public static function obtener_cotizaciones_award_por_canal($conexion, $canal, $id_usuario, $cargo) {
     $cotizaciones = [];
     if (isset($conexion)) {
@@ -750,9 +666,7 @@ class RepositorioRfq {
       <?php
     }
   }
-/*************************************************************************************************************/
-/*******************************************NO BID************************************************************/
-/*************************************************************************************************************/
+
   public static function obtener_cotizaciones_no_bid($conexion) {
     $cotizaciones = [];
     if (isset($conexion)) {
@@ -830,9 +744,7 @@ class RepositorioRfq {
       <?php
     }
   }
-/*************************************************************************************************************/
-/*******************************************CANCELLED************************************************************/
-/*************************************************************************************************************/
+
   public static function obtener_cotizaciones_cancelled($conexion) {
     $cotizaciones = [];
     if (isset($conexion)) {
@@ -882,9 +794,7 @@ class RepositorioRfq {
       <?php
     }
   }
-/**************************************************************************************************************************/
-/****************************************************NO SUBMITTED**********************************************************/
-/**************************************************************************************************************************/
+
   public static function obtener_cotizaciones_no_submitted($conexion) {
     $cotizaciones = [];
     if (isset($conexion)) {
@@ -934,9 +844,7 @@ class RepositorioRfq {
       <?php
     }
   }
-/**************************************************************************************************************************************/
-/***************************************************RESULTADO DE BUSQUEDA**************************************************************/
-/**************************************************************************************************************************************/
+
   public static function escribir_cotizacion_resultado_busqueda($cotizacion) {
     if (!isset($cotizacion)) {
       return;
@@ -1099,9 +1007,7 @@ class RepositorioRfq {
     </table>
     <?php
   }
-/*************************************************************************************************************************/
-/*********************************************REPORTES********************************************************************/
-/*************************************************************************************************************************/
+
   public static function obtener_cotizaciones_ganadas_por_mes($conexion) {
     $cotizaciones_mes = array();
     if (isset($conexion)) {
@@ -1196,30 +1102,6 @@ class RepositorioRfq {
     }
     return array($no_bid, $manufacturer_in_the_bid, $expired_due_date, $supplier_did_not_provide_a_quote, $others);
   }
-/******************************************************************************************************************************/
-/******************************************************************************************************************************/
-/******************************************************************************************************************************/
-  public static function actualizar_rfq_2($conexion, $comments, $ship_via, $address, $ship_to, $id_rfq) {
-    $rfq_editado = false;
-    if (isset($conexion)) {
-      try {
-        $sql = 'UPDATE rfq SET comments = :comments, ship_via = :ship_via, address = :address, ship_to = :ship_to WHERE id = :id_rfq';
-        $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':comments', $comments, PDO::PARAM_STR);
-        $sentencia->bindParam(':ship_via', $ship_via, PDO::PARAM_STR);
-        $sentencia->bindParam(':address', $address, PDO::PARAM_STR);
-        $sentencia->bindParam(':ship_to', $ship_to, PDO::PARAM_STR);
-        $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-        $sentencia->execute();
-        if ($sentencia) {
-          $rfq_editado = true;
-        }
-      } catch (PDOException $ex) {
-        print 'ERROR:' . $ex->getMessage() . '<br>';
-      }
-    }
-    return $rfq_editado;
-  }
 
   public static function actualizar_fecha_y_submitted($conexion, $id_rfq) {
     $rfq_editado = false;
@@ -1247,26 +1129,6 @@ class RepositorioRfq {
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindParam(':payment_terms', $payment_terms, PDO::PARAM_STR);
         $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-        $sentencia->execute();
-        if ($sentencia) {
-          $rfq_editado = true;
-        }
-      } catch (PDOException $ex) {
-        print 'ERROR:' . $ex->getMessage() . '<br>';
-      }
-    }
-    return $rfq_editado;
-  }
-
-  public static function actualizar_fecha_y_completado($conexion, $fecha_completado , $expiration_date, $id_rfq) {
-    $rfq_editado = false;
-    if (isset($conexion)) {
-      try {
-        $sql = 'UPDATE rfq SET fecha_completado = :fecha_completado, expiration_date = :expiration_date WHERE id = :id_rfq';
-        $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-        $sentencia->bindParam(':fecha_completado', $fecha_completado, PDO::PARAM_STR);
-        $sentencia->bindParam(':expiration_date', $expiration_date, PDO::PARAM_STR);
         $sentencia->execute();
         if ($sentencia) {
           $rfq_editado = true;
@@ -1355,9 +1217,7 @@ class RepositorioRfq {
       }
     }
   }
-    /*******************************************************************************************************************/
-    /***********************************************RFP CONNECTION*****************************************************/
-    /*******************************************************************************************************************/
+
   public static function quote_rfq_exists($conexion, $id_project){
     $quote_rfq_exists = true;
     if(isset($conexion)){
@@ -1418,9 +1278,6 @@ class RepositorioRfq {
     return $rfp_quotes;
   }
 
-    /*****************************************************************************************************************************************/
-    /*****************************************************COTIZACIONES RFP********************************************************************/
-    /*****************************************************************************************************************************************/
   public static function obtener_cotizaciones_rfp($conexion, $cargo, $id_usuario){
     $rfp_quotes = [];
     if (isset($conexion)) {
@@ -1669,10 +1526,11 @@ class RepositorioRfq {
       ?>
         <tr>
           <td style="border:none;"></td>
-          <td colspan="8" style="font-size:10pt;"><?php echo nl2br($cotizacion->obtener_shipping()); ?></td>
+          <td colspan="9" style="font-size:10pt;"><?php echo nl2br($cotizacion->obtener_shipping()); ?></td>
           <td style="text-align:right;">$ <?php echo number_format($cotizacion->obtener_shipping_cost(), 2); ?></td>
         </tr>
         <tr>
+          <td style="border:none;"></td>
           <td style="border:none;"></td>
           <td style="border:none;"></td>
           <td style="border:none;"></td>

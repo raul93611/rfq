@@ -45,6 +45,9 @@ include_once 'app/ValidadorUsuario.inc.php';
 include_once 'app/ValidadorLogin.inc.php';
 include_once 'app/ValidadorRegistro.inc.php';
 
+include_once 'app/Cuestionario.inc.php';
+include_once 'app/RepositorioCuestionario.inc.php';
+
 include_once 'app/Rfq.inc.php';
 include_once 'app/RepositorioRfq.inc.php';
 include_once 'app/ValidadorCotizacion.inc.php';
@@ -474,10 +477,6 @@ if ($partes_ruta[0] == 'rfq') {
         case 'edit_user':
           $id_user = $partes_ruta[3];
           $gestor_actual = 'edit_user';
-          break;
-        case 'historial_comments':
-          $id_rfq = $partes_ruta[3];
-          $gestor_actual = 'historial_comments';
           break;
         case 're_quote':
           $gestor_actual = 're_quote';

@@ -26,7 +26,7 @@ if (!ControlSesion::sesion_iniciada()) {
             </div>
             <form role="form" method="post" action="<?php echo GUARDAR_EDIT_SUBITEM . $id_subitem; ?>">
               <?php
-              include_once 'plantillas/edicion_subitem_vacio.inc.php';
+              include_once 'forms/edicion_subitem_vacio.inc.php';
               ?>
             </form>
           </div>

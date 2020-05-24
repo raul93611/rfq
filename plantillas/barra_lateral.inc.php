@@ -10,7 +10,7 @@
         <img src="<?php echo RUTA_IMG; ?>user.png" class="img-circle elevation-2" alt="User Image">
       </div>
       <div class="info">
-        <a href="#" class="d-block"><?php echo $usuario->obtener_nombre_usuario(); ?></a>
+        <a href="#" class="d-block"><?php echo $_SESSION['nombre_usuario']; ?></a>
       </div>
     </div>
     <nav class="mt-2">
@@ -28,7 +28,7 @@
           </a>
         </li>
         <?php
-        if ($cargo == 1) {
+        if ($_SESSION['cargo'] == 1) {
           ?>
           <li class="nav-item has-treeview menu-open">
             <a href="<?php echo REGISTRO; ?>" class="nav-link
@@ -69,14 +69,14 @@
           <ul class="nav nav-treeview">
             <li class="nav-item has-treeview
             <?php
-            if ($gestor_actual == 'cotizaciones' && $cotizacion != 'add_project_risk' && $cotizacion != 'add_project_milestone' && $cotizacion != 'add_out_of_scope' && $cotizacion != 'add_high_level_requirement' && $cotizacion != 'cuestionario' && $cotizacion != 'editar_cotizacion' && $cotizacion != 'nuevo' && $cotizacion != 'add_item' && $cotizacion != 'add_provider' && $cotizacion != 'edit_item' && $cotizacion != 'edit_provider') {
+            if ($gestor_actual == 'cotizaciones' && $cotizacion != 'editar_cotizacion' && $cotizacion != 'nuevo' && $cotizacion != 'add_item' && $cotizacion != 'add_provider' && $cotizacion != 'edit_item' && $cotizacion != 'edit_provider') {
               echo 'menu-open';
             }
             ?>
                 ">
               <a href="#" class="nav-link
               <?php
-              if ($gestor_actual == 'cotizaciones' && $cotizacion != 'add_project_risk' && $cotizacion != 'add_project_milestone' && $cotizacion != 'add_out_of_scope' && $cotizacion != 'add_high_level_requirement' && $cotizacion != 'cuestionario' && $cotizacion != 'editar_cotizacion' && $cotizacion != 'nuevo' && $cotizacion != 'add_item' && $cotizacion != 'add_provider' && $cotizacion != 'edit_item' && $cotizacion != 'edit_provider') {
+              if ($gestor_actual == 'cotizaciones' && $cotizacion != 'editar_cotizacion' && $cotizacion != 'nuevo' && $cotizacion != 'add_item' && $cotizacion != 'add_provider' && $cotizacion != 'edit_item' && $cotizacion != 'edit_provider') {
                 echo 'active';
               }
               ?>

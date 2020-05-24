@@ -1,31 +1,15 @@
 <?php
-//error_reporting(E_ALL);
-//ini_set('display_errors', 1);
 session_start();
 Conexion::abrir_conexion();
 $cotizacion = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
 $cotizacion_copia = new Rfq('', $cotizacion-> obtener_id_usuario(), $cotizacion-> obtener_usuario_designado(), $cotizacion-> obtener_canal(), $cotizacion-> obtener_email_code() . '(copia)', $cotizacion-> obtener_type_of_bid(), $cotizacion-> obtener_issue_date(), $cotizacion-> obtener_end_date(), 0, 0, $cotizacion-> obtener_total_cost(), $cotizacion-> obtener_total_price(), $cotizacion-> obtener_comments(), 0, '', '', '', $cotizacion-> obtener_payment_terms(), $cotizacion-> obtener_address(), $cotizacion-> obtener_ship_to(), '', $cotizacion-> obtener_ship_via(), $cotizacion-> obtener_taxes(), $cotizacion-> obtener_profit(), $cotizacion-> obtener_additional(), $cotizacion-> obtener_shipping(), $cotizacion-> obtener_shipping_cost(), 0, 0, $cotizacion-> obtener_contract_number());
 list($cotizacion_insertada, $id_rfq_copia) = RepositorioRfq::insertar_cotizacion(Conexion::obtener_conexion(), $cotizacion_copia);
-$cuestionario_copia = new Cuestionario('', $id_rfq_copia, '', '', '', '', '', '', '', '', '');
-RepositorioCuestionario::insertar_cuestionario(Conexion::obtener_conexion(), $cuestionario_copia);
 
 $rfq_directory = $_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $id_rfq;
 $rfq_copia_directory = $_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $id_rfq_copia;
-mkdir($rfq_copia_directory, 0777);
-if(is_dir($rfq_directory)){
-  $manager = opendir($rfq_directory);
-  $folder = @scandir($rfq_directory);
-  while(($file = readdir($manager)) !== false){
-    if($file != '.' && $file != '..'){
-      copy($rfq_directory . '/' . $file, $rfq_copia_directory . '/' . $file);
-    }
-  }
-  closedir($manager);
-}
+Input::copy_files($rfq_directory, $rfq_copia_directory);
 
 $items = RepositorioItem::obtener_items_por_id_rfq(Conexion::obtener_conexion(), $id_rfq);
-
-
 
 if(count($items)){
   $items_copias = [];
@@ -75,6 +59,6 @@ if(count($items)){
     }
   }
 }
-Redireccion::redirigir(EDITAR_COTIZACION . '/' . $id_rfq_copia);
 Conexion::cerrar_conexion();
+Redireccion::redirigir(EDITAR_COTIZACION . '/' . $id_rfq_copia);
 ?>

@@ -24,7 +24,7 @@ include_once 'plantillas/validation_edit_user.inc.php';
             </div>
             <form role="form" method="post" action="<?php echo EDIT_USER . $id_user; ?>">
               <?php
-                include_once 'plantillas/empty_edit_user_form.inc.php';
+                include_once 'forms/empty_edit_user_form.inc.php';
               ?>
             </form>
           </div>

@@ -28,22 +28,7 @@ RepositorioRfq::establecer_id_rfp(Conexion::obtener_conexion(), $id_project, $id
 Conexion::cerrar_conexion();
 $rfq_directory = $_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $id_rfq;
 $rfp_directory = $_SERVER['DOCUMENT_ROOT'] . '/rfp/documents/' . $id_project;
-mkdir($rfp_directory, 0777);
-if(is_dir($rfq_directory)){
-  $manager = opendir($rfq_directory);
-  $folder = @scandir($rfq_directory);
-  while(($file = readdir($manager)) !== false){
-    if($file != '.' && $file != '..'){
-      copy($rfq_directory . '/' . $file, $rfp_directory . '/' . $file);
-    }
-  }
-  closedir($manager);
-}
-$to = $user-> get_email();
-$subject = "RFP system";
-$headers = "MIME-Version: 1.0\r\n";
-$headers .= "Content-type: text/html; charset=UTF-8\r\n";
-$headers .= "From: " . $_SESSION['nombre_usuario'] . " E-logic <elogic@e-logic.us>\r\n";
+Input::copy_files($rfq_directory, $rfp_directory);
 $message = '
 <html>
 <body>
@@ -54,6 +39,6 @@ $message = '
 </body>
 </html>
 ';
-mail($to, $subject, $message, $headers);
+Email::send_email($user-> get_email(), $_SESSION['nombre_usuario'], 'RFP system', $message);
 Redireccion::redirigir(EDITAR_COTIZACION . '/' . $id_rfq);
 ?>

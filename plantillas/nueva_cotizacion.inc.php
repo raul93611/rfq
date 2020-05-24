@@ -24,9 +24,9 @@ include_once 'plantillas/validacion_registro_cotizacion.inc.php';
             <form role="form" method="post" enctype="multipart/form-data" action="<?php echo NUEVA_COTIZACION; ?>">
               <?php
               if (isset($_POST['registrar_cotizacion'])) {
-                include_once 'plantillas/registro_cotizacion_validado.inc.php';
+                include_once 'forms/registro_cotizacion_validado.inc.php';
               } else {
-                include_once 'plantillas/registro_cotizacion_vacio.inc.php';
+                include_once 'forms/registro_cotizacion_vacio.inc.php';
               }
               ?>
             </form>

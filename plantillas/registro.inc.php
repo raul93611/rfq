@@ -25,9 +25,9 @@ include_once 'validacion_registro_usuario.inc.php';
             <form role="form" method="post" action="<?php echo REGISTRO; ?>">
               <?php
               if (isset($_POST['registrar_usuario'])) {
-                include_once 'plantillas/registro_usuario_validado.inc.php';
+                include_once 'forms/registro_usuario_validado.inc.php';
               } else {
-                include_once 'plantillas/registro_usuario_vacio.inc.php';
+                include_once 'forms/registro_usuario_vacio.inc.php';
               }
               ?>
             </form>

@@ -214,10 +214,18 @@ class ProposalRepository{
       $html .= number_format($best_unit_price, 2);
       $html .= '
       </td>
-      <td>$ ' . number_format(round($best_unit_price, 2) * $re_quote_item-> get_quantity(), 2) . '</td>
-      <td style="text-align:right;">$ ' . number_format($item-> obtener_unit_price(), 2) . '</td>
-      <td style="text-align:right;">$ ' . number_format($item-> obtener_total_price(), 2) . '</td>
-      ';
+      <td>$ ' . number_format(round($best_unit_price, 2) * $re_quote_item-> get_quantity(), 2) . '</td>';
+      if(!is_null($item)){
+        $html .=
+        '<td style="text-align:right;">$ ' . number_format($item-> obtener_unit_price(), 2) . '</td>
+        <td style="text-align:right;">$ ' . number_format($item-> obtener_total_price(), 2) . '</td>
+        ';
+      }else{
+        $html .=
+        '<td style="text-align:right;"></td>
+        <td style="text-align:right;"></td>
+        ';
+      }
     }else{
       $html .= '
       <td></td>
@@ -233,7 +241,11 @@ class ProposalRepository{
     ';
     Conexion::abrir_conexion();
     $re_quote_subitems = ReQuoteSubitemRepository::get_re_quote_subitems_by_id_re_quote_item(Conexion::obtener_conexion(), $re_quote_item-> get_id());
-    $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Conexion::obtener_conexion(), $item-> obtener_id());
+    if(!is_null($item)){
+      $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Conexion::obtener_conexion(), $item-> obtener_id());
+    }else{
+      $subitems = [];
+    }
     Conexion::cerrar_conexion();
     foreach ($re_quote_subitems as $key => $re_quote_subitem) {
       $html .= self::print_subitem_pdf_re_quote($re_quote_subitem, $key, $subitems);
@@ -278,10 +290,18 @@ class ProposalRepository{
         $html .= number_format($best_unit_price, 2);
         $html .= '
         </td>
-        <td>$ ' . number_format(round($best_unit_price, 2) * $re_quote_subitem-> get_quantity(), 2) . '</td>
-        <td style="text-align:right;">$ ' . number_format($subitem-> obtener_unit_price(), 2) . '</td>
-        <td style="text-align:right;">$ ' . number_format($subitem-> obtener_total_price(), 2) . '</td>
-        ';
+        <td>$ ' . number_format(round($best_unit_price, 2) * $re_quote_subitem-> get_quantity(), 2) . '</td>';
+        if(!is_null($subitem)){
+          $html .=
+          '<td style="text-align:right;">$ ' . number_format($subitem-> obtener_unit_price(), 2) . '</td>
+          <td style="text-align:right;">$ ' . number_format($subitem-> obtener_total_price(), 2) . '</td>
+          ';
+        }else{
+          $html .=
+          '<td style="text-align:right;"></td>
+          <td style="text-align:right;"></td>
+          ';
+        }
     }else{
       $html .= '
       <td></td>

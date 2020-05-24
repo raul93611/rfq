@@ -20,7 +20,7 @@
             </div>
             <div class="card-body table-responsive">
               <?php
-              RepositorioRfq::escribir_cotizaciones_por_canal_usuario_cargo($canal, $_SESSION['id_usuario'], $cargo);
+              RepositorioRfq::escribir_cotizaciones_por_canal_usuario_cargo($canal, $_SESSION['id_usuario'], $_SESSION['cargo']);
               ?>
             </div>
           </div>

@@ -53,25 +53,6 @@ CREATE TABLE rfq(
             ON DELETE RESTRICT
 );
 
-CREATE TABLE cuestionario(
-        id INT NOT NULL AUTO_INCREMENT UNIQUE,
-        id_rfq INT NOT NULL,
-        reach_objectives VARCHAR(255) NOT NULL,
-        cost_objectives VARCHAR(255) NOT NULL,
-        time_objectives VARCHAR(255) NOT NULL,
-        quality_objectives VARCHAR(255) NOT NULL,
-        reach_goals VARCHAR(255) NOT NULL,
-        cost_goals VARCHAR(255) NOT NULL,
-        time_goals VARCHAR(255) NOT NULL,
-        quality_goals VARCHAR(255) NOT NULL,
-        locations VARCHAR(255) NOT NULL,
-        PRIMARY KEY(id),
-        FOREIGN KEY(id_rfq)
-            REFERENCES rfq(id)
-            ON UPDATE CASCADE
-            ON DELETE RESTRICT
-);
-
 CREATE TABLE comments(
   id INT NOT NULL AUTO_INCREMENT UNIQUE,
   id_rfq INT NOT NULL,
@@ -83,51 +64,6 @@ CREATE TABLE comments(
     REFERENCES rfq(id)
     ON UPDATE CASCADE
     ON DELETE RESTRICT
-);
-
-CREATE TABLE high_level_requirements(
-        id INT NOT NULL AUTO_INCREMENT UNIQUE,
-        id_cuestionario INT NOT NULL,
-        requirement VARCHAR(255) NOT NULL,
-        PRIMARY KEY(id),
-        FOREIGN KEY(id_cuestionario)
-            REFERENCES cuestionario(id)
-            ON UPDATE CASCADE
-            ON DELETE RESTRICT
-);
-
-CREATE TABLE out_of_scopes(
-        id INT NOT NULL AUTO_INCREMENT UNIQUE,
-        id_cuestionario INT NOT NULL,
-        requirement VARCHAR(255) NOT NULL,
-        PRIMARY KEY(id),
-        FOREIGN KEY(id_cuestionario)
-            REFERENCES cuestionario(id)
-            ON UPDATE CASCADE
-            ON DELETE RESTRICT
-);
-
-CREATE TABLE project_risks(
-        id INT NOT NULL AUTO_INCREMENT UNIQUE,
-        id_cuestionario INT NOT NULL,
-        description VARCHAR(255) NOT NULL,
-        PRIMARY KEY(id),
-        FOREIGN KEY(id_cuestionario)
-            REFERENCES cuestionario(id)
-            ON UPDATE CASCADE
-            ON DELETE RESTRICT
-);
-
-CREATE TABLE project_milestones(
-        id INT NOT NULL AUTO_INCREMENT UNIQUE,
-        id_cuestionario INT NOT NULL,
-        date_milestone VARCHAR(255) NOT NULL,
-        description VARCHAR(255) NOT NULL,
-        PRIMARY KEY(id),
-        FOREIGN KEY(id_cuestionario)
-            REFERENCES cuestionario(id)
-            ON UPDATE CASCADE
-            ON DELETE RESTRICT
 );
 
 CREATE TABLE item(

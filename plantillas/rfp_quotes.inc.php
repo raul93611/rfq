@@ -20,7 +20,7 @@
             </div>
             <div class="card-body">
               <?php
-              RepositorioRfq::escribir_cotizaciones_rfp($cargo, $_SESSION['id_usuario']);
+              RepositorioRfq::escribir_cotizaciones_rfp($_SESSION['cargo'], $_SESSION['id_usuario']);
               ?>
             </div>
           </div>

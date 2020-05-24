@@ -26,44 +26,12 @@ if(isset($_POST['guardar_fullfillment_form'])){
   RepositorioRfqFullFillmentComment::insertar_comment(ConnectionFullFillment::get_connection(), $comment);
   $rfq_fullfillment_part = new RfqFullFillmentPart('', $_POST['id_rfq'], '', '', '', '', '', 0, '', 0, '', 0, '', '', '', '', '', '', 0, '', '');
   RfqFullFillmentPartRepository::insert_rfq_fullfillment_part(ConnectionFullFillment::get_connection(), $rfq_fullfillment_part);
-  $fullfillment_users = UserFullFillmentRepository::get_all_fullfillment_users(ConnectionFullFillment::get_connection());
   ConnectionFullFillment::close_connection();
   Conexion::cerrar_conexion();
 
-  foreach ($fullfillment_users as $fullfillment_user) {
-    $to = $fullfillment_user-> get_email();
-    $subject = 'New quote: proposal ' . $cotizacion-> obtener_id();
-    $headers = "MIME-Version: 1.0\r\n";
-    $headers .= "Content-type: text/html; charset=UTF-8\r\n";
-    $headers .= "From:" .  $_SESSION['nombre_usuario']  . " <elogic@e-logic.us>\r\n";
-    $message = '
-    <html>
-    <body>
-    <h3>Details:</h3>
-    <p>' . $_POST['fullfillment_comment'] . '</p>
-    <h5>Quote:</h5>
-    <p><a href="http://www.elogicportal.com/fullfillment/profile/edit_quote/' . $cotizacion-> obtener_id() . '">' . $cotizacion-> obtener_id() . '</a></p>
-    <h5>Comment:</h5>
-    <p>New quote in fullfillment.</p>
-    </body>
-    </html>
-    ';
-    mail($to, $subject, $message, $headers);
-  }
-
   $fullfillment_directory = $_SERVER['DOCUMENT_ROOT'] . '/fullfillment/documents/rfq_team/' . $_POST['id_rfq'];
   $rfq_directory = $_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $_POST['id_rfq'];
-  mkdir($fullfillment_directory, 0777);
-  if(is_dir($rfq_directory)){
-    $manager = opendir($rfq_directory);
-    $folder = @scandir($rfq_directory);
-    while(($file = readdir($manager)) !== false){
-      if($file != '.' && $file != '..'){
-        copy($rfq_directory . '/' . $file, $fullfillment_directory . '/' . $file);
-      }
-    }
-    closedir($manager);
-  }
+  Input::copy_files($rfq_directory, $fullfillment_directory);
   Redireccion::redirigir1(EDITAR_COTIZACION . '/' . $_POST['id_rfq']);
 }
 ?>

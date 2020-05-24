@@ -26,7 +26,7 @@ if (!ControlSesion::sesion_iniciada()) {
             </div>
             <form role="form" method="post" action="<?php echo GUARDAR_EDIT_PROVIDER . $id_provider;?>">
               <?php
-              include_once 'plantillas/edicion_provider_vacio.inc.php';
+              include_once 'forms/edicion_provider_vacio.inc.php';
               ?>
             </form>
           </div>

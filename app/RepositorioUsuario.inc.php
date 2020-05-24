@@ -466,31 +466,6 @@ class RepositorioUsuario {
     return $usuarios;
   }
 
-  public static function obtener_usuarios_rfq_sin_importar_estado($conexion) {
-    $usuarios = [];
-
-    if (isset($conexion)) {
-      try {
-        $sql = "SELECT * FROM usuarios WHERE cargo > 2";
-
-        $sentencia = $conexion->prepare($sql);
-
-        $sentencia->execute();
-
-        $resultado = $sentencia->fetchAll(PDO::FETCH_ASSOC);
-
-        if (count($resultado)) {
-          foreach ($resultado as $fila) {
-            $usuarios [] = new Usuario($fila['id'], $fila['nombre_usuario'], $fila['password'], $fila['nombres'], $fila['apellidos'], $fila['cargo'], $fila['email'], $fila['status'], $fila['hash_recover_email']);
-          }
-        }
-      } catch (PDOException $ex) {
-        print 'ERROR:' . $ex->getMessage() . '<br>';
-      }
-    }
-    return $usuarios;
-  }
-
   public static function obtener_cotizaciones_por_usuario($conexion, $id_usuario, $tipo) {
     $cotizaciones = 0;
     $cotizaciones_pasadas = 0;

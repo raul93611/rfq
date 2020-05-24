@@ -26,7 +26,7 @@ if (!ControlSesion::sesion_iniciada()) {
             </div>
             <form role="form" method="post" action="<?php echo GUARDAR_ADD_PROVIDER . $id_item;?>">
               <?php
-              include_once 'plantillas/registro_provider_vacio.inc.php';
+              include_once 'forms/registro_provider_vacio.inc.php';
               ?>
             </form>
           </div>
