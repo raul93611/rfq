@@ -34,7 +34,8 @@ class Input{
       Conexion::cerrar_conexion();
       ?>
       <label for="usuario_designado">Designated user:</label>
-      <input type="text" class="form-control form-control-sm" value="<?php echo $usuario->obtener_nombre_usuario(); ?>" disabled>
+      <input type="text" name="usuario_designado" class="form-control form-control-sm" value="<?php echo $usuario->obtener_nombre_usuario(); ?>" readonly>
+      <input type="hidden" name="designated_user_original" value="<?php echo $usuario->obtener_nombre_usuario(); ?>">
       <input type="hidden" value="<?php echo $usuario-> obtener_nombre_usuario(); ?>" name="usuario_designado">
       <?php
     } else {

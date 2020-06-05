@@ -35,6 +35,7 @@ if(is_null($cotizacion_recuperada)){
           Conexion::cerrar_conexion();
           ?>
           <a href="#" id="mostrar_comentarios" class="btn btn-info"><i class="fas fa-comment"></i> Comments(<?php echo $cantidad_de_comentarios; ?>)</a>
+          <button id="audit_trails_button" type="button" name="button" class="btn btn-info">Audit Trails</button>
         </div>
         <div class="col-md-2">
           <?php
@@ -83,7 +84,7 @@ if(is_null($cotizacion_recuperada)){
     </div>
   </section>
 </div>
-<!--*************************************************MODAL COMMENT*************************************************************-->
+<!--*************************************************SAVE QUOTE INFO*************************************************************-->
 <div class="modal fade" id="quote_info_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
@@ -171,6 +172,26 @@ if(is_null($cotizacion_recuperada)){
       <div class="modal-body">
         <?php
         RepositorioComment::escribir_comments($cotizacion_recuperada-> obtener_id());
+        ?>
+      </div>
+    </div>
+  </div>
+</div>
+<!--*************************************************MODAL TO SHOW AUDIT TRAILS*************************************************************-->
+<div class="modal fade" id="audit_trails_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Audit Trails</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <?php
+        Conexion::abrir_conexion();
+        AuditTrailRepository::display_audit_trails(Conexion::obtener_conexion(), $cotizacion_recuperada-> obtener_id());
+        Conexion::cerrar_conexion();
         ?>
       </div>
     </div>

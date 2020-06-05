@@ -6,6 +6,7 @@ if($cotizacion_recuperada-> obtener_award()){
       <div class="form-group">
         <label for="contract_number">Contract number:</label>
         <input type="text" class="form-control form-control-sm" name="contract_number" value="<?php echo $cotizacion_recuperada-> obtener_contract_number(); ?>">
+        <input type="hidden" name="contract_number_original" value="<?php echo $cotizacion_recuperada-> obtener_contract_number(); ?>">
       </div>
     </div>
   <?php
@@ -43,18 +44,21 @@ if($cotizacion_recuperada-> obtener_award()){
       <option <?php if($cotizacion_recuperada-> obtener_type_of_bid() == 'Video Cameras'){echo 'selected';} ?>>Video Cameras</option>
       <option <?php if($cotizacion_recuperada-> obtener_type_of_bid() == 'Phones'){echo 'selected';} ?>>Phones</option>
     </select>
+    <input type="hidden" name="type_of_bid_original" value="<?php echo $cotizacion_recuperada-> obtener_type_of_bid(); ?>">
   </div>
 </div>
 <div class="col-md-12">
   <div class="form-group">
     <label for="issue_date">Issue date:</label>
     <input type="text" class="form-control form-control-sm" id="issue_date" name="issue_date" value="<?php echo $cotizacion_recuperada->obtener_issue_date(); ?>">
+    <input type="hidden" name="issue_date_original" value="<?php echo $cotizacion_recuperada->obtener_issue_date(); ?>">
   </div>
 </div>
 <div class="col-md-12">
   <div class="form-group">
     <label for="end_date">End date:</label>
     <input type="text" class="form-control form-control-sm" id="end_date" name="end_date" value="<?php echo $cotizacion_recuperada->obtener_end_date(); ?>">
+    <input type="hidden" name="end_date_original" value="<?php echo $cotizacion_recuperada->obtener_end_date(); ?>">
   </div>
 </div>
 <div class="col-md-12">
@@ -71,6 +75,7 @@ if($cotizacion_recuperada-> obtener_award()){
       <option <?php if($cotizacion_recuperada-> obtener_canal() == 'Chemonics'){echo 'selected';} ?>>Chemonics</option>
       <option <?php if($cotizacion_recuperada-> obtener_canal() == 'Ebay & Amazon'){echo 'selected';} ?>>Ebay & Amazon</option>
     </select>
+    <input type="hidden" name="canal_original" value="<?php echo $cotizacion_recuperada-> obtener_canal(); ?>">
   </div>
 </div>
 <div class="col-md-12">
@@ -96,12 +101,14 @@ if($cotizacion_recuperada-> obtener_award()){
       <div class="form-group">
           <label for="completed_date">Completed date:</label>
           <input type="text" class="form-control form-control-sm" id="completed_date" name="completed_date" value="<?php if($cotizacion_recuperada->obtener_fecha_completado() != '0000-00-00'){echo RepositorioComment::mysql_date_to_english_format($cotizacion_recuperada->obtener_fecha_completado());} ?>">
+          <input type="hidden" name="completed_date_original" value="<?php if($cotizacion_recuperada->obtener_fecha_completado() != '0000-00-00'){echo RepositorioComment::mysql_date_to_english_format($cotizacion_recuperada->obtener_fecha_completado());} ?>">
       </div>
     </div>
     <div class="col-md-6">
       <div class="form-group">
           <label for="expiration_date">Expiration date:</label>
           <input type="text" class="form-control form-control-sm" id="expiration_date" name="expiration_date" value="<?php if($cotizacion_recuperada->obtener_expiration_date() != '0000-00-00'){echo RepositorioComment::mysql_date_to_english_format($cotizacion_recuperada->obtener_expiration_date());} ?>">
+          <input type="hidden" name="expiration_date_original" value="<?php if($cotizacion_recuperada->obtener_expiration_date() != '0000-00-00'){echo RepositorioComment::mysql_date_to_english_format($cotizacion_recuperada->obtener_expiration_date());} ?>">
       </div>
     </div>
   </div>
@@ -136,6 +143,7 @@ if($cotizacion_recuperada-> obtener_award()){
           <option <?php if ($cotizacion_recuperada->obtener_ship_via() == 'GROUND') { echo 'selected';} ?>>GROUND</option>
           <option <?php if ($cotizacion_recuperada->obtener_ship_via() == 'BEST WAY') { echo 'selected';} ?>>BEST WAY</option>
         </select>
+        <input type="hidden" name="ship_via_original" value="<?php echo $cotizacion_recuperada->obtener_ship_via(); ?>">
       </div>
         <div class="form-group">
           <label for="ship_to">Ship to:</label>

@@ -66,6 +66,19 @@ CREATE TABLE comments(
     ON DELETE RESTRICT
 );
 
+CREATE TABLE audit_trails(
+  id INT NOT NULL AUTO_INCREMENT UNIQUE,
+  id_rfq INT NOT NULL,
+  username VARCHAR(255) NOT NULL,
+  audit_trail TEXT CHARACTER SET utf8 NOT NULL,
+  created_date DATETIME,
+  PRIMARY KEY(id),
+  FOREIGN KEY(id_rfq)
+    REFERENCES rfq(id)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT
+);
+
 CREATE TABLE item(
         id INT NOT NULL AUTO_INCREMENT UNIQUE,
         id_rfq INT NOT NULL,

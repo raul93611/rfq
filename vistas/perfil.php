@@ -3,12 +3,6 @@ if(!ControlSesion::sesion_iniciada()) {
   Redireccion::redirigir1(SERVIDOR);
 }
 $titulo = 'Profile';
-/*
-Conexion::abrir_conexion();
-$usuario = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), $_SESSION['id_usuario']);
-Conexion::cerrar_conexion();
-$cargo = $usuario->obtener_cargo();
-*/
 include_once 'plantillas/documento_declaracion.inc.php';
 include_once 'plantillas/navbar.inc.php';
 include_once 'plantillas/barra_lateral.inc.php';
@@ -44,7 +38,7 @@ switch ($gestor_actual) {
     include_once 'plantillas/edit_re_quote_subitem_provider.inc.php';
     break;
   case 'registro':
-    if ($cargo == 1) {
+    if ($_SESSION['cargo'] == 1) {
       include_once 'plantillas/registro.inc.php';
     } else {
       include_once 'plantillas/muro.inc.php';

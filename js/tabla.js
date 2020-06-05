@@ -1,4 +1,16 @@
 $(document).ready(function () {
+  $('.audit_trail').click(function(){
+    $('#audit_trails_modal').modal('hide');
+    var element = $(this).attr('href');
+    $(element).addClass('highlight');
+    setTimeout(function() {
+      $(element).removeClass('highlight');
+    }, 5000);
+    console.log($(element));
+  });
+  $('#audit_trails_button').click(function(){
+    $('#audit_trails_modal').modal();
+  });
   $('#quote_info_button').click(function(){
     $('#quote_info_modal').modal();
   });

@@ -88,6 +88,9 @@ include_once 'app/ProposalRepository.inc.php';
 include_once 'app/Input.inc.php';
 include_once 'app/Email.inc.php';
 
+include_once 'app/AuditTrail.inc.php';
+include_once 'app/AuditTrailRepository.inc.php';
+
 $componentes_url = parse_url($_SERVER['REQUEST_URI']);
 $ruta = $componentes_url['path'];
 

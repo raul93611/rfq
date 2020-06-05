@@ -1,4 +1,7 @@
 /****************************general styles**************************/
+html {
+  scroll-behavior: smooth;
+}
 body{
   font-family: 'Nunito', sans-serif;
   font-size: 11pt !important;
@@ -198,7 +201,7 @@ body{
   background-color: #d0e585 !important;
   border-color: #d0e585 !important;
 }
-/*******************************tabel buttons************************/
+/*******************************table buttons************************/
 .btn-warning{
     font-size: 0.9em !important;
 }
@@ -250,6 +253,18 @@ table{
 
 .list-group-item:hover{
   background-color: #f4f6f9;
+}
+
+#tabla_items tr.highlight{
+  animation-name: target-fade;
+  animation-duration: 5s;
+}
+
+@keyframes target-fade {
+    0% { background-color: rgba(255, 157, 0, .8); }
+    25% { background-color: rgba(255, 157, 0, .8); }
+    50% { background-color: rgba(255, 157, 0, .8); }
+    100% { background-color: rgba(255,255,153,0); }
 }
 
 #tabla_items .description{

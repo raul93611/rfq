@@ -1,7 +1,6 @@
 <?php
 class RepositorioItem {
   public static function insertar_item($conexion, $item) {
-    $item_insertado = false;
     if (isset($conexion)) {
       try {
         $sql = 'INSERT INTO item(id_rfq, id_usuario, provider_menor, brand, brand_project, part_number, part_number_project, description, description_project, quantity, unit_price, total_price, comments, website, additional) VALUES(:id_rfq, :id_usuario, :provider_menor, :brand, :brand_project, :part_number, :part_number_project, :description, :description_project, :quantity, :unit_price, :total_price, :comments, :website, :additional)';
@@ -22,14 +21,12 @@ class RepositorioItem {
         $sentencia->bindParam(':website', $item->obtener_website(), PDO::PARAM_STR);
         $sentencia->bindParam(':additional', $item->obtener_additional(), PDO::PARAM_STR);
         $resultado = $sentencia->execute();
-        if ($resultado) {
-          $item_insertado = true;
-        }
+        $id = $conexion->lastInsertId();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
-    return $item_insertado;
+    return $id;
   }
 
   public static function actualizar_provider_menor_item($conexion, $provider_menor, $id_item){
@@ -80,7 +77,7 @@ class RepositorioItem {
     Conexion::abrir_conexion();
     $providers = RepositorioProvider::obtener_providers_por_id_item(Conexion::obtener_conexion(), $item->obtener_id());
     Conexion::cerrar_conexion();
-    echo '<tr>';
+    echo '<tr id="item' . $item->obtener_id() . '">';
     echo '<td><a href="' . ADD_PROVIDER . '/' . $item->obtener_id() . '" class="btn btn-warning btn-block"><i class="fa fa-plus-circle"></i> Add Provider</a><br><a href="' . EDIT_ITEM . '/' . $item->obtener_id() . '" class="btn btn-warning btn-block"><i class="fa fa-edit"></i> Edit item</a><br><a href="' . DELETE_ITEM . '/' . $item-> obtener_id() . '" class="delete_item_button btn btn-warning btn-block"><i class="fa fa-trash"></i> Delete</a><br><a href="' . ADD_SUBITEM . '/' . $item-> obtener_id() . '" class="btn btn-warning btn-block"><i class="fa fa-plus-circle"></i> Add subitem</a></td>';
     echo '<td>' . $numeracion . '</td>';
     if(strlen($item-> obtener_description_project()) >= 100){
@@ -189,6 +186,7 @@ class RepositorioItem {
       echo '><label class="custom-control-label" for="net_30cc">Net 30/CC</label>
           </div>
       </div>';
+      echo '<input type="hidden" name="payment_terms_original" value="' . $cotizacion-> obtener_payment_terms() . '">';
       echo '</div></div><br>';
       echo '<div class="table-responsive">';
       echo '<table id="tabla_items" class="table table-bordered table-hover">';

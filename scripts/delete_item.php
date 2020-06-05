@@ -9,15 +9,7 @@ if(count($subitems)){
     RepositorioSubitem::delete_subitem(Conexion::obtener_conexion(), $subitem-> obtener_id());
   }
 }
-$description_comment = 'An item was deleted:
-<b>ELOGIC PROPOSAL</b>
-<b>Brand:</b>
-' . $item-> obtener_brand() . '
-<b>Part number:</b>
-' . $item-> obtener_part_number() . '
-';
-$comment = new Comment('', $id_rfq, $_SESSION['id_usuario'], $description_comment, '');
-RepositorioComment::insertar_comment(Conexion::obtener_conexion(), $comment);
+AuditTrailRepository::create_audit_trail_item_deleted(Conexion::obtener_conexion(), 'Item', $item-> obtener_part_number_project(), 'Part Number', $id_rfq);
 RepositorioItem::delete_item(Conexion::obtener_conexion(), $id_item);
 Conexion::cerrar_conexion();
 Redireccion::redirigir(EDITAR_COTIZACION . '/' . $id_rfq . '#caja_items');
