@@ -84,6 +84,7 @@ include_once 'app/ReQuoteSubitemProvider.inc.php';
 include_once 'app/ReQuoteSubitemProviderRepository.inc.php';
 
 include_once 'app/ProposalRepository.inc.php';
+include_once 'app/ExcelRepository.inc.php';
 
 include_once 'app/Input.inc.php';
 include_once 'app/Email.inc.php';
@@ -266,6 +267,10 @@ if ($partes_ruta[0] == 'rfq') {
       case 'pdf_tabla_items';
         $id_rfq = $partes_ruta[2];
         $ruta_elegida = 'scripts/pdf_tabla_items.php';
+        break;
+      case 'excel_items_table';
+        $id_rfq = $partes_ruta[2];
+        $ruta_elegida = 'scripts/excel_items_table.php';
         break;
       case 'pdf_re_quote';
         $id_rfq = $partes_ruta[2];

@@ -1651,5 +1651,25 @@ class RepositorioRfq {
       }
     }
   }
+
+  public static function get_all_providers_name($connection, $id_rfq){
+    $providers_name = [];
+    $items = RepositorioItem::obtener_items_por_id_rfq($connection, $id_rfq);
+    foreach ($items as $i => $item) {
+      $providers = RepositorioProvider::obtener_providers_por_id_item($connection, $item-> obtener_id());
+      foreach ($providers as $j => $provider) {
+        array_push($providers_name, $provider-> obtener_provider());
+      }
+      $subitems = RepositorioSubitem::obtener_subitems_por_id_item($connection, $item-> obtener_id());
+      foreach ($subitems as $k => $subitem) {
+        $providers_subitem = RepositorioProviderSubitem::obtener_providers_subitem_por_id_subitem($connection, $subitem-> obtener_id());
+        foreach ($providers_subitem as $l => $provider_subitem) {
+          array_push($providers_name, $provider_subitem-> obtener_provider());
+        }
+      }
+    }
+    $providers_name = array_unique($providers_name);
+    return $providers_name;
+  }
 }
 ?>

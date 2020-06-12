@@ -114,6 +114,7 @@ define('GUARDAR_FULLFILLMENT_FORM', SERVIDOR . 'guardar_fullfillment_form');
 /**********************************************************************************/
 define('PDF_TABLA_ITEMS', SERVIDOR . 'pdf_tabla_items/');
 define('PDF_RE_QUOTE', SERVIDOR . 'pdf_re_quote/');
+define('EXCEL_ITEMS_TABLE', SERVIDOR . 'excel_items_table/');
 /**********************************************************************************/
 define('EXCEL_REPORTS', PERFIL . 'excel_reports');
 define('GENERATE_EXCEL_REPORT', SERVIDOR . 'generate_excel_report');

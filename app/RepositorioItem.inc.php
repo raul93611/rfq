@@ -146,7 +146,8 @@ class RepositorioItem {
     if (count($items)) {
       ?>
       <br>
-      <a target="_blank" href="<?php echo PDF_TABLA_ITEMS . $id_rfq; ?>" class="float-right btn btn-primary"><i class="fa fa-file"></i> PDF</a>
+      <a target="_blank" href="<?php echo PDF_TABLA_ITEMS . $id_rfq; ?>" class="ml-2 float-right btn btn-primary"><i class="fa fa-file"></i> PDF</a>
+      <a target="_blank" href="<?php echo EXCEL_ITEMS_TABLE . $id_rfq; ?>" class="float-right btn btn-primary"><i class="fa fa-file"></i> EXCEL</a>
       <?php
       echo '<h2 id="caja_items">Items:</h2>';
       echo '<div class="row">';
