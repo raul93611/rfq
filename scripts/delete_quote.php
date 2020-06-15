@@ -13,6 +13,7 @@ if(!$cotizacion-> obtener_rfp()){
     RepositorioItem::delete_item(Conexion::obtener_conexion(), $item->obtener_id());
   }
   RepositorioComment::delete_all_comments(Conexion::obtener_conexion(), $cotizacion-> obtener_id());
+  AuditTrailRepository::delete_audit_trails(Conexion::obtener_conexion(), $cotizacion-> obtener_id());
   $cuestionario = RepositorioCuestionario::obtener_cuestionario_por_id_rfq(Conexion::obtener_conexion(), $cotizacion-> obtener_id());
   if(!is_null($cuestionario)){
     RepositorioCuestionario::delete_cuestionario_por_id_rfq(Conexion::obtener_conexion(), $cotizacion-> obtener_id());

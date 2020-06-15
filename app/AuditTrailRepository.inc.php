@@ -36,6 +36,19 @@ class AuditTrailRepository{
     return $audit_trails;
   }
 
+  public static function delete_audit_trails($connection, $id_rfq){
+    if(isset($connection)){
+      try{
+        $sql = 'DELETE FROM audit_trails WHERE id_rfq = :id_rfq';
+        $sentence = $connection-> prepare($sql);
+        $sentence-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentence-> execute();
+      }catch(PDOException $ex){
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+  }
+
   public static function display_audit_trails($connection, $id_rfq){
     $audit_trails = self::get_audit_trails($connection, $id_rfq);
     ?>
