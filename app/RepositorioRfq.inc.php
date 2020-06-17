@@ -47,6 +47,23 @@ class RepositorioRfq {
     return array($cotizacion_insertada, $id);
   }
 
+  public static function insert_calc($connection, $id_items, $id_subitems, $total_prices, $subitem_total_prices, $unit_prices, $subitem_unit_prices, $additionals, $additional_subitems){
+    $id_items = explode(',', $id_items);
+    $id_subitems = explode(',', $id_subitems);
+    $total_prices = explode(',', $total_prices);
+    $subitem_total_prices = explode(',', $subitem_total_prices);
+    $unit_prices = explode(',', $unit_prices);
+    $subitem_unit_prices = explode(',', $subitem_unit_prices);
+    $additionals = explode(',', $additionals);
+    $additional_subitems = explode(',', $additional_subitems);
+    foreach ($id_items as $i => $id_item) {
+      RepositorioItem::insertar_calculos($connection, $unit_prices[$i], $total_prices[$i], $additionals[$i], $id_item);
+    }
+    foreach ($id_subitems as $i => $id_subitem) {
+      RepositorioSubitem::insertar_calculos($connection, $subitem_unit_prices[$i], $subitem_total_prices[$i], $additional_subitems[$i], $id_subitem);
+    }
+  }
+
   public static function insertar_cotizacion_fullfillment($conexion, $cotizacion) {
     $cotizacion_insertada = false;
     if (isset($conexion)) {
@@ -326,47 +343,25 @@ class RepositorioRfq {
     return $cotizacion_editada;
   }
 
-  public static function actualizar_taxes_profit($conexion, $taxes, $profit, $total_cost, $total_price, $additional, $id_rfq) {
-    $cotizacion_editada = false;
-    if (isset($conexion)) {
+  public static function update_variables($connection, $payment_terms, $taxes, $profit, $total_cost, $total_price, $additional, $shipping, $shipping_cost, $id_rfq) {
+    if (isset($connection)) {
       try {
-        $sql = 'UPDATE rfq SET taxes = :taxes, profit = :profit, total_cost = :total_cost, total_price = :total_price, additional = :additional WHERE id = :id_rfq';
-        $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':taxes', $taxes, PDO::PARAM_STR);
-        $sentencia->bindParam(':profit', $profit, PDO::PARAM_STR);
-        $sentencia->bindParam(':total_cost', $total_cost, PDO::PARAM_STR);
-        $sentencia->bindParam(':total_price', $total_price, PDO::PARAM_STR);
-        $sentencia->bindParam(':additional', $additional, PDO::PARAM_STR);
-        $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-        $sentencia->execute();
-        if ($sentencia) {
-          $cotizacion_editada = true;
-        }
+        $sql = 'UPDATE rfq SET payment_terms = :payment_terms, taxes = :taxes, profit = :profit, total_cost = :total_cost, total_price = :total_price, additional = :additional, shipping = :shipping, shipping_cost = :shipping_cost WHERE id = :id_rfq';
+        $sentence = $connection->prepare($sql);
+        $sentence->bindParam(':payment_terms', $payment_terms, PDO::PARAM_STR);
+        $sentence->bindParam(':taxes', $taxes, PDO::PARAM_STR);
+        $sentence->bindParam(':profit', $profit, PDO::PARAM_STR);
+        $sentence->bindParam(':total_cost', $total_cost, PDO::PARAM_STR);
+        $sentence->bindParam(':total_price', $total_price, PDO::PARAM_STR);
+        $sentence->bindParam(':additional', $additional, PDO::PARAM_STR);
+        $sentence->bindParam(':shipping', $shipping, PDO::PARAM_STR);
+        $sentence->bindParam(':shipping_cost', $shipping_cost, PDO::PARAM_STR);
+        $sentence->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentence->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
-    return $cotizacion_editada;
-  }
-
-  public static function actualizar_shipping($conexion, $shipping, $shipping_cost, $id_rfq) {
-    $cotizacion_editada = false;
-    if (isset($conexion)) {
-      try {
-        $sql = 'UPDATE rfq SET shipping = :shipping, shipping_cost = :shipping_cost WHERE id = :id_rfq';
-        $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':shipping', $shipping, PDO::PARAM_STR);
-        $sentencia->bindParam(':shipping_cost', $shipping_cost, PDO::PARAM_STR);
-        $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-        $sentencia->execute();
-        if ($sentencia) {
-          $cotizacion_editada = true;
-        }
-      } catch (PDOException $ex) {
-        print 'ERROR:' . $ex->getMessage() . '<br>';
-      }
-    }
-    return $cotizacion_editada;
   }
 
   public static function obtener_cotizaciones_completadas_por_canal($conexion, $canal, $id_usuario, $cargo) {
@@ -1109,25 +1104,6 @@ class RepositorioRfq {
       try {
         $sql = 'UPDATE rfq SET status = 1, fecha_submitted = NOW() WHERE id = :id_rfq';
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-        $sentencia->execute();
-        if ($sentencia) {
-          $rfq_editado = true;
-        }
-      } catch (PDOException $ex) {
-        print 'ERROR:' . $ex->getMessage() . '<br>';
-      }
-    }
-    return $rfq_editado;
-  }
-
-  public static function actualizar_payment_terms($conexion, $payment_terms, $id_rfq) {
-    $rfq_editado = false;
-    if (isset($conexion)) {
-      try {
-        $sql = 'UPDATE rfq SET payment_terms = :payment_terms WHERE id = :id_rfq';
-        $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':payment_terms', $payment_terms, PDO::PARAM_STR);
         $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia->execute();
         if ($sentencia) {

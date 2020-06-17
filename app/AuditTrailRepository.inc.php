@@ -293,5 +293,11 @@ class AuditTrailRepository{
     $audit_trail = new AuditTrail('', $id_rfq, $_SESSION['nombre_usuario'], $message, '');
     self::insert_audit_trail($connection, $audit_trail);
   }
+
+  public static function quote_status_audit_trail($connection, $status, $id_rfq){
+    $message = 'The quote was <b>' . $status . '</b>';
+    $audit_trail = new AuditTrail('', $id_rfq, $_SESSION['nombre_usuario'], $message, '');
+    self::insert_audit_trail($connection, $audit_trail);
+  }
 }
 ?>
