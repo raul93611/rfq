@@ -221,7 +221,7 @@ $('.fulfillment_table').DataTable({
       $('#total_re_quote').html('$ ' + total.toFixed(2));
       $('#total_cost').val(total);
       var profit_rq = (total_ganado - total).toFixed(2);
-      var percentage_profit_rq = ((profit_rq/total)*100).toFixed(2);
+      var percentage_profit_rq = ((profit_rq/total_ganado)*100).toFixed(2);
       $('#profit_rq').html('$ ' + profit_rq + '<br>' + percentage_profit_rq + '%');
     }, 100);
   }
@@ -260,7 +260,7 @@ $('#re_quote_form').submit(function () {
   $('#total_cost').val(total);
 
   var profit_rq = (total_ganado - total).toFixed(2);
-  var percentage_profit_rq = ((profit_rq/total)*100).toFixed(2);
+  var percentage_profit_rq = ((profit_rq/total_ganado)*100).toFixed(2);
   $('#profit_rq').html('$ ' + profit_rq + '<br>' + percentage_profit_rq + '%');
 });
 /****************************************************************************************************/
@@ -420,7 +420,7 @@ if($('#form_edited_quote').length != 0){
     $('#partes_total_price_subitems').val(partes_total_price_subitems);
     total1 = total1.toFixed(2);
     total2 = total2.toFixed(2);
-    var percentage_profit = ((dif_total/total1)*100).toFixed(2);
+    var percentage_profit = ((dif_total/total2)*100).toFixed(2);
     $('#total_cost').val(total1);
     $('#total_price').val(total2);
     $('#total1').html('$ ' + total1);
@@ -574,7 +574,7 @@ if($('#form_edited_quote').length != 0){
     $('#partes_total_price_subitems').val(partes_total_price_subitems);
     total1 = total1.toFixed(2);
     total2 = total2.toFixed(2);
-    var percentage_profit = ((dif_total/total1)*100).toFixed(2);
+    var percentage_profit = ((dif_total/total2)*100).toFixed(2);
     $('#total_cost').val(total1);
     $('#total_price').val(total2);
     $('#total1').html('$ ' + total1);
