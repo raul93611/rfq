@@ -92,6 +92,9 @@ include_once 'app/Email.inc.php';
 include_once 'app/AuditTrail.inc.php';
 include_once 'app/AuditTrailRepository.inc.php';
 
+include_once 'app/ReQuoteAuditTrail.inc.php';
+include_once 'app/ReQuoteAuditTrailRepository.inc.php';
+
 $componentes_url = parse_url($_SERVER['REQUEST_URI']);
 $ruta = $componentes_url['path'];
 
@@ -307,6 +310,10 @@ if ($partes_ruta[0] == 'rfq') {
       case 'remove_fulfillment':
         $id_rfq = $partes_ruta[2];
         $ruta_elegida = 'scripts/remove_fulfillment.php';
+        break;
+      case 'reload_requote':
+        $id_rfq = $partes_ruta[2];
+        $ruta_elegida = 'scripts/reload_requote.php';
         break;
       default:
       break;

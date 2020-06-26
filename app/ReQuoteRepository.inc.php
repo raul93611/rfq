@@ -21,6 +21,74 @@ class ReQuoteRepository{
     return $re_quote_exists;
   }
 
+  public static function create_re_quote($connection, $id_rfq){
+    $re_quote_exists = ReQuoteRepository::re_quote_exists($connection, $id_rfq);
+    $cotizacion = RepositorioRfq::obtener_cotizacion_por_id($connection, $id_rfq);
+    if(!$re_quote_exists){
+      $re_quote = new ReQuote('', $id_rfq, $cotizacion-> obtener_total_cost(), $cotizacion-> obtener_total_price(), $cotizacion-> obtener_payment_terms(), $cotizacion-> obtener_taxes(), $cotizacion-> obtener_profit(), $cotizacion-> obtener_additional(), $cotizacion-> obtener_shipping_cost(), $cotizacion-> obtener_shipping());
+      $id_re_quote = ReQuoteRepository::insert_re_quote($connection, $re_quote);
+      $items = RepositorioItem::obtener_items_por_id_rfq($connection, $id_rfq);
+      if(count($items)){
+        foreach ($items as $key => $item) {
+          $re_quote_item = new ReQuoteItem('', $id_re_quote, $item-> obtener_brand(), $item-> obtener_brand_project(), $item-> obtener_part_number(), $item-> obtener_part_number_project(), $item-> obtener_description(), $item-> obtener_description_project(), $item-> obtener_quantity(), $item-> obtener_unit_price(), $item-> obtener_total_price(), $item-> obtener_comments(), $item-> obtener_website(), $item-> obtener_additional());
+          $id_re_quote_item = ReQuoteItemRepository::insert_re_quote_item($connection, $re_quote_item);
+          $subitems = RepositorioSubitem::obtener_subitems_por_id_item($connection, $item-> obtener_id());
+          if(count($subitems)){
+            foreach ($subitems as $key => $subitem) {
+              $re_quote_subitem = new ReQuoteSubitem('', $id_re_quote_item, $subitem-> obtener_brand(), $subitem-> obtener_brand_project(), $subitem-> obtener_part_number(), $subitem-> obtener_part_number_project(), $subitem-> obtener_description(), $subitem-> obtener_description_project(), $subitem-> obtener_quantity(), $subitem-> obtener_unit_price(), $subitem-> obtener_total_price(), $subitem-> obtener_comments(), $subitem-> obtener_website(), $subitem-> obtener_additional());
+              $id_re_quote_subitem = ReQuoteSubitemRepository::insert_re_quote_subitem($connection, $re_quote_subitem);
+              $subitem_providers = RepositorioProviderSubitem::obtener_providers_subitem_por_id_subitem($connection, $subitem-> obtener_id());
+              if(count($subitem_providers)){
+                foreach ($subitem_providers as $key => $subitem_provider) {
+                  $re_quote_subitem_provider = new ReQuoteSubitemProvider('', $id_re_quote_subitem, $subitem_provider-> obtener_provider(), $subitem_provider-> obtener_price());
+                  ReQuoteSubitemProviderRepository::insert_re_quote_subitem_provider($connection, $re_quote_subitem_provider);
+                }
+              }
+            }
+          }
+          $providers = RepositorioProvider::obtener_providers_por_id_item($connection, $item-> obtener_id());
+          if(count($providers)){
+            foreach ($providers as $key => $provider) {
+              $re_quote_provider = new ReQuoteProvider('', $id_re_quote_item, $provider-> obtener_provider(), $provider-> obtener_price());
+              ReQuoteProviderRepository::insert_re_quote_provider($connection, $re_quote_provider);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  public static function reload_requote($connection, $id_rfq){
+    self::delete_whole_requote($connection, $id_rfq);
+    self::create_re_quote($connection, $id_rfq);
+  }
+
+  public static function delete_whole_requote($connection, $id_rfq){
+    $requote = self::get_re_quote_by_id_rfq($connection, $id_rfq);
+    $items = ReQuoteItemRepository::get_re_quote_items_by_id_re_quote($connection, $requote-> get_id());
+    foreach ($items as $key => $item) {
+      $subitems = ReQuoteSubitemRepository::get_re_quote_subitems_by_id_re_quote_item($connection, $item-> get_id());
+      foreach ($subitems as $key => $subitem) {
+        ReQuoteSubitemRepository::delete_re_quote_subitem($connection, $subitem-> get_id());
+      }
+      ReQuoteItemRepository::delete_re_quote_item($connection, $item-> get_id());
+    }
+    self::delete_requote($connection, $requote-> get_id());
+  }
+
+  public static function delete_requote($connection, $id_requote){
+    if(isset($connection)){
+      try{
+        $sql = 'DELETE FROM re_quotes WHERE id = :id_requote';
+        $sentence= $connection->prepare($sql);
+        $sentence-> bindParam(':id_requote', $id_requote, PDO::PARAM_STR);
+        $sentence-> execute();
+      }catch(PDOException $ex){
+        print "ERROR:" . $ex->getMessage() . "<br>";
+      }
+    }
+  }
+
   public static function insert_re_quote($connection, $re_quote){
     if(isset($connection)){
       try{

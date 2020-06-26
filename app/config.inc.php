@@ -127,6 +127,7 @@ define('RECOVER_PASSWORD_FORM', SERVIDOR . 'recover_password_form');
 define('RESTART_PASSWORD', SERVIDOR . 'restart_password/');
 /***************************************************************************************/
 define('RE_QUOTE', PERFIL . 're_quote/');
+define('RELOAD_REQUOTE', SERVIDOR . 'reload_requote/');
 define('SAVE_RE_QUOTE', SERVIDOR . 'save_re_quote');
 define('ADD_RE_QUOTE_ITEM', PERFIL . 'add_re_quote_item/');
 define('SAVE_RE_QUOTE_ITEM', SERVIDOR . 'save_re_quote_item');
