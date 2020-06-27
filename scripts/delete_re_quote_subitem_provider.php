@@ -5,6 +5,7 @@ $re_quote_subitem = ReQuoteSubitemRepository::get_re_quote_subitem_by_id(Conexio
 $re_quote_item = ReQuoteItemRepository::get_re_quote_item_by_id(Conexion::obtener_conexion(), $re_quote_subitem-> get_id_re_quote_item());
 $re_quote = ReQuoteRepository::get_re_quote_by_id(Conexion::obtener_conexion(), $re_quote_item-> get_id_re_quote());
 ReQuoteSubitemProviderRepository::delete_re_quote_subitem_provider(Conexion::obtener_conexion(), $id_re_quote_subitem_provider);
+ReQuoteAuditTrailRepository::create_audit_trail_subitem_provider_deleted(Conexion::obtener_conexion(), $re_quote_subitem_provider-> get_provider(), 'Provider', $re_quote_subitem-> get_id(), $re_quote_item-> get_id_re_quote());
 Conexion::cerrar_conexion();
-Redireccion::redirigir(RE_QUOTE . $re_quote-> get_id_rfq());
+Redireccion::redirigir(RE_QUOTE . $re_quote-> get_id_rfq() . '#subitem' . $re_quote_subitem-> get_id());
 ?>

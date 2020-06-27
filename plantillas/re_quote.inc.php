@@ -12,7 +12,7 @@ Conexion::cerrar_conexion();
           <h1>Re quote</h1>
         </div>
         <div class="text-center col-sm-10">
-          <!--<button type="button" name="button" class="btn btn-info" id="audit_trails_button">Audit Trails</button>-->
+          <button type="button" name="button" class="btn btn-info" id="audit_trails_button">Audit Trails</button>
           <a href="<?php echo RELOAD_REQUOTE . $id_rfq; ?>" class="btn btn-primary">Reload</a>
         </div>
       </div>
@@ -46,7 +46,6 @@ Conexion::cerrar_conexion();
   </section>
 </div>
 <!--*************************************************MODAL TO SHOW AUDIT TRAILS*************************************************************-->
-<!--
 <div class="modal fade" id="audit_trails_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
@@ -58,12 +57,11 @@ Conexion::cerrar_conexion();
       </div>
       <div class="modal-body">
         <?php
-        //Conexion::abrir_conexion();
-        //ReQuoteAuditTrailRepository::display_audit_trails(Conexion::obtener_conexion(), $re_quote-> get_id());
-        //Conexion::cerrar_conexion();
+        Conexion::abrir_conexion();
+        ReQuoteAuditTrailRepository::display_audit_trails(Conexion::obtener_conexion(), $re_quote-> get_id());
+        Conexion::cerrar_conexion();
         ?>
       </div>
     </div>
   </div>
 </div>
--->

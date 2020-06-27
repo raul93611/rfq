@@ -9,6 +9,7 @@ if(count($re_quote_subitems)){
   }
 }
 ReQuoteItemRepository::delete_re_quote_item(Conexion::obtener_conexion(), $id_re_quote_item);
+ReQuoteAuditTrailRepository::create_audit_trail_item_deleted(Conexion::obtener_conexion(), 'Item', $re_quote_item-> get_part_number_project(), 'Part Number', $re_quote_item-> get_id_re_quote());
 Conexion::cerrar_conexion();
 Redireccion::redirigir(RE_QUOTE . $re_quote-> get_id_rfq());
 ?>

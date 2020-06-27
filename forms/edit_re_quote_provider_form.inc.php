@@ -12,12 +12,14 @@ Conexion::cerrar_conexion();
       <div class="form-group">
         <label for="provider">Provider:</label>
         <input type="text" class="form-control form-control-sm" name="provider" required value="<?php echo $re_quote_provider-> get_provider(); ?>">
+        <input type="hidden" name="provider_original" value="<?php echo $re_quote_provider-> get_provider(); ?>">
       </div>
     </div>
     <div class="col-md-6">
       <div class="form-group">
         <label for="price">Price:</label>
         <input type="number" step=".01" class="form-control form-control-sm" name="price" required value="<?php echo $re_quote_provider-> get_price(); ?>">
+        <input type="hidden" name="price_original" value="<?php echo $re_quote_provider-> get_price(); ?>">
       </div>
     </div>
   </div>

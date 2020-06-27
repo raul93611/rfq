@@ -13,14 +13,17 @@ Conexion::cerrar_conexion();
       <div class="form-group">
         <label for="brand_project">Brand:</label>
         <input type="text" class="form-control form-control-sm" name="brand_project" value="<?php echo $re_quote_subitem-> get_brand_project(); ?>">
+        <input type="hidden" name="brand_project_original" value="<?php echo $re_quote_subitem-> get_brand_project(); ?>">
       </div>
       <div class="form-group">
         <label for="part_number_project">Part #:</label>
         <input type="text" class="form-control form-control-sm" name="part_number_project" value="<?php echo $re_quote_subitem-> get_part_number_project(); ?>">
+        <input type="hidden" name="part_number_project_original" value="<?php echo $re_quote_subitem-> get_part_number_project(); ?>">
       </div>
       <div class="form-group">
         <label for="description_project">Description:</label>
         <textarea class="form-control form-control-sm" rows="5" name="description_project"><?php echo $re_quote_subitem-> get_description_project(); ?></textarea>
+        <input type="hidden" name="description_project_original" value="<?php echo $re_quote_subitem-> get_description_project(); ?>">
       </div>
     </div>
     <div class="col-md-6">
@@ -28,28 +31,34 @@ Conexion::cerrar_conexion();
       <div class="form-group">
         <label for="brand">Brand:</label>
         <input type="text" class="form-control form-control-sm" name="brand" value="<?php echo $re_quote_subitem-> get_brand(); ?>">
+        <input type="hidden" name="brand_original" value="<?php echo $re_quote_subitem-> get_brand(); ?>">
       </div>
       <div class="form-group">
         <label for="part_number">Part #:</label>
         <input type="text" class="form-control form-control-sm" name="part_number" value="<?php echo $re_quote_subitem-> get_part_number(); ?>">
+        <input type="hidden" name="part_number_original" value="<?php echo $re_quote_subitem-> get_part_number(); ?>">
       </div>
       <div class="form-group">
         <label for="description">Description:</label>
         <textarea class="form-control form-control-sm" rows="5" name="description"><?php echo $re_quote_subitem-> get_description(); ?></textarea>
+        <input type="hidden" name="description_original" value="<?php echo $re_quote_subitem-> get_description(); ?>">
       </div>
     </div>
   </div>
   <div class="form-group">
     <label for="quantity">Quantity:</label>
     <input type="number" class="form-control form-control-sm" name="quantity" required value="<?php echo $re_quote_subitem-> get_quantity(); ?>">
+    <input type="hidden" name="quantity_original" value="<?php echo $re_quote_subitem-> get_quantity(); ?>">
   </div>
   <div class="form-group">
     <label for="comments">Comments:</label>
     <textarea class="form-control form-control-sm" rows="5" name="comments"><?php echo $re_quote_subitem-> get_comments(); ?></textarea>
+    <input type="hidden" name="comments_original" value="<?php echo $re_quote_subitem-> get_comments(); ?>">
   </div>
   <div class="form-group">
     <label for="website">Website:</label>
     <input type="text" class="form-control form-control-sm" name="website" value="<?php echo $re_quote_subitem-> get_website(); ?>">
+    <input type="hidden" name="website_original" value="<?php echo $re_quote_subitem-> get_website(); ?>">
   </div>
 </div>
 <div class="card-footer">

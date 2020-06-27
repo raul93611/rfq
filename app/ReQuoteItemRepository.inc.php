@@ -41,13 +41,14 @@ class ReQuoteItemRepository{
       <h2>Items:</h2>
       <div class="p-3">
         <div class="custom-control custom-radio">
-          <input type="radio" id="net_30" name="payment_terms" class="custom-control-input" value="net_30" <?php if($re_quote-> get_payment_terms() == 'net_30'){echo 'checked';} ?>>
+          <input type="radio" id="net_30" name="payment_terms" class="custom-control-input" value="Net 30" <?php if($re_quote-> get_payment_terms() == 'Net 30'){echo 'checked';} ?>>
           <label class="custom-control-label" for="net_30">Net 30</label>
         </div>
         <div class="custom-control custom-radio">
-          <input type="radio" id="net_30_cc" name="payment_terms" class="custom-control-input" value="net_30_cc" <?php if($re_quote-> get_payment_terms() == 'net_30_cc'){echo 'checked';} ?>>
+          <input type="radio" id="net_30_cc" name="payment_terms" class="custom-control-input" value="Net 30/CC" <?php if($re_quote-> get_payment_terms() == 'Net 30/CC'){echo 'checked';} ?>>
           <label class="custom-control-label" for="net_30_cc">Net 30/CC</label>
         </div>
+        <input type="hidden" name="payment_terms_original" value="<?php echo $re_quote-> get_payment_terms(); ?>">
       </div>
       <div class="table-responsive">
         <table class="table table-bordered table-hover">
@@ -115,11 +116,13 @@ class ReQuoteItemRepository{
         <div class="col-md-3">
           <div class="form-group">
             <textarea class="form-control form-control-sm" rows="1" name="shipping" id="shipping_rq" placeholder="Enter shipping ..."><?php echo $re_quote-> get_shipping(); ?></textarea>
+            <input type="hidden" name="shipping_original" value="<?php echo $re_quote-> get_shipping(); ?>">
           </div>
         </div>
         <div class="col-md-3">
           <div class="form-group">
             <input type="number" step=".01" class="form-control form-control-sm" id="shipping_cost_rq" name="shipping_cost" value="<?php echo $re_quote-> get_shipping_cost(); ?>">
+            <input type="hidden" name="shipping_cost_original" value="<?php echo $re_quote-> get_shipping_cost(); ?>">
           </div>
         </div>
 
@@ -147,7 +150,7 @@ class ReQuoteItemRepository{
     $re_quote_providers = ReQuoteProviderRepository::get_re_quote_providers_by_id_re_quote_item(Conexion::obtener_conexion(), $re_quote_item-> get_id());
     Conexion::cerrar_conexion();
     ?>
-    <tr>
+    <tr id="<?php echo 'item' . $re_quote_item-> get_id(); ?>">
       <td>
         <a href="<?php echo ADD_RE_QUOTE_PROVIDER . $re_quote_item-> get_id(); ?>" class="btn btn-warning btn-block">
           <i class="fa fa-plus-circle"></i> Add Provider

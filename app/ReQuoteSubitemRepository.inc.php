@@ -73,7 +73,7 @@ class ReQuoteSubitemRepository{
     $re_quote_subitem_providers = ReQuoteSubitemProviderRepository::get_re_quote_subitem_providers_by_id_re_quote_subitem(Conexion::obtener_conexion(), $re_quote_subitem-> get_id());
     Conexion::cerrar_conexion();
     ?>
-    <tr class="fila_subitem">
+    <tr id="<?php echo 'subitem' . $re_quote_subitem-> get_id(); ?>" class="fila_subitem">
       <td>
         <a href="<?php echo ADD_RE_QUOTE_SUBITEM_PROVIDER . $re_quote_subitem-> get_id(); ?>" class="btn btn-warning btn-block subitem">
           <i class="fa fa-plus-circle"></i> Add Provider

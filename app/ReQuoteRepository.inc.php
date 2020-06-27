@@ -73,6 +73,7 @@ class ReQuoteRepository{
       }
       ReQuoteItemRepository::delete_re_quote_item($connection, $item-> get_id());
     }
+    ReQuoteAuditTrailRepository::delete_audit_trails($connection, $requote-> get_id());
     self::delete_requote($connection, $requote-> get_id());
   }
 
