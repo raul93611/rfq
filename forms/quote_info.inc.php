@@ -1,25 +1,19 @@
-  <div class="row">
-  <?php
-if($cotizacion_recuperada-> obtener_award()){
-  ?>
-    <div class="col-md-12">
-      <div class="form-group">
-        <label for="contract_number">Contract number:</label>
-        <input type="text" class="form-control form-control-sm" name="contract_number" value="<?php echo $cotizacion_recuperada-> obtener_contract_number(); ?>">
-        <input type="hidden" name="contract_number_original" value="<?php echo $cotizacion_recuperada-> obtener_contract_number(); ?>">
-      </div>
+<div class="row">
+  <div class="col-md-6">
+    <div class="form-group">
+      <label for="contract_number">Contract number:</label>
+      <input type="text" class="form-control form-control-sm" name="contract_number" value="<?php echo $cotizacion_recuperada-> obtener_contract_number(); ?>">
+      <input type="hidden" name="contract_number_original" value="<?php echo $cotizacion_recuperada-> obtener_contract_number(); ?>">
     </div>
-  <?php
-}
-?>
-<div class="col-md-12">
+  </div>
+<div class="col-md-6">
   <div class="form-group">
     <label for="email_code">Code:</label>
     <input type="text" class="form-control form-control-sm" id="email_code" name="email_code" value="<?php echo $cotizacion_recuperada->obtener_email_code(); ?>">
     <input type="hidden" name="email_code_original" value="<?php echo $cotizacion_recuperada-> obtener_email_code(); ?>">
   </div>
 </div>
-<div class="col-md-12">
+<div class="col-md-6">
   <div class="form-group">
     <label for="type_of_bid">Type of bid:</label>
     <select class="form-control form-control-sm" name="type_of_bid" id="type_of_bid">
@@ -47,21 +41,21 @@ if($cotizacion_recuperada-> obtener_award()){
     <input type="hidden" name="type_of_bid_original" value="<?php echo $cotizacion_recuperada-> obtener_type_of_bid(); ?>">
   </div>
 </div>
-<div class="col-md-12">
+<div class="col-md-6">
   <div class="form-group">
     <label for="issue_date">Issue date:</label>
     <input type="text" class="form-control form-control-sm" id="issue_date" name="issue_date" value="<?php echo $cotizacion_recuperada->obtener_issue_date(); ?>">
     <input type="hidden" name="issue_date_original" value="<?php echo $cotizacion_recuperada->obtener_issue_date(); ?>">
   </div>
 </div>
-<div class="col-md-12">
+<div class="col-md-6">
   <div class="form-group">
     <label for="end_date">End date:</label>
     <input type="text" class="form-control form-control-sm" id="end_date" name="end_date" value="<?php echo $cotizacion_recuperada->obtener_end_date(); ?>">
     <input type="hidden" name="end_date_original" value="<?php echo $cotizacion_recuperada->obtener_end_date(); ?>">
   </div>
 </div>
-<div class="col-md-12">
+<div class="col-md-6">
   <div class="form-group">
     <label for="canal">Channel:</label>
     <select class="form-control form-control-sm" name="canal" id="canal">
