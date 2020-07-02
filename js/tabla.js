@@ -191,7 +191,7 @@ $('.fulfillment_table').DataTable({
     var time2 = setInterval(function(){
       var payment_terms = 1;
       var total_ganado = parseFloat($('#total_ganado').html().split(' ')[1]);
-      if ($('input:radio[name=payment_terms]:checked').val() === 'net_30_cc') {
+      if ($('input:radio[name=payment_terms]:checked').val() === 'Net 30/CC') {
         payment_terms = total_ganado*0.029;
       } else {
         payment_terms = 0;
@@ -229,7 +229,7 @@ $('.fulfillment_table').DataTable({
 $('#re_quote_form').submit(function () {
   var payment_terms = 1;
   var total_ganado = parseFloat($('#total_ganado').html().split(' ')[1]);
-  if ($('input:radio[name=payment_terms]:checked').val() === 'net_30_cc') {
+  if ($('input:radio[name=payment_terms]:checked').val() === 'Net 30/CC') {
     payment_terms = total_ganado*0.029;
   } else {
     payment_terms = 0;
