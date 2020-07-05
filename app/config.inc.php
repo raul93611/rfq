@@ -71,10 +71,10 @@ define('DELETE_QUOTE', SERVIDOR . 'delete_quote');
 define('GUARDAR_EDITAR_COTIZACION', SERVIDOR . 'guardar_editar_cotizacion/');
 define('SAVE_QUOTE_INFO', SERVIDOR . 'save_quote_info');
 /***************************OTHER SECTIONS**************************************/
-define('NO_BID', COTIZACIONES . 'no_bid');
-define('NO_SUBMITTED', COTIZACIONES . 'no_submitted');
-define('RFP_QUOTES', COTIZACIONES . 'rfp_quotes');
-define('CANCELLED', COTIZACIONES . 'cancelled');
+define('NO_BID', PERFIL . 'no_bid');
+define('NO_SUBMITTED', PERFIL . 'no_submitted');
+define('RFP_QUOTES', PERFIL . 'rfp_quotes');
+define('CANCELLED', PERFIL . 'cancelled');
 /***************************PROPOSAL********************************************/
 define('PROPOSAL', SERVIDOR . 'proposal');
 define('PROPOSAL_GSA', SERVIDOR . 'proposal_gsa');

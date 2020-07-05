@@ -184,6 +184,18 @@ if ($partes_ruta[0] == 'rfq') {
         case 'fulfillment_quotes':
           $gestor_actual = 'fulfillment_quotes';
           break;
+        case 'no_bid':
+          $gestor_actual = 'no_bid';
+          break;
+        case 'no_submitted':
+          $gestor_actual = 'no_submitted';
+          break;
+        case 'rfp_quotes':
+          $gestor_actual = 'rfp_quotes';
+          break;
+        case 'cancelled':
+          $gestor_actual = 'cancelled';
+          break;
       }
       break;
       case 'proposal':
@@ -390,18 +402,6 @@ if ($partes_ruta[0] == 'rfq') {
               break;
             case 'nuevo':
               $cotizacion = 'nuevo';
-              break;
-            case 'no_bid':
-              $cotizacion = 'no_bid';
-              break;
-            case 'no_submitted':
-              $cotizacion = 'no_submitted';
-              break;
-            case 'rfp_quotes':
-              $cotizacion = 'rfp_quotes';
-              break;
-            case 'cancelled':
-              $cotizacion = 'cancelled';
               break;
           }
           break;

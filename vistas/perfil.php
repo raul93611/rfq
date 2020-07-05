@@ -58,18 +58,6 @@ switch ($gestor_actual) {
       case 'nuevo':
         include_once 'plantillas/nueva_cotizacion.inc.php';
         break;
-      case 'no_bid':
-        include_once 'plantillas/no_bid.inc.php';
-        break;
-      case 'no_submitted':
-        include_once 'plantillas/no_submitted.inc.php';
-        break;
-      case 'rfp_quotes':
-        include_once 'plantillas/rfp_quotes.inc.php';
-        break;
-      case 'cancelled':
-        include_once 'plantillas/cancelled.inc.php';
-        break;
       case 'editar_cotizacion':
         Conexion::abrir_conexion();
         $cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
@@ -149,8 +137,20 @@ switch ($gestor_actual) {
   case 'excel_reports':
     include_once 'plantillas/excel_reports.inc.php';
     break;
+  case 'no_bid':
+    include_once 'plantillas/no_bid.inc.php';
+    break;
   case 'fulfillment_quotes':
     include_once 'plantillas/fulfillment_quotes.inc.php';
+    break;
+  case 'no_submitted':
+    include_once 'plantillas/no_submitted.inc.php';
+    break;
+  case 'rfp_quotes':
+    include_once 'plantillas/rfp_quotes.inc.php';
+    break;
+  case 'cancelled':
+    include_once 'plantillas/cancelled.inc.php';
     break;
 }
 include_once 'plantillas/documento_cierre.inc.php';

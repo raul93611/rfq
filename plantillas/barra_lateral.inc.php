@@ -48,14 +48,14 @@
         <!---->
         <li class="nav-item has-treeview
         <?php
-        if ($gestor_actual == 'cotizaciones' || $gestor_actual == 'completados' || $gestor_actual == 'submitted' || $gestor_actual == 'award') {
+        if ($gestor_actual == 'cotizaciones' || $gestor_actual == 'completados' || $gestor_actual == 'submitted' || $gestor_actual == 'award' || $gestor_actual == 'fulfillment_quotes' || $gestor_actual == 'no_bid' || $gestor_actual == 'rfp_quotes' || $gestor_actual == 'no_submitted' || $gestor_actual == 'cancelled') {
           echo 'menu-open';
         }
         ?>
             ">
           <a href="#" class="nav-link
           <?php
-          if ($gestor_actual == 'cotizaciones' || $gestor_actual == 'completados' || $gestor_actual == 'submitted' || $gestor_actual == 'award') {
+          if ($gestor_actual == 'cotizaciones' || $gestor_actual == 'completados' || $gestor_actual == 'submitted' || $gestor_actual == 'award' || $gestor_actual == 'fulfillment_quotes' || $gestor_actual == 'no_bid' || $gestor_actual == 'rfp_quotes' || $gestor_actual == 'no_submitted' || $gestor_actual == 'cancelled') {
             echo 'active';
           }
           ?>
@@ -503,9 +503,10 @@
                 </ul>
               </li>
               <li class="nav-item">
+
                 <a href="<?php echo FULFILLMENT_QUOTES; ?>" class="nav-link
                 <?php
-                if ($cotizacion == 'fulfillment_quotes') {
+                if ($gestor_actual == 'fulfillment_quotes') {
                   echo 'active';
                 }
                 ?>
@@ -516,7 +517,7 @@
               <li class="nav-item">
                 <a href="<?php echo RFP_QUOTES; ?>" class="nav-link
                 <?php
-                if ($cotizacion == 'rfp_quotes') {
+                if ($gestor_actual == 'rfp_quotes') {
                   echo 'active';
                 }
                 ?>
@@ -527,7 +528,7 @@
               <li class="nav-item">
                 <a href="<?php echo NO_BID; ?>" class="nav-link
                 <?php
-                if ($cotizacion == 'no_bid') {
+                if ($gestor_actual == 'no_bid') {
                   echo 'active';
                 }
                 ?>
@@ -538,7 +539,7 @@
               <li class="nav-item">
                 <a href="<?php echo NO_SUBMITTED; ?>" class="nav-link
                 <?php
-                if ($cotizacion == 'no_submitted') {
+                if ($gestor_actual == 'no_submitted') {
                   echo 'active';
                 }
                 ?>
@@ -549,7 +550,7 @@
               <li class="nav-item">
                 <a href="<?php echo CANCELLED; ?>" class="nav-link
                 <?php
-                if ($cotizacion == 'cancelled') {
+                if ($gestor_actual == 'cancelled') {
                   echo 'active';
                 }
                 ?>

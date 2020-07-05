@@ -349,5 +349,25 @@ class ReQuoteRepository{
     <?php
     }
   }
+
+  public static function get_all_providers_name($connection, $id_requote){
+    $providers_name = [];
+    $items = ReQuoteItemRepository::get_re_quote_items_by_id_re_quote($connection, $id_requote);
+    foreach ($items as $i => $item) {
+      $providers = ReQuoteProviderRepository::get_re_quote_providers_by_id_re_quote_item($connection, $item-> get_id());
+      foreach ($providers as $j => $provider) {
+        array_push($providers_name, $provider-> get_provider());
+      }
+      $subitems = ReQuoteSubitemRepository::get_re_quote_subitems_by_id_re_quote_item($connection, $item-> get_id());
+      foreach ($subitems as $k => $subitem) {
+        $providers_subitem = ReQuoteSubitemProviderRepository::get_re_quote_subitem_providers_by_id_re_quote_subitem($connection, $subitem-> get_id());
+        foreach ($providers_subitem as $l => $provider_subitem) {
+          array_push($providers_name, $provider_subitem-> get_provider());
+        }
+      }
+    }
+    $providers_name = array_unique($providers_name);
+    return $providers_name;
+  }
 }
 ?>

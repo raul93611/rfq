@@ -1,5 +1,4 @@
 <?php
-
 use PhpOffice\PhpSpreadsheet\Helper\Sample;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -11,6 +10,8 @@ if ($helper->isCli()) {
 }
 Conexion::abrir_conexion();
 $providers_name = RepositorioRfq::get_all_providers_name(Conexion::obtener_conexion(), $id_rfq);
+$requote = ReQuoteRepository::get_re_quote_by_id_rfq(Conexion::obtener_conexion(), $id_rfq);
+$requote_providers_name = ReQuoteRepository::get_all_providers_name(Conexion::obtener_conexion(), $requote-> get_id());
 $x = 'A';
 
 $spreadsheet = new Spreadsheet();
@@ -23,6 +24,7 @@ $spreadsheet->getProperties()->setCreator('E-logic.Inc')
     ->setCategory('QuoteItemsTable');
 
 $spreadsheet->setActiveSheetIndex(0);
+$spreadsheet->getActiveSheet()->getStyle($x . '1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('ed9191');
 $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . '1', '#');$x++;
 $spreadsheet->getActiveSheet()->getStyle($x . '1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('ed9191');
 $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . '1', 'PROJECT SPECIFICATIONS');$x++;
@@ -37,14 +39,17 @@ foreach ($providers_name as $i => $provider_name) {
   $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . '1', strtoupper($provider_name));
   $x++;
 }
+foreach ($requote_providers_name as $i => $requote_provider_name) {
+  $spreadsheet->getActiveSheet()->getStyle($x . '1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('03befc');
+  $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . '1', strtoupper($requote_provider_name));
+  $x++;
+}
 $spreadsheet->getActiveSheet()->getStyle($x . '1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('668fe8');
 $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . '1', 'PRICE FOR CLIENT');$x++;
 $spreadsheet->getActiveSheet()->getStyle($x . '1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('668fe8');
 $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . '1', 'TOTAL PRICE');$x++;
-$spreadsheet->getActiveSheet()->getStyle($x . '1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('e86684');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue($x . '1', 'COMMENTS');
 
-ExcelRepository::print_items(Conexion::obtener_conexion(), $spreadsheet, $providers_name, $id_rfq);
+ExcelRepository::print_items(Conexion::obtener_conexion(), $spreadsheet, $providers_name, $requote_providers_name, $requote, $id_rfq);
 
 Conexion::cerrar_conexion();
 
