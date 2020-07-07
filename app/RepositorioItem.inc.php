@@ -142,12 +142,19 @@ class RepositorioItem {
     Conexion::abrir_conexion();
     $cotizacion = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
     $items = self::obtener_items_por_id_rfq(Conexion::obtener_conexion(), $id_rfq);
+    $re_quote_exists = ReQuoteRepository::re_quote_exists(Conexion::obtener_conexion(), $id_rfq);
     Conexion::cerrar_conexion();
     if (count($items)) {
       ?>
       <br>
       <a target="_blank" href="<?php echo PDF_TABLA_ITEMS . $id_rfq; ?>" class="ml-2 float-right btn btn-primary"><i class="fa fa-file"></i> PDF</a>
-      <a target="_blank" href="<?php echo EXCEL_ITEMS_TABLE . $id_rfq; ?>" class="float-right btn btn-primary"><i class="fa fa-file"></i> EXCEL</a>
+      <?php
+      if($re_quote_exists){
+        ?>
+        <a target="_blank" href="<?php echo EXCEL_ITEMS_TABLE . $id_rfq; ?>" class="float-right btn btn-primary"><i class="fa fa-file"></i> EXCEL</a>
+        <?php
+      }
+      ?>
       <?php
       echo '<h2 id="caja_items">Items:</h2>';
       echo '<div class="row">';

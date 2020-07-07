@@ -2,7 +2,7 @@
 define('NOMBRE_SERVIDOR', 'localhost');
 define('NOMBRE_USUARIO', 'root');
 define('PASSWORD', '');
-define('NOMBRE_BD', 'elogic');
+define('NOMBRE_BD', 'elogicnewdb');
 
 define('SERVER_NAME', 'localhost');
 define('USER_NAME', 'root');
