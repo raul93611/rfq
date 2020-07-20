@@ -146,9 +146,6 @@ switch ($gestor_actual) {
   case 'no_submitted':
     include_once 'plantillas/no_submitted.inc.php';
     break;
-  case 'rfp_quotes':
-    include_once 'plantillas/rfp_quotes.inc.php';
-    break;
   case 'cancelled':
     include_once 'plantillas/cancelled.inc.php';
     break;

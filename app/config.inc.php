@@ -2,11 +2,7 @@
 define('NOMBRE_SERVIDOR', 'localhost');
 define('NOMBRE_USUARIO', 'root');
 define('PASSWORD', '');
-define('NOMBRE_BD', 'elogicnewdb');
-
-define('SERVER_NAME', 'localhost');
-define('USER_NAME', 'root');
-define('BD_NAME', 'rfp');
+define('NOMBRE_BD', 'elogic');
 
 define('SERVERNAME_FULLFILLMENT', 'localhost');
 define('BD_NAME_FULLFILLMENT', 'fullfillment');
@@ -73,7 +69,6 @@ define('SAVE_QUOTE_INFO', SERVIDOR . 'save_quote_info');
 /***************************OTHER SECTIONS**************************************/
 define('NO_BID', PERFIL . 'no_bid');
 define('NO_SUBMITTED', PERFIL . 'no_submitted');
-define('RFP_QUOTES', PERFIL . 'rfp_quotes');
 define('CANCELLED', PERFIL . 'cancelled');
 /***************************PROPOSAL********************************************/
 define('PROPOSAL', SERVIDOR . 'proposal');
@@ -104,11 +99,8 @@ define('GUARDAR_ADD_PROVIDER_SUBITEM', SERVIDOR . 'guardar_add_provider_subitem/
 define('GUARDAR_EDIT_PROVIDER_SUBITEM', SERVIDOR . 'guardar_edit_provider_subitem/');
 /**************************************************************************************/
 define('PDF_REPORT', SERVIDOR . 'pdf_report');
-define('PDF_PROJECT_CHARTER', SERVIDOR . 'pdf_project_charter/');
 /************************************************************************************/
 define('GUARDAR_COMMENT', SERVIDOR . 'guardar_comment/');
-/*************************************************************************************/
-define('CREATE_PROJECT', SERVIDOR . 'create_project/');
 /***********************************************************************************/
 define('GUARDAR_FULLFILLMENT_FORM', SERVIDOR . 'guardar_fullfillment_form');
 /**********************************************************************************/

@@ -19,11 +19,6 @@ if(is_null($cotizacion_recuperada)){
         <div class="col-md-8 text-center">
           <?php
           if($cotizacion_recuperada-> obtener_canal() != 'Chemonics' && $cotizacion_recuperada-> obtener_canal() != 'Ebay & Amazon'){
-            if(!$cotizacion_recuperada-> obtener_rfp()){
-              ?>
-              <a class="btn btn-info" href="<?php echo CREATE_PROJECT . $cotizacion_recuperada-> obtener_id(); ?>"><i class="fas fa-plus"></i> Create project</a>
-              <?php
-            }
             if($cotizacion_recuperada-> obtener_completado()){
               ?>
               <a class="btn btn-primary" href="<?php echo COPY_QUOTE . $cotizacion_recuperada-> obtener_id(); ?>"><i class="fa fa-copy"></i> Copy</a>

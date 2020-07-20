@@ -48,21 +48,21 @@
         <!---->
         <li class="nav-item has-treeview
         <?php
-        if ($gestor_actual == 'cotizaciones' || $gestor_actual == 'completados' || $gestor_actual == 'submitted' || $gestor_actual == 'award' || $gestor_actual == 'fulfillment_quotes' || $gestor_actual == 'no_bid' || $gestor_actual == 'rfp_quotes' || $gestor_actual == 'no_submitted' || $gestor_actual == 'cancelled') {
+        if ($gestor_actual == 'cotizaciones' || $gestor_actual == 'completados' || $gestor_actual == 'submitted' || $gestor_actual == 'award' || $gestor_actual == 'fulfillment_quotes' || $gestor_actual == 'no_bid' || $gestor_actual == 'no_submitted' || $gestor_actual == 'cancelled') {
           echo 'menu-open';
         }
         ?>
             ">
           <a href="#" class="nav-link
           <?php
-          if ($gestor_actual == 'cotizaciones' || $gestor_actual == 'completados' || $gestor_actual == 'submitted' || $gestor_actual == 'award' || $gestor_actual == 'fulfillment_quotes' || $gestor_actual == 'no_bid' || $gestor_actual == 'rfp_quotes' || $gestor_actual == 'no_submitted' || $gestor_actual == 'cancelled') {
+          if ($gestor_actual == 'cotizaciones' || $gestor_actual == 'completados' || $gestor_actual == 'submitted' || $gestor_actual == 'award' || $gestor_actual == 'fulfillment_quotes' || $gestor_actual == 'no_bid' || $gestor_actual == 'no_submitted' || $gestor_actual == 'cancelled') {
             echo 'active';
           }
           ?>
              ">
             <i class="nav-icon fas fa-tag"></i>
             <p>
-              RFQ Team
+              RFQ & RFP Team
               <i class="right fa fa-angle-left"></i>
             </p>
           </a>
@@ -512,17 +512,6 @@
                 ?>
                    ">
                   <p>Fulfillment Quotes</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo RFP_QUOTES; ?>" class="nav-link
-                <?php
-                if ($gestor_actual == 'rfp_quotes') {
-                  echo 'active';
-                }
-                ?>
-                   ">
-                  <p>RFP Quotes</p>
                 </a>
               </li>
               <li class="nav-item">

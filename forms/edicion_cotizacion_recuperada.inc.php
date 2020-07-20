@@ -9,13 +9,6 @@
       <h6><b>End Date:</b> <small><?php echo $cotizacion_recuperada->obtener_end_date(); ?></small></h6>
       <h6><b>Channel:</b> <small><?php echo $cotizacion_recuperada-> obtener_canal() ?></small></h6>
       <h6><b>Designated User:</b> <small><?php echo Input::get_designated_user($cotizacion_recuperada); ?></small></h6>
-      <?php
-      if($cotizacion_recuperada-> obtener_rfp()){
-        ?>
-        <h6><b>Proposal RFP:</b> <small><?php echo $cotizacion_recuperada-> obtener_rfp(); ?></small></h6>
-        <?php
-      }
-      ?>
       <h6><b>Completed Date:</b> <small><?php if($cotizacion_recuperada->obtener_fecha_completado() != '0000-00-00'){echo RepositorioComment::mysql_date_to_english_format($cotizacion_recuperada->obtener_fecha_completado());} ?></small></h6>
       <h6><b>Expiration Date:</b> <small><?php if($cotizacion_recuperada->obtener_expiration_date() != '0000-00-00'){echo RepositorioComment::mysql_date_to_english_format($cotizacion_recuperada->obtener_expiration_date());} ?></small></h6>
       <h6><b>Comments:</b> <small><?php echo $cotizacion_recuperada->obtener_comments(); ?></small></h6>
@@ -127,8 +120,6 @@
       echo '<a class="btn btn-primary" id="go_back" href="' . NO_SUBMITTED . '"><i class="fa fa-reply"></i></a>';
     }else if(!empty($cotizacion_recuperada-> obtener_canal())){
       echo '<a class="btn btn-primary" id="go_back" href="' . COTIZACIONES . $canal . '"><i class="fa fa-reply"></i></a>';
-    }else{
-      echo '<a class="btn btn-primary" id="go_back" href="' . RFP_QUOTES . '"><i class="fa fa-reply"></i></a>';
     }
     ?>
     <button type="submit" class="btn btn-success" id="save_item" name="guardar_cambios_cotizacion"><i class="fa fa-check"></i> Save</button>
@@ -150,7 +141,7 @@
       Conexion::abrir_conexion();
       $re_quote_exists = ReQuoteRepository::re_quote_exists(Conexion::obtener_conexion(), $cotizacion_recuperada-> obtener_id());
       Conexion::cerrar_conexion();
-      if(!$cotizacion_recuperada-> obtener_fullfillment() && $cotizacion_recuperada-> obtener_award() && $re_quote_exists && !$cotizacion_recuperada-> obtener_rfp()){
+      if(!$cotizacion_recuperada-> obtener_fullfillment() && $cotizacion_recuperada-> obtener_award() && $re_quote_exists){
         ?>
         <a href="#" id="fullfillment" class="btn btn-primary"><i class="fas fa-share-square"></i> Full-fillment</a>
         <?php

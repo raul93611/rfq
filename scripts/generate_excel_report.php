@@ -35,7 +35,6 @@ $spreadsheet->setActiveSheetIndex(0)->setCellValue('N1', 'TAXES(%)');
 $spreadsheet->setActiveSheetIndex(0)->setCellValue('O1', 'PROFIT(%)');
 $spreadsheet->setActiveSheetIndex(0)->setCellValue('P1', 'SHIPPING COST($)');
 $spreadsheet->setActiveSheetIndex(0)->setCellValue('Q1', 'SHIPPING');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('R1', 'RFP PROJECT');
 
 Conexion::abrir_conexion();
 $date_from = RepositorioComment::english_format_to_mysql_date($_POST['date_from']);
@@ -70,7 +69,6 @@ foreach ($quotes as $quote) {
   $spreadsheet->setActiveSheetIndex(0)->setCellValue('O'.$i, $quote-> obtener_profit());
   $spreadsheet->setActiveSheetIndex(0)->setCellValue('P'.$i, $quote-> obtener_shipping_cost());
   $spreadsheet->setActiveSheetIndex(0)->setCellValue('Q'.$i, $quote-> obtener_shipping());
-  $spreadsheet->setActiveSheetIndex(0)->setCellValue('R'.$i, $quote-> obtener_rfp());
   $i++;
 }
 

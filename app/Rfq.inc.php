@@ -27,11 +27,10 @@ class Rfq {
   private $additional;
   private $shipping;
   private $shipping_cost;
-  private $rfp;
   private $fullfillment;
   private $contract_number;
 
-  public function __construct($id, $id_usuario, $usuario_designado, $canal, $email_code, $type_of_bid, $issue_date, $end_date, $status, $completado, $total_cost, $total_price, $comments, $award, $fecha_completado, $fecha_submitted, $fecha_award, $payment_terms, $address, $ship_to, $expiration_date, $ship_via, $taxes, $profit, $additional, $shipping, $shipping_cost, $rfp, $fullfillment, $contract_number) {
+  public function __construct($id, $id_usuario, $usuario_designado, $canal, $email_code, $type_of_bid, $issue_date, $end_date, $status, $completado, $total_cost, $total_price, $comments, $award, $fecha_completado, $fecha_submitted, $fecha_award, $payment_terms, $address, $ship_to, $expiration_date, $ship_via, $taxes, $profit, $additional, $shipping, $shipping_cost, $fullfillment, $contract_number) {
     $this->id = $id;
     $this->id_usuario = $id_usuario;
     $this->usuario_designado = $usuario_designado;
@@ -59,7 +58,6 @@ class Rfq {
     $this->additional = $additional;
     $this->shipping = $shipping;
     $this->shipping_cost = $shipping_cost;
-    $this-> rfp = $rfp;
     $this-> fullfillment = $fullfillment;
     $this-> contract_number = $contract_number;
   }
@@ -170,10 +168,6 @@ class Rfq {
 
   public function obtener_shipping_cost(){
     return $this-> shipping_cost;
-  }
-
-  public function obtener_rfp(){
-    return $this-> rfp;
   }
 
   public function obtener_fullfillment(){

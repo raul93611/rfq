@@ -6,23 +6,6 @@ include_once 'app/Conexion.inc.php';
 include_once 'app/ControlSesion.inc.php';
 include_once 'app/Redireccion.inc.php';
 
-include_once '../rfp/app/Connection.inc.php';
-
-include_once 'app/RfpComment.inc.php';
-include_once '../rfp/app/CommentRepository.inc.php';
-
-include_once '../rfp/app/User.inc.php';
-include_once '../rfp/app/UserRepository.inc.php';
-
-include_once '../rfp/app/Project.inc.php';
-include_once '../rfp/app/ProjectRepository.inc.php';
-
-include_once '../rfp/app/Service.inc.php';
-include_once '../rfp/app/ServiceRepository.inc.php';
-
-include_once '../rfp/app/ContactList.inc.php';
-include_once '../rfp/app/ContactListRepository.inc.php';
-
 include_once '../fullfillment/app/ConnectionFullFillment.inc.php';
 include_once '../fullfillment/app/RepositorioRfqFullFillment.inc.php';
 include_once '../fullfillment/app/RepositorioItemFullFillment.inc.php';
@@ -189,9 +172,6 @@ if ($partes_ruta[0] == 'rfq') {
           break;
         case 'no_submitted':
           $gestor_actual = 'no_submitted';
-          break;
-        case 'rfp_quotes':
-          $gestor_actual = 'rfp_quotes';
           break;
         case 'cancelled':
           $gestor_actual = 'cancelled';
