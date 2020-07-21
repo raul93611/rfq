@@ -43,7 +43,6 @@ CREATE TABLE rfq(
         additional VARCHAR(100) NOT NULL,
         shipping_cost DECIMAL(10,2) NOT NULL,
         shipping VARCHAR(100) NOT NULL,
-        rfp INT NOT NULL,
         fullfillment TINYINT NOT NULL,
         contract_number VARCHAR(255) NOT NULL,
         PRIMARY KEY(id),
