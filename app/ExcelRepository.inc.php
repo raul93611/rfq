@@ -15,10 +15,13 @@ class ExcelRepository{
       list($i, $x) = self::print_item($i, $j, $x, $item, $providers_name, $providers_item, $requote_providers_name, $requote_providers, $spreadsheet);
 
       $subitems = RepositorioSubitem::obtener_subitems_por_id_item($connection, $item-> obtener_id());
-      foreach ($subitems as $key => $subitem) {
+      $requote_subitems = ReQuoteSubitemRepository::get_re_quote_subitems_by_id_re_quote_item($connection, $item-> obtener_id());
+      foreach ($subitems as $key1 => $subitem) {
+        $requote_subitem = $requote_subitems[$key1];
         $x = 'A';
         $providers_subitem = RepositorioProviderSubitem::obtener_providers_subitem_por_id_subitem($connection, $subitem-> obtener_id());
-        list($i, $x) = self::print_item($i, '', $x, $subitem, $providers_name, $providers_subitem, $spreadsheet);
+        $requote_subitem_providers = ReQuoteSubitemProviderRepository::get_re_quote_subitem_providers_by_id_re_quote_subitem($connection, $requote_subitem-> get_id());
+        list($i, $x) = self::print_item($i, '', $x, $subitem, $providers_name, $providers_subitem, $requote_providers_name, $requote_subitem_providers, $spreadsheet);
       }
       $j++;
     }
