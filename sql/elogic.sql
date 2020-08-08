@@ -65,6 +65,20 @@ CREATE TABLE comments(
     ON DELETE RESTRICT
 );
 
+CREATE TABLE services(
+  id INT NOT NULL AUTO_INCREMENT UNIQUE,
+  id_rfq INT NOT NULL,
+  description TEXT CHARACTER SET utf8 NOT NULL,
+  quantity INT NOT NULL,
+  unit_price DECIMAL(10,2) NOT NULL,
+  total_price DECIMAL(10,2) NOT NULL,
+  PRIMARY KEY(id),
+  FOREIGN KEY(id_rfq)
+      REFERENCES rfq(id)
+      ON UPDATE CASCADE
+      ON DELETE RESTRICT
+);
+
 CREATE TABLE audit_trails(
   id INT NOT NULL AUTO_INCREMENT UNIQUE,
   id_rfq INT NOT NULL,
@@ -250,6 +264,12 @@ CREATE TABLE re_quote_subitem_providers(
     REFERENCES re_quote_subitems(id)
     ON UPDATE CASCADE
     ON DELETE RESTRICT
+);
+
+CREATE TABLE type_of_bids(
+  id INT NOT NULL AUTO_INCREMENT UNIQUE,
+  type_of_bid VARCHAR(255) NOT NULL,
+  PRIMARY KEY(id)
 );
 
 ALTER TABLE rfq AUTO_INCREMENT = 300;

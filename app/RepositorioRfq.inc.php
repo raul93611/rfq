@@ -221,6 +221,7 @@ class RepositorioRfq {
       <td><?php echo $cotizacion->obtener_issue_date(); ?></td>
       <td><?php echo $cotizacion->obtener_end_date(); ?></td>
       <td><?php echo $cotizacion->obtener_email_code(); ?></td>
+      <td class="text-center"><?php if($cotizacion-> obtener_type_of_bid() == 'Services'){echo '<i class="text-success fas fa-check"></i>';}else{echo '<i class="text-danger fas fa-times"></i>';} ?></td>
       <td class="text-center">
         <a href="<?php echo DELETE_QUOTE . '/' . $cotizacion->obtener_id(); ?>" class="delete_quote_button text-danger"><i class="fa fa-times"></i> Delete</a>
       </td>
@@ -243,6 +244,7 @@ class RepositorioRfq {
             <th>ISSUE DATE</th>
             <th>END DATE</th>
             <th>CODE</th>
+            <th>RFP</th>
             <th>OPTIONS</th>
           </tr>
         </thead>

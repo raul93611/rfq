@@ -17,26 +17,16 @@
     <div class="form-group">
       <label for="type_of_bid">Type of bid:</label>
       <select class="form-control form-control-sm" name="type_of_bid" id="type_of_bid">
-        <option <?php if($cotizacion_recuperada-> obtener_type_of_bid() == 'Audio Visual'){echo 'selected';} ?>>Audio Visual</option>
-        <option <?php if($cotizacion_recuperada-> obtener_type_of_bid() == 'Back up Batteries'){echo 'selected';} ?>>Back up Batteries</option>
-        <option <?php if($cotizacion_recuperada-> obtener_type_of_bid() == 'Cameras'){echo 'selected';} ?>>Cameras</option>
-        <option <?php if($cotizacion_recuperada-> obtener_type_of_bid() == 'Computer Peripherals'){echo 'selected';} ?>>Computer Peripherals</option>
-        <option <?php if($cotizacion_recuperada-> obtener_type_of_bid() == 'Computers'){echo 'selected';} ?>>Computers</option>
-        <option <?php if($cotizacion_recuperada-> obtener_type_of_bid() == 'Medical'){echo 'selected';} ?>>Medical</option>
-        <option <?php if($cotizacion_recuperada-> obtener_type_of_bid() == 'Miscellaneous'){echo 'selected';} ?>>Miscellaneous</option>
-        <option <?php if($cotizacion_recuperada-> obtener_type_of_bid() == 'Monitors & Televisions'){echo 'selected';} ?>>Monitors & Televisions</option>
-        <option <?php if($cotizacion_recuperada-> obtener_type_of_bid() == 'Office Supplies'){echo 'selected';} ?>>Office Supplies</option>
-        <option <?php if($cotizacion_recuperada-> obtener_type_of_bid() == 'Peripherals'){echo 'selected';} ?>>Peripherals</option>
-        <option <?php if($cotizacion_recuperada-> obtener_type_of_bid() == 'Portable Radios'){echo 'selected';} ?>>Portable Radios</option>
-        <option <?php if($cotizacion_recuperada-> obtener_type_of_bid() == 'Printers'){echo 'selected';} ?>>Printers</option>
-        <option <?php if($cotizacion_recuperada-> obtener_type_of_bid() == 'Servers'){echo 'selected';} ?>>Servers</option>
-        <option <?php if($cotizacion_recuperada-> obtener_type_of_bid() == 'Software'){echo 'selected';} ?>>Software</option>
-        <option <?php if($cotizacion_recuperada-> obtener_type_of_bid() == 'Tactical'){echo 'selected';} ?>>Tactical</option>
-        <option <?php if($cotizacion_recuperada-> obtener_type_of_bid() == 'Tools'){echo 'selected';} ?>>Tools</option>
-        <option <?php if($cotizacion_recuperada-> obtener_type_of_bid() == 'Scanners'){echo 'selected';} ?>>Scanners</option>
-        <option <?php if($cotizacion_recuperada-> obtener_type_of_bid() == 'Projectors'){echo 'selected';} ?>>Projectors</option>
-        <option <?php if($cotizacion_recuperada-> obtener_type_of_bid() == 'Video Cameras'){echo 'selected';} ?>>Video Cameras</option>
-        <option <?php if($cotizacion_recuperada-> obtener_type_of_bid() == 'Phones'){echo 'selected';} ?>>Phones</option>
+        <?php
+        Conexion::abrir_conexion();
+        $type_of_bids = TypeOfBidRepository::get_all(Conexion::obtener_conexion());
+        Conexion::cerrar_conexion();
+        foreach ($type_of_bids as $key => $type_of_bid) {
+          ?>
+          <option <?php if($cotizacion_recuperada-> obtener_type_of_bid() == $type_of_bid-> get_type_of_bid()){echo 'selected';} ?>><?php echo $type_of_bid-> get_type_of_bid(); ?></option>
+          <?php
+        }
+        ?>
       </select>
       <input type="hidden" name="type_of_bid_original" value="<?php echo $cotizacion_recuperada-> obtener_type_of_bid(); ?>">
     </div>

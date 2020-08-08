@@ -146,6 +146,11 @@ define('FULFILLMENT_QUOTES', PERFIL . 'fulfillment_quotes');
 /******************************************************************************/
 define('REMOVE_AWARD', SERVIDOR . 'remove_award/');
 define('REMOVE_FULFILLMENT', SERVIDOR . 'remove_fulfillment/');
+/******************************************************************************/
+define('ADD_SERVICE', SERVIDOR . 'add_service');
+define('LOAD_SERVICE', SERVIDOR . 'load_service/');
+define('EDIT_SERVICE', SERVIDOR . 'edit_service');
+define('DELETE_SERVICE', SERVIDOR . 'delete_service/');
 
 define('EMPLOYEE_DOCS', SERVIDOR . 'employee_docs/');
 define('REPORTS_DOCS', SERVIDOR . 'reports/');

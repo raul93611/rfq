@@ -1,4 +1,12 @@
 $(document).ready(function () {
+  $('#services_table').on('click', '.edit_service', function(){
+    $('#edit_service_modal form').load('http://' + document.location.hostname + '/rfq/load_service/' + $(this).attr('data'), function(){
+      $('#edit_service_modal').modal();
+    });
+  });
+  $('#add_service').click(function(){
+    $('#add_service_modal').modal();
+  });
   $('.audit_trail').click(function(){
     $('#audit_trails_modal').modal('hide');
     var element = $(this).attr('href');

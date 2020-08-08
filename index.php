@@ -78,6 +78,12 @@ include_once 'app/AuditTrailRepository.inc.php';
 include_once 'app/ReQuoteAuditTrail.inc.php';
 include_once 'app/ReQuoteAuditTrailRepository.inc.php';
 
+include_once 'app/TypeOfBid.inc.php';
+include_once 'app/TypeOfBidRepository.inc.php';
+
+include_once 'app/Service.inc.php';
+include_once 'app/ServiceRepository.inc.php';
+
 $componentes_url = parse_url($_SERVER['REQUEST_URI']);
 $ruta = $componentes_url['path'];
 
@@ -145,6 +151,12 @@ if ($partes_ruta[0] == 'rfq') {
         break;
       case 'save_quote_info':
         $ruta_elegida = 'scripts/save_quote_info.php';
+        break;
+      case 'add_service':
+        $ruta_elegida = 'scripts/add_service.php';
+        break;
+      case 'edit_service';
+        $ruta_elegida = 'scripts/edit_service.php';
         break;
     }
   } else if (count($partes_ruta) == 3) {
@@ -306,6 +318,14 @@ if ($partes_ruta[0] == 'rfq') {
       case 'reload_requote':
         $id_rfq = $partes_ruta[2];
         $ruta_elegida = 'scripts/reload_requote.php';
+        break;
+      case 'load_service';
+        $id_service = $partes_ruta[2];
+        $ruta_elegida = 'scripts/load_service.php';
+        break;
+      case 'delete_service';
+        $id_service = $partes_ruta[2];
+        $ruta_elegida = 'scripts/delete_service.php';
         break;
       default:
       break;

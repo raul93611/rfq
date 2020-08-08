@@ -67,6 +67,9 @@
     <br>
     <?php
   }
+  if($cotizacion_recuperada-> obtener_type_of_bid() == 'Services'){
+    include_once 'plantillas/services.inc.php';
+  }
   if($cotizacion_recuperada-> obtener_canal() == 'Chemonics' || $cotizacion_recuperada-> obtener_canal() == 'Ebay & Amazon'){
     if(!$cotizacion_recuperada->obtener_award()){
       ?>
