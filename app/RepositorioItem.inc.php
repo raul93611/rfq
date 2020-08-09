@@ -144,6 +144,7 @@ class RepositorioItem {
     $items = self::obtener_items_por_id_rfq(Conexion::obtener_conexion(), $id_rfq);
     $re_quote_exists = ReQuoteRepository::re_quote_exists(Conexion::obtener_conexion(), $id_rfq);
     Conexion::cerrar_conexion();
+    echo '<br><h2 id="caja_items">Items:</h2>';
     if (count($items)) {
       ?>
       <br>
@@ -154,9 +155,6 @@ class RepositorioItem {
         <a target="_blank" href="<?php echo EXCEL_ITEMS_TABLE . $id_rfq; ?>" class="float-right btn btn-primary"><i class="fa fa-file"></i> EXCEL</a>
         <?php
       }
-      ?>
-      <?php
-      echo '<h2 id="caja_items">Items:</h2>';
       echo '<div class="row">';
       echo '<div class="col-md-3">';
       if ($cotizacion->obtener_taxes() != 0) {
@@ -271,7 +269,7 @@ class RepositorioItem {
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <textarea class="form-control form-control-sm" rows="3" id="shipping" name="shipping" placeholder="Enter shipping ..."><?php echo $cotizacion->obtener_shipping(); ?></textarea>
+            <textarea class="form-control form-control-sm" rows="1" id="shipping" name="shipping" placeholder="Enter shipping ..."><?php echo $cotizacion->obtener_shipping(); ?></textarea>
             <input type="hidden" name="shipping_original" value="<?php echo $cotizacion->obtener_shipping(); ?>">
           </div>
         </div>
@@ -282,6 +280,10 @@ class RepositorioItem {
           </div>
         </div>
       </div>
+      <?php
+    }else{
+      ?>
+      <h3 class="text-info text-center"><i class="fas fa-exclamation-circle"></i> No Items to display!</h3>
       <?php
     }
   }

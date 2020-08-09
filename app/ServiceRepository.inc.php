@@ -42,6 +42,7 @@ class ServiceRepository{
 
   public static function display_services($connection, $id_rfq){
     $services = self::get_services($connection, $id_rfq);
+    $total_service = self::get_total($connection, $id_rfq);
     if(count($services)){
       ?>
       <div class="table-responsive" id="services_table">
@@ -62,9 +63,17 @@ class ServiceRepository{
               self::display_service($service, $key);
             }
             ?>
+            <tr>
+              <td colspan="5" class="display-4"><b><h4>TOTAL:</h4></b></td>
+              <td id="total_service">$ <?php echo $total_service; ?></td>
+            </tr>
           </tbody>
         </table>
       </div>
+      <?php
+    }else{
+      ?>
+      <h3 class="text-info text-center"><i class="fas fa-exclamation-circle"></i> No Services to display!</h3>
       <?php
     }
   }
@@ -134,6 +143,25 @@ class ServiceRepository{
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
+  }
+
+  public static function get_total($connection, $id_rfq){
+    $total_service = 0;
+    if(isset($connection)){
+      try{
+        $sql = 'SELECT SUM(total_price) AS total_service FROM services WHERE id_rfq = :id_rfq';
+        $sentence = $connection-> prepare($sql);
+        $sentence-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentence-> execute();
+        $result = $sentence-> fetch(PDO::FETCH_ASSOC);
+        if(!empty($result)){
+          $total_service = $result['total_service'];
+        }
+      }catch(PDOException $ex){
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $total_service;
   }
 }
 ?>

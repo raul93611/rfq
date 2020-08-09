@@ -1,4 +1,4 @@
-<h3>Services:</h3>
+<h2>Services:</h2>
 <div class="row">
   <div class="col-md-12">
     <button type="button" name="button" class="btn btn-primary float-right" id="add_service">Add</button>

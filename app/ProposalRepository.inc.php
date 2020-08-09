@@ -318,5 +318,16 @@ class ProposalRepository{
 
     return $html;
   }
+
+  public static function print_service($service, $a){
+    $html = '<tr>
+      <td style="border-bottom: 0;">' . $a . '</td>
+      <td style="border-bottom: 0;">' . nl2br($service-> get_description()) . '</td>
+      <td style="text-align:right;border-bottom: 0;">' .  $service-> get_quantity() . '</td>
+      <td style="text-align:right;border-bottom: 0;">$ ' . number_format($service-> get_unit_price(), 2) . '</td>
+      <td style="text-align:right;border-bottom: 0;">$ ' . number_format($service-> get_total_price(), 2) . '</td>
+      </tr>';
+    return $html;
+  }
 }
 ?>

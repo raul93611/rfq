@@ -70,6 +70,11 @@
   if($cotizacion_recuperada-> obtener_type_of_bid() == 'Services'){
     include_once 'plantillas/services.inc.php';
   }
+  Conexion::abrir_conexion();
+  ?>
+  <h3 class="text-center text-info">TOTAL: $ <?php echo number_format($cotizacion_recuperada-> obtener_total_price() + ServiceRepository::get_total(Conexion::obtener_conexion(), $id_rfq), 2); ?></h3>
+  <?php
+  Conexion::cerrar_conexion();
   if($cotizacion_recuperada-> obtener_canal() == 'Chemonics' || $cotizacion_recuperada-> obtener_canal() == 'Ebay & Amazon'){
     if(!$cotizacion_recuperada->obtener_award()){
       ?>

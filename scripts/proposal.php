@@ -4,11 +4,15 @@ Conexion::abrir_conexion();
 $cotizacion = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
 $usuario_designado = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), $cotizacion->obtener_usuario_designado());
 $items = RepositorioItem::obtener_items_por_id_rfq(Conexion::obtener_conexion(), $id_rfq);
+if($cotizacion-> obtener_type_of_bid() == 'Services'){
+  $services = ServiceRepository::get_services(Conexion::obtener_conexion(), $id_rfq);
+  $total_service = ServiceRepository::get_total(Conexion::obtener_conexion(), $id_rfq);
+}else{
+  $total_service = 0;
+}
 Conexion::cerrar_conexion();
-$partes_fecha_completado = explode('-', $cotizacion->obtener_fecha_completado());
-$fecha_completado = $partes_fecha_completado[1] . '/' . $partes_fecha_completado[2] . '/' . $partes_fecha_completado[0];
-$partes_expiration_date = explode('-', $cotizacion->obtener_expiration_date());
-$expiration_date = $partes_expiration_date[1] . '/' . $partes_expiration_date[2] . '/' . $partes_expiration_date[0];
+$fecha_completado = RepositorioComment::mysql_date_to_english_format($cotizacion->obtener_fecha_completado());
+$expiration_date = RepositorioComment::mysql_date_to_english_format($cotizacion->obtener_expiration_date());
 try{
   $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
   $fontDirs = $defaultConfig['fontDir'];
@@ -128,7 +132,6 @@ try{
       <td style="text-align:center;">' . $cotizacion->obtener_payment_terms() . '</td>
     </tr>
   </table><br>';
-  if (count($items)) {
       if ($encabezado) {
           $html .= '<table id="tabla" style="width:100%">
           <tr>
@@ -167,10 +170,19 @@ try{
       }
       $a = 1;
       $limit = 400;
-      foreach ($items as $i => $item) {
-        $html .= ProposalRepository::print_item($item, $limit, $a);
-        $a++;
+      if(count($items)){
+        foreach ($items as $i => $item) {
+          $html .= ProposalRepository::print_item($item, $limit, $a);
+          $a++;
+        }
       }
+      if(count($services)){
+        foreach ($services as $key => $service) {
+          $html .= ProposalRepository::print_service($service, $a);
+          $a++;
+        }
+      }
+
       $html .= '
       <tr>
         <td style="border:none;"></td>
@@ -183,10 +195,9 @@ try{
           <td style="border:none;"></td>
       <td style="font-size:12pt;">TOTAL:</td>
 
-      <td style="font-size:12pt;text-align:right;">$ ' . number_format($cotizacion->obtener_total_price(), 2) . '</td>
+      <td style="font-size:12pt;text-align:right;">$ ' . number_format($cotizacion->obtener_total_price() + $total_service, 2) . '</td>
     </tr>';
       $html .= '</table>';
-  }
   if ($cotizacion->obtener_payment_terms() == 'Net 30') {
     $html .= '<br><div class="color letra_chiquita"><b>PAYMENT TERMS</b><br><b>NET TERMS: </b>30 Days<br><b>CREDIT CARD PAYMENT: </b>Please add an additional 3% to process credit card payments.</div>';
   }
