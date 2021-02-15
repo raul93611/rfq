@@ -53,10 +53,8 @@ ExcelRepository::print_items(Conexion::obtener_conexion(), $spreadsheet, $provid
 
 Conexion::cerrar_conexion();
 
-// Set active sheet index to the first sheet, so Excel opens this as the first sheet
 $spreadsheet->setActiveSheetIndex(0);
 
-// Redirect output to a client’s web browser (Xlsx)
 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 header('Content-Disposition: attachment;filename="QuoteItemsTable.xlsx"');
 header('Cache-Control: max-age=0');

@@ -16,9 +16,9 @@ try{
   $fontDirs = $defaultConfig['fontDir'];
   $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
   $fontData = $defaultFontConfig['fontdata'];
-  $mpdf = new \Mpdf\Mpdf(['format' => 'Letter-L', 'margin_footer' => '8',
+  $mpdf = new Mpdf\Mpdf(['format' => 'Letter-L', 'margin_footer' => '8',
   'fontDir' => array_merge($fontDirs, [
-          SERVER . '/vendor/mpdf/mpdf/ttfonts',
+          SERVIDOR . '/vendor/mpdf/mpdf/ttfonts',
       ]),
       'fontdata' => $fontData + [
           'roboto' => [
@@ -192,6 +192,6 @@ try{
     $mpdf->Output($_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $cotizacion->obtener_id() . '/' . preg_replace('/[^a-z0-9-_\-\.]/i','_', $cotizacion-> obtener_email_code()) . '(re_quote_items_table)' . '.pdf', 'F');
     $mpdf->Output(preg_replace('/[^a-z0-9-_\-\.]/i','_', $cotizacion-> obtener_email_code()) . '(re_quote_items_table).pdf', 'I');
   }
-} catch (\Mpdf\MpdfException $e) {
+} catch (Mpdf\MpdfException $e) {
   echo $e->getMessage();
 }

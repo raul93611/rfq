@@ -15,7 +15,7 @@ class ExcelRepository{
       list($i, $x) = self::print_item($i, $j, $x, $item, $providers_name, $providers_item, $requote_providers_name, $requote_providers, $spreadsheet);
 
       $subitems = RepositorioSubitem::obtener_subitems_por_id_item($connection, $item-> obtener_id());
-      $requote_subitems = ReQuoteSubitemRepository::get_re_quote_subitems_by_id_re_quote_item($connection, $item-> obtener_id());
+      $requote_subitems = ReQuoteSubitemRepository::get_re_quote_subitems_by_id_re_quote_item($connection, $requote_item-> get_id());
       foreach ($subitems as $key1 => $subitem) {
         $requote_subitem = $requote_subitems[$key1];
         $x = 'A';

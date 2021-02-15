@@ -18,7 +18,7 @@ try{
   $fontDirs = $defaultConfig['fontDir'];
   $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
   $fontData = $defaultFontConfig['fontdata'];
-  $mpdf = new \Mpdf\Mpdf(['format' => 'Letter', 'margin_footer' => '8',
+  $mpdf = new Mpdf\Mpdf(['format' => 'Letter', 'margin_footer' => '8',
   'fontDir' => array_merge($fontDirs, [
           SERVIDOR . '/vendor/mpdf/mpdf/ttfonts',
       ]),
@@ -176,7 +176,7 @@ try{
           $a++;
         }
       }
-      if(count($services)){
+      if(isset($services)){
         foreach ($services as $key => $service) {
           $html .= ProposalRepository::print_service($service, $a);
           $a++;
@@ -211,7 +211,7 @@ try{
   $mpdf->WriteHTML($html);
   $mpdf->Output($_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $cotizacion->obtener_id() . '/' . preg_replace('/[^a-z0-9-_\-\.]/i','_', $cotizacion-> obtener_email_code()) . '(proposal)' . '.pdf', 'F');
   $mpdf->Output(preg_replace('/[^a-z0-9-_\-\.]/i','_', $cotizacion-> obtener_email_code()) . '.pdf', 'I');
-} catch (\Mpdf\MpdfException $e) {
+} catch (Mpdf\MpdfException $e) {
   echo $e->getMessage();
 }
 ?>
