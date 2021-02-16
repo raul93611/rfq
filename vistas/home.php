@@ -2,7 +2,7 @@
 if (ControlSesion::sesion_iniciada()) {
   Redireccion::redirigir(PERFIL);
 }
-include_once 'plantillas/validacion_login.inc.php';
+include_once 'plantillas/user/validacion_login.inc.php';
 ?>
 <!DOCTYPE html>
 <html lang="es">

@@ -1,10 +1,10 @@
 <?php
 session_save_path('temp');
 session_start();
-include_once 'app/config.inc.php';
-include_once 'app/Conexion.inc.php';
-include_once 'app/ControlSesion.inc.php';
-include_once 'app/Redireccion.inc.php';
+include_once 'app/Bootstrap/config.inc.php';
+include_once 'app/Bootstrap/Conexion.inc.php';
+include_once 'app/Bootstrap/ControlSesion.inc.php';
+include_once 'app/Bootstrap/Redireccion.inc.php';
 
 include_once '../fullfillment/app/ConnectionFullFillment.inc.php';
 include_once '../fullfillment/app/RepositorioRfqFullFillment.inc.php';
@@ -22,67 +22,67 @@ include_once '../fullfillment/app/ExtraSubitem.inc.php';
 include_once '../fullfillment/app/ExtraItemRepository.inc.php';
 include_once '../fullfillment/app/ExtraSubitemRepository.inc.php';
 
-include_once 'app/RepositorioUsuario.inc.php';
-include_once 'app/Usuario.inc.php';
-include_once 'app/ValidadorUsuario.inc.php';
-include_once 'app/ValidadorLogin.inc.php';
-include_once 'app/ValidadorRegistro.inc.php';
+include_once 'app/User/RepositorioUsuario.inc.php';
+include_once 'app/User/Usuario.inc.php';
+include_once 'app/User/ValidadorUsuario.inc.php';
+include_once 'app/User/ValidadorLogin.inc.php';
+include_once 'app/User/ValidadorRegistro.inc.php';
 
-include_once 'app/Cuestionario.inc.php';
-include_once 'app/RepositorioCuestionario.inc.php';
+include_once 'app/Cuestionario/Cuestionario.inc.php';
+include_once 'app/Cuestionario/RepositorioCuestionario.inc.php';
 
-include_once 'app/Rfq.inc.php';
-include_once 'app/RepositorioRfq.inc.php';
-include_once 'app/ValidadorCotizacion.inc.php';
-include_once 'app/ValidadorCotizacionRegistro.inc.php';
+include_once 'app/Quote/Rfq.inc.php';
+include_once 'app/Quote/RepositorioRfq.inc.php';
+include_once 'app/Quote/ValidadorCotizacion.inc.php';
+include_once 'app/Quote/ValidadorCotizacionRegistro.inc.php';
 
-include_once 'app/Item.inc.php';
-include_once 'app/RepositorioItem.inc.php';
+include_once 'app/Quote/Item.inc.php';
+include_once 'app/Quote/RepositorioItem.inc.php';
 
-include_once 'app/Provider.inc.php';
-include_once 'app/RepositorioProvider.inc.php';
+include_once 'app/Quote/Provider.inc.php';
+include_once 'app/Quote/RepositorioProvider.inc.php';
 
-include_once 'app/Subitem.inc.php';
-include_once 'app/RepositorioSubitem.inc.php';
+include_once 'app/Quote/Subitem.inc.php';
+include_once 'app/Quote/RepositorioSubitem.inc.php';
 
-include_once 'app/ProviderSubitem.inc.php';
-include_once 'app/RepositorioProviderSubitem.inc.php';
+include_once 'app/Quote/ProviderSubitem.inc.php';
+include_once 'app/Quote/RepositorioProviderSubitem.inc.php';
 
-include_once 'app/Comment.inc.php';
-include_once 'app/RepositorioComment.inc.php';
+include_once 'app/Comment/Comment.inc.php';
+include_once 'app/Comment/RepositorioComment.inc.php';
 
-include_once 'app/ReQuote.inc.php';
-include_once 'app/ReQuoteRepository.inc.php';
+include_once 'app/ReQuote/ReQuote.inc.php';
+include_once 'app/ReQuote/ReQuoteRepository.inc.php';
 
-include_once 'app/ReQuoteItem.inc.php';
-include_once 'app/ReQuoteItemRepository.inc.php';
+include_once 'app/ReQuote/ReQuoteItem.inc.php';
+include_once 'app/ReQuote/ReQuoteItemRepository.inc.php';
 
-include_once 'app/ReQuoteProvider.inc.php';
-include_once 'app/ReQuoteProviderRepository.inc.php';
+include_once 'app/ReQuote/ReQuoteProvider.inc.php';
+include_once 'app/ReQuote/ReQuoteProviderRepository.inc.php';
 
-include_once 'app/ReQuoteSubitem.inc.php';
-include_once 'app/ReQuoteSubitemRepository.inc.php';
+include_once 'app/ReQuote/ReQuoteSubitem.inc.php';
+include_once 'app/ReQuote/ReQuoteSubitemRepository.inc.php';
 
-include_once 'app/ReQuoteSubitemProvider.inc.php';
-include_once 'app/ReQuoteSubitemProviderRepository.inc.php';
+include_once 'app/ReQuote/ReQuoteSubitemProvider.inc.php';
+include_once 'app/ReQuote/ReQuoteSubitemProviderRepository.inc.php';
 
-include_once 'app/ProposalRepository.inc.php';
-include_once 'app/ExcelRepository.inc.php';
+include_once 'app/Utilities/ProposalRepository.inc.php';
+include_once 'app/Utilities/ExcelRepository.inc.php';
 
-include_once 'app/Input.inc.php';
-include_once 'app/Email.inc.php';
+include_once 'app/Utilities/Input.inc.php';
+include_once 'app/Utilities/Email.inc.php';
 
-include_once 'app/AuditTrail.inc.php';
-include_once 'app/AuditTrailRepository.inc.php';
+include_once 'app/Quote/AuditTrail.inc.php';
+include_once 'app/Quote/AuditTrailRepository.inc.php';
 
-include_once 'app/ReQuoteAuditTrail.inc.php';
-include_once 'app/ReQuoteAuditTrailRepository.inc.php';
+include_once 'app/ReQuote/ReQuoteAuditTrail.inc.php';
+include_once 'app/ReQuote/ReQuoteAuditTrailRepository.inc.php';
 
-include_once 'app/TypeOfBid.inc.php';
-include_once 'app/TypeOfBidRepository.inc.php';
+include_once 'app/TypeOfBid/TypeOfBid.inc.php';
+include_once 'app/TypeOfBid/TypeOfBidRepository.inc.php';
 
-include_once 'app/Service.inc.php';
-include_once 'app/ServiceRepository.inc.php';
+include_once 'app/Service/Service.inc.php';
+include_once 'app/Service/ServiceRepository.inc.php';
 
 $componentes_url = parse_url($_SERVER['REQUEST_URI']);
 $ruta = $componentes_url['path'];

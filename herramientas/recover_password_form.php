@@ -1,5 +1,5 @@
 <?php
-include_once 'plantillas/validacion_recover_password_form.inc.php';
+include_once 'plantillas/user/validacion_recover_password_form.inc.php';
 ?>
 <!DOCTYPE html>
 <html lang="es">
