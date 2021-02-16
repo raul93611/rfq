@@ -64,12 +64,6 @@ switch ($gestor_actual) {
         Conexion::cerrar_conexion();
         include_once 'plantillas/quote/editar_cotizacion.inc.php';
         break;
-      case 'delete_quote':
-        Conexion::abrir_conexion();
-        $cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
-        Conexion::cerrar_conexion();
-        include_once 'scripts/delete_quote.php';
-        break;
       case 'add_item':
         Conexion::abrir_conexion();
         $cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);

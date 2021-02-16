@@ -104,59 +104,59 @@ if ($partes_ruta[0] == 'rfq') {
         $ruta_elegida = 'herramientas/genera_usuario.php';
         break;
       case 'logout':
-        $ruta_elegida = 'scripts/logout.php';
+        $ruta_elegida = 'scripts/user/logout.php';
         break;
       case 'pdf_report':
         $gestor_actual = 'pdf_report';
         $ruta_elegida = 'scripts/pdf_report.php';
         break;
       case 'guardar_comment':
-        $ruta_elegida = 'scripts/guardar_comment.php';
+        $ruta_elegida = 'scripts/utilities/guardar_comment.php';
         break;
       case 'guardar_fullfillment_form':
-        $ruta_elegida = 'scripts/guardar_fullfillment_form.php';
+        $ruta_elegida = 'scripts/fulfillment/guardar_fullfillment_form.php';
         break;
       case 'recover_password_form':
         $ruta_elegida = 'herramientas/recover_password_form.php';
         break;
       case 'save_re_quote_item':
-        $ruta_elegida = 'scripts/save_re_quote_item.php';
+        $ruta_elegida = 'scripts/re_quote/save_re_quote_item.php';
         break;
       case 'save_edit_re_quote_item':
-        $ruta_elegida = 'scripts/save_edit_re_quote_item.php';
+        $ruta_elegida = 'scripts/re_quote/save_edit_re_quote_item.php';
         break;
       case 'save_re_quote_provider':
-        $ruta_elegida = 'scripts/save_re_quote_provider.php';
+        $ruta_elegida = 'scripts/re_quote/save_re_quote_provider.php';
         break;
       case 'save_edit_re_quote_provider':
-        $ruta_elegida = 'scripts/save_edit_re_quote_provider.inc.php';
+        $ruta_elegida = 'scripts/re_quote/save_edit_re_quote_provider.php';
         break;
       case 'save_re_quote_subitem':
-        $ruta_elegida = 'scripts/save_re_quote_subitem.php';
+        $ruta_elegida = 'scripts/re_quote/save_re_quote_subitem.php';
         break;
       case 'save_edit_re_quote_subitem':
-        $ruta_elegida = 'scripts/save_edit_re_quote_subitem.php';
+        $ruta_elegida = 'scripts/re_quote/save_edit_re_quote_subitem.php';
         break;
       case 'save_re_quote_subitem_provider':
-        $ruta_elegida = 'scripts/save_re_quote_subitem_provider.php';
+        $ruta_elegida = 'scripts/re_quote/save_re_quote_subitem_provider.php';
         break;
       case 'save_edit_re_quote_subitem_provider':
-        $ruta_elegida = 'scripts/save_edit_re_quote_subitem_provider.php';
+        $ruta_elegida = 'scripts/re_quote/save_edit_re_quote_subitem_provider.php';
         break;
       case 'save_re_quote':
-        $ruta_elegida = 'scripts/save_re_quote.php';
+        $ruta_elegida = 'scripts/re_quote/save_re_quote.php';
         break;
       case 'generate_excel_report':
-        $ruta_elegida = 'scripts/generate_excel_report.php';
+        $ruta_elegida = 'scripts/utilities/generate_excel_report.php';
         break;
       case 'save_quote_info':
-        $ruta_elegida = 'scripts/save_quote_info.php';
+        $ruta_elegida = 'scripts/quote/save_quote_info.php';
         break;
       case 'add_service':
-        $ruta_elegida = 'scripts/add_service.php';
+        $ruta_elegida = 'scripts/service/add_service.php';
         break;
       case 'edit_service';
-        $ruta_elegida = 'scripts/edit_service.php';
+        $ruta_elegida = 'scripts/service/edit_service.php';
         break;
     }
   } else if (count($partes_ruta) == 3) {
@@ -192,80 +192,80 @@ if ($partes_ruta[0] == 'rfq') {
       break;
       case 'proposal':
         $id_rfq = $partes_ruta[2];
-        $ruta_elegida = 'scripts/proposal.php';
+        $ruta_elegida = 'scripts/utilities/proposal.php';
         break;
       case 'proposal_gsa':
         $id_rfq = $partes_ruta[2];
         $encabezado = 1;
-        $ruta_elegida = 'scripts/proposal.php';
+        $ruta_elegida = 'scripts/utilities/proposal.php';
         break;
       case 'copy_quote':
         $id_rfq = $partes_ruta[2];
-        $ruta_elegida = 'scripts/copy_quote.php';
+        $ruta_elegida = 'scripts/quote/copy_quote.php';
         break;
       case 'delete_quote':
         $id_rfq = $partes_ruta[2];
-        $ruta_elegida = 'scripts/delete_quote.php';
+        $ruta_elegida = 'scripts/quote/delete_quote.php';
         break;
       case 'guardar_editar_cotizacion':
         $id_rfq = $partes_ruta[2];
-        $ruta_elegida = 'scripts/guardar_editar_cotizacion.php';
+        $ruta_elegida = 'scripts/quote/guardar_editar_cotizacion.php';
         break;
       case 'guardar_add_item':
         $id_rfq = $partes_ruta[2];
-        $ruta_elegida = 'scripts/guardar_add_item.php';
+        $ruta_elegida = 'scripts/quote/guardar_add_item.php';
         break;
       case 'guardar_add_provider':
         $id_item = $partes_ruta[2];
-        $ruta_elegida = 'scripts/guardar_add_provider.php';
+        $ruta_elegida = 'scripts/quote/guardar_add_provider.php';
         break;
       case 'guardar_edit_item':
         $id_item = $partes_ruta[2];
-        $ruta_elegida = 'scripts/guardar_edit_item.php';
+        $ruta_elegida = 'scripts/quote/guardar_edit_item.php';
         break;
       case 'delete_item':
         $id_item = $partes_ruta[2];
-        $ruta_elegida = 'scripts/delete_item.php';
+        $ruta_elegida = 'scripts/quote/delete_item.php';
         break;
       case 'guardar_edit_provider':
         $id_provider = $partes_ruta[2];
-        $ruta_elegida = 'scripts/guardar_edit_provider.php';
+        $ruta_elegida = 'scripts/quote/guardar_edit_provider.php';
         break;
       case 'guardar_add_subitem':
         $id_item = $partes_ruta[2];
-        $ruta_elegida = 'scripts/guardar_add_subitem.php';
+        $ruta_elegida = 'scripts/quote/guardar_add_subitem.php';
         break;
       case 'guardar_add_provider_subitem':
         $id_subitem = $partes_ruta[2];
-        $ruta_elegida = 'scripts/guardar_add_provider_subitem.php';
+        $ruta_elegida = 'scripts/quote/guardar_add_provider_subitem.php';
         break;
       case 'guardar_edit_subitem':
         $id_subitem = $partes_ruta[2];
-        $ruta_elegida = 'scripts/guardar_edit_subitem.php';
+        $ruta_elegida = 'scripts/quote/guardar_edit_subitem.php';
         break;
       case 'guardar_edit_provider_subitem':
         $id_provider_subitem = $partes_ruta[2];
-        $ruta_elegida = 'scripts/guardar_edit_provider_subitem.php';
+        $ruta_elegida = 'scripts/quote/guardar_edit_provider_subitem.php';
         break;
       case 'delete_provider':
         $id_provider = $partes_ruta[2];
-        $ruta_elegida = 'scripts/delete_provider.php';
+        $ruta_elegida = 'scripts/quote/delete_provider.php';
         break;
       case 'delete_provider_subitem':
         $id_provider_subitem = $partes_ruta[2];
-        $ruta_elegida = 'scripts/delete_provider_subitem.php';
+        $ruta_elegida = 'scripts/quote/delete_provider_subitem.php';
         break;
       case 'delete_subitem':
         $id_subitem = $partes_ruta[2];
-        $ruta_elegida = 'scripts/delete_subitem.php';
+        $ruta_elegida = 'scripts/quote/delete_subitem.php';
         break;
       case 'enable_user':
         $id_usuario = $partes_ruta[2];
-        $ruta_elegida = 'scripts/enable_user.php';
+        $ruta_elegida = 'scripts/user/enable_user.php';
         break;
       case 'disable_user':
         $id_usuario = $partes_ruta[2];
-        $ruta_elegida = 'scripts/disable_user.php';
+        $ruta_elegida = 'scripts/user/disable_user.php';
         break;
       case 'create_project':
         $id_rfq = $partes_ruta[2];
@@ -273,59 +273,59 @@ if ($partes_ruta[0] == 'rfq') {
         break;
       case 'pdf_tabla_items';
         $id_rfq = $partes_ruta[2];
-        $ruta_elegida = 'scripts/pdf_tabla_items.php';
+        $ruta_elegida = 'scripts/utilities/pdf_tabla_items.php';
         break;
       case 'excel_items_table';
         $id_rfq = $partes_ruta[2];
-        $ruta_elegida = 'scripts/excel_items_table.php';
+        $ruta_elegida = 'scripts/utilities/excel_items_table.php';
         break;
       case 'pdf_re_quote';
         $id_rfq = $partes_ruta[2];
-        $ruta_elegida = 'scripts/pdf_re_quote.php';
+        $ruta_elegida = 'scripts/utilities/pdf_re_quote.php';
         break;
       case 'load_img':
         $id_rfq = $partes_ruta[2];
-        $ruta_elegida = 'scripts/load_img.php';
+        $ruta_elegida = 'scripts/utilities/load_img.php';
         break;
       case 'restart_password':
         $url_secreta = $partes_ruta[2];
         $ruta_elegida = 'herramientas/restart_password.php';
         break;
       case 'delete_re_quote_provider':
-        $ruta_elegida = 'scripts/delete_re_quote_provider.php';
+        $ruta_elegida = 'scripts/re_quote/delete_re_quote_provider.php';
         $id_re_quote_provider = $partes_ruta[2];
         break;
       case 'delete_re_quote_subitem_provider':
-        $ruta_elegida = 'scripts/delete_re_quote_subitem_provider.php';
+        $ruta_elegida = 'scripts/re_quote/delete_re_quote_subitem_provider.php';
         $id_re_quote_subitem_provider = $partes_ruta[2];
         break;
       case 'delete_re_quote_subitem':
-        $ruta_elegida = 'scripts/delete_re_quote_subitem.php';
+        $ruta_elegida = 'scripts/re_quote/delete_re_quote_subitem.php';
         $id_re_quote_subitem = $partes_ruta[2];
         break;
       case 'delete_re_quote_item':
-        $ruta_elegida = 'scripts/delete_re_quote_item.php';
+        $ruta_elegida = 'scripts/re_quote/delete_re_quote_item.php';
         $id_re_quote_item = $partes_ruta[2];
         break;
       case 'remove_award':
         $id_rfq = $partes_ruta[2];
-        $ruta_elegida = 'scripts/remove_award.php';
+        $ruta_elegida = 'scripts/quote/remove_award.php';
         break;
       case 'remove_fulfillment':
         $id_rfq = $partes_ruta[2];
-        $ruta_elegida = 'scripts/remove_fulfillment.php';
+        $ruta_elegida = 'scripts/quote/remove_fulfillment.php';
         break;
       case 'reload_requote':
         $id_rfq = $partes_ruta[2];
-        $ruta_elegida = 'scripts/reload_requote.php';
+        $ruta_elegida = 'scripts/re_quote/reload_requote.php';
         break;
       case 'load_service';
         $id_service = $partes_ruta[2];
-        $ruta_elegida = 'scripts/load_service.php';
+        $ruta_elegida = 'scripts/service/load_service.php';
         break;
       case 'delete_service';
         $id_service = $partes_ruta[2];
-        $ruta_elegida = 'scripts/delete_service.php';
+        $ruta_elegida = 'scripts/service/delete_service.php';
         break;
       default:
       break;
@@ -334,7 +334,7 @@ if ($partes_ruta[0] == 'rfq') {
     if($partes_ruta[1] == 'delete_document'){
       $id_rfq = $partes_ruta[2];
       $archivo = $partes_ruta[3];
-      $ruta_elegida = 'scripts/delete_document.php';
+      $ruta_elegida = 'scripts/utilities/delete_document.php';
     }else if($partes_ruta[1] == 'perfil'){
       $ruta_elegida = 'vistas/perfil.php';
       switch ($partes_ruta[2]) {
