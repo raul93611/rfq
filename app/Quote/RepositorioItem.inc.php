@@ -69,6 +69,25 @@ class RepositorioItem {
     return $items;
   }
 
+  public static function items_exists($connection, $id_rfq) {
+    $items = 0;
+    if (isset($connection)) {
+      try {
+        $sql = "SELECT COUNT(*) as items FROM item WHERE id_rfq = :id_rfq";
+        $sentence = $connection->prepare($sql);
+        $sentence->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentence->execute();
+        $result = $sentence->fetch(PDO::FETCH_ASSOC);
+        if (!empty($result)) {
+          $items = $result['items'];
+        }
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $items;
+  }
+
   public static function escribir_item($item, $i, $numeracion) {
     if (!isset($item)) {
       return;

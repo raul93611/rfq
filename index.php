@@ -1,26 +1,12 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
 session_save_path('temp');
 session_start();
 include_once 'app/Bootstrap/config.inc.php';
 include_once 'app/Bootstrap/Conexion.inc.php';
 include_once 'app/Bootstrap/ControlSesion.inc.php';
 include_once 'app/Bootstrap/Redireccion.inc.php';
-
-include_once '../fullfillment/app/ConnectionFullFillment.inc.php';
-include_once '../fullfillment/app/RepositorioRfqFullFillment.inc.php';
-include_once '../fullfillment/app/RepositorioItemFullFillment.inc.php';
-include_once '../fullfillment/app/RepositorioProviderFullFillment.inc.php';
-include_once '../fullfillment/app/RepositorioSubitemFullFillment.inc.php';
-include_once '../fullfillment/app/RepositorioProviderSubitemFullFillment.inc.php';
-include_once '../fullfillment/app/CommentRfqFullFillment.inc.php';
-include_once '../fullfillment/app/RepositorioRfqFullFillmentComment.inc.php';
-include_once '../fullfillment/app/RfqFullFillmentPart.inc.php';
-include_once '../fullfillment/app/RfqFullFillmentPartRepository.inc.php';
-include_once '../fullfillment/app/UserFullFillmentRepository.inc.php';
-include_once '../fullfillment/app/ExtraItem.inc.php';
-include_once '../fullfillment/app/ExtraSubitem.inc.php';
-include_once '../fullfillment/app/ExtraItemRepository.inc.php';
-include_once '../fullfillment/app/ExtraSubitemRepository.inc.php';
 
 include_once 'app/User/RepositorioUsuario.inc.php';
 include_once 'app/User/Usuario.inc.php';
@@ -84,6 +70,12 @@ include_once 'app/TypeOfBid/TypeOfBidRepository.inc.php';
 include_once 'app/Service/Service.inc.php';
 include_once 'app/Service/ServiceRepository.inc.php';
 
+include_once 'app/Tracking/Tracking.inc.php';
+include_once 'app/Tracking/TrackingRepository.inc.php';
+
+include_once 'app/Tracking/TrackingSubitem.inc.php';
+include_once 'app/Tracking/TrackingSubitemRepository.inc.php';
+
 $componentes_url = parse_url($_SERVER['REQUEST_URI']);
 $ruta = $componentes_url['path'];
 
@@ -91,6 +83,7 @@ $partes_ruta = explode('/', $ruta);
 $partes_ruta = array_filter($partes_ruta);
 $partes_ruta = array_slice($partes_ruta, 0);
 $ruta_elegida = 'vistas/404.php';
+
 if ($partes_ruta[0] == 'rfq') {
   if (count($partes_ruta) == 1) {
     $ruta_elegida = 'vistas/home.php';
@@ -112,9 +105,6 @@ if ($partes_ruta[0] == 'rfq') {
         break;
       case 'guardar_comment':
         $ruta_elegida = 'scripts/utilities/guardar_comment.php';
-        break;
-      case 'guardar_fullfillment_form':
-        $ruta_elegida = 'scripts/fulfillment/guardar_fullfillment_form.php';
         break;
       case 'recover_password_form':
         $ruta_elegida = 'herramientas/recover_password_form.php';
@@ -157,6 +147,18 @@ if ($partes_ruta[0] == 'rfq') {
         break;
       case 'edit_service';
         $ruta_elegida = 'scripts/service/edit_service.php';
+        break;
+      case 'save_tracking':
+        $ruta_elegida = 'scripts/tracking/save_tracking.php';
+        break;
+      case 'save_tracking_subitem':
+        $ruta_elegida = 'scripts/tracking/save_tracking_subitem.php';
+        break;
+      case 'save_edit_tracking':
+        $ruta_elegida = 'scripts/tracking/save_edit_tracking.php';
+        break;
+      case 'save_edit_tracking_subitem':
+        $ruta_elegida = 'scripts/tracking/save_edit_tracking_subitem.php';
         break;
     }
   } else if (count($partes_ruta) == 3) {
@@ -327,6 +329,30 @@ if ($partes_ruta[0] == 'rfq') {
         $id_service = $partes_ruta[2];
         $ruta_elegida = 'scripts/service/delete_service.php';
         break;
+      case 'delete_tracking':
+        $id_tracking = $partes_ruta[2];
+        $ruta_elegida = 'scripts/tracking/delete_tracking.php';
+        break;
+      case 'delete_tracking_subitem':
+        $id_tracking_subitem = $partes_ruta[2];
+        $ruta_elegida = 'scripts/tracking/delete_tracking_subitem.php';
+        break;
+      case 'tracking_pdf':
+        $id_rfq = $partes_ruta[2];
+        $ruta_elegida = 'scripts/tracking/tracking_pdf.php';
+        break;
+      case 'load_tracking':
+        $id_tracking = $partes_ruta[2];
+        $ruta_elegida = 'scripts/tracking/load_tracking.php';
+        break;
+      case 'load_tracking_box':
+        $id_rfq = $partes_ruta[2];
+        $ruta_elegida = 'scripts/tracking/load_tracking_box.php';
+        break;
+      case 'load_tracking_subitem':
+        $id_tracking_subitem = $partes_ruta[2];
+        $ruta_elegida = 'scripts/tracking/load_tracking_subitem.php';
+        break;
       default:
       break;
     }
@@ -495,6 +521,10 @@ if ($partes_ruta[0] == 'rfq') {
           break;
         case 're_quote':
           $gestor_actual = 're_quote';
+          $id_rfq = $partes_ruta[3];
+          break;
+        case 'tracking':
+          $gestor_actual = 'tracking';
           $id_rfq = $partes_ruta[3];
           break;
         default:

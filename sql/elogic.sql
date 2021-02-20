@@ -44,6 +44,7 @@ CREATE TABLE rfq(
   shipping_cost DECIMAL(10,2) NOT NULL,
   shipping VARCHAR(100) NOT NULL,
   fullfillment TINYINT NOT NULL,
+  fulfillment_date DATE,
   contract_number VARCHAR(255) NOT NULL,
   PRIMARY KEY(id),
   FOREIGN KEY(id_usuario)
@@ -262,6 +263,36 @@ CREATE TABLE re_quote_subitem_providers(
   PRIMARY KEY(id),
   FOREIGN KEY(id_re_quote_subitem)
     REFERENCES re_quote_subitems(id)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT
+);
+
+/*TRACKINGS*/
+
+CREATE TABLE trackings(
+  id INT NOT NULL AUTO_INCREMENT UNIQUE,
+  id_item INT NOT NULL,
+  quantity INT NOT NULL,
+  tracking_number TEXT CHARACTER SET utf8 NOT NULL,
+  delivery_date DATE NOT NULL,
+  signed_by VARCHAR(255) NOT NULL,
+  PRIMARY KEY(id),
+  FOREIGN KEY(id_item)
+    REFERENCES item(id)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT
+);
+
+CREATE TABLE trackings_subitems(
+  id INT NOT NULL AUTO_INCREMENT UNIQUE,
+  id_subitem INT NOT NULL,
+  quantity INT NOT NULL,
+  tracking_number TEXT CHARACTER SET utf8 NOT NULL,
+  delivery_date DATE NOT NULL,
+  signed_by VARCHAR(255) NOT NULL,
+  PRIMARY KEY(id),
+  FOREIGN KEY(id_subitem)
+    REFERENCES subitems(id)
     ON UPDATE CASCADE
     ON DELETE RESTRICT
 );

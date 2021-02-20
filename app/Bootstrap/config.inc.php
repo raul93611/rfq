@@ -151,7 +151,14 @@ define('ADD_SERVICE', SERVIDOR . 'add_service');
 define('LOAD_SERVICE', SERVIDOR . 'load_service/');
 define('EDIT_SERVICE', SERVIDOR . 'edit_service');
 define('DELETE_SERVICE', SERVIDOR . 'delete_service/');
-
+/******************************************************************************/
+define('TRACKING', PERFIL . 'tracking/');
+define('SAVE_TRACKING', SERVIDOR . 'save_tracking');
+define('SAVE_TRACKING_SUBITEM', SERVIDOR . 'save_tracking_subitem');
+define('DELETE_TRACKING', SERVIDOR . 'delete_tracking/');
+define('DELETE_TRACKING_SUBITEM', SERVIDOR . 'delete_tracking_subitem/');
+define('TRACKING_PDF', SERVIDOR . 'tracking_pdf/');
+/******************************************************************************/
 define('EMPLOYEE_DOCS', SERVIDOR . 'employee_docs/');
 define('REPORTS_DOCS', SERVIDOR . 'reports/');
 define('DOCS', SERVIDOR . 'documentos/');

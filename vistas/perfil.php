@@ -143,6 +143,9 @@ switch ($gestor_actual) {
   case 'cancelled':
     include_once 'plantillas/cancelled/cancelled.inc.php';
     break;
+  case 'tracking':
+    include_once 'plantillas/tracking/tracking.inc.php';
+    break;
 }
 include_once 'plantillas/utilities/documento_cierre.inc.php';
 ?>

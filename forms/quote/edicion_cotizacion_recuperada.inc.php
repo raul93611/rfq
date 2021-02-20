@@ -74,6 +74,8 @@
   ?>
   <h3 class="text-center text-info">TOTAL: $ <?php echo number_format($cotizacion_recuperada-> obtener_total_price() + ServiceRepository::get_total(Conexion::obtener_conexion(), $id_rfq), 2); ?></h3>
   <?php
+  $re_quote_exists = ReQuoteRepository::re_quote_exists(Conexion::obtener_conexion(), $cotizacion_recuperada-> obtener_id());
+  $items_exists = RepositorioItem::items_exists(Conexion::obtener_conexion(), $cotizacion_recuperada-> obtener_id());
   Conexion::cerrar_conexion();
   if($cotizacion_recuperada-> obtener_canal() == 'Chemonics' || $cotizacion_recuperada-> obtener_canal() == 'Ebay & Amazon'){
     if(!$cotizacion_recuperada->obtener_award()){
@@ -85,13 +87,19 @@
       <?php
     }
   }else{
-    if ($cotizacion_recuperada->obtener_completado() && $cotizacion_recuperada->obtener_status() && !$cotizacion_recuperada->obtener_award() && $_SESSION['cargo'] < 4) {
+    if($cotizacion_recuperada->obtener_completado() && $cotizacion_recuperada->obtener_status() && $cotizacion_recuperada->obtener_award() && !$cotizacion_recuperada-> obtener_fullfillment() && $re_quote_exists && $_SESSION['cargo'] < 4){
+      ?>
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" class="custom-control-input" name="fulfillment" value="si" <?php if ($cotizacion_recuperada->obtener_fullfillment()) { echo 'checked'; } ?> id="fulfillment">
+        <label class="custom-control-label" for="fulfillment">Fulfillment</label>
+      </div>
+      <?php
+    }else if ($cotizacion_recuperada->obtener_completado() && $cotizacion_recuperada->obtener_status() && !$cotizacion_recuperada->obtener_award() && $_SESSION['cargo'] < 4) {
       ?>
         <div class="custom-control custom-checkbox">
           <input type="checkbox" class="custom-control-input" name="award" value="si" <?php if ($cotizacion_recuperada->obtener_award()) { echo 'checked'; } ?> id="award">
           <label class="custom-control-label" for="award">Award</label>
         </div>
-
         <?php
       } else if ($cotizacion_recuperada->obtener_completado() && !$cotizacion_recuperada->obtener_status() && !$cotizacion_recuperada->obtener_award()) {
         ?>
@@ -141,19 +149,25 @@
     <a href="#" id="add_comment" class="btn btn-primary add_item_charter"><i class="fas fa-plus"></i> Add comment</a>
     <?php
     if($cotizacion_recuperada-> obtener_canal() != 'Chemonics' && $cotizacion_recuperada-> obtener_canal() != 'Ebay & Amazon'){
-      if($cotizacion_recuperada-> obtener_award()){
+      if($cotizacion_recuperada-> obtener_award() && $items_exists){
         ?>
         <a href="<?php echo RE_QUOTE . $cotizacion_recuperada-> obtener_id(); ?>" class="btn btn-primary"><i class="fas fa-plus"></i> Re-quote</a>
         <?php
       }
-      Conexion::abrir_conexion();
-      $re_quote_exists = ReQuoteRepository::re_quote_exists(Conexion::obtener_conexion(), $cotizacion_recuperada-> obtener_id());
-      Conexion::cerrar_conexion();
-      if(!$cotizacion_recuperada-> obtener_fullfillment() && $cotizacion_recuperada-> obtener_award() && $re_quote_exists){
-        ?>
-        <a href="#" id="fullfillment" class="btn btn-primary"><i class="fas fa-share-square"></i> Full-fillment</a>
-        <?php
-      }
     }
     ?>
+    <div class="btn-group dropup">
+      <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Actions
+      </button>
+      <div class="dropdown-menu">
+        <?php
+        if($cotizacion_recuperada-> obtener_fullfillment() && $re_quote_exists){
+          ?>
+          <a class="dropdown-item" href="<?php echo TRACKING . $cotizacion_recuperada-> obtener_id(); ?>">Tracking</a>
+          <?php
+        }
+        ?>
+      </div>
+    </div>
   </div>
