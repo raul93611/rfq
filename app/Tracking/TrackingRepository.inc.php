@@ -89,7 +89,7 @@ class TrackingRepository{
         </td>
         <td><?php echo $tracking-> get_quantity(); ?></td>
         <td><?php echo nl2br($tracking-> get_tracking_number()); ?></td>
-        <td><?php echo RepositorioRfqFullFillmentComment::mysql_date_to_english_format($tracking-> get_delivery_date()); ?></td>
+        <td><?php echo RepositorioComment::mysql_date_to_english_format($tracking-> get_delivery_date()); ?></td>
         <td><?php echo $tracking-> get_signed_by(); ?></td>
       </tr>
       <?php
@@ -179,7 +179,7 @@ class TrackingRepository{
           </td>
           <td><?php echo $tracking-> get_quantity(); ?></td>
           <td><?php echo nl2br($tracking-> get_tracking_number()); ?></td>
-          <td><?php echo RepositorioRfqFullFillmentComment::mysql_date_to_english_format($tracking-> get_delivery_date()); ?></td>
+          <td><?php echo RepositorioComment::mysql_date_to_english_format($tracking-> get_delivery_date()); ?></td>
           <td><?php echo $tracking-> get_signed_by(); ?></td>
         </tr>
         <?php
