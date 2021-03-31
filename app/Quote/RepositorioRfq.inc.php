@@ -33,7 +33,7 @@ class RepositorioRfq {
         $sentencia->bindParam(':shipping', $cotizacion->obtener_shipping(), PDO::PARAM_STR);
         $sentencia->bindParam(':shipping_cost', $cotizacion->obtener_shipping_cost(), PDO::PARAM_STR);
         $sentencia-> bindParam(':fullfillment', $cotizacion-> obtener_fullfillment(), PDO::PARAM_STR);
-        $sentencia-> bindParam(':fullfillment_date', $cotizacion-> obtener_fullfillment_date(), PDO::PARAM_STR);
+        $sentencia-> bindParam(':fulfillment_date', $cotizacion-> obtener_fullfillment_date(), PDO::PARAM_STR);
         $sentencia-> bindParam(':contract_number', $cotizacion-> obtener_contract_number(), PDO::PARAM_STR);
         $resultado = $sentencia->execute();
         $id = $conexion->lastInsertId();
@@ -364,7 +364,7 @@ class RepositorioRfq {
         }
       }
       ?>
-      <td></td>
+      <td class="text-center"><?php echo $cotizacion-> obtener_type_of_bid() == 'Services' ? '<i class="text-success fas fa-check"></i>' : '<i class="text-danger fas fa-times"></i>'; ?></td>
     </tr>
     <?php
   }
@@ -464,7 +464,7 @@ class RepositorioRfq {
         }
       }
       ?>
-      <td></td>
+      <td class="text-center"><?php echo $cotizacion-> obtener_type_of_bid() == 'Services' ? '<i class="text-success fas fa-check"></i>' : '<i class="text-danger fas fa-times"></i>'; ?></td>
     </tr>
     <?php
   }
@@ -563,7 +563,7 @@ class RepositorioRfq {
         }
       }
       ?>
-      <td></td>
+      <td class="text-center"><?php echo $cotizacion-> obtener_type_of_bid() == 'Services' ? '<i class="text-success fas fa-check"></i>' : '<i class="text-danger fas fa-times"></i>'; ?></td>
     </tr>
     <?php
   }
@@ -1433,10 +1433,10 @@ class RepositorioRfq {
       </td>
       <td><?php echo $quote-> obtener_email_code(); ?></td>
       <td><?php echo $quote-> obtener_canal(); ?></td>
-      <td>$ <?php echo $re_quote-> get_total_price() ?></td>
+      <td><?php echo isset($re_quote) ? '$' . $re_quote-> get_total_price() : 'No Re-Quote'; ?></td>
       <td><?php echo $fulfillment_date; ?></td>
       <td><?php echo $quote-> obtener_fecha_award(); ?></td>
-      <td></td>
+      <td class="text-center"><?php echo $quote-> obtener_type_of_bid() == 'Services' ? '<i class="text-success fas fa-check"></i>' : '<i class="text-danger fas fa-times"></i>'; ?></td>
     </tr>
     <?php
   }

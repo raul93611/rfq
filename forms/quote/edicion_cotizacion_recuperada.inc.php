@@ -87,13 +87,15 @@
       <?php
     }
   }else{
-    if($cotizacion_recuperada->obtener_completado() && $cotizacion_recuperada->obtener_status() && $cotizacion_recuperada->obtener_award() && !$cotizacion_recuperada-> obtener_fullfillment() && $re_quote_exists && $_SESSION['cargo'] < 4){
-      ?>
-      <div class="custom-control custom-checkbox">
-        <input type="checkbox" class="custom-control-input" name="fulfillment" value="si" <?php if ($cotizacion_recuperada->obtener_fullfillment()) { echo 'checked'; } ?> id="fulfillment">
-        <label class="custom-control-label" for="fulfillment">Fulfillment</label>
-      </div>
-      <?php
+    if($cotizacion_recuperada->obtener_completado() && $cotizacion_recuperada->obtener_status() && $cotizacion_recuperada->obtener_award() && !$cotizacion_recuperada-> obtener_fullfillment() && $_SESSION['cargo'] < 4){
+      if($re_quote_exists || $cotizacion_recuperada-> obtener_type_of_bid() == 'Services'){
+        ?>
+        <div class="custom-control custom-checkbox">
+          <input type="checkbox" class="custom-control-input" name="fulfillment" value="si" <?php if ($cotizacion_recuperada->obtener_fullfillment()) { echo 'checked'; } ?> id="fulfillment">
+          <label class="custom-control-label" for="fulfillment">Fulfillment</label>
+        </div>
+        <?php
+      }
     }else if ($cotizacion_recuperada->obtener_completado() && $cotizacion_recuperada->obtener_status() && !$cotizacion_recuperada->obtener_award() && $_SESSION['cargo'] < 4) {
       ?>
         <div class="custom-control custom-checkbox">
