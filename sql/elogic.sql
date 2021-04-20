@@ -46,6 +46,8 @@ CREATE TABLE rfq(
   fullfillment TINYINT NOT NULL,
   fulfillment_date DATE,
   contract_number VARCHAR(255) NOT NULL,
+  fulfillment_profit DECIMAL(10,2),
+  services_fulfillment_profit DECIMAL(10,2)
   PRIMARY KEY(id),
   FOREIGN KEY(id_usuario)
       REFERENCES usuarios(id)
@@ -73,6 +75,7 @@ CREATE TABLE services(
   quantity INT NOT NULL,
   unit_price DECIMAL(10,2) NOT NULL,
   total_price DECIMAL(10,2) NOT NULL,
+  fulfillment_profit DECIMAL(10,2),
   PRIMARY KEY(id),
   FOREIGN KEY(id_rfq)
       REFERENCES rfq(id)
@@ -97,6 +100,7 @@ CREATE TABLE item(
   comments TEXT CHARACTER SET utf8 NOT NULL,
   website VARCHAR(255) NOT NULL,
   additional VARCHAR(100) NOT NULL,
+  fulfillment_profit DECIMAL(10,2),
   PRIMARY KEY(id),
   FOREIGN KEY(id_rfq)
       REFERENCES rfq(id)
@@ -136,6 +140,7 @@ CREATE TABLE subitems(
   comments TEXT CHARACTER SET utf8 NOT NULL,
   website VARCHAR(255) NOT NULL,
   additional VARCHAR(100) NOT NULL,
+  fulfillment_profit DECIMAL(10,2),
   PRIMARY KEY(id),
   FOREIGN KEY(id_item)
       REFERENCES item(id)
@@ -295,6 +300,59 @@ CREATE TABLE trackings_subitems(
     REFERENCES subitems(id)
     ON UPDATE CASCADE
     ON DELETE RESTRICT
+);
+
+/*FULFILLMENT*/
+
+CREATE TABLE fulfillment_items(
+  id INT NOT NULL AUTO_INCREMENT UNIQUE,
+  id_item INT NOT NULL,
+  provider VARCHAR(255) NOT NULL,
+  quantity INT NOT NULL,
+  unit_cost DECIMAL(20,2) NOT NULL,
+  other_cost DECIMAL(20,2) NOT NULL,
+  real_cost DECIMAL(20,2) NOT NULL,
+  PRIMARY KEY(id),
+  FOREIGN KEY(id_item)
+    REFERENCES item(id)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT
+);
+
+CREATE TABLE fulfillment_subitems(
+  id INT NOT NULL AUTO_INCREMENT UNIQUE,
+  id_subitem INT NOT NULL,
+  provider VARCHAR(255) NOT NULL,
+  quantity INT NOT NULL,
+  unit_cost DECIMAL(20,2) NOT NULL,
+  other_cost DECIMAL(20,2) NOT NULL,
+  real_cost DECIMAL(20,2) NOT NULL,
+  PRIMARY KEY(id),
+  FOREIGN KEY(id_subitem)
+    REFERENCES subitems(id)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT
+);
+
+CREATE TABLE fulfillment_services(
+  id INT NOT NULL AUTO_INCREMENT UNIQUE,
+  id_service INT NOT NULL,
+  provider VARCHAR(255) NOT NULL,
+  quantity INT NOT NULL,
+  unit_cost DECIMAL(20,2) NOT NULL,
+  other_cost DECIMAL(20,2) NOT NULL,
+  real_cost DECIMAL(20,2) NOT NULL,
+  PRIMARY KEY(id),
+  FOREIGN KEY(id_service)
+    REFERENCES services(id)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT
+);
+
+CREATE TABLE providers_list(
+  id INT NOT NULL AUTO_INCREMENT UNIQUE,
+  company_name VARCHAR(255) NOT NULL,
+  PRIMARY KEY(id)
 );
 
 CREATE TABLE type_of_bids(

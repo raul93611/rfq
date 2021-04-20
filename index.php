@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', '1');
+// error_reporting(E_ALL);
+// ini_set('display_errors', '1');
 session_save_path('temp');
 session_start();
 include_once 'app/Bootstrap/config.inc.php';
@@ -75,6 +75,21 @@ include_once 'app/Tracking/TrackingRepository.inc.php';
 
 include_once 'app/Tracking/TrackingSubitem.inc.php';
 include_once 'app/Tracking/TrackingSubitemRepository.inc.php';
+
+include_once 'app/Fulfillment/FulfillmentRepository.inc.php';
+
+include_once 'app/Fulfillment/FulfillmentItem.inc.php';
+include_once 'app/Fulfillment/FulfillmentItemRepository.inc.php';
+
+include_once 'app/Fulfillment/FulfillmentSubitem.inc.php';
+include_once 'app/Fulfillment/FulfillmentSubitemRepository.inc.php';
+
+include_once 'app/Fulfillment/FulfillmentService.inc.php';
+include_once 'app/Fulfillment/FulfillmentServiceRepository.inc.php';
+
+include_once 'app/ProviderList/ProviderList.inc.php';
+include_once 'app/ProviderList/ProviderListRepository.inc.php';
+
 
 $componentes_url = parse_url($_SERVER['REQUEST_URI']);
 $ruta = $componentes_url['path'];
@@ -159,6 +174,33 @@ if ($partes_ruta[0] == 'rfq') {
         break;
       case 'save_edit_tracking_subitem':
         $ruta_elegida = 'scripts/tracking/save_edit_tracking_subitem.php';
+        break;
+      case 'save_fulfillment_item':
+        $ruta_elegida = 'scripts/fulfillment/save_fulfillment_item.php';
+        break;
+      case 'save_edit_fulfillment_item':
+        $ruta_elegida = 'scripts/fulfillment/save_edit_fulfillment_item.php';
+        break;
+      case 'delete_fulfillment_item':
+        $ruta_elegida = 'scripts/fulfillment/delete_fulfillment_item.php';
+        break;
+      case 'save_fulfillment_subitem':
+        $ruta_elegida = 'scripts/fulfillment/save_fulfillment_subitem.php';
+        break;
+      case 'save_edit_fulfillment_subitem':
+        $ruta_elegida = 'scripts/fulfillment/save_edit_fulfillment_subitem.php';
+        break;
+      case 'delete_fulfillment_subitem':
+        $ruta_elegida = 'scripts/fulfillment/delete_fulfillment_subitem.php';
+        break;
+      case 'save_fulfillment_service':
+        $ruta_elegida = 'scripts/fulfillment/save_fulfillment_service.php';
+        break;
+      case 'save_edit_fulfillment_service':
+        $ruta_elegida = 'scripts/fulfillment/save_edit_fulfillment_service.php';
+        break;
+      case 'delete_fulfillment_service':
+        $ruta_elegida = 'scripts/fulfillment/delete_fulfillment_service.php';
         break;
     }
   } else if (count($partes_ruta) == 3) {
@@ -353,6 +395,22 @@ if ($partes_ruta[0] == 'rfq') {
         $id_tracking_subitem = $partes_ruta[2];
         $ruta_elegida = 'scripts/tracking/load_tracking_subitem.php';
         break;
+      case 'load_fulfillment_page':
+        $id_rfq = $partes_ruta[2];
+        $ruta_elegida = 'scripts/fulfillment/load_fulfillment_page.php';
+        break;
+      case 'load_fulfillment_item':
+        $id_fulfillment_item = $partes_ruta[2];
+        $ruta_elegida = 'scripts/fulfillment/load_fulfillment_item.php';
+        break;
+      case 'load_fulfillment_subitem':
+        $id_fulfillment_subitem = $partes_ruta[2];
+        $ruta_elegida = 'scripts/fulfillment/load_fulfillment_subitem.php';
+        break;
+      case 'load_fulfillment_service':
+        $id_fulfillment_service = $partes_ruta[2];
+        $ruta_elegida = 'scripts/fulfillment/load_fulfillment_service.php';
+        break;
       default:
       break;
     }
@@ -525,6 +583,10 @@ if ($partes_ruta[0] == 'rfq') {
           break;
         case 'tracking':
           $gestor_actual = 'tracking';
+          $id_rfq = $partes_ruta[3];
+          break;
+        case 'fulfillment':
+          $gestor_actual = 'fulfillment';
           $id_rfq = $partes_ruta[3];
           break;
         default:

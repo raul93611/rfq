@@ -30,8 +30,10 @@ class Rfq {
   private $fullfillment;
   private $fulfillment_date;
   private $contract_number;
+  private $fulfillment_profit;
+  private $services_fulfillment_profit;
 
-  public function __construct($id, $id_usuario, $usuario_designado, $canal, $email_code, $type_of_bid, $issue_date, $end_date, $status, $completado, $total_cost, $total_price, $comments, $award, $fecha_completado, $fecha_submitted, $fecha_award, $payment_terms, $address, $ship_to, $expiration_date, $ship_via, $taxes, $profit, $additional, $shipping, $shipping_cost, $fullfillment, $fulfillment_date, $contract_number) {
+  public function __construct($id, $id_usuario, $usuario_designado, $canal, $email_code, $type_of_bid, $issue_date, $end_date, $status, $completado, $total_cost, $total_price, $comments, $award, $fecha_completado, $fecha_submitted, $fecha_award, $payment_terms, $address, $ship_to, $expiration_date, $ship_via, $taxes, $profit, $additional, $shipping, $shipping_cost, $fullfillment, $fulfillment_date, $contract_number, $fulfillment_profit, $services_fulfillment_profit) {
     $this->id = $id;
     $this->id_usuario = $id_usuario;
     $this->usuario_designado = $usuario_designado;
@@ -62,6 +64,8 @@ class Rfq {
     $this-> fullfillment = $fullfillment;
     $this-> fulfillment_date = $fulfillment_date;
     $this-> contract_number = $contract_number;
+    $this-> fulfillment_profit = $fulfillment_profit;
+    $this-> services_fulfillment_profit = $services_fulfillment_profit;
   }
 
   public function obtener_id() {
@@ -182,6 +186,14 @@ class Rfq {
 
   public function obtener_contract_number(){
     return $this-> contract_number;
+  }
+
+  public function obtener_fulfillment_profit(){
+    return $this-> fulfillment_profit;
+  }
+
+  public function obtener_services_fulfillment_profit(){
+    return $this-> services_fulfillment_profit;
   }
 }
 ?>

@@ -146,6 +146,9 @@ switch ($gestor_actual) {
   case 'tracking':
     include_once 'plantillas/tracking/tracking.inc.php';
     break;
+  case 'fulfillment':
+    include_once 'plantillas/fulfillment/fulfillment.inc.php';
+    break;
 }
 include_once 'plantillas/utilities/documento_cierre.inc.php';
 ?>

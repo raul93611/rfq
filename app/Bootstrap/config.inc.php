@@ -159,6 +159,14 @@ define('DELETE_TRACKING', SERVIDOR . 'delete_tracking/');
 define('DELETE_TRACKING_SUBITEM', SERVIDOR . 'delete_tracking_subitem/');
 define('TRACKING_PDF', SERVIDOR . 'tracking_pdf/');
 /******************************************************************************/
+define('FULFILLMENT', PERFIL . 'fulfillment/');
+define('SAVE_FULFILLMENT_ITEM', SERVIDOR . 'save_fulfillment_item');
+define('SAVE_FULFILLMENT_SUBITEM', SERVIDOR . 'save_fulfillment_subitem');
+define('DELETE_FULFILLMENT_ITEM', SERVIDOR . 'delete_fulfillment_item/');
+define('DELETE_FULFILLMENT_SUBITEM', SERVIDOR . 'delete_fulfillment_subitem/');
+/******************************************************************************/
+define('SAVE_FULFILLMENT_SERVICE', SERVIDOR . 'save_fulfillment_service');
+/******************************************************************************/
 define('EMPLOYEE_DOCS', SERVIDOR . 'employee_docs/');
 define('REPORTS_DOCS', SERVIDOR . 'reports/');
 define('DOCS', SERVIDOR . 'documentos/');

@@ -30,7 +30,7 @@ class ServiceRepository{
         $result = $sentence-> fetchAll(PDO::FETCH_ASSOC);
         if(count($result)){
           foreach ($result as $key => $row) {
-            $services[] = new Service($row['id'], $row['id_rfq'], $row['description'], $row['quantity'], $row['unit_price'], $row['total_price']);
+            $services[] = new Service($row['id'], $row['id_rfq'], $row['description'], $row['quantity'], $row['unit_price'], $row['total_price'], $row['fulfillment_profit']);
           }
         }
       }catch(PDOException $ex){
@@ -38,6 +38,20 @@ class ServiceRepository{
       }
     }
     return $services;
+  }
+
+  public static function set_fulfillment_profit($conexion, $fulfillment_profit, $id_service){
+    if(isset($conexion)){
+      try{
+        $sql = 'UPDATE services SET fulfillment_profit = :fulfillment_profit WHERE id = :id_service';
+        $sentencia = $conexion-> prepare($sql);
+        $sentencia-> bindParam(':fulfillment_profit', $fulfillment_profit, PDO::PARAM_STR);
+        $sentencia-> bindParam(':id_service', $id_service, PDO::PARAM_STR);
+        $sentencia-> execute();
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
   }
 
   public static function display_services($connection, $id_rfq){
@@ -106,7 +120,7 @@ class ServiceRepository{
         $sentence-> execute();
         $result = $sentence-> fetch(PDO::FETCH_ASSOC);
         if(!empty($result)){
-          $service = new Service($result['id'], $result['id_rfq'], $result['description'], $result['quantity'], $result['unit_price'], $result['total_price']);
+          $service = new Service($result['id'], $result['id_rfq'], $result['description'], $result['quantity'], $result['unit_price'], $result['total_price'], $result['fulfillment_profit']);
         }
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';

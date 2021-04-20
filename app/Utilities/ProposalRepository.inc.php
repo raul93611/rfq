@@ -88,7 +88,7 @@ class ProposalRepository{
   }
 
   public static function print_item_pdf($quote, $item, $a, $payment_terms){
-    $html .= '<tr>
+    $html = '<tr>
       <td>' . $a . '</td>
       <td><b>Brand name:</b> ' . $item-> obtener_brand_project() . '<br><b>Part number:</b> ' . $item-> obtener_part_number_project() . '<br><b>Item description:</b> ' . nl2br(wordwrap(mb_substr($item-> obtener_description_project(), 0, 150), 70, '<br>', true)) . '</td>
       <td><b>Brand name:</b> ' . $item->obtener_brand() . '<br><b>Part number:</b> ' . $item->obtener_part_number() . '<br><b> Item description:</b><br> ' . nl2br(wordwrap(mb_substr($item->obtener_description(), 0, 150), 70, '<br>', true)) . '</td>
@@ -110,7 +110,7 @@ class ProposalRepository{
       </td>
       <td>$ ' . number_format($item-> obtener_additional(), 2) . '</td>
       <td>$ ';
-      $best_unit_price = $provider_menor-> obtener_price()*$payment_terms*(1+($quote-> obtener_taxes()/100)) + $item-> obtener_additional() + $quote-> obtener_additional();
+      $best_unit_price = $provider_menor-> obtener_price()*$payment_terms*(1+($quote-> obtener_taxes()/100)) + (float)$item-> obtener_additional() + (float)$quote-> obtener_additional();
       $html .= number_format($best_unit_price, 2);
       $html .= '</td>
       <td>$ ' . number_format(round($best_unit_price, 2) * $item-> obtener_quantity(), 2) . '</td>

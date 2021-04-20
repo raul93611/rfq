@@ -15,8 +15,9 @@ class Subitem{
   private $comments;
   private $website;
   private $additional;
+  private $fulfillment_profit;
 
-  public function __construct($id, $id_item, $provider_menor, $brand, $brand_project, $part_number, $part_number_project, $description, $description_project, $quantity, $unit_price, $total_price, $comments, $website, $additional){
+  public function __construct($id, $id_item, $provider_menor, $brand, $brand_project, $part_number, $part_number_project, $description, $description_project, $quantity, $unit_price, $total_price, $comments, $website, $additional, $fulfillment_profit){
     $this-> id = $id;
     $this-> id_item = $id_item;
     $this-> provider_menor = $provider_menor;
@@ -32,6 +33,7 @@ class Subitem{
     $this-> comments = $comments;
     $this-> website = $website;
     $this-> additional = $additional;
+    $this-> fulfillment_profit = $fulfillment_profit;
   }
 
   public function obtener_id(){
@@ -92,6 +94,10 @@ class Subitem{
 
   public function obtener_additional(){
     return $this-> additional;
+  }
+
+  public function obtener_fulfillment_profit(){
+    return $this-> fulfillment_profit;
   }
 }
 ?>
