@@ -97,7 +97,7 @@ class RepositorioRfq {
         $resultado = $sentencia-> fetchAll(PDO::FETCH_ASSOC);
         if (count($resultado)) {
           foreach ($resultado as $fila) {
-            $quotes[] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['total_cost'], $fila['total_price'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['fecha_submitted'], $fila['fecha_award'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via'], $fila['taxes'], $fila['profit'], $fila['additional'], $fila['shipping'], $fila['shipping_cost'], $fila['fullfillment'], $fila['fulfillment_date'], $fila['fulfillment_date'], $fila['contract_number'], $fila['fulfillment_profit'], $fila['services_fulfillment_profit']);
+            $quotes[] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['total_cost'], $fila['total_price'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['fecha_submitted'], $fila['fecha_award'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via'], $fila['taxes'], $fila['profit'], $fila['additional'], $fila['shipping'], $fila['shipping_cost'], $fila['fullfillment'], $fila['fulfillment_date'], $fila['fulfillment_date'], $fila['contract_number'], $fila['fulfillment_profit'], $fila['services_fulfillment_profit'], $fila['total_fulfillment'], $fila['total_services_fulfillment']);
           }
         }
       }catch(PDOException $ex){
@@ -119,7 +119,7 @@ class RepositorioRfq {
         $resultado = $sentencia-> fetchAll(PDO::FETCH_ASSOC);
         if (count($resultado)) {
           foreach ($resultado as $fila) {
-            $quotes[] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['total_cost'], $fila['total_price'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['fecha_submitted'], $fila['fecha_award'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via'], $fila['taxes'], $fila['profit'], $fila['additional'], $fila['shipping'], $fila['shipping_cost'], $fila['fullfillment'], $fila['fulfillment_date'], $fila['contract_number'], $fila['fulfillment_profit'], $fila['services_fulfillment_profit']);
+            $quotes[] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['total_cost'], $fila['total_price'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['fecha_submitted'], $fila['fecha_award'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via'], $fila['taxes'], $fila['profit'], $fila['additional'], $fila['shipping'], $fila['shipping_cost'], $fila['fullfillment'], $fila['fulfillment_date'], $fila['contract_number'], $fila['fulfillment_profit'], $fila['services_fulfillment_profit'], $fila['total_fulfillment'], $fila['total_services_fulfillment']);
           }
         }
       }catch(PDOException $ex){
@@ -147,7 +147,7 @@ class RepositorioRfq {
         $resultado = $sentencia->fetchAll(PDO::FETCH_ASSOC);
         if (count($resultado)) {
           foreach ($resultado as $fila) {
-            $cotizaciones [] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['total_cost'], $fila['total_price'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['fecha_submitted'], $fila['fecha_award'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via'], $fila['taxes'], $fila['profit'], $fila['additional'], $fila['shipping'], $fila['shipping_cost'], $fila['fullfillment'], $fila['fulfillment_date'], $fila['contract_number'], $fila['fulfillment_profit'], $fila['services_fulfillment_profit']);
+            $cotizaciones [] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['total_cost'], $fila['total_price'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['fecha_submitted'], $fila['fecha_award'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via'], $fila['taxes'], $fila['profit'], $fila['additional'], $fila['shipping'], $fila['shipping_cost'], $fila['fullfillment'], $fila['fulfillment_date'], $fila['contract_number'], $fila['fulfillment_profit'], $fila['services_fulfillment_profit'], $fila['total_fulfillment'], $fila['total_services_fulfillment']);
           }
         }
       } catch (PDOException $ex) {
@@ -229,7 +229,7 @@ class RepositorioRfq {
         $sentencia->execute();
         $resultado = $sentencia->fetch(PDO::FETCH_ASSOC);
         if (!empty($resultado)) {
-          $cotizacion_recuperada = new Rfq($resultado['id'], $resultado['id_usuario'], $resultado['usuario_designado'], $resultado['canal'], $resultado['email_code'], $resultado['type_of_bid'], $resultado['issue_date'], $resultado['end_date'], $resultado['status'], $resultado['completado'], $resultado['total_cost'], $resultado['total_price'], $resultado['comments'], $resultado['award'], $resultado['fecha_completado'], $resultado['fecha_submitted'], $resultado['fecha_award'], $resultado['payment_terms'], $resultado['address'], $resultado['ship_to'], $resultado['expiration_date'], $resultado['ship_via'], $resultado['taxes'], $resultado['profit'], $resultado['additional'], $resultado['shipping'], $resultado['shipping_cost'], $resultado['fullfillment'], $resultado['fulfillment_date'], $resultado['contract_number'], $resultado['fulfillment_profit'], $resultado['services_fulfillment_profit']);
+          $cotizacion_recuperada = new Rfq($resultado['id'], $resultado['id_usuario'], $resultado['usuario_designado'], $resultado['canal'], $resultado['email_code'], $resultado['type_of_bid'], $resultado['issue_date'], $resultado['end_date'], $resultado['status'], $resultado['completado'], $resultado['total_cost'], $resultado['total_price'], $resultado['comments'], $resultado['award'], $resultado['fecha_completado'], $resultado['fecha_submitted'], $resultado['fecha_award'], $resultado['payment_terms'], $resultado['address'], $resultado['ship_to'], $resultado['expiration_date'], $resultado['ship_via'], $resultado['taxes'], $resultado['profit'], $resultado['additional'], $resultado['shipping'], $resultado['shipping_cost'], $resultado['fullfillment'], $resultado['fulfillment_date'], $resultado['contract_number'], $resultado['fulfillment_profit'], $resultado['services_fulfillment_profit'], $resultado['total_fulfillment'], $resultado['total_services_fulfillment']);
         }
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -303,22 +303,26 @@ class RepositorioRfq {
     }
   }
 
-  public static function set_fulfillment_profit($connection, $id_rfq){
+  public static function set_fulfillment_profit_and_total($connection, $id_rfq){
     if (isset($connection)) {
+      $total_profit = 0;
       $total_cost = 0;
       $items = RepositorioItem::obtener_items_por_id_rfq($connection, $id_rfq);
       foreach ($items as $i => $item) {
-        $total_cost += $item-> obtener_fulfillment_profit();
+        $total_profit += $item-> obtener_fulfillment_profit();
+        $total_cost += FulfillmentItemRepository::get_total_cost($connection, $item-> obtener_id());
         $subitems = RepositorioSubitem::obtener_subitems_por_id_item($connection, $item-> obtener_id());
         foreach ($subitems as $j => $subitem) {
-          $total_cost += $subitem-> obtener_fulfillment_profit();
+          $total_profit += $subitem-> obtener_fulfillment_profit();
+          $total_cost += FulfillmentSubitemRepository::get_total_cost($connection, $subitem-> obtener_id());
         }
       }
       try {
-        $sql = 'UPDATE rfq SET fulfillment_profit = :fulfillment_profit WHERE id = :id_rfq';
+        $sql = 'UPDATE rfq SET fulfillment_profit = :fulfillment_profit, total_fulfillment = :total_fulfillment WHERE id = :id_rfq';
         $sentence = $connection->prepare($sql);
         $sentence->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-        $sentence->bindParam(':fulfillment_profit', $total_cost, PDO::PARAM_STR);
+        $sentence->bindParam(':fulfillment_profit', $total_profit, PDO::PARAM_STR);
+        $sentence->bindParam(':total_fulfillment', $total_cost, PDO::PARAM_STR);
         $sentence->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -326,18 +330,21 @@ class RepositorioRfq {
     }
   }
 
-  public static function set_services_fulfillment_profit($connection, $id_rfq){
+  public static function set_services_fulfillment_profit_and_total($connection, $id_rfq){
     if (isset($connection)) {
       $total_cost = 0;
+      $total_profit = 0;
       $services = ServiceRepository::get_services($connection, $id_rfq);
       foreach ($services as $i => $service) {
-        $total_cost += $service-> get_fulfillment_profit();
+        $total_profit += $service-> get_fulfillment_profit();
+        $total_cost += FulfillmentServiceRepository::get_total_cost($connection, $service-> get_id());
       }
       try {
-        $sql = 'UPDATE rfq SET services_fulfillment_profit = :services_fulfillment_profit WHERE id = :id_rfq';
+        $sql = 'UPDATE rfq SET services_fulfillment_profit = :services_fulfillment_profit, total_services_fulfillment = :total_services_fulfillment WHERE id = :id_rfq';
         $sentence = $connection->prepare($sql);
         $sentence->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-        $sentence->bindParam(':services_fulfillment_profit', $total_cost, PDO::PARAM_STR);
+        $sentence->bindParam(':services_fulfillment_profit', $total_profit, PDO::PARAM_STR);
+        $sentence->bindParam(':total_services_fulfillment', $total_cost, PDO::PARAM_STR);
         $sentence->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -356,7 +363,7 @@ class RepositorioRfq {
         $resultado = $sentencia->fetchAll(PDO::FETCH_ASSOC);
         if (count($resultado)) {
           foreach ($resultado as $fila) {
-            $cotizaciones[] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['total_cost'], $fila['total_price'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['fecha_submitted'], $fila['fecha_award'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via'], $fila['taxes'], $fila['profit'], $fila['additional'], $fila['shipping'], $fila['shipping_cost'], $fila['fullfillment'], $fila['fulfillment_date'], $fila['contract_number'], $fila['fulfillment_profit'], $fila['services_fulfillment_profit']);
+            $cotizaciones[] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['total_cost'], $fila['total_price'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['fecha_submitted'], $fila['fecha_award'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via'], $fila['taxes'], $fila['profit'], $fila['additional'], $fila['shipping'], $fila['shipping_cost'], $fila['fullfillment'], $fila['fulfillment_date'], $fila['contract_number'], $fila['fulfillment_profit'], $fila['services_fulfillment_profit'], $fila['total_fulfillment'], $fila['total_services_fulfillment']);
           }
         }
       } catch (PDOException $ex) {
@@ -456,7 +463,7 @@ class RepositorioRfq {
 
         if (count($resultado)) {
           foreach ($resultado as $fila) {
-            $cotizaciones [] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['total_cost'], $fila['total_price'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['fecha_submitted'], $fila['fecha_award'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via'], $fila['taxes'], $fila['profit'], $fila['additional'], $fila['shipping'], $fila['shipping_cost'], $fila['fullfillment'], $fila['fulfillment_date'], $fila['contract_number'], $fila['fulfillment_profit'], $fila['services_fulfillment_profit']);
+            $cotizaciones [] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['total_cost'], $fila['total_price'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['fecha_submitted'], $fila['fecha_award'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via'], $fila['taxes'], $fila['profit'], $fila['additional'], $fila['shipping'], $fila['shipping_cost'], $fila['fullfillment'], $fila['fulfillment_date'], $fila['contract_number'], $fila['fulfillment_profit'], $fila['services_fulfillment_profit'], $fila['total_fulfillment'], $fila['total_services_fulfillment']);
           }
         }
       } catch (PDOException $ex) {
@@ -555,7 +562,7 @@ class RepositorioRfq {
         $resultado = $sentencia->fetchAll(PDO::FETCH_ASSOC);
         if (count($resultado)) {
           foreach ($resultado as $fila) {
-            $cotizaciones [] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['total_cost'], $fila['total_price'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['fecha_submitted'], $fila['fecha_award'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via'], $fila['taxes'], $fila['profit'], $fila['additional'], $fila['shipping'], $fila['shipping_cost'], $fila['fullfillment'], $fila['fulfillment_date'], $fila['contract_number'], $fila['fulfillment_profit'], $fila['services_fulfillment_profit']);
+            $cotizaciones [] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['total_cost'], $fila['total_price'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['fecha_submitted'], $fila['fecha_award'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via'], $fila['taxes'], $fila['profit'], $fila['additional'], $fila['shipping'], $fila['shipping_cost'], $fila['fullfillment'], $fila['fulfillment_date'], $fila['contract_number'], $fila['fulfillment_profit'], $fila['services_fulfillment_profit'], $fila['total_fulfillment'], $fila['total_services_fulfillment']);
           }
         }
       } catch (PDOException $ex) {
@@ -653,7 +660,7 @@ class RepositorioRfq {
         $resultado = $sentencia->fetchAll(PDO::FETCH_ASSOC);
         if (count($resultado)) {
           foreach ($resultado as $fila) {
-            $cotizaciones [] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['total_cost'], $fila['total_price'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['fecha_submitted'], $fila['fecha_award'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via'], $fila['taxes'], $fila['profit'], $fila['additional'], $fila['shipping'], $fila['shipping_cost'], $fila['fullfillment'], $fila['fulfillment_date'], $fila['contract_number'], $fila['fulfillment_profit'], $fila['services_fulfillment_profit']);
+            $cotizaciones [] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['total_cost'], $fila['total_price'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['fecha_submitted'], $fila['fecha_award'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via'], $fila['taxes'], $fila['profit'], $fila['additional'], $fila['shipping'], $fila['shipping_cost'], $fila['fullfillment'], $fila['fulfillment_date'], $fila['contract_number'], $fila['fulfillment_profit'], $fila['services_fulfillment_profit'], $fila['total_fulfillment'], $fila['total_services_fulfillment']);
           }
         }
       } catch (PDOException $ex) {
@@ -731,7 +738,7 @@ class RepositorioRfq {
         $resultado = $sentencia->fetchAll(PDO::FETCH_ASSOC);
         if (count($resultado)) {
           foreach ($resultado as $fila) {
-            $cotizaciones [] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['total_cost'], $fila['total_price'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['fecha_submitted'], $fila['fecha_award'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via'], $fila['taxes'], $fila['profit'], $fila['additional'], $fila['shipping'], $fila['shipping_cost'], $fila['fullfillment'], $fila['fulfillment_date'], $fila['contract_number'], $fila['fulfillment_profit'], $fila['services_fulfillment_profit']);
+            $cotizaciones [] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['total_cost'], $fila['total_price'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['fecha_submitted'], $fila['fecha_award'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via'], $fila['taxes'], $fila['profit'], $fila['additional'], $fila['shipping'], $fila['shipping_cost'], $fila['fullfillment'], $fila['fulfillment_date'], $fila['contract_number'], $fila['fulfillment_profit'], $fila['services_fulfillment_profit'], $fila['total_fulfillment'], $fila['total_services_fulfillment']);
           }
         }
       } catch (PDOException $ex) {
@@ -781,7 +788,7 @@ class RepositorioRfq {
         $resultado = $sentencia->fetchAll(PDO::FETCH_ASSOC);
         if (count($resultado)) {
           foreach ($resultado as $fila) {
-            $cotizaciones [] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['total_cost'], $fila['total_price'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['fecha_submitted'], $fila['fecha_award'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via'], $fila['taxes'], $fila['profit'], $fila['additional'], $fila['shipping'], $fila['shipping_cost'], $fila['fullfillment'], $fila['fulfillment_date'], $fila['contract_number'], $fila['fulfillment_profit'], $fila['services_fulfillment_profit']);
+            $cotizaciones [] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['total_cost'], $fila['total_price'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['fecha_submitted'], $fila['fecha_award'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via'], $fila['taxes'], $fila['profit'], $fila['additional'], $fila['shipping'], $fila['shipping_cost'], $fila['fullfillment'], $fila['fulfillment_date'], $fila['contract_number'], $fila['fulfillment_profit'], $fila['services_fulfillment_profit'], $fila['total_fulfillment'], $fila['total_services_fulfillment']);
           }
         }
       } catch (PDOException $ex) {
@@ -887,7 +894,7 @@ class RepositorioRfq {
 
           if (count($resultado)) {
             foreach ($resultado as $fila) {
-              $cotizaciones [] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['total_cost'], $fila['total_price'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['fecha_submitted'], $fila['fecha_award'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via'], $fila['taxes'], $fila['profit'], $fila['additional'], $fila['shipping'], $fila['shipping_cost'], $fila['fullfillment'], $fila['fulfillment_date'], $fila['contract_number'], $fila['fulfillment_profit'], $fila['services_fulfillment_profit']);
+              $cotizaciones [] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['total_cost'], $fila['total_price'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['fecha_submitted'], $fila['fecha_award'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via'], $fila['taxes'], $fila['profit'], $fila['additional'], $fila['shipping'], $fila['shipping_cost'], $fila['fullfillment'], $fila['fulfillment_date'], $fila['contract_number'], $fila['fulfillment_profit'], $fila['services_fulfillment_profit'], $fila['total_fulfillment'], $fila['total_services_fulfillment']);
             }
           }
 
@@ -896,7 +903,7 @@ class RepositorioRfq {
               Conexion::abrir_conexion();
               $cotizacion = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $fila1['id_rfq']);
               Conexion::cerrar_conexion();
-              $cotizaciones[] = new Rfq($cotizacion-> obtener_id(), $cotizacion-> obtener_id_usuario(), $cotizacion-> obtener_usuario_designado(), $cotizacion-> obtener_canal(), $cotizacion-> obtener_email_code(), $cotizacion-> obtener_type_of_bid(), $cotizacion-> obtener_issue_date(), $cotizacion-> obtener_end_date(), $cotizacion-> obtener_status(), $cotizacion-> obtener_completado(), $cotizacion-> obtener_total_cost(), $cotizacion-> obtener_total_price(), $cotizacion-> obtener_comments(), $cotizacion-> obtener_award(), $cotizacion-> obtener_fecha_completado(), $cotizacion-> obtener_fecha_submitted(), $cotizacion-> obtener_fecha_award(), $cotizacion-> obtener_payment_terms(), $cotizacion-> obtener_address(), $cotizacion-> obtener_ship_to(), $cotizacion-> obtener_expiration_date(), $cotizacion-> obtener_ship_via(), $cotizacion-> obtener_taxes(), $cotizacion-> obtener_profit(), $cotizacion-> obtener_additional(), $cotizacion-> obtener_shipping(), $cotizacion-> obtener_shipping_cost(), $cotizacion-> obtener_fullfillment(), $cotizacion-> obtener_contract_number(), $cotizacion-> obtener_fulfillment_profit(), $cotizacion-> obtener_services_fulfillment_profit());
+              $cotizaciones[] = new Rfq($cotizacion-> obtener_id(), $cotizacion-> obtener_id_usuario(), $cotizacion-> obtener_usuario_designado(), $cotizacion-> obtener_canal(), $cotizacion-> obtener_email_code(), $cotizacion-> obtener_type_of_bid(), $cotizacion-> obtener_issue_date(), $cotizacion-> obtener_end_date(), $cotizacion-> obtener_status(), $cotizacion-> obtener_completado(), $cotizacion-> obtener_total_cost(), $cotizacion-> obtener_total_price(), $cotizacion-> obtener_comments(), $cotizacion-> obtener_award(), $cotizacion-> obtener_fecha_completado(), $cotizacion-> obtener_fecha_submitted(), $cotizacion-> obtener_fecha_award(), $cotizacion-> obtener_payment_terms(), $cotizacion-> obtener_address(), $cotizacion-> obtener_ship_to(), $cotizacion-> obtener_expiration_date(), $cotizacion-> obtener_ship_via(), $cotizacion-> obtener_taxes(), $cotizacion-> obtener_profit(), $cotizacion-> obtener_additional(), $cotizacion-> obtener_shipping(), $cotizacion-> obtener_shipping_cost(), $cotizacion-> obtener_fullfillment(), $cotizacion-> obtener_contract_number(), $cotizacion-> obtener_fulfillment_profit(), $cotizacion-> obtener_services_fulfillment_profit(), $cotizacion-> obtener_total_fulfillment(), $cotizacion-> obtener_total_services_fulfillment());
             }
           }
 
@@ -905,7 +912,7 @@ class RepositorioRfq {
               Conexion::abrir_conexion();
               $cotizacion = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $fila2['id_rfq']);
               Conexion::cerrar_conexion();
-              $cotizaciones[] = new Rfq($cotizacion-> obtener_id(), $cotizacion-> obtener_id_usuario(), $cotizacion-> obtener_usuario_designado(), $cotizacion-> obtener_canal(), $cotizacion-> obtener_email_code(), $cotizacion-> obtener_type_of_bid(), $cotizacion-> obtener_issue_date(), $cotizacion-> obtener_end_date(), $cotizacion-> obtener_status(), $cotizacion-> obtener_completado(), $cotizacion-> obtener_total_cost(), $cotizacion-> obtener_total_price(), $cotizacion-> obtener_comments(), $cotizacion-> obtener_award(), $cotizacion-> obtener_fecha_completado(), $cotizacion-> obtener_fecha_submitted(), $cotizacion-> obtener_fecha_award(), $cotizacion-> obtener_payment_terms(), $cotizacion-> obtener_address(), $cotizacion-> obtener_ship_to(), $cotizacion-> obtener_expiration_date(), $cotizacion-> obtener_ship_via(), $cotizacion-> obtener_taxes(), $cotizacion-> obtener_profit(), $cotizacion-> obtener_additional(), $cotizacion-> obtener_shipping(), $cotizacion-> obtener_shipping_cost(), $cotizacion-> obtener_fullfillment(), $cotizacion-> obtener_contract_number(), $cotizacion-> obtener_fulfillment_profit(), $cotizacion-> obtener_services_fulfillment_profit());
+              $cotizaciones[] = new Rfq($cotizacion-> obtener_id(), $cotizacion-> obtener_id_usuario(), $cotizacion-> obtener_usuario_designado(), $cotizacion-> obtener_canal(), $cotizacion-> obtener_email_code(), $cotizacion-> obtener_type_of_bid(), $cotizacion-> obtener_issue_date(), $cotizacion-> obtener_end_date(), $cotizacion-> obtener_status(), $cotizacion-> obtener_completado(), $cotizacion-> obtener_total_cost(), $cotizacion-> obtener_total_price(), $cotizacion-> obtener_comments(), $cotizacion-> obtener_award(), $cotizacion-> obtener_fecha_completado(), $cotizacion-> obtener_fecha_submitted(), $cotizacion-> obtener_fecha_award(), $cotizacion-> obtener_payment_terms(), $cotizacion-> obtener_address(), $cotizacion-> obtener_ship_to(), $cotizacion-> obtener_expiration_date(), $cotizacion-> obtener_ship_via(), $cotizacion-> obtener_taxes(), $cotizacion-> obtener_profit(), $cotizacion-> obtener_additional(), $cotizacion-> obtener_shipping(), $cotizacion-> obtener_shipping_cost(), $cotizacion-> obtener_fullfillment(), $cotizacion-> obtener_contract_number(), $cotizacion-> obtener_fulfillment_profit(), $cotizacion-> obtener_services_fulfillment_profit(), $cotizacion-> obtener_total_fulfillment(), $cotizacion-> obtener_total_services_fulfillment());
             }
           }
         }else if($cargo >= 4){
@@ -930,7 +937,7 @@ class RepositorioRfq {
 
           if (count($resultado)) {
             foreach ($resultado as $fila) {
-              $cotizaciones [] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['total_cost'], $fila['total_price'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['fecha_submitted'], $fila['fecha_award'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via'], $fila['taxes'], $fila['profit'], $fila['additional'], $fila['shipping'], $fila['shipping_cost'], $fila['fullfillment'], $fila['fulfillment_date'], $fila['contract_number'], $fila['fulfillment_profit'], $fila['services_fulfillment_profit']);
+              $cotizaciones [] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['total_cost'], $fila['total_price'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['fecha_submitted'], $fila['fecha_award'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via'], $fila['taxes'], $fila['profit'], $fila['additional'], $fila['shipping'], $fila['shipping_cost'], $fila['fullfillment'], $fila['fulfillment_date'], $fila['contract_number'], $fila['fulfillment_profit'], $fila['services_fulfillment_profit'], $fila['total_fulfillment'], $fila['total_services_fulfillment']);
             }
           }
 
@@ -939,7 +946,7 @@ class RepositorioRfq {
               Conexion::abrir_conexion();
               $cotizacion = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $fila1['id_rfq']);
               Conexion::cerrar_conexion();
-              $cotizaciones[] = new Rfq($cotizacion-> obtener_id(), $cotizacion-> obtener_id_usuario(), $cotizacion-> obtener_usuario_designado(), $cotizacion-> obtener_canal(), $cotizacion-> obtener_email_code(), $cotizacion-> obtener_type_of_bid(), $cotizacion-> obtener_issue_date(), $cotizacion-> obtener_end_date(), $cotizacion-> obtener_status(), $cotizacion-> obtener_completado(), $cotizacion-> obtener_total_cost(), $cotizacion-> obtener_total_price(), $cotizacion-> obtener_comments(), $cotizacion-> obtener_award(), $cotizacion-> obtener_fecha_completado(), $cotizacion-> obtener_fecha_submitted(), $cotizacion-> obtener_fecha_award(), $cotizacion-> obtener_payment_terms(), $cotizacion-> obtener_address(), $cotizacion-> obtener_ship_to(), $cotizacion-> obtener_expiration_date(), $cotizacion-> obtener_ship_via(), $cotizacion-> obtener_taxes(), $cotizacion-> obtener_profit(), $cotizacion-> obtener_additional(), $cotizacion-> obtener_shipping(), $cotizacion-> obtener_shipping_cost(), $cotizacion-> obtener_fullfillment(), $cotizacion-> obtener_contract_number(), $cotizacion-> obtener_fulfillment_profit(), $cotizacion-> obtener_services_fulfillment_profit());
+              $cotizaciones[] = new Rfq($cotizacion-> obtener_id(), $cotizacion-> obtener_id_usuario(), $cotizacion-> obtener_usuario_designado(), $cotizacion-> obtener_canal(), $cotizacion-> obtener_email_code(), $cotizacion-> obtener_type_of_bid(), $cotizacion-> obtener_issue_date(), $cotizacion-> obtener_end_date(), $cotizacion-> obtener_status(), $cotizacion-> obtener_completado(), $cotizacion-> obtener_total_cost(), $cotizacion-> obtener_total_price(), $cotizacion-> obtener_comments(), $cotizacion-> obtener_award(), $cotizacion-> obtener_fecha_completado(), $cotizacion-> obtener_fecha_submitted(), $cotizacion-> obtener_fecha_award(), $cotizacion-> obtener_payment_terms(), $cotizacion-> obtener_address(), $cotizacion-> obtener_ship_to(), $cotizacion-> obtener_expiration_date(), $cotizacion-> obtener_ship_via(), $cotizacion-> obtener_taxes(), $cotizacion-> obtener_profit(), $cotizacion-> obtener_additional(), $cotizacion-> obtener_shipping(), $cotizacion-> obtener_shipping_cost(), $cotizacion-> obtener_fullfillment(), $cotizacion-> obtener_contract_number(), $cotizacion-> obtener_fulfillment_profit(), $cotizacion-> obtener_services_fulfillment_profit(), $cotizacion-> obtener_total_fulfillment(), $cotizacion-> obtener_total_services_fulfillment());
             }
           }
 
@@ -948,7 +955,7 @@ class RepositorioRfq {
               Conexion::abrir_conexion();
               $cotizacion = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $fila2['id_rfq']);
               Conexion::cerrar_conexion();
-              $cotizaciones[] = new Rfq($cotizacion-> obtener_id(), $cotizacion-> obtener_id_usuario(), $cotizacion-> obtener_usuario_designado(), $cotizacion-> obtener_canal(), $cotizacion-> obtener_email_code(), $cotizacion-> obtener_type_of_bid(), $cotizacion-> obtener_issue_date(), $cotizacion-> obtener_end_date(), $cotizacion-> obtener_status(), $cotizacion-> obtener_completado(), $cotizacion-> obtener_total_cost(), $cotizacion-> obtener_total_price(), $cotizacion-> obtener_comments(), $cotizacion-> obtener_award(), $cotizacion-> obtener_fecha_completado(), $cotizacion-> obtener_fecha_submitted(), $cotizacion-> obtener_fecha_award(), $cotizacion-> obtener_payment_terms(), $cotizacion-> obtener_address(), $cotizacion-> obtener_ship_to(), $cotizacion-> obtener_expiration_date(), $cotizacion-> obtener_ship_via(), $cotizacion-> obtener_taxes(), $cotizacion-> obtener_profit(), $cotizacion-> obtener_additional(), $cotizacion-> obtener_shipping(), $cotizacion-> obtener_shipping_cost(), $cotizacion-> obtener_fullfillment(), $cotizacion-> obtener_contract_number(), $cotizacion-> obtener_fulfillment_profit(), $cotizacion-> obtener_services_fulfillment_profit());
+              $cotizaciones[] = new Rfq($cotizacion-> obtener_id(), $cotizacion-> obtener_id_usuario(), $cotizacion-> obtener_usuario_designado(), $cotizacion-> obtener_canal(), $cotizacion-> obtener_email_code(), $cotizacion-> obtener_type_of_bid(), $cotizacion-> obtener_issue_date(), $cotizacion-> obtener_end_date(), $cotizacion-> obtener_status(), $cotizacion-> obtener_completado(), $cotizacion-> obtener_total_cost(), $cotizacion-> obtener_total_price(), $cotizacion-> obtener_comments(), $cotizacion-> obtener_award(), $cotizacion-> obtener_fecha_completado(), $cotizacion-> obtener_fecha_submitted(), $cotizacion-> obtener_fecha_award(), $cotizacion-> obtener_payment_terms(), $cotizacion-> obtener_address(), $cotizacion-> obtener_ship_to(), $cotizacion-> obtener_expiration_date(), $cotizacion-> obtener_ship_via(), $cotizacion-> obtener_taxes(), $cotizacion-> obtener_profit(), $cotizacion-> obtener_additional(), $cotizacion-> obtener_shipping(), $cotizacion-> obtener_shipping_cost(), $cotizacion-> obtener_fullfillment(), $cotizacion-> obtener_contract_number(), $cotizacion-> obtener_fulfillment_profit(), $cotizacion-> obtener_services_fulfillment_profit(), $cotizacion-> obtener_total_fulfillment(), $cotizacion-> obtener_total_services_fulfillment());
             }
           }
         }
@@ -1493,7 +1500,7 @@ class RepositorioRfq {
         $result = $sentence-> fetchAll(PDO::FETCH_ASSOC);
         if(count($result)){
           foreach ($result as $key => $row) {
-            $quotes[] = new Rfq($row['id'], $row['id_usuario'], $row['usuario_designado'], $row['canal'], $row['email_code'], $row['type_of_bid'], $row['issue_date'], $row['end_date'], $row['status'], $row['completado'], $row['total_cost'], $row['total_price'], $row['comments'], $row['award'], $row['fecha_completado'], $row['fecha_submitted'], $row['fecha_award'], $row['payment_terms'], $row['address'], $row['ship_to'], $row['expiration_date'], $row['ship_via'], $row['taxes'], $row['profit'], $row['additional'], $row['shipping'], $row['shipping_cost'], $row['fullfillment'], $row['fulfillment_date'], $row['contract_number'], $row['fulfillment_profit'], $row['services_fulfillment_profit']);
+            $quotes[] = new Rfq($row['id'], $row['id_usuario'], $row['usuario_designado'], $row['canal'], $row['email_code'], $row['type_of_bid'], $row['issue_date'], $row['end_date'], $row['status'], $row['completado'], $row['total_cost'], $row['total_price'], $row['comments'], $row['award'], $row['fecha_completado'], $row['fecha_submitted'], $row['fecha_award'], $row['payment_terms'], $row['address'], $row['ship_to'], $row['expiration_date'], $row['ship_via'], $row['taxes'], $row['profit'], $row['additional'], $row['shipping'], $row['shipping_cost'], $row['fullfillment'], $row['fulfillment_date'], $row['contract_number'], $row['fulfillment_profit'], $row['services_fulfillment_profit'], $row['total_fulfillment'], $row['total_services_fulfillment']);
           }
         }
       }catch(PDOException $ex){

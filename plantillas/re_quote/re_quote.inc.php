@@ -36,7 +36,7 @@ Conexion::cerrar_conexion();
               <div class="card-footer footer_item">
                 <a class="btn btn-primary" id="go_back" href="<?php echo EDITAR_COTIZACION . '/' . $re_quote-> get_id_rfq(); ?>"><i class="fa fa-reply"></i></a>
                 <button type="submit" class="btn btn-success" name="save_re_quote"><i class="fas fa-check"></i> Save</button>
-                <a href="<?php echo ADD_RE_QUOTE_ITEM . $re_quote-> get_id(); ?>" class="btn btn-primary"><i class="fas fa-plus"></i> Add item</a>
+                <!-- <a href="<?php echo ADD_RE_QUOTE_ITEM . $re_quote-> get_id(); ?>" class="btn btn-primary"><i class="fas fa-plus"></i> Add item</a> -->
               </div>
             </form>
           </div>

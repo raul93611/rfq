@@ -83,9 +83,9 @@ class ReQuoteSubitemRepository{
           <i class="fa fa-edit"></i> Edit subitem
         </a>
         <br>
-        <a href="<?php echo DELETE_RE_QUOTE_SUBITEM . $re_quote_subitem-> get_id(); ?>" class="delete_subitem_button btn btn-warning btn-block subitem">
+        <!-- <a href="<?php echo DELETE_RE_QUOTE_SUBITEM . $re_quote_subitem-> get_id(); ?>" class="delete_subitem_button btn btn-warning btn-block subitem">
           <i class="fa fa-trash"></i> Delete
-        </a>
+        </a> -->
       </td>
       <td></td>
     <?php

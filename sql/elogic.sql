@@ -47,7 +47,9 @@ CREATE TABLE rfq(
   fulfillment_date DATE,
   contract_number VARCHAR(255) NOT NULL,
   fulfillment_profit DECIMAL(10,2),
-  services_fulfillment_profit DECIMAL(10,2)
+  services_fulfillment_profit DECIMAL(10,2),
+  total_fulfillment DECIMAL(10,2),
+  total_services_fulfillment DECIMAL(10,2),
   PRIMARY KEY(id),
   FOREIGN KEY(id_usuario)
       REFERENCES usuarios(id)

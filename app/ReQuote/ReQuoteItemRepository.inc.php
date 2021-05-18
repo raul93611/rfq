@@ -160,13 +160,13 @@ class ReQuoteItemRepository{
           <i class="fa fa-edit"></i> Edit item
         </a>
         <br>
-        <a href="<?php echo DELETE_RE_QUOTE_ITEM . $re_quote_item-> get_id(); ?>" class="delete_item_button btn btn-warning btn-block">
+        <!-- <a href="<?php echo DELETE_RE_QUOTE_ITEM . $re_quote_item-> get_id(); ?>" class="delete_item_button btn btn-warning btn-block">
           <i class="fa fa-trash"></i> Delete
-        </a>
+        </a> -->
         <br>
-        <a href="<?php echo ADD_RE_QUOTE_SUBITEM . $re_quote_item-> get_id(); ?>" class="btn btn-warning btn-block">
+        <!-- <a href="<?php echo ADD_RE_QUOTE_SUBITEM . $re_quote_item-> get_id(); ?>" class="btn btn-warning btn-block">
           <i class="fa fa-plus-circle"></i> Add subitem
-        </a>
+        </a> -->
         <br>
       </td>
       <td><?php echo $number; ?></td>
