@@ -1,9 +1,9 @@
 <?php
-Conexion::abrir_conexion();
-$provider_subitem = RepositorioProviderSubitem::obtener_provider_subitem_por_id(Conexion::obtener_conexion(),$id_provider_subitem);
-$item = RepositorioItem::obtener_item_por_id(Conexion::obtener_conexion(), $subitem-> obtener_id_item());
-$cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $item-> obtener_id_rfq());
-Conexion::cerrar_conexion();
+Database::open_connection();
+$provider_subitem = RepositorioProviderSubitem::obtener_provider_subitem_por_id(Database::get_connection(),$id_provider_subitem);
+$item = RepositorioItem::obtener_item_por_id(Database::get_connection(), $subitem-> obtener_id_item());
+$cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Database::get_connection(), $item-> obtener_id_rfq());
+Database::close_connection();
 ?>
 <input type="hidden" name="id_provider_subitem" value="<?php echo $id_provider_subitem; ?>">
 <input type="hidden" name="id_rfq" value="<?php echo $item-> obtener_id_rfq(); ?>">
@@ -28,6 +28,6 @@ Conexion::cerrar_conexion();
 </div>
 <div class="card-footer">
   <button type="submit" class="btn btn-success" name="guardar_cambios_provider_subitem"><i class="fa fa-check"></i> Save</button>
-  <a href="<?php echo EDITAR_COTIZACION . '/' . $item-> obtener_id_rfq(); ?>" class="btn btn-info"><i class="fa fa-times"></i> Cancel</a>
+  <a href="<?php echo EDIT_QUOTE . '/' . $item-> obtener_id_rfq(); ?>" class="btn btn-info"><i class="fa fa-times"></i> Cancel</a>
   <a href="<?php echo DELETE_PROVIDER_SUBITEM . '/' . $id_provider_subitem; ?>" class="delete_provider_subitem_button btn btn-danger"><i class="fa fa-trash"></i> Delete</a>
 </div>

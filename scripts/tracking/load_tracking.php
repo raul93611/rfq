@@ -1,7 +1,7 @@
 <?php
-Conexion::abrir_conexion();
-$tracking = TrackingRepository::get_tracking_by_id(Conexion::obtener_conexion(), $id_tracking);
-Conexion::cerrar_conexion();
+Database::open_connection();
+$tracking = TrackingRepository::get_tracking_by_id(Database::get_connection(), $id_tracking);
+Database::close_connection();
 $delivery_date = RepositorioComment::mysql_date_to_english_format($tracking-> get_delivery_date());
 ?>
 <input type="hidden" id="id_tracking" name="id_tracking" value="<?php echo $tracking-> get_id(); ?>">

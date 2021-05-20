@@ -1,7 +1,7 @@
 <?php
-Conexion::abrir_conexion();
-$service = ServiceRepository::get_service(Conexion::obtener_conexion(), $id_service);
-Conexion::cerrar_conexion();
+Database::open_connection();
+$service = ServiceRepository::get_service(Database::get_connection(), $id_service);
+Database::close_connection();
 ?>
 <div class="form-group">
   <label for="description">Description:</label>

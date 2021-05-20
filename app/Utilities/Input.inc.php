@@ -29,9 +29,9 @@ class Input{
 
   public static function print_designated_user($quote){
     if ($quote->obtener_completado() || $quote-> obtener_status()) {
-      Conexion::abrir_conexion();
-      $usuario = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), $quote-> obtener_usuario_designado());
-      Conexion::cerrar_conexion();
+      Database::open_connection();
+      $usuario = RepositorioUsuario::obtener_usuario_por_id(Database::get_connection(), $quote-> obtener_usuario_designado());
+      Database::close_connection();
       ?>
       <label for="usuario_designado">Designated user:</label>
       <input type="text" name="usuario_designado" class="form-control form-control-sm" value="<?php echo $usuario->obtener_nombre_usuario(); ?>" readonly>
@@ -42,9 +42,9 @@ class Input{
       ?>
       <div class="form-group">
         <?php
-        Conexion::abrir_conexion();
-        $usuarios = RepositorioUsuario::obtener_usuarios_rfq(Conexion::obtener_conexion());
-        Conexion::cerrar_conexion();
+        Database::open_connection();
+        $usuarios = RepositorioUsuario::obtener_usuarios_rfq(Database::get_connection());
+        Database::close_connection();
         ?>
         <?php
         if (count($usuarios)) {
@@ -72,9 +72,9 @@ class Input{
   }
 
   public static function get_designated_user($quote){
-    Conexion::abrir_conexion();
-    $usuarios = RepositorioUsuario::obtener_usuarios_rfq(Conexion::obtener_conexion());
-    Conexion::cerrar_conexion();
+    Database::open_connection();
+    $usuarios = RepositorioUsuario::obtener_usuarios_rfq(Database::get_connection());
+    Database::close_connection();
     foreach ($usuarios as $usuario) {
       if ($usuario->obtener_id() == $quote->obtener_usuario_designado()) {
         $designated_user = $usuario-> obtener_nombre_usuario();
@@ -99,7 +99,7 @@ class Input{
         $canal = 'mailbox';
         break;
       case 'FindFRP':
-        $canal = 'findfrp';
+        $canal = 'findrfp';
         break;
       case 'Embassies':
         $canal = 'embassies';
@@ -119,8 +119,8 @@ class Input{
 
   public static function save_files($path, $files, $temp_files){
     mkdir($path, 0777);
-    $documentos = array_filter($files);
-    $total = count($documentos);
+    $documents = array_filter($files);
+    $total = count($documents);
     for ($i = 0; $i < $total; $i++) {
       $tmp_path = $temp_files[$i];
       $file = $files[$i];

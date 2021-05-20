@@ -1,9 +1,9 @@
 <?php
-Conexion::abrir_conexion();
-$quote = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
-$items_exists = RepositorioItem::items_exists(Conexion::obtener_conexion(), $id_rfq);
-$total_services = ServiceRepository::get_total(Conexion::obtener_conexion(), $id_rfq);
-Conexion::cerrar_conexion();
+Database::open_connection();
+$quote = RepositorioRfq::obtener_cotizacion_por_id(Database::get_connection(), $id_rfq);
+$items_exists = RepositorioItem::items_exists(Database::get_connection(), $id_rfq);
+$total_services = ServiceRepository::get_total(Database::get_connection(), $id_rfq);
+Database::close_connection();
 ?>
 <div class="card card-primary">
   <div class="card-header">

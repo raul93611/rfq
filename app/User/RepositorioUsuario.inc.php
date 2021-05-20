@@ -365,9 +365,9 @@ class RepositorioUsuario {
   }
 
   public static function escribir_usuarios() {
-    Conexion::abrir_conexion();
-    $usuarios = self::obtener_todos_usuarios(Conexion::obtener_conexion());
-    Conexion::cerrar_conexion();
+    Database::open_connection();
+    $usuarios = self::obtener_todos_usuarios(Database::get_connection());
+    Database::close_connection();
     if (count($usuarios)) {
       ?>
       <table id="tabla_usuarios" class="table table-bordered table-hover">
@@ -413,21 +413,21 @@ class RepositorioUsuario {
   }
 
   public static function obtener_cotizaciones_por_usuario($conexion, $id_usuario, $tipo) {
-    $cotizaciones = 0;
+    $quotes = 0;
     $cotizaciones_pasadas = 0;
     if (isset($conexion)) {
       try {
         switch ($tipo) {
           case 'completado':
-            $sql = 'SELECT COUNT(*) as cotizaciones FROM rfq WHERE usuario_designado = :usuario_designado AND completado = 1 AND MONTH(fecha_completado) = MONTH(CURDATE()) AND YEAR(fecha_completado) = YEAR(CURDATE())';
+            $sql = 'SELECT COUNT(*) as quotes FROM rfq WHERE usuario_designado = :usuario_designado AND completado = 1 AND MONTH(fecha_completado) = MONTH(CURDATE()) AND YEAR(fecha_completado) = YEAR(CURDATE())';
             $sql1 = 'SELECT COUNT(*) as cotizaciones_pasadas FROM rfq WHERE usuario_designado = :usuario_designado AND completado = 1 AND MONTH(fecha_completado) = MONTH(DATE_SUB(CURDATE(), INTERVAL 1 MONTH)) AND YEAR(fecha_completado) = YEAR(DATE_SUB(CURDATE(), INTERVAL 1 MONTH))';
             break;
           case 'award':
-            $sql = 'SELECT COUNT(*) as cotizaciones FROM rfq WHERE usuario_designado = :usuario_designado AND award= 1 AND MONTH(fecha_award) = MONTH(CURDATE()) AND YEAR(fecha_award) = YEAR(CURDATE())';
+            $sql = 'SELECT COUNT(*) as quotes FROM rfq WHERE usuario_designado = :usuario_designado AND award= 1 AND MONTH(fecha_award) = MONTH(CURDATE()) AND YEAR(fecha_award) = YEAR(CURDATE())';
             $sql1 = 'SELECT COUNT(*) as cotizaciones_pasadas FROM rfq WHERE usuario_designado = :usuario_designado AND award = 1 AND MONTH(fecha_award) = MONTH(DATE_SUB(CURDATE(), INTERVAL 1 MONTH)) AND YEAR(fecha_award) = YEAR(DATE_SUB(CURDATE(), INTERVAL 1 MONTH))';
             break;
           case 'status':
-            $sql = 'SELECT COUNT(*) as cotizaciones FROM rfq WHERE usuario_designado = :usuario_designado AND status = 1 AND MONTH(fecha_submitted) = MONTH(CURDATE()) AND YEAR(fecha_submitted) = YEAR(CURDATE())';
+            $sql = 'SELECT COUNT(*) as quotes FROM rfq WHERE usuario_designado = :usuario_designado AND status = 1 AND MONTH(fecha_submitted) = MONTH(CURDATE()) AND YEAR(fecha_submitted) = YEAR(CURDATE())';
             $sql1 = 'SELECT COUNT(*) as cotizaciones_pasadas FROM rfq WHERE usuario_designado = :usuario_designado AND status = 1 AND MONTH(fecha_submitted) = MONTH(DATE_SUB(CURDATE(), INTERVAL 1 MONTH)) AND YEAR(fecha_submitted) = YEAR(DATE_SUB(CURDATE(), INTERVAL 1 MONTH))';
             break;
         }
@@ -443,7 +443,7 @@ class RepositorioUsuario {
         $resultado1 = $sentencia1->fetch(PDO::FETCH_ASSOC);
 
         if (!empty($resultado)) {
-          $cotizaciones = $resultado['cotizaciones'];
+          $quotes = $resultado['quotes'];
         }
         if (!empty($resultado1)) {
           $cotizaciones_pasadas = $resultado1['cotizaciones_pasadas'];
@@ -452,15 +452,15 @@ class RepositorioUsuario {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
-    return array($cotizaciones, $cotizaciones_pasadas);
+    return array($quotes, $cotizaciones_pasadas);
   }
 
   public static function obtener_cotizaciones_no_sometidas_por_usuario($conexion, $id_usuario) {
-    $cotizaciones = 0;
+    $quotes = 0;
     $cotizaciones_pasadas = 0;
     if (isset($conexion)) {
       try {
-        $sql = 'SELECT COUNT(*) as cotizaciones FROM rfq WHERE usuario_designado = :usuario_designado AND comments = "Not submitted" AND MONTH(fecha_completado) = MONTH(CURDATE()) AND YEAR(fecha_completado) = YEAR(CURDATE())';
+        $sql = 'SELECT COUNT(*) as quotes FROM rfq WHERE usuario_designado = :usuario_designado AND comments = "Not submitted" AND MONTH(fecha_completado) = MONTH(CURDATE()) AND YEAR(fecha_completado) = YEAR(CURDATE())';
         $sql1 = 'SELECT COUNT(*) as cotizaciones_pasadas FROM rfq WHERE usuario_designado = :usuario_designado AND comments = "Not submitted" AND MONTH(fecha_completado) = MONTH(DATE_SUB(CURDATE(), INTERVAL 1 MONTH)) AND YEAR(fecha_completado) = YEAR(DATE_SUB(CURDATE(), INTERVAL 1 MONTH))';
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindParam(':usuario_designado', $id_usuario, PDO::PARAM_STR);
@@ -474,7 +474,7 @@ class RepositorioUsuario {
         $resultado1 = $sentencia1->fetch(PDO::FETCH_ASSOC);
 
         if (!empty($resultado)) {
-          $cotizaciones = $resultado['cotizaciones'];
+          $quotes = $resultado['quotes'];
         }
         if (!empty($resultado1)) {
           $cotizaciones_pasadas = $resultado1['cotizaciones_pasadas'];
@@ -483,7 +483,7 @@ class RepositorioUsuario {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
-    return array($cotizaciones, $cotizaciones_pasadas);
+    return array($quotes, $cotizaciones_pasadas);
   }
 
   public static function obtener_array_nombres_usuario_cotizaciones_completadas_ganadas_sometidas() {
@@ -496,20 +496,20 @@ class RepositorioUsuario {
     $cotizaciones_sometidas_pasadas = array();
     $cotizaciones_no_sometidas = array();
     $cotizaciones_no_sometidas_pasadas = array();
-    Conexion::abrir_conexion();
-    $usuarios = self::obtener_usuarios_rfq(Conexion::obtener_conexion());
-    Conexion::cerrar_conexion();
+    Database::open_connection();
+    $usuarios = self::obtener_usuarios_rfq(Database::get_connection());
+    Database::close_connection();
 
     if (count($usuarios)) {
       for ($i = 0; $i < count($usuarios); $i++) {
         $usuario = $usuarios[$i];
         $nombres_usuario[$i] = $usuario->obtener_nombre_usuario();
-        Conexion::abrir_conexion();
-        list($cotizaciones_completadas[$i], $cotizaciones_completadas_pasadas[$i]) = self::obtener_cotizaciones_por_usuario(Conexion::obtener_conexion(), $usuario->obtener_id(), 'completado');
-        list($cotizaciones_ganadas[$i], $cotizaciones_ganadas_pasadas[$i]) = self::obtener_cotizaciones_por_usuario(Conexion::obtener_conexion(), $usuario->obtener_id(), 'award');
-        list($cotizaciones_sometidas[$i], $cotizaciones_sometidas_pasadas[$i]) = self::obtener_cotizaciones_por_usuario(Conexion::obtener_conexion(), $usuario->obtener_id(), 'status');
-        list($cotizaciones_no_sometidas[$i], $cotizaciones_no_sometidas_pasadas[$i]) = self::obtener_cotizaciones_no_sometidas_por_usuario(Conexion::obtener_conexion(), $usuario->obtener_id());
-        Conexion::cerrar_conexion();
+        Database::open_connection();
+        list($cotizaciones_completadas[$i], $cotizaciones_completadas_pasadas[$i]) = self::obtener_cotizaciones_por_usuario(Database::get_connection(), $usuario->obtener_id(), 'completado');
+        list($cotizaciones_ganadas[$i], $cotizaciones_ganadas_pasadas[$i]) = self::obtener_cotizaciones_por_usuario(Database::get_connection(), $usuario->obtener_id(), 'award');
+        list($cotizaciones_sometidas[$i], $cotizaciones_sometidas_pasadas[$i]) = self::obtener_cotizaciones_por_usuario(Database::get_connection(), $usuario->obtener_id(), 'status');
+        list($cotizaciones_no_sometidas[$i], $cotizaciones_no_sometidas_pasadas[$i]) = self::obtener_cotizaciones_no_sometidas_por_usuario(Database::get_connection(), $usuario->obtener_id());
+        Database::close_connection();
       }
     }
     return array($nombres_usuario, $cotizaciones_completadas, $cotizaciones_completadas_pasadas, $cotizaciones_ganadas, $cotizaciones_ganadas_pasadas, $cotizaciones_sometidas, $cotizaciones_sometidas_pasadas, $cotizaciones_no_sometidas, $cotizaciones_no_sometidas_pasadas);

@@ -1,12 +1,12 @@
 <?php
 include_once 'vendor/autoload.php';
-Conexion::abrir_conexion();
-$cotizacion = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
-$re_quote = ReQuoteRepository::get_re_quote_by_id_rfq(Conexion::obtener_conexion(), $id_rfq);
-$re_quote_items = ReQuoteItemRepository::get_re_quote_items_by_id_re_quote(Conexion::obtener_conexion(), $re_quote-> get_id());
-$items = RepositorioItem::obtener_items_por_id_rfq(Conexion::obtener_conexion(), $id_rfq);
-$usuario_designado = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), $cotizacion->obtener_usuario_designado());
-Conexion::cerrar_conexion();
+Database::open_connection();
+$cotizacion = RepositorioRfq::obtener_cotizacion_por_id(Database::get_connection(), $id_rfq);
+$re_quote = ReQuoteRepository::get_re_quote_by_id_rfq(Database::get_connection(), $id_rfq);
+$re_quote_items = ReQuoteItemRepository::get_re_quote_items_by_id_re_quote(Database::get_connection(), $re_quote-> get_id());
+$items = RepositorioItem::obtener_items_por_id_rfq(Database::get_connection(), $id_rfq);
+$usuario_designado = RepositorioUsuario::obtener_usuario_por_id(Database::get_connection(), $cotizacion->obtener_usuario_designado());
+Database::close_connection();
 $partes_fecha_completado = explode('-', $cotizacion->obtener_fecha_completado());
 $fecha_completado = $partes_fecha_completado[1] . '/' . $partes_fecha_completado[2] . '/' . $partes_fecha_completado[0];
 $partes_expiration_date = explode('-', $cotizacion->obtener_expiration_date());
@@ -18,7 +18,7 @@ try{
   $fontData = $defaultFontConfig['fontdata'];
   $mpdf = new Mpdf\Mpdf(['format' => 'Letter-L', 'margin_footer' => '8',
   'fontDir' => array_merge($fontDirs, [
-          SERVIDOR . '/vendor/mpdf/mpdf/ttfonts',
+          SERVER . '/vendor/mpdf/mpdf/ttfonts',
       ]),
       'fontdata' => $fontData + [
           'roboto' => [
@@ -189,7 +189,7 @@ try{
     </div>
     ');
     $mpdf->WriteHTML($html);
-    $mpdf->Output($_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $cotizacion->obtener_id() . '/' . preg_replace('/[^a-z0-9-_\-\.]/i','_', $cotizacion-> obtener_email_code()) . '(re_quote_items_table)' . '.pdf', 'F');
+    $mpdf->Output($_SERVER['DOCUMENT_ROOT'] . '/rfq/documents/' . $cotizacion->obtener_id() . '/' . preg_replace('/[^a-z0-9-_\-\.]/i','_', $cotizacion-> obtener_email_code()) . '(re_quote_items_table)' . '.pdf', 'F');
     $mpdf->Output(preg_replace('/[^a-z0-9-_\-\.]/i','_', $cotizacion-> obtener_email_code()) . '(re_quote_items_table).pdf', 'I');
   }
 } catch (Mpdf\MpdfException $e) {

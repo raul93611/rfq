@@ -1,8 +1,8 @@
 <?php
-Conexion::abrir_conexion();
-$quote = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
-$items = RepositorioItem::obtener_items_por_id_rfq(Conexion::obtener_conexion(), $id_rfq);
-Conexion::cerrar_conexion();
+Database::open_connection();
+$quote = RepositorioRfq::obtener_cotizacion_por_id(Database::get_connection(), $id_rfq);
+$items = RepositorioItem::obtener_items_por_id_rfq(Database::get_connection(), $id_rfq);
+Database::close_connection();
 ?>
 <div class="content-wrapper">
   <section class="content-header">
@@ -28,7 +28,7 @@ Conexion::cerrar_conexion();
               ?>
             </div>
             <div class="card-footer footer_item">
-              <a class="btn btn-primary" id="go_back" href="<?php echo EDITAR_COTIZACION . '/' . $quote-> obtener_id(); ?>"><i class="fa fa-reply"></i></a>
+              <a class="btn btn-primary" id="go_back" href="<?php echo EDIT_QUOTE . '/' . $quote-> obtener_id(); ?>"><i class="fa fa-reply"></i></a>
               <a href="<?php echo TRACKING_PDF . $quote-> obtener_id(); ?>" target="_blank" class="btn btn-primary"><i class="fas fa-file"></i></a>
             </div>
           </div>

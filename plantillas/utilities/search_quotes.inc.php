@@ -1,10 +1,10 @@
 <?php
-$cotizaciones = [];
+$quotes = [];
 if(isset($_POST['buscar'])){
   echo $_POST['termino_busqueda'];
-  Conexion::abrir_conexion();
-  $cotizaciones = RepositorioRfq::obtener_resultados_busqueda(Conexion::obtener_conexion(), $_POST['termino_busqueda'], $_SESSION['cargo'], $_SESSION['id_usuario']);
-  Conexion::cerrar_conexion();
+  Database::open_connection();
+  $quotes = RepositorioRfq::obtener_resultados_busqueda(Database::get_connection(), $_POST['termino_busqueda'], $_SESSION['cargo'], $_SESSION['id_usuario']);
+  Database::close_connection();
 }
 ?>
 <div class="content-wrapper">
@@ -53,7 +53,7 @@ if(isset($_POST['buscar'])){
             </div>
             <div class="card-body">
               <?php
-              RepositorioRfq::escribir_resultados_busqueda($cotizaciones);
+              RepositorioRfq::escribir_resultados_busqueda($quotes);
               ?>
             </div>
           </div>

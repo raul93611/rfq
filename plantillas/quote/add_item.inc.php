@@ -1,10 +1,10 @@
 <?php
 if (!ControlSesion::sesion_iniciada()) {
-  Redireccion::redirigir1(SERVIDOR);
+  Redireccion::redirigir1(SERVER);
 }
-Conexion::abrir_conexion();
-$cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
-Conexion::cerrar_conexion();
+Database::open_connection();
+$cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Database::get_connection(), $id_rfq);
+Database::close_connection();
 ?>
 <div class="content-wrapper">
   <section class="content-header">
@@ -27,7 +27,7 @@ Conexion::cerrar_conexion();
             <div class="card-header">
               <h3 class="card-title"><i class="fas fa-highlighter"></i> Enter the data</h3>
             </div>
-            <form role="form" method="post" action="<?php echo GUARDAR_ADD_ITEM . $id_rfq; ?>">
+            <form role="form" method="post" action="<?php echo SAVE_ADD_ITEM . $id_rfq; ?>">
               <?php
               include_once 'forms/quote/registro_item_vacio.inc.php';
               ?>

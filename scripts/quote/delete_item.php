@@ -1,16 +1,16 @@
 <?php
 session_start();
-Conexion::abrir_conexion();
-$item = RepositorioItem::obtener_item_por_id(Conexion::obtener_conexion(), $id_item);
+Database::open_connection();
+$item = RepositorioItem::obtener_item_por_id(Database::get_connection(), $id_item);
 $id_rfq = $item-> obtener_id_rfq();
-$subitems = RepositorioSubitem::obtener_subitems_por_id_item(Conexion::obtener_conexion(), $id_item);
+$subitems = RepositorioSubitem::obtener_subitems_por_id_item(Database::get_connection(), $id_item);
 if(count($subitems)){
   foreach ($subitems as $subitem) {
-    RepositorioSubitem::delete_subitem(Conexion::obtener_conexion(), $subitem-> obtener_id());
+    RepositorioSubitem::delete_subitem(Database::get_connection(), $subitem-> obtener_id());
   }
 }
-AuditTrailRepository::create_audit_trail_item_deleted(Conexion::obtener_conexion(), 'Item', $item-> obtener_part_number_project(), 'Part Number', $id_rfq);
-RepositorioItem::delete_item(Conexion::obtener_conexion(), $id_item);
-Conexion::cerrar_conexion();
-Redireccion::redirigir(EDITAR_COTIZACION . '/' . $id_rfq . '#caja_items');
+AuditTrailRepository::create_audit_trail_item_deleted(Database::get_connection(), 'Item', $item-> obtener_part_number_project(), 'Part Number', $id_rfq);
+RepositorioItem::delete_item(Database::get_connection(), $id_item);
+Database::close_connection();
+Redireccion::redirigir(EDIT_QUOTE . '/' . $id_rfq . '#caja_items');
 ?>

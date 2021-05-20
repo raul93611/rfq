@@ -1,8 +1,8 @@
 <?php
-Conexion::abrir_conexion();
-$re_quote_item = ReQuoteItemRepository::get_re_quote_item_by_id(Conexion::obtener_conexion(), $id_re_quote_item);
-$re_quote = ReQuoteRepository::get_re_quote_by_id(Conexion::obtener_conexion(), $re_quote_item-> get_id_re_quote());
-Conexion::cerrar_conexion();
+Database::open_connection();
+$re_quote_item = ReQuoteItemRepository::get_re_quote_item_by_id(Database::get_connection(), $id_re_quote_item);
+$re_quote = ReQuoteRepository::get_re_quote_by_id(Database::get_connection(), $re_quote_item-> get_id_re_quote());
+Database::close_connection();
 ?>
 <input type="hidden" name="id_re_quote_item" value="<?php echo $id_re_quote_item; ?>">
 <div class="card-body">

@@ -1,6 +1,6 @@
 <?php
 if (!ControlSesion::sesion_iniciada()) {
-    Redireccion::redirigir1(SERVIDOR);
+    Redireccion::redirigir1(SERVER);
 }
 ?>
 <div class="content-wrapper">
@@ -24,7 +24,7 @@ if (!ControlSesion::sesion_iniciada()) {
             <div class="card-header">
               <h3 class="card-title"><i class="fas fa-highlighter"></i> Enter the data</h3>
             </div>
-            <form role="form" method="post" action="<?php echo GUARDAR_EDIT_ITEM . $id_item; ?>">
+            <form role="form" method="post" action="<?php echo SAVE_EDIT_ITEM . $id_item; ?>">
               <?php
               include_once 'forms/quote/edicion_item_vacio.inc.php';
               ?>

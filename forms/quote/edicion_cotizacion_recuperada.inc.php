@@ -31,7 +31,7 @@
   <div class="row">
     <div class="col-md-12">
       <?php
-      $ruta = $_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $cotizacion_recuperada->obtener_id();
+      $ruta = $_SERVER['DOCUMENT_ROOT'] . '/rfq/documents/' . $cotizacion_recuperada->obtener_id();
       Input::print_input_file($ruta);
       ?>
     </div>
@@ -70,13 +70,13 @@
   if($cotizacion_recuperada-> obtener_type_of_bid() == 'Services'){
     include_once 'plantillas/services/services.inc.php';
   }
-  Conexion::abrir_conexion();
+  Database::open_connection();
   ?>
-  <h3 class="text-center text-info">TOTAL: $ <?php echo number_format($cotizacion_recuperada-> obtener_total_price() + ServiceRepository::get_total(Conexion::obtener_conexion(), $id_rfq), 2); ?></h3>
+  <h3 class="text-center text-info">TOTAL: $ <?php echo number_format($cotizacion_recuperada-> obtener_total_price() + ServiceRepository::get_total(Database::get_connection(), $id_rfq), 2); ?></h3>
   <?php
-  $re_quote_exists = ReQuoteRepository::re_quote_exists(Conexion::obtener_conexion(), $cotizacion_recuperada-> obtener_id());
-  $items_exists = RepositorioItem::items_exists(Conexion::obtener_conexion(), $cotizacion_recuperada-> obtener_id());
-  Conexion::cerrar_conexion();
+  $re_quote_exists = ReQuoteRepository::re_quote_exists(Database::get_connection(), $cotizacion_recuperada-> obtener_id());
+  $items_exists = RepositorioItem::items_exists(Database::get_connection(), $cotizacion_recuperada-> obtener_id());
+  Database::close_connection();
   if($cotizacion_recuperada-> obtener_canal() == 'Chemonics' || $cotizacion_recuperada-> obtener_canal() == 'Ebay & Amazon'){
     if(!$cotizacion_recuperada->obtener_award()){
       ?>
@@ -131,13 +131,13 @@
     } else if ($cotizacion_recuperada->obtener_status() && ($cotizacion_recuperada->obtener_comments() == 'No comments' || $cotizacion_recuperada->obtener_comments() == 'Working on it' || $cotizacion_recuperada-> obtener_comments() == 'QuickBooks')) {
       echo '<a class="btn btn-primary" id="go_back" href="' . SUBMITTED . $canal . '"><i class="fa fa-reply"></i></a>';
     } else if ($cotizacion_recuperada->obtener_completado() && ($cotizacion_recuperada->obtener_comments() == 'No comments' || $cotizacion_recuperada->obtener_comments() == 'Working on it' || $cotizacion_recuperada-> obtener_comments() == 'QuickBooks')) {
-      echo '<a class="btn btn-primary" id="go_back" href="' . COMPLETADOS . $canal . '"><i class="fa fa-reply"></i></a>';
+      echo '<a class="btn btn-primary" id="go_back" href="' . COMPLETE . $canal . '"><i class="fa fa-reply"></i></a>';
     } else if ($cotizacion_recuperada->obtener_comments() == 'No Bid' || $cotizacion_recuperada->obtener_comments() == 'Manufacturer in the Bid' || $cotizacion_recuperada->obtener_comments() == 'Expired due date' || $cotizacion_recuperada->obtener_comments() == 'Supplier did not provide a quote' || $cotizacion_recuperada->obtener_comments() == 'Others') {
       echo '<a class="btn btn-primary" id="go_back" href="' . NO_BID . '"><i class="fa fa-reply"></i></a>';
     }else if($cotizacion_recuperada-> obtener_comments() == 'No submitted'){
       echo '<a class="btn btn-primary" id="go_back" href="' . NO_SUBMITTED . '"><i class="fa fa-reply"></i></a>';
     }else if(!empty($cotizacion_recuperada-> obtener_canal())){
-      echo '<a class="btn btn-primary" id="go_back" href="' . COTIZACIONES . $canal . '"><i class="fa fa-reply"></i></a>';
+      echo '<a class="btn btn-primary" id="go_back" href="' . QUOTES . $canal . '"><i class="fa fa-reply"></i></a>';
     }
     ?>
     <button type="submit" class="btn btn-success" id="save_item" name="guardar_cambios_cotizacion"><i class="fa fa-check"></i> Save</button>

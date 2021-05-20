@@ -4,7 +4,7 @@
 session_save_path('temp');
 session_start();
 include_once 'app/Bootstrap/config.inc.php';
-include_once 'app/Bootstrap/Conexion.inc.php';
+include_once 'app/Bootstrap/Database.inc.php';
 include_once 'app/Bootstrap/ControlSesion.inc.php';
 include_once 'app/Bootstrap/Redireccion.inc.php';
 
@@ -104,9 +104,9 @@ if ($partes_ruta[0] == 'rfq') {
     $ruta_elegida = 'vistas/home.php';
   } else if (count($partes_ruta) == 2) {
     switch ($partes_ruta[1]) {
-      case 'perfil':
+      case 'profile':
         $gestor_actual = '';
-        $ruta_elegida = 'vistas/perfil.php';
+        $ruta_elegida = 'vistas/profile.php';
         break;
       case 'genera_usuario':
         $ruta_elegida = 'herramientas/genera_usuario.php';
@@ -118,8 +118,8 @@ if ($partes_ruta[0] == 'rfq') {
         $gestor_actual = 'pdf_report';
         $ruta_elegida = 'scripts/pdf_report.php';
         break;
-      case 'guardar_comment':
-        $ruta_elegida = 'scripts/utilities/guardar_comment.php';
+      case 'save_comment':
+        $ruta_elegida = 'scripts/utilities/save_comment.php';
         break;
       case 'recover_password_form':
         $ruta_elegida = 'herramientas/recover_password_form.php';
@@ -205,11 +205,11 @@ if ($partes_ruta[0] == 'rfq') {
     }
   } else if (count($partes_ruta) == 3) {
     switch ($partes_ruta[1]) {
-      case 'perfil':
-      $ruta_elegida = 'vistas/perfil.php';
+      case 'profile':
+      $ruta_elegida = 'vistas/profile.php';
       switch ($partes_ruta[2]) {
-        case 'registro':
-          $gestor_actual = 'registro';
+        case 'register_user':
+          $gestor_actual = 'register_user';
           break;
         case 'search_quotes':
           $gestor_actual = 'search_quotes';
@@ -251,45 +251,45 @@ if ($partes_ruta[0] == 'rfq') {
         $id_rfq = $partes_ruta[2];
         $ruta_elegida = 'scripts/quote/delete_quote.php';
         break;
-      case 'guardar_editar_cotizacion':
+      case 'save_edit_quote':
         $id_rfq = $partes_ruta[2];
-        $ruta_elegida = 'scripts/quote/guardar_editar_cotizacion.php';
+        $ruta_elegida = 'scripts/quote/save_edit_quote.php';
         break;
-      case 'guardar_add_item':
+      case 'save_add_item':
         $id_rfq = $partes_ruta[2];
-        $ruta_elegida = 'scripts/quote/guardar_add_item.php';
+        $ruta_elegida = 'scripts/quote/save_add_item.php';
         break;
-      case 'guardar_add_provider':
+      case 'save_add_provider':
         $id_item = $partes_ruta[2];
-        $ruta_elegida = 'scripts/quote/guardar_add_provider.php';
+        $ruta_elegida = 'scripts/quote/save_add_provider.php';
         break;
-      case 'guardar_edit_item':
+      case 'save_edit_item':
         $id_item = $partes_ruta[2];
-        $ruta_elegida = 'scripts/quote/guardar_edit_item.php';
+        $ruta_elegida = 'scripts/quote/save_edit_item.php';
         break;
       case 'delete_item':
         $id_item = $partes_ruta[2];
         $ruta_elegida = 'scripts/quote/delete_item.php';
         break;
-      case 'guardar_edit_provider':
+      case 'save_edit_provider':
         $id_provider = $partes_ruta[2];
-        $ruta_elegida = 'scripts/quote/guardar_edit_provider.php';
+        $ruta_elegida = 'scripts/quote/save_edit_provider.php';
         break;
-      case 'guardar_add_subitem':
+      case 'save_add_subitem':
         $id_item = $partes_ruta[2];
-        $ruta_elegida = 'scripts/quote/guardar_add_subitem.php';
+        $ruta_elegida = 'scripts/quote/save_add_subitem.php';
         break;
-      case 'guardar_add_provider_subitem':
+      case 'save_add_provider_subitem':
         $id_subitem = $partes_ruta[2];
-        $ruta_elegida = 'scripts/quote/guardar_add_provider_subitem.php';
+        $ruta_elegida = 'scripts/quote/save_add_provider_subitem.php';
         break;
-      case 'guardar_edit_subitem':
+      case 'save_edit_subitem':
         $id_subitem = $partes_ruta[2];
-        $ruta_elegida = 'scripts/quote/guardar_edit_subitem.php';
+        $ruta_elegida = 'scripts/quote/save_edit_subitem.php';
         break;
-      case 'guardar_edit_provider_subitem':
+      case 'save_edit_provider_subitem':
         $id_provider_subitem = $partes_ruta[2];
-        $ruta_elegida = 'scripts/quote/guardar_edit_provider_subitem.php';
+        $ruta_elegida = 'scripts/quote/save_edit_provider_subitem.php';
         break;
       case 'delete_provider':
         $id_provider = $partes_ruta[2];
@@ -419,8 +419,8 @@ if ($partes_ruta[0] == 'rfq') {
       $id_rfq = $partes_ruta[2];
       $archivo = $partes_ruta[3];
       $ruta_elegida = 'scripts/utilities/delete_document.php';
-    }else if($partes_ruta[1] == 'perfil'){
-      $ruta_elegida = 'vistas/perfil.php';
+    }else if($partes_ruta[1] == 'profile'){
+      $ruta_elegida = 'vistas/profile.php';
       switch ($partes_ruta[2]) {
         case 'add_re_quote_item':
           $gestor_actual = 'add_re_quote_item';
@@ -454,8 +454,8 @@ if ($partes_ruta[0] == 'rfq') {
           $gestor_actual = 'edit_re_quote_subitem_provider';
           $id_re_quote_subitem_provider = $partes_ruta[3];
           break;
-        case 'cotizaciones':
-          $gestor_actual = 'cotizaciones';
+        case 'quotes':
+          $gestor_actual = 'quotes';
           switch ($partes_ruta[3]) {
             case 'gsa_buy':
               $cotizacion = 'gsa_buy';
@@ -469,8 +469,8 @@ if ($partes_ruta[0] == 'rfq') {
             case 'mailbox':
               $cotizacion = 'mailbox';
               break;
-            case 'findfrp':
-              $cotizacion = 'findfrp';
+            case 'findrfp':
+              $cotizacion = 'findrfp';
               break;
             case 'embassies':
               $cotizacion = 'embassies';
@@ -484,13 +484,13 @@ if ($partes_ruta[0] == 'rfq') {
             case 'ebay_amazon':
               $cotizacion = 'ebay_amazon';
               break;
-            case 'nuevo':
-              $cotizacion = 'nuevo';
+            case 'new':
+              $cotizacion = 'new';
               break;
           }
           break;
-        case 'completados':
-          $gestor_actual = 'completados';
+        case 'complete':
+          $gestor_actual = 'complete';
           switch ($partes_ruta[3]) {
             case 'gsa_buy':
               $cotizacion = 'gsa_buy_completados';
@@ -504,7 +504,7 @@ if ($partes_ruta[0] == 'rfq') {
             case 'mailbox':
               $cotizacion = 'mailbox_completados';
               break;
-            case 'findfrp':
+            case 'findrfp':
               $cotizacion = 'findfrp_completados';
               break;
             case 'embassies':
@@ -530,7 +530,7 @@ if ($partes_ruta[0] == 'rfq') {
             case 'mailbox':
               $cotizacion = 'mailbox_submitted';
               break;
-            case 'findfrp':
+            case 'findrfp':
               $cotizacion = 'findfrp_submitted';
               break;
             case 'embassies':
@@ -556,7 +556,7 @@ if ($partes_ruta[0] == 'rfq') {
             case 'mailbox':
               $cotizacion = 'mailbox_award';
               break;
-            case 'findfrp':
+            case 'findrfp':
               $cotizacion = 'findfrp_award';
               break;
             case 'embassies':
@@ -594,14 +594,14 @@ if ($partes_ruta[0] == 'rfq') {
       }
     }
   } else if (count($partes_ruta) == 5) {
-    if ($partes_ruta[1] == 'perfil') {
-      $ruta_elegida = 'vistas/perfil.php';
+    if ($partes_ruta[1] == 'profile') {
+      $ruta_elegida = 'vistas/profile.php';
       switch ($partes_ruta[2]) {
-        case 'cotizaciones':
-          $gestor_actual = 'cotizaciones';
+        case 'quotes':
+          $gestor_actual = 'quotes';
           switch ($partes_ruta[3]) {
-            case 'editar_cotizacion':
-              $cotizacion = 'editar_cotizacion';
+            case 'edit_quote':
+              $cotizacion = 'edit_quote';
               $id_rfq = $partes_ruta[4];
               break;
             case 'add_item':

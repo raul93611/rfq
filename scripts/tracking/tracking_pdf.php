@@ -1,11 +1,11 @@
 <?php
 include_once 'vendor/autoload.php';
-Conexion::abrir_conexion();
-$cotizacion = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
-$items = RepositorioItem::obtener_items_por_id_rfq(Conexion::obtener_conexion(), $id_rfq);
-$re_quote = ReQuoteRepository::get_re_quote_by_id_rfq(Conexion::obtener_conexion(), $id_rfq);
-$re_quote_items = ReQuoteItemRepository::get_re_quote_items_by_id_re_quote(Conexion::obtener_conexion(), $re_quote-> get_id());
-Conexion::cerrar_conexion();
+Database::open_connection();
+$cotizacion = RepositorioRfq::obtener_cotizacion_por_id(Database::get_connection(), $id_rfq);
+$items = RepositorioItem::obtener_items_por_id_rfq(Database::get_connection(), $id_rfq);
+$re_quote = ReQuoteRepository::get_re_quote_by_id_rfq(Database::get_connection(), $id_rfq);
+$re_quote_items = ReQuoteItemRepository::get_re_quote_items_by_id_re_quote(Database::get_connection(), $re_quote-> get_id());
+Database::close_connection();
 try{
   $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
   $fontDirs = $defaultConfig['fontDir'];
@@ -13,7 +13,7 @@ try{
   $fontData = $defaultFontConfig['fontdata'];
   $mpdf = new Mpdf\Mpdf(['format' => 'Letter-L', 'margin_footer' => '8',
   'fontDir' => array_merge($fontDirs, [
-          SERVIDOR . '/vendor/mpdf/mpdf/ttfonts',
+          SERVER . '/vendor/mpdf/mpdf/ttfonts',
       ]),
       'fontdata' => $fontData + [
           'roboto' => [
@@ -99,9 +99,9 @@ try{
     for ($i = 0; $i < count($items); $i++) {
       $item = $items[$i];
       $re_quote_item = $re_quote_items[$i];
-      Conexion::abrir_conexion();
-      $trackings = TrackingRepository::get_all_trackings_by_id_item(Conexion::obtener_conexion(), $item-> obtener_id());
-      Conexion::cerrar_conexion();
+      Database::open_connection();
+      $trackings = TrackingRepository::get_all_trackings_by_id_item(Database::get_connection(), $item-> obtener_id());
+      Database::close_connection();
       if(!count($trackings)){
         $trackings_quantity = 1;
       }else{
@@ -130,17 +130,17 @@ try{
           ';
         }
       }
-      Conexion::abrir_conexion();
-      $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Conexion::obtener_conexion(), $item-> obtener_id());
-      $re_quote_subitems = ReQuoteSubitemRepository::get_re_quote_subitems_by_id_re_quote_item(Conexion::obtener_conexion(), $re_quote_item-> get_id());
-      Conexion::cerrar_conexion();
+      Database::open_connection();
+      $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Database::get_connection(), $item-> obtener_id());
+      $re_quote_subitems = ReQuoteSubitemRepository::get_re_quote_subitems_by_id_re_quote_item(Database::get_connection(), $re_quote_item-> get_id());
+      Database::close_connection();
       if(count($subitems)){
         for($k = 0; $k < count($subitems); $k++){
           $subitem = $subitems[$k];
           $re_quote_subitem = $re_quote_subitems[$k];
-          Conexion::abrir_conexion();
-          $trackings_subitems = TrackingSubitemRepository::get_all_trackings_by_id_subitem(Conexion::obtener_conexion(), $subitem-> obtener_id());
-          Conexion::cerrar_conexion();
+          Database::open_connection();
+          $trackings_subitems = TrackingSubitemRepository::get_all_trackings_by_id_subitem(Database::get_connection(), $subitem-> obtener_id());
+          Database::close_connection();
           if(!count($trackings_subitems)){
             $trackings_subitems_quantity = 1;
           }else{
@@ -183,7 +183,7 @@ try{
   </div>
   ');
   $mpdf->WriteHTML($html);
-  $mpdf->Output($_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $cotizacion->obtener_id() . '/' . preg_replace('/[^a-z0-9-_\-\.]/i','_', $cotizacion-> obtener_email_code()) . '(trackings)' . '.pdf', 'F');
+  $mpdf->Output($_SERVER['DOCUMENT_ROOT'] . '/rfq/documents/' . $cotizacion->obtener_id() . '/' . preg_replace('/[^a-z0-9-_\-\.]/i','_', $cotizacion-> obtener_email_code()) . '(trackings)' . '.pdf', 'F');
   $mpdf->Output(preg_replace('/[^a-z0-9-_\-\.]/i','_', $cotizacion-> obtener_email_code()) . '(trackings).pdf', 'I');
 } catch (Mpdf\MpdfException $e) {
   echo $e->getMessage();

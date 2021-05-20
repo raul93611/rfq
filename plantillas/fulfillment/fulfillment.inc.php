@@ -1,10 +1,10 @@
 <?php
-Conexion::abrir_conexion();
-$quote = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
-$providers_list = ProviderListRepository::get_all(Conexion::obtener_conexion());
-$items_exists = RepositorioItem::items_exists(Conexion::obtener_conexion(), $id_rfq);
-$total_services = ServiceRepository::get_total(Conexion::obtener_conexion(), $id_rfq);
-Conexion::cerrar_conexion();
+Database::open_connection();
+$quote = RepositorioRfq::obtener_cotizacion_por_id(Database::get_connection(), $id_rfq);
+$providers_list = ProviderListRepository::get_all(Database::get_connection());
+$items_exists = RepositorioItem::items_exists(Database::get_connection(), $id_rfq);
+$total_services = ServiceRepository::get_total(Database::get_connection(), $id_rfq);
+Database::close_connection();
 ?>
 <div class="content-wrapper">
   <section class="content-header">
@@ -69,7 +69,7 @@ Conexion::cerrar_conexion();
           </div>
         </div>
         <div class="card-footer footer_item">
-          <a class="btn btn-primary" id="go_back" href="<?php echo EDITAR_COTIZACION . '/' . $quote-> obtener_id(); ?>"><i class="fa fa-reply"></i></a>
+          <a class="btn btn-primary" id="go_back" href="<?php echo EDIT_QUOTE . '/' . $quote-> obtener_id(); ?>"><i class="fa fa-reply"></i></a>
         </div>
       </div>
     </div>

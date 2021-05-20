@@ -28,12 +28,12 @@ class ReQuoteItemRepository{
   }
 
   public static function print_re_quote_items($id_re_quote) {
-    Conexion::abrir_conexion();
-    $re_quote = ReQuoteRepository::get_re_quote_by_id(Conexion::obtener_conexion(), $id_re_quote);
-    $quote = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $re_quote-> get_id_rfq());
-    $re_quote_items = self::get_re_quote_items_by_id_re_quote(Conexion::obtener_conexion(), $id_re_quote);
-    $items = RepositorioItem::obtener_items_por_id_rfq(Conexion::obtener_conexion(), $re_quote-> get_id_rfq());
-    Conexion::cerrar_conexion();
+    Database::open_connection();
+    $re_quote = ReQuoteRepository::get_re_quote_by_id(Database::get_connection(), $id_re_quote);
+    $quote = RepositorioRfq::obtener_cotizacion_por_id(Database::get_connection(), $re_quote-> get_id_rfq());
+    $re_quote_items = self::get_re_quote_items_by_id_re_quote(Database::get_connection(), $id_re_quote);
+    $items = RepositorioItem::obtener_items_por_id_rfq(Database::get_connection(), $re_quote-> get_id_rfq());
+    Database::close_connection();
     if (count($re_quote_items)) {
       ?>
       <br>
@@ -93,9 +93,9 @@ class ReQuoteItemRepository{
       $contador_subitems = 0;
       foreach ($re_quote_items as $key => $re_quote_item) {
         $id_items[] = $re_quote_item-> get_id();
-        Conexion::abrir_conexion();
-        $re_quote_subitems = ReQuoteSubitemRepository::get_re_quote_subitems_by_id_re_quote_item(Conexion::obtener_conexion(), $re_quote_item-> get_id());
-        Conexion::cerrar_conexion();
+        Database::open_connection();
+        $re_quote_subitems = ReQuoteSubitemRepository::get_re_quote_subitems_by_id_re_quote_item(Database::get_connection(), $re_quote_item-> get_id());
+        Database::close_connection();
         foreach ($re_quote_subitems as $key => $re_quote_subitem) {
           $id_subitems[] = $re_quote_subitem-> get_id();
         }
@@ -146,9 +146,9 @@ class ReQuoteItemRepository{
       return;
     }
     $j = $i;
-    Conexion::abrir_conexion();
-    $re_quote_providers = ReQuoteProviderRepository::get_re_quote_providers_by_id_re_quote_item(Conexion::obtener_conexion(), $re_quote_item-> get_id());
-    Conexion::cerrar_conexion();
+    Database::open_connection();
+    $re_quote_providers = ReQuoteProviderRepository::get_re_quote_providers_by_id_re_quote_item(Database::get_connection(), $re_quote_item-> get_id());
+    Database::close_connection();
     ?>
     <tr id="<?php echo 'item' . $re_quote_item-> get_id(); ?>">
       <td>

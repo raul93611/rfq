@@ -93,9 +93,9 @@ class RepositorioItem {
       return;
     }
     $j = $i;
-    Conexion::abrir_conexion();
-    $providers = RepositorioProvider::obtener_providers_por_id_item(Conexion::obtener_conexion(), $item->obtener_id());
-    Conexion::cerrar_conexion();
+    Database::open_connection();
+    $providers = RepositorioProvider::obtener_providers_por_id_item(Database::get_connection(), $item->obtener_id());
+    Database::close_connection();
     echo '<tr id="item' . $item->obtener_id() . '">';
     echo '<td><a href="' . ADD_PROVIDER . '/' . $item->obtener_id() . '" class="btn btn-warning btn-block"><i class="fa fa-plus-circle"></i> Add Provider</a><br><a href="' . EDIT_ITEM . '/' . $item->obtener_id() . '" class="btn btn-warning btn-block"><i class="fa fa-edit"></i> Edit item</a><br><a href="' . DELETE_ITEM . '/' . $item-> obtener_id() . '" class="delete_item_button btn btn-warning btn-block"><i class="fa fa-trash"></i> Delete</a><br><a href="' . ADD_SUBITEM . '/' . $item-> obtener_id() . '" class="btn btn-warning btn-block"><i class="fa fa-plus-circle"></i> Add subitem</a></td>';
     echo '<td>' . $numeracion . '</td>';
@@ -140,9 +140,9 @@ class RepositorioItem {
       $best_unit_price = min($precios);
       for($i = 0;$i < count($precios); $i++){
         if($best_unit_price == $precios[$i]){
-          Conexion::abrir_conexion();
-          self::actualizar_provider_menor_item(Conexion::obtener_conexion(), $providers[$i]->obtener_id(), $item-> obtener_id());
-          Conexion::cerrar_conexion();
+          Database::open_connection();
+          self::actualizar_provider_menor_item(Database::get_connection(), $providers[$i]->obtener_id(), $item-> obtener_id());
+          Database::close_connection();
         }
       }
       echo '$ ' . $best_unit_price;
@@ -158,11 +158,11 @@ class RepositorioItem {
   }
 
   public static function escribir_items($id_rfq) {
-    Conexion::abrir_conexion();
-    $cotizacion = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
-    $items = self::obtener_items_por_id_rfq(Conexion::obtener_conexion(), $id_rfq);
-    $re_quote_exists = ReQuoteRepository::re_quote_exists(Conexion::obtener_conexion(), $id_rfq);
-    Conexion::cerrar_conexion();
+    Database::open_connection();
+    $cotizacion = RepositorioRfq::obtener_cotizacion_por_id(Database::get_connection(), $id_rfq);
+    $items = self::obtener_items_por_id_rfq(Database::get_connection(), $id_rfq);
+    $re_quote_exists = ReQuoteRepository::re_quote_exists(Database::get_connection(), $id_rfq);
+    Database::close_connection();
     echo '<br><h2 id="caja_items">Items:</h2>';
     if (count($items)) {
       ?>
@@ -260,9 +260,9 @@ class RepositorioItem {
         }else{
           $id_items = $id_items . ',' . $item-> obtener_id();
         }
-        Conexion::abrir_conexion();
-        $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Conexion::obtener_conexion(), $item-> obtener_id());
-        Conexion::cerrar_conexion();
+        Database::open_connection();
+        $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Database::get_connection(), $item-> obtener_id());
+        Database::close_connection();
         for($j = 0; $j < count($subitems); $j++){
           $subitem = $subitems[$j];
           if($contador_subitems == 0){

@@ -11,16 +11,16 @@ if(isset($_POST['send'])){
     }
     return $string_aleatorio;
   }
-  Conexion::abrir_conexion();
-  $email_existe = RepositorioUsuario::email_existe(Conexion::obtener_conexion(), $_POST['email']);
-  Conexion::cerrar_conexion();
+  Database::open_connection();
+  $email_existe = RepositorioUsuario::email_existe(Database::get_connection(), $_POST['email']);
+  Database::close_connection();
   if($email_existe){
-    Conexion::abrir_conexion();
-    $usuario = RepositorioUsuario::obtener_usuario_por_email(Conexion::obtener_conexion(), $_POST['email']);
+    Database::open_connection();
+    $usuario = RepositorioUsuario::obtener_usuario_por_email(Database::get_connection(), $_POST['email']);
     $string_aleatorio = sa(10);
     $url_secreta = hash('sha256', $string_aleatorio . $usuario-> obtener_nombre_usuario());
-    RepositorioUsuario::guardar_url_secreta(Conexion::obtener_conexion(), $usuario-> obtener_id(), $url_secreta);
-    Conexion::cerrar_conexion();
+    RepositorioUsuario::guardar_url_secreta(Database::get_connection(), $usuario-> obtener_id(), $url_secreta);
+    Database::close_connection();
     $to = $usuario-> obtener_email();
     $subject = 'Restart your password';
     $headers = "MIME-Version: 1.0\r\n";

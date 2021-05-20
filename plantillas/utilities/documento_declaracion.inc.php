@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="Shortcut Icon" href="<?php echo RUTA_IMG; ?>eP_favicon.png" type="image/x-icon" />
+    <link rel="Shortcut Icon" href="<?php echo IMG_PATH; ?>eP_favicon.png" type="image/x-icon" />
     <?php
     if (!isset($titulo) || empty($titulo)) {
       $titulo = Inicio;
@@ -22,10 +22,10 @@
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <link rel="stylesheet" href="<?php echo PLUGINS; ?>datatables/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="<?php echo DIST; ?>css/adminlte.min.css">
-    <link rel="stylesheet" href="<?php echo RUTA_CSS; ?>estilos.css">
+    <link rel="stylesheet" href="<?php echo CSS_PATH; ?>estilos.css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:300,400,700,900" rel="stylesheet">
-    <link rel="stylesheet" href="<?php echo SERVIDOR; ?>bower_components/bootstrap-fileinput/css/fileinput.min.css">
-    <link rel="stylesheet" href="<?php echo SERVIDOR; ?>bower_components/bootstrap-fileinput/themes/explorer-fas/theme.min.css">
+    <link rel="stylesheet" href="<?php echo SERVER; ?>bower_components/bootstrap-fileinput/css/fileinput.min.css">
+    <link rel="stylesheet" href="<?php echo SERVER; ?>bower_components/bootstrap-fileinput/themes/explorer-fas/theme.min.css">
   </head>
   <body class="hold-transition sidebar-mini sidebar-collapse">
     <div class="wrapper">

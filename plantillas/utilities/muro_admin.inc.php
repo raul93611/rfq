@@ -18,9 +18,9 @@
             <div class="inner">
               <h3>
                 <?php
-                Conexion::abrir_conexion();
-                echo RepositorioUsuario::contar_usuarios(Conexion::obtener_conexion());
-                Conexion::cerrar_conexion();
+                Database::open_connection();
+                echo RepositorioUsuario::contar_usuarios(Database::get_connection());
+                Database::close_connection();
                 ?>
               </h3>
               <p>Registered users</p>

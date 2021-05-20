@@ -50,10 +50,10 @@ class ReQuoteSubitemRepository{
 
   public static function print_re_quote_subitems($id_re_quote_item, $id_item, $j) {
     $j++;
-    Conexion::abrir_conexion();
-    $re_quote_subitems = self::get_re_quote_subitems_by_id_re_quote_item(Conexion::obtener_conexion(), $id_re_quote_item);
-    $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Conexion::obtener_conexion(), $id_item);
-    Conexion::cerrar_conexion();
+    Database::open_connection();
+    $re_quote_subitems = self::get_re_quote_subitems_by_id_re_quote_item(Database::get_connection(), $id_re_quote_item);
+    $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Database::get_connection(), $id_item);
+    Database::close_connection();
     if (count($re_quote_subitems)) {
       foreach ($re_quote_subitems as $key => $re_quote_subitem) {
         $subitem = $subitems[$key];
@@ -69,9 +69,9 @@ class ReQuoteSubitemRepository{
       return;
     }
     $j = $i;
-    Conexion::abrir_conexion();
-    $re_quote_subitem_providers = ReQuoteSubitemProviderRepository::get_re_quote_subitem_providers_by_id_re_quote_subitem(Conexion::obtener_conexion(), $re_quote_subitem-> get_id());
-    Conexion::cerrar_conexion();
+    Database::open_connection();
+    $re_quote_subitem_providers = ReQuoteSubitemProviderRepository::get_re_quote_subitem_providers_by_id_re_quote_subitem(Database::get_connection(), $re_quote_subitem-> get_id());
+    Database::close_connection();
     ?>
     <tr id="<?php echo 'subitem' . $re_quote_subitem-> get_id(); ?>" class="fila_subitem">
       <td>

@@ -7,9 +7,9 @@
 <div class="row mt-4">
   <div class="col-md-12">
     <?php
-    Conexion::abrir_conexion();
-    ServiceRepository::display_services(Conexion::obtener_conexion(), $cotizacion_recuperada->obtener_id());
-    Conexion::cerrar_conexion();
+    Database::open_connection();
+    ServiceRepository::display_services(Database::get_connection(), $cotizacion_recuperada->obtener_id());
+    Database::close_connection();
     ?>
   </div>
 </div>

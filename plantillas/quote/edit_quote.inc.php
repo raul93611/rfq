@@ -1,10 +1,10 @@
 <?php
 if (!ControlSesion::sesion_iniciada()) {
-  Redireccion::redirigir1(SERVIDOR);
+  Redireccion::redirigir1(SERVER);
 }
-Conexion::abrir_conexion();
-$cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
-Conexion::cerrar_conexion();
+Database::open_connection();
+$cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Database::get_connection(), $id_rfq);
+Database::close_connection();
 if(is_null($cotizacion_recuperada)){
   Redireccion::redirigir1(ERROR);
 }
@@ -25,9 +25,9 @@ if(is_null($cotizacion_recuperada)){
               <?php
             }
           }
-          Conexion::abrir_conexion();
-          $cantidad_de_comentarios = RepositorioComment::contar_todos_comentarios_quote(Conexion::obtener_conexion(), $cotizacion_recuperada-> obtener_id());
-          Conexion::cerrar_conexion();
+          Database::open_connection();
+          $cantidad_de_comentarios = RepositorioComment::contar_todos_comentarios_quote(Database::get_connection(), $cotizacion_recuperada-> obtener_id());
+          Database::close_connection();
           ?>
           <a href="#" id="mostrar_comentarios" class="btn btn-info"><i class="fas fa-comment"></i> Comments(<?php echo $cantidad_de_comentarios; ?>)</a>
           <button id="audit_trails_button" type="button" name="button" class="btn btn-info">Audit Trails</button>
@@ -68,7 +68,7 @@ if(is_null($cotizacion_recuperada)){
             <div class="card-header">
               <h3 class="card-title"><i class="fas fa-highlighter"></i> Enter the data</h3>
             </div>
-            <form role="form" id="form_edited_quote" method="post" enctype="multipart/form-data" action="<?php echo GUARDAR_EDITAR_COTIZACION . $id_rfq; ?>">
+            <form role="form" id="form_edited_quote" method="post" enctype="multipart/form-data" action="<?php echo SAVE_EDIT_QUOTE . $id_rfq; ?>">
               <?php
               include_once 'forms/quote/edicion_cotizacion_recuperada.inc.php';
               ?>
@@ -113,7 +113,7 @@ if(is_null($cotizacion_recuperada)){
         </button>
       </div>
       <div class="modal-body">
-        <form id="form_nuevo_comment" method="post" enctype="multipart/form-data" action="<?php echo GUARDAR_COMMENT; ?>">
+        <form id="form_nuevo_comment" method="post" enctype="multipart/form-data" action="<?php echo SAVE_COMMENT; ?>">
           <div class="form-group">
             <label for="comment_rfq">Comment:</label>
             <textarea class="form-control form-control-sm" name="comment_rfq" rows="10" id="comment_rfq" autofocus></textarea>
@@ -122,7 +122,7 @@ if(is_null($cotizacion_recuperada)){
         </form>
       </div>
       <div class="modal-footer">
-        <button type="submit" name="guardar_comment" form="form_nuevo_comment" class="btn btn-success"><i class="fa fa-check"></i> Save</button>
+        <button type="submit" name="save_comment" form="form_nuevo_comment" class="btn btn-success"><i class="fa fa-check"></i> Save</button>
         <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-ban"></i> Cancel</button>
       </div>
     </div>
@@ -158,9 +158,9 @@ if(is_null($cotizacion_recuperada)){
       </div>
       <div class="modal-body">
         <?php
-        Conexion::abrir_conexion();
-        AuditTrailRepository::display_audit_trails(Conexion::obtener_conexion(), $cotizacion_recuperada-> obtener_id());
-        Conexion::cerrar_conexion();
+        Database::open_connection();
+        AuditTrailRepository::display_audit_trails(Database::get_connection(), $cotizacion_recuperada-> obtener_id());
+        Database::close_connection();
         ?>
       </div>
     </div>

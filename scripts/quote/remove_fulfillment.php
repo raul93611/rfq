@@ -1,6 +1,6 @@
 <?php
-Conexion::abrir_conexion();
-RepositorioRfq::remove_fulfillment(Conexion::obtener_conexion(), $id_rfq);
-Conexion::cerrar_conexion();
-Redireccion::redirigir(EDITAR_COTIZACION . '/' . $id_rfq);
+Database::open_connection();
+RepositorioRfq::remove_fulfillment(Database::get_connection(), $id_rfq);
+Database::close_connection();
+Redireccion::redirigir(EDIT_QUOTE . '/' . $id_rfq);
 ?>

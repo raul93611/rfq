@@ -36,22 +36,22 @@ $spreadsheet->setActiveSheetIndex(0)->setCellValue('O1', 'PROFIT(%)');
 $spreadsheet->setActiveSheetIndex(0)->setCellValue('P1', 'SHIPPING COST($)');
 $spreadsheet->setActiveSheetIndex(0)->setCellValue('Q1', 'SHIPPING');
 
-Conexion::abrir_conexion();
+Database::open_connection();
 $date_from = RepositorioComment::english_format_to_mysql_date($_POST['date_from']);
 $date_to = RepositorioComment::english_format_to_mysql_date($_POST['date_to']);
 if($_POST['quote_type'] == 'submitted'){
-  $quotes = RepositorioRfq::get_all_submitted_quotes_between_dates(Conexion::obtener_conexion(), $date_from, $date_to);
+  $quotes = RepositorioRfq::get_all_submitted_quotes_between_dates(Database::get_connection(), $date_from, $date_to);
 }else if($_POST['quote_type'] == 'award'){
-  $quotes = RepositorioRfq::get_all_award_quotes_between_dates(Conexion::obtener_conexion(), $date_from, $date_to);
+  $quotes = RepositorioRfq::get_all_award_quotes_between_dates(Database::get_connection(), $date_from, $date_to);
 }
-Conexion::cerrar_conexion();
+Database::close_connection();
 
 $i=2;
 
 foreach ($quotes as $quote) {
-  Conexion::abrir_conexion();
-  $usuario_designado = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), $quote-> obtener_usuario_designado());
-  Conexion::cerrar_conexion();
+  Database::open_connection();
+  $usuario_designado = RepositorioUsuario::obtener_usuario_por_id(Database::get_connection(), $quote-> obtener_usuario_designado());
+  Database::close_connection();
   $spreadsheet->setActiveSheetIndex(0)->setCellValue('A'.$i, $quote-> obtener_id());
   $spreadsheet->setActiveSheetIndex(0)->setCellValue('B'.$i, $usuario_designado-> obtener_nombre_usuario());
   $spreadsheet->setActiveSheetIndex(0)->setCellValue('C'.$i, $quote-> obtener_canal());

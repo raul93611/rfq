@@ -1,6 +1,6 @@
 <?php
 if (ControlSesion::sesion_iniciada()) {
-  Redireccion::redirigir(PERFIL);
+  Redireccion::redirigir(PROFILE);
 }
 include_once 'plantillas/user/validacion_login.inc.php';
 ?>
@@ -13,9 +13,9 @@ include_once 'plantillas/user/validacion_login.inc.php';
     <title>Home</title>
     <link rel="stylesheet" href="<?php echo PLUGINS; ?>/font-awesome/css/all.min.css">
     <link rel="stylesheet" href="<?php echo DIST; ?>css/adminlte.min.css">
-    <link rel="stylesheet" href="<?php echo RUTA_CSS; ?>estilos.css">
+    <link rel="stylesheet" href="<?php echo CSS_PATH; ?>estilos.css">
     <link rel="stylesheet" href="<?php echo PLUGINS; ?>iCheck/square/blue.css">
-    <link rel="Shortcut Icon" href="<?php echo RUTA_IMG; ?>eP_favicon.png" type="image/x-icon" />
+    <link rel="Shortcut Icon" href="<?php echo IMG_PATH; ?>eP_favicon.png" type="image/x-icon" />
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     <link rel="stylesheet" id="fondo" href="css/fondo1.css">
     <style>
@@ -50,12 +50,12 @@ include_once 'plantillas/user/validacion_login.inc.php';
   <body class="hold-transition login-page">
     <div class="login-box">
       <div class="login-logo">
-        <img class="mb-4" src="<?php echo RUTA_IMG; ?>eP_logo_home.png" alt="" width="60" height="38">
+        <img class="mb-4" src="<?php echo IMG_PATH; ?>eP_logo_home.png" alt="" width="60" height="38">
       </div>
       <hr>
       <div class="card-body login-card-body">
         <p class="login-box-msg" style="color: #BDC5CF !important;">Please log in</p>
-        <form action="<?php echo SERVIDOR; ?>" method="post">
+        <form action="<?php echo SERVER; ?>" method="post">
           <div class="form-group has-feedback">
             <input type="text" class="form-control <?php if(isset($_POST['iniciar_sesion'])){echo 'is-invalid';} ?>" name="nombre_usuario" placeholder="Username" autofocus required
             <?php

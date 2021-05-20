@@ -56,10 +56,10 @@ class RepositorioComment{
   }
 
   public static function escribir_comments($id_rfq){
-    Conexion::abrir_conexion();
-    $cotizacion = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
-    $comments = self::obtener_comments_de_un_rfq(Conexion::obtener_conexion(), $id_rfq);
-    Conexion::cerrar_conexion();
+    Database::open_connection();
+    $cotizacion = RepositorioRfq::obtener_cotizacion_por_id(Database::get_connection(), $id_rfq);
+    $comments = self::obtener_comments_de_un_rfq(Database::get_connection(), $id_rfq);
+    Database::close_connection();
     ?>
     <ul class="timeline">
       <li class="clickable_title">
@@ -80,9 +80,9 @@ class RepositorioComment{
               <h3 class="timeline-header">
                 <span class="text-primary">
                 <?php
-                Conexion::abrir_conexion();
-                $usuario = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), $comment-> obtener_id_usuario());
-                Conexion::cerrar_conexion();
+                Database::open_connection();
+                $usuario = RepositorioUsuario::obtener_usuario_por_id(Database::get_connection(), $comment-> obtener_id_usuario());
+                Database::close_connection();
                 echo $usuario-> obtener_nombre_usuario();
                 ?>
                 </span>

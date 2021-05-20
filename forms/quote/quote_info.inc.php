@@ -18,9 +18,9 @@
       <label for="type_of_bid">Type of bid:</label>
       <select class="form-control form-control-sm" name="type_of_bid" id="type_of_bid">
         <?php
-        Conexion::abrir_conexion();
-        $type_of_bids = TypeOfBidRepository::get_all(Conexion::obtener_conexion());
-        Conexion::cerrar_conexion();
+        Database::open_connection();
+        $type_of_bids = TypeOfBidRepository::get_all(Database::get_connection());
+        Database::close_connection();
         foreach ($type_of_bids as $key => $type_of_bid) {
           ?>
           <option <?php if($cotizacion_recuperada-> obtener_type_of_bid() == $type_of_bid-> get_type_of_bid()){echo 'selected';} ?>><?php echo $type_of_bid-> get_type_of_bid(); ?></option>

@@ -237,7 +237,7 @@ $(document).ready(function () {
 
       for (var i = 0; i < archivos.length; i++) {
         array_div_archivos.push('"<h3>' + "<i class='" + "fas fa-file" + "'></i>" + '</h3>"');
-        array_opciones.push('{"previewAsData": false, "caption": "' + archivos[i] + '", "url": "' + 'http://' + document.location.hostname + '/rfq/delete_document/' + $('input[name="id_rfq"]').val() + '/' + archivos[i] + '", "downloadUrl": "' + 'http://' + document.location.hostname + '/rfq/documentos/' + $('input[name="id_rfq"]').val() + '/' + archivos[i] + '", "key": ' + i + '}');
+        array_opciones.push('{"previewAsData": false, "caption": "' + archivos[i] + '", "url": "' + 'http://' + document.location.hostname + '/rfq/delete_document/' + $('input[name="id_rfq"]').val() + '/' + archivos[i] + '", "downloadUrl": "' + 'http://' + document.location.hostname + '/rfq/documents/' + $('input[name="id_rfq"]').val() + '/' + archivos[i] + '", "key": ' + i + '}');
       }
       array_div_archivos.join(',');
       array_div_archivos = '[' + array_div_archivos + ']';

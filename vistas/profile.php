@@ -1,6 +1,6 @@
 <?php
 if(!ControlSesion::sesion_iniciada()) {
-  Redireccion::redirigir1(SERVIDOR);
+  Redireccion::redirigir1(SERVER);
 }
 $titulo = 'Profile';
 include_once 'plantillas/utilities/documento_declaracion.inc.php';
@@ -37,9 +37,9 @@ switch ($gestor_actual) {
   case 'edit_re_quote_subitem_provider':
     include_once 'plantillas/re_quote/edit_re_quote_subitem_provider.inc.php';
     break;
-  case 'registro':
+  case 'register_user':
     if ($_SESSION['cargo'] == 1) {
-      include_once 'plantillas/user/registro.inc.php';
+      include_once 'plantillas/user/register_user.inc.php';
     } else {
       include_once 'plantillas/utilities/muro.inc.php';
     }
@@ -53,74 +53,74 @@ switch ($gestor_actual) {
   case 'edit_user':
     include_once 'plantillas/user/edit_user.inc.php';
     break;
-  case 'cotizaciones':
+  case 'quotes':
     switch ($cotizacion) {
-      case 'nuevo':
+      case 'new':
         include_once 'plantillas/quote/nueva_cotizacion.inc.php';
         break;
-      case 'editar_cotizacion':
-        Conexion::abrir_conexion();
-        $cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
-        Conexion::cerrar_conexion();
-        include_once 'plantillas/quote/editar_cotizacion.inc.php';
+      case 'edit_quote':
+        Database::open_connection();
+        $cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Database::get_connection(), $id_rfq);
+        Database::close_connection();
+        include_once 'plantillas/quote/edit_quote.inc.php';
         break;
       case 'add_item':
-        Conexion::abrir_conexion();
-        $cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
-        Conexion::cerrar_conexion();
+        Database::open_connection();
+        $cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Database::get_connection(), $id_rfq);
+        Database::close_connection();
         include_once 'plantillas/quote/add_item.inc.php';
         break;
       case 'add_provider':
-        Conexion::abrir_conexion();
-        $item = RepositorioItem::obtener_item_por_id(Conexion::obtener_conexion(), $id_item);
-        Conexion::cerrar_conexion();
+        Database::open_connection();
+        $item = RepositorioItem::obtener_item_por_id(Database::get_connection(), $id_item);
+        Database::close_connection();
         include_once 'plantillas/quote/add_provider.inc.php';
         break;
       case 'add_provider_subitem':
-        Conexion::abrir_conexion();
-        $subitem = RepositorioSubitem::obtener_subitem_por_id(Conexion::obtener_conexion(), $id_subitem);
-        Conexion::cerrar_conexion();
+        Database::open_connection();
+        $subitem = RepositorioSubitem::obtener_subitem_por_id(Database::get_connection(), $id_subitem);
+        Database::close_connection();
         include_once 'plantillas/quote/add_provider_subitem.inc.php';
         break;
       case 'add_subitem':
-        Conexion::abrir_conexion();
-        $item = RepositorioItem::obtener_item_por_id(Conexion::obtener_conexion(), $id_item);
-        Conexion::cerrar_conexion();
+        Database::open_connection();
+        $item = RepositorioItem::obtener_item_por_id(Database::get_connection(), $id_item);
+        Database::close_connection();
         include_once 'plantillas/quote/add_subitem.inc.php';
         break;
       case 'edit_item':
-        Conexion::abrir_conexion();
-        $item = RepositorioItem::obtener_item_por_id(Conexion::obtener_conexion(), $id_item);
-        Conexion::cerrar_conexion();
+        Database::open_connection();
+        $item = RepositorioItem::obtener_item_por_id(Database::get_connection(), $id_item);
+        Database::close_connection();
         include_once 'plantillas/quote/edit_item.inc.php';
         break;
       case 'edit_subitem':
-        Conexion::abrir_conexion();
-        $subitem = RepositorioSubitem::obtener_subitem_por_id(Conexion::obtener_conexion(), $id_subitem);
-        Conexion::cerrar_conexion();
+        Database::open_connection();
+        $subitem = RepositorioSubitem::obtener_subitem_por_id(Database::get_connection(), $id_subitem);
+        Database::close_connection();
         include_once 'plantillas/quote/edit_subitem.inc.php';
         break;
       case 'edit_provider':
-        Conexion::abrir_conexion();
-        $provider = RepositorioProvider::obtener_provider_por_id(Conexion::obtener_conexion(), $id_provider);
-        $item = RepositorioItem::obtener_item_por_id(Conexion::obtener_conexion(), $provider->obtener_id_item());
-        Conexion::cerrar_conexion();
+        Database::open_connection();
+        $provider = RepositorioProvider::obtener_provider_por_id(Database::get_connection(), $id_provider);
+        $item = RepositorioItem::obtener_item_por_id(Database::get_connection(), $provider->obtener_id_item());
+        Database::close_connection();
         include_once 'plantillas/quote/edit_provider.inc.php';
         break;
       case 'edit_provider_subitem':
-        Conexion::abrir_conexion();
-        $provider_subitem = RepositorioProviderSubitem::obtener_provider_subitem_por_id(Conexion::obtener_conexion(), $id_provider_subitem);
-        $subitem = RepositorioSubitem::obtener_subitem_por_id(Conexion::obtener_conexion(), $provider_subitem-> obtener_id_subitem());
-        Conexion::cerrar_conexion();
+        Database::open_connection();
+        $provider_subitem = RepositorioProviderSubitem::obtener_provider_subitem_por_id(Database::get_connection(), $id_provider_subitem);
+        $subitem = RepositorioSubitem::obtener_subitem_por_id(Database::get_connection(), $provider_subitem-> obtener_id_subitem());
+        Database::close_connection();
         include_once 'plantillas/quote/edit_provider_subitem.inc.php';
         break;
       default :
-        include_once 'plantillas/created/cotizaciones.inc.php';
+        include_once 'plantillas/created/quotes.inc.php';
         break;
       }
       break;
-  case 'completados':
-    include_once 'plantillas/completed/completados.inc.php';
+  case 'complete':
+    include_once 'plantillas/completed/complete.inc.php';
     break;
   case 'submitted':
     include_once 'plantillas/submitted/submitted.inc.php';

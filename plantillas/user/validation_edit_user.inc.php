@@ -21,11 +21,11 @@ if(isset($_POST['edit_user'])){
   }else{
     $password = password_hash($_POST['password1'], PASSWORD_DEFAULT);
   }
-  Conexion::abrir_conexion();
-  $edited_user = RepositorioUsuario::edit_user(Conexion::obtener_conexion(), $password, $_POST['username'], $_POST['nombres'], $_POST['apellidos'], $cargo_nuevo, $_POST['email'], $_POST['id_user']);
-  Conexion::cerrar_conexion();
+  Database::open_connection();
+  $edited_user = RepositorioUsuario::edit_user(Database::get_connection(), $password, $_POST['username'], $_POST['nombres'], $_POST['apellidos'], $cargo_nuevo, $_POST['email'], $_POST['id_user']);
+  Database::close_connection();
   if($edited_user){
-    Redireccion::redirigir1(PERFIL);
+    Redireccion::redirigir1(PROFILE);
   }
 }
 ?>

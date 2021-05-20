@@ -16,9 +16,9 @@ switch ($cotizacion) {
     $canal = 'Mailbox';
     include_once 'plantillas/created/mailbox.inc.php';
     break;
-  case 'findfrp':
+  case 'findrfp':
     $canal = 'FindFRP';
-    include_once 'plantillas/created/findfrp.inc.php';
+    include_once 'plantillas/created/findrfp.inc.php';
     break;
   case 'embassies':
     $canal = 'Embassies';

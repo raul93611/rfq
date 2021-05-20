@@ -1,10 +1,10 @@
 <?php
 class FulfillmentRepository{
   public static function items_list($id_rfq){
-    Conexion::abrir_conexion();
-    $quote = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
-    $items = RepositorioItem::obtener_items_por_id_rfq(Conexion::obtener_conexion(), $id_rfq);
-    Conexion::cerrar_conexion();
+    Database::open_connection();
+    $quote = RepositorioRfq::obtener_cotizacion_por_id(Database::get_connection(), $id_rfq);
+    $items = RepositorioItem::obtener_items_por_id_rfq(Database::get_connection(), $id_rfq);
+    Database::close_connection();
     if(count($items)){
       ?>
       <div class="table-responsive">
@@ -54,9 +54,9 @@ class FulfillmentRepository{
     if(!isset($item)){
       return;
     }
-    Conexion::abrir_conexion();
-    $fulfillment_items = FulfillmentItemRepository::get_all_by_id_item(Conexion::obtener_conexion(), $item-> obtener_id());
-    Conexion::cerrar_conexion();
+    Database::open_connection();
+    $fulfillment_items = FulfillmentItemRepository::get_all_by_id_item(Database::get_connection(), $item-> obtener_id());
+    Database::close_connection();
     if(!count($fulfillment_items)){
       $fulfillment_items_quantity = 1;
     }else{
@@ -112,9 +112,9 @@ class FulfillmentRepository{
       <?php
     }
   }
-    Conexion::abrir_conexion();
-    $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Conexion::obtener_conexion(), $item-> obtener_id());
-    Conexion::cerrar_conexion();
+    Database::open_connection();
+    $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Database::get_connection(), $item-> obtener_id());
+    Database::close_connection();
     foreach ($subitems as $key => $subitem) {
       self::subitem_list($subitem, $id_rfq);
     }
@@ -124,9 +124,9 @@ class FulfillmentRepository{
     if(!isset($subitem)){
       return;
     }
-    Conexion::abrir_conexion();
-    $fulfillment_subitems = FulfillmentSubitemRepository::get_all_by_id_subitem(Conexion::obtener_conexion(), $subitem-> obtener_id());
-    Conexion::cerrar_conexion();
+    Database::open_connection();
+    $fulfillment_subitems = FulfillmentSubitemRepository::get_all_by_id_subitem(Database::get_connection(), $subitem-> obtener_id());
+    Database::close_connection();
     if(!count($fulfillment_subitems)){
       $fulfillment_subitems_quantity = 1;
     }else{
@@ -185,11 +185,11 @@ class FulfillmentRepository{
   }
 
   public static function services_list($id_rfq){
-    Conexion::abrir_conexion();
-    $quote = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
-    $services = ServiceRepository::get_services(Conexion::obtener_conexion(), $id_rfq);
-    $total = ServiceRepository::get_total(Conexion::obtener_conexion(), $id_rfq);
-    Conexion::cerrar_conexion();
+    Database::open_connection();
+    $quote = RepositorioRfq::obtener_cotizacion_por_id(Database::get_connection(), $id_rfq);
+    $services = ServiceRepository::get_services(Database::get_connection(), $id_rfq);
+    $total = ServiceRepository::get_total(Database::get_connection(), $id_rfq);
+    Database::close_connection();
     if(count($services)){
       ?>
       <div class="table-responsive">
@@ -239,9 +239,9 @@ class FulfillmentRepository{
     if(!isset($service)){
       return;
     }
-    Conexion::abrir_conexion();
-    $fulfillment_services = FulfillmentServiceRepository::get_all_by_id_service(Conexion::obtener_conexion(), $service-> get_id());
-    Conexion::cerrar_conexion();
+    Database::open_connection();
+    $fulfillment_services = FulfillmentServiceRepository::get_all_by_id_service(Database::get_connection(), $service-> get_id());
+    Database::close_connection();
     if(!count($fulfillment_services)){
       $fulfillment_services_quantity = 1;
     }else{

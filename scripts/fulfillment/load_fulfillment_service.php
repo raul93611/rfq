@@ -1,8 +1,8 @@
 <?php
-Conexion::abrir_conexion();
-$fulfillment_service = FulfillmentServiceRepository::get_one(Conexion::obtener_conexion(), $id_fulfillment_service);
-$providers_list = ProviderListRepository::get_all(Conexion::obtener_conexion());
-Conexion::cerrar_conexion();
+Database::open_connection();
+$fulfillment_service = FulfillmentServiceRepository::get_one(Database::get_connection(), $id_fulfillment_service);
+$providers_list = ProviderListRepository::get_all(Database::get_connection());
+Database::close_connection();
 ?>
 <div class="modal-body">
   <div class="row">

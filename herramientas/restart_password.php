@@ -10,11 +10,11 @@ include_once 'plantillas/user/validacion_restart_password_form.inc.php';
     <title>Home</title>
     <link rel="stylesheet" href="<?php echo PLUGINS; ?>/font-awesome/css/all.min.css">
     <link rel="stylesheet" href="<?php echo DIST; ?>css/adminlte.min.css">
-    <link rel="stylesheet" href="<?php echo RUTA_CSS; ?>estilos.css">
+    <link rel="stylesheet" href="<?php echo CSS_PATH; ?>estilos.css">
     <link rel="stylesheet" href="<?php echo PLUGINS; ?>iCheck/square/blue.css">
-    <link rel="Shortcut Icon" href="<?php echo RUTA_IMG; ?>eP_favicon.png" type="image/x-icon" />
+    <link rel="Shortcut Icon" href="<?php echo IMG_PATH; ?>eP_favicon.png" type="image/x-icon" />
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-    <link rel="stylesheet" id="fondo" href="<?php echo RUTA_CSS; ?>fondo1.css">
+    <link rel="stylesheet" id="fondo" href="<?php echo CSS_PATH; ?>fondo1.css">
     <style>
       body{
         font-family: 'Roboto', sans-serif;
@@ -42,7 +42,7 @@ include_once 'plantillas/user/validacion_restart_password_form.inc.php';
   <body class="hold-transition login-page">
     <div class="login-box">
       <div class="login-logo">
-        <img class="mb-4" src="<?php echo RUTA_IMG; ?>eP_logo_home.png" alt="" width="60" height="38">
+        <img class="mb-4" src="<?php echo IMG_PATH; ?>eP_logo_home.png" alt="" width="60" height="38">
       </div>
       <hr>
       <div class="card-body login-card-body">
@@ -66,7 +66,7 @@ include_once 'plantillas/user/validacion_restart_password_form.inc.php';
               }else{
                 ?>
                 <div class="alert alert-success" role="alert">
-                  Successful process!.<a href="<?php echo SERVIDOR; ?>"> Log in.</a>
+                  Successful process!.<a href="<?php echo SERVER; ?>"> Log in.</a>
                 </div>
                 <?php
               }

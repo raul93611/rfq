@@ -1,12 +1,12 @@
 <?php
 class TrackingRepository{
   public static function tracking_list_items($id_rfq){
-    Conexion::abrir_conexion();
-    $quote = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
-    $items = RepositorioItem::obtener_items_por_id_rfq(Conexion::obtener_conexion(), $id_rfq);
-    $re_quote = ReQuoteRepository::get_re_quote_by_id_rfq(Conexion::obtener_conexion(), $id_rfq);
-    $re_quote_items = ReQuoteItemRepository::get_re_quote_items_by_id_re_quote(Conexion::obtener_conexion(), $re_quote-> get_id());
-    Conexion::cerrar_conexion();
+    Database::open_connection();
+    $quote = RepositorioRfq::obtener_cotizacion_por_id(Database::get_connection(), $id_rfq);
+    $items = RepositorioItem::obtener_items_por_id_rfq(Database::get_connection(), $id_rfq);
+    $re_quote = ReQuoteRepository::get_re_quote_by_id_rfq(Database::get_connection(), $id_rfq);
+    $re_quote_items = ReQuoteItemRepository::get_re_quote_items_by_id_re_quote(Database::get_connection(), $re_quote-> get_id());
+    Database::close_connection();
     if(count($items)){
       ?>
       <div class="table-responsive">
@@ -42,9 +42,9 @@ class TrackingRepository{
     if(!isset($item)){
       return;
     }
-    Conexion::abrir_conexion();
-    $trackings = TrackingRepository::get_all_trackings_by_id_item(Conexion::obtener_conexion(), $item-> obtener_id());
-    Conexion::cerrar_conexion();
+    Database::open_connection();
+    $trackings = TrackingRepository::get_all_trackings_by_id_item(Database::get_connection(), $item-> obtener_id());
+    Database::close_connection();
     if(!count($trackings)){
       $trackings_quantity = 1;
     }else{
@@ -95,12 +95,12 @@ class TrackingRepository{
       <?php
     }
   }
-    Conexion::abrir_conexion();
-    $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Conexion::obtener_conexion(), $item-> obtener_id());
-    Conexion::cerrar_conexion();
-    Conexion::abrir_conexion();
-    $re_quote_subitems = ReQuoteSubitemRepository::get_re_quote_subitems_by_id_re_quote_item(Conexion::obtener_conexion(), $re_quote_item-> get_id());
-    Conexion::cerrar_conexion();
+    Database::open_connection();
+    $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Database::get_connection(), $item-> obtener_id());
+    Database::close_connection();
+    Database::open_connection();
+    $re_quote_subitems = ReQuoteSubitemRepository::get_re_quote_subitems_by_id_re_quote_item(Database::get_connection(), $re_quote_item-> get_id());
+    Database::close_connection();
     foreach ($subitems as $key => $subitem) {
       $re_quote_subitem = $re_quote_subitems[$key];
       TrackingRepository::tracking_list_subitem($subitem, $re_quote_subitem);
@@ -132,9 +132,9 @@ class TrackingRepository{
     if(!isset($subitem)){
       return;
     }
-    Conexion::abrir_conexion();
-    $trackings_subitems = TrackingRepository::get_all_trackings_by_id_subitem(Conexion::obtener_conexion(), $subitem-> obtener_id());
-    Conexion::cerrar_conexion();
+    Database::open_connection();
+    $trackings_subitems = TrackingRepository::get_all_trackings_by_id_subitem(Database::get_connection(), $subitem-> obtener_id());
+    Database::close_connection();
     if(!count($trackings_subitems)){
       $trackings_quantity = 1;
     }else{

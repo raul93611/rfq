@@ -1,6 +1,6 @@
 <?php
 if (!ControlSesion::sesion_iniciada()) {
-  Redireccion::redirigir1(SERVIDOR);
+  Redireccion::redirigir1(SERVER);
 }
 ?>
 <div class="content-wrapper">
@@ -24,7 +24,7 @@ if (!ControlSesion::sesion_iniciada()) {
             <div class="card-header">
               <h3 class="card-title"><i class="fas fa-highlighter"></i> Enter the data</h3>
             </div>
-            <form role="form" method="post" action="<?php echo GUARDAR_ADD_SUBITEM . $id_item;?>">
+            <form role="form" method="post" action="<?php echo SAVE_ADD_SUBITEM . $id_item;?>">
               <?php
               include_once 'forms/quote/registro_subitem_vacio.inc.php';
               ?>

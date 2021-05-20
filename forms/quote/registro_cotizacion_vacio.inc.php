@@ -11,9 +11,9 @@
       </div>
       <div class="form-group">
         <?php
-        Conexion::abrir_conexion();
-        $usuarios = RepositorioUsuario::obtener_usuarios_rfq(Conexion::obtener_conexion());
-        Conexion::cerrar_conexion();
+        Database::open_connection();
+        $usuarios = RepositorioUsuario::obtener_usuarios_rfq(Database::get_connection());
+        Database::close_connection();
         ?>
         <?php
         if (count($usuarios)) {
@@ -81,10 +81,10 @@
   </div>
   <div class="form-group">
     <label for="documents">Upload documents:</label><br>
-    <input type="file" id="archivos_crear" multiple name="documentos[]">
+    <input type="file" id="archivos_crear" multiple name="documents[]">
   </div>
 </div>
 <div class="card-footer">
   <button type="submit" class="btn btn-success" name="registrar_cotizacion"><i class="fa fa-check"></i> Save</button>
-  <a href="<?php echo PERFIL; ?>" class="btn btn-danger"><i class="fa fa-times"></i> Cancel</a>
+  <a href="<?php echo PROFILE; ?>" class="btn btn-danger"><i class="fa fa-times"></i> Cancel</a>
 </div>

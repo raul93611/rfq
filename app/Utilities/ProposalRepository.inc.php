@@ -36,9 +36,9 @@ class ProposalRepository{
         ';
     }
 
-    Conexion::abrir_conexion();
-    $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Conexion::obtener_conexion(), $item-> obtener_id());
-    Conexion::cerrar_conexion();
+    Database::open_connection();
+    $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Database::get_connection(), $item-> obtener_id());
+    Database::close_connection();
     if(count($subitems)){
       foreach ($subitems as $i => $subitem) {
         $html .= self::print_subitem($subitem, $limit);
@@ -94,13 +94,13 @@ class ProposalRepository{
       <td><b>Brand name:</b> ' . $item->obtener_brand() . '<br><b>Part number:</b> ' . $item->obtener_part_number() . '<br><b> Item description:</b><br> ' . nl2br(wordwrap(mb_substr($item->obtener_description(), 0, 150), 70, '<br>', true)) . '</td>
       <td style="text-align:right;">' . $item->obtener_quantity() . '</td>
       <td>';
-    Conexion::abrir_conexion();
-    $providers = RepositorioProvider::obtener_providers_por_id_item(Conexion::obtener_conexion(), $item-> obtener_id());
-    Conexion::cerrar_conexion();
+    Database::open_connection();
+    $providers = RepositorioProvider::obtener_providers_por_id_item(Database::get_connection(), $item-> obtener_id());
+    Database::close_connection();
     if(count($providers)){
-      Conexion::abrir_conexion();
-      $provider_menor = RepositorioProvider::obtener_provider_por_id(Conexion::obtener_conexion(), $item-> obtener_provider_menor());
-      Conexion::cerrar_conexion();
+      Database::open_connection();
+      $provider_menor = RepositorioProvider::obtener_provider_por_id(Database::get_connection(), $item-> obtener_provider_menor());
+      Database::close_connection();
       if(count($providers)){
         foreach ($providers as $provider) {
           $html .= '<b>' . $provider-> obtener_provider() . ':</b><br>$ ' . number_format($provider-> obtener_price(), 2) . '<br>';
@@ -128,9 +128,9 @@ class ProposalRepository{
       ';
     }
     $html .= '</tr>';
-    Conexion::abrir_conexion();
-    $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Conexion::obtener_conexion(), $item-> obtener_id());
-    Conexion::cerrar_conexion();
+    Database::open_connection();
+    $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Database::get_connection(), $item-> obtener_id());
+    Database::close_connection();
     foreach ($subitems as $key => $subitem) {
       $html .= self::print_subitem_pdf($quote, $subitem, $payment_terms);
     }
@@ -145,14 +145,14 @@ class ProposalRepository{
       <td><b>Brand name:</b> ' . $subitem-> obtener_brand_project() . '<br><b>Part number:</b> ' . $subitem-> obtener_part_number_project() . '<br><b>Item description:</b><br> ' . nl2br(wordwrap(mb_substr($subitem->obtener_description_project(), 0, 150), 70, '<br>', true)) . '</td>}
       <td><b>Brand name:</b> ' . $subitem->obtener_brand() . '<br><b>Part number:</b> ' . $subitem->obtener_part_number() . '<br><b> Item description:</b><br> ' . nl2br(wordwrap(mb_substr($subitem->obtener_description(), 0, 150), 70, '<br>', true)) . '</td>
       <td style="text-align:right;">' . $subitem-> obtener_quantity() . '</td>';
-      Conexion::abrir_conexion();
-      $providers_subitem = RepositorioProviderSubitem::obtener_providers_subitem_por_id_subitem(Conexion::obtener_conexion(), $subitem-> obtener_id());
-      Conexion::cerrar_conexion();
+      Database::open_connection();
+      $providers_subitem = RepositorioProviderSubitem::obtener_providers_subitem_por_id_subitem(Database::get_connection(), $subitem-> obtener_id());
+      Database::close_connection();
       if(count($providers_subitem)){
         $html .= '<td>';
-        Conexion::abrir_conexion();
-        $provider_subitem_menor = RepositorioProviderSubitem::obtener_provider_subitem_por_id(Conexion::obtener_conexion(), $subitem-> obtener_provider_menor());
-        Conexion::cerrar_conexion();
+        Database::open_connection();
+        $provider_subitem_menor = RepositorioProviderSubitem::obtener_provider_subitem_por_id(Database::get_connection(), $subitem-> obtener_provider_menor());
+        Database::close_connection();
         if(count($providers_subitem)){
           foreach ($providers_subitem as $provider_subitem) {
             $html .= '<b>' . $provider_subitem-> obtener_provider()  . ':</b><br>$ ' . number_format($provider_subitem-> obtener_price(), 2) . '<br>';
@@ -194,9 +194,9 @@ class ProposalRepository{
     <td style="text-align:right;">' . $re_quote_item-> get_quantity() . '</td>
     <td style="width: 200px;">
     ';
-    Conexion::abrir_conexion();
-    $re_quote_providers = ReQuoteProviderRepository::get_re_quote_providers_by_id_re_quote_item(Conexion::obtener_conexion(), $re_quote_item-> get_id());
-    Conexion::cerrar_conexion();
+    Database::open_connection();
+    $re_quote_providers = ReQuoteProviderRepository::get_re_quote_providers_by_id_re_quote_item(Database::get_connection(), $re_quote_item-> get_id());
+    Database::close_connection();
     $prices = [];
     if(count($re_quote_providers)){
       foreach ($re_quote_providers as $re_quote_provider) {
@@ -239,14 +239,14 @@ class ProposalRepository{
     $html .= '
     </tr>
     ';
-    Conexion::abrir_conexion();
-    $re_quote_subitems = ReQuoteSubitemRepository::get_re_quote_subitems_by_id_re_quote_item(Conexion::obtener_conexion(), $re_quote_item-> get_id());
+    Database::open_connection();
+    $re_quote_subitems = ReQuoteSubitemRepository::get_re_quote_subitems_by_id_re_quote_item(Database::get_connection(), $re_quote_item-> get_id());
     if(!is_null($item)){
-      $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Conexion::obtener_conexion(), $item-> obtener_id());
+      $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Database::get_connection(), $item-> obtener_id());
     }else{
       $subitems = [];
     }
-    Conexion::cerrar_conexion();
+    Database::close_connection();
     foreach ($re_quote_subitems as $key => $re_quote_subitem) {
       $html .= self::print_subitem_pdf_re_quote($re_quote_subitem, $key, $subitems);
     }
@@ -263,9 +263,9 @@ class ProposalRepository{
     <td><b>Brand name:</b>' . $re_quote_subitem-> get_brand() . '<br><b>Part number:</b> ' . $re_quote_subitem-> get_part_number() . '<br><b> Item description:</b><br> ' . nl2br(mb_substr($re_quote_subitem-> get_description(), 0, 150)) . '</td>
     <td style="text-align:right;">' . $re_quote_subitem-> get_quantity() . '</td>
     ';
-    Conexion::abrir_conexion();
-    $re_quote_subitem_providers = ReQuoteSubitemProviderRepository::get_re_quote_subitem_providers_by_id_re_quote_subitem(Conexion::obtener_conexion(), $re_quote_subitem-> get_id());
-    Conexion::cerrar_conexion();
+    Database::open_connection();
+    $re_quote_subitem_providers = ReQuoteSubitemProviderRepository::get_re_quote_subitem_providers_by_id_re_quote_subitem(Database::get_connection(), $re_quote_subitem-> get_id());
+    Database::close_connection();
     if(count($re_quote_subitem_providers)){
       $html .= '
       <td>

@@ -169,12 +169,12 @@ class ReQuoteRepository{
   }
 
   public static function print_final_re_quote($id_rfq){
-    Conexion::abrir_conexion();
-    $cotizacion = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
-    $re_quote = self::get_re_quote_by_id_rfq(Conexion::obtener_conexion(), $id_rfq);
-    $re_quote_items = ReQuoteItemRepository::get_re_quote_items_by_id_re_quote(Conexion::obtener_conexion(), $re_quote-> get_id());
-    $items = RepositorioItem::obtener_items_por_id_rfq(Conexion::obtener_conexion(), $id_rfq);
-    Conexion::cerrar_conexion();
+    Database::open_connection();
+    $cotizacion = RepositorioRfq::obtener_cotizacion_por_id(Database::get_connection(), $id_rfq);
+    $re_quote = self::get_re_quote_by_id_rfq(Database::get_connection(), $id_rfq);
+    $re_quote_items = ReQuoteItemRepository::get_re_quote_items_by_id_re_quote(Database::get_connection(), $re_quote-> get_id());
+    $items = RepositorioItem::obtener_items_por_id_rfq(Database::get_connection(), $id_rfq);
+    Database::close_connection();
     ?>
     <div class="row">
       <div class="col-md-12">
@@ -212,9 +212,9 @@ class ReQuoteRepository{
           <td style="text-align:right;"><?php echo $re_quote_item-> get_quantity(); ?></td>
           <td style="width: 200px;">
         <?php
-        Conexion::abrir_conexion();
-        $re_quote_providers = ReQuoteProviderRepository::get_re_quote_providers_by_id_re_quote_item(Conexion::obtener_conexion(), $re_quote_item-> get_id());
-        Conexion::cerrar_conexion();
+        Database::open_connection();
+        $re_quote_providers = ReQuoteProviderRepository::get_re_quote_providers_by_id_re_quote_item(Database::get_connection(), $re_quote_item-> get_id());
+        Database::close_connection();
         $prices = [];
         if(count($re_quote_providers)){
           foreach ($re_quote_providers as $re_quote_provider) {
@@ -255,14 +255,14 @@ class ReQuoteRepository{
         ?>
       </tr>
         <?php
-        Conexion::abrir_conexion();
-        $re_quote_subitems = ReQuoteSubitemRepository::get_re_quote_subitems_by_id_re_quote_item(Conexion::obtener_conexion(), $re_quote_item-> get_id());
+        Database::open_connection();
+        $re_quote_subitems = ReQuoteSubitemRepository::get_re_quote_subitems_by_id_re_quote_item(Database::get_connection(), $re_quote_item-> get_id());
         if(!is_null($item)){
-          $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Conexion::obtener_conexion(), $item-> obtener_id());
+          $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Database::get_connection(), $item-> obtener_id());
         }else{
-          $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Conexion::obtener_conexion(), '');
+          $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Database::get_connection(), '');
         }
-        Conexion::cerrar_conexion();
+        Database::close_connection();
         for($j = 0; $j < count($re_quote_subitems); $j++){
           $re_quote_subitem = $re_quote_subitems[$j];
           $subitem = $subitems[$j];
@@ -274,9 +274,9 @@ class ReQuoteRepository{
         <td><a target="_blank" href="<?php echo $re_quote_subitem-> get_website(); ?>">Provider Website</a></td>
         <td style="text-align:right;"><?php echo $re_quote_subitem-> get_quantity(); ?></td>
           <?php
-            Conexion::abrir_conexion();
-            $re_quote_subitem_providers = ReQuoteSubitemProviderRepository::get_re_quote_subitem_providers_by_id_re_quote_subitem(Conexion::obtener_conexion(), $re_quote_subitem-> get_id());
-            Conexion::cerrar_conexion();
+            Database::open_connection();
+            $re_quote_subitem_providers = ReQuoteSubitemProviderRepository::get_re_quote_subitem_providers_by_id_re_quote_subitem(Database::get_connection(), $re_quote_subitem-> get_id());
+            Database::close_connection();
             if(count($re_quote_subitem_providers)){
               ?>
         <td>

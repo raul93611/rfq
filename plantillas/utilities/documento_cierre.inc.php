@@ -51,7 +51,7 @@
 <script>
   $.widget.bridge('uibutton', $.ui.button)
 </script>
-<script src="<?php echo RUTA_JS; ?>raphael-min.js"></script>
+<script src="<?php echo JS_PATH; ?>raphael-min.js"></script>
 <script src="<?php echo PLUGINS; ?>morris/morris.min.js"></script>
 <script src="<?php echo PLUGINS; ?>sparkline/jquery.sparkline.min.js"></script>
 <script src="<?php echo PLUGINS; ?>jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
@@ -60,7 +60,7 @@
 <script src="<?php echo PLUGINS; ?>input-mask/jquery.inputmask.js"></script>
 <script src="<?php echo PLUGINS; ?>input-mask/jquery.inputmask.date.extensions.js"></script>
 <script src="<?php echo PLUGINS; ?>input-mask/jquery.inputmask.extensions.js"></script>
-<script src="<?php echo RUTA_JS; ?>moment.min.js"></script>
+<script src="<?php echo JS_PATH; ?>moment.min.js"></script>
 <script src="<?php echo PLUGINS; ?>datatables/jquery.dataTables.js"></script>
 <script src="<?php echo PLUGINS; ?>datatables/dataTables.bootstrap4.min.js"></script>
 <script src="<?php echo PLUGINS; ?>daterangepicker/daterangepicker.js"></script>
@@ -68,13 +68,13 @@
 <script src="<?php echo PLUGINS; ?>ckeditor/ckeditor.js"></script>
 <script src="<?php echo PLUGINS; ?>bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
 <script src="<?php echo PLUGINS; ?>slimScroll/jquery.slimscroll.min.js"></script>
-<script src="<?php echo SERVIDOR; ?>bower_components/bootstrap-fileinput/js/plugins/piexif.min.js"></script>
-<script src="<?php echo SERVIDOR; ?>bower_components/bootstrap-fileinput/js/plugins/sortable.min.js"></script>
-<script src="<?php echo SERVIDOR; ?>bower_components/bootstrap-fileinput/js/plugins/purify.min.js"></script>
-<script src="<?php echo SERVIDOR; ?>bower_components/bootstrap-fileinput/js/fileinput.min.js"></script>
-<script src="<?php echo SERVIDOR; ?>bower_components/bootstrap-fileinput/themes/explorer-fas/theme.min.js"></script>
-<script src="<?php echo RUTA_JS; ?>moment_datatable.js"></script>
-<script src="<?php echo RUTA_JS; ?>tabla.js"></script>
+<script src="<?php echo SERVER; ?>bower_components/bootstrap-fileinput/js/plugins/piexif.min.js"></script>
+<script src="<?php echo SERVER; ?>bower_components/bootstrap-fileinput/js/plugins/sortable.min.js"></script>
+<script src="<?php echo SERVER; ?>bower_components/bootstrap-fileinput/js/plugins/purify.min.js"></script>
+<script src="<?php echo SERVER; ?>bower_components/bootstrap-fileinput/js/fileinput.min.js"></script>
+<script src="<?php echo SERVER; ?>bower_components/bootstrap-fileinput/themes/explorer-fas/theme.min.js"></script>
+<script src="<?php echo JS_PATH; ?>moment_datatable.js"></script>
+<script src="<?php echo JS_PATH; ?>tabla.js"></script>
 <script src="<?php echo DIST; ?>js/pages/dashboard3.js"></script>
 </body>
 </html>

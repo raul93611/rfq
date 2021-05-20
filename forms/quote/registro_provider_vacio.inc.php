@@ -1,9 +1,9 @@
 <input type="hidden" name="id_item" value="<?php echo $id_item; ?>">
 <?php
-Conexion::abrir_conexion();
-$item = RepositorioItem::obtener_item_por_id(Conexion::obtener_conexion(), $id_item);
-$cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $item-> obtener_id_rfq());
-Conexion::cerrar_conexion();
+Database::open_connection();
+$item = RepositorioItem::obtener_item_por_id(Database::get_connection(), $id_item);
+$cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Database::get_connection(), $item-> obtener_id_rfq());
+Database::close_connection();
 ?>
 <div class="card-body">
   <div class="row">
@@ -23,5 +23,5 @@ Conexion::cerrar_conexion();
 </div>
 <div class="card-footer">
   <button type="submit" class="btn btn-success" name="guardar_provider"><i class="fa fa-check"></i> Save</button>
-  <a href="<?php echo EDITAR_COTIZACION . '/' . $item-> obtener_id_rfq(); ?>" class="btn btn-danger"><i class="fa fa-times"></i> Cancel</a>
+  <a href="<?php echo EDIT_QUOTE . '/' . $item-> obtener_id_rfq(); ?>" class="btn btn-danger"><i class="fa fa-times"></i> Cancel</a>
 </div>

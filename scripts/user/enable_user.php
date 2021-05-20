@@ -1,9 +1,9 @@
 <?php
 session_start();
-Conexion::abrir_conexion();
-$usuario_editado = RepositorioUsuario::enable_user(Conexion::obtener_conexion(), $id_usuario);
-Conexion::cerrar_conexion();
+Database::open_connection();
+$usuario_editado = RepositorioUsuario::enable_user(Database::get_connection(), $id_usuario);
+Database::close_connection();
 if($usuario_editado){
-  Redireccion::redirigir(PERFIL);
+  Redireccion::redirigir(PROFILE);
 }
 ?>

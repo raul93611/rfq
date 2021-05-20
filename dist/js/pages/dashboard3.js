@@ -48,8 +48,8 @@ $(function () {
       var mode = 'index';
       var intersect = true;
 
-      if($('#completados-chart').length != 0){
-        var $completadosChart = $('#completados-chart');
+      if($('#complete-chart').length != 0){
+        var $completadosChart = $('#complete-chart');
         var completadosChart = new Chart($completadosChart, {
             type: 'bar',
             data: {

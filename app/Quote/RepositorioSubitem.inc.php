@@ -129,9 +129,9 @@ class RepositorioSubitem{
       return;
     }
     $j = $i;
-    Conexion::abrir_conexion();
-    $providers_subitem = RepositorioProviderSubitem::obtener_providers_subitem_por_id_subitem(Conexion::obtener_conexion(), $subitem->obtener_id());
-    Conexion::cerrar_conexion();
+    Database::open_connection();
+    $providers_subitem = RepositorioProviderSubitem::obtener_providers_subitem_por_id_subitem(Database::get_connection(), $subitem->obtener_id());
+    Database::close_connection();
     echo '<tr id="subitem' . $subitem->obtener_id() .  '" class="fila_subitem">';
     echo '<td><a href="' . ADD_PROVIDER_SUBITEM . '/' . $subitem->obtener_id() . '" class="btn btn-warning btn-block subitem"><i class="fa fa-plus-circle"></i> Add Provider</a><br><a href="' . EDIT_SUBITEM . '/' . $subitem->obtener_id() . '" class="btn btn-warning btn-block subitem"><i class="fa fa-edit"></i> Edit subitem</a><br><a href="' . DELETE_SUBITEM . '/' . $subitem-> obtener_id() . '" class="delete_subitem_button btn btn-warning btn-block subitem"><i class="fa fa-trash"></i> Delete</a></td>';
     echo '<td></td>';
@@ -176,9 +176,9 @@ class RepositorioSubitem{
       $best_unit_price = min($precios_subitem);
       for($i = 0;$i < count($precios_subitem); $i++){
         if($best_unit_price == $precios_subitem[$i]){
-          Conexion::abrir_conexion();
-          self::actualizar_provider_menor_subitem(Conexion::obtener_conexion(), $providers_subitem[$i]->obtener_id(), $subitem-> obtener_id());
-          Conexion::cerrar_conexion();
+          Database::open_connection();
+          self::actualizar_provider_menor_subitem(Database::get_connection(), $providers_subitem[$i]->obtener_id(), $subitem-> obtener_id());
+          Database::close_connection();
         }
       }
       echo '$ ' . $best_unit_price;
@@ -193,9 +193,9 @@ class RepositorioSubitem{
 
   public static function escribir_subitems($id_item, $j) {
     $j++;
-    Conexion::abrir_conexion();
-    $subitems = self::obtener_subitems_por_id_item(Conexion::obtener_conexion(), $id_item);
-    Conexion::cerrar_conexion();
+    Database::open_connection();
+    $subitems = self::obtener_subitems_por_id_item(Database::get_connection(), $id_item);
+    Database::close_connection();
     if (count($subitems)) {
       for ($i = 0; $i < count($subitems); $i++) {
         $subitem = $subitems[$i];

@@ -8,10 +8,10 @@ if ($helper->isCli()) {
     $helper->log('This example should only be run from a Web Browser' . PHP_EOL);
     return;
 }
-Conexion::abrir_conexion();
-$providers_name = RepositorioRfq::get_all_providers_name(Conexion::obtener_conexion(), $id_rfq);
-$requote = ReQuoteRepository::get_re_quote_by_id_rfq(Conexion::obtener_conexion(), $id_rfq);
-$requote_providers_name = ReQuoteRepository::get_all_providers_name(Conexion::obtener_conexion(), $requote-> get_id());
+Database::open_connection();
+$providers_name = RepositorioRfq::get_all_providers_name(Database::get_connection(), $id_rfq);
+$requote = ReQuoteRepository::get_re_quote_by_id_rfq(Database::get_connection(), $id_rfq);
+$requote_providers_name = ReQuoteRepository::get_all_providers_name(Database::get_connection(), $requote-> get_id());
 $x = 'A';
 
 $spreadsheet = new Spreadsheet();
@@ -49,9 +49,9 @@ $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . '1', 'PRICE FOR CLIENT')
 $spreadsheet->getActiveSheet()->getStyle($x . '1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('668fe8');
 $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . '1', 'TOTAL PRICE');$x++;
 
-ExcelRepository::print_items(Conexion::obtener_conexion(), $spreadsheet, $providers_name, $requote_providers_name, $requote, $id_rfq);
+ExcelRepository::print_items(Database::get_connection(), $spreadsheet, $providers_name, $requote_providers_name, $requote, $id_rfq);
 
-Conexion::cerrar_conexion();
+Database::close_connection();
 
 $spreadsheet->setActiveSheetIndex(0);
 

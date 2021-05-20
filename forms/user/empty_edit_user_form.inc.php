@@ -1,9 +1,9 @@
 <?php
-Conexion::abrir_conexion();
-$user = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), $id_user);
-Conexion::cerrar_conexion();
+Database::open_connection();
+$user = RepositorioUsuario::obtener_usuario_por_id(Database::get_connection(), $id_user);
+Database::close_connection();
 if($_SESSION['cargo'] != 1){
-  Redireccion::redirigir1(PERFIL);
+  Redireccion::redirigir1(PROFILE);
 }
 ?>
 <input type="hidden" name="id_user" value="<?php echo $id_user; ?>">

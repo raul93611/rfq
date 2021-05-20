@@ -1,22 +1,22 @@
 <?php
 if (isset($_POST['registrar_cotizacion'])) {
-  Conexion::abrir_conexion();
-  $usuario = RepositorioUsuario::obtener_usuario_por_nombre_usuario(Conexion::obtener_conexion(), $_POST['usuario_designado']);
+  Database::open_connection();
+  $usuario = RepositorioUsuario::obtener_usuario_por_nombre_usuario(Database::get_connection(), $_POST['usuario_designado']);
   $usuario_designado = $usuario->obtener_id();
-  $validador = new ValidadorCotizacionRegistro(Conexion::obtener_conexion(), $_POST['email_code'], $_POST['issue_date'], $_POST['end_date'], $_POST['type_of_bid'], $_POST['usuario_designado'], $_POST['canal']);
-  Conexion::cerrar_conexion();
+  $validador = new ValidadorCotizacionRegistro(Database::get_connection(), $_POST['email_code'], $_POST['issue_date'], $_POST['end_date'], $_POST['type_of_bid'], $_POST['usuario_designado'], $_POST['canal']);
+  Database::close_connection();
   if ($validador->registro_cotizacion_valida()) {
-    Conexion::abrir_conexion();
+    Database::open_connection();
     $cotizacion = new Rfq('', $_SESSION['id_usuario'], $usuario_designado, $_POST['canal'], $validador->obtener_email_code(), $_POST['type_of_bid'], $validador->obtener_issue_date(), $validador->obtener_end_date(), 0, 0, 0, 0, '', 0, '', '', '', '', '', '', '', '', 0, 0, '', '', 0, 0, 0, '', null, null, null, null);
-    list($cotizacion_insertada, $id_rfq) = RepositorioRfq::insertar_cotizacion(Conexion::obtener_conexion(), $cotizacion);
-    Conexion::cerrar_conexion();
+    list($cotizacion_insertada, $id_rfq) = RepositorioRfq::insertar_cotizacion(Database::get_connection(), $cotizacion);
+    Database::close_connection();
     if ($cotizacion_insertada) {
-      $directorio = $_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $id_rfq;
-      $documentos = $_FILES['documentos']['name'];
-      $temp_documents = $_FILES['documentos']['tmp_name'];
-      Input::save_files($directorio, $documentos, $temp_documents);
+      $directorio = $_SERVER['DOCUMENT_ROOT'] . '/rfq/documents/' . $id_rfq;
+      $documents = $_FILES['documents']['name'];
+      $temp_documents = $_FILES['documents']['tmp_name'];
+      Input::save_files($directorio, $documents, $temp_documents);
       $canal = Input::translate_channel($cotizacion-> obtener_canal());
-      Redireccion::redirigir1(COTIZACIONES . $canal);
+      Redireccion::redirigir1(QUOTES . $canal);
     }
   }
 }

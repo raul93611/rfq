@@ -1,10 +1,10 @@
 <?php
 include_once 'vendor/autoload.php';
-Conexion::abrir_conexion();
-$cotizacion = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
-$usuario_designado = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), $cotizacion->obtener_usuario_designado());
-$items = RepositorioItem::obtener_items_por_id_rfq(Conexion::obtener_conexion(), $id_rfq);
-Conexion::cerrar_conexion();
+Database::open_connection();
+$cotizacion = RepositorioRfq::obtener_cotizacion_por_id(Database::get_connection(), $id_rfq);
+$usuario_designado = RepositorioUsuario::obtener_usuario_por_id(Database::get_connection(), $cotizacion->obtener_usuario_designado());
+$items = RepositorioItem::obtener_items_por_id_rfq(Database::get_connection(), $id_rfq);
+Database::close_connection();
 $partes_fecha_completado = explode('-', $cotizacion->obtener_fecha_completado());
 $fecha_completado = $partes_fecha_completado[1] . '/' . $partes_fecha_completado[2] . '/' . $partes_fecha_completado[0];
 $partes_expiration_date = explode('-', $cotizacion->obtener_expiration_date());
@@ -16,7 +16,7 @@ try{
   $fontData = $defaultFontConfig['fontdata'];
   $mpdf = new Mpdf\Mpdf(['format' => 'Letter-L', 'margin_footer' => '8',
   'fontDir' => array_merge($fontDirs, [
-          SERVIDOR . '/vendor/mpdf/mpdf/ttfonts',
+          SERVER . '/vendor/mpdf/mpdf/ttfonts',
       ]),
       'fontdata' => $fontData + [
           'roboto' => [

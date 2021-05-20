@@ -22,7 +22,7 @@ include_once 'plantillas/user/validacion_registro_usuario.inc.php';
             <div class="card-header">
               <h3 class="card-title"><i class="fa fa-user-plus"></i> Sign in</h3>
             </div>
-            <form role="form" method="post" action="<?php echo REGISTRO; ?>">
+            <form role="form" method="post" action="<?php echo REGISTER_USER; ?>">
               <?php
               if (isset($_POST['registrar_usuario'])) {
                 include_once 'forms/user/registro_usuario_validado.inc.php';
