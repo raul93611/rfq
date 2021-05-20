@@ -1,6 +1,6 @@
 <?php
 if (!SessionControl::has_session()) {
-  Redireccion::redirigir1(SERVER);
+  Redirection::redirect_js(SERVER);
 }
 Database::open_connection();
 $cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Database::get_connection(), $id_rfq);

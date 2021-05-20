@@ -1,6 +1,6 @@
 <?php
 if (!SessionControl::has_session()) {
-  Redireccion::redirigir1(SERVER);
+  Redirection::redirect_js(SERVER);
 }
 ?>
 <div class="content-wrapper">

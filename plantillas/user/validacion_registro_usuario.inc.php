@@ -20,7 +20,7 @@ if(isset($_POST['registrar_usuario'])){
     $nuevo_usuario = new Usuario('', $validador-> obtener_nombre_usuario(), password_hash($validador-> obtener_password(), PASSWORD_DEFAULT), $validador-> obtener_nombres(), $validador-> obtener_apellidos(), $cargo, $_POST['email'], 0, '');
     $usuario_insertado = RepositorioUsuario::insertar_usuario(Database::get_connection(), $nuevo_usuario);
     if($usuario_insertado){
-      Redireccion::redirigir1(PROFILE);
+      Redirection::redirect_js(PROFILE);
     }
   }
   Database::close_connection();

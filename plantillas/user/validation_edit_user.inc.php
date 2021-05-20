@@ -25,7 +25,7 @@ if(isset($_POST['edit_user'])){
   $edited_user = RepositorioUsuario::edit_user(Database::get_connection(), $password, $_POST['username'], $_POST['nombres'], $_POST['apellidos'], $cargo_nuevo, $_POST['email'], $_POST['id_user']);
   Database::close_connection();
   if($edited_user){
-    Redireccion::redirigir1(PROFILE);
+    Redirection::redirect_js(PROFILE);
   }
 }
 ?>

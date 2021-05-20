@@ -1,6 +1,6 @@
 <?php
 if (SessionControl::has_session()) {
-  Redireccion::redirigir(PROFILE);
+  Redirection::redirect(PROFILE);
 }
 include_once 'plantillas/user/validacion_login.inc.php';
 ?>

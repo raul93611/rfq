@@ -12,5 +12,5 @@ if(count($subitems)){
 AuditTrailRepository::create_audit_trail_item_deleted(Database::get_connection(), 'Item', $item-> obtener_part_number_project(), 'Part Number', $id_rfq);
 RepositorioItem::delete_item(Database::get_connection(), $id_item);
 Database::close_connection();
-Redireccion::redirigir(EDIT_QUOTE . '/' . $id_rfq . '#caja_items');
+Redirection::redirect(EDIT_QUOTE . '/' . $id_rfq . '#caja_items');
 ?>

@@ -7,6 +7,6 @@ if(isset($_POST['save_re_quote_subitem_provider'])){
   $re_quote = ReQuoteRepository::get_re_quote_by_id(Database::get_connection(), $re_quote_item-> get_id_re_quote());
   ReQuoteSubitemProviderRepository::insert_re_quote_subitem_provider(Database::get_connection(), $re_quote_subitem_provider);
   Database::close_connection();
-  Redireccion::redirigir(RE_QUOTE . $re_quote-> get_id_rfq());
+  Redirection::redirect(RE_QUOTE . $re_quote-> get_id_rfq());
 }
 ?>

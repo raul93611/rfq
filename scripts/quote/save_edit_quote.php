@@ -18,20 +18,20 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
       RepositorioRfq::check_completed(Database::get_connection(), $_POST['id_rfq']);
       RepositorioRfq::actualizar_fecha_y_submitted(Database::get_connection(), $_POST['id_rfq']);
       RepositorioRfq::actualizar_fecha_y_award(Database::get_connection(), $_POST['id_rfq']);
-      Redireccion::redirigir(AWARD . $canal);
+      Redirection::redirect(AWARD . $canal);
     }
   }else{
     if (!$cotizacion_recuperada->obtener_completado()) {
       if (isset($_POST['completado']) && $_POST['completado'] == 'si') {
         RepositorioRfq::check_completed(Database::get_connection(), $_POST['id_rfq']);
         AuditTrailRepository::quote_status_audit_trail(Database::get_connection(), 'Completed', $_POST['id_rfq']);
-        Redireccion::redirigir(COMPLETE . $canal);
+        Redirection::redirect(COMPLETE . $canal);
       }
     } else if (!$cotizacion_recuperada->obtener_status()) {
       if (isset($_POST['status']) && $_POST['status'] == 'si') {
         AuditTrailRepository::quote_status_audit_trail(Database::get_connection(), 'Submitted', $_POST['id_rfq']);
         RepositorioRfq::actualizar_fecha_y_submitted(Database::get_connection(), $_POST['id_rfq']);
-        Redireccion::redirigir(COMPLETE . $canal);
+        Redirection::redirect(COMPLETE . $canal);
       }
     }else if(!$cotizacion_recuperada-> obtener_award()){
       if(isset($_POST['award']) && $_POST['award'] == 'si'){
@@ -39,18 +39,18 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
         $usuario = RepositorioUsuario::obtener_usuario_por_id(Database::get_connection(), $cotizacion_recuperada-> obtener_usuario_designado());
         Email::send_email_quote_awarded($usuario-> obtener_email(), $cotizacion_recuperada-> obtener_id(), nl2br($_POST['address']));
         AuditTrailRepository::quote_status_audit_trail(Database::get_connection(), 'Awarded', $_POST['id_rfq']);
-        Redireccion::redirigir(AWARD . $canal);
+        Redirection::redirect(AWARD . $canal);
       }
     }else if(!$cotizacion_recuperada-> obtener_fullfillment()){
       if(isset($_POST['fulfillment']) && $_POST['fulfillment'] == 'si'){
         RepositorioRfq::check_fulfillment_and_date(Database::get_connection(), $_POST['id_rfq']);
         AuditTrailRepository::quote_status_audit_trail(Database::get_connection(), 'Fulfillment', $_POST['id_rfq']);
-        Redireccion::redirigir(FULFILLMENT_QUOTES);
+        Redirection::redirect(FULFILLMENT_QUOTES);
       }
     }
   }
   AuditTrailRepository::items_table_events(Database::get_connection(), $_POST['taxes'], $_POST['taxes_original'], $_POST['profit'], $_POST['profit_original'], $_POST['additional_general'], $_POST['additional_general_original'], $_POST['payment_terms'], $_POST['payment_terms_original'], $_POST['shipping'], $_POST['shipping_original'], $_POST['shipping_cost'], $_POST['shipping_cost_original'], $_POST['id_rfq']);
   Database::close_connection();
-  Redireccion::redirigir(EDIT_QUOTE . '/' . $_POST['id_rfq']);
+  Redirection::redirect(EDIT_QUOTE . '/' . $_POST['id_rfq']);
 }
 ?>

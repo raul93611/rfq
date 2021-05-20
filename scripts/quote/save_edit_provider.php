@@ -8,7 +8,7 @@ if (isset($_POST['guardar_cambios_provider'])) {
   AuditTrailRepository::edit_provider_item_events(Database::get_connection(), $_POST['provider'], $_POST['provider_original'], $_POST['price'], $_POST['price_original'], $item-> obtener_id(), $_POST['id_rfq']);
   Database::close_connection();
   if($provider_editado){
-    Redireccion::redirigir(EDIT_QUOTE . '/' . $_POST['id_rfq'] . '#item' . $item-> obtener_id());
+    Redirection::redirect(EDIT_QUOTE . '/' . $_POST['id_rfq'] . '#item' . $item-> obtener_id());
   }
 }
 ?>

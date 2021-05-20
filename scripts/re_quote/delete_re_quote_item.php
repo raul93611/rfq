@@ -11,5 +11,5 @@ if(count($re_quote_subitems)){
 ReQuoteItemRepository::delete_re_quote_item(Database::get_connection(), $id_re_quote_item);
 ReQuoteAuditTrailRepository::create_audit_trail_item_deleted(Database::get_connection(), 'Item', $re_quote_item-> get_part_number_project(), 'Part Number', $re_quote_item-> get_id_re_quote());
 Database::close_connection();
-Redireccion::redirigir(RE_QUOTE . $re_quote-> get_id_rfq());
+Redirection::redirect(RE_QUOTE . $re_quote-> get_id_rfq());
 ?>

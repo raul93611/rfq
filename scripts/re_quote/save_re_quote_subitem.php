@@ -7,6 +7,6 @@ if(isset($_POST['save_re_quote_subitem'])){
   $id = ReQuoteSubitemRepository::insert_re_quote_subitem(Database::get_connection(), $re_quote_subitem);
   ReQuoteAuditTrailRepository::create_audit_trail_subitem_created(Database::get_connection(), $id, 'Subitem', $_POST['part_number_project'], 'Part Number', $re_quote_item-> get_id_re_quote());
   Database::close_connection();
-  Redireccion::redirigir(RE_QUOTE . $re_quote-> get_id_rfq() . '#subitem' . $id);
+  Redirection::redirect(RE_QUOTE . $re_quote-> get_id_rfq() . '#subitem' . $id);
 }
 ?>

@@ -4,6 +4,6 @@ if(isset($_POST['add_service_button'])){
   Database::open_connection();
   $id = ServiceRepository::store_service(Database::get_connection(), $service);
   Database::close_connection();
-  Redireccion::redirigir(EDIT_QUOTE . '/' . $_POST['id_rfq'] . '#service' . $id);
+  Redirection::redirect(EDIT_QUOTE . '/' . $_POST['id_rfq'] . '#service' . $id);
 }
 ?>

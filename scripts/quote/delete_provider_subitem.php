@@ -7,5 +7,5 @@ $item = RepositorioItem::obtener_item_por_id(Database::get_connection(), $subite
 RepositorioProviderSubitem::delete_provider_subitem(Database::get_connection(), $id_provider_subitem);
 AuditTrailRepository::create_audit_trail_subitem_provider_deleted(Database::get_connection(), $provider_subitem-> obtener_provider(), 'Provider', $subitem-> obtener_id(), $item-> obtener_id_rfq());
 Database::close_connection();
-Redireccion::redirigir(EDIT_QUOTE . '/' . $item-> obtener_id_rfq() . '#subitem' . $subitem-> obtener_id());
+Redirection::redirect(EDIT_QUOTE . '/' . $item-> obtener_id_rfq() . '#subitem' . $subitem-> obtener_id());
 ?>

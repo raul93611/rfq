@@ -1,13 +1,13 @@
 <?php
 
-class Redireccion {
+class Redirection {
 
-  public static function redirigir($url) {
+  public static function redirect($url) {
     header('Location: ' . $url, true, 301);
     exit();
   }
 
-  public static function redirigir1($url) {
+  public static function redirect_js($url) {
     echo '<script type="text/javascript">window.location.assign("' . $url . '");</script>';
   }
 

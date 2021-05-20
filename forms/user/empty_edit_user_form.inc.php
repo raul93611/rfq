@@ -3,7 +3,7 @@ Database::open_connection();
 $user = RepositorioUsuario::obtener_usuario_por_id(Database::get_connection(), $id_user);
 Database::close_connection();
 if($_SESSION['role'] != 1){
-  Redireccion::redirigir1(PROFILE);
+  Redirection::redirect_js(PROFILE);
 }
 ?>
 <input type="hidden" name="id_user" value="<?php echo $id_user; ?>">

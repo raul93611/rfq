@@ -9,6 +9,6 @@ if(isset($_POST['guardar_provider_subitem'])){
   $id_rfq = $item-> obtener_id_rfq();
   AuditTrailRepository::create_audit_trail_subitem_created(Database::get_connection(), $_POST['id_subitem'], 'Provider', $_POST['provider'], 'Provider', $id_rfq);
   Database::close_connection();
-  Redireccion::redirigir(EDIT_QUOTE . '/' . $id_rfq . '#caja_items');
+  Redirection::redirect(EDIT_QUOTE . '/' . $id_rfq . '#caja_items');
 }
 ?>

@@ -7,6 +7,6 @@ $deleted_provider = RepositorioProvider::delete_provider(Database::get_connectio
 AuditTrailRepository::create_audit_trail_item_provider_deleted(Database::get_connection(), $provider-> obtener_provider(), 'Provider', $item-> obtener_id(), $item-> obtener_id_rfq());
 Database::close_connection();
 if($deleted_provider){
-  Redireccion::redirigir(EDIT_QUOTE . '/' . $item-> obtener_id_rfq() . '#item' . $item-> obtener_id());
+  Redirection::redirect(EDIT_QUOTE . '/' . $item-> obtener_id_rfq() . '#item' . $item-> obtener_id());
 }
 ?>

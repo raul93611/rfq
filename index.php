@@ -6,7 +6,7 @@ session_start();
 include_once 'app/Bootstrap/config.inc.php';
 include_once 'app/Bootstrap/Database.inc.php';
 include_once 'app/Bootstrap/SessionControl.inc.php';
-include_once 'app/Bootstrap/Redireccion.inc.php';
+include_once 'app/Bootstrap/Redirection.inc.php';
 
 include_once 'app/User/RepositorioUsuario.inc.php';
 include_once 'app/User/Usuario.inc.php';

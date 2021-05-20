@@ -20,5 +20,5 @@ if(!is_null($cuestionario)){
 RepositorioRfq::delete_quote(Database::get_connection(), $cotizacion-> obtener_id());
 Database::close_connection();
 $canal = Input::translate_channel($cotizacion-> obtener_canal());
-Redireccion::redirigir(QUOTES . $canal);
+Redirection::redirect(QUOTES . $canal);
 ?>

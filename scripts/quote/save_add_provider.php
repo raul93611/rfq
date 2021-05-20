@@ -9,7 +9,7 @@ if(isset($_POST['guardar_provider'])){
   AuditTrailRepository::create_audit_trail_item_created(Database::get_connection(), $_POST['id_item'], 'Provider', $_POST['provider'], 'Provider', $id_rfq);
   Database::close_connection();
   if($provider_insertado){
-    Redireccion::redirigir(EDIT_QUOTE . '/' . $id_rfq . '#item' . $_POST['id_item']);
+    Redirection::redirect(EDIT_QUOTE . '/' . $id_rfq . '#item' . $_POST['id_item']);
   }
 }
 ?>

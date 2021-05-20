@@ -60,5 +60,5 @@ if(count($items)){
   }
 }
 Database::close_connection();
-Redireccion::redirigir(EDIT_QUOTE . '/' . $id_rfq_copia);
+Redirection::redirect(EDIT_QUOTE . '/' . $id_rfq_copia);
 ?>

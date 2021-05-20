@@ -8,6 +8,6 @@ if(isset($_POST['save_tracking_subitem'])){
   $tracking = new TrackingSubitem('', $_POST['id_subitem'], $_POST['quantity_shipped'], htmlspecialchars($_POST['tracking_number']), $delivery_date, $_POST['signed_by']);
   TrackingSubitemRepository::insert_tracking(Database::get_connection(), $tracking);
   Database::close_connection();
-  Redireccion::redirigir(TRACKING . $item-> obtener_id_rfq());
+  Redirection::redirect(TRACKING . $item-> obtener_id_rfq());
 }
 ?>

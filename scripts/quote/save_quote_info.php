@@ -13,8 +13,8 @@ if(isset($_POST['save_quote_info'])){
   Database::close_connection();
   if ($usuario_antiguo->obtener_nombre_usuario() != $_POST['usuario_designado']) {
     $canal = Input::translate_channel($cotizacion_recuperada->obtener_canal());
-    Redireccion::redirigir(QUOTES . $canal);
+    Redirection::redirect(QUOTES . $canal);
   }
-  Redireccion::redirigir(EDIT_QUOTE . '/' . $_POST['id_rfq']);
+  Redirection::redirect(EDIT_QUOTE . '/' . $_POST['id_rfq']);
 }
 ?>

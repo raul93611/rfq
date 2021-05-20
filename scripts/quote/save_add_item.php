@@ -7,7 +7,7 @@ if (isset($_POST['guardar_item'])) {
   AuditTrailRepository::create_audit_trail_item_created(Database::get_connection(), $id, 'Item', $_POST['part_number_project'], 'Part Number',  $_POST['id_rfq']);
   Database::close_connection();
   if($id){
-    Redireccion::redirigir(EDIT_QUOTE . '/' . $_POST['id_rfq'] . '#item' . $id);
+    Redirection::redirect(EDIT_QUOTE . '/' . $_POST['id_rfq'] . '#item' . $id);
   }
 }
 ?>
