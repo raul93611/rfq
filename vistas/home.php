@@ -1,5 +1,5 @@
 <?php
-if (ControlSesion::sesion_iniciada()) {
+if (SessionControl::has_session()) {
   Redireccion::redirigir(PROFILE);
 }
 include_once 'plantillas/user/validacion_login.inc.php';
@@ -57,26 +57,26 @@ include_once 'plantillas/user/validacion_login.inc.php';
         <p class="login-box-msg" style="color: #BDC5CF !important;">Please log in</p>
         <form action="<?php echo SERVER; ?>" method="post">
           <div class="form-group has-feedback">
-            <input type="text" class="form-control <?php if(isset($_POST['iniciar_sesion'])){echo 'is-invalid';} ?>" name="nombre_usuario" placeholder="Username" autofocus required
+            <input type="text" class="form-control <?php if(isset($_POST['create_session'])){echo 'is-invalid';} ?>" name="nombre_usuario" placeholder="Username" autofocus required
             <?php
-            if (isset($_POST['iniciar_sesion']) && isset($_POST['nombre_usuario']) && !empty($_POST['nombre_usuario'])) {
+            if (isset($_POST['create_session']) && isset($_POST['nombre_usuario']) && !empty($_POST['nombre_usuario'])) {
               echo 'value="' . $_POST['nombre_usuario'] . '"';
             }
             ?>>
             <span class="fa fa-user form-control-feedback" style="color: #BDC5CF !important;"></span>
           </div>
           <div class="form-group has-feedback">
-            <input type="password" class="form-control <?php if(isset($_POST['iniciar_sesion'])){echo 'is-invalid';} ?>" name="password" placeholder="Password" required>
+            <input type="password" class="form-control <?php if(isset($_POST['create_session'])){echo 'is-invalid';} ?>" name="password" placeholder="Password" required>
             <span class="fa fa-lock form-control-feedback" style="color: #BDC5CF !important;"></span>
             <?php
-            if (isset($_POST['iniciar_sesion'])) {
+            if (isset($_POST['create_session'])) {
               $validador->mostrar_error();
             }
             ?>
           </div>
           <div class="row">
             <div class="col-12 text-center">
-              <button type="submit" class="btn btn-primary btn-flat" name="iniciar_sesion">Log in</button>
+              <button type="submit" class="btn btn-primary btn-flat" name="create_session">Log in</button>
             </div>
           </div>
         </form>

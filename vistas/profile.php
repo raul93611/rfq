@@ -1,5 +1,5 @@
 <?php
-if(!ControlSesion::sesion_iniciada()) {
+if(!SessionControl::has_session()) {
   Redireccion::redirigir1(SERVER);
 }
 $titulo = 'Profile';
@@ -38,7 +38,7 @@ switch ($gestor_actual) {
     include_once 'plantillas/re_quote/edit_re_quote_subitem_provider.inc.php';
     break;
   case 'register_user':
-    if ($_SESSION['cargo'] == 1) {
+    if ($_SESSION['role'] == 1) {
       include_once 'plantillas/user/register_user.inc.php';
     } else {
       include_once 'plantillas/utilities/muro.inc.php';

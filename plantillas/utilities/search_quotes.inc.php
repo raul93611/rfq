@@ -3,7 +3,7 @@ $quotes = [];
 if(isset($_POST['buscar'])){
   echo $_POST['termino_busqueda'];
   Database::open_connection();
-  $quotes = RepositorioRfq::obtener_resultados_busqueda(Database::get_connection(), $_POST['termino_busqueda'], $_SESSION['cargo'], $_SESSION['id_usuario']);
+  $quotes = RepositorioRfq::obtener_resultados_busqueda(Database::get_connection(), $_POST['termino_busqueda'], $_SESSION['role'], $_SESSION['id_user']);
   Database::close_connection();
 }
 ?>

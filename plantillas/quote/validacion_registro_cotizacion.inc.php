@@ -7,7 +7,7 @@ if (isset($_POST['registrar_cotizacion'])) {
   Database::close_connection();
   if ($validador->registro_cotizacion_valida()) {
     Database::open_connection();
-    $cotizacion = new Rfq('', $_SESSION['id_usuario'], $usuario_designado, $_POST['canal'], $validador->obtener_email_code(), $_POST['type_of_bid'], $validador->obtener_issue_date(), $validador->obtener_end_date(), 0, 0, 0, 0, '', 0, '', '', '', '', '', '', '', '', 0, 0, '', '', 0, 0, 0, '', null, null, null, null);
+    $cotizacion = new Rfq('', $_SESSION['id_user'], $usuario_designado, $_POST['canal'], $validador->obtener_email_code(), $_POST['type_of_bid'], $validador->obtener_issue_date(), $validador->obtener_end_date(), 0, 0, 0, 0, '', 0, '', '', '', '', '', '', '', '', 0, 0, '', '', 0, 0, 0, '', null, null, null, null);
     list($cotizacion_insertada, $id_rfq) = RepositorioRfq::insertar_cotizacion(Database::get_connection(), $cotizacion);
     Database::close_connection();
     if ($cotizacion_insertada) {

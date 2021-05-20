@@ -5,7 +5,7 @@ session_save_path('temp');
 session_start();
 include_once 'app/Bootstrap/config.inc.php';
 include_once 'app/Bootstrap/Database.inc.php';
-include_once 'app/Bootstrap/ControlSesion.inc.php';
+include_once 'app/Bootstrap/SessionControl.inc.php';
 include_once 'app/Bootstrap/Redireccion.inc.php';
 
 include_once 'app/User/RepositorioUsuario.inc.php';

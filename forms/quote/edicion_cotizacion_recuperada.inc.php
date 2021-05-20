@@ -87,7 +87,7 @@
       <?php
     }
   }else{
-    if($cotizacion_recuperada->obtener_completado() && $cotizacion_recuperada->obtener_status() && $cotizacion_recuperada->obtener_award() && !$cotizacion_recuperada-> obtener_fullfillment() && $_SESSION['cargo'] < 4){
+    if($cotizacion_recuperada->obtener_completado() && $cotizacion_recuperada->obtener_status() && $cotizacion_recuperada->obtener_award() && !$cotizacion_recuperada-> obtener_fullfillment() && $_SESSION['role'] < 4){
       if(($items_exists && $re_quote_exists) || (!$items_exists && $cotizacion_recuperada-> obtener_type_of_bid() == 'Services')){
         ?>
         <div class="custom-control custom-checkbox">
@@ -96,7 +96,7 @@
         </div>
         <?php
       }
-    }else if ($cotizacion_recuperada->obtener_completado() && $cotizacion_recuperada->obtener_status() && !$cotizacion_recuperada->obtener_award() && $_SESSION['cargo'] < 4) {
+    }else if ($cotizacion_recuperada->obtener_completado() && $cotizacion_recuperada->obtener_status() && !$cotizacion_recuperada->obtener_award() && $_SESSION['role'] < 4) {
       ?>
         <div class="custom-control custom-checkbox">
           <input type="checkbox" class="custom-control-input" name="award" value="si" <?php if ($cotizacion_recuperada->obtener_award()) { echo 'checked'; } ?> id="award">

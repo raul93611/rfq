@@ -2,7 +2,7 @@
 Database::open_connection();
 $user = RepositorioUsuario::obtener_usuario_por_id(Database::get_connection(), $id_user);
 Database::close_connection();
-if($_SESSION['cargo'] != 1){
+if($_SESSION['role'] != 1){
   Redireccion::redirigir1(PROFILE);
 }
 ?>

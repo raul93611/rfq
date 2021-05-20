@@ -1,4 +1,4 @@
 <?php
-ControlSesion::cerrar_sesion();
+SessionControl::destroy_session();
 Redireccion::redirigir(SERVER);
 ?>

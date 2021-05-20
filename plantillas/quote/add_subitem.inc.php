@@ -1,5 +1,5 @@
 <?php
-if (!ControlSesion::sesion_iniciada()) {
+if (!SessionControl::has_session()) {
   Redireccion::redirigir1(SERVER);
 }
 ?>
