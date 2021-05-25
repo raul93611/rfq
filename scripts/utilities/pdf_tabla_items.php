@@ -1,13 +1,13 @@
 <?php
 include_once 'vendor/autoload.php';
 Database::open_connection();
-$cotizacion = RepositorioRfq::obtener_cotizacion_por_id(Database::get_connection(), $id_rfq);
-$usuario_designado = RepositorioUsuario::obtener_usuario_por_id(Database::get_connection(), $cotizacion->obtener_usuario_designado());
-$items = RepositorioItem::obtener_items_por_id_rfq(Database::get_connection(), $id_rfq);
+$quote = QuoteRepository::get_by_id(Database::get_connection(), $id_quote);
+$assigned_user = RepositorioUsuario::obtener_usuario_por_id(Database::get_connection(), $quote->get_assigned_user());
+$items = ItemRepository::get_all_by_id_quote(Database::get_connection(), $id_quote);
 Database::close_connection();
-$partes_fecha_completado = explode('-', $cotizacion->obtener_fecha_completado());
-$fecha_completado = $partes_fecha_completado[1] . '/' . $partes_fecha_completado[2] . '/' . $partes_fecha_completado[0];
-$partes_expiration_date = explode('-', $cotizacion->obtener_expiration_date());
+$completed_date_parts = explode('-', $quote->get_completed_date());
+$completed_date = $completed_date_parts[1] . '/' . $completed_date_parts[2] . '/' . $completed_date_parts[0];
+$partes_expiration_date = explode('-', $quote->get_expiration_date());
 $expiration_date = $partes_expiration_date[1] . '/' . $partes_expiration_date[2] . '/' . $partes_expiration_date[0];
 try{
   $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
@@ -86,11 +86,11 @@ try{
             <th>PAYMENT TERMS</th>
           </tr>
           <tr>
-            <td style="text-align:center;">' . $cotizacion->obtener_ship_via() . '</td>
-            <td style="text-align:center;">' . $cotizacion->obtener_email_code() . '</td>
-            <td style="text-align:center;">' . $usuario_designado->obtener_nombres() . ' ' . $usuario_designado->obtener_apellidos() . '</td>
-                <td style="text-align:center;">' . $usuario_designado->obtener_email() . '</td>
-            <td style="text-align:center;">' . $cotizacion->obtener_payment_terms() . '</td>
+            <td style="text-align:center;">' . $quote->get_ship_via() . '</td>
+            <td style="text-align:center;">' . $quote->get_email_code() . '</td>
+            <td style="text-align:center;">' . $assigned_user->obtener_nombres() . ' ' . $assigned_user->obtener_apellidos() . '</td>
+                <td style="text-align:center;">' . $assigned_user->obtener_email() . '</td>
+            <td style="text-align:center;">' . $quote->get_payment_terms() . '</td>
           </tr>
         </table>
       </td>
@@ -102,8 +102,8 @@ try{
             <th>EXPIRATION DATE</th>
           </tr>
           <tr>
-            <td style="text-align:center;">' . $cotizacion->obtener_id() . '</td>
-            <td style="text-align:center;">' . $fecha_completado . '</td>
+            <td style="text-align:center;">' . $quote->get_id() . '</td>
+            <td style="text-align:center;">' . $completed_date . '</td>
             <td style="text-align:center;">' . $expiration_date . '</td>
           </tr>
         </table>
@@ -113,9 +113,9 @@ try{
   <div >
   </div>
   <div class="color">
-    <b>Taxes:</b> '  . $cotizacion-> obtener_taxes() . '%<br>
-    <b>Profit:</b> ' . $cotizacion-> obtener_profit() . '%<br>
-    <b>Additional general: </b> $ ' . $cotizacion-> obtener_additional() . '
+    <b>Taxes:</b> '  . $quote-> get_taxes() . '%<br>
+    <b>Profit:</b> ' . $quote-> get_profit() . '%<br>
+    <b>Additional general: </b> $ ' . $quote-> get_additional() . '
   </div>
   <br>';
   if (count($items)) {
@@ -133,20 +133,20 @@ try{
         <th class="total_ancho">TOTAL PRICE</th>
       </tr>';
       $a = 1;
-      if($cotizacion-> obtener_payment_terms() == 'Net 30/CC'){
+      if($quote-> get_payment_terms() == 'Net 30/CC'){
         $payment_terms = 1.0299;
       }else{
         $payment_terms = 1;
       }
       foreach ($items as $key => $item) {
-        $html .= ProposalRepository::print_item_pdf($cotizacion, $item, $a, $payment_terms);
+        $html .= ProposalRepository::print_item_pdf($quote, $item, $a, $payment_terms);
         $a++;
       }
       $html .= '
       <tr>
         <td style="border:none;"></td>
-        <td colspan="8" style="font-size:10pt;">' . nl2br($cotizacion->obtener_shipping()) .'</td>
-        <td style="text-align:right;">$ ' . number_format($cotizacion->obtener_shipping_cost(), 2) .'</td>
+        <td colspan="8" style="font-size:10pt;">' . nl2br($quote->get_shipping()) .'</td>
+        <td style="text-align:right;">$ ' . number_format($quote->get_shipping_cost(), 2) .'</td>
       </tr>
       <tr>
           <td style="border:none;"></td>
@@ -156,14 +156,14 @@ try{
           <td style="border:none;"></td>
           <td style="border:none;"></td>
           <td style="font-size:12pt;">TOTAL:</td>
-          <td>$ ' . number_format($cotizacion-> obtener_total_cost(), 2) . '</td>
+          <td>$ ' . number_format($quote-> get_total_cost(), 2) . '</td>
           <td></td>
 
-      <td style="font-size:12pt;text-align:right;">$ ' . number_format($cotizacion->obtener_total_price(), 2) . '</td>
+      <td style="font-size:12pt;text-align:right;">$ ' . number_format($quote->get_total_price(), 2) . '</td>
     </tr>';
       $html .= '</table>';
   }
-  if ($cotizacion->obtener_payment_terms() == 'Net 30') {
+  if ($quote->get_payment_terms() == 'Net 30') {
     $html .= '<br><div class="color letra_chiquita"><b>PAYMENT TERMS</b><br><b>NET TERMS: </b>30 Days<br><b>CREDIT CARD PAYMENT: </b>Please add an additional 2.1% to process credit card payments.</div>';
   }
   $html .= '</body></html>';
@@ -173,7 +173,7 @@ try{
   </div>
   ');
   $mpdf->WriteHTML($html);
-  $mpdf->Output(preg_replace('/[^a-z0-9-_\-\.]/i','_', $cotizacion-> obtener_email_code()) . '(items_table).pdf', 'I');
+  $mpdf->Output(preg_replace('/[^a-z0-9-_\-\.]/i','_', $quote-> get_email_code()) . '(items_table).pdf', 'I');
 } catch (Mpdf\MpdfException $e) {
   echo $e->getMessage();
 }

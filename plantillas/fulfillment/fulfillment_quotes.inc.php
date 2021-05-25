@@ -20,7 +20,7 @@
             </div>
             <div class="card-body">
               <?php
-              RepositorioRfq::print_fulfillment_quotes();
+              QuoteRepository::print_fulfillment_quotes();
               ?>
             </div>
           </div>

@@ -1,12 +1,12 @@
 <?php
 session_start();
 Database::open_connection();
-$provider = RepositorioProvider::obtener_provider_por_id(Database::get_connection(), $id_provider);
-$item = RepositorioItem::obtener_item_por_id(Database::get_connection(), $provider->obtener_id_item());
-$deleted_provider = RepositorioProvider::delete_provider(Database::get_connection(), $id_provider);
-AuditTrailRepository::create_audit_trail_item_provider_deleted(Database::get_connection(), $provider-> obtener_provider(), 'Provider', $item-> obtener_id(), $item-> obtener_id_rfq());
+$provider = ProviderRepository::get_by_id(Database::get_connection(), $id_provider);
+$item = ItemRepository::get_by_id(Database::get_connection(), $provider->get_id_item());
+$deleted_provider = ProviderRepository::delete_provider(Database::get_connection(), $id_provider);
+AuditTrailRepository::create_audit_trail_item_provider_deleted(Database::get_connection(), $provider-> get_provider(), 'Provider', $item-> get_id(), $item-> get_id_quote());
 Database::close_connection();
 if($deleted_provider){
-  Redirection::redirect(EDIT_QUOTE . '/' . $item-> obtener_id_rfq() . '#item' . $item-> obtener_id());
+  Redirection::redirect(EDIT_QUOTE . '/' . $item-> get_id_quote() . '#item' . $item-> get_id());
 }
 ?>

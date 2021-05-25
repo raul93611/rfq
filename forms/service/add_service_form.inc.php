@@ -11,5 +11,5 @@
     <label for="unit_price">Unit Price:</label>
     <input type="number" step=".01" name="unit_price" class="form-control form-control-sm" value="">
   </div>
-  <input type="hidden" name="id_rfq" value="<?php echo $cotizacion_recuperada-> obtener_id(); ?>">
+  <input type="hidden" name="id_quote" value="<?php echo $quote-> get_id(); ?>">
 </form>

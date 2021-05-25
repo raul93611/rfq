@@ -1,3 +1,3 @@
 <?php
-TrackingRepository::tracking_list_items($id_rfq);
+TrackingRepository::tracking_list_items($id_quote);
 ?>

@@ -1,4 +1,9 @@
 $(document).ready(function () {
+  $('.summernote_text').summernote({
+    toolbar: [
+      ['color', ['color']]
+    ]
+  });
   /***********************************FULFILLMENT SERVICES******************/
   $('#fulfillment_page').on('click', '.add_fulfillment_service_button', function(){
     var id_service = $(this).attr('name');
@@ -11,7 +16,7 @@ $(document).ready(function () {
       $('#add_fulfillment_service_form')[0].reset();
       $('#new_fulfillment_service_modal').modal('hide');
       console.log(res);
-      $('#fulfillment_page').load('/rfq/load_fulfillment_page/' + res.id_rfq);
+      $('#fulfillment_page').load('/rfq/load_fulfillment_page/' + res.id_quote);
     });
     return false;
   });
@@ -26,7 +31,7 @@ $(document).ready(function () {
   $('#edit_fulfillment_service_form').submit(function(){
     $.post('/rfq/save_edit_fulfillment_service', $(this).serialize(), function(res){
       $('#edit_fulfillment_service_modal').modal('hide');
-      $('#fulfillment_page').load('/rfq/load_fulfillment_page/' + res.id_rfq);
+      $('#fulfillment_page').load('/rfq/load_fulfillment_page/' + res.id_quote);
     });
     return false;
   });
@@ -41,7 +46,7 @@ $(document).ready(function () {
       type: 'POST',
       success: function(res){
         console.log(res);
-        $('#fulfillment_page').load('/rfq/load_fulfillment_page/' + res.id_rfq);
+        $('#fulfillment_page').load('/rfq/load_fulfillment_page/' + res.id_quote);
       }
     });
     return false;
@@ -58,7 +63,7 @@ $(document).ready(function () {
       $('#add_fulfillment_item_form')[0].reset();
       $('#new_fulfillment_item_modal').modal('hide');
       console.log(res);
-      $('#fulfillment_page').load('/rfq/load_fulfillment_page/' + res.id_rfq);
+      $('#fulfillment_page').load('/rfq/load_fulfillment_page/' + res.id_quote);
     });
     return false;
   });
@@ -73,7 +78,7 @@ $(document).ready(function () {
   $('#edit_fulfillment_item_form').submit(function(){
     $.post('/rfq/save_edit_fulfillment_item', $(this).serialize(), function(res){
       $('#edit_fulfillment_item_modal').modal('hide');
-      $('#fulfillment_page').load('/rfq/load_fulfillment_page/' + res.id_rfq);
+      $('#fulfillment_page').load('/rfq/load_fulfillment_page/' + res.id_quote);
     });
     return false;
   });
@@ -88,7 +93,7 @@ $(document).ready(function () {
       type: 'POST',
       success: function(res){
         console.log(res);
-        $('#fulfillment_page').load('/rfq/load_fulfillment_page/' + res.id_rfq);
+        $('#fulfillment_page').load('/rfq/load_fulfillment_page/' + res.id_quote);
       }
     });
   });
@@ -104,7 +109,7 @@ $(document).ready(function () {
       $('#add_fulfillment_subitem_form')[0].reset();
       $('#new_fulfillment_subitem_modal').modal('hide');
       console.log(res);
-      $('#fulfillment_page').load('/rfq/load_fulfillment_page/' + res.id_rfq);
+      $('#fulfillment_page').load('/rfq/load_fulfillment_page/' + res.id_quote);
     });
     return false;
   });
@@ -119,7 +124,7 @@ $(document).ready(function () {
   $('#edit_fulfillment_subitem_form').submit(function(){
     $.post('/rfq/save_edit_fulfillment_subitem', $(this).serialize(), function(res){
       $('#edit_fulfillment_subitem_modal').modal('hide');
-      $('#fulfillment_page').load('/rfq/load_fulfillment_page/' + res.id_rfq);
+      $('#fulfillment_page').load('/rfq/load_fulfillment_page/' + res.id_quote);
     });
     return false;
   });
@@ -130,12 +135,12 @@ $(document).ready(function () {
       data: {
         id_fulfillment_subitem: $(this).attr('data'),
         id_subitem: $(this).attr('id_subitem'),
-        id_rfq: $(this).attr('id_rfq')
+        id_quote: $(this).attr('id_quote')
       },
       type: 'POST',
       success: function(res){
         console.log(res);
-        $('#fulfillment_page').load('/rfq/load_fulfillment_page/' + res.id_rfq);
+        $('#fulfillment_page').load('/rfq/load_fulfillment_page/' + res.id_quote);
       }
     });
   });
@@ -161,7 +166,7 @@ $(document).ready(function () {
   $('#edit_tracking_form').submit(function(){
     $.post('http://' + document.location.hostname + '/rfq/save_edit_tracking', $(this).serialize(), function(res){
       $('#edit_tracking_modal').modal('hide');
-      $('#tracking_box').load('http://' + document.location.hostname + '/rfq/load_tracking_box/' + res.id_rfq);
+      $('#tracking_box').load('http://' + document.location.hostname + '/rfq/load_tracking_box/' + res.id_quote);
     });
     return false;
   });
@@ -186,7 +191,7 @@ $(document).ready(function () {
   $('#edit_tracking_subitem_form').submit(function(){
     $.post('http://' + document.location.hostname + '/rfq/save_edit_tracking_subitem', $(this).serialize(), function(res){
       $('#edit_tracking_subitem_modal').modal('hide');
-      $('#tracking_box').load('http://' + document.location.hostname + '/rfq/load_tracking_box/' + res.id_rfq);
+      $('#tracking_box').load('http://' + document.location.hostname + '/rfq/load_tracking_box/' + res.id_quote);
     });
     return false;
   });
@@ -237,7 +242,7 @@ $(document).ready(function () {
 
       for (var i = 0; i < archivos.length; i++) {
         array_div_archivos.push('"<h3>' + "<i class='" + "fas fa-file" + "'></i>" + '</h3>"');
-        array_opciones.push('{"previewAsData": false, "caption": "' + archivos[i] + '", "url": "' + 'http://' + document.location.hostname + '/rfq/delete_document/' + $('input[name="id_rfq"]').val() + '/' + archivos[i] + '", "downloadUrl": "' + 'http://' + document.location.hostname + '/rfq/documents/' + $('input[name="id_rfq"]').val() + '/' + archivos[i] + '", "key": ' + i + '}');
+        array_opciones.push('{"previewAsData": false, "caption": "' + archivos[i] + '", "url": "' + 'http://' + document.location.hostname + '/rfq/delete_document/' + $('input[name="id_quote"]').val() + '/' + archivos[i] + '", "downloadUrl": "' + 'http://' + document.location.hostname + '/rfq/documents/' + $('input[name="id_quote"]').val() + '/' + archivos[i] + '", "key": ' + i + '}');
       }
       array_div_archivos.join(',');
       array_div_archivos = '[' + array_div_archivos + ']';
@@ -251,7 +256,7 @@ $(document).ready(function () {
     }
     $('#archivos_ejemplo').fileinput({
       theme: 'explorer-fas',
-      uploadUrl: 'http://' + document.location.hostname + '/rfq/load_img/' + $('input[name="id_rfq"]').val(),
+      uploadUrl: 'http://' + document.location.hostname + '/rfq/load_img/' + $('input[name="id_quote"]').val(),
       overwriteInitial: false,
       initialPreviewAsData: true,
       initialPreview: array_div_archivos,
@@ -267,7 +272,7 @@ $(document).ready(function () {
     $('#todos_commentarios_quote').modal();
   });
   /**************************************BOTON PARA FULLFILLMENT****************************/
-  $('#fullfillment').click(function(){
+  $('#fulfillment').click(function(){
     $('#fullfillment_modal').modal();
   });
 /***********************************VARIABLES INICIALES PARA EL BORRADO*********************/
@@ -373,7 +378,7 @@ $('#tabla_quotes').DataTable({
   'order': [[ 4, "desc" ]]
 });
 
-$('#tabla_busqueda').DataTable({
+$('#search_table').DataTable({
   'pageLength': 50
 });
 
@@ -505,8 +510,8 @@ if($('#form_edited_quote').length != 0){
     var j = 1;
     var total1 = 0;
     var total2 = 0 + parseFloat(shipping_cost);
-    var partes_total_price = '';
-    var partes_total_price_subitems = '';
+    var total_price_parts = '';
+    var total_price_subitems_parts = '';
     var unit_prices = '';
     var unit_prices_subitems = '';
     var additional = '';
@@ -594,16 +599,16 @@ if($('#form_edited_quote').length != 0){
         $(this).find('td').eq(11).html('$ ' + total_price);
         if($(this).hasClass('fila_subitem')){
           if(contador_subitems === 0){
-            partes_total_price_subitems = partes_total_price_subitems + total_price;
+            total_price_subitems_parts = total_price_subitems_parts + total_price;
           }else{
-            partes_total_price_subitems = partes_total_price_subitems + ',' + total_price;
+            total_price_subitems_parts = total_price_subitems_parts + ',' + total_price;
           }
           contador_subitems++;
         }else{
           if (i === 0) {
-            partes_total_price = partes_total_price + total_price;
+            total_price_parts = total_price_parts + total_price;
           } else {
-            partes_total_price = partes_total_price + ',' + total_price;
+            total_price_parts = total_price_parts + ',' + total_price;
           }
         }
 
@@ -616,8 +621,8 @@ if($('#form_edited_quote').length != 0){
     $('#additional_subitems').val(additional_subitems);
     $('#unit_prices').val(unit_prices);
     $('#unit_prices_subitems').val(unit_prices_subitems);
-    $('#partes_total_price').val(partes_total_price);
-    $('#partes_total_price_subitems').val(partes_total_price_subitems);
+    $('#total_price_parts').val(total_price_parts);
+    $('#total_price_subitems_parts').val(total_price_subitems_parts);
     total1 = total1.toFixed(2);
     total2 = total2.toFixed(2);
     var percentage_profit = ((dif_total/total2)*100).toFixed(2);
@@ -659,8 +664,8 @@ if($('#form_edited_quote').length != 0){
     var j = 1;
     var total1 = 0;
     var total2 = 0 + parseFloat(shipping_cost);
-    var partes_total_price = '';
-    var partes_total_price_subitems = '';
+    var total_price_parts = '';
+    var total_price_subitems_parts = '';
     var unit_prices = '';
     var unit_prices_subitems = '';
     var additional = '';
@@ -748,16 +753,16 @@ if($('#form_edited_quote').length != 0){
         $(this).find('td').eq(11).html('$ ' + total_price);
         if($(this).hasClass('fila_subitem')){
           if(contador_subitems === 0){
-            partes_total_price_subitems = partes_total_price_subitems + total_price;
+            total_price_subitems_parts = total_price_subitems_parts + total_price;
           }else{
-            partes_total_price_subitems = partes_total_price_subitems + ',' + total_price;
+            total_price_subitems_parts = total_price_subitems_parts + ',' + total_price;
           }
           contador_subitems++;
         }else{
           if (i === 0) {
-            partes_total_price = partes_total_price + total_price;
+            total_price_parts = total_price_parts + total_price;
           } else {
-            partes_total_price = partes_total_price + ',' + total_price;
+            total_price_parts = total_price_parts + ',' + total_price;
           }
         }
 
@@ -770,8 +775,8 @@ if($('#form_edited_quote').length != 0){
     $('#additional_subitems').val(additional_subitems);
     $('#unit_prices').val(unit_prices);
     $('#unit_prices_subitems').val(unit_prices_subitems);
-    $('#partes_total_price').val(partes_total_price);
-    $('#partes_total_price_subitems').val(partes_total_price_subitems);
+    $('#total_price_parts').val(total_price_parts);
+    $('#total_price_subitems_parts').val(total_price_subitems_parts);
     total1 = total1.toFixed(2);
     total2 = total2.toFixed(2);
     var percentage_profit = ((dif_total/total2)*100).toFixed(2);

@@ -1,12 +1,12 @@
 <?php
-list($nombres_usuario, $cotizaciones_completadas, $cotizaciones_completadas_pasadas, $cotizaciones_ganadas, $cotizaciones_ganadas_pasadas, $cotizaciones_sometidas, $cotizaciones_sometidas_pasadas, $cotizaciones_no_sometidas, $cotizaciones_no_sometidas_pasadas) = RepositorioUsuario::obtener_array_nombres_usuario_cotizaciones_completadas_ganadas_sometidas();
+list($nombres_usuario, $quotees_completadas, $quotees_completadas_pasadas, $quotees_ganadas, $quotees_ganadas_pasadas, $quotees_sometidas, $quotees_sometidas_pasadas, $quotees_no_sometidas, $quotees_no_sometidas_pasadas) = RepositorioUsuario::obtener_array_nombres_usuario_cotizaciones_completadas_ganadas_sometidas();
 Database::open_connection();
-$cotizaciones_mes = RepositorioRfq::obtener_cotizaciones_ganadas_por_mes(Database::get_connection());
-$monto_cotizaciones_mes = RepositorioRfq::obtener_monto_cotizaciones_ganadas_por_mes(Database::get_connection());
-list($no_bid, $manufacturer_in_the_bid, $expired_due_date, $supplier_did_not_provide_a_quote, $others) = RepositorioRfq::obtener_comments(Database::get_connection());
-$cotizaciones_completadas_anual_usuarios = RepositorioUsuario::obtener_cotizaciones_completadas_por_usuario_y_mes(Database::get_connection());
-list($cotizaciones_ganadas_anual_usuarios, $cotizaciones_ganadas_anual_usuarios_monto) = RepositorioUsuario::obtener_cotizaciones_ganadas_por_usuario_y_mes(Database::get_connection());
-$cotizaciones_not_submitted_anual_usuarios = RepositorioUsuario::obtener_cotizaciones_not_submitted_por_usuario_y_mes(Database::get_connection());
+$monthly_award_quotes = QuoteRepository::get_award_by_month(Database::get_connection());
+$total_monthly_award_quotes = QuoteRepository::get_total_award_by_month(Database::get_connection());
+list($no_bid, $manufacturer_in_the_bid, $expired_due_date, $supplier_did_not_provide_a_quote, $others) = QuoteRepository::get_counter_comment_status(Database::get_connection());
+$quotees_completadas_anual_usuarios = RepositorioUsuario::obtener_cotizaciones_completadas_por_usuario_y_mes(Database::get_connection());
+list($quotees_ganadas_anual_usuarios, $quotees_ganadas_anual_usuarios_monto) = RepositorioUsuario::obtener_cotizaciones_ganadas_por_usuario_y_mes(Database::get_connection());
+$quotees_not_submitted_anual_usuarios = RepositorioUsuario::obtener_cotizaciones_not_submitted_por_usuario_y_mes(Database::get_connection());
 Database::close_connection();
 ?>
 <div class="content-wrapper">
@@ -24,25 +24,25 @@ Database::close_connection();
       <div class="row">
         <div class="col-lg-12 col-12">
           <input type="hidden" id="nombres_usuario" <?php echo "value='" . json_encode($nombres_usuario) . "'"; ?>>
-          <input type="hidden" id="cotizaciones_completadas" <?php echo "value='" . json_encode($cotizaciones_completadas) . "'"; ?>>
-          <input type="hidden" id="cotizaciones_completadas_pasadas" <?php echo "value='" . json_encode($cotizaciones_completadas_pasadas) . "'"; ?>>
-          <input type="hidden" id="cotizaciones_ganadas" <?php echo "value='" . json_encode($cotizaciones_ganadas) . "'"; ?>>
-          <input type="hidden" id="cotizaciones_ganadas_pasadas" <?php echo "value='" . json_encode($cotizaciones_ganadas_pasadas) . "'"; ?>>
-          <input type="hidden" id="cotizaciones_sometidas" <?php echo "value='" . json_encode($cotizaciones_sometidas) . "'"; ?>>
-          <input type="hidden" id="cotizaciones_sometidas_pasadas" <?php echo "value='" . json_encode($cotizaciones_sometidas_pasadas) . "'"; ?>>
-          <input type="hidden" id="cotizaciones_no_sometidas" <?php echo "value='" . json_encode($cotizaciones_no_sometidas) . "'"; ?>>
-          <input type="hidden" id="cotizaciones_no_sometidas_pasadas" <?php echo "value='" . json_encode($cotizaciones_no_sometidas_pasadas) . "'"; ?>>
-          <input type="hidden" id="cotizaciones_mes" <?php echo "value='" . json_encode($cotizaciones_mes) . "'"; ?>>
-          <input type="hidden" id="monto_cotizaciones_mes" <?php echo "value='" . json_encode($monto_cotizaciones_mes) . "'"; ?>>
+          <input type="hidden" id="cotizaciones_completadas" <?php echo "value='" . json_encode($quotees_completadas) . "'"; ?>>
+          <input type="hidden" id="cotizaciones_completadas_pasadas" <?php echo "value='" . json_encode($quotees_completadas_pasadas) . "'"; ?>>
+          <input type="hidden" id="cotizaciones_ganadas" <?php echo "value='" . json_encode($quotees_ganadas) . "'"; ?>>
+          <input type="hidden" id="cotizaciones_ganadas_pasadas" <?php echo "value='" . json_encode($quotees_ganadas_pasadas) . "'"; ?>>
+          <input type="hidden" id="cotizaciones_sometidas" <?php echo "value='" . json_encode($quotees_sometidas) . "'"; ?>>
+          <input type="hidden" id="cotizaciones_sometidas_pasadas" <?php echo "value='" . json_encode($quotees_sometidas_pasadas) . "'"; ?>>
+          <input type="hidden" id="cotizaciones_no_sometidas" <?php echo "value='" . json_encode($quotees_no_sometidas) . "'"; ?>>
+          <input type="hidden" id="cotizaciones_no_sometidas_pasadas" <?php echo "value='" . json_encode($quotees_no_sometidas_pasadas) . "'"; ?>>
+          <input type="hidden" id="monthly_award_quotes" <?php echo "value='" . json_encode($monthly_award_quotes) . "'"; ?>>
+          <input type="hidden" id="monto_cotizaciones_mes" <?php echo "value='" . json_encode($total_monthly_award_quotes) . "'"; ?>>
           <input type="hidden" id="no_bid" <?php echo "value='" . json_encode($no_bid) . "'"; ?>>
           <input type="hidden" id="manufacturer_in_the_bid" <?php echo "value='" . json_encode($manufacturer_in_the_bid) . "'"; ?>>
           <input type="hidden" id="expired_due_date" <?php echo "value='" . json_encode($expired_due_date) . "'"; ?>>
           <input type="hidden" id="supplier_did_not_provide_a_quote" <?php echo "value='" . json_encode($supplier_did_not_provide_a_quote) . "'"; ?>>
           <input type="hidden" id="others" <?php echo "value='" . json_encode($others) . "'"; ?>>
-          <input type="hidden" id="cotizaciones_completadas_anual_usuarios" <?php echo "value='" . json_encode($cotizaciones_completadas_anual_usuarios) . "'"; ?>>
-          <input type="hidden" id="cotizaciones_ganadas_anual_usuarios" <?php echo "value='" . json_encode($cotizaciones_ganadas_anual_usuarios) . "'"; ?>>
-          <input type="hidden" id="cotizaciones_ganadas_anual_usuarios_monto" <?php echo "value='" . json_encode($cotizaciones_ganadas_anual_usuarios_monto) . "'"; ?>>
-          <input type="hidden" id="cotizaciones_not_submitted_anual_usuarios" <?php echo "value='" . json_encode($cotizaciones_not_submitted_anual_usuarios) . "'"; ?>>
+          <input type="hidden" id="cotizaciones_completadas_anual_usuarios" <?php echo "value='" . json_encode($quotees_completadas_anual_usuarios) . "'"; ?>>
+          <input type="hidden" id="cotizaciones_ganadas_anual_usuarios" <?php echo "value='" . json_encode($quotees_ganadas_anual_usuarios) . "'"; ?>>
+          <input type="hidden" id="cotizaciones_ganadas_anual_usuarios_monto" <?php echo "value='" . json_encode($quotees_ganadas_anual_usuarios_monto) . "'"; ?>>
+          <input type="hidden" id="cotizaciones_not_submitted_anual_usuarios" <?php echo "value='" . json_encode($quotees_not_submitted_anual_usuarios) . "'"; ?>>
         </div>
       </div>
       <div id="graficas" class="row">

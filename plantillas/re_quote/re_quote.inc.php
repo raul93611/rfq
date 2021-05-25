@@ -1,7 +1,7 @@
 <?php
 Database::open_connection();
-ReQuoteRepository::create_re_quote(Database::get_connection(), $id_rfq);
-$re_quote = ReQuoteRepository::get_re_quote_by_id_rfq(Database::get_connection(), $id_rfq);
+ReQuoteRepository::create_re_quote(Database::get_connection(), $id_quote);
+$re_quote = ReQuoteRepository::get_re_quote_by_id_rfq(Database::get_connection(), $id_quote);
 Database::close_connection();
 ?>
 <div class="content-wrapper">
@@ -13,7 +13,7 @@ Database::close_connection();
         </div>
         <div class="text-center col-sm-10">
           <button type="button" name="button" class="btn btn-info" id="audit_trails_button">Audit Trails</button>
-          <a href="<?php echo RELOAD_REQUOTE . $id_rfq; ?>" class="btn btn-primary">Reload</a>
+          <a href="<?php echo RELOAD_REQUOTE . $id_quote; ?>" class="btn btn-primary">Reload</a>
         </div>
       </div>
     </div>
@@ -34,7 +34,7 @@ Database::close_connection();
                 ?>
               </div>
               <div class="card-footer footer_item">
-                <a class="btn btn-primary" id="go_back" href="<?php echo EDIT_QUOTE . '/' . $re_quote-> get_id_rfq(); ?>"><i class="fa fa-reply"></i></a>
+                <a class="btn btn-primary" id="go_back" href="<?php echo EDIT_QUOTE . '/' . $re_quote-> get_id_quote(); ?>"><i class="fa fa-reply"></i></a>
                 <button type="submit" class="btn btn-success" name="save_re_quote"><i class="fas fa-check"></i> Save</button>
                 <!-- <a href="<?php echo ADD_RE_QUOTE_ITEM . $re_quote-> get_id(); ?>" class="btn btn-primary"><i class="fas fa-plus"></i> Add item</a> -->
               </div>
@@ -58,7 +58,7 @@ Database::close_connection();
       <div class="modal-body">
         <?php
         Database::open_connection();
-        ReQuoteAuditTrailRepository::display_audit_trails(Database::get_connection(), $re_quote-> get_id());
+        ReQuoteAuditTrailRepository::print_audit_trails(Database::get_connection(), $re_quote-> get_id());
         Database::close_connection();
         ?>
       </div>

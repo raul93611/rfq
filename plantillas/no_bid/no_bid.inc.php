@@ -20,7 +20,7 @@
             </div>
             <div class="card-body">
               <?php
-              RepositorioRfq::escribir_cotizaciones_no_bid();
+              QuoteRepository::print_no_bids();
               ?>
             </div>
           </div>

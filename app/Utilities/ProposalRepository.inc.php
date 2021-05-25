@@ -3,7 +3,7 @@ class ProposalRepository{
   public static function print_item($item, $limit, $a){
     $item_description = '';
     $html = '';
-    $html_item_description = explode('<br />', nl2br($item-> obtener_description()));
+    $html_item_description = explode('<br />', nl2br($item-> get_description()));
     $j = 0;
     while (strlen($item_description) <= $limit && $j <= count($html_item_description)) {
       $item_description .= $html_item_description[$j] . '<br />';
@@ -11,12 +11,12 @@ class ProposalRepository{
     }
     $html = '<tr>
       <td style="border-bottom: 0;">' . $a . '</td>
-      <td style="border-bottom: 0;"><b>Brand name:</b> ' . $item->obtener_brand() . '<br><b>Part number:</b> ' . $item->obtener_part_number() . '<br><b> Item description:</b><br> ';
+      <td style="border-bottom: 0;"><b>Brand name:</b> ' . $item->get_brand() . '<br><b>Part number:</b> ' . $item->get_part_number() . '<br><b> Item description:</b><br> ';
     $html .= $item_description;
     $html .= '</td>
-      <td style="text-align:right;border-bottom: 0;">' .  $item->obtener_quantity() . '</td>
-      <td style="text-align:right;border-bottom: 0;">$ ' . number_format($item->obtener_unit_price(), 2) . '</td>
-      <td style="text-align:right;border-bottom: 0;">$ ' . number_format($item->obtener_total_price(), 2) . '</td>
+      <td style="text-align:right;border-bottom: 0;">' .  $item->get_quantity() . '</td>
+      <td style="text-align:right;border-bottom: 0;">$ ' . number_format($item->get_unit_price(), 2) . '</td>
+      <td style="text-align:right;border-bottom: 0;">$ ' . number_format($item->get_total_price(), 2) . '</td>
       </tr>';
 
     while ($j <= count($html_item_description) && $j != 0) {
@@ -37,7 +37,7 @@ class ProposalRepository{
     }
 
     Database::open_connection();
-    $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Database::get_connection(), $item-> obtener_id());
+    $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Database::get_connection(), $item-> get_id());
     Database::close_connection();
     if(count($subitems)){
       foreach ($subitems as $i => $subitem) {
@@ -51,7 +51,7 @@ class ProposalRepository{
   public static function print_subitem($subitem, $limit){
     $subitem_description = '';
     $html = '';
-    $html_subitem_description = explode('<br />', nl2br($subitem-> obtener_description()));
+    $html_subitem_description = explode('<br />', nl2br($subitem-> get_description()));
     $j = 0;
     while (strlen($subitem_description) <= $limit && $j <= count($html_subitem_description)) {
       $subitem_description .= $html_subitem_description[$j] . '<br />';
@@ -59,12 +59,12 @@ class ProposalRepository{
     }
     $html = '<tr>
       <td style="border-bottom: 0;"></td>
-      <td style="border-bottom: 0;"><b>Brand name:</b> ' . $subitem->obtener_brand() . '<br><b>Part number:</b> ' . $subitem->obtener_part_number() . '<br><b> Item description:</b><br> ';
+      <td style="border-bottom: 0;"><b>Brand name:</b> ' . $subitem->get_brand() . '<br><b>Part number:</b> ' . $subitem->get_part_number() . '<br><b> Item description:</b><br> ';
     $html .= $subitem_description;
     $html .= '</td>
-      <td style="text-align:right;border-bottom: 0;">' .  $subitem->obtener_quantity() . '</td>
-      <td style="text-align:right;border-bottom: 0;">$ ' . number_format($subitem->obtener_unit_price(), 2) . '</td>
-      <td style="text-align:right;border-bottom: 0;">$ ' . number_format($subitem->obtener_total_price(), 2) . '</td>
+      <td style="text-align:right;border-bottom: 0;">' .  $subitem->get_quantity() . '</td>
+      <td style="text-align:right;border-bottom: 0;">$ ' . number_format($subitem->get_unit_price(), 2) . '</td>
+      <td style="text-align:right;border-bottom: 0;">$ ' . number_format($subitem->get_total_price(), 2) . '</td>
       </tr>';
 
     while ($j <= count($html_subitem_description) && $j != 0) {
@@ -90,32 +90,32 @@ class ProposalRepository{
   public static function print_item_pdf($quote, $item, $a, $payment_terms){
     $html = '<tr>
       <td>' . $a . '</td>
-      <td><b>Brand name:</b> ' . $item-> obtener_brand_project() . '<br><b>Part number:</b> ' . $item-> obtener_part_number_project() . '<br><b>Item description:</b> ' . nl2br(wordwrap(mb_substr($item-> obtener_description_project(), 0, 150), 70, '<br>', true)) . '</td>
-      <td><b>Brand name:</b> ' . $item->obtener_brand() . '<br><b>Part number:</b> ' . $item->obtener_part_number() . '<br><b> Item description:</b><br> ' . nl2br(wordwrap(mb_substr($item->obtener_description(), 0, 150), 70, '<br>', true)) . '</td>
-      <td style="text-align:right;">' . $item->obtener_quantity() . '</td>
+      <td><b>Brand name:</b> ' . $item-> get_brand_project() . '<br><b>Part number:</b> ' . $item-> get_part_number_project() . '<br><b>Item description:</b> ' . nl2br(wordwrap(mb_substr($item-> get_description_project(), 0, 150), 70, '<br>', true)) . '</td>
+      <td><b>Brand name:</b> ' . $item->get_brand() . '<br><b>Part number:</b> ' . $item->get_part_number() . '<br><b> Item description:</b><br> ' . nl2br(wordwrap(mb_substr($item->get_description(), 0, 150), 70, '<br>', true)) . '</td>
+      <td style="text-align:right;">' . $item->get_quantity() . '</td>
       <td>';
     Database::open_connection();
-    $providers = RepositorioProvider::obtener_providers_por_id_item(Database::get_connection(), $item-> obtener_id());
+    $providers = ProviderRepository::get_all_by_id_item(Database::get_connection(), $item-> get_id());
     Database::close_connection();
     if(count($providers)){
       Database::open_connection();
-      $provider_menor = RepositorioProvider::obtener_provider_por_id(Database::get_connection(), $item-> obtener_provider_menor());
+      $least_provider = ProviderRepository::get_by_id(Database::get_connection(), $item-> get_least_provider());
       Database::close_connection();
       if(count($providers)){
         foreach ($providers as $provider) {
-          $html .= '<b>' . $provider-> obtener_provider() . ':</b><br>$ ' . number_format($provider-> obtener_price(), 2) . '<br>';
+          $html .= '<b>' . $provider-> get_provider() . ':</b><br>$ ' . number_format($provider-> get_price(), 2) . '<br>';
         }
       }
       $html .= '
       </td>
-      <td>$ ' . number_format($item-> obtener_additional(), 2) . '</td>
+      <td>$ ' . number_format($item-> get_additional(), 2) . '</td>
       <td>$ ';
-      $best_unit_price = $provider_menor-> obtener_price()*$payment_terms*(1+($quote-> obtener_taxes()/100)) + (float)$item-> obtener_additional() + (float)$quote-> obtener_additional();
+      $best_unit_price = $least_provider-> get_price()*$payment_terms*(1+($quote-> get_taxes()/100)) + (float)$item-> get_additional() + (float)$quote-> get_additional();
       $html .= number_format($best_unit_price, 2);
       $html .= '</td>
-      <td>$ ' . number_format(round($best_unit_price, 2) * $item-> obtener_quantity(), 2) . '</td>
-      <td style="text-align:right;">$ ' . number_format($item->obtener_unit_price(), 2) . '</td>
-      <td style="text-align:right;">$ ' . number_format($item->obtener_total_price(), 2) . '</td>
+      <td>$ ' . number_format(round($best_unit_price, 2) * $item-> get_quantity(), 2) . '</td>
+      <td style="text-align:right;">$ ' . number_format($item->get_unit_price(), 2) . '</td>
+      <td style="text-align:right;">$ ' . number_format($item->get_total_price(), 2) . '</td>
       ';
     }else{
       $html .= '
@@ -129,7 +129,7 @@ class ProposalRepository{
     }
     $html .= '</tr>';
     Database::open_connection();
-    $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Database::get_connection(), $item-> obtener_id());
+    $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Database::get_connection(), $item-> get_id());
     Database::close_connection();
     foreach ($subitems as $key => $subitem) {
       $html .= self::print_subitem_pdf($quote, $subitem, $payment_terms);
@@ -142,32 +142,32 @@ class ProposalRepository{
     $html .= '
       <tr>
       <td></td>
-      <td><b>Brand name:</b> ' . $subitem-> obtener_brand_project() . '<br><b>Part number:</b> ' . $subitem-> obtener_part_number_project() . '<br><b>Item description:</b><br> ' . nl2br(wordwrap(mb_substr($subitem->obtener_description_project(), 0, 150), 70, '<br>', true)) . '</td>}
-      <td><b>Brand name:</b> ' . $subitem->obtener_brand() . '<br><b>Part number:</b> ' . $subitem->obtener_part_number() . '<br><b> Item description:</b><br> ' . nl2br(wordwrap(mb_substr($subitem->obtener_description(), 0, 150), 70, '<br>', true)) . '</td>
-      <td style="text-align:right;">' . $subitem-> obtener_quantity() . '</td>';
+      <td><b>Brand name:</b> ' . $subitem-> get_brand_project() . '<br><b>Part number:</b> ' . $subitem-> get_part_number_project() . '<br><b>Item description:</b><br> ' . nl2br(wordwrap(mb_substr($subitem->get_description_project(), 0, 150), 70, '<br>', true)) . '</td>}
+      <td><b>Brand name:</b> ' . $subitem->get_brand() . '<br><b>Part number:</b> ' . $subitem->get_part_number() . '<br><b> Item description:</b><br> ' . nl2br(wordwrap(mb_substr($subitem->get_description(), 0, 150), 70, '<br>', true)) . '</td>
+      <td style="text-align:right;">' . $subitem-> get_quantity() . '</td>';
       Database::open_connection();
-      $providers_subitem = RepositorioProviderSubitem::obtener_providers_subitem_por_id_subitem(Database::get_connection(), $subitem-> obtener_id());
+      $providers_subitem = ProviderSubitemRepository::get_all_by_id_subitem(Database::get_connection(), $subitem-> get_id());
       Database::close_connection();
       if(count($providers_subitem)){
         $html .= '<td>';
         Database::open_connection();
-        $provider_subitem_menor = RepositorioProviderSubitem::obtener_provider_subitem_por_id(Database::get_connection(), $subitem-> obtener_provider_menor());
+        $provider_subitem_menor = ProviderSubitemRepository::get_by_id(Database::get_connection(), $subitem-> get_least_provider());
         Database::close_connection();
         if(count($providers_subitem)){
           foreach ($providers_subitem as $provider_subitem) {
-            $html .= '<b>' . $provider_subitem-> obtener_provider()  . ':</b><br>$ ' . number_format($provider_subitem-> obtener_price(), 2) . '<br>';
+            $html .= '<b>' . $provider_subitem-> get_provider()  . ':</b><br>$ ' . number_format($provider_subitem-> get_price(), 2) . '<br>';
           }
         }
         $html .= '
         </td>
-        <td>$ ' . number_format($subitem-> obtener_additional(), 2) . '</td>
+        <td>$ ' . number_format($subitem-> get_additional(), 2) . '</td>
         <td>$ ';
-        $best_unit_price = $provider_subitem_menor-> obtener_price()*$payment_terms*(1+($quote-> obtener_taxes()/100)) + $subitem-> obtener_additional() + $quote-> obtener_additional();
+        $best_unit_price = $provider_subitem_menor-> get_price()*$payment_terms*(1+($quote-> get_taxes()/100)) + $subitem-> get_additional() + $quote-> get_additional();
         $html .= number_format($best_unit_price, 2);
         $html .= '</td>
-        <td>$ ' . number_format(round($best_unit_price, 2) * $subitem-> obtener_quantity(), 2) . '</td>
-        <td style="text-align:right;">$ ' . number_format($subitem-> obtener_unit_price(), 2) . '</td>
-        <td style="text-align:right;">$ ' . number_format($subitem-> obtener_total_price(), 2) . '</td>
+        <td>$ ' . number_format(round($best_unit_price, 2) * $subitem-> get_quantity(), 2) . '</td>
+        <td style="text-align:right;">$ ' . number_format($subitem-> get_unit_price(), 2) . '</td>
+        <td style="text-align:right;">$ ' . number_format($subitem-> get_total_price(), 2) . '</td>
         ';
       }else{
         $html .= '
@@ -217,8 +217,8 @@ class ProposalRepository{
       <td>$ ' . number_format(round($best_unit_price, 2) * $re_quote_item-> get_quantity(), 2) . '</td>';
       if(!is_null($item)){
         $html .=
-        '<td style="text-align:right;">$ ' . number_format($item-> obtener_unit_price(), 2) . '</td>
-        <td style="text-align:right;">$ ' . number_format($item-> obtener_total_price(), 2) . '</td>
+        '<td style="text-align:right;">$ ' . number_format($item-> get_unit_price(), 2) . '</td>
+        <td style="text-align:right;">$ ' . number_format($item-> get_total_price(), 2) . '</td>
         ';
       }else{
         $html .=
@@ -242,7 +242,7 @@ class ProposalRepository{
     Database::open_connection();
     $re_quote_subitems = ReQuoteSubitemRepository::get_re_quote_subitems_by_id_re_quote_item(Database::get_connection(), $re_quote_item-> get_id());
     if(!is_null($item)){
-      $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Database::get_connection(), $item-> obtener_id());
+      $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Database::get_connection(), $item-> get_id());
     }else{
       $subitems = [];
     }
@@ -293,8 +293,8 @@ class ProposalRepository{
         <td>$ ' . number_format(round($best_unit_price, 2) * $re_quote_subitem-> get_quantity(), 2) . '</td>';
         if(!is_null($subitem)){
           $html .=
-          '<td style="text-align:right;">$ ' . number_format($subitem-> obtener_unit_price(), 2) . '</td>
-          <td style="text-align:right;">$ ' . number_format($subitem-> obtener_total_price(), 2) . '</td>
+          '<td style="text-align:right;">$ ' . number_format($subitem-> get_unit_price(), 2) . '</td>
+          <td style="text-align:right;">$ ' . number_format($subitem-> get_total_price(), 2) . '</td>
           ';
         }else{
           $html .=

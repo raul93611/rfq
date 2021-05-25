@@ -5,24 +5,24 @@ class Usuario{
   private $password;
   private $nombres;
   private $apellidos;
-  private $cargo;
+  private $role;
   private $email;
   private $status;
   private $hash_recover_email;
 
-  public function __construct($id, $nombre_usuario, $password, $nombres, $apellidos, $cargo, $email, $status, $hash_recover_email){
+  public function __construct($id, $nombre_usuario, $password, $nombres, $apellidos, $role, $email, $status, $hash_recover_email){
     $this-> id = $id;
     $this-> nombre_usuario = $nombre_usuario;
     $this-> password = $password;
     $this-> nombres = $nombres;
     $this-> apellidos = $apellidos;
-    $this-> cargo = $cargo;
+    $this-> cargo = $role;
     $this-> email = $email;
     $this-> status = $status;
     $this-> hash_recover_email = $hash_recover_email;
   }
 
-  public function obtener_id(){
+  public function get_id(){
     return $this-> id;
   }
 
@@ -50,7 +50,7 @@ class Usuario{
     return $this-> email;
   }
 
-  public function obtener_status(){
+  public function get_submitted(){
     return $this-> status;
   }
 

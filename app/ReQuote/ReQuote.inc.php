@@ -1,7 +1,7 @@
 <?php
 class ReQuote{
   private $id;
-  private $id_rfq;
+  private $id_quote;
   private $total_cost;
   private $total_price;
   private $payment_terms;
@@ -11,9 +11,9 @@ class ReQuote{
   private $shipping_cost;
   private $shipping;
 
-  public function __construct($id, $id_rfq, $total_cost, $total_price, $payment_terms, $taxes, $profit, $additional, $shipping_cost, $shipping){
+  public function __construct($id, $id_quote, $total_cost, $total_price, $payment_terms, $taxes, $profit, $additional, $shipping_cost, $shipping){
     $this-> id = $id;
-    $this-> id_rfq = $id_rfq;
+    $this-> id_quote = $id_quote;
     $this-> total_cost = $total_cost;
     $this-> total_price = $total_price;
     $this-> payment_terms = $payment_terms;
@@ -28,8 +28,8 @@ class ReQuote{
     return $this-> id;
   }
 
-  public function get_id_rfq(){
-    return $this-> id_rfq;
+  public function get_id_quote(){
+    return $this-> id_quote;
   }
 
   public function get_total_cost(){

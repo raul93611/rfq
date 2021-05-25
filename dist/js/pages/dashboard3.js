@@ -8,7 +8,7 @@ $(function () {
       var cotizaciones_ganadas_pasadas = document.getElementById('cotizaciones_ganadas_pasadas').value;
       var cotizaciones_no_sometidas = document.getElementById('cotizaciones_no_sometidas').value;
       var cotizaciones_no_sometidas_pasadas = document.getElementById('cotizaciones_no_sometidas_pasadas').value;
-      var cotizaciones_mes = document.getElementById('cotizaciones_mes').value;
+      var monthly_award_quotes = document.getElementById('monthly_award_quotes').value;
       var monto_cotizaciones_mes = document.getElementById('monto_cotizaciones_mes').value;
       var no_bid = document.getElementById('no_bid').value;
       var manufacturer_in_the_bid = document.getElementById('manufacturer_in_the_bid').value;
@@ -28,7 +28,7 @@ $(function () {
       cotizaciones_ganadas_pasadas = jQuery.parseJSON(cotizaciones_ganadas_pasadas);
       cotizaciones_no_sometidas = jQuery.parseJSON(cotizaciones_no_sometidas);
       cotizaciones_no_sometidas_pasadas = jQuery.parseJSON(cotizaciones_no_sometidas_pasadas);
-      cotizaciones_mes = jQuery.parseJSON(cotizaciones_mes);
+      monthly_award_quotes = jQuery.parseJSON(monthly_award_quotes);
       monto_cotizaciones_mes = jQuery.parseJSON(monto_cotizaciones_mes);
       no_bid = jQuery.parseJSON(no_bid);
       manufacturer_in_the_bid = jQuery.parseJSON(manufacturer_in_the_bid);
@@ -258,7 +258,7 @@ $(function () {
                   {
                       backgroundColor: '#13A8F0',
                       borderColor: '#13A8F0',
-                      data: cotizaciones_mes/*[1,2,3,4,5,6,7,8,9,1,2,0]*/
+                      data: monthly_award_quotes/*[1,2,3,4,5,6,7,8,9,1,2,0]*/
                   }/*,
                    {
                    backgroundColor: '#39485A',

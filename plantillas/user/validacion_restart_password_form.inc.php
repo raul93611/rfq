@@ -8,8 +8,8 @@ if(isset($_POST['send'])){
       $url_secreta_existe = RepositorioUsuario::url_secreta_existe(Database::get_connection(), $_POST['url_secreta']);
       if($url_secreta_existe){
         $usuario = RepositorioUsuario::obtener_usuario_por_url_secreta(Database::get_connection(), $_POST['url_secreta']);
-        RepositorioUsuario::actualizar_clave(Database::get_connection(), $password, $usuario-> obtener_id());
-        RepositorioUsuario::eliminar_hash_recover_email(Database::get_connection(), $usuario-> obtener_id());
+        RepositorioUsuario::actualizar_clave(Database::get_connection(), $password, $usuario-> get_id());
+        RepositorioUsuario::eliminar_hash_recover_email(Database::get_connection(), $usuario-> get_id());
       }else {
         $error = true;
       }

@@ -5,9 +5,9 @@ abstract class ValidadorCotizacion {
   protected $email_code;
   protected $issue_date;
   protected $end_date;
-  protected $usuario_designado;
+  protected $assigned_user;
   protected $type_of_bid;
-  protected $canal;
+  protected $channel;
   protected $error_email_code;
   protected $error_issue_date;
   protected $error_end_date;
@@ -24,13 +24,13 @@ abstract class ValidadorCotizacion {
     }
   }
 
-  protected function validar_email_code($conexion, $email_code) {
+  protected function validar_email_code($database, $email_code) {
     if (!$this->variable_iniciada($email_code)) {
       return 'Must be fill out.';
     } else {
       $this->email_code = $email_code;
     }
-    if(RepositorioRfq::email_code_existe($conexion, $email_code)){
+    if(QuoteRepository::email_code_exists($database, $email_code)){
       return 'E-mail Code already exists.';
     }
     return '';
@@ -54,28 +54,28 @@ abstract class ValidadorCotizacion {
     return '';
   }
 
-  public function obtener_email_code() {
+  public function get_email_code() {
     return $this->email_code;
   }
 
-  public function obtener_issue_date() {
+  public function get_issue_date() {
     return $this->issue_date;
   }
 
-  public function obtener_end_date() {
+  public function get_end_date() {
     return $this->end_date;
   }
 
-  public function obtener_usuario_designado() {
-    return $this->usuario_designado;
+  public function get_assigned_user() {
+    return $this->assigned_user;
   }
 
-  public function obtener_type_of_bid() {
+  public function get_type_of_bid() {
     return $this->type_of_bid;
   }
 
-  public function obtener_canal() {
-    return $this->canal;
+  public function get_channel() {
+    return $this->channel;
   }
 
   public function obtener_error_email_code() {

@@ -1,3 +1,3 @@
 <?php
-FulfillmentRepository::services_list($id_rfq);
+FulfillmentRepository::services_list($id_quote);
 ?>

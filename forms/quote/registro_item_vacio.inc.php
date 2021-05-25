@@ -1,4 +1,4 @@
-<input type="hidden" name="id_rfq" value="<?php echo $id_rfq; ?>">
+<input type="hidden" name="id_quote" value="<?php echo $id_quote; ?>">
 <div class="card-body">
   <div class="row">
     <div class="col-md-6">
@@ -13,7 +13,7 @@
       </div>
       <div class="form-group">
         <label for="description_project">Description:</label>
-        <textarea class="form-control form-control-sm" rows="5" placeholder="Enter description ..." id="description_project" name="description_project" ></textarea>
+        <textarea class="summernote_text form-control form-control-sm" rows="5" placeholder="Enter description ..." id="description_project" name="description_project" ></textarea>
       </div>
     </div>
     <div class="col-md-6">
@@ -28,7 +28,7 @@
       </div>
       <div class="form-group">
         <label for="description">Description:</label>
-        <textarea class="form-control form-control-sm" rows="5" placeholder="Enter description ..." id="description" name="description" ></textarea>
+        <textarea class="summernote_text form-control form-control-sm" rows="5" placeholder="Enter description ..." id="description" name="description" ></textarea>
       </div>
     </div>
   </div>
@@ -47,5 +47,5 @@
 </div>
 <div class="card-footer">
   <button type="submit" class="btn btn-success" name="guardar_item"><i class="fa fa-check"></i> Save</button>
-  <a href="<?php echo EDIT_QUOTE . '/' . $id_rfq; ?>" class="btn btn-danger"><i class="fa fa-times"></i> Cancel</a>
+  <a href="<?php echo EDIT_QUOTE . '/' . $id_quote; ?>" class="btn btn-danger"><i class="fa fa-times"></i> Cancel</a>
 </div>

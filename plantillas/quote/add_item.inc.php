@@ -3,7 +3,7 @@ if (!SessionControl::has_session()) {
   Redirection::redirect_js(SERVER);
 }
 Database::open_connection();
-$cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Database::get_connection(), $id_rfq);
+$quote = QuoteRepository::get_by_id(Database::get_connection(), $id_quote);
 Database::close_connection();
 ?>
 <div class="content-wrapper">
@@ -27,7 +27,7 @@ Database::close_connection();
             <div class="card-header">
               <h3 class="card-title"><i class="fas fa-highlighter"></i> Enter the data</h3>
             </div>
-            <form role="form" method="post" action="<?php echo SAVE_ADD_ITEM . $id_rfq; ?>">
+            <form role="form" method="post" action="<?php echo SAVE_ADD_ITEM . $id_quote; ?>">
               <?php
               include_once 'forms/quote/registro_item_vacio.inc.php';
               ?>

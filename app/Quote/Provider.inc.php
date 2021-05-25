@@ -12,19 +12,19 @@ class Provider{
     $this-> price = $price;
   }
 
-  public function obtener_id(){
+  public function get_id(){
     return $this-> id;
   }
 
-  public function obtener_id_item(){
+  public function get_id_item(){
     return $this-> id_item;
   }
 
-  public function obtener_provider(){
+  public function get_provider(){
     return $this-> provider;
   }
 
-  public function obtener_price(){
+  public function get_price(){
     return $this-> price;
   }
 }

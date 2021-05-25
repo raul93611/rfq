@@ -69,14 +69,14 @@
           <ul class="nav nav-treeview">
             <li class="nav-item has-treeview
             <?php
-            if ($gestor_actual == 'quotes' && $cotizacion != 'edit_quote' && $cotizacion != 'new' && $cotizacion != 'add_item' && $cotizacion != 'add_provider' && $cotizacion != 'edit_item' && $cotizacion != 'edit_provider') {
+            if ($gestor_actual == 'quotes' && $quote != 'edit_quote' && $quote != 'new' && $quote != 'add_item' && $quote != 'add_provider' && $quote != 'edit_item' && $quote != 'edit_provider') {
               echo 'menu-open';
             }
             ?>
                 ">
               <a href="#" class="nav-link
               <?php
-              if ($gestor_actual == 'quotes' && $cotizacion != 'edit_quote' && $cotizacion != 'new' && $cotizacion != 'add_item' && $cotizacion != 'add_provider' && $cotizacion != 'edit_item' && $cotizacion != 'edit_provider') {
+              if ($gestor_actual == 'quotes' && $quote != 'edit_quote' && $quote != 'new' && $quote != 'add_item' && $quote != 'add_provider' && $quote != 'edit_item' && $quote != 'edit_provider') {
                 echo 'active';
               }
               ?>
@@ -89,7 +89,7 @@
                 <li class="nav-item">
                   <a href="<?php echo GSA_BUY; ?>" class="nav-link
                   <?php
-                  if ($cotizacion == 'gsa_buy') {
+                  if ($quote == 'gsa_buy') {
                     echo 'active';
                   }
                   ?>
@@ -100,7 +100,7 @@
                 <li class="nav-item">
                   <a href="<?php echo FEDBID; ?>" class="nav-link
                   <?php
-                  if ($cotizacion == 'fedbid') {
+                  if ($quote == 'fedbid') {
                     echo 'active';
                   }
                   ?>
@@ -111,7 +111,7 @@
                 <li class="nav-item">
                   <a href="<?php echo EMAILS; ?>" class="nav-link
                   <?php
-                  if ($cotizacion == 'emails') {
+                  if ($quote == 'emails') {
                     echo 'active';
                   }
                   ?>
@@ -122,7 +122,7 @@
                 <li class="nav-item">
                   <a href="<?php echo MAILBOX; ?>" class="nav-link
                   <?php
-                  if ($cotizacion == 'mailbox') {
+                  if ($quote == 'mailbox') {
                     echo 'active';
                   }
                   ?>
@@ -133,7 +133,7 @@
                 <li class="nav-item">
                   <a href="<?php echo FINDRFP; ?>" class="nav-link
                   <?php
-                  if ($cotizacion == 'findrfp') {
+                  if ($quote == 'findrfp') {
                     echo 'active';
                   }
                   ?>
@@ -144,7 +144,7 @@
                 <li class="nav-item">
                   <a href="<?php echo EMBASSIES; ?>" class="nav-link
                   <?php
-                  if ($cotizacion == 'embassies') {
+                  if ($quote == 'embassies') {
                     echo 'active';
                   }
                   ?>
@@ -155,7 +155,7 @@
                 <li class="nav-item">
                   <a href="<?php echo FBO; ?>" class="nav-link
                   <?php
-                  if ($cotizacion == 'fbo') {
+                  if ($quote == 'fbo') {
                     echo 'active';
                   }
                   ?>
@@ -166,7 +166,7 @@
                 <li class="nav-item">
                   <a href="<?php echo CHEMONICS; ?>" class="nav-link
                   <?php
-                  if ($cotizacion == 'chemonics') {
+                  if ($quote == 'chemonics') {
                     echo 'active';
                   }
                   ?>
@@ -177,7 +177,7 @@
                 <li class="nav-item">
                   <a href="<?php echo EBAY_AMAZON; ?>" class="nav-link
                   <?php
-                  if ($cotizacion == 'ebay_amazon') {
+                  if ($quote == 'ebay_amazon') {
                     echo 'active';
                   }
                   ?>
@@ -210,7 +210,7 @@
                 <li class="nav-item">
                   <a href="<?php echo GSA_BUY_COMPLETE; ?>" class="nav-link
                   <?php
-                  if ($cotizacion == 'gsa_buy_completados') {
+                  if ($quote == 'gsa_buy_completados') {
                     echo 'active';
                   }
                   ?>
@@ -221,7 +221,7 @@
                 <li class="nav-item">
                   <a href="<?php echo FEDBID_COMPLETE; ?>" class="nav-link
                   <?php
-                  if ($cotizacion == 'fedbid_completados') {
+                  if ($quote == 'fedbid_completados') {
                     echo 'active';
                   }
                   ?>
@@ -232,7 +232,7 @@
                 <li class="nav-item">
                   <a href="<?php echo EMAILS_COMPLETE; ?>" class="nav-link
                   <?php
-                  if ($cotizacion == 'emails_completados') {
+                  if ($quote == 'emails_completados') {
                     echo 'active';
                   }
                   ?>
@@ -243,7 +243,7 @@
                 <li class="nav-item">
                   <a href="<?php echo MAILBOX_COMPLETE; ?>" class="nav-link
                   <?php
-                  if ($cotizacion == 'mailbox_completados') {
+                  if ($quote == 'mailbox_completados') {
                     echo 'active';
                   }
                   ?>
@@ -254,7 +254,7 @@
                 <li class="nav-item">
                   <a href="<?php echo FINDRFP_COMPLETE; ?>" class="nav-link
                   <?php
-                  if ($cotizacion == 'findfrp_completados') {
+                  if ($quote == 'findfrp_completados') {
                     echo 'active';
                   }
                   ?>
@@ -265,7 +265,7 @@
                 <li class="nav-item">
                   <a href="<?php echo EMBASSIES_COMPLETE; ?>" class="nav-link
                   <?php
-                  if ($cotizacion == 'embassies_completados') {
+                  if ($quote == 'embassies_completados') {
                     echo 'active';
                   }
                   ?>
@@ -276,7 +276,7 @@
                 <li class="nav-item">
                   <a href="<?php echo FBO_COMPLETE; ?>" class="nav-link
                   <?php
-                  if ($cotizacion == 'fbo_completados') {
+                  if ($quote == 'fbo_completados') {
                     echo 'active';
                   }
                   ?>
@@ -307,7 +307,7 @@
                   <li class="nav-item">
                     <a href="<?php echo GSA_BUY_SUBMITTED; ?>" class="nav-link
                     <?php
-                    if ($cotizacion == 'gsa_buy_submitted') {
+                    if ($quote == 'gsa_buy_submitted') {
                         echo 'active';
                     }
                     ?>
@@ -318,7 +318,7 @@
                   <li class="nav-item">
                     <a href="<?php echo FEDBID_SUBMITTED; ?>" class="nav-link
                     <?php
-                    if ($cotizacion == 'fedbid_submitted') {
+                    if ($quote == 'fedbid_submitted') {
                         echo 'active';
                     }
                     ?>
@@ -329,7 +329,7 @@
                   <li class="nav-item">
                     <a href="<?php echo EMAILS_SUBMITTED; ?>" class="nav-link
                     <?php
-                    if ($cotizacion == 'emails_submitted') {
+                    if ($quote == 'emails_submitted') {
                         echo 'active';
                     }
                     ?>
@@ -340,7 +340,7 @@
                   <li class="nav-item">
                     <a href="<?php echo MAILBOX_SUBMITTED; ?>" class="nav-link
                     <?php
-                    if ($cotizacion == 'mailbox_submitted') {
+                    if ($quote == 'mailbox_submitted') {
                         echo 'active';
                     }
                     ?>
@@ -351,7 +351,7 @@
                   <li class="nav-item">
                     <a href="<?php echo FINDFRP_SUBMITTED; ?>" class="nav-link
                     <?php
-                    if ($cotizacion == 'findfrp_submitted') {
+                    if ($quote == 'findfrp_submitted') {
                         echo 'active';
                     }
                     ?>
@@ -362,7 +362,7 @@
                   <li class="nav-item">
                     <a href="<?php echo EMBASSIES_SUBMITTED; ?>" class="nav-link
                     <?php
-                    if ($cotizacion == 'embassies_submitted') {
+                    if ($quote == 'embassies_submitted') {
                         echo 'active';
                     }
                     ?>
@@ -373,7 +373,7 @@
                   <li class="nav-item">
                     <a href="<?php echo FBO_SUBMITTED; ?>" class="nav-link
                     <?php
-                    if ($cotizacion == 'fbo_submitted') {
+                    if ($quote == 'fbo_submitted') {
                         echo 'active';
                     }
                     ?>
@@ -404,7 +404,7 @@
                   <li class="nav-item">
                     <a href="<?php echo GSA_BUY_AWARD; ?>" class="nav-link
                     <?php
-                    if ($cotizacion == 'gsa_buy_award') {
+                    if ($quote == 'gsa_buy_award') {
                       echo 'active';
                     }
                     ?>
@@ -415,7 +415,7 @@
                   <li class="nav-item">
                     <a href="<?php echo FEDBID_AWARD; ?>" class="nav-link
                     <?php
-                    if ($cotizacion == 'fedbid_award') {
+                    if ($quote == 'fedbid_award') {
                       echo 'active';
                     }
                     ?>
@@ -426,7 +426,7 @@
                   <li class="nav-item">
                     <a href="<?php echo EMAILS_AWARD; ?>" class="nav-link
                     <?php
-                    if ($cotizacion == 'emails_award') {
+                    if ($quote == 'emails_award') {
                         echo 'active';
                     }
                     ?>
@@ -437,7 +437,7 @@
                   <li class="nav-item">
                     <a href="<?php echo MAILBOX_AWARD; ?>" class="nav-link
                     <?php
-                    if ($cotizacion == 'mailbox_award') {
+                    if ($quote == 'mailbox_award') {
                         echo 'active';
                     }
                     ?>
@@ -448,7 +448,7 @@
                   <li class="nav-item">
                     <a href="<?php echo FINDFRP_AWARD; ?>" class="nav-link
                     <?php
-                    if ($cotizacion == 'findfrp_award') {
+                    if ($quote == 'findfrp_award') {
                         echo 'active';
                     }
                     ?>
@@ -459,7 +459,7 @@
                   <li class="nav-item">
                     <a href="<?php echo EMBASSIES_AWARD; ?>" class="nav-link
                     <?php
-                    if ($cotizacion == 'embassies_award') {
+                    if ($quote == 'embassies_award') {
                         echo 'active';
                     }
                     ?>
@@ -470,7 +470,7 @@
                   <li class="nav-item">
                     <a href="<?php echo FBO_AWARD; ?>" class="nav-link
                     <?php
-                    if ($cotizacion == 'fbo_award') {
+                    if ($quote == 'fbo_award') {
                         echo 'active';
                     }
                     ?>
@@ -481,7 +481,7 @@
                   <li class="nav-item">
                     <a href="<?php echo CHEMONICS_AWARD; ?>" class="nav-link
                     <?php
-                    if ($cotizacion == 'chemonics_award') {
+                    if ($quote == 'chemonics_award') {
                         echo 'active';
                     }
                     ?>
@@ -492,7 +492,7 @@
                   <li class="nav-item">
                     <a href="<?php echo EBAY_AMAZON_AWARD; ?>" class="nav-link
                     <?php
-                    if ($cotizacion == 'ebay_amazon_award') {
+                    if ($quote == 'ebay_amazon_award') {
                         echo 'active';
                     }
                     ?>
@@ -550,7 +550,7 @@
               <li class="nav-item">
                 <a href="<?php echo NEW_QUOTE; ?>" id="new_quote" class="nav-link
                 <?php
-                if ($cotizacion == 'new') {
+                if ($quote == 'new') {
                     echo 'active';
                 }
                 ?>

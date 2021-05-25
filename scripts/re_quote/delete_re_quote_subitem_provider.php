@@ -7,5 +7,5 @@ $re_quote = ReQuoteRepository::get_re_quote_by_id(Database::get_connection(), $r
 ReQuoteSubitemProviderRepository::delete_re_quote_subitem_provider(Database::get_connection(), $id_re_quote_subitem_provider);
 ReQuoteAuditTrailRepository::create_audit_trail_subitem_provider_deleted(Database::get_connection(), $re_quote_subitem_provider-> get_provider(), 'Provider', $re_quote_subitem-> get_id(), $re_quote_item-> get_id_re_quote());
 Database::close_connection();
-Redirection::redirect(RE_QUOTE . $re_quote-> get_id_rfq() . '#subitem' . $re_quote_subitem-> get_id());
+Redirection::redirect(RE_QUOTE . $re_quote-> get_id_quote() . '#subitem' . $re_quote_subitem-> get_id());
 ?>

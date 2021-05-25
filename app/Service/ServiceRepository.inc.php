@@ -1,17 +1,17 @@
 <?php
 class ServiceRepository{
-  public static function store_service($connection, $service){
-    if(isset($connection)){
+  public static function store_service($database, $service){
+    if(isset($database)){
       try{
-        $sql = 'INSERT INTO services(id_rfq, description, quantity, unit_price, total_price) VALUES(:id_rfq, :description, :quantity, :unit_price, :total_price)';
-        $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_rfq', $service-> get_id_rfq(), PDO::PARAM_STR);
-        $sentence-> bindParam(':description', $service-> get_description(), PDO::PARAM_STR);
-        $sentence-> bindParam(':quantity', $service-> get_quantity(), PDO::PARAM_STR);
-        $sentence-> bindParam(':unit_price', $service-> get_unit_price(), PDO::PARAM_STR);
-        $sentence-> bindParam(':total_price', $service-> get_total_price(), PDO::PARAM_STR);
-        $sentence-> execute();
-        $id = $connection-> lastInsertId();
+        $sql = 'INSERT INTO services(id_quote, description, quantity, unit_price, total_price) VALUES(:id_quote, :description, :quantity, :unit_price, :total_price)';
+        $query = $database-> prepare($sql);
+        $query-> bindParam(':id_quote', $service-> get_id_quote(), PDO::PARAM_STR);
+        $query-> bindParam(':description', $service-> get_description(), PDO::PARAM_STR);
+        $query-> bindParam(':quantity', $service-> get_quantity(), PDO::PARAM_STR);
+        $query-> bindParam(':unit_price', $service-> get_unit_price(), PDO::PARAM_STR);
+        $query-> bindParam(':total_price', $service-> get_total_price(), PDO::PARAM_STR);
+        $query-> execute();
+        $id = $database-> lastInsertId();
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
@@ -19,18 +19,18 @@ class ServiceRepository{
     return $id;
   }
 
-  public static function get_services($connection, $id_rfq){
+  public static function get_services($database, $id_quote){
     $services = [];
-    if(isset($connection)){
+    if(isset($database)){
       try{
-        $sql = 'SELECT * FROM services WHERE id_rfq = :id_rfq';
-        $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-        $sentence-> execute();
-        $result = $sentence-> fetchAll(PDO::FETCH_ASSOC);
+        $sql = 'SELECT * FROM services WHERE id_quote = :id_quote';
+        $query = $database-> prepare($sql);
+        $query-> bindParam(':id_quote', $id_quote, PDO::PARAM_STR);
+        $query-> execute();
+        $result = $query-> fetchAll(PDO::FETCH_ASSOC);
         if(count($result)){
           foreach ($result as $key => $row) {
-            $services[] = new Service($row['id'], $row['id_rfq'], $row['description'], $row['quantity'], $row['unit_price'], $row['total_price'], $row['fulfillment_profit']);
+            $services[] = new Service($row['id'], $row['id_quote'], $row['description'], $row['quantity'], $row['unit_price'], $row['total_price'], $row['fulfillment_profit']);
           }
         }
       }catch(PDOException $ex){
@@ -40,23 +40,23 @@ class ServiceRepository{
     return $services;
   }
 
-  public static function set_fulfillment_profit($conexion, $fulfillment_profit, $id_service){
-    if(isset($conexion)){
+  public static function set_fulfillment_profit($database, $fulfillment_profit, $id_service){
+    if(isset($database)){
       try{
         $sql = 'UPDATE services SET fulfillment_profit = :fulfillment_profit WHERE id = :id_service';
-        $sentencia = $conexion-> prepare($sql);
-        $sentencia-> bindParam(':fulfillment_profit', $fulfillment_profit, PDO::PARAM_STR);
-        $sentencia-> bindParam(':id_service', $id_service, PDO::PARAM_STR);
-        $sentencia-> execute();
+        $query = $database-> prepare($sql);
+        $query-> bindParam(':fulfillment_profit', $fulfillment_profit, PDO::PARAM_STR);
+        $query-> bindParam(':id_service', $id_service, PDO::PARAM_STR);
+        $query-> execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
   }
 
-  public static function display_services($connection, $id_rfq){
-    $services = self::get_services($connection, $id_rfq);
-    $total_service = self::get_total($connection, $id_rfq);
+  public static function display_services($database, $id_quote){
+    $services = self::get_services($database, $id_quote);
+    $total_service = self::get_total($database, $id_quote);
     if(count($services)){
       ?>
       <div class="table-responsive" id="services_table">
@@ -110,17 +110,17 @@ class ServiceRepository{
     <?php
   }
 
-  public static function get_service($connection, $id_service){
+  public static function get_service($database, $id_service){
     $service = null;
-    if(isset($connection)){
+    if(isset($database)){
       try{
         $sql = 'SELECT * FROM services WHERE id = :id_service';
-        $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_service', $id_service, PDO::PARAM_STR);
-        $sentence-> execute();
-        $result = $sentence-> fetch(PDO::FETCH_ASSOC);
+        $query = $database-> prepare($sql);
+        $query-> bindParam(':id_service', $id_service, PDO::PARAM_STR);
+        $query-> execute();
+        $result = $query-> fetch(PDO::FETCH_ASSOC);
         if(!empty($result)){
-          $service = new Service($result['id'], $result['id_rfq'], $result['description'], $result['quantity'], $result['unit_price'], $result['total_price'], $result['fulfillment_profit']);
+          $service = new Service($result['id'], $result['id_quote'], $result['description'], $result['quantity'], $result['unit_price'], $result['total_price'], $result['fulfillment_profit']);
         }
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -129,45 +129,45 @@ class ServiceRepository{
     return $service;
   }
 
-  public static function edit_service($connection, $id, $description, $quantity, $unit_price, $total_price){
-    if(isset($connection)){
+  public static function edit_service($database, $id, $description, $quantity, $unit_price, $total_price){
+    if(isset($database)){
       try{
         $sql = 'UPDATE services SET description = :description, quantity = :quantity, unit_price = :unit_price, total_price = :total_price WHERE id = :id_service';
-        $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':description', $description, PDO::PARAM_STR);
-        $sentence-> bindParam(':quantity', $quantity, PDO::PARAM_STR);
-        $sentence-> bindParam(':unit_price', $unit_price, PDO::PARAM_STR);
-        $sentence-> bindParam(':total_price', $total_price, PDO::PARAM_STR);
-        $sentence-> bindParam(':id_service', $id, PDO::PARAM_STR);
-        $sentence-> execute();
+        $query = $database-> prepare($sql);
+        $query-> bindParam(':description', $description, PDO::PARAM_STR);
+        $query-> bindParam(':quantity', $quantity, PDO::PARAM_STR);
+        $query-> bindParam(':unit_price', $unit_price, PDO::PARAM_STR);
+        $query-> bindParam(':total_price', $total_price, PDO::PARAM_STR);
+        $query-> bindParam(':id_service', $id, PDO::PARAM_STR);
+        $query-> execute();
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
   }
 
-  public static function delete_service($connection, $id_service){
-    if(isset($connection)){
+  public static function delete_service($database, $id_service){
+    if(isset($database)){
       try{
         $sql = 'DELETE FROM services WHERE id = :id_service';
-        $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_service', $id_service, PDO::PARAM_STR);
-        $sentence-> execute();
+        $query = $database-> prepare($sql);
+        $query-> bindParam(':id_service', $id_service, PDO::PARAM_STR);
+        $query-> execute();
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
   }
 
-  public static function get_total($connection, $id_rfq){
+  public static function get_total($database, $id_quote){
     $total_service = 0;
-    if(isset($connection)){
+    if(isset($database)){
       try{
-        $sql = 'SELECT SUM(total_price) AS total_service FROM services WHERE id_rfq = :id_rfq';
-        $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-        $sentence-> execute();
-        $result = $sentence-> fetch(PDO::FETCH_ASSOC);
+        $sql = 'SELECT SUM(total_price) AS total_service FROM services WHERE id_quote = :id_quote';
+        $query = $database-> prepare($sql);
+        $query-> bindParam(':id_quote', $id_quote, PDO::PARAM_STR);
+        $query-> execute();
+        $result = $query-> fetch(PDO::FETCH_ASSOC);
         if(!empty($result)){
           $total_service = $result['total_service'];
         }

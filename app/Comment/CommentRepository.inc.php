@@ -1,51 +1,51 @@
 <?php
-class RepositorioComment{
-  public static function insertar_comment($conexion, $comment){
-    if(isset($conexion)){
+class CommentRepository{
+  public static function insert($database, $comment){
+    if(isset($database)){
       try{
-        $sql = 'INSERT INTO comments (id_rfq, id_usuario, comment, fecha_comment) VALUES(:id_rfq, :id_usuario, :comment, NOW())';
-        $sentencia = $conexion-> prepare($sql);
-        $sentencia-> bindParam(':id_rfq', $comment-> obtener_id_rfq(), PDO::PARAM_STR);
-        $sentencia-> bindParam(':id_usuario', $comment-> obtener_id_usuario(), PDO::PARAM_STR);
-        $sentencia-> bindParam(':comment', $comment-> obtener_comment(), PDO::PARAM_STR);
-        $sentencia-> execute();
+        $sql = 'INSERT INTO comments (id_quote, id_user, comment, comment_date) VALUES(:id_quote, :id_user, :comment, NOW())';
+        $query = $database-> prepare($sql);
+        $query-> bindParam(':id_quote', $comment-> get_id_quote(), PDO::PARAM_STR);
+        $query-> bindParam(':id_user', $comment-> get_id_user(), PDO::PARAM_STR);
+        $query-> bindParam(':comment', $comment-> get_comment(), PDO::PARAM_STR);
+        $query-> execute();
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
   }
 
-  public static function contar_todos_comentarios_quote($conexion, $id_rfq){
-    $todos_comentarios_quote = 0;
-    if(isset($conexion)){
+  public static function count_all_by_quote($database, $id_quote){
+    $total = 0;
+    if(isset($database)){
       try{
-        $sql = 'SELECT COUNT(*) as todos_comentarios_quote FROM comments WHERE id_rfq = :id_rfq';
-        $sentencia = $conexion-> prepare($sql);
-        $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-        $sentencia-> execute();
-        $resultado = $sentencia-> fetch(PDO::FETCH_ASSOC);
-        if(!empty($resultado)){
-          $todos_comentarios_quote = $resultado['todos_comentarios_quote'];
+        $sql = 'SELECT COUNT(*) as total FROM comments WHERE id_quote = :id_quote';
+        $query = $database-> prepare($sql);
+        $query-> bindParam(':id_quote', $id_quote, PDO::PARAM_STR);
+        $query-> execute();
+        $result = $query-> fetch(PDO::FETCH_ASSOC);
+        if(!empty($result)){
+          $total = $result['total'];
         }
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
-    return $todos_comentarios_quote;
+    return $total;
   }
 
-  public static function obtener_comments_de_un_rfq($conexion, $id_rfq){
+  public static function get_all_by_quote($database, $id_quote){
     $comments = [];
-    if(isset($conexion)){
+    if(isset($database)){
       try{
-        $sql = 'SELECT * FROM comments WHERE id_rfq = :id_rfq ORDER BY fecha_comment DESC';
-        $sentencia = $conexion-> prepare($sql);
-        $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-        $sentencia-> execute();
-        $resultado = $sentencia-> fetchAll(PDO::FETCH_ASSOC);
-        if(count($resultado)){
-          foreach ($resultado as $fila) {
-            $comments[] = new Comment($fila['id'], $fila['id_rfq'], $fila['id_usuario'], $fila['comment'], $fila['fecha_comment']);
+        $sql = 'SELECT * FROM comments WHERE id_quote = :id_quote ORDER BY comment_date DESC';
+        $query = $database-> prepare($sql);
+        $query-> bindParam(':id_quote', $id_quote, PDO::PARAM_STR);
+        $query-> execute();
+        $result = $query-> fetchAll(PDO::FETCH_ASSOC);
+        if(count($result)){
+          foreach ($result as $row) {
+            $comments[] = new Comment($row['id'], $row['id_quote'], $row['id_user'], $row['comment'], $row['comment_date']);
           }
         }
       }catch(PDOException $ex){
@@ -55,40 +55,40 @@ class RepositorioComment{
     return $comments;
   }
 
-  public static function escribir_comments($id_rfq){
+  public static function print_comments($id_quote){
     Database::open_connection();
-    $cotizacion = RepositorioRfq::obtener_cotizacion_por_id(Database::get_connection(), $id_rfq);
-    $comments = self::obtener_comments_de_un_rfq(Database::get_connection(), $id_rfq);
+    $quote = QuoteRepository::get_by_id(Database::get_connection(), $id_quote);
+    $comments = self::get_all_by_quote(Database::get_connection(), $id_quote);
     Database::close_connection();
     ?>
     <ul class="timeline">
       <li class="clickable_title">
         <i class="fa fa-bookmark"></i>
         <div class="timeline-item">
-          <h3 class="timeline-header">Proposal: <?php echo $cotizacion-> obtener_id(); ?></a></h3>
+          <h3 class="timeline-header">Proposal: <?php echo $quote-> get_id(); ?></a></h3>
         </div>
       </li>
       <?php
       if(count($comments)){
         foreach ($comments as $comment) {
-          $fecha_comment = self::mysql_datetime_to_english_format($comment-> obtener_fecha_comment());
+          $comment_date = self::mysql_datetime_to_english_format($comment-> get_comment_date());
           ?>
           <li class="body_comments">
             <i class="fa fa-user"></i>
             <div class="timeline-item">
-              <span class="time"><i class="far fa-clock"></i> <?php echo $fecha_comment; ?></span>
+              <span class="time"><i class="far fa-clock"></i> <?php echo $comment_date; ?></span>
               <h3 class="timeline-header">
                 <span class="text-primary">
                 <?php
                 Database::open_connection();
-                $usuario = RepositorioUsuario::obtener_usuario_por_id(Database::get_connection(), $comment-> obtener_id_usuario());
+                $usuario = RepositorioUsuario::obtener_usuario_por_id(Database::get_connection(), $comment-> get_id_user());
                 Database::close_connection();
                 echo $usuario-> obtener_nombre_usuario();
                 ?>
                 </span>
                  said</h3>
               <div class="timeline-body">
-                <?php echo nl2br($comment-> obtener_comment()); ?>
+                <?php echo nl2br($comment-> get_comment()); ?>
               </div>
             </div>
           </li>
@@ -104,13 +104,13 @@ class RepositorioComment{
       <?php
   }
 
-  public static function delete_all_comments($conexion, $id_rfq){
-    if(isset($conexion)){
+  public static function delete_all_by_quote($database, $id_quote){
+    if(isset($database)){
       try{
-        $sql = 'DELETE FROM comments WHERE id_rfq = :id_rfq';
-        $sentencia = $conexion-> prepare($sql);
-        $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-        $sentencia-> execute();
+        $sql = 'DELETE FROM comments WHERE id_quote = :id_quote';
+        $query = $database-> prepare($sql);
+        $query-> bindParam(':id_quote', $id_quote, PDO::PARAM_STR);
+        $query-> execute();
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }

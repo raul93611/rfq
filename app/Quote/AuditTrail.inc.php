@@ -1,14 +1,14 @@
 <?php
 class AuditTrail{
   private $id;
-  private $id_rfq;
+  private $id_quote;
   private $username;
   private $audit_trail;
   private $created_date;
 
-  public function __construct($id, $id_rfq, $username, $audit_trail, $created_date){
+  public function __construct($id, $id_quote, $username, $audit_trail, $created_date){
     $this-> id = $id;
-    $this-> id_rfq = $id_rfq;
+    $this-> id_quote = $id_quote;
     $this-> username = $username;
     $this-> audit_trail = $audit_trail;
     $this-> created_date = $created_date;
@@ -18,8 +18,8 @@ class AuditTrail{
     return $this-> id;
   }
 
-  public function get_id_rfq(){
-    return $this-> id_rfq;
+  public function get_id_quote(){
+    return $this-> id_quote;
   }
 
   public function get_username(){

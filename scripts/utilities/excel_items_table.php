@@ -9,8 +9,8 @@ if ($helper->isCli()) {
     return;
 }
 Database::open_connection();
-$providers_name = RepositorioRfq::get_all_providers_name(Database::get_connection(), $id_rfq);
-$requote = ReQuoteRepository::get_re_quote_by_id_rfq(Database::get_connection(), $id_rfq);
+$providers_name = QuoteRepository::get_all_providers_name(Database::get_connection(), $id_quote);
+$requote = ReQuoteRepository::get_re_quote_by_id_rfq(Database::get_connection(), $id_quote);
 $requote_providers_name = ReQuoteRepository::get_all_providers_name(Database::get_connection(), $requote-> get_id());
 $x = 'A';
 
@@ -49,7 +49,7 @@ $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . '1', 'PRICE FOR CLIENT')
 $spreadsheet->getActiveSheet()->getStyle($x . '1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('668fe8');
 $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . '1', 'TOTAL PRICE');$x++;
 
-ExcelRepository::print_items(Database::get_connection(), $spreadsheet, $providers_name, $requote_providers_name, $requote, $id_rfq);
+ExcelRepository::print_items(Database::get_connection(), $spreadsheet, $providers_name, $requote_providers_name, $requote, $id_quote);
 
 Database::close_connection();
 

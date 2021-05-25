@@ -37,12 +37,12 @@ $spreadsheet->setActiveSheetIndex(0)->setCellValue('P1', 'SHIPPING COST($)');
 $spreadsheet->setActiveSheetIndex(0)->setCellValue('Q1', 'SHIPPING');
 
 Database::open_connection();
-$date_from = RepositorioComment::english_format_to_mysql_date($_POST['date_from']);
-$date_to = RepositorioComment::english_format_to_mysql_date($_POST['date_to']);
+$date_from = CommentRepository::english_format_to_mysql_date($_POST['date_from']);
+$date_to = CommentRepository::english_format_to_mysql_date($_POST['date_to']);
 if($_POST['quote_type'] == 'submitted'){
-  $quotes = RepositorioRfq::get_all_submitted_quotes_between_dates(Database::get_connection(), $date_from, $date_to);
+  $quotes = QuoteRepository::get_all_submitted_quotes_between_dates(Database::get_connection(), $date_from, $date_to);
 }else if($_POST['quote_type'] == 'award'){
-  $quotes = RepositorioRfq::get_all_award_quotes_between_dates(Database::get_connection(), $date_from, $date_to);
+  $quotes = QuoteRepository::get_all_award_quotes_between_dates(Database::get_connection(), $date_from, $date_to);
 }
 Database::close_connection();
 
@@ -50,25 +50,25 @@ $i=2;
 
 foreach ($quotes as $quote) {
   Database::open_connection();
-  $usuario_designado = RepositorioUsuario::obtener_usuario_por_id(Database::get_connection(), $quote-> obtener_usuario_designado());
+  $assigned_user = RepositorioUsuario::obtener_usuario_por_id(Database::get_connection(), $quote-> get_assigned_user());
   Database::close_connection();
-  $spreadsheet->setActiveSheetIndex(0)->setCellValue('A'.$i, $quote-> obtener_id());
-  $spreadsheet->setActiveSheetIndex(0)->setCellValue('B'.$i, $usuario_designado-> obtener_nombre_usuario());
-  $spreadsheet->setActiveSheetIndex(0)->setCellValue('C'.$i, $quote-> obtener_canal());
-  $spreadsheet->setActiveSheetIndex(0)->setCellValue('D'.$i, $quote-> obtener_email_code());
-  $spreadsheet->setActiveSheetIndex(0)->setCellValue('E'.$i, $quote-> obtener_type_of_bid());
-  $spreadsheet->setActiveSheetIndex(0)->setCellValue('F'.$i, $quote-> obtener_issue_date());
-  $spreadsheet->setActiveSheetIndex(0)->setCellValue('G'.$i, $quote-> obtener_end_date());
-  $spreadsheet->setActiveSheetIndex(0)->setCellValue('H'.$i, $quote-> obtener_total_cost());
-  $spreadsheet->setActiveSheetIndex(0)->setCellValue('I'.$i, $quote-> obtener_total_price());
-  $spreadsheet->setActiveSheetIndex(0)->setCellValue('J'.$i, $quote-> obtener_fecha_completado());
-  $spreadsheet->setActiveSheetIndex(0)->setCellValue('K'.$i, $quote-> obtener_fecha_submitted());
-  $spreadsheet->setActiveSheetIndex(0)->setCellValue('L'.$i, $quote-> obtener_fecha_award());
-  $spreadsheet->setActiveSheetIndex(0)->setCellValue('M'.$i, $quote-> obtener_payment_terms());
-  $spreadsheet->setActiveSheetIndex(0)->setCellValue('N'.$i, $quote-> obtener_taxes());
-  $spreadsheet->setActiveSheetIndex(0)->setCellValue('O'.$i, $quote-> obtener_profit());
-  $spreadsheet->setActiveSheetIndex(0)->setCellValue('P'.$i, $quote-> obtener_shipping_cost());
-  $spreadsheet->setActiveSheetIndex(0)->setCellValue('Q'.$i, $quote-> obtener_shipping());
+  $spreadsheet->setActiveSheetIndex(0)->setCellValue('A'.$i, $quote-> get_id());
+  $spreadsheet->setActiveSheetIndex(0)->setCellValue('B'.$i, $assigned_user-> obtener_nombre_usuario());
+  $spreadsheet->setActiveSheetIndex(0)->setCellValue('C'.$i, $quote-> get_channel());
+  $spreadsheet->setActiveSheetIndex(0)->setCellValue('D'.$i, $quote-> get_email_code());
+  $spreadsheet->setActiveSheetIndex(0)->setCellValue('E'.$i, $quote-> get_type_of_bid());
+  $spreadsheet->setActiveSheetIndex(0)->setCellValue('F'.$i, $quote-> get_issue_date());
+  $spreadsheet->setActiveSheetIndex(0)->setCellValue('G'.$i, $quote-> get_end_date());
+  $spreadsheet->setActiveSheetIndex(0)->setCellValue('H'.$i, $quote-> get_total_cost());
+  $spreadsheet->setActiveSheetIndex(0)->setCellValue('I'.$i, $quote-> get_total_price());
+  $spreadsheet->setActiveSheetIndex(0)->setCellValue('J'.$i, $quote-> get_completed_date());
+  $spreadsheet->setActiveSheetIndex(0)->setCellValue('K'.$i, $quote-> get_submitted_date());
+  $spreadsheet->setActiveSheetIndex(0)->setCellValue('L'.$i, $quote-> get_award_date());
+  $spreadsheet->setActiveSheetIndex(0)->setCellValue('M'.$i, $quote-> get_payment_terms());
+  $spreadsheet->setActiveSheetIndex(0)->setCellValue('N'.$i, $quote-> get_taxes());
+  $spreadsheet->setActiveSheetIndex(0)->setCellValue('O'.$i, $quote-> get_profit());
+  $spreadsheet->setActiveSheetIndex(0)->setCellValue('P'.$i, $quote-> get_shipping_cost());
+  $spreadsheet->setActiveSheetIndex(0)->setCellValue('Q'.$i, $quote-> get_shipping());
   $i++;
 }
 

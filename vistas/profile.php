@@ -54,25 +54,25 @@ switch ($gestor_actual) {
     include_once 'plantillas/user/edit_user.inc.php';
     break;
   case 'quotes':
-    switch ($cotizacion) {
+    switch ($quote) {
       case 'new':
         include_once 'plantillas/quote/nueva_cotizacion.inc.php';
         break;
       case 'edit_quote':
         Database::open_connection();
-        $cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Database::get_connection(), $id_rfq);
+        $quote = QuoteRepository::get_by_id(Database::get_connection(), $id_quote);
         Database::close_connection();
         include_once 'plantillas/quote/edit_quote.inc.php';
         break;
       case 'add_item':
         Database::open_connection();
-        $cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Database::get_connection(), $id_rfq);
+        $quote = QuoteRepository::get_by_id(Database::get_connection(), $id_quote);
         Database::close_connection();
         include_once 'plantillas/quote/add_item.inc.php';
         break;
       case 'add_provider':
         Database::open_connection();
-        $item = RepositorioItem::obtener_item_por_id(Database::get_connection(), $id_item);
+        $item = ItemRepository::get_by_id(Database::get_connection(), $id_item);
         Database::close_connection();
         include_once 'plantillas/quote/add_provider.inc.php';
         break;
@@ -84,13 +84,13 @@ switch ($gestor_actual) {
         break;
       case 'add_subitem':
         Database::open_connection();
-        $item = RepositorioItem::obtener_item_por_id(Database::get_connection(), $id_item);
+        $item = ItemRepository::get_by_id(Database::get_connection(), $id_item);
         Database::close_connection();
         include_once 'plantillas/quote/add_subitem.inc.php';
         break;
       case 'edit_item':
         Database::open_connection();
-        $item = RepositorioItem::obtener_item_por_id(Database::get_connection(), $id_item);
+        $item = ItemRepository::get_by_id(Database::get_connection(), $id_item);
         Database::close_connection();
         include_once 'plantillas/quote/edit_item.inc.php';
         break;
@@ -102,15 +102,15 @@ switch ($gestor_actual) {
         break;
       case 'edit_provider':
         Database::open_connection();
-        $provider = RepositorioProvider::obtener_provider_por_id(Database::get_connection(), $id_provider);
-        $item = RepositorioItem::obtener_item_por_id(Database::get_connection(), $provider->obtener_id_item());
+        $provider = ProviderRepository::get_by_id(Database::get_connection(), $id_provider);
+        $item = ItemRepository::get_by_id(Database::get_connection(), $provider->get_id_item());
         Database::close_connection();
         include_once 'plantillas/quote/edit_provider.inc.php';
         break;
       case 'edit_provider_subitem':
         Database::open_connection();
-        $provider_subitem = RepositorioProviderSubitem::obtener_provider_subitem_por_id(Database::get_connection(), $id_provider_subitem);
-        $subitem = RepositorioSubitem::obtener_subitem_por_id(Database::get_connection(), $provider_subitem-> obtener_id_subitem());
+        $provider_subitem = ProviderSubitemRepository::get_by_id(Database::get_connection(), $id_provider_subitem);
+        $subitem = RepositorioSubitem::obtener_subitem_por_id(Database::get_connection(), $provider_subitem-> get_id_subitem());
         Database::close_connection();
         include_once 'plantillas/quote/edit_provider_subitem.inc.php';
         break;

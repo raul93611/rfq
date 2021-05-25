@@ -3,9 +3,9 @@ if (!SessionControl::has_session()) {
   Redirection::redirect_js(SERVER);
 }
 Database::open_connection();
-$cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Database::get_connection(), $id_rfq);
+$quote = QuoteRepository::get_by_id(Database::get_connection(), $id_quote);
 Database::close_connection();
-if(is_null($cotizacion_recuperada)){
+if(is_null($quote)){
   Redirection::redirect_js(ERROR);
 }
 ?>
@@ -14,19 +14,19 @@ if(is_null($cotizacion_recuperada)){
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-md-2">
-          <h1>Proposal # <?php echo $cotizacion_recuperada-> obtener_id(); ?></h1>
+          <h1>Proposal # <?php echo $quote-> get_id(); ?></h1>
         </div>
         <div class="col-md-8 text-center">
           <?php
-          if($cotizacion_recuperada-> obtener_canal() != 'Chemonics' && $cotizacion_recuperada-> obtener_canal() != 'Ebay & Amazon'){
-            if($cotizacion_recuperada-> obtener_completado()){
+          if($quote-> get_channel() != 'Chemonics' && $quote-> get_channel() != 'Ebay & Amazon'){
+            if($quote-> get_complete()){
               ?>
-              <a class="btn btn-primary" href="<?php echo COPY_QUOTE . $cotizacion_recuperada-> obtener_id(); ?>"><i class="fa fa-copy"></i> Copy</a>
+              <a class="btn btn-primary" href="<?php echo COPY_QUOTE . $quote-> get_id(); ?>"><i class="fa fa-copy"></i> Copy</a>
               <?php
             }
           }
           Database::open_connection();
-          $cantidad_de_comentarios = RepositorioComment::contar_todos_comentarios_quote(Database::get_connection(), $cotizacion_recuperada-> obtener_id());
+          $cantidad_de_comentarios = CommentRepository::count_all_by_quote(Database::get_connection(), $quote-> get_id());
           Database::close_connection();
           ?>
           <a href="#" id="mostrar_comentarios" class="btn btn-info"><i class="fas fa-comment"></i> Comments(<?php echo $cantidad_de_comentarios; ?>)</a>
@@ -34,23 +34,23 @@ if(is_null($cotizacion_recuperada)){
         </div>
         <div class="col-md-2">
           <?php
-          if($cotizacion_recuperada-> obtener_fullfillment()){
+          if($quote-> get_fulfillment()){
             ?>
             <h1 class="float-right text-success"><i class="fa fa-check"></i> Fulfillment</h1>
             <div class="clearfix"></div>
-            <a href="<?php echo REMOVE_FULFILLMENT . $cotizacion_recuperada-> obtener_id(); ?>" class=" float-right d-block"><i class="fas fa-times"></i> Remove Fulfillment</a>
+            <a href="<?php echo REMOVE_FULFILLMENT . $quote-> get_id(); ?>" class=" float-right d-block"><i class="fas fa-times"></i> Remove Fulfillment</a>
             <?php
-          }else if($cotizacion_recuperada-> obtener_completado() && $cotizacion_recuperada-> obtener_status() && $cotizacion_recuperada-> obtener_award()){
+          }else if($quote-> get_complete() && $quote-> get_submitted() && $quote-> get_award()){
           ?>
             <h1 class="float-right text-success"><i class="fa fa-check"></i> Award</h1>
             <div class="clearfix"></div>
-            <a href="<?php echo REMOVE_AWARD . $cotizacion_recuperada-> obtener_id(); ?>" class=" float-right d-block"><i class="fas fa-times"></i> Remove Award</a>
+            <a href="<?php echo REMOVE_AWARD . $quote-> get_id(); ?>" class=" float-right d-block"><i class="fas fa-times"></i> Remove Award</a>
           <?php
-          }else if($cotizacion_recuperada-> obtener_completado() && $cotizacion_recuperada-> obtener_status() && !$cotizacion_recuperada-> obtener_award()){
+          }else if($quote-> get_complete() && $quote-> get_submitted() && !$quote-> get_award()){
           ?>
             <h1 class="float-right text-success"><i class="fa fa-check"></i> Submitted</h1>
           <?php
-          }else if($cotizacion_recuperada-> obtener_completado() && !$cotizacion_recuperada-> obtener_status() && !$cotizacion_recuperada-> obtener_award()){
+          }else if($quote-> get_complete() && !$quote-> get_submitted() && !$quote-> get_award()){
             ?>
             <h1 class="float-right text-success"><i class="fa fa-check"></i> Completed</h1>
             <?php
@@ -68,7 +68,7 @@ if(is_null($cotizacion_recuperada)){
             <div class="card-header">
               <h3 class="card-title"><i class="fas fa-highlighter"></i> Enter the data</h3>
             </div>
-            <form role="form" id="form_edited_quote" method="post" enctype="multipart/form-data" action="<?php echo SAVE_EDIT_QUOTE . $id_rfq; ?>">
+            <form role="form" id="form_edited_quote" method="post" enctype="multipart/form-data" action="<?php echo SAVE_EDIT_QUOTE . $id_quote; ?>">
               <?php
               include_once 'forms/quote/edicion_cotizacion_recuperada.inc.php';
               ?>
@@ -92,7 +92,7 @@ if(is_null($cotizacion_recuperada)){
       <div class="modal-body">
         <form id="quote_info_form" method="post" enctype="multipart/form-data" action="<?php echo SAVE_QUOTE_INFO; ?>">
           <?php include_once 'forms/quote/quote_info.inc.php'; ?>
-          <input type="hidden" name="id_rfq" value="<?php echo $cotizacion_recuperada-> obtener_id(); ?>">
+          <input type="hidden" name="id_quote" value="<?php echo $quote-> get_id(); ?>">
         </form>
       </div>
       <div class="modal-footer">
@@ -118,7 +118,7 @@ if(is_null($cotizacion_recuperada)){
             <label for="comment_rfq">Comment:</label>
             <textarea class="form-control form-control-sm" name="comment_rfq" rows="10" id="comment_rfq" autofocus></textarea>
           </div>
-          <input type="hidden" name="id_rfq" value="<?php echo $cotizacion_recuperada-> obtener_id(); ?>">
+          <input type="hidden" name="id_quote" value="<?php echo $quote-> get_id(); ?>">
         </form>
       </div>
       <div class="modal-footer">
@@ -140,7 +140,7 @@ if(is_null($cotizacion_recuperada)){
       </div>
       <div class="modal-body">
         <?php
-        RepositorioComment::escribir_comments($cotizacion_recuperada-> obtener_id());
+        CommentRepository::print_comments($quote-> get_id());
         ?>
       </div>
     </div>
@@ -159,7 +159,7 @@ if(is_null($cotizacion_recuperada)){
       <div class="modal-body">
         <?php
         Database::open_connection();
-        AuditTrailRepository::display_audit_trails(Database::get_connection(), $cotizacion_recuperada-> obtener_id());
+        AuditTrailRepository::print_audit_trails(Database::get_connection(), $quote-> get_id());
         Database::close_connection();
         ?>
       </div>

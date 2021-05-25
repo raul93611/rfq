@@ -1,26 +1,26 @@
 <?php
 class RepositorioSubitem{
-  public static function insertar_subitem($conexion, $subitem) {
-    if (isset($conexion)) {
+  public static function insertar_subitem($database, $subitem) {
+    if (isset($database)) {
       try {
-        $sql = 'INSERT INTO subitems(id_item, provider_menor, brand, brand_project, part_number, part_number_project, description, description_project, quantity, unit_price, total_price, comments, website, additional) VALUES(:id_item, :provider_menor, :brand, :brand_project, :part_number, :part_number_project, :description, :description_project, :quantity, :unit_price, :total_price, :comments, :website, :additional)';
-        $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':id_item', $subitem->obtener_id_item(), PDO::PARAM_STR);
-        $sentencia->bindParam(':provider_menor', $subitem->obtener_provider_menor(), PDO::PARAM_STR);
-        $sentencia->bindParam(':brand', $subitem->obtener_brand(), PDO::PARAM_STR);
-        $sentencia->bindParam(':brand_project', $subitem->obtener_brand_project(), PDO::PARAM_STR);
-        $sentencia->bindParam(':part_number', $subitem->obtener_part_number(), PDO::PARAM_STR);
-        $sentencia->bindParam(':part_number_project', $subitem->obtener_part_number_project(), PDO::PARAM_STR);
-        $sentencia->bindParam(':description', $subitem->obtener_description(), PDO::PARAM_STR);
-        $sentencia->bindParam(':description_project', $subitem->obtener_description_project(), PDO::PARAM_STR);
-        $sentencia->bindParam(':quantity', $subitem->obtener_quantity(), PDO::PARAM_STR);
-        $sentencia->bindParam(':unit_price', $subitem->obtener_unit_price(), PDO::PARAM_STR);
-        $sentencia->bindParam(':total_price', $subitem->obtener_total_price(), PDO::PARAM_STR);
-        $sentencia->bindParam(':comments', $subitem->obtener_comments(), PDO::PARAM_STR);
-        $sentencia->bindParam(':website', $subitem->obtener_website(), PDO::PARAM_STR);
-        $sentencia->bindParam(':additional', $subitem->obtener_additional(), PDO::PARAM_STR);
-        $sentencia->execute();
-        $id = $conexion->lastInsertId();
+        $sql = 'INSERT INTO subitems(id_item, least_provider, brand, brand_project, part_number, part_number_project, description, description_project, quantity, unit_price, total_price, comments, website, additional) VALUES(:id_item, :least_provider, :brand, :brand_project, :part_number, :part_number_project, :description, :description_project, :quantity, :unit_price, :total_price, :comments, :website, :additional)';
+        $query = $database->prepare($sql);
+        $query->bindParam(':id_item', $subitem->get_id_item(), PDO::PARAM_STR);
+        $query->bindParam(':least_provider', $subitem->get_least_provider(), PDO::PARAM_STR);
+        $query->bindParam(':brand', $subitem->get_brand(), PDO::PARAM_STR);
+        $query->bindParam(':brand_project', $subitem->get_brand_project(), PDO::PARAM_STR);
+        $query->bindParam(':part_number', $subitem->get_part_number(), PDO::PARAM_STR);
+        $query->bindParam(':part_number_project', $subitem->get_part_number_project(), PDO::PARAM_STR);
+        $query->bindParam(':description', $subitem->get_description(), PDO::PARAM_STR);
+        $query->bindParam(':description_project', $subitem->get_description_project(), PDO::PARAM_STR);
+        $query->bindParam(':quantity', $subitem->get_quantity(), PDO::PARAM_STR);
+        $query->bindParam(':unit_price', $subitem->get_unit_price(), PDO::PARAM_STR);
+        $query->bindParam(':total_price', $subitem->get_total_price(), PDO::PARAM_STR);
+        $query->bindParam(':comments', $subitem->get_comments(), PDO::PARAM_STR);
+        $query->bindParam(':website', $subitem->get_website(), PDO::PARAM_STR);
+        $query->bindParam(':additional', $subitem->get_additional(), PDO::PARAM_STR);
+        $query->execute();
+        $id = $database->lastInsertId();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
@@ -28,73 +28,73 @@ class RepositorioSubitem{
     return $id;
   }
 
-  public static function delete_subitem($conexion, $id_subitem){
-    if(isset($conexion)){
+  public static function delete_subitem($database, $id_subitem){
+    if(isset($database)){
       try{
-        $conexion -> beginTransaction();
+        $database -> beginTransaction();
         $sql1 = "DELETE FROM provider_subitems WHERE id_subitem = :id_subitem";
-        $sentencia1 = $conexion-> prepare($sql1);
-        $sentencia1-> bindParam(':id_subitem', $id_subitem, PDO::PARAM_STR);
-        $sentencia1-> execute();
+        $query1 = $database-> prepare($sql1);
+        $query1-> bindParam(':id_subitem', $id_subitem, PDO::PARAM_STR);
+        $query1-> execute();
         $sql2 = "DELETE FROM subitems WHERE id = :id_subitem";
-        $sentencia2 = $conexion-> prepare($sql2);
-        $sentencia2-> bindParam(':id_subitem', $id_subitem, PDO::PARAM_STR);
-        $sentencia2-> execute();
-        $conexion-> commit();
+        $query2 = $database-> prepare($sql2);
+        $query2-> bindParam(':id_subitem', $id_subitem, PDO::PARAM_STR);
+        $query2-> execute();
+        $database-> commit();
       } catch (PDOException $ex) {
         print "ERROR:" . $ex->getMessage() . "<br>";
-        $conexion-> rollBack();
+        $database-> rollBack();
       }
     }
   }
 
-  public static function actualizar_provider_menor_subitem($conexion, $provider_menor, $id_subitem){
-    if(isset($conexion)){
+  public static function actualizar_provider_menor_subitem($database, $least_provider, $id_subitem){
+    if(isset($database)){
       try{
-        $sql = 'UPDATE subitems SET provider_menor = :provider_menor WHERE id = :id_subitem';
-        $sentencia = $conexion-> prepare($sql);
-        $sentencia-> bindParam(':provider_menor', $provider_menor, PDO::PARAM_STR);
-        $sentencia-> bindParam(':id_subitem', $id_subitem, PDO::PARAM_STR);
-        $sentencia-> execute();
+        $sql = 'UPDATE subitems SET least_provider = :least_provider WHERE id = :id_subitem';
+        $query = $database-> prepare($sql);
+        $query-> bindParam(':least_provider', $least_provider, PDO::PARAM_STR);
+        $query-> bindParam(':id_subitem', $id_subitem, PDO::PARAM_STR);
+        $query-> execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
   }
 
-  public static function actualizar_subitem($conexion, $id_subitem, $brand, $brand_project, $part_number, $part_number_project, $description, $description_project, $quantity, $comments, $website) {
-    if (isset($conexion)) {
+  public static function actualizar_subitem($database, $id_subitem, $brand, $brand_project, $part_number, $part_number_project, $description, $description_project, $quantity, $comments, $website) {
+    if (isset($database)) {
       try {
         $sql = 'UPDATE subitems SET brand = :brand, brand_project = :brand_project, part_number = :part_number, part_number_project = :part_number_project, description = :description, description_project = :description_project, quantity = :quantity, comments = :comments, website = :website WHERE id = :id_subitem';
-        $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':brand', $brand, PDO::PARAM_STR);
-        $sentencia->bindParam(':brand_project', $brand_project, PDO::PARAM_STR);
-        $sentencia->bindParam(':part_number', $part_number, PDO::PARAM_STR);
-        $sentencia->bindParam(':part_number_project', $part_number_project, PDO::PARAM_STR);
-        $sentencia->bindParam(':description', $description, PDO::PARAM_STR);
-        $sentencia->bindParam(':description_project', $description_project, PDO::PARAM_STR);
-        $sentencia->bindParam(':quantity', $quantity, PDO::PARAM_STR);
-        $sentencia->bindParam(':comments', $comments, PDO::PARAM_STR);
-        $sentencia->bindParam(':website', $website, PDO::PARAM_STR);
-        $sentencia->bindParam(':id_subitem', $id_subitem, PDO::PARAM_STR);
-        $sentencia->execute();
+        $query = $database->prepare($sql);
+        $query->bindParam(':brand', $brand, PDO::PARAM_STR);
+        $query->bindParam(':brand_project', $brand_project, PDO::PARAM_STR);
+        $query->bindParam(':part_number', $part_number, PDO::PARAM_STR);
+        $query->bindParam(':part_number_project', $part_number_project, PDO::PARAM_STR);
+        $query->bindParam(':description', $description, PDO::PARAM_STR);
+        $query->bindParam(':description_project', $description_project, PDO::PARAM_STR);
+        $query->bindParam(':quantity', $quantity, PDO::PARAM_STR);
+        $query->bindParam(':comments', $comments, PDO::PARAM_STR);
+        $query->bindParam(':website', $website, PDO::PARAM_STR);
+        $query->bindParam(':id_subitem', $id_subitem, PDO::PARAM_STR);
+        $query->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
   }
 
-  public static function obtener_subitem_por_id($conexion, $id_subitem) {
+  public static function obtener_subitem_por_id($database, $id_subitem) {
     $subitem = null;
-    if (isset($conexion)) {
+    if (isset($database)) {
       try {
         $sql = 'SELECT * FROM subitems WHERE id = :id_subitem';
-        $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':id_subitem', $id_subitem, PDO::PARAM_STR);
-        $sentencia->execute();
-        $resultado = $sentencia->fetch();
-        if (!empty($resultado)) {
-          $subitem = new Subitem($resultado['id'], $resultado['id_item'], $resultado['provider_menor'], $resultado['brand'], $resultado['brand_project'], $resultado['part_number'], $resultado['part_number_project'], $resultado['description'], $resultado['description_project'], $resultado['quantity'], $resultado['unit_price'], $resultado['total_price'], $resultado['comments'], $resultado['website'], $resultado['additional'], $resultado['fulfillment_profit']);
+        $query = $database->prepare($sql);
+        $query->bindParam(':id_subitem', $id_subitem, PDO::PARAM_STR);
+        $query->execute();
+        $result = $query->fetch();
+        if (!empty($result)) {
+          $subitem = new Subitem($result['id'], $result['id_item'], $result['least_provider'], $result['brand'], $result['brand_project'], $result['part_number'], $result['part_number_project'], $result['description'], $result['description_project'], $result['quantity'], $result['unit_price'], $result['total_price'], $result['comments'], $result['website'], $result['additional'], $result['fulfillment_profit']);
         }
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -103,18 +103,18 @@ class RepositorioSubitem{
     return $subitem;
   }
 
-  public static function obtener_subitems_por_id_item($conexion, $id_item) {
+  public static function obtener_subitems_por_id_item($database, $id_item) {
     $subitems = [];
-    if (isset($conexion)) {
+    if (isset($database)) {
       try {
         $sql = 'SELECT * FROM subitems WHERE id_item = :id_item';
-        $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':id_item', $id_item, PDO::PARAM_STR);
-        $sentencia->execute();
-        $resultado = $sentencia->fetchAll();
-        if (count($resultado)) {
-          foreach ($resultado as $fila) {
-            $subitems[] = new Subitem($fila['id'], $fila['id_item'], $fila['provider_menor'], $fila['brand'], $fila['brand_project'], $fila['part_number'], $fila['part_number_project'], $fila['description'], $fila['description_project'], $fila['quantity'], $fila['unit_price'], $fila['total_price'], $fila['comments'], $fila['website'], $fila['additional'], $fila['fulfillment_profit']);
+        $query = $database->prepare($sql);
+        $query->bindParam(':id_item', $id_item, PDO::PARAM_STR);
+        $query->execute();
+        $result = $query->fetchAll();
+        if (count($result)) {
+          foreach ($result as $row) {
+            $subitems[] = new Subitem($row['id'], $row['id_item'], $row['least_provider'], $row['brand'], $row['brand_project'], $row['part_number'], $row['part_number_project'], $row['description'], $row['description_project'], $row['quantity'], $row['unit_price'], $row['total_price'], $row['comments'], $row['website'], $row['additional'], $row['fulfillment_profit']);
           }
         }
       } catch (PDOException $ex) {
@@ -130,54 +130,54 @@ class RepositorioSubitem{
     }
     $j = $i;
     Database::open_connection();
-    $providers_subitem = RepositorioProviderSubitem::obtener_providers_subitem_por_id_subitem(Database::get_connection(), $subitem->obtener_id());
+    $providers_subitem = ProviderSubitemRepository::get_all_by_id_subitem(Database::get_connection(), $subitem->get_id());
     Database::close_connection();
-    echo '<tr id="subitem' . $subitem->obtener_id() .  '" class="fila_subitem">';
-    echo '<td><a href="' . ADD_PROVIDER_SUBITEM . '/' . $subitem->obtener_id() . '" class="btn btn-warning btn-block subitem"><i class="fa fa-plus-circle"></i> Add Provider</a><br><a href="' . EDIT_SUBITEM . '/' . $subitem->obtener_id() . '" class="btn btn-warning btn-block subitem"><i class="fa fa-edit"></i> Edit subitem</a><br><a href="' . DELETE_SUBITEM . '/' . $subitem-> obtener_id() . '" class="delete_subitem_button btn btn-warning btn-block subitem"><i class="fa fa-trash"></i> Delete</a></td>';
+    echo '<tr id="subitem' . $subitem->get_id() .  '" class="fila_subitem">';
+    echo '<td><a href="' . ADD_PROVIDER_SUBITEM . '/' . $subitem->get_id() . '" class="btn btn-warning btn-block subitem"><i class="fa fa-plus-circle"></i> Add Provider</a><br><a href="' . EDIT_SUBITEM . '/' . $subitem->get_id() . '" class="btn btn-warning btn-block subitem"><i class="fa fa-edit"></i> Edit subitem</a><br><a href="' . DELETE_SUBITEM . '/' . $subitem-> get_id() . '" class="delete_subitem_button btn btn-warning btn-block subitem"><i class="fa fa-trash"></i> Delete</a></td>';
     echo '<td></td>';
-    if(strlen($subitem-> obtener_description_project()) >= 100){
-      echo '<td><b>Brand:</b> ' . $subitem->obtener_brand_project() . '<br><b>Part #:</b> ' . $subitem->obtener_part_number_project() . '<br><b>Description:</b> ' . nl2br(mb_substr($subitem->obtener_description_project(), 0, 100)) . ' ...</td>';
+    if(strlen($subitem-> get_description_project()) >= 100){
+      echo '<td><b>Brand:</b> ' . $subitem->get_brand_project() . '<br><b>Part #:</b> ' . $subitem->get_part_number_project() . '<br><b>Description:</b> ' . nl2br(mb_substr($subitem->get_description_project(), 0, 100)) . ' ...</td>';
     }else{
-      echo '<td><b>Brand:</b> ' . $subitem->obtener_brand_project() . '<br><b>Part #:</b> ' . $subitem->obtener_part_number_project() . '<br><b>Description:</b> ' . nl2br($subitem->obtener_description_project()) . '</td>';
+      echo '<td><b>Brand:</b> ' . $subitem->get_brand_project() . '<br><b>Part #:</b> ' . $subitem->get_part_number_project() . '<br><b>Description:</b> ' . nl2br($subitem->get_description_project()) . '</td>';
     }
-    if(strlen($subitem-> obtener_description()) >= 100){
-      echo '<td><b>Brand:</b> ' . $subitem->obtener_brand() . '<br><b>Part #:</b> ' . $subitem->obtener_part_number() . '<br><b>Description:</b> ' . nl2br(mb_substr($subitem->obtener_description(), 0, 100)) . ' ...</td>';
+    if(strlen($subitem-> get_description()) >= 100){
+      echo '<td><b>Brand:</b> ' . $subitem->get_brand() . '<br><b>Part #:</b> ' . $subitem->get_part_number() . '<br><b>Description:</b> ' . nl2br(mb_substr($subitem->get_description(), 0, 100)) . ' ...</td>';
     }else{
-      echo '<td><b>Brand:</b> ' . $subitem->obtener_brand() . '<br><b>Part #:</b> ' . $subitem->obtener_part_number() . '<br><b>Description:</b> ' . nl2br($subitem->obtener_description()) . '</td>';
+      echo '<td><b>Brand:</b> ' . $subitem->get_brand() . '<br><b>Part #:</b> ' . $subitem->get_part_number() . '<br><b>Description:</b> ' . nl2br($subitem->get_description()) . '</td>';
     }
-    echo '<td class="estrechar"><a target="_blank" href="'. $subitem-> obtener_website() .'">'. $subitem-> obtener_website() .'</a></td>';
-    echo '<td>' . $subitem->obtener_quantity() . '</td>';
+    echo '<td class="estrechar"><a target="_blank" href="'. $subitem-> get_website() .'">'. $subitem-> get_website() .'</a></td>';
+    echo '<td>' . $subitem->get_quantity() . '</td>';
     echo '<td><div class="row"><div class="col-6">';
     for ($i = 0; $i < count($providers_subitem); $i++) {
       $provider_subitem = $providers_subitem[$i];
-      if(strlen($provider_subitem-> obtener_provider()) >= 10){
-        echo '<a href="' . EDIT_PROVIDER_SUBITEM . '/' . $provider_subitem->obtener_id() . '"><b>' . mb_substr($provider_subitem->obtener_provider(), 0, 10) . '... :</b></a><br>';
+      if(strlen($provider_subitem-> get_provider()) >= 10){
+        echo '<a href="' . EDIT_PROVIDER_SUBITEM . '/' . $provider_subitem->get_id() . '"><b>' . mb_substr($provider_subitem->get_provider(), 0, 10) . '... :</b></a><br>';
       }else{
-        echo '<a href="' . EDIT_PROVIDER_SUBITEM . '/' . $provider_subitem->obtener_id() . '"><b>' . $provider_subitem->obtener_provider() . ':</b></a><br>';
+        echo '<a href="' . EDIT_PROVIDER_SUBITEM . '/' . $provider_subitem->get_id() . '"><b>' . $provider_subitem->get_provider() . ':</b></a><br>';
       }
     }
     echo '</div><div class="col-6">';
     for ($i = 0; $i < count($providers_subitem); $i++) {
       $provider_subitem = $providers_subitem[$i];
-      echo '$ ' . $provider_subitem->obtener_price() . '<br>';
+      echo '$ ' . $provider_subitem->get_price() . '<br>';
     }
     echo '</div></div></td>';
-    if($subitem-> obtener_additional() != 0){
-      echo '<td><input type="text" class="form-control form-control-sm" id="add_cost'.$j.'" size="10" value="'.$subitem-> obtener_additional().'"></td>';
+    if($subitem-> get_additional() != 0){
+      echo '<td><input type="text" class="form-control form-control-sm" id="add_cost'.$j.'" size="10" value="'.$subitem-> get_additional().'"></td>';
     }else{
       echo '<td><input type="text" class="form-control form-control-sm" id="add_cost'.$j.'" size="10" value="0"></td>';
     }
     echo '<td>';
     for ($i = 0; $i < count($providers_subitem); $i++) {
       $provider_subitem = $providers_subitem[$i];
-      $precios_subitem[$i] = $provider_subitem->obtener_price();
+      $prices_subitem[$i] = $provider_subitem->get_price();
     }
-    if (!empty($precios_subitem)) {
-      $best_unit_price = min($precios_subitem);
-      for($i = 0;$i < count($precios_subitem); $i++){
-        if($best_unit_price == $precios_subitem[$i]){
+    if (!empty($prices_subitem)) {
+      $best_unit_price = min($prices_subitem);
+      for($i = 0;$i < count($prices_subitem); $i++){
+        if($best_unit_price == $prices_subitem[$i]){
           Database::open_connection();
-          self::actualizar_provider_menor_subitem(Database::get_connection(), $providers_subitem[$i]->obtener_id(), $subitem-> obtener_id());
+          self::actualizar_provider_menor_subitem(Database::get_connection(), $providers_subitem[$i]->get_id(), $subitem-> get_id());
           Database::close_connection();
         }
       }
@@ -187,7 +187,7 @@ class RepositorioSubitem{
     echo '<td></td>';
     echo '<td></td>';
     echo '<td></td>';
-    echo '<td>' . nl2br($subitem->obtener_comments()) . '</td>';
+    echo '<td>' . nl2br($subitem->get_comments()) . '</td>';
     echo '</tr>';
   }
 
@@ -206,30 +206,30 @@ class RepositorioSubitem{
     return $j;
   }
 
-  public static function insertar_calculos($conexion, $unit_price_subitem, $total_price_subitem, $additional_subitem, $id_subitem){
-    if(isset($conexion)){
+  public static function update_amounts($database, $unit_price_subitem, $total_price_subitem, $additional_subitem, $id_subitem){
+    if(isset($database)){
       try{
         $sql = 'UPDATE subitems SET unit_price = :unit_price, total_price = :total_price, additional = :additional WHERE id = :id_subitem';
-        $sentencia = $conexion-> prepare($sql);
-        $sentencia-> bindParam(':unit_price', $unit_price_subitem, PDO::PARAM_STR);
-        $sentencia-> bindParam(':total_price', $total_price_subitem, PDO::PARAM_STR);
-        $sentencia-> bindParam(':additional', $additional_subitem, PDO::PARAM_STR);
-        $sentencia-> bindParam(':id_subitem', $id_subitem, PDO::PARAM_STR);
-        $sentencia-> execute();
+        $query = $database-> prepare($sql);
+        $query-> bindParam(':unit_price', $unit_price_subitem, PDO::PARAM_STR);
+        $query-> bindParam(':total_price', $total_price_subitem, PDO::PARAM_STR);
+        $query-> bindParam(':additional', $additional_subitem, PDO::PARAM_STR);
+        $query-> bindParam(':id_subitem', $id_subitem, PDO::PARAM_STR);
+        $query-> execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
   }
 
-  public static function set_fulfillment_profit($conexion, $fulfillment_profit, $id_subitem){
-    if(isset($conexion)){
+  public static function set_fulfillment_profit($database, $fulfillment_profit, $id_subitem){
+    if(isset($database)){
       try{
         $sql = 'UPDATE subitems SET fulfillment_profit = :fulfillment_profit WHERE id = :id_subitem';
-        $sentencia = $conexion-> prepare($sql);
-        $sentencia-> bindParam(':fulfillment_profit', $fulfillment_profit, PDO::PARAM_STR);
-        $sentencia-> bindParam(':id_subitem', $id_subitem, PDO::PARAM_STR);
-        $sentencia-> execute();
+        $query = $database-> prepare($sql);
+        $query-> bindParam(':fulfillment_profit', $fulfillment_profit, PDO::PARAM_STR);
+        $query-> bindParam(':id_subitem', $id_subitem, PDO::PARAM_STR);
+        $query-> execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }

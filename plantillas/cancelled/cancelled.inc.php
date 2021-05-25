@@ -20,7 +20,7 @@
             </div>
             <div class="card-body">
               <?php
-              RepositorioRfq::escribir_cotizaciones_cancelled();
+              QuoteRepository::print_all_cancelled();
               ?>
             </div>
           </div>

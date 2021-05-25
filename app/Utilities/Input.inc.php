@@ -28,15 +28,15 @@ class Input{
   }
 
   public static function print_designated_user($quote){
-    if ($quote->obtener_completado() || $quote-> obtener_status()) {
+    if ($quote->get_complete() || $quote-> get_submitted()) {
       Database::open_connection();
-      $usuario = RepositorioUsuario::obtener_usuario_por_id(Database::get_connection(), $quote-> obtener_usuario_designado());
+      $usuario = RepositorioUsuario::obtener_usuario_por_id(Database::get_connection(), $quote-> get_assigned_user());
       Database::close_connection();
       ?>
-      <label for="usuario_designado">Designated user:</label>
-      <input type="text" name="usuario_designado" class="form-control form-control-sm" value="<?php echo $usuario->obtener_nombre_usuario(); ?>" readonly>
+      <label for="assigned_user">Designated user:</label>
+      <input type="text" name="assigned_user" class="form-control form-control-sm" value="<?php echo $usuario->obtener_nombre_usuario(); ?>" readonly>
       <input type="hidden" name="designated_user_original" value="<?php echo $usuario->obtener_nombre_usuario(); ?>">
-      <input type="hidden" value="<?php echo $usuario-> obtener_nombre_usuario(); ?>" name="usuario_designado">
+      <input type="hidden" value="<?php echo $usuario-> obtener_nombre_usuario(); ?>" name="assigned_user">
       <?php
     } else {
       ?>
@@ -49,13 +49,13 @@ class Input{
         <?php
         if (count($usuarios)) {
           ?>
-          <label for="usuario_designado">Designated user:</label>
-          <select id="usuario_designado" class="form-control form-control-sm" name="usuario_designado">
+          <label for="assigned_user">Designated user:</label>
+          <select id="assigned_user" class="form-control form-control-sm" name="assigned_user">
             <?php
             foreach ($usuarios as $usuario) {
               ?>
               <option <?php
-              if ($usuario->obtener_id() == $quote->obtener_usuario_designado()) {
+              if ($usuario->get_id() == $quote->get_assigned_user()) {
                 echo 'selected';
               }
               ?>><?php echo $usuario->obtener_nombre_usuario(); ?></option>
@@ -76,45 +76,45 @@ class Input{
     $usuarios = RepositorioUsuario::obtener_usuarios_rfq(Database::get_connection());
     Database::close_connection();
     foreach ($usuarios as $usuario) {
-      if ($usuario->obtener_id() == $quote->obtener_usuario_designado()) {
-        $designated_user = $usuario-> obtener_nombre_usuario();
+      if ($usuario->get_id() == $quote->get_assigned_user()) {
+        $assigned_user = $usuario-> obtener_nombre_usuario();
       }
     }
 
-    return $designated_user;
+    return $assigned_user;
   }
 
   public static function translate_channel($channel){
     switch ($channel) {
       case 'GSA-Buy':
-        $canal = 'gsa_buy';
+        $channel = 'gsa_buy';
         break;
       case 'FedBid':
-        $canal = 'fedbid';
+        $channel = 'fedbid';
         break;
       case 'E-mails':
-        $canal = 'emails';
+        $channel = 'emails';
         break;
       case 'Mailbox':
-        $canal = 'mailbox';
+        $channel = 'mailbox';
         break;
       case 'FindFRP':
-        $canal = 'findrfp';
+        $channel = 'findrfp';
         break;
       case 'Embassies':
-        $canal = 'embassies';
+        $channel = 'embassies';
         break;
       case 'FBO':
-        $canal = 'fbo';
+        $channel = 'fbo';
         break;
       case 'Chemonics':
-        $canal = 'chemonics';
+        $channel = 'chemonics';
         break;
       case 'Ebay & Amazon':
-        $canal = 'ebay_amazon';
+        $channel = 'ebay_amazon';
         break;
     }
-    return $canal;
+    return $channel;
   }
 
   public static function save_files($path, $files, $temp_files){

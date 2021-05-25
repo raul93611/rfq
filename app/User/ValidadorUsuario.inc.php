@@ -25,7 +25,7 @@ abstract class ValidadorUsuario {
     }
   }
 
-  protected function validar_nombre_usuario($nombre_usuario, $conexion) {
+  protected function validar_nombre_usuario($nombre_usuario, $database) {
     if (!$this->variable_iniciada($nombre_usuario)) {
       return 'Debes introducir nombre de usuario.';
     } else {
@@ -34,7 +34,7 @@ abstract class ValidadorUsuario {
     if (!preg_match("/^[a-zA-Z0123456789]*$/", $nombre_usuario)) {
       return 'Caracteres no permitidos.';
     }
-    if(RepositorioUsuario::nombre_usuario_existe($conexion, $nombre_usuario)){
+    if(RepositorioUsuario::nombre_usuario_existe($database, $nombre_usuario)){
       return 'Nombre de usuario en uso.';
     }
     return '';
@@ -52,7 +52,7 @@ abstract class ValidadorUsuario {
     return '';
   }
 
-  protected function validar_apellidos($conexion, $apellidos, $nombres) {
+  protected function validar_apellidos($database, $apellidos, $nombres) {
     if (!$this->variable_iniciada($nombres)) {
       return 'Introduce tu(s) nombre(s) y apellido(s).';
     }
@@ -61,7 +61,7 @@ abstract class ValidadorUsuario {
     } else {
       $this->apellidos = $apellidos;
     }
-    if (RepositorioUsuario::nombre_completo_existe($conexion, $apellidos, $nombres)) {
+    if (RepositorioUsuario::nombre_completo_existe($database, $apellidos, $nombres)) {
       return 'Tus nombres y apellidos ya existen.';
     }
     return '';

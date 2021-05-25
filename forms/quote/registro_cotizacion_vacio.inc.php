@@ -18,8 +18,8 @@
         <?php
         if (count($usuarios)) {
           ?>
-          <label for="usuario_designado">Designated user:</label>
-          <select id="usuario_designado" class="form-control form-control-sm" name="usuario_designado">
+          <label for="assigned_user">Designated user:</label>
+          <select id="assigned_user" class="form-control form-control-sm" name="assigned_user">
             <?php
             foreach ($usuarios as $usuario) {
               ?>
@@ -64,8 +64,8 @@
         <input type="text" class="form-control form-control-sm" id="end_date" name="end_date" placeholder="End date" required>
       </div>
       <div class="form-group">
-        <label for="canal">Channel:</label>
-        <select class="form-control form-control-sm" name="canal" id="canal">
+        <label for="channel">Channel:</label>
+        <select class="form-control form-control-sm" name="channel" id="channel">
           <option>GSA-Buy</option>
           <option>FedBid</option>
           <option>E-mails</option>

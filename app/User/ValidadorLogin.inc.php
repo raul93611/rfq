@@ -3,7 +3,7 @@ class ValidadorLogin extends ValidadorUsuario {
   private $usuario;
   private $error;
 
-  public function __construct($nombre_usuario, $password, $conexion) {
+  public function __construct($nombre_usuario, $password, $database) {
     $this->aviso_inicio = "<br><div class='alert alert-danger' role='alert'>";
     $this->aviso_cierre = "</div>";
     $this->error = '';
@@ -11,8 +11,8 @@ class ValidadorLogin extends ValidadorUsuario {
       $this->usuario = null;
       $this->error = 'Must be filled out.';
     } else {
-      $this->usuario = RepositorioUsuario::obtener_usuario_por_nombre_usuario($conexion, $nombre_usuario);
-      if (is_null($this->usuario) || !password_verify($password, $this->usuario->obtener_password()) || !$this-> usuario-> obtener_status()) {
+      $this->usuario = RepositorioUsuario::obtener_usuario_por_nombre_usuario($database, $nombre_usuario);
+      if (is_null($this->usuario) || !password_verify($password, $this->usuario->obtener_password()) || !$this-> usuario-> get_submitted()) {
         $this->error = 'Wrong values.';
       }
     }

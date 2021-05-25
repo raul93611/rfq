@@ -1,9 +1,9 @@
 <?php
 class Item{
   private $id;
-  private $id_rfq;
-  private $id_usuario;
-  private $provider_menor;
+  private $id_quote;
+  private $id_user;
+  private $least_provider;
   private $brand;
   private $brand_project;
   private $part_number;
@@ -18,11 +18,11 @@ class Item{
   private $additional;
   private $fulfillment_profit;
 
-  public function __construct($id, $id_rfq, $id_usuario, $provider_menor, $brand, $brand_project, $part_number, $part_number_project, $description, $description_project, $quantity, $unit_price, $total_price, $comments, $website, $additional, $fulfillment_profit){
+  public function __construct($id, $id_quote, $id_user, $least_provider, $brand, $brand_project, $part_number, $part_number_project, $description, $description_project, $quantity, $unit_price, $total_price, $comments, $website, $additional, $fulfillment_profit){
     $this-> id = $id;
-    $this-> id_rfq = $id_rfq;
-    $this-> id_usuario = $id_usuario;
-    $this-> provider_menor = $provider_menor;
+    $this-> id_quote = $id_quote;
+    $this-> id_user = $id_user;
+    $this-> least_provider = $least_provider;
     $this-> brand = $brand;
     $this-> brand_project = $brand_project;
     $this-> part_number = $part_number;
@@ -38,71 +38,71 @@ class Item{
     $this-> fulfillment_profit = $fulfillment_profit;
   }
 
-  public function obtener_id(){
+  public function get_id(){
     return $this-> id;
   }
 
-  public function obtener_id_rfq(){
-    return $this-> id_rfq;
+  public function get_id_quote(){
+    return $this-> id_quote;
   }
 
-  public function obtener_id_usuario(){
-    return $this-> id_usuario;
+  public function get_id_user(){
+    return $this-> id_user;
   }
 
-  public function obtener_provider_menor(){
-    return $this-> provider_menor;
+  public function get_least_provider(){
+    return $this-> least_provider;
   }
 
-  public function obtener_brand(){
+  public function get_brand(){
     return $this-> brand;
   }
 
-  public function obtener_brand_project(){
+  public function get_brand_project(){
     return $this-> brand_project;
   }
 
-  public function obtener_part_number(){
+  public function get_part_number(){
     return $this-> part_number;
   }
 
-  public function obtener_part_number_project(){
+  public function get_part_number_project(){
     return $this-> part_number_project;
   }
 
-  public function obtener_description(){
+  public function get_description(){
     return $this-> description;
   }
 
-  public function obtener_description_project(){
+  public function get_description_project(){
     return $this-> description_project;
   }
 
-  public function obtener_quantity(){
+  public function get_quantity(){
     return $this-> quantity;
   }
 
-  public function obtener_unit_price(){
+  public function get_unit_price(){
     return $this-> unit_price;
   }
 
-  public function obtener_total_price(){
+  public function get_total_price(){
     return $this-> total_price;
   }
 
-  public function obtener_comments(){
+  public function get_comments(){
     return $this-> comments;
   }
 
-  public function obtener_website(){
+  public function get_website(){
     return $this-> website;
   }
 
-  public function obtener_additional(){
+  public function get_additional(){
     return $this-> additional;
   }
 
-  public function obtener_fulfillment_profit(){
+  public function get_fulfillment_profit(){
     return $this-> fulfillment_profit;
   }
 }

@@ -20,7 +20,7 @@
             </div>
             <div class="card-body">
               <?php
-              RepositorioRfq::escribir_cotizaciones_award_por_canal($canal, $_SESSION['id_user'], $_SESSION['role']);
+              QuoteRepository::print_all_award($channel);
               ?>
             </div>
           </div>

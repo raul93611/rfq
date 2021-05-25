@@ -20,7 +20,7 @@
             </div>
             <div class="card-body">
               <?php
-              RepositorioRfq::escribir_tabla_cotizaciones_no_submitted();
+              QuoteRepository::print_all_no_submitted();
               ?>
             </div>
           </div>

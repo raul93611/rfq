@@ -1,13 +1,13 @@
 <?php
 class Database {
-  private static $connection;
+  private static $database;
 
   public static function open_connection() {
-    if (!isset(self::$connection)) {
+    if (!isset(self::$database)) {
       try {
-        self::$connection = new PDO('mysql:host=' . DATABASE_SERVER . '; dbname=' . DATABASE_NAME, DATABASE_USER, DATABASE_PASSWORD);
-        self::$connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        self::$connection->exec('SET CHARACTER SET utf8');
+        self::$database = new PDO('mysql:host=' . DATABASE_SERVER . '; dbname=' . DATABASE_NAME, DATABASE_USER, DATABASE_PASSWORD);
+        self::$database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        self::$database->exec('SET CHARACTER SET utf8');
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
         die();
@@ -16,13 +16,13 @@ class Database {
   }
 
   public static function close_connection() {
-    if (isset(self::$connection)) {
-      self::$connection = null;
+    if (isset(self::$database)) {
+      self::$database = null;
     }
   }
 
   public static function get_connection() {
-    return self::$connection;
+    return self::$database;
   }
 }
 ?>

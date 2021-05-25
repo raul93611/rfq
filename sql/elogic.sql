@@ -15,24 +15,24 @@ CREATE TABLE usuarios(
   PRIMARY KEY(id)
 );
 
-CREATE TABLE rfq(
+CREATE TABLE quotes(
   id INT NOT NULL AUTO_INCREMENT UNIQUE,
-  id_usuario INT NOT NULL,
-  usuario_designado INT NOT NULL,
-  canal VARCHAR(100) NOT NULL,
+  id_user INT NOT NULL,
+  assigned_user INT NOT NULL,
+  channel VARCHAR(100) NOT NULL,
   email_code VARCHAR(100) NOT NULL,
   type_of_bid VARCHAR(100) NOT NULL,
   issue_date VARCHAR(100) NOT NULL,
   end_date VARCHAR(100) NOT NULL,
-  status TINYINT NOT NULL,
-  completado TINYINT NOT NULL,
+  submitted TINYINT NOT NULL,
+  complete TINYINT NOT NULL,
   total_cost DECIMAL(10,2),
   total_price DECIMAL(10,2),
   comments VARCHAR(100),
   award TINYINT NOT NULL,
-  fecha_completado DATE,
-  fecha_submitted DATE,
-  fecha_award DATE,
+  completed_date DATE,
+  submitted_date DATE,
+  award_date DATE,
   payment_terms VARCHAR(100) NOT NULL,
   address TEXT CHARACTER SET utf8 NOT NULL,
   ship_to TEXT CHARACTER SET utf8 NOT NULL,
@@ -43,7 +43,7 @@ CREATE TABLE rfq(
   additional VARCHAR(100) NOT NULL,
   shipping_cost DECIMAL(10,2) NOT NULL,
   shipping VARCHAR(100) NOT NULL,
-  fullfillment TINYINT NOT NULL,
+  fulfillment TINYINT NOT NULL,
   fulfillment_date DATE,
   contract_number VARCHAR(255) NOT NULL,
   fulfillment_profit DECIMAL(10,2),
@@ -51,7 +51,7 @@ CREATE TABLE rfq(
   total_fulfillment DECIMAL(10,2),
   total_services_fulfillment DECIMAL(10,2),
   PRIMARY KEY(id),
-  FOREIGN KEY(id_usuario)
+  FOREIGN KEY(id_user)
       REFERENCES usuarios(id)
       ON UPDATE CASCADE
       ON DELETE RESTRICT
@@ -59,12 +59,12 @@ CREATE TABLE rfq(
 
 CREATE TABLE comments(
   id INT NOT NULL AUTO_INCREMENT UNIQUE,
-  id_rfq INT NOT NULL,
-  id_usuario INT NOT NULL,
+  id_quote INT NOT NULL,
+  id_user INT NOT NULL,
   comment TEXT CHARACTER SET utf8 NOT NULL,
-  fecha_comment DATETIME,
+  comment_date DATETIME,
   PRIMARY KEY(id),
-  FOREIGN KEY(id_rfq)
+  FOREIGN KEY(id_quote)
     REFERENCES rfq(id)
     ON UPDATE CASCADE
     ON DELETE RESTRICT
@@ -72,24 +72,24 @@ CREATE TABLE comments(
 
 CREATE TABLE services(
   id INT NOT NULL AUTO_INCREMENT UNIQUE,
-  id_rfq INT NOT NULL,
+  id_quote INT NOT NULL,
   description TEXT CHARACTER SET utf8 NOT NULL,
   quantity INT NOT NULL,
   unit_price DECIMAL(10,2) NOT NULL,
   total_price DECIMAL(10,2) NOT NULL,
   fulfillment_profit DECIMAL(10,2),
   PRIMARY KEY(id),
-  FOREIGN KEY(id_rfq)
+  FOREIGN KEY(id_quote)
       REFERENCES rfq(id)
       ON UPDATE CASCADE
       ON DELETE RESTRICT
 );
 
-CREATE TABLE item(
+CREATE TABLE items(
   id INT NOT NULL AUTO_INCREMENT UNIQUE,
-  id_rfq INT NOT NULL,
-  id_usuario INT NOT NULL,
-  provider_menor INT NOT NULL,
+  id_quote INT NOT NULL,
+  id_user INT NOT NULL,
+  least_provider INT NOT NULL,
   brand VARCHAR(100) NOT NULL,
   brand_project VARCHAR(100) NOT NULL,
   part_number VARCHAR(100) NOT NULL,
@@ -104,17 +104,17 @@ CREATE TABLE item(
   additional VARCHAR(100) NOT NULL,
   fulfillment_profit DECIMAL(10,2),
   PRIMARY KEY(id),
-  FOREIGN KEY(id_rfq)
+  FOREIGN KEY(id_quote)
       REFERENCES rfq(id)
       ON UPDATE CASCADE
       ON DELETE RESTRICT,
-  FOREIGN KEY(id_usuario)
+  FOREIGN KEY(id_user)
       REFERENCES usuarios(id)
       ON UPDATE CASCADE
       ON DELETE RESTRICT
 );
 
-CREATE TABLE provider(
+CREATE TABLE providers(
   id INT NOT NULL AUTO_INCREMENT UNIQUE,
   id_item INT NOT NULL,
   provider VARCHAR(100) NOT NULL,
@@ -129,7 +129,7 @@ CREATE TABLE provider(
 CREATE TABLE subitems(
   id INT NOT NULL AUTO_INCREMENT UNIQUE,
   id_item INT NOT NULL,
-  provider_menor INT NOT NULL,
+  least_provider INT NOT NULL,
   brand VARCHAR(100) NOT NULL,
   brand_project VARCHAR(100) NOT NULL,
   part_number VARCHAR(100) NOT NULL,
@@ -164,7 +164,7 @@ CREATE TABLE provider_subitems(
 
 CREATE TABLE re_quotes(
   id INT NOT NULL AUTO_INCREMENT UNIQUE,
-  id_rfq INT NOT NULL,
+  id_quote INT NOT NULL,
   total_cost DECIMAL(20,2) NOT NULL,
   total_price DECIMAL(20,2) NOT NULL,
   payment_terms VARCHAR(255) NOT NULL,
@@ -174,7 +174,7 @@ CREATE TABLE re_quotes(
   shipping_cost DECIMAL (20,2) NOT NULL,
   shipping VARCHAR(255) NOT NULL,
   PRIMARY KEY(id),
-  FOREIGN KEY(id_rfq)
+  FOREIGN KEY(id_quote)
     REFERENCES rfq(id)
     ON UPDATE CASCADE
     ON DELETE RESTRICT
@@ -204,12 +204,12 @@ CREATE TABLE re_quote_items(
 
 CREATE TABLE audit_trails(
   id INT NOT NULL AUTO_INCREMENT UNIQUE,
-  id_rfq INT NOT NULL,
+  id_quote INT NOT NULL,
   username VARCHAR(255) NOT NULL,
   audit_trail TEXT CHARACTER SET utf8 NOT NULL,
   created_date DATETIME,
   PRIMARY KEY(id),
-  FOREIGN KEY(id_rfq)
+  FOREIGN KEY(id_quote)
     REFERENCES rfq(id)
     ON UPDATE CASCADE
     ON DELETE RESTRICT
@@ -364,3 +364,26 @@ CREATE TABLE type_of_bids(
 );
 
 ALTER TABLE rfq AUTO_INCREMENT = 300;
+
+INSERT INTO type_of_bids (type_of_bid) VALUES
+('Audio Visual'),
+('Back Up Batteries'),
+('Cameras'),
+('Computer Peripherals'),
+('Computers'),
+('Medical'),
+('Miscellaneous'),
+('Monitor & Televisions'),
+('Office Supplies'),
+('Peripherals'),
+('Portable Radios'),
+('Printers'),
+('Servers'),
+('Software'),
+('Tactical'),
+('Tools'),
+('Scanners'),
+('Projectors'),
+('Video Cameras'),
+('Phones'),
+('Services');

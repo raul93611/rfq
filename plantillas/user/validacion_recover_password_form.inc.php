@@ -19,7 +19,7 @@ if(isset($_POST['send'])){
     $usuario = RepositorioUsuario::obtener_usuario_por_email(Database::get_connection(), $_POST['email']);
     $string_aleatorio = sa(10);
     $url_secreta = hash('sha256', $string_aleatorio . $usuario-> obtener_nombre_usuario());
-    RepositorioUsuario::guardar_url_secreta(Database::get_connection(), $usuario-> obtener_id(), $url_secreta);
+    RepositorioUsuario::guardar_url_secreta(Database::get_connection(), $usuario-> get_id(), $url_secreta);
     Database::close_connection();
     $to = $usuario-> obtener_email();
     $subject = 'Restart your password';

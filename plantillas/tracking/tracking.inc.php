@@ -1,7 +1,7 @@
 <?php
 Database::open_connection();
-$quote = RepositorioRfq::obtener_cotizacion_por_id(Database::get_connection(), $id_rfq);
-$items = RepositorioItem::obtener_items_por_id_rfq(Database::get_connection(), $id_rfq);
+$quote = QuoteRepository::get_by_id(Database::get_connection(), $id_quote);
+$items = ItemRepository::get_all_by_id_quote(Database::get_connection(), $id_quote);
 Database::close_connection();
 ?>
 <div class="content-wrapper">
@@ -24,12 +24,12 @@ Database::close_connection();
             </div>
             <div class="card-body" id="tracking_box">
               <?php
-              TrackingRepository::tracking_list_items($id_rfq);
+              TrackingRepository::tracking_list_items($id_quote);
               ?>
             </div>
             <div class="card-footer footer_item">
-              <a class="btn btn-primary" id="go_back" href="<?php echo EDIT_QUOTE . '/' . $quote-> obtener_id(); ?>"><i class="fa fa-reply"></i></a>
-              <a href="<?php echo TRACKING_PDF . $quote-> obtener_id(); ?>" target="_blank" class="btn btn-primary"><i class="fas fa-file"></i></a>
+              <a class="btn btn-primary" id="go_back" href="<?php echo EDIT_QUOTE . '/' . $quote-> get_id(); ?>"><i class="fa fa-reply"></i></a>
+              <a href="<?php echo TRACKING_PDF . $quote-> get_id(); ?>" target="_blank" class="btn btn-primary"><i class="fas fa-file"></i></a>
             </div>
           </div>
         </div>
@@ -47,7 +47,7 @@ Database::close_connection();
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-        <input type="hidden" name="id_rfq" form="edit_tracking_subitem_form" value="<?php echo $quote-> obtener_id(); ?>">
+        <input type="hidden" name="id_quote" form="edit_tracking_subitem_form" value="<?php echo $quote-> get_id(); ?>">
         <form id="edit_tracking_subitem_form" method="post" action="">
 
         </form>
@@ -64,7 +64,7 @@ Database::close_connection();
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-        <input type="hidden" name="id_rfq" form="edit_tracking_form" value="<?php echo $quote-> obtener_id(); ?>">
+        <input type="hidden" name="id_quote" form="edit_tracking_form" value="<?php echo $quote-> get_id(); ?>">
         <form id="edit_tracking_form" method="post" action="">
 
         </form>

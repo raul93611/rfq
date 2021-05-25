@@ -1,8 +1,8 @@
 <input type="hidden" name="id_item" value="<?php echo $id_item; ?>">
 <?php
 Database::open_connection();
-$item = RepositorioItem::obtener_item_por_id(Database::get_connection(), $id_item);
-$cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Database::get_connection(), $item-> obtener_id_rfq());
+$item = ItemRepository::get_by_id(Database::get_connection(), $id_item);
+$quote = QuoteRepository::get_by_id(Database::get_connection(), $item-> get_id_quote());
 Database::close_connection();
 ?>
 <div class="card-body">
@@ -23,5 +23,5 @@ Database::close_connection();
 </div>
 <div class="card-footer">
   <button type="submit" class="btn btn-success" name="guardar_provider"><i class="fa fa-check"></i> Save</button>
-  <a href="<?php echo EDIT_QUOTE . '/' . $item-> obtener_id_rfq(); ?>" class="btn btn-danger"><i class="fa fa-times"></i> Cancel</a>
+  <a href="<?php echo EDIT_QUOTE . '/' . $item-> get_id_quote(); ?>" class="btn btn-danger"><i class="fa fa-times"></i> Cancel</a>
 </div>

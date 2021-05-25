@@ -1,9 +1,9 @@
 <?php
 include_once 'vendor/autoload.php';
 Database::open_connection();
-$cotizacion = RepositorioRfq::obtener_cotizacion_por_id(Database::get_connection(), $id_rfq);
-$items = RepositorioItem::obtener_items_por_id_rfq(Database::get_connection(), $id_rfq);
-$re_quote = ReQuoteRepository::get_re_quote_by_id_rfq(Database::get_connection(), $id_rfq);
+$quote = QuoteRepository::get_by_id(Database::get_connection(), $id_quote);
+$items = ItemRepository::get_all_by_id_quote(Database::get_connection(), $id_quote);
+$re_quote = ReQuoteRepository::get_re_quote_by_id_rfq(Database::get_connection(), $id_quote);
 $re_quote_items = ReQuoteItemRepository::get_re_quote_items_by_id_re_quote(Database::get_connection(), $re_quote-> get_id());
 Database::close_connection();
 try{
@@ -78,8 +78,8 @@ try{
       <th style="font-size:9pt;">CONTRACT NUMBER</th>
     </tr>
     <tr>
-      <td style="text-align:center;font-size:9pt;">' . $cotizacion->obtener_id() . '</td>
-      <td style="text-align:center;font-size:9pt;">' . $cotizacion-> obtener_contract_number() . '</ts>
+      <td style="text-align:center;font-size:9pt;">' . $quote->get_id() . '</td>
+      <td style="text-align:center;font-size:9pt;">' . $quote-> get_contract_number() . '</ts>
     </tr>
   </table>';
   if (count($items)) {
@@ -100,7 +100,7 @@ try{
       $item = $items[$i];
       $re_quote_item = $re_quote_items[$i];
       Database::open_connection();
-      $trackings = TrackingRepository::get_all_trackings_by_id_item(Database::get_connection(), $item-> obtener_id());
+      $trackings = TrackingRepository::get_all_trackings_by_id_item(Database::get_connection(), $item-> get_id());
       Database::close_connection();
       if(!count($trackings)){
         $trackings_quantity = 1;
@@ -115,7 +115,7 @@ try{
         $html .= '
         <td>' . $trackings[0]-> get_quantity() . '</td>
         <td>' . $trackings[0]-> get_tracking_number() . '</td>
-        <td>' . RepositorioComment::mysql_date_to_english_format($trackings[0]-> get_delivery_date()) . '</td>
+        <td>' . CommentRepository::mysql_date_to_english_format($trackings[0]-> get_delivery_date()) . '</td>
         <td>' . $trackings[0]-> get_signed_by() . '</td>
         </tr>';
         for ($j = 1; $j < count($trackings); $j++) {
@@ -124,14 +124,14 @@ try{
           <tr>
           <td>' . $tracking-> get_quantity() . '</td>
           <td>' . nl2br($tracking-> get_tracking_number()) . '</td>
-          <td>' . RepositorioComment::mysql_date_to_english_format($tracking-> get_delivery_date()) . '</td>
+          <td>' . CommentRepository::mysql_date_to_english_format($tracking-> get_delivery_date()) . '</td>
           <td>' . $tracking-> get_signed_by() . '</td>
           </tr>
           ';
         }
       }
       Database::open_connection();
-      $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Database::get_connection(), $item-> obtener_id());
+      $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Database::get_connection(), $item-> get_id());
       $re_quote_subitems = ReQuoteSubitemRepository::get_re_quote_subitems_by_id_re_quote_item(Database::get_connection(), $re_quote_item-> get_id());
       Database::close_connection();
       if(count($subitems)){
@@ -139,7 +139,7 @@ try{
           $subitem = $subitems[$k];
           $re_quote_subitem = $re_quote_subitems[$k];
           Database::open_connection();
-          $trackings_subitems = TrackingSubitemRepository::get_all_trackings_by_id_subitem(Database::get_connection(), $subitem-> obtener_id());
+          $trackings_subitems = TrackingSubitemRepository::get_all_trackings_by_id_subitem(Database::get_connection(), $subitem-> get_id());
           Database::close_connection();
           if(!count($trackings_subitems)){
             $trackings_subitems_quantity = 1;
@@ -155,7 +155,7 @@ try{
             $html .= '
             <td>' . $trackings_subitems[0]-> get_quantity() . '</td>
             <td>' . $trackings_subitems[0]-> get_tracking_number() . '</td>
-            <td>' . RepositorioComment::mysql_date_to_english_format($trackings_subitems[0]-> get_delivery_date()) . '</td>
+            <td>' . CommentRepository::mysql_date_to_english_format($trackings_subitems[0]-> get_delivery_date()) . '</td>
             <td>' . $trackings_subitems[0]-> get_signed_by() . '</td>
             </tr>
             ';
@@ -165,7 +165,7 @@ try{
               <tr>
               <td>' . $tracking_subitem-> get_quantity() . '</td>
               <td>' . nl2br($tracking_subitem-> get_tracking_number()) . '</td>
-              <td>' . RepositorioComment::mysql_date_to_english_format($tracking_subitem-> get_delivery_date()) . '</td>
+              <td>' . CommentRepository::mysql_date_to_english_format($tracking_subitem-> get_delivery_date()) . '</td>
               <td>' . $tracking_subitem-> get_signed_by() . '</td>
               </tr>
               ';
@@ -183,8 +183,8 @@ try{
   </div>
   ');
   $mpdf->WriteHTML($html);
-  $mpdf->Output($_SERVER['DOCUMENT_ROOT'] . '/rfq/documents/' . $cotizacion->obtener_id() . '/' . preg_replace('/[^a-z0-9-_\-\.]/i','_', $cotizacion-> obtener_email_code()) . '(trackings)' . '.pdf', 'F');
-  $mpdf->Output(preg_replace('/[^a-z0-9-_\-\.]/i','_', $cotizacion-> obtener_email_code()) . '(trackings).pdf', 'I');
+  $mpdf->Output($_SERVER['DOCUMENT_ROOT'] . '/rfq/documents/' . $quote->get_id() . '/' . preg_replace('/[^a-z0-9-_\-\.]/i','_', $quote-> get_email_code()) . '(trackings)' . '.pdf', 'F');
+  $mpdf->Output(preg_replace('/[^a-z0-9-_\-\.]/i','_', $quote-> get_email_code()) . '(trackings).pdf', 'I');
 } catch (Mpdf\MpdfException $e) {
   echo $e->getMessage();
 }

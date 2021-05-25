@@ -1,9 +1,9 @@
 <?php
 $quotes = [];
 if(isset($_POST['buscar'])){
-  echo $_POST['termino_busqueda'];
+  echo $_POST['keyword'];
   Database::open_connection();
-  $quotes = RepositorioRfq::obtener_resultados_busqueda(Database::get_connection(), $_POST['termino_busqueda'], $_SESSION['role'], $_SESSION['id_user']);
+  $quotes = QuoteRepository::get_search_result(Database::get_connection(), $_POST['keyword'], $_SESSION['role'], $_SESSION['id_user']);
   Database::close_connection();
 }
 ?>
@@ -36,7 +36,7 @@ if(isset($_POST['buscar'])){
                 <div class="col-md-4">
                   <form role="form" method="post" action="<?php echo SEARCH_QUOTES; ?>">
                     <div class="form-group">
-                      <input type="search" name="termino_busqueda" class="form-control" placeholder="Search ..." required autofocus <?php if(isset($_POST['buscar'])){echo 'value="' . $_POST['termino_busqueda'] . '"';} ?>>
+                      <input type="search" name="keyword" class="form-control" placeholder="Search ..." required autofocus <?php if(isset($_POST['buscar'])){echo 'value="' . $_POST['keyword'] . '"';} ?>>
                     </div>
                     <button type="submit" class="btn btn-primary btn-block" name="buscar">Search</button>
                   </form>
@@ -53,7 +53,7 @@ if(isset($_POST['buscar'])){
             </div>
             <div class="card-body">
               <?php
-              RepositorioRfq::escribir_resultados_busqueda($quotes);
+              QuoteRepository::print_search_results($quotes);
               ?>
             </div>
           </div>

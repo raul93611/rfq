@@ -255,7 +255,7 @@ table{
   background-color: #f4f6f9;
 }
 
-#tabla_items tr.highlight, #re_quote_data tr.highlight{
+#items_table tr.highlight, #re_quote_data tr.highlight{
   animation-name: target-fade;
   animation-duration: 5s;
 }
@@ -267,15 +267,15 @@ table{
     100% { background-color: rgba(255,255,153,0); }
 }
 
-#tabla_items .description{
+#items_table .description{
   width: 150px !important;
 }
 
-#tabla_items .options{
+#items_table .options{
   min-width: 130px !important;
 }
 
-#tabla_items .qty{
+#items_table .qty{
   min-width: 80px !important;
 }
 
@@ -283,7 +283,7 @@ table{
   word-break: break-all !important;
 }
 
-#tabla_items #numeracion{
+#items_table #numeration{
   min-width: 20px !important;
 }
 
@@ -294,7 +294,7 @@ table{
 #users #options{
   width: 140px !important;
 }
-#tabla_items #provider{
+#items_table #provider{
   min-width: 250px !important;
 }
 

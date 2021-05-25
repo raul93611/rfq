@@ -1,16 +1,16 @@
 <?php
 class Service{
   private $id;
-  private $id_rfq;
+  private $id_quote;
   private $description;
   private $quantity;
   private $unit_price;
   private $total_price;
   private $fulfillment_profit;
 
-  public function __construct($id, $id_rfq, $description, $quantity, $unit_price, $total_price, $fulfillment_profit){
+  public function __construct($id, $id_quote, $description, $quantity, $unit_price, $total_price, $fulfillment_profit){
     $this-> id = $id;
-    $this-> id_rfq = $id_rfq;
+    $this-> id_quote = $id_quote;
     $this-> description = $description;
     $this-> quantity = $quantity;
     $this-> unit_price = $unit_price;
@@ -22,8 +22,8 @@ class Service{
     return $this-> id;
   }
 
-  public function get_id_rfq(){
-    return $this-> id_rfq;
+  public function get_id_quote(){
+    return $this-> id_quote;
   }
 
   public function get_description(){

@@ -2,7 +2,7 @@
 Database::open_connection();
 $tracking = TrackingRepository::get_tracking_by_id(Database::get_connection(), $id_tracking);
 Database::close_connection();
-$delivery_date = RepositorioComment::mysql_date_to_english_format($tracking-> get_delivery_date());
+$delivery_date = CommentRepository::mysql_date_to_english_format($tracking-> get_delivery_date());
 ?>
 <input type="hidden" id="id_tracking" name="id_tracking" value="<?php echo $tracking-> get_id(); ?>">
 <div class="modal-body">

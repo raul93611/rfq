@@ -8,6 +8,6 @@ if(isset($_POST['save_edit_re_quote_subitem_provider'])){
   $re_quote = ReQuoteRepository::get_re_quote_by_id(Database::get_connection(), $re_quote_item-> get_id_re_quote());
   ReQuoteAuditTrailRepository::edit_provider_subitem_events(Database::get_connection(), $_POST['provider'], $_POST['provider_original'], $_POST['price'], $_POST['price_original'], $re_quote_subitem_provider-> get_id_re_quote_subitem(), $re_quote_item-> get_id_re_quote());
   Database::close_connection();
-  Redirection::redirect(RE_QUOTE . $re_quote-> get_id_rfq() . '#subitem' . $re_quote_subitem_provider-> get_id_re_quote_subitem());
+  Redirection::redirect(RE_QUOTE . $re_quote-> get_id_quote() . '#subitem' . $re_quote_subitem_provider-> get_id_re_quote_subitem());
 }
 ?>

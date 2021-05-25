@@ -27,6 +27,6 @@ Database::close_connection();
 </div>
 <div class="card-footer">
   <button type="submit" class="btn btn-success" name="save_edit_re_quote_subitem_provider"><i class="fa fa-check"></i> Save</button>
-  <a href="<?php echo RE_QUOTE . $re_quote-> get_id_rfq(); ?>" class="btn btn-info"><i class="fa fa-times"></i> Cancel</a>
+  <a href="<?php echo RE_QUOTE . $re_quote-> get_id_quote(); ?>" class="btn btn-info"><i class="fa fa-times"></i> Cancel</a>
   <a href="<?php echo DELETE_RE_QUOTE_SUBITEM_PROVIDER . $re_quote_subitem_provider-> get_id(); ?>" class="delete_provider_subitem_button btn btn-danger"><i class="fa fa-trash"></i> Delete</a>
 </div>

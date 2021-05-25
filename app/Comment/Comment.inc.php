@@ -1,37 +1,37 @@
 <?php
 class Comment{
   private $id;
-  private $id_rfq;
-  private $id_usuario;
+  private $id_quote;
+  private $id_user;
   private $comment;
-  private $fecha_comment;
+  private $comment_date;
 
-  public function __construct($id, $id_rfq, $id_usuario, $comment, $fecha_comment){
+  public function __construct($id, $id_quote, $id_user, $comment, $comment_date){
     $this-> id = $id;
-    $this-> id_rfq = $id_rfq;
-    $this-> id_usuario = $id_usuario;
+    $this-> id_quote = $id_quote;
+    $this-> id_user = $id_user;
     $this-> comment = $comment;
-    $this-> fecha_comment = $fecha_comment;
+    $this-> comment_date = $comment_date;
   }
 
-  public function obtener_id(){
+  public function get_id(){
     return $this-> id;
   }
 
-  public function obtener_id_rfq(){
-    return $this-> id_rfq;
+  public function get_id_quote(){
+    return $this-> id_quote;
   }
 
-  public function obtener_id_usuario(){
-    return $this-> id_usuario;
+  public function get_id_user(){
+    return $this-> id_user;
   }
 
-  public function obtener_comment(){
+  public function get_comment(){
     return $this-> comment;
   }
 
-  public function obtener_fecha_comment(){
-    return $this-> fecha_comment;
+  public function get_comment_date(){
+    return $this-> comment_date;
   }
 }
 ?>

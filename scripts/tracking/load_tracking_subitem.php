@@ -2,7 +2,7 @@
 Database::open_connection();
 $tracking_subitem = TrackingSubitemRepository::get_tracking_subitem_by_id(Database::get_connection(), $id_tracking_subitem);
 Database::close_connection();
-$delivery_date = RepositorioComment::mysql_date_to_english_format($tracking_subitem-> get_delivery_date());
+$delivery_date = CommentRepository::mysql_date_to_english_format($tracking_subitem-> get_delivery_date());
 ?>
 <input type="hidden" id="id_tracking_subitem" name="id_tracking_subitem" value="<?php echo $tracking_subitem-> get_id(); ?>">
 <div class="modal-body">

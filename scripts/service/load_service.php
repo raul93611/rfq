@@ -15,5 +15,5 @@ Database::close_connection();
   <label for="unit_price">Unit Price:</label>
   <input type="number" step=".01" name="unit_price" class="form-control form-control-sm" value="<?php echo $service-> get_unit_price(); ?>">
 </div>
-<input type="hidden" name="id_rfq" value="<?php echo $service-> get_id_rfq(); ?>">
+<input type="hidden" name="id_quote" value="<?php echo $service-> get_id_quote(); ?>">
 <input type="hidden" name="id_service" value="<?php echo $id_service; ?>">

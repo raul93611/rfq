@@ -1,25 +1,25 @@
 <?php
 class ReQuoteItemRepository{
-  public static function insert_re_quote_item($connection, $re_quote_item){
-    if(isset($connection)){
+  public static function insert_re_quote_item($database, $re_quote_item){
+    if(isset($database)){
       try{
         $sql = 'INSERT INTO re_quote_items(id_re_quote, brand, brand_project, part_number, part_number_project, description, description_project, quantity, unit_price, total_price, comments, website, additional) VALUES(:id_re_quote, :brand, :brand_project, :part_number, :part_number_project, :description, :description_project, :quantity, :unit_price, :total_price, :comments, :website, :additional)';
-        $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_re_quote', $re_quote_item-> get_id_re_quote(), PDO::PARAM_STR);
-        $sentence-> bindParam(':brand', $re_quote_item-> get_brand(), PDO::PARAM_STR);
-        $sentence-> bindParam(':brand_project', $re_quote_item-> get_brand_project(), PDO::PARAM_STR);
-        $sentence-> bindParam(':part_number', $re_quote_item-> get_part_number(), PDO::PARAM_STR);
-        $sentence-> bindParam(':part_number_project', $re_quote_item-> get_part_number_project(), PDO::PARAM_STR);
-        $sentence-> bindParam(':description', $re_quote_item-> get_description(), PDO::PARAM_STR);
-        $sentence-> bindParam(':description_project', $re_quote_item-> get_description_project(), PDO::PARAM_STR);
-        $sentence-> bindParam(':quantity', $re_quote_item-> get_quantity(), PDO::PARAM_STR);
-        $sentence-> bindParam(':unit_price', $re_quote_item-> get_unit_price(), PDO::PARAM_STR);
-        $sentence-> bindParam(':total_price', $re_quote_item-> get_total_price(), PDO::PARAM_STR);
-        $sentence-> bindParam(':comments', $re_quote_item-> get_comments(), PDO::PARAM_STR);
-        $sentence-> bindParam(':website', $re_quote_item-> get_website(), PDO::PARAM_STR);
-        $sentence-> bindParam(':additional', $re_quote_item-> get_additional(), PDO::PARAM_STR);
-        $sentence-> execute();
-        $id = $connection-> lastInsertId();
+        $query = $database-> prepare($sql);
+        $query-> bindParam(':id_re_quote', $re_quote_item-> get_id_re_quote(), PDO::PARAM_STR);
+        $query-> bindParam(':brand', $re_quote_item-> get_brand(), PDO::PARAM_STR);
+        $query-> bindParam(':brand_project', $re_quote_item-> get_brand_project(), PDO::PARAM_STR);
+        $query-> bindParam(':part_number', $re_quote_item-> get_part_number(), PDO::PARAM_STR);
+        $query-> bindParam(':part_number_project', $re_quote_item-> get_part_number_project(), PDO::PARAM_STR);
+        $query-> bindParam(':description', $re_quote_item-> get_description(), PDO::PARAM_STR);
+        $query-> bindParam(':description_project', $re_quote_item-> get_description_project(), PDO::PARAM_STR);
+        $query-> bindParam(':quantity', $re_quote_item-> get_quantity(), PDO::PARAM_STR);
+        $query-> bindParam(':unit_price', $re_quote_item-> get_unit_price(), PDO::PARAM_STR);
+        $query-> bindParam(':total_price', $re_quote_item-> get_total_price(), PDO::PARAM_STR);
+        $query-> bindParam(':comments', $re_quote_item-> get_comments(), PDO::PARAM_STR);
+        $query-> bindParam(':website', $re_quote_item-> get_website(), PDO::PARAM_STR);
+        $query-> bindParam(':additional', $re_quote_item-> get_additional(), PDO::PARAM_STR);
+        $query-> execute();
+        $id = $database-> lastInsertId();
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
@@ -30,14 +30,14 @@ class ReQuoteItemRepository{
   public static function print_re_quote_items($id_re_quote) {
     Database::open_connection();
     $re_quote = ReQuoteRepository::get_re_quote_by_id(Database::get_connection(), $id_re_quote);
-    $quote = RepositorioRfq::obtener_cotizacion_por_id(Database::get_connection(), $re_quote-> get_id_rfq());
+    $quote = QuoteRepository::get_by_id(Database::get_connection(), $re_quote-> get_id_quote());
     $re_quote_items = self::get_re_quote_items_by_id_re_quote(Database::get_connection(), $id_re_quote);
-    $items = RepositorioItem::obtener_items_por_id_rfq(Database::get_connection(), $re_quote-> get_id_rfq());
+    $items = ItemRepository::get_all_by_id_quote(Database::get_connection(), $re_quote-> get_id_quote());
     Database::close_connection();
     if (count($re_quote_items)) {
       ?>
       <br>
-      <a target="_blank" href="<?php echo PDF_RE_QUOTE . $re_quote-> get_id_rfq(); ?>" class="btn btn-primary float-right"><i class="fa fa-file"></i> PDF</a>
+      <a target="_blank" href="<?php echo PDF_RE_QUOTE . $re_quote-> get_id_quote(); ?>" class="btn btn-primary float-right"><i class="fa fa-file"></i> PDF</a>
       <h2>Items:</h2>
       <div class="p-3">
         <div class="custom-control custom-radio">
@@ -55,7 +55,7 @@ class ReQuoteItemRepository{
           <thead>
             <tr>
               <th class="options">Options</th>
-              <th id="numeracion">#</th>
+              <th id="numeration">#</th>
               <th class="description">PROJECT SPECIFICATIONS</th>
               <th class="description">E-LOGIC PROPOSAL</th>
               <th class="options">WEBSITE</th>
@@ -82,7 +82,7 @@ class ReQuoteItemRepository{
             <td></td>
             <td id="total_re_quote"></td>
             <td></td>
-            <td id="total_ganado"><?php echo '$ ' . $quote-> obtener_total_price(); ?></td>
+            <td id="total_ganado"><?php echo '$ ' . $quote-> get_total_price(); ?></td>
             <td id="profit_rq"></td>
           </tbody>
         </table>
@@ -90,7 +90,7 @@ class ReQuoteItemRepository{
       <?php
       $id_items = [];
       $id_subitems = [];
-      $contador_subitems = 0;
+      $subitems_counter = 0;
       foreach ($re_quote_items as $key => $re_quote_item) {
         $id_items[] = $re_quote_item-> get_id();
         Database::open_connection();
@@ -128,12 +128,12 @@ class ReQuoteItemRepository{
 
         <div class="col-md-3">
           <div class="form-group">
-            <textarea class="form-control form-control-sm" rows="1" name="shipping" id="shipping" disabled placeholder="Enter shipping ..."><?php echo $quote-> obtener_shipping(); ?></textarea>
+            <textarea class="form-control form-control-sm" rows="1" name="shipping" id="shipping" disabled placeholder="Enter shipping ..."><?php echo $quote-> get_shipping(); ?></textarea>
           </div>
         </div>
         <div class="col-md-3">
           <div class="form-group">
-            <input type="number" step=".01" class="form-control form-control-sm" id="shipping_cost" disabled name="shipping_cost" value="<?php echo $quote-> obtener_shipping_cost(); ?>">
+            <input type="number" step=".01" class="form-control form-control-sm" id="shipping_cost" disabled name="shipping_cost" value="<?php echo $quote-> get_shipping_cost(); ?>">
           </div>
         </div>
       </div>
@@ -269,28 +269,28 @@ class ReQuoteItemRepository{
     echo '</td>';
     ?>
       <td><?php echo '$ ' . $best_unit_price * $re_quote_item-> get_quantity(); ?></td>
-      <td><?php if(!is_null($item)){echo '$ ' . $item-> obtener_unit_price();} ?></td>
-      <td><?php if(!is_null($item)){echo '$ ' . $item-> obtener_total_price();} ?></td>
+      <td><?php if(!is_null($item)){echo '$ ' . $item-> get_unit_price();} ?></td>
+      <td><?php if(!is_null($item)){echo '$ ' . $item-> get_total_price();} ?></td>
       <td><?php echo nl2br($re_quote_item-> get_comments()); ?></td>
     </tr>
     <?php
     if(!is_null($item)){
-      $j = ReQuoteSubitemRepository::print_re_quote_subitems($re_quote_item-> get_id(), $item-> obtener_id(), $j);
+      $j = ReQuoteSubitemRepository::print_re_quote_subitems($re_quote_item-> get_id(), $item-> get_id(), $j);
     }else{
       $j = ReQuoteSubitemRepository::print_re_quote_subitems($re_quote_item-> get_id(), '', $j);
     }
     return $j;
   }
 
-  public static function get_re_quote_items_by_id_re_quote($connection, $id_re_quote){
+  public static function get_re_quote_items_by_id_re_quote($database, $id_re_quote){
     $re_quote_items = [];
-    if(isset($connection)){
+    if(isset($database)){
       try{
         $sql = 'SELECT * FROM re_quote_items WHERE id_re_quote = :id_re_quote';
-        $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_re_quote', $id_re_quote, PDO::PARAM_STR);
-        $sentence-> execute();
-        $result = $sentence-> fetchAll(PDO::FETCH_ASSOC);
+        $query = $database-> prepare($sql);
+        $query-> bindParam(':id_re_quote', $id_re_quote, PDO::PARAM_STR);
+        $query-> execute();
+        $result = $query-> fetchAll(PDO::FETCH_ASSOC);
         if(count($result)){
           foreach ($result as $key => $row) {
             $re_quote_items[] = new ReQuoteItem($row['id'], $row['id_re_quote'], $row['brand'], $row['brand_project'], $row['part_number'], $row['part_number_project'], $row['description'], $row['description_project'], $row['quantity'], $row['unit_price'], $row['total_price'], $row['comments'], $row['website'], $row['additional']);
@@ -303,15 +303,15 @@ class ReQuoteItemRepository{
     return $re_quote_items;
   }
 
-  public static function get_re_quote_item_by_id($connection, $id_re_quote_item){
+  public static function get_re_quote_item_by_id($database, $id_re_quote_item){
     $re_quote_item = null;
-    if(isset($connection)){
+    if(isset($database)){
       try{
         $sql = 'SELECT * FROM re_quote_items WHERE id = :id_re_quote_item';
-        $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_re_quote_item', $id_re_quote_item, PDO::PARAM_STR);
-        $sentence-> execute();
-        $result = $sentence-> fetch(PDO::FETCH_ASSOC);
+        $query = $database-> prepare($sql);
+        $query-> bindParam(':id_re_quote_item', $id_re_quote_item, PDO::PARAM_STR);
+        $query-> execute();
+        $result = $query-> fetch(PDO::FETCH_ASSOC);
         if(!empty($result)){
           $re_quote_item = new ReQuoteItem($result['id'], $result['id_re_quote'], $result['brand'], $result['brand_project'], $result['part_number'], $result['part_number_project'], $result['description'], $result['description_project'], $result['quantity'], $result['unit_price'], $result['total_price'], $result['comments'], $result['website'], $result['additional']);
         }
@@ -322,58 +322,58 @@ class ReQuoteItemRepository{
     return $re_quote_item;
   }
 
-  public static function update_re_quote_item($connection, $brand, $brand_project, $part_number, $part_number_project, $description, $description_project, $quantity, $comments, $website, $id_re_quote_item){
-    if(isset($connection)){
+  public static function update_re_quote_item($database, $brand, $brand_project, $part_number, $part_number_project, $description, $description_project, $quantity, $comments, $website, $id_re_quote_item){
+    if(isset($database)){
       try{
         $sql = 'UPDATE re_quote_items SET brand = :brand, brand_project = :brand_project, part_number = :part_number, part_number_project = :part_number_project, description = :description, description_project = :description_project, quantity = :quantity, comments = :comments, website = :website WHERE id = :id_re_quote_item';
-        $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':brand', $brand, PDO::PARAM_STR);
-        $sentence-> bindParam(':brand_project', $brand_project, PDO::PARAM_STR);
-        $sentence-> bindParam(':part_number', $part_number, PDO::PARAM_STR);
-        $sentence-> bindParam(':part_number_project', $part_number_project, PDO::PARAM_STR);
-        $sentence-> bindParam(':description', $description, PDO::PARAM_STR);
-        $sentence-> bindParam(':description_project', $description_project, PDO::PARAM_STR);
-        $sentence-> bindParam(':quantity', $quantity, PDO::PARAM_STR);
-        $sentence-> bindParam(':comments', $comments, PDO::PARAM_STR);
-        $sentence-> bindParam(':website', $website, PDO::PARAM_STR);
-        $sentence-> bindParam(':id_re_quote_item', $id_re_quote_item, PDO::PARAM_STR);
-        $sentence-> execute();
+        $query = $database-> prepare($sql);
+        $query-> bindParam(':brand', $brand, PDO::PARAM_STR);
+        $query-> bindParam(':brand_project', $brand_project, PDO::PARAM_STR);
+        $query-> bindParam(':part_number', $part_number, PDO::PARAM_STR);
+        $query-> bindParam(':part_number_project', $part_number_project, PDO::PARAM_STR);
+        $query-> bindParam(':description', $description, PDO::PARAM_STR);
+        $query-> bindParam(':description_project', $description_project, PDO::PARAM_STR);
+        $query-> bindParam(':quantity', $quantity, PDO::PARAM_STR);
+        $query-> bindParam(':comments', $comments, PDO::PARAM_STR);
+        $query-> bindParam(':website', $website, PDO::PARAM_STR);
+        $query-> bindParam(':id_re_quote_item', $id_re_quote_item, PDO::PARAM_STR);
+        $query-> execute();
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
   }
 
-  public static function delete_re_quote_item($connection, $id_re_quote_item){
-    if(isset($connection)){
+  public static function delete_re_quote_item($database, $id_re_quote_item){
+    if(isset($database)){
       try{
-        $connection-> beginTransaction();
+        $database-> beginTransaction();
         $sql1 = 'DELETE FROM re_quote_providers WHERE id_re_quote_item = :id_re_quote_item';
-        $sentence1 = $connection-> prepare($sql1);
-        $sentence1-> bindParam(':id_re_quote_item', $id_re_quote_item, PDO::PARAM_STR);
-        $sentence1-> execute();
+        $query1 = $database-> prepare($sql1);
+        $query1-> bindParam(':id_re_quote_item', $id_re_quote_item, PDO::PARAM_STR);
+        $query1-> execute();
         $sql2 = 'DELETE FROM re_quote_items WHERE id = :id_re_quote_item';
-        $sentence2 = $connection-> prepare($sql2);
-        $sentence2-> bindParam(':id_re_quote_item', $id_re_quote_item, PDO::PARAM_STR);
-        $sentence2-> execute();
-        $connection-> commit();
+        $query2 = $database-> prepare($sql2);
+        $query2-> bindParam(':id_re_quote_item', $id_re_quote_item, PDO::PARAM_STR);
+        $query2-> execute();
+        $database-> commit();
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
-        $connection-> rollBack();
+        $database-> rollBack();
       }
     }
   }
 
-  public static function insert_calc($connection, $unit_price, $total_price, $additional, $id_re_quote_item){
-    if(isset($connection)){
+  public static function insert_calc($database, $unit_price, $total_price, $additional, $id_re_quote_item){
+    if(isset($database)){
       try{
         $sql = 'UPDATE re_quote_items SET unit_price = :unit_price, total_price = :total_price, additional = :additional WHERE id = :id_re_quote_item';
-        $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':unit_price', $unit_price, PDO::PARAM_STR);
-        $sentence-> bindParam(':total_price', $total_price, PDO::PARAM_STR);
-        $sentence-> bindParam(':additional', $additional, PDO::PARAM_STR);
-        $sentence-> bindParam(':id_re_quote_item', $id_re_quote_item, PDO::PARAM_STR);
-        $sentence-> execute();
+        $query = $database-> prepare($sql);
+        $query-> bindParam(':unit_price', $unit_price, PDO::PARAM_STR);
+        $query-> bindParam(':total_price', $total_price, PDO::PARAM_STR);
+        $query-> bindParam(':additional', $additional, PDO::PARAM_STR);
+        $query-> bindParam(':id_re_quote_item', $id_re_quote_item, PDO::PARAM_STR);
+        $query-> execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
