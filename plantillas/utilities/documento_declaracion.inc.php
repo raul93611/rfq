@@ -26,6 +26,7 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito:300,400,700,900" rel="stylesheet">
     <link rel="stylesheet" href="<?php echo SERVIDOR; ?>bower_components/bootstrap-fileinput/css/fileinput.min.css">
     <link rel="stylesheet" href="<?php echo SERVIDOR; ?>bower_components/bootstrap-fileinput/themes/explorer-fas/theme.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
   </head>
   <body class="hold-transition sidebar-mini sidebar-collapse">
     <div class="wrapper">

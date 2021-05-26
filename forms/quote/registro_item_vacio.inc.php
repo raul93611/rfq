@@ -38,7 +38,7 @@
   </div>
   <div class="form-group">
     <label for="comments">Comments:</label>
-    <textarea class="form-control form-control-sm" rows="5" placeholder="Enter comments ..." id="comments" name="comments"></textarea>
+    <textarea class="summernote_textarea form-control form-control-sm" rows="5" placeholder="Enter comments ..." id="comments" name="comments"></textarea>
   </div>
   <div class="form-group">
     <label for="website">Website:</label>

@@ -1,4 +1,11 @@
 $(document).ready(function () {
+  /**************************************FONT COLOR FOR TEXTAREAS***********/
+  $('.summernote_textarea').summernote({
+  toolbar: [
+    ['color', ['color']]
+  ]
+});
+
   /***********************************FULFILLMENT SERVICES******************/
   $('#fulfillment_page').on('click', '.add_fulfillment_service_button', function(){
     var id_service = $(this).attr('name');
