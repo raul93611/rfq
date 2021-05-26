@@ -119,6 +119,7 @@ if(is_null($cotizacion_recuperada)){
             <textarea class="form-control form-control-sm" name="comment_rfq" rows="10" id="comment_rfq" autofocus></textarea>
           </div>
           <input type="hidden" name="id_rfq" value="<?php echo $cotizacion_recuperada-> obtener_id(); ?>">
+          <input type="hidden" name="place" value="quote">
         </form>
       </div>
       <div class="modal-footer">

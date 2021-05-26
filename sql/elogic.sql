@@ -364,3 +364,26 @@ CREATE TABLE type_of_bids(
 );
 
 ALTER TABLE rfq AUTO_INCREMENT = 300;
+
+INSERT INTO type_of_bids (type_of_bid) VALUES
+('Audio Visual'),
+('Back Up Batteries'),
+('Cameras'),
+('Computer Peripherals'),
+('Computers'),
+('Medical'),
+('Miscellaneous'),
+('Monitor & Televisions'),
+('Office Supplies'),
+('Peripherals'),
+('Portable Radios'),
+('Printers'),
+('Servers'),
+('Software'),
+('Tactical'),
+('Tools'),
+('Scanners'),
+('Projectors'),
+('Video Cameras'),
+('Phones'),
+('Services');

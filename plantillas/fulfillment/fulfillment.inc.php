@@ -13,6 +13,14 @@ Conexion::cerrar_conexion();
         <div class="col-sm-2">
           <h1>Fulfillment table</h1>
         </div>
+        <div class="col-sm-8 text-center">
+          <?php
+          Conexion::abrir_conexion();
+          $cantidad_de_comentarios = RepositorioComment::contar_todos_comentarios_quote(Conexion::obtener_conexion(), $quote-> obtener_id());
+          Conexion::cerrar_conexion();
+          ?>
+          <a href="#" id="mostrar_comentarios" class="btn btn-info"><i class="fas fa-comment"></i> Comments(<?php echo $cantidad_de_comentarios; ?>)</a>
+        </div>
       </div>
     </div>
   </section>
@@ -70,6 +78,7 @@ Conexion::cerrar_conexion();
         </div>
         <div class="card-footer footer_item">
           <a class="btn btn-primary" id="go_back" href="<?php echo EDITAR_COTIZACION . '/' . $quote-> obtener_id(); ?>"><i class="fa fa-reply"></i></a>
+          <a href="#" id="add_comment" class="btn btn-primary add_item_charter"><i class="fas fa-plus"></i> Add comment</a>
         </div>
       </div>
     </div>
@@ -274,6 +283,51 @@ Conexion::cerrar_conexion();
         <form id="edit_fulfillment_service_form" method="post" action="">
 
         </form>
+    </div>
+  </div>
+</div>
+<!--*************************************************MODAL COMMENT*************************************************************-->
+<div class="modal fade" id="nuevo_comment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add comment</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="form_nuevo_comment" method="post" enctype="multipart/form-data" action="<?php echo GUARDAR_COMMENT; ?>">
+          <div class="form-group">
+            <label for="comment_rfq">Comment:</label>
+            <textarea class="form-control form-control-sm" name="comment_rfq" rows="10" id="comment_rfq" autofocus></textarea>
+          </div>
+          <input type="hidden" name="id_rfq" value="<?php echo $quote-> obtener_id(); ?>">
+          <input type="hidden" name="place" value="fulfillment">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" name="guardar_comment" form="form_nuevo_comment" class="btn btn-success"><i class="fa fa-check"></i> Save</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-ban"></i> Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--*************************************************MODAL TO SHOW COMMENTS*************************************************************-->
+<div class="modal fade" id="todos_commentarios_quote" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Comments</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <?php
+        RepositorioComment::escribir_comments($quote-> obtener_id());
+        ?>
+      </div>
     </div>
   </div>
 </div>
