@@ -52,8 +52,8 @@ Conexion::cerrar_conexion();
   </div>
   <div class="form-group">
     <label for="comments">Comments:</label>
-    <textarea class="form-control form-control-sm" rows="5" placeholder="Enter comments ..." id="comments" name="comments"><?php echo $subitem->obtener_comments(); ?></textarea>
-    <input type="hidden" name="comments_original" value="<?php echo $subitem->obtener_comments(); ?>">
+    <textarea class="summernote_textarea form-control form-control-sm" rows="5" placeholder="Enter comments ..." id="comments" name="comments"><?php echo $subitem->obtener_comments(); ?></textarea>
+    <textarea name="comments_original" rows="8" cols="80" style="display: none;"><?php echo $subitem->obtener_comments(); ?></textarea>
   </div>
   <div class="form-group">
     <label for="website">Website:</label>
