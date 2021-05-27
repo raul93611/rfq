@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', '1');
+// error_reporting(E_ALL);
+// ini_set('display_errors', '1');
 session_save_path('temp');
 session_start();
 include_once 'app/Bootstrap/config.inc.php';
@@ -90,6 +90,8 @@ include_once 'app/Fulfillment/FulfillmentServiceRepository.inc.php';
 include_once 'app/ProviderList/ProviderList.inc.php';
 include_once 'app/ProviderList/ProviderListRepository.inc.php';
 
+include_once 'app/PaymentTerm/PaymentTerm.inc.php';
+include_once 'app/PaymentTerm/PaymentTermRepository.inc.php';
 
 $componentes_url = parse_url($_SERVER['REQUEST_URI']);
 $ruta = $componentes_url['path'];

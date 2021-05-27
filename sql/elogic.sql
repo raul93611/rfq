@@ -314,6 +314,7 @@ CREATE TABLE fulfillment_items(
   unit_cost DECIMAL(20,2) NOT NULL,
   other_cost DECIMAL(20,2) NOT NULL,
   real_cost DECIMAL(20,2) NOT NULL,
+  payment_term VARCHAR(255) NOT NULL,
   PRIMARY KEY(id),
   FOREIGN KEY(id_item)
     REFERENCES item(id)
@@ -329,6 +330,7 @@ CREATE TABLE fulfillment_subitems(
   unit_cost DECIMAL(20,2) NOT NULL,
   other_cost DECIMAL(20,2) NOT NULL,
   real_cost DECIMAL(20,2) NOT NULL,
+  payment_term VARCHAR(255) NOT NULL,
   PRIMARY KEY(id),
   FOREIGN KEY(id_subitem)
     REFERENCES subitems(id)
@@ -344,6 +346,7 @@ CREATE TABLE fulfillment_services(
   unit_cost DECIMAL(20,2) NOT NULL,
   other_cost DECIMAL(20,2) NOT NULL,
   real_cost DECIMAL(20,2) NOT NULL,
+  payment_term VARCHAR(255) NOT NULL,
   PRIMARY KEY(id),
   FOREIGN KEY(id_service)
     REFERENCES services(id)
@@ -360,6 +363,12 @@ CREATE TABLE providers_list(
 CREATE TABLE type_of_bids(
   id INT NOT NULL AUTO_INCREMENT UNIQUE,
   type_of_bid VARCHAR(255) NOT NULL,
+  PRIMARY KEY(id)
+);
+
+CREATE TABLE payment_terms(
+  id INT NOT NULL AUTO_INCREMENT UNIQUE,
+  payment_term VARCHAR(255) NOT NULL,
   PRIMARY KEY(id)
 );
 
@@ -387,3 +396,32 @@ INSERT INTO type_of_bids (type_of_bid) VALUES
 ('Video Cameras'),
 ('Phones'),
 ('Services');
+
+INSERT INTO providers_list (company_name) VALUES
+('A-I CONSOLIDATED INC'),
+('Ali Pacheco V'),
+('Amazon'),
+('ANIXTER Inc.'),
+('Axxera'),
+('B&H PHOTO-VIDEO'),
+('CITI Inc.'),
+('Control Cable, Inc.'),
+('DarkTrace Limited'),
+('DLT SOLUTIONS LLC'),
+('FedBid'),
+('GLOBAL EQUIPMENT COMPANY INC'),
+('Insight Public Sector, Inc.'),
+('Kron Technologies Inc'),
+('Mythics'),
+('Sunhillo Corporation'),
+('Synamedia Vividtec Holdings, Inc.'),
+('Synnex Corporation'),
+('Tech Data Corp'),
+('ULINE'),
+('UPS');
+
+INSERT INTO payment_terms (payment_term) VALUES
+('Amex Credit Card'),
+('Mercury Credit Card'),
+('Capital Credit Card'),
+('Net 30 terms');

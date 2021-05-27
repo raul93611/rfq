@@ -2,6 +2,7 @@
 Conexion::abrir_conexion();
 $fulfillment_subitem = FulfillmentSubitemRepository::get_one(Conexion::obtener_conexion(), $id_fulfillment_subitem);
 $providers_list = ProviderListRepository::get_all(Conexion::obtener_conexion());
+$payment_terms = PaymentTermRepository::get_all(Conexion::obtener_conexion());
 Conexion::cerrar_conexion();
 ?>
 <div class="modal-body">
@@ -30,6 +31,18 @@ Conexion::cerrar_conexion();
       <div class="form-group">
         <label for="other_cost">Other Cost:</label>
         <input type="number" step=".01" id="other_cost" class="form-control form-control-sm" name="other_cost" value="<?php echo $fulfillment_subitem-> get_other_cost(); ?>">
+      </div>
+      <div class="form-group">
+        <label for="payment_term">Payment Term:</label>
+        <select class="custom-select" name="payment_term" id="payment_term">
+          <?php
+            foreach ($payment_terms as $key => $payment_term) {
+              ?>
+              <option <?php echo $payment_term-> get_payment_term() == $fulfillment_subitem-> get_payment_term() ? 'selected' : ''; ?>><?php echo $payment_term-> get_payment_term(); ?></option>
+              <?php
+            }
+          ?>
+        </select>
       </div>
     </div>
   </div>

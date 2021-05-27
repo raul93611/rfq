@@ -23,6 +23,7 @@ class FulfillmentRepository{
               <th class="thin">UNIT COST</th>
               <th class="thin">OTHER COST</th>
               <th>REAL COST</th>
+              <th>PAYMENT TERM</th>
               <th>PROFIT</th>
             </tr>
           </thead>
@@ -37,10 +38,11 @@ class FulfillmentRepository{
               <td><?php echo $quote-> obtener_total_price(); ?></td>
               <td colspan="5"></td>
               <td><?php echo $quote-> obtener_total_fulfillment(); ?></td>
+              <td></td>
               <td><?php echo $quote-> obtener_fulfillment_profit(); ?></td>
             </tr>
             <tr>
-              <td colspan="12"></td>
+              <td colspan="13"></td>
               <td>% <?php echo number_format(100*(1-($quote-> obtener_total_fulfillment()/$quote-> obtener_total_price())), 2); ?></td>
             </tr>
           </tbody>
@@ -90,6 +92,7 @@ class FulfillmentRepository{
         <td><?php echo $fulfillment_items[0]-> get_unit_cost(); ?></td>
         <td><?php echo $fulfillment_items[0]-> get_other_cost(); ?></td>
         <td><?php echo $fulfillment_items[0]-> get_real_cost(); ?></td>
+        <td><?php echo $fulfillment_items[0]-> get_payment_term(); ?></td>
         <td rowspan="<?php echo $fulfillment_items_quantity; ?>"><?php echo $item-> obtener_fulfillment_profit(); ?></td>
         <?php
       ?>
@@ -108,6 +111,7 @@ class FulfillmentRepository{
         <td><?php echo $fulfillment_item-> get_unit_cost(); ?></td>
         <td><?php echo $fulfillment_item-> get_other_cost(); ?></td>
         <td><?php echo $fulfillment_item-> get_real_cost(); ?></td>
+        <td><?php echo $fulfillment_item-> get_payment_term(); ?></td>
       </tr>
       <?php
     }
@@ -160,6 +164,7 @@ class FulfillmentRepository{
           <td><?php echo $fulfillment_subitems[0]-> get_unit_cost(); ?></td>
           <td><?php echo $fulfillment_subitems[0]-> get_other_cost(); ?></td>
           <td><?php echo $fulfillment_subitems[0]-> get_real_cost(); ?></td>
+          <td><?php echo $fulfillment_subitems[0]-> get_payment_term(); ?></td>
           <td rowspan="<?php echo $fulfillment_subitems_quantity; ?>"><?php echo $subitem-> obtener_fulfillment_profit(); ?></td>
           <?php
         ?>
@@ -178,6 +183,7 @@ class FulfillmentRepository{
           <td><?php echo $fulfillment_subitem-> get_unit_cost(); ?></td>
           <td><?php echo $fulfillment_subitem-> get_other_cost(); ?></td>
           <td><?php echo $fulfillment_subitem-> get_real_cost(); ?></td>
+          <td><?php echo $fulfillment_subitem-> get_payment_term(); ?></td>
         </tr>
         <?php
       }
@@ -208,6 +214,7 @@ class FulfillmentRepository{
               <th class="thin">UNIT COST</th>
               <th class="thin">OTHER COST</th>
               <th>REAL COST</th>
+              <th>PAYMENT TERM</th>
               <th>PROFIT</th>
             </tr>
           </thead>
@@ -222,10 +229,11 @@ class FulfillmentRepository{
               <td><?php echo $total; ?></td>
               <td colspan="5"></td>
               <td><?php echo $quote-> obtener_total_services_fulfillment(); ?></td>
+              <td></td>
               <td><?php echo $quote-> obtener_services_fulfillment_profit(); ?></td>
             </tr>
             <tr>
-              <td colspan="12"></td>
+              <td colspan="13"></td>
               <td>% <?php echo number_format(100*(1-($quote-> obtener_total_services_fulfillment()/$total)), 2); ?></td>
             </tr>
           </tbody>
@@ -269,6 +277,7 @@ class FulfillmentRepository{
           <td><?php echo $fulfillment_services[0]-> get_unit_cost(); ?></td>
           <td><?php echo $fulfillment_services[0]-> get_other_cost(); ?></td>
           <td><?php echo $fulfillment_services[0]-> get_real_cost(); ?></td>
+          <td><?php echo $fulfillment_services[0]-> get_payment_term(); ?></td>
           <td rowspan="<?php echo $fulfillment_services_quantity; ?>"><?php echo $service-> get_fulfillment_profit(); ?></td>
           <?php
         ?>
@@ -287,6 +296,7 @@ class FulfillmentRepository{
           <td><?php echo $fulfillment_service-> get_unit_cost(); ?></td>
           <td><?php echo $fulfillment_service-> get_other_cost(); ?></td>
           <td><?php echo $fulfillment_service-> get_real_cost(); ?></td>
+          <td><?php echo $fulfillment_service-> get_payment_term(); ?></td>
         </tr>
         <?php
       }

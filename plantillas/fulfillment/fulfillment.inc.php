@@ -4,6 +4,7 @@ $quote = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(),
 $providers_list = ProviderListRepository::get_all(Conexion::obtener_conexion());
 $items_exists = RepositorioItem::items_exists(Conexion::obtener_conexion(), $id_rfq);
 $total_services = ServiceRepository::get_total(Conexion::obtener_conexion(), $id_rfq);
+$payment_terms = PaymentTermRepository::get_all(Conexion::obtener_conexion());
 Conexion::cerrar_conexion();
 ?>
 <div class="content-wrapper">
@@ -156,6 +157,18 @@ Conexion::cerrar_conexion();
                 <label for="other_cost">Other Cost:</label>
                 <input type="number" step=".01" id="other_cost" class="form-control form-control-sm" name="other_cost" value="">
               </div>
+              <div class="form-group">
+                <label for="payment_term">Payment Term:</label>
+                <select class="custom-select" name="payment_term">
+                  <?php
+                    foreach ($payment_terms as $key => $payment_term) {
+                      ?>
+                      <option><?php echo $payment_term-> get_payment_term(); ?></option>
+                      <?php
+                    }
+                  ?>
+                </select>
+              </div>
             </div>
           </div>
           <input type="hidden" id="id_item" name="id_item" value="">
@@ -205,6 +218,18 @@ Conexion::cerrar_conexion();
               <div class="form-group">
                 <label for="other_cost">Other Cost:</label>
                 <input type="number" step=".01" id="other_cost" class="form-control form-control-sm" name="other_cost" value="">
+              </div>
+              <div class="form-group">
+                <label for="payment_term">Payment Term:</label>
+                <select class="custom-select" name="payment_term">
+                  <?php
+                    foreach ($payment_terms as $key => $payment_term) {
+                      ?>
+                      <option><?php echo $payment_term-> get_payment_term(); ?></option>
+                      <?php
+                    }
+                  ?>
+                </select>
               </div>
             </div>
           </div>
@@ -256,6 +281,18 @@ Conexion::cerrar_conexion();
               <div class="form-group">
                 <label for="other_cost">Other Cost:</label>
                 <input type="number" step=".01" id="other_cost" class="form-control form-control-sm" name="other_cost" value="">
+              </div>
+              <div class="form-group">
+                <label for="payment_term">Payment Term:</label>
+                <select class="custom-select" name="payment_term">
+                  <?php
+                    foreach ($payment_terms as $key => $payment_term) {
+                      ?>
+                      <option><?php echo $payment_term-> get_payment_term(); ?></option>
+                      <?php
+                    }
+                  ?>
+                </select>
               </div>
             </div>
           </div>

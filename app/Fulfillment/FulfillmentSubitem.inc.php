@@ -7,8 +7,9 @@ class FulfillmentSubitem{
   private $unit_cost;
   private $other_cost;
   private $real_cost;
+  private $payment_term;
 
-  public function __construct($id, $id_subitem, $provider, $quantity, $unit_cost, $other_cost, $real_cost){
+  public function __construct($id, $id_subitem, $provider, $quantity, $unit_cost, $other_cost, $real_cost, $payment_term){
     $this-> id = $id;
     $this-> id_subitem = $id_subitem;
     $this-> provider = $provider;
@@ -16,6 +17,7 @@ class FulfillmentSubitem{
     $this-> unit_cost = $unit_cost;
     $this-> other_cost = $other_cost;
     $this-> real_cost = $real_cost;
+    $this-> payment_term = $payment_term;
   }
 
   public function get_id(){
@@ -44,6 +46,10 @@ class FulfillmentSubitem{
 
   public function get_real_cost(){
     return $this-> real_cost;
+  }
+
+  public function get_payment_term(){
+    return $this-> payment_term;
   }
 }
 ?>
