@@ -45,7 +45,7 @@ switch ($gestor_actual) {
     }
     break;
   case 'search_quotes':
-    include_once 'plantillas/utilities/earch_quotes.inc.php';
+    include_once 'plantillas/utilities/search_quotes.inc.php';
     break;
   case 'employee_docs_page':
     include_once 'plantillas/utilities/employee_docs_page.inc.php';

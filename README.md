@@ -7,3 +7,7 @@ In my.cnf file
 add this line under the [mysqld] section
 sql_mode= ""
 then restart mySQL service
+
+
+Production env.
+enable xmlwriter PHP module

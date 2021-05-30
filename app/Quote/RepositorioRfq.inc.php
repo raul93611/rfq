@@ -1494,7 +1494,7 @@ class RepositorioRfq {
     $quotes = [];
     if(isset($connection)){
       try{
-        $sql = 'SELECT * FROM rfq WHERE fullfillment = 1';
+        $sql = 'SELECT * FROM rfq WHERE fullfillment = 1 LIMIT 100';
         $sentence = $connection-> prepare($sql);
         $sentence-> execute();
         $result = $sentence-> fetchAll(PDO::FETCH_ASSOC);

@@ -4,11 +4,6 @@ define('NOMBRE_USUARIO', 'root');
 define('PASSWORD', '');
 define('NOMBRE_BD', 'elogic');
 
-define('SERVERNAME_FULLFILLMENT', 'localhost');
-define('BD_NAME_FULLFILLMENT', 'fullfillment');
-define('USERNAME_FULLFILLMENT', 'root');
-define('PASSWORD_FULLFILLMENT', '');
-
 define('SERVIDOR', 'http://localhost/rfq/');
 define('ERROR', SERVIDOR . 'error');
 /*****************************USER OPTIONS************************************/
