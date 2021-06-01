@@ -35,7 +35,10 @@ class Rfq {
   private $total_fulfillment;
   private $total_services_fulfillment;
 
-  public function __construct($id, $id_usuario, $usuario_designado, $canal, $email_code, $type_of_bid, $issue_date, $end_date, $status, $completado, $total_cost, $total_price, $comments, $award, $fecha_completado, $fecha_submitted, $fecha_award, $payment_terms, $address, $ship_to, $expiration_date, $ship_via, $taxes, $profit, $additional, $shipping, $shipping_cost, $fullfillment, $fulfillment_date, $contract_number, $fulfillment_profit, $services_fulfillment_profit, $total_fulfillment, $total_services_fulfillment) {
+  public function __construct($id, $id_usuario, $usuario_designado, $canal, $email_code, $type_of_bid, $issue_date, $end_date, $status,
+  $completado, $total_cost, $total_price, $comments, $award, $fecha_completado, $fecha_submitted, $fecha_award, $payment_terms, $address,
+  $ship_to, $expiration_date, $ship_via, $taxes, $profit, $additional, $shipping, $shipping_cost, $fullfillment, $fulfillment_date, $contract_number,
+  $fulfillment_profit, $services_fulfillment_profit, $total_fulfillment, $total_services_fulfillment) {
     $this->id = $id;
     $this->id_usuario = $id_usuario;
     $this->usuario_designado = $usuario_designado;
@@ -184,7 +187,7 @@ class Rfq {
     return $this-> fullfillment;
   }
 
-  public function obtener_fullfillment_date(){
+  public function obtener_fulfillment_date(){
     return $this-> fulfillment_date;
   }
 
