@@ -83,7 +83,7 @@ include_once 'plantillas/user/validacion_recover_password_form.inc.php';
         </form>
         <div class="social-auth-links text-center">
           <p>- OR -</p>
-          <a href="http://www.elogicportal.com" class="btn btn_home btn-flat">Home</a>
+          <a href="https://www.elogicportal.com" class="btn btn_home btn-flat">Home</a>
         </div>
       </div>
     </div>

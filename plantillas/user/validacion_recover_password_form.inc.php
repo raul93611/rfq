@@ -30,7 +30,7 @@ if(isset($_POST['send'])){
     <html>
     <body>
     <h3>Restart your password:</h3>
-    <p><a href="http://www.elogicportal.com/rfq/restart_password/' . $url_secreta . '">Restart your password</a></p>
+    <p><a href="https://www.elogicportal.com/rfq/restart_password/' . $url_secreta . '">Restart your password</a></p>
     </body>
     </html>
     ';

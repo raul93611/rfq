@@ -15,7 +15,7 @@ class Email{
     <table align="center" border="0" cellpadding="0" cellspacing="0" style="box-shadow: 5px 10px 8px #888888;width:400px;padding:10px;border-radius: 10px; border-collapse: separate;" bgcolor="#FFFFFF">
       <tr>
         <td align="center" style="padding: 10px;">
-          <img src="http://www.elogicportal.com/congratulation_img.png" alt="Logo" style="width:300px;border:0;"/>
+          <img src="https://www.elogicportal.com/congratulation_img.png" alt="Logo" style="width:300px;border:0;"/>
         </td>
       </tr>
       <tr>
@@ -25,7 +25,7 @@ class Email{
       </tr>
       <tr>
         <td align="center" style="padding: 10px;">
-          <img src="http://www.elogicportal.com/rfp/img/eP_logo_home.png" alt="Logo" style="width:50px;border:0;"/>
+          <img src="https://www.elogicportal.com/rfp/img/eP_logo_home.png" alt="Logo" style="width:50px;border:0;"/>
         </td>
       </tr>
     </table>

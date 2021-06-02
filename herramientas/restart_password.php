@@ -90,7 +90,7 @@ include_once 'plantillas/user/validacion_restart_password_form.inc.php';
       $(document).ready(function(){
         var a = 1;
         var intervalo = setInterval(function(){
-          $('#fondo').attr('href', 'http://www-elogicportal.com/rfq/css/fondo' + a + '.css');
+          $('#fondo').attr('href', 'https://www-elogicportal.com/rfq/css/fondo' + a + '.css');
           if(a == 3){
             a = 0;
           }

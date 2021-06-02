@@ -82,10 +82,10 @@ include_once 'plantillas/user/validacion_login.inc.php';
         </form>
         <div class="social-auth-links text-center">
           <p>- OR -</p>
-          <a href="http://www.elogicportal.com" class="btn btn_home btn-flat">Home</a>
+          <a href="https://www.elogicportal.com" class="btn btn_home btn-flat">Home</a>
         </div>
         <div class="social-auth-links text-center">
-          <a href="http://www.elogicportal.com/rfq/recover_password_form" class="">Did you forget your password?</a>
+          <a href="https://www.elogicportal.com/rfq/recover_password_form" class="">Did you forget your password?</a>
         </div>
       </div>
     </div>

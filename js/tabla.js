@@ -164,7 +164,7 @@ $(document).ready(function () {
     singleDatePicker: true
   });
   $('#tracking_box').on('click', '.edit_tracking', function(){
-    $('#edit_tracking_modal form').load('http://' + document.location.hostname + '/rfq/load_tracking/' + $(this).attr('data'), function(){
+    $('#edit_tracking_modal form').load('/rfq/load_tracking/' + $(this).attr('data'), function(){
       $('.date').daterangepicker({
         singleDatePicker: true
       });
@@ -174,9 +174,9 @@ $(document).ready(function () {
   });
 
   $('#edit_tracking_form').submit(function(){
-    $.post('http://' + document.location.hostname + '/rfq/save_edit_tracking', $(this).serialize(), function(res){
+    $.post('/rfq/save_edit_tracking', $(this).serialize(), function(res){
       $('#edit_tracking_modal').modal('hide');
-      $('#tracking_box').load('http://' + document.location.hostname + '/rfq/load_tracking_box/' + res.id_rfq);
+      $('#tracking_box').load('/rfq/load_tracking_box/' + res.id_rfq);
     });
     return false;
   });
@@ -190,7 +190,7 @@ $(document).ready(function () {
     singleDatePicker: true
   });
   $('#tracking_box').on('click', '.edit_tracking_subitem', function(){
-    $('#edit_tracking_subitem_modal form').load('http://' + document.location.hostname + '/rfq/load_tracking_subitem/' + $(this).attr('data'), function(){
+    $('#edit_tracking_subitem_modal form').load('/rfq/load_tracking_subitem/' + $(this).attr('data'), function(){
       $('.date').daterangepicker({
         singleDatePicker: true
       });
@@ -199,15 +199,15 @@ $(document).ready(function () {
     return false;
   });
   $('#edit_tracking_subitem_form').submit(function(){
-    $.post('http://' + document.location.hostname + '/rfq/save_edit_tracking_subitem', $(this).serialize(), function(res){
+    $.post('/rfq/save_edit_tracking_subitem', $(this).serialize(), function(res){
       $('#edit_tracking_subitem_modal').modal('hide');
-      $('#tracking_box').load('http://' + document.location.hostname + '/rfq/load_tracking_box/' + res.id_rfq);
+      $('#tracking_box').load('/rfq/load_tracking_box/' + res.id_rfq);
     });
     return false;
   });
   /**************************SERVICES*******************************/
   $('#services_table').on('click', '.edit_service', function(){
-    $('#edit_service_modal form').load('http://' + document.location.hostname + '/rfq/load_service/' + $(this).attr('data'), function(){
+    $('#edit_service_modal form').load('/rfq/load_service/' + $(this).attr('data'), function(){
       $('#edit_service_modal').modal();
     });
   });
@@ -252,7 +252,7 @@ $(document).ready(function () {
 
       for (var i = 0; i < archivos.length; i++) {
         array_div_archivos.push('"<h3>' + "<i class='" + "fas fa-file" + "'></i>" + '</h3>"');
-        array_opciones.push('{"previewAsData": false, "caption": "' + archivos[i] + '", "url": "' + 'http://' + document.location.hostname + '/rfq/delete_document/' + $('input[name="id_rfq"]').val() + '/' + archivos[i] + '", "downloadUrl": "' + 'http://' + document.location.hostname + '/rfq/documentos/' + $('input[name="id_rfq"]').val() + '/' + archivos[i] + '", "key": ' + i + '}');
+        array_opciones.push('{"previewAsData": false, "caption": "' + archivos[i] + '", "url": "' + '/rfq/delete_document/' + $('input[name="id_rfq"]').val() + '/' + archivos[i] + '", "downloadUrl": "' + '/rfq/documentos/' + $('input[name="id_rfq"]').val() + '/' + archivos[i] + '", "key": ' + i + '}');
       }
       array_div_archivos.join(',');
       array_div_archivos = '[' + array_div_archivos + ']';
@@ -266,7 +266,7 @@ $(document).ready(function () {
     }
     $('#archivos_ejemplo').fileinput({
       theme: 'explorer-fas',
-      uploadUrl: 'http://' + document.location.hostname + '/rfq/load_img/' + $('input[name="id_rfq"]').val(),
+      uploadUrl: '/rfq/load_img/' + $('input[name="id_rfq"]').val(),
       overwriteInitial: false,
       initialPreviewAsData: true,
       initialPreview: array_div_archivos,
