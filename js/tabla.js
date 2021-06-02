@@ -1,10 +1,18 @@
 $(document).ready(function () {
   /**************************************FONT COLOR FOR TEXTAREAS***********/
   $('.summernote_textarea').summernote({
-  toolbar: [
-    ['color', ['color']]
-  ]
-});
+    callbacks: {
+      onPaste: function (e) {
+        var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('text/html');
+        e.preventDefault();
+        bufferText = bufferText.replace(/<\/?[^>]+(>|$)/g, '');
+        setTimeout($(this).summernote('insertText', bufferText), 10);
+      }
+    },
+    toolbar: [
+      ['color', ['color']]
+    ]
+  });
 
   /***********************************FULFILLMENT SERVICES******************/
   $('#fulfillment_page').on('click', '.add_fulfillment_service_button', function(){
