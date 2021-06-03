@@ -60,9 +60,9 @@ body{
 .sidebar-dark-primary .nav-treeview > .nav-item > .nav-treeview > .nav-item > .nav-link.active{
   background-color: #2B3644 !important;
 }
-.sidebar-dark-primary .nav-treeview > .nav-item > .nav-link{
+/* .sidebar-dark-primary .nav-treeview > .nav-item > .nav-link{
   padding-left: 47px !important;
-}
+} */
 /**********************************************************************************************/
 /***********************************buttons****************************************************/
 .btn-primary {

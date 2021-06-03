@@ -21,5 +21,5 @@
     <link rel="stylesheet" href="<?php echo DIST; ?>css/adminlte.min.css">
     <link rel="stylesheet" href="<?php echo RUTA_CSS; ?>estilos.css">
   </head>
-  <body class="hold-transition sidebar-mini sidebar-collapse">
+  <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed">
     <div class="wrapper">
