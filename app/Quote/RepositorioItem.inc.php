@@ -163,7 +163,9 @@ class RepositorioItem {
     $items = self::obtener_items_por_id_rfq(Conexion::obtener_conexion(), $id_rfq);
     $re_quote_exists = ReQuoteRepository::re_quote_exists(Conexion::obtener_conexion(), $id_rfq);
     Conexion::cerrar_conexion();
-    echo '<br><h2 id="caja_items">Items:</h2>';
+    ?>
+    <br><h2 id="caja_items">Items:</h2>
+    <?php
     if (count($items)) {
       ?>
       <br>
@@ -174,82 +176,77 @@ class RepositorioItem {
         <a target="_blank" href="<?php echo EXCEL_ITEMS_TABLE . $id_rfq; ?>" class="float-right btn btn-primary"><i class="fa fa-file"></i> EXCEL</a>
         <?php
       }
-      echo '<div class="row">';
-      echo '<div class="col-md-3">';
-      if ($cotizacion->obtener_taxes() != 0) {
-        echo '<label>Taxes (%):</label><input type="hidden" name="taxes_original" value="' . $cotizacion->obtener_taxes() . '"><input type="number" step=".01" name="taxes" id="taxes" class="form-control form-control-sm" value="' . $cotizacion->obtener_taxes() . '">';
-      } else {
-        echo '<label>Taxes (%):</label><input type="hidden" name="taxes_original" value="' . $cotizacion->obtener_taxes() . '"><input type="number" step=".01" name="taxes" id="taxes" class="form-control form-control-sm" value="0">';
-      }
-      echo '</div><div class="col-md-3">';
-      if ($cotizacion->obtener_profit() != 0) {
-        echo '<label>Profit (%):</label><input type="hidden" name="profit_original" value="' . $cotizacion->obtener_profit() . '"><input type="number" step=".01" name="profit" id="profit" class="form-control form-control-sm" value="' . $cotizacion->obtener_profit() . '">';
-      } else {
-        echo '<label>Profit (%):</label><input type="hidden" name="profit_original" value="' . $cotizacion->obtener_profit() . '"><input type="number" step=".01" name="profit" id="profit" class="form-control form-control-sm" value="0">';
-      }
-      echo '</div><div class="col-md-3">';
-      if($cotizacion-> obtener_additional() != 0){
-        echo '<label>Additional general ($):</label><input type="hidden" name="additional_general_original" value="' . $cotizacion->obtener_additional() . '"><input type="text" name="additional_general" id="additional_general" class="form-control form-control-sm" value="' . $cotizacion->obtener_additional() . '">';
-      }else{
-        echo '<label>Additional general ($):</label><input type="hidden" name="additional_general_original" value="' . $cotizacion->obtener_additional() . '"><input type="text" name="additional_general" id="additional_general" class="form-control form-control-sm" value="0">';
-      }
-      echo '</div><div class="col-md-3">';
-      echo '<label>Payment terms:</label><div class="form-group">
-          <div class="form-check-inline custom-control custom-radio">
-              <input class="custom-control-input" type="radio" id="net_30" value="Net 30" name="payment_terms"';
-              if ($cotizacion->obtener_payment_terms() == 'Net 30') {
-                echo 'checked';
-              }
-              echo '><label class="custom-control-label" for="net_30">Net 30</label>
+      ?>
+      <div class="row">
+        <div class="col-md-3">
+          <label>Taxes (%):</label>
+          <input type="hidden" name="taxes_original" value="<?php echo $cotizacion->obtener_taxes(); ?>">
+          <input type="number" step=".01" name="taxes" id="taxes" class="form-control form-control-sm" value="<?php echo $cotizacion->obtener_taxes(); ?>">
+        </div>
+        <div class="col-md-3">
+          <label>Profit (%):</label>
+          <input type="hidden" name="profit_original" value="<?php echo $cotizacion->obtener_profit(); ?>">
+          <input type="number" step=".01" name="profit" id="profit" class="form-control form-control-sm" value="<?php echo $cotizacion->obtener_profit(); ?>">
+        </div>
+        <div class="col-md-3">
+          <label>Additional general ($):</label>
+          <input type="hidden" name="additional_general_original" value="<?php echo $cotizacion->obtener_additional(); ?>">
+          <input type="text" name="additional_general" id="additional_general" class="form-control form-control-sm" value="<?php echo $cotizacion->obtener_additional(); ?>">
+        </div>
+        <div class="col-md-3">
+          <label>Payment terms:</label>
+          <div class="custom-control custom-radio">
+            <input type="radio" id="net_30" name="payment_terms" class="custom-control-input" value="Net 30" <?php echo $cotizacion->obtener_payment_terms() == 'Net 30' ? 'checked': ''; ?>>
+            <label class="custom-control-label" for="net_30">Net 30</label>
           </div>
-          <div class="form-check-inline custom-control custom-radio">
-              <input class="custom-control-input" type="radio" id="net_30cc" value="Net 30/CC" name="payment_terms"';
-
-              if ($cotizacion->obtener_payment_terms() == 'Net 30/CC') {
-                echo 'checked';
-              }
-      echo '><label class="custom-control-label" for="net_30cc">Net 30/CC</label>
+          <div class="custom-control custom-radio">
+            <input type="radio" id="net_30cc" name="payment_terms" class="custom-control-input" value="Net 30/CC" <?php echo $cotizacion->obtener_payment_terms() == 'Net 30/CC' ? 'checked' : ''; ?>>
+            <label class="custom-control-label" for="net_30cc">Net 30/CC</label>
           </div>
-      </div>';
-      echo '<input type="hidden" name="payment_terms_original" value="' . $cotizacion-> obtener_payment_terms() . '">';
-      echo '</div></div><br>';
-      echo '<div class="table-responsive">';
-      echo '<table id="tabla_items" class="table table-bordered table-hover">';
-      echo '<thead>';
-      echo '<tr>';
-      echo '<th class="options">Options</th>';
-      echo '<th id="numeracion">#</th>';
-      echo '<th class="description">PROJECT SPECIFICATIONS</th>';
-      echo '<th class="description">E-LOGIC PROPOSAL</th>';
-      echo '<th class="options">WEBSITE</th>';
-      echo '<th class="qty">QTY</th>';
-      echo '<th id="provider">PROVIDERS</th>';
-      echo '<th class="qty">ADDITIONAL</th>';
-      echo '<th class="options">BEST UNIT COST</th>';
-      echo '<th class="options">TOTAL COST</th>';
-      echo '<th class="options">PRICE FOR CLIENT</th>';
-      echo '<th class="options">TOTAL PRICE</th>';
-      echo '<th class="description">COMMENTS</th>';
-      echo '</tr>';
-      echo '</thead>';
-      echo '<tbody id="items">';
-      $k = 1;
-      for ($i = 0; $i < count($items); $i++) {
-        $item = $items[$i];
-        $k = self::escribir_item($item, $k, $i+1);
-      }
-      echo '<td colspan="5" class="display-4"><b><h4>TOTAL:</h4></b></td>';
-      echo '<td id="total_quantity"></td>';
-      echo '<td></td>';
-      echo '<td id="total_additional"></td>';
-      echo '<td></td>';
-      echo '<td id="total1"></td>';
-      echo '<td></td>';
-      echo '<td id="total2"></td>';
-      echo '<td id="dif_total"></td>';
-      echo '</tbody>';
-      echo '</table>';
-      echo '</div>';
+          <input type="hidden" name="payment_terms_original" value="<?php echo $cotizacion-> obtener_payment_terms(); ?>">
+        </div>
+      </div>
+      <br>
+      <div class="table-responsive">
+        <table id="tabla_items" class="table table-bordered table-hover">
+          <thead>
+            <tr>
+              <th class="options">Options</th>
+              <th id="numeracion">#</th>
+              <th class="description">PROJECT SPECIFICATIONS</th>
+              <th class="description">E-LOGIC PROPOSAL</th>
+              <th class="options">WEBSITE</th>
+              <th class="qty">QTY</th>
+              <th id="provider">PROVIDERS</th>
+              <th class="qty">ADDITIONAL</th>
+              <th class="options">BEST UNIT COST</th>
+              <th class="options">TOTAL COST</th>
+              <th class="options">PRICE FOR CLIENT</th>
+              <th class="options">TOTAL PRICE</th>
+              <th class="description">COMMENTS</th>
+            </tr>
+          </thead>
+          <tbody id="items">
+          <?php
+          $k = 1;
+          for ($i = 0; $i < count($items); $i++) {
+            $item = $items[$i];
+            $k = self::escribir_item($item, $k, $i+1);
+          }
+          ?>
+            <td colspan="5" class="display-4"><b><h4>TOTAL:</h4></b></td>
+            <td id="total_quantity"></td>
+            <td></td>
+            <td id="total_additional"></td>
+            <td></td>
+            <td id="total1"></td>
+            <td></td>
+            <td id="total2"></td>
+            <td id="dif_total"></td>
+          </tbody>
+        </table>
+      </div>
+      <?php
       $id_items = '';
       $id_subitems = '';
       $contador_subitems = 0;
@@ -273,17 +270,17 @@ class RepositorioItem {
           $contador_subitems++;
         }
       }
-      echo '<input type="hidden" id="id_items" name="id_items" value="'.$id_items.'">';
-      echo '<input type="hidden" id="id_subitems" name="id_subitems" value="'.$id_subitems.'">';
-      echo '<input type="hidden" id="partes_total_price" name="partes_total_price" value="">';
-      echo '<input type="hidden" id="partes_total_price_subitems" name="partes_total_price_subitems" value="">';
-      echo '<input type="hidden" id="additional" name="additional" value="">';
-      echo '<input type="hidden" id="additional_subitems" name="additional_subitems" value="">';
-      echo '<input type="hidden" id="unit_prices" name="unit_prices" value="">';
-      echo '<input type="hidden" id="unit_prices_subitems" name="unit_prices_subitems" value="">';
-      echo '<input type="hidden" id="total_cost" name="total_cost" value="">';
-      echo '<input type="hidden" id="total_price" name="total_price" value="">';
       ?>
+      <input type="hidden" id="id_items" name="id_items" value="'.$id_items.'">
+      <input type="hidden" id="id_subitems" name="id_subitems" value="'.$id_subitems.'">
+      <input type="hidden" id="partes_total_price" name="partes_total_price" value="">
+      <input type="hidden" id="partes_total_price_subitems" name="partes_total_price_subitems" value="">
+      <input type="hidden" id="additional" name="additional" value="">
+      <input type="hidden" id="additional_subitems" name="additional_subitems" value="">
+      <input type="hidden" id="unit_prices" name="unit_prices" value="">
+      <input type="hidden" id="unit_prices_subitems" name="unit_prices_subitems" value="">
+      <input type="hidden" id="total_cost" name="total_cost" value="">
+      <input type="hidden" id="total_price" name="total_price" value="">
       <br>
       <div class="row">
         <div class="col-md-6">
@@ -299,10 +296,6 @@ class RepositorioItem {
           </div>
         </div>
       </div>
-      <?php
-    }else{
-      ?>
-      <h3 class="text-info text-center"><i class="fas fa-exclamation-circle"></i> No Items to display!</h3>
       <?php
     }
   }

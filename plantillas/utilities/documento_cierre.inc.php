@@ -55,7 +55,7 @@
 <script src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.2.1/themes/fa/theme.js"></script>
 <script src="<?php echo PLUGINS; ?>momentDatatable.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
-<script src="<?php echo DIST; ?>js/adminlte.js"></script>
+<script src="<?php echo DIST; ?>js/adminlte.min.js"></script>
 <script src="<?php echo DIST; ?>js/pages/dashboard3.js"></script>
 <script src="<?php echo RUTA_JS; ?>tabla.js"></script>
 </body>
