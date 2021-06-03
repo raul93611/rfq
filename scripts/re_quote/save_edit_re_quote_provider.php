@@ -1,5 +1,4 @@
 <?php
-echo "string";
 if(isset($_POST['save_edit_re_quote_provider'])){
   Conexion::abrir_conexion();
   ReQuoteProviderRepository::update_re_quote_provider(Conexion::obtener_conexion(), $_POST['provider'], $_POST['price'], $_POST['id_re_quote_provider']);
