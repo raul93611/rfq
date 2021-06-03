@@ -231,7 +231,7 @@ $(document).ready(function () {
   });
   /************************************************************/
   $('#archivos_crear').fileinput({
-    theme: 'explorer-fas',
+    theme: 'fa',
     initialPreviewAsData: true,
     showUpload: false,
     overwriteInitial: false,
@@ -265,7 +265,7 @@ $(document).ready(function () {
       console.log(array_opciones);
     }
     $('#archivos_ejemplo').fileinput({
-      theme: 'explorer-fas',
+      theme: 'fa',
       uploadUrl: '/rfq/load_img/' + $('input[name="id_rfq"]').val(),
       overwriteInitial: false,
       initialPreviewAsData: true,

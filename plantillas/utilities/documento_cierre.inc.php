@@ -41,41 +41,22 @@
     </div>
 </footer>
 </div>
-<script src="<?php echo PLUGINS; ?>jquery/jquery.min.js"></script>
-<script src="<?php echo PLUGINS; ?>bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="<?php echo PLUGINS; ?>chart.js/Chart.min.js"></script>
-<script src="<?php echo PLUGINS; ?>fastclick/fastclick.js"></script>
-<script src="<?php echo DIST; ?>js/adminlte.js"></script>
-<script src="<?php echo DIST; ?>js/demo.js"></script>
-<script src="<?php echo PLUGINS; ?>jQueryUI/jquery-ui.min.js"></script>
-<script>
-  $.widget.bridge('uibutton', $.ui.button)
-</script>
-<script src="<?php echo RUTA_JS; ?>raphael-min.js"></script>
-<script src="<?php echo PLUGINS; ?>morris/morris.min.js"></script>
-<script src="<?php echo PLUGINS; ?>sparkline/jquery.sparkline.min.js"></script>
-<script src="<?php echo PLUGINS; ?>jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
-<script src="<?php echo PLUGINS; ?>jvectormap/jquery-jvectormap-world-mill-en.js"></script>
-<script src="<?php echo PLUGINS; ?>knob/jquery.knob.js"></script>
-<script src="<?php echo PLUGINS; ?>input-mask/jquery.inputmask.js"></script>
-<script src="<?php echo PLUGINS; ?>input-mask/jquery.inputmask.date.extensions.js"></script>
-<script src="<?php echo PLUGINS; ?>input-mask/jquery.inputmask.extensions.js"></script>
-<script src="<?php echo RUTA_JS; ?>moment.min.js"></script>
-<script src="<?php echo PLUGINS; ?>datatables/jquery.dataTables.js"></script>
-<script src="<?php echo PLUGINS; ?>datatables/dataTables.bootstrap4.min.js"></script>
-<script src="<?php echo PLUGINS; ?>daterangepicker/daterangepicker.js"></script>
-<script src="<?php echo PLUGINS; ?>datepicker/bootstrap-datepicker.js"></script>
-<script src="<?php echo PLUGINS; ?>ckeditor/ckeditor.js"></script>
-<script src="<?php echo PLUGINS; ?>bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
-<script src="<?php echo PLUGINS; ?>slimScroll/jquery.slimscroll.min.js"></script>
-<script src="<?php echo SERVIDOR; ?>bower_components/bootstrap-fileinput/js/plugins/piexif.min.js"></script>
-<script src="<?php echo SERVIDOR; ?>bower_components/bootstrap-fileinput/js/plugins/sortable.min.js"></script>
-<script src="<?php echo SERVIDOR; ?>bower_components/bootstrap-fileinput/js/plugins/purify.min.js"></script>
-<script src="<?php echo SERVIDOR; ?>bower_components/bootstrap-fileinput/js/fileinput.min.js"></script>
-<script src="<?php echo SERVIDOR; ?>bower_components/bootstrap-fileinput/themes/explorer-fas/theme.min.js"></script>
-<script src="<?php echo RUTA_JS; ?>moment_datatable.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.3.2/dist/chart.min.js"></script>
+<script src="<?php echo PLUGINS; ?>moment.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.2.1/js/plugins/piexif.min.js" type="text/javascript"></script>
+<script src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.2.1/js/plugins/sortable.min.js" type="text/javascript"></script>
+<script src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.2.1/js/fileinput.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.2.1/themes/fa/theme.js"></script>
+<script src="<?php echo PLUGINS; ?>momentDatatable.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
-<script src="<?php echo RUTA_JS; ?>tabla.js"></script>
+<script src="<?php echo DIST; ?>js/adminlte.js"></script>
 <script src="<?php echo DIST; ?>js/pages/dashboard3.js"></script>
+<script src="<?php echo RUTA_JS; ?>tabla.js"></script>
 </body>
 </html>
