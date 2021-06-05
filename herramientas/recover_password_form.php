@@ -8,10 +8,8 @@ include_once 'plantillas/user/validacion_recover_password_form.inc.php';
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Home</title>
-    <link rel="stylesheet" href="<?php echo PLUGINS; ?>/font-awesome/css/all.min.css">
-    <link rel="stylesheet" href="<?php echo DIST; ?>css/adminlte.min.css">
-    <link rel="stylesheet" href="<?php echo RUTA_CSS; ?>estilos.css">
-    <link rel="stylesheet" href="<?php echo PLUGINS; ?>iCheck/square/blue.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="rfq/dist/css/adminlte.min.css">
     <link rel="Shortcut Icon" href="<?php echo RUTA_IMG; ?>eP_favicon.png" type="image/x-icon" />
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     <link rel="stylesheet" id="fondo" href="css/fondo1.css">
@@ -87,9 +85,8 @@ include_once 'plantillas/user/validacion_recover_password_form.inc.php';
         </div>
       </div>
     </div>
-    <script src="<?php echo PLUGINS; ?>jquery/jquery.min.js"></script>
-    <script src="<?php echo PLUGINS; ?>bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="<?php echo PLUGINS; ?>iCheck/icheck.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
     <script type="text/javascript">
       $(document).ready(function(){
         var a = 1;
