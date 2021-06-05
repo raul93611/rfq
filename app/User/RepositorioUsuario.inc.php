@@ -492,10 +492,6 @@ class RepositorioUsuario {
     $cotizaciones_completadas_pasadas = array();
     $cotizaciones_ganadas = array();
     $cotizaciones_ganadas_pasadas = array();
-    $cotizaciones_sometidas = array();
-    $cotizaciones_sometidas_pasadas = array();
-    $cotizaciones_no_sometidas = array();
-    $cotizaciones_no_sometidas_pasadas = array();
     Conexion::abrir_conexion();
     $usuarios = self::obtener_usuarios_rfq(Conexion::obtener_conexion());
     Conexion::cerrar_conexion();
@@ -507,12 +503,10 @@ class RepositorioUsuario {
         Conexion::abrir_conexion();
         list($cotizaciones_completadas[$i], $cotizaciones_completadas_pasadas[$i]) = self::obtener_cotizaciones_por_usuario(Conexion::obtener_conexion(), $usuario->obtener_id(), 'completado');
         list($cotizaciones_ganadas[$i], $cotizaciones_ganadas_pasadas[$i]) = self::obtener_cotizaciones_por_usuario(Conexion::obtener_conexion(), $usuario->obtener_id(), 'award');
-        list($cotizaciones_sometidas[$i], $cotizaciones_sometidas_pasadas[$i]) = self::obtener_cotizaciones_por_usuario(Conexion::obtener_conexion(), $usuario->obtener_id(), 'status');
-        list($cotizaciones_no_sometidas[$i], $cotizaciones_no_sometidas_pasadas[$i]) = self::obtener_cotizaciones_no_sometidas_por_usuario(Conexion::obtener_conexion(), $usuario->obtener_id());
         Conexion::cerrar_conexion();
       }
     }
-    return array($nombres_usuario, $cotizaciones_completadas, $cotizaciones_completadas_pasadas, $cotizaciones_ganadas, $cotizaciones_ganadas_pasadas, $cotizaciones_sometidas, $cotizaciones_sometidas_pasadas, $cotizaciones_no_sometidas, $cotizaciones_no_sometidas_pasadas);
+    return array($nombres_usuario, $cotizaciones_completadas, $cotizaciones_completadas_pasadas, $cotizaciones_ganadas);
   }
 
   public static function edit_user($conexion, $password, $username, $nombres, $apellidos, $cargo, $email, $id_user) {

@@ -113,6 +113,9 @@ if ($partes_ruta[0] == 'rfq') {
       case 'genera_usuario':
         $ruta_elegida = 'herramientas/genera_usuario.php';
         break;
+      case 'main_charts':
+        $ruta_elegida = 'scripts/utilities/main_charts.php';
+        break;
       case 'logout':
         $ruta_elegida = 'scripts/user/logout.php';
         break;

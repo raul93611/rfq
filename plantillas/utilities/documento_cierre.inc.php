@@ -56,7 +56,7 @@
 <script src="<?php echo PLUGINS; ?>momentDatatable.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
 <script src="<?php echo DIST; ?>js/adminlte.min.js"></script>
-<script src="<?php echo DIST; ?>js/pages/dashboard3.js"></script>
-<script src="<?php echo RUTA_JS; ?>tabla.js"></script>
+<script src="<?php echo RUTA_JS; ?>main_charts.js"></script>
+<script src="<?php echo RUTA_JS; ?>main.js"></script>
 </body>
 </html>
