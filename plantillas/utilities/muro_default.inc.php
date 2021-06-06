@@ -120,3 +120,4 @@
     </div>
   </section>
 </div>
+<script src="<?php echo RUTA_JS; ?>main_charts.js"></script>
