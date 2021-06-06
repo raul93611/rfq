@@ -1,32 +1,5 @@
 <?php
 class Input{
-  public static function print_input_file($path){
-    ?>
-    <label>Documents:</label>
-    <?php
-    if (is_dir($path)) {
-      $gestor = opendir($path);
-      $carpeta = @scandir($path);
-      if(count($carpeta) <= 2){
-      }
-      $archivos = [];
-      while (($archivo = readdir($gestor)) !== false) {
-        $ruta_completa = $path . "/" . $archivo;
-        if ($archivo != "." && $archivo != "..") {
-          $archivos[] = $archivo;
-        }
-      }
-      $archivos = implode(',', $archivos);
-      closedir($gestor);
-      ?>
-      <input type="hidden" id="archivos" value="<?php echo $archivos; ?>">
-      <?php
-    }
-    ?>
-    <input type="file" id="archivos_ejemplo" multiple name="archivos_ejemplo[]">
-    <?php
-  }
-
   public static function print_designated_user($quote){
     if ($quote->obtener_completado() || $quote-> obtener_status()) {
       Conexion::abrir_conexion();

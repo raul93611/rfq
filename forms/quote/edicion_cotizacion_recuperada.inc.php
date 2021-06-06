@@ -30,10 +30,8 @@
   </div>
   <div class="row">
     <div class="col-md-12">
-      <?php
-      $ruta = $_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $cotizacion_recuperada->obtener_id();
-      Input::print_input_file($ruta);
-      ?>
+      <label>Documents:</label>
+      <input type="file" id="archivos_ejemplo" multiple name="archivos_ejemplo[]">
     </div>
   </div>
   <?php

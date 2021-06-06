@@ -243,6 +243,10 @@ if ($partes_ruta[0] == 'rfq') {
         $id_rfq = $partes_ruta[2];
         $ruta_elegida = 'scripts/utilities/proposal.php';
         break;
+      case 'get_quote_files':
+        $id_rfq = $partes_ruta[2];
+        $ruta_elegida = 'scripts/utilities/get_quote_files.php';
+        break;
       case 'proposal_gsa':
         $id_rfq = $partes_ruta[2];
         $encabezado = 1;

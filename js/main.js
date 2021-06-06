@@ -244,36 +244,44 @@ $(document).ready(function () {
   });
 
   if($('#archivos_ejemplo').length != 0){
-    var archivos = $('#archivos').val();
-    var array_div_archivos = [];
-    var array_opciones = [];
-    if(archivos != ''){
-      archivos = archivos.split(',');
+    $.ajax({
+      url: '/rfq/get_quote_files/' + $('[name="id_rfq"]').val(),
+      dataType: 'json',
+      contentType: "application/json; charset=utf-8",
+      method: "GET",
+      success: function(data) {
+        var files = data.files;
+        var filesIcon = [];
+        var filesConfig = [];
+        files.forEach((file, i) => {
+          var icon = '<h1><i class="p-3 fas fa-file"></i></h1>';
+          filesIcon.push(icon);
+          filesConfig.push({
+            previewAsData: false,
+            caption: file,
+            url: '/rfq/delete_document/' + $('input[name="id_rfq"]').val() + '/' + file,
+            downloadUrl: '/rfq/documentos/' + $('input[name="id_rfq"]').val() + '/' + file,
+            key: i
+          });
+        });
 
-      for (var i = 0; i < archivos.length; i++) {
-        array_div_archivos.push('"<h3>' + "<i class='" + "fas fa-file" + "'></i>" + '</h3>"');
-        array_opciones.push('{"previewAsData": false, "caption": "' + archivos[i] + '", "url": "' + '/rfq/delete_document/' + $('input[name="id_rfq"]').val() + '/' + archivos[i] + '", "downloadUrl": "' + '/rfq/documentos/' + $('input[name="id_rfq"]').val() + '/' + archivos[i] + '", "key": ' + i + '}');
-      }
-      array_div_archivos.join(',');
-      array_div_archivos = '[' + array_div_archivos + ']';
-      console.log(array_div_archivos);
-      array_div_archivos = jQuery.parseJSON(array_div_archivos);
-      array_opciones.join(',');
-      array_opciones = '[' + array_opciones + ']';
-      array_opciones = jQuery.parseJSON(array_opciones);
-      console.log(array_div_archivos);
-      console.log(array_opciones);
-    }
-    $('#archivos_ejemplo').fileinput({
-      theme: 'fa',
-      uploadUrl: '/rfq/load_img/' + $('input[name="id_rfq"]').val(),
-      overwriteInitial: false,
-      initialPreviewAsData: true,
-      initialPreview: array_div_archivos,
-      initialPreviewConfig: array_opciones,
-      fileActionSettings:
-      {
-        showZoom: false
+        $('#archivos_ejemplo').fileinput({
+          theme: 'explorer-fa',
+          uploadUrl: '/rfq/load_img/' + $('input[name="id_rfq"]').val(),
+          overwriteInitial: false,
+          initialPreviewAsData: true,
+          initialPreview: filesIcon,
+          initialPreviewConfig: filesConfig,
+          showRemove: false,
+          showCancel: false,
+          fileActionSettings:
+          {
+            showZoom: false,
+          }
+        });
+      },
+      error: function(data) {
+        console.log(data);
       }
     });
   }
