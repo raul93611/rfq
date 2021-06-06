@@ -7,7 +7,7 @@
       </div>
       <div class="form-group">
         <label for="issue_date">Issue date:</label>
-        <input type="text" class="form-control form-control-sm" id="issue_date" name="issue_date" placeholder="Issue date" required>
+        <input type="text" class="date form-control form-control-sm" id="issue_date" name="issue_date" placeholder="Issue date" required>
       </div>
       <div class="form-group">
         <?php

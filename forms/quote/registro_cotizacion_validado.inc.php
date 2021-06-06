@@ -8,7 +8,7 @@
       </div>
       <div class="form-group">
         <label for="issue_date">Issue date:</label>
-        <input type="text" class="form-control form-control-sm" id="issue_date" name="issue_date" placeholder="Issue date" required <?php $validador-> mostrar_issue_date(); ?>>
+        <input type="text" class="date form-control form-control-sm" id="issue_date" name="issue_date" placeholder="Issue date" required <?php $validador-> mostrar_issue_date(); ?>>
         <?php $validador->mostrar_error_issue_date(); ?>
       </div>
       <div class="form-group">

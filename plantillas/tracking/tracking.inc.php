@@ -159,3 +159,4 @@ Conexion::cerrar_conexion();
     </div>
   </div>
 </div>
+<script src="<?php echo RUTA_JS; ?>tracking.js"></script>

@@ -34,7 +34,7 @@
   <div class="col-md-6">
     <div class="form-group">
       <label for="issue_date">Issue date:</label>
-      <input type="text" class="form-control form-control-sm" id="issue_date" name="issue_date" value="<?php echo $cotizacion_recuperada->obtener_issue_date(); ?>">
+      <input type="text" class="date form-control form-control-sm" id="issue_date" name="issue_date" value="<?php echo $cotizacion_recuperada->obtener_issue_date(); ?>">
       <input type="hidden" name="issue_date_original" value="<?php echo $cotizacion_recuperada->obtener_issue_date(); ?>">
     </div>
   </div>
@@ -72,14 +72,14 @@
   <div class="col-md-6">
     <div class="form-group">
         <label for="completed_date">Completed date:</label>
-        <input type="text" class="form-control form-control-sm" id="completed_date" name="completed_date" value="<?php if($cotizacion_recuperada->obtener_fecha_completado() != '0000-00-00'){echo RepositorioComment::mysql_date_to_english_format($cotizacion_recuperada->obtener_fecha_completado());} ?>">
+        <input type="text" class="date form-control form-control-sm" id="completed_date" name="completed_date" value="<?php if($cotizacion_recuperada->obtener_fecha_completado() != '0000-00-00'){echo RepositorioComment::mysql_date_to_english_format($cotizacion_recuperada->obtener_fecha_completado());} ?>">
         <input type="hidden" name="completed_date_original" value="<?php if($cotizacion_recuperada->obtener_fecha_completado() != '0000-00-00'){echo RepositorioComment::mysql_date_to_english_format($cotizacion_recuperada->obtener_fecha_completado());} ?>">
     </div>
   </div>
   <div class="col-md-6">
     <div class="form-group">
         <label for="expiration_date">Expiration date:</label>
-        <input type="text" class="form-control form-control-sm" id="expiration_date" name="expiration_date" value="<?php if($cotizacion_recuperada->obtener_expiration_date() != '0000-00-00'){echo RepositorioComment::mysql_date_to_english_format($cotizacion_recuperada->obtener_expiration_date());} ?>">
+        <input type="text" class="date form-control form-control-sm" id="expiration_date" name="expiration_date" value="<?php if($cotizacion_recuperada->obtener_expiration_date() != '0000-00-00'){echo RepositorioComment::mysql_date_to_english_format($cotizacion_recuperada->obtener_expiration_date());} ?>">
         <input type="hidden" name="expiration_date_original" value="<?php if($cotizacion_recuperada->obtener_expiration_date() != '0000-00-00'){echo RepositorioComment::mysql_date_to_english_format($cotizacion_recuperada->obtener_expiration_date());} ?>">
     </div>
   </div>

@@ -209,3 +209,5 @@ if(is_null($cotizacion_recuperada)){
     </div>
   </div>
 </div>
+<script src="<?php echo RUTA_JS; ?>services.js"></script>
+<script src="<?php echo RUTA_JS; ?>quote.js"></script>

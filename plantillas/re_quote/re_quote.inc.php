@@ -65,3 +65,4 @@ Conexion::cerrar_conexion();
     </div>
   </div>
 </div>
+<script src="<?php echo RUTA_JS; ?>reQuote.js"></script>
