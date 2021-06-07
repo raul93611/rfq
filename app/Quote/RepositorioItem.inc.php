@@ -271,8 +271,8 @@ class RepositorioItem {
         }
       }
       ?>
-      <input type="hidden" id="id_items" name="id_items" value="'.$id_items.'">
-      <input type="hidden" id="id_subitems" name="id_subitems" value="'.$id_subitems.'">
+      <input type="hidden" id="id_items" name="id_items" value="<?php echo $id_items; ?>">
+      <input type="hidden" id="id_subitems" name="id_subitems" value="<?php echo $id_subitems; ?>">
       <input type="hidden" id="partes_total_price" name="partes_total_price" value="">
       <input type="hidden" id="partes_total_price_subitems" name="partes_total_price_subitems" value="">
       <input type="hidden" id="additional" name="additional" value="">

@@ -52,39 +52,39 @@ class AuditTrailRepository{
   public static function display_audit_trails($connection, $id_rfq){
     $audit_trails = self::get_audit_trails($connection, $id_rfq);
     ?>
-    <ul class="timeline">
-      <li class="clickable_title">
+    <div class="timeline">
+      <div>
         <i class="fa fa-bookmark"></i>
         <div class="timeline-item">
           <h3 class="timeline-header">Proposal: <?php echo $id_rfq; ?></h3>
         </div>
-      </li>
+      </div>
       <?php
       if(count($audit_trails)){
         foreach ($audit_trails as $audit_trail) {
           $created_date = RepositorioComment::mysql_datetime_to_english_format($audit_trail-> get_created_date());
           ?>
-          <li class="body_comments">
+          <div>
             <i class="fa fa-user"></i>
             <div class="timeline-item">
               <span class="time"><i class="far fa-clock"></i> <?php echo $created_date; ?></span>
               <h3 class="timeline-header">
                 <span class="text-primary"><?php echo $audit_trail-> get_username(); ?></span></h3>
-              <div class="timeline-body">
-                <?php echo nl2br($audit_trail-> get_audit_trail()); ?>
+                <div class="timeline-body">
+                  <?php echo nl2br($audit_trail-> get_audit_trail()); ?>
+                </div>
               </div>
-            </div>
-          </li>
+          </div>
           <?php
         }
       }
       ?>
-      <li>
+      <div>
         <i class="fa fa-infinity"></i>
-      </li>
-      </ul>
-      <br>
-      <?php
+      </div>
+    </div>
+    <br>
+    <?php
   }
 
   public static function quote_info_events($connection, $contract_number, $contract_number_original, $code, $code_original, $type_of_bid, $type_of_bid_original, $issue_date, $issue_date_original, $end_date, $end_date_original, $canal, $canal_original, $designated_user, $designated_user_original, $completed_date, $completed_date_original, $expiration_date, $expiration_date_original, $comments, $comments_original, $ship_via, $ship_via_original, $address, $address_original, $ship_to, $ship_to_original, $id_rfq){

@@ -61,47 +61,47 @@ class RepositorioComment{
     $comments = self::obtener_comments_de_un_rfq(Conexion::obtener_conexion(), $id_rfq);
     Conexion::cerrar_conexion();
     ?>
-    <ul class="timeline">
-      <li class="clickable_title">
+    <div class="timeline">
+      <div>
         <i class="fa fa-bookmark"></i>
         <div class="timeline-item">
-          <h3 class="timeline-header">Proposal: <?php echo $cotizacion-> obtener_id(); ?></a></h3>
+          <h3 class="timeline-header">Proposal: <?php echo $cotizacion-> obtener_id(); ?></h3>
         </div>
-      </li>
+      </div>
       <?php
       if(count($comments)){
         foreach ($comments as $comment) {
           $fecha_comment = self::mysql_datetime_to_english_format($comment-> obtener_fecha_comment());
           ?>
-          <li class="body_comments">
+          <div>
             <i class="fa fa-user"></i>
             <div class="timeline-item">
               <span class="time"><i class="far fa-clock"></i> <?php echo $fecha_comment; ?></span>
               <h3 class="timeline-header">
                 <span class="text-primary">
-                <?php
-                Conexion::abrir_conexion();
-                $usuario = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), $comment-> obtener_id_usuario());
-                Conexion::cerrar_conexion();
-                echo $usuario-> obtener_nombre_usuario();
-                ?>
+                  <?php
+                  Conexion::abrir_conexion();
+                  $usuario = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), $comment-> obtener_id_usuario());
+                  Conexion::cerrar_conexion();
+                  echo $usuario-> obtener_nombre_usuario();
+                  ?>
                 </span>
-                 said</h3>
-              <div class="timeline-body">
-                <?php echo nl2br($comment-> obtener_comment()); ?>
+                said</h3>
+                <div class="timeline-body">
+                  <?php echo nl2br($comment-> obtener_comment()); ?>
+                </div>
               </div>
-            </div>
-          </li>
+          </div>
           <?php
         }
       }
       ?>
-      <li>
+      <div>
         <i class="fa fa-infinity"></i>
-      </li>
-      </ul>
-      <br>
-      <?php
+      </div>
+    </div>
+    <br>
+    <?php
   }
 
   public static function delete_all_comments($conexion, $id_rfq){

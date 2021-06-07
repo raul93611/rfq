@@ -11,7 +11,7 @@
     }
     echo "<title>$titulo</title>";
     ?>
-    <link rel="stylesheet" href="<?php echo DIST; ?>css/adminlte.css">
+    <link rel="stylesheet" type="text/css" href="<?php echo DIST; ?>css/adminlte.min.css"/>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" crossorigin="anonymous">
