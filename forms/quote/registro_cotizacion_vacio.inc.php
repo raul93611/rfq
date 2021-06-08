@@ -37,26 +37,16 @@
       <div class="form-group">
         <label for="type_of_bid">Type of bid:</label>
         <select class="form-control form-control-sm" name="type_of_bid" id="type_of_bid">
-          <option>Audio Visual</option>
-          <option>Back up Batteries</option>
-          <option>Cameras</option>
-          <option>Computer Peripherals</option>
-          <option>Computers</option>
-          <option>Medical</option>
-          <option>Miscellaneous</option>
-          <option>Monitors & Televisions</option>
-          <option>Office Supplies</option>
-          <option>Peripherals</option>
-          <option>Portable Radios</option>
-          <option>Printers</option>
-          <option>Servers</option>
-          <option>Software</option>
-          <option>Tactical</option>
-          <option>Tools</option>
-          <option>Scanners</option>
-          <option>Projectors</option>
-          <option>Video Cameras</option>
-          <option>Phones</option>
+          <?php
+          Conexion::abrir_conexion();
+          $type_of_bids = TypeOfBidRepository::get_all(Conexion::obtener_conexion());
+          Conexion::cerrar_conexion();
+          foreach ($type_of_bids as $key => $type_of_bid) {
+            ?>
+            <option><?php echo $type_of_bid-> get_type_of_bid(); ?></option>
+            <?php
+          }
+          ?>
         </select>
       </div>
       <div class="form-group">
