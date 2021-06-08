@@ -144,12 +144,10 @@ try{
               <tr>
       <td colspan="5">OPEN MARKET PRICING PROPOSAL<br><br>
 
-    E-Logic is an SBA 8(a) and HUBZONE Certified SB
-    SBA 8(a) Case Number: C0069X
-    SBA 8(a) Entrance Date: 09/30/2016
+    E-Logic is an SBA 8(a) and HUBZONE Certified SB<br><br>
+    SBA 8(a) Case Number: C0069X<br><br>
+    SBA 8(a) Entrance Date: 09/30/2016<br><br>
     SBA 8(a) Exit Date: 09/30/2026
-    As authorized by FAR 19.8, Federal agencies may issue sole source contracts to 8(a) firms up to $4 million.
-    The agency CO should send "Offer Letter" and PWS to dcofferletters@sba.gov. The SBA processes the Offer Letter and returns it to the agency CO within 5 business days for contract processing.
   </td>
     </tr>';
       } else {
