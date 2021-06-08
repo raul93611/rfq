@@ -32,6 +32,22 @@
         <?php
         }
         ?>
+        <li class="nav-item">
+          <a href="<?php echo NUEVA_COTIZACION; ?>" class="nav-link <?php echo $cotizacion == 'nuevo' ? 'active' : ''; ?>">
+            <i class="nav-icon fas fa-plus"></i>
+            <p>
+              New quote
+            </p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="<?php echo SEARCH_QUOTES; ?>" class="nav-link <?php echo $gestor_actual == 'search_quotes' ? 'active' : ''; ?>">
+            <i class="nav-icon fas fa-search"></i>
+            <p>
+              Search
+            </p>
+          </a>
+        </li>
         <li class="nav-item <?php echo $gestor_actual == 'cotizaciones' && $cotizacion != 'editar_cotizacion' && $cotizacion != 'nuevo' && $cotizacion != 'add_item' && $cotizacion != 'add_provider' && $cotizacion != 'edit_item' && $cotizacion != 'edit_provider' ? 'menu-open' : ''; ?>">
           <a href="#" class="nav-link <?php echo $gestor_actual == 'cotizaciones' && $cotizacion != 'editar_cotizacion' && $cotizacion != 'nuevo' && $cotizacion != 'add_item' && $cotizacion != 'add_provider' && $cotizacion != 'edit_item' && $cotizacion != 'edit_provider' ? 'active' : ''; ?>">
             <i class="nav-icon fas fa-tag"></i>
@@ -297,22 +313,6 @@
             <i class="nav-icon fas fa-th"></i>
             <p>
               Cancelled
-            </p>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="<?php echo NUEVA_COTIZACION; ?>" class="nav-link <?php echo $cotizacion == 'nuevo' ? 'active' : ''; ?>">
-            <i class="nav-icon fas fa-plus"></i>
-            <p>
-              New quote
-            </p>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="<?php echo SEARCH_QUOTES; ?>" class="nav-link <?php echo $gestor_actual == 'search_quotes' ? 'active' : ''; ?>">
-            <i class="nav-icon fas fa-search"></i>
-            <p>
-              Search
             </p>
           </a>
         </li>

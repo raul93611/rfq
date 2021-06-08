@@ -51,6 +51,7 @@ $(document).ready(function () {
 
         $('#archivos_ejemplo').fileinput({
           theme: 'explorer-fa',
+          mainClass: 'input-group-sm',
           uploadUrl: '/rfq/load_img/' + $('input[name="id_rfq"]').val(),
           overwriteInitial: false,
           initialPreviewAsData: true,
