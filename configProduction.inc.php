@@ -4,7 +4,7 @@ define('NOMBRE_USUARIO', 'elogicdb');
 define('PASSWORD', 'elogicdb');
 define('NOMBRE_BD', 'elogicnewdb');
 
-define('SERVIDOR', 'http://www.elogicportal.com/rfq/');
+define('SERVIDOR', 'https://www.elogicportal.com/rfq/');
 define('ERROR', SERVIDOR . 'error');
 /*****************************USER OPTIONS************************************/
 define('PERFIL', SERVIDOR . 'perfil/');
