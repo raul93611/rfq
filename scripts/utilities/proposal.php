@@ -142,13 +142,17 @@ try{
             <th class="total_ancho">TOTAL</th>
           </tr>
               <tr>
-      <td colspan="5">OPEN MARKET PRICING PROPOSAL<br><br>
+              <td></td>
+      <td>OPEN MARKET PRICING PROPOSAL<br><br>
 
     E-Logic is an SBA 8(a) and HUBZONE Certified SB<br><br>
     SBA 8(a) Case Number: C0069X<br><br>
     SBA 8(a) Entrance Date: 09/30/2016<br><br>
     SBA 8(a) Exit Date: 09/30/2026
   </td>
+  <td></td>
+  <td></td>
+  <td></td>
     </tr>';
       } else {
           $html .= '<table id="tabla" style="width:100%">
@@ -177,7 +181,7 @@ try{
 
       $html .= '
       <tr>
-        <td style="border:none;"></td>
+        <td style="border-bottom:0;border-left:0;"></td>
         <td colspan="3" style="font-size:10pt;">' . nl2br($cotizacion->obtener_shipping()) .'</td>
         <td style="text-align:right;">$ ' . number_format($cotizacion->obtener_shipping_cost(), 2) .'</td>
       </tr>
