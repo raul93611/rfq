@@ -10,7 +10,8 @@ $(document).ready(function () {
       }
     },
     toolbar: [
-      ['color', ['color']]
+      ['color', ['color']],
+      ['insert', ['link']],
     ]
   });
   /***********************FILE INPUT*************************************/

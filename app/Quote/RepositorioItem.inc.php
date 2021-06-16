@@ -151,7 +151,7 @@ class RepositorioItem {
     echo '<td></td>';
     echo '<td></td>';
     echo '<td></td>';
-    echo '<td>' . nl2br($item->obtener_comments()) . '</td>';
+    echo '<td class="estrechar">' . nl2br($item->obtener_comments()) . '</td>';
     echo '</tr>';
     $j = RepositorioSubitem::escribir_subitems($item-> obtener_id(), $j);
     return $j;
