@@ -1001,49 +1001,31 @@ class RepositorioRfq {
     <?php
   }
 
-  public static function obtener_cotizaciones_ganadas_por_mes($conexion) {
-    $cotizaciones_mes = array();
-    if (isset($conexion)) {
-      try {
-        for ($i = 1; $i <= 12; $i++) {
-          $sql = 'SELECT COUNT(*) as cotizaciones_mes FROM rfq WHERE award = 1 AND MONTH(fecha_award) =' . $i . ' AND YEAR(fecha_award) = YEAR(CURDATE())';
-          $sentencia = $conexion->prepare($sql);
-          $sentencia->execute();
-          $resultado = $sentencia->fetch();
-          if (!empty($resultado)) {
-            $cotizaciones_mes[$i - 1] = $resultado['cotizaciones_mes'];
-          } else {
-            $cotizaciones_mes[$i - 1] = 0;
-          }
-        }
-      } catch (PDOException $ex) {
-        print 'ERROR:' . $ex->getMessage() . '<br>';
-      }
-    }
-    return $cotizaciones_mes;
-  }
-
   public static function obtener_monto_cotizaciones_ganadas_por_mes($conexion) {
-    $monto_cotizaciones_mes = array();
+    $amount = array();
+    $past_amount = array();
     if (isset($conexion)) {
       try {
         for ($i = 1; $i <= 12; $i++) {
-          $sql = 'SELECT SUM(total_price) as monto FROM rfq WHERE award = 1 AND MONTH(fecha_award) =' . $i . ' AND YEAR(fecha_award) = YEAR(CURDATE())';
-          $sentencia = $conexion->prepare($sql);
-          $sentencia->execute();
-          $resultado = $sentencia->fetch();
+          $sql1 = 'SELECT SUM(total_price) as amount, COUNT(*) as awards FROM rfq WHERE award = 1 AND MONTH(fecha_award) =' . $i . ' AND YEAR(fecha_award) = YEAR(CURDATE())';
+          $sql2 = 'SELECT SUM(total_price) as past_amount, COUNT(*) as past_awards FROM rfq WHERE award = 1 AND MONTH(fecha_award) =' . $i . ' AND YEAR(fecha_award) = YEAR(DATE_SUB(NOW(),INTERVAL 1 YEAR))';
+          $sentencia1 = $conexion->prepare($sql1);
+          $sentencia2 = $conexion->prepare($sql2);
+          $sentencia1-> execute();
+          $sentencia2-> execute();
+          $resultado1 = $sentencia1-> fetch(PDO::FETCH_ASSOC);
+          $resultado2 = $sentencia2-> fetch(PDO::FETCH_ASSOC);
 
-          if (is_null($resultado['monto'])) {
-            $monto_cotizaciones_mes[$i - 1] = 0;
-          } else {
-            $monto_cotizaciones_mes[$i - 1] = $resultado['monto'];
-          }
+          $amount[$i - 1] = is_null($resultado1['amount']) ? 0 : $resultado1['amount'];
+          $awards[$i - 1] = is_null($resultado1['awards']) ? 0 : $resultado1['awards'];
+          $past_amount[$i - 1] = is_null($resultado2['past_amount']) ? 0 : $resultado2['past_amount'];
+          $past_awards[$i - 1] = is_null($resultado2['past_awards']) ? 0 : $resultado2['past_awards'];
         }
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
-    return $monto_cotizaciones_mes;
+    return array($amount, $past_amount, $awards, $past_awards);
   }
 
   public static function obtener_comments($conexion){

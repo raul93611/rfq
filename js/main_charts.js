@@ -46,6 +46,12 @@ $(document).ready(function () {
               backgroundColor: '#13A8F0',
               borderColor: '#13A8F0',
               data: data.monthly_price_awards
+            },
+            {
+              label: 'Past annual awards(by amount)',
+              backgroundColor: '#39485A',
+              borderColor: '#39485A',
+              data: data.past_monthly_price_awards
             }
           ]
         };
@@ -112,6 +118,12 @@ $(document).ready(function () {
               backgroundColor: '#13A8F0',
               borderColor: '#13A8F0',
               data: data.monthly_awards
+            },
+            {
+              label: 'Past annual awards',
+              backgroundColor: '#39485A',
+              borderColor: '#39485A',
+              data: data.past_monthly_awards
             }
           ]
         };
