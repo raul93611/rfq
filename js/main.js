@@ -145,6 +145,7 @@ $(document).ready(function () {
   $('.date').daterangepicker({
     singleDatePicker: true
   });
+
   $('#end_date').daterangepicker({
     timePicker: true,
     singleDatePicker: true,
@@ -180,4 +181,6 @@ $(document).ready(function () {
     'order': [[ 4, "desc" ]],
     'pageLength': 50
   });
+
+  $('.regular_table').DataTable();
 });

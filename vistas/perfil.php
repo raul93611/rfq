@@ -128,8 +128,8 @@ switch ($gestor_actual) {
   case 'award':
     include_once 'plantillas/awards/award.inc.php';
     break;
-  case 'excel_reports':
-    include_once 'plantillas/utilities/excel_reports.inc.php';
+  case 'reports':
+    include_once 'plantillas/utilities/reports.inc.php';
     break;
   case 'no_bid':
     include_once 'plantillas/no_bid/no_bid.inc.php';

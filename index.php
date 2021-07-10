@@ -93,6 +93,8 @@ include_once 'app/ProviderList/ProviderListRepository.inc.php';
 include_once 'app/PaymentTerm/PaymentTerm.inc.php';
 include_once 'app/PaymentTerm/PaymentTermRepository.inc.php';
 
+include_once 'app/Report/Report.inc.php';
+
 $componentes_url = parse_url($_SERVER['REQUEST_URI']);
 $ruta = $componentes_url['path'];
 
@@ -155,9 +157,6 @@ if ($partes_ruta[0] == 'rfq') {
         break;
       case 'save_re_quote':
         $ruta_elegida = 'scripts/re_quote/save_re_quote.php';
-        break;
-      case 'generate_excel_report':
-        $ruta_elegida = 'scripts/utilities/generate_excel_report.php';
         break;
       case 'save_quote_info':
         $ruta_elegida = 'scripts/quote/save_quote_info.php';
@@ -222,8 +221,8 @@ if ($partes_ruta[0] == 'rfq') {
         case 'employee_docs_page':
           $gestor_actual = 'employee_docs_page';
           break;
-        case 'excel_reports':
-          $gestor_actual = 'excel_reports';
+        case 'reports':
+          $gestor_actual = 'reports';
           break;
         case 'fulfillment_quotes':
           $gestor_actual = 'fulfillment_quotes';

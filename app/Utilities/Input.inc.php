@@ -118,5 +118,19 @@ class Input{
       closedir($manager);
     }
   }
+
+  public static function print_year_select($year){
+    ?>
+    <select name="year" class="custom-select">
+    <?php
+    for ($i=2018; $i<=2100; $i++) {
+      ?>
+      <option <?php echo $year == $i ? 'selected' : ''; ?>><?php echo $i; ?></option>
+      <?php
+    }
+    ?>
+    </select>
+    <?php
+  }
 }
 ?>

@@ -325,10 +325,10 @@
           </a>
         </li>
         <li class="nav-item">
-          <a href="<?php echo EXCEL_REPORTS; ?>" class="nav-link <?php echo $gestor_actual == 'excel_reports' ? 'active' : ''; ?>">
+          <a href="<?php echo REPORTS; ?>" class="nav-link <?php echo $gestor_actual == 'reports' ? 'active' : ''; ?>">
             <i class="nav-icon fas fa-file"></i>
             <p>
-              Excel reports
+              Reports
             </p>
           </a>
         </li>

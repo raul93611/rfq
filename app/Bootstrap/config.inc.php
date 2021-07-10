@@ -2,7 +2,7 @@
 define('NOMBRE_SERVIDOR', 'localhost');
 define('NOMBRE_USUARIO', 'root');
 define('PASSWORD', '');
-define('NOMBRE_BD', 'elogicnewdb');
+define('NOMBRE_BD', 'elogic');
 
 define('SERVIDOR', 'http://localhost/rfq/');
 define('ERROR', SERVIDOR . 'error');
@@ -103,8 +103,7 @@ define('PDF_TABLA_ITEMS', SERVIDOR . 'pdf_tabla_items/');
 define('PDF_RE_QUOTE', SERVIDOR . 'pdf_re_quote/');
 define('EXCEL_ITEMS_TABLE', SERVIDOR . 'excel_items_table/');
 /**********************************************************************************/
-define('EXCEL_REPORTS', PERFIL . 'excel_reports');
-define('GENERATE_EXCEL_REPORT', SERVIDOR . 'generate_excel_report');
+define('REPORTS', PERFIL . 'reports');
 /*************************************************************************************/
 define('EMPLOYEE_DOCS_PAGE', PERFIL . 'employee_docs_page/');
 /********************************************************************************/
