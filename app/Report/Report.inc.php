@@ -8,15 +8,15 @@ class Report{
         <tr>
           <th>DATE</th>
           <th>PROPOSAL #</th>
-          <th>TOTAL COST</th>
-          <th>TOTAL PRICE</th>
-          <th>PROFIT</th>
-          <th>TOTAL COST</th>
-          <th>TOTAL PRICE</th>
-          <th>PROFIT</th>
-          <th>TOTAL COST</th>
-          <th>TOTAL PRICE</th>
-          <th>PROFIT</th>
+          <th class="bg-primary">TOTAL COST</th>
+          <th class="bg-primary">TOTAL PRICE</th>
+          <th class="bg-primary">PROFIT</th>
+          <th class="bg-warning">TOTAL COST</th>
+          <th class="bg-warning">TOTAL PRICE</th>
+          <th class="bg-warning">PROFIT</th>
+          <th class="bg-success">TOTAL COST</th>
+          <th class="bg-success">TOTAL PRICE</th>
+          <th class="bg-success">PROFIT</th>
           <th>TYPE</th>
         </tr>
       </thead>
