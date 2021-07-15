@@ -50,6 +50,8 @@ CREATE TABLE rfq(
   services_fulfillment_profit DECIMAL(10,2),
   total_fulfillment DECIMAL(10,2),
   total_services_fulfillment DECIMAL(10,2),
+  invoice TINYINT,
+  invoice_date DATE,
   PRIMARY KEY(id),
   FOREIGN KEY(id_usuario)
       REFERENCES usuarios(id)

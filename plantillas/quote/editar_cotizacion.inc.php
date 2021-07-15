@@ -34,7 +34,11 @@ if(is_null($cotizacion_recuperada)){
         </div>
         <div class="col-md-2">
           <?php
-          if($cotizacion_recuperada-> obtener_fullfillment()){
+          if($cotizacion_recuperada-> obtener_invoice()){
+            ?>
+            <h1 class="float-right text-success"><i class="fa fa-check"></i> Invoice</h1>
+            <?php
+          }else if($cotizacion_recuperada-> obtener_fullfillment()){
             ?>
             <h1 class="float-right text-success"><i class="fa fa-check"></i> Fulfillment</h1>
             <div class="clearfix"></div>

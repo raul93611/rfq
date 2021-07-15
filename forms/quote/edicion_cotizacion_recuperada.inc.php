@@ -85,7 +85,14 @@
       <?php
     }
   }else{
-    if($cotizacion_recuperada->obtener_completado() && $cotizacion_recuperada->obtener_status() && $cotizacion_recuperada->obtener_award() && !$cotizacion_recuperada-> obtener_fullfillment() && $_SESSION['cargo'] < 4){
+    if($cotizacion_recuperada-> obtener_fullfillment() && !is_null($cotizacion_recuperada-> obtener_fulfillment_profit()) || !is_null($cotizacion_recuperada-> obtener_services_fulfillment_profit())){
+      ?>
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" class="custom-control-input" name="invoice" value="si" <?php if ($cotizacion_recuperada->obtener_invoice()) { echo 'checked'; } ?> id="invoice">
+        <label class="custom-control-label" for="invoice">Invoice</label>
+      </div>
+      <?php
+    }else if($cotizacion_recuperada->obtener_completado() && $cotizacion_recuperada->obtener_status() && $cotizacion_recuperada->obtener_award() && !$cotizacion_recuperada-> obtener_fullfillment() && $_SESSION['cargo'] < 4){
       if(($items_exists && $re_quote_exists) || (!$items_exists && $cotizacion_recuperada-> obtener_type_of_bid() == 'Services')){
         ?>
         <div class="custom-control custom-checkbox">
@@ -122,7 +129,9 @@
   <div class="card-footer footer_item" id="footer_lg">
     <?php
     $canal = Input::translate_channel($cotizacion_recuperada-> obtener_canal());
-    if($cotizacion_recuperada-> obtener_fullfillment()){
+    if($cotizacion_recuperada-> obtener_invoice()){
+      echo '<a class="btn btn-primary" id="go_back" href="' . INVOICE_QUOTES . '"><i class="fa fa-reply"></i></a>';
+    }else if($cotizacion_recuperada-> obtener_fullfillment()){
       echo '<a class="btn btn-primary" id="go_back" href="' . FULFILLMENT_QUOTES . '"><i class="fa fa-reply"></i></a>';
     }else if ($cotizacion_recuperada->obtener_award() && ($cotizacion_recuperada->obtener_comments() == 'No comments' || $cotizacion_recuperada->obtener_comments() == 'Working on it' || $cotizacion_recuperada-> obtener_comments() == 'QuickBooks')) {
       echo '<a class="btn btn-primary" id="go_back" href="' . AWARD . $canal . '"><i class="fa fa-reply"></i></a>';

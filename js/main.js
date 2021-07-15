@@ -172,7 +172,7 @@ $(document).ready(function () {
     'pageLength': 50
   });
 
-  $('#tabla_usuarios').DataTable({
+  $('#tabla_usuarios, .invoice_table').DataTable({
     'order': [[ 3, "desc" ]],
     'pageLength': 50
   });

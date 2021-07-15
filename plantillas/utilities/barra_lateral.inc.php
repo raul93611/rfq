@@ -293,6 +293,14 @@
           </a>
         </li>
         <li class="nav-item">
+          <a href="<?php echo INVOICE_QUOTES; ?>" class="nav-link <?php echo $gestor_actual == 'invoice_quotes' ? 'active' : ''; ?>">
+            <i class="nav-icon fas fa-th"></i>
+            <p>
+              Invoice Quotes
+            </p>
+          </a>
+        </li>
+        <li class="nav-item">
           <a href="<?php echo NO_BID; ?>" class="nav-link <?php echo $gestor_actual == 'no_bid' ? 'active' : ''; ?>">
             <i class="nav-icon fas fa-th"></i>
             <p>

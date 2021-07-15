@@ -34,11 +34,13 @@ class Rfq {
   private $services_fulfillment_profit;
   private $total_fulfillment;
   private $total_services_fulfillment;
+  private $invoice;
+  private $invoice_date;
 
   public function __construct($id, $id_usuario, $usuario_designado, $canal, $email_code, $type_of_bid, $issue_date, $end_date, $status,
   $completado, $total_cost, $total_price, $comments, $award, $fecha_completado, $fecha_submitted, $fecha_award, $payment_terms, $address,
   $ship_to, $expiration_date, $ship_via, $taxes, $profit, $additional, $shipping, $shipping_cost, $fullfillment, $fulfillment_date, $contract_number,
-  $fulfillment_profit, $services_fulfillment_profit, $total_fulfillment, $total_services_fulfillment) {
+  $fulfillment_profit, $services_fulfillment_profit, $total_fulfillment, $total_services_fulfillment, $invoice, $invoice_date) {
     $this->id = $id;
     $this->id_usuario = $id_usuario;
     $this->usuario_designado = $usuario_designado;
@@ -73,6 +75,8 @@ class Rfq {
     $this-> services_fulfillment_profit = $services_fulfillment_profit;
     $this-> total_fulfillment = $total_fulfillment;
     $this-> total_services_fulfillment = $total_services_fulfillment;
+    $this-> invoice = $invoice;
+    $this-> invoice_date = $invoice_date;
   }
 
   public function obtener_id() {
@@ -209,6 +213,14 @@ class Rfq {
 
   public function obtener_total_services_fulfillment(){
     return $this-> total_services_fulfillment;
+  }
+
+  public function obtener_invoice(){
+    return $this-> invoice;
+  }
+
+  public function obtener_invoice_date(){
+    return $this-> invoice_date;
   }
 }
 ?>

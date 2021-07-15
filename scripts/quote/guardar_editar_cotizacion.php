@@ -47,6 +47,12 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
         AuditTrailRepository::quote_status_audit_trail(Conexion::obtener_conexion(), 'Fulfillment', $_POST['id_rfq']);
         Redireccion::redirigir(FULFILLMENT_QUOTES);
       }
+    }else if(!$cotizacion_recuperada-> obtener_invoice()){
+      if(isset($_POST['invoice']) && $_POST['invoice'] == 'si'){
+        RepositorioRfq::check_invoice_and_date(Conexion::obtener_conexion(), $_POST['id_rfq']);
+        AuditTrailRepository::quote_status_audit_trail(Conexion::obtener_conexion(), 'Invoice', $_POST['id_rfq']);
+        Redireccion::redirigir(INVOICE_QUOTES);
+      }
     }
   }
   AuditTrailRepository::items_table_events(Conexion::obtener_conexion(), $_POST['taxes'], $_POST['taxes_original'], $_POST['profit'], $_POST['profit_original'], $_POST['additional_general'], $_POST['additional_general_original'], $_POST['payment_terms'], $_POST['payment_terms_original'], $_POST['shipping'], $_POST['shipping_original'], $_POST['shipping_cost'], $_POST['shipping_cost_original'], $_POST['id_rfq']);
