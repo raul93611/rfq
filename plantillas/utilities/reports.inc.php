@@ -85,11 +85,6 @@
                 <h3 class="card-title"><i class="fas fa-hand-point-right"></i> Report</h3>
               </div>
               <div class="card-body">
-                <div class="my-3">
-                  <i class="fas fa-square text-primary"></i> Quote <br>
-                  <i class="fas fa-square text-warning"></i> Re-Quote <br>
-                  <i class="fas fa-square text-success"></i> Fulfillment
-                </div>
                 <?php
                 include_once 'plantillas/utilities/report_' . $_POST['report'] . '.inc.php';
                 ?>
