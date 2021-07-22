@@ -222,7 +222,11 @@ if ($partes_ruta[0] == 'rfq') {
           $gestor_actual = 'employee_docs_page';
           break;
         case 'reports':
-          $gestor_actual = 'reports';
+          if(isset($_POST['generate_excel_report'])){
+            $ruta_elegida = 'scripts/utilities/excel_report_' . $_POST['report'] . '.php';
+          }else {
+            $gestor_actual = 'reports';
+          }
           break;
         case 'fulfillment_quotes':
           $gestor_actual = 'fulfillment_quotes';

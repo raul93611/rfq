@@ -4,6 +4,8 @@ class Report{
     $quotes = self::get_profit_report($connection, $month, $year);
     $total['total_cost']= 0;
     $total['total_price']= 0;
+    $total['re_quote_total_cost']= 0;
+    $total['fulfillment_total_cost']= 0;
     ?>
     <div class="my-3">
       <i class="fas fa-square text-primary"></i> Quote <br>

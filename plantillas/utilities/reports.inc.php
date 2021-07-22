@@ -20,7 +20,7 @@
               <h3 class="card-title"><i class="fas fa-hand-point-right"></i> Choose</h3>
             </div>
             <div class="card-body">
-              <form method="post">
+              <form action="<?php echo REPORTS; ?>" method="post">
                 <div class="row">
                   <div class="col-md-12">
                     <?php $report = $_POST['report'] ?? ''; ?>
@@ -67,7 +67,7 @@
                 <div class="row mt-4">
                   <div class="col-md-12">
                     <button type="submit" class="btn btn-primary" name="generate_excel_report"><i class="fas fa-file-excel"></i> Excel</button>
-                    <button type="submit" action="<?php echo REPORTS; ?>" class="btn btn-primary" name="generate_report"><i class="fas fa-play"></i> Generate</button>
+                    <button type="submit" class="btn btn-primary" name="generate_report"><i class="fas fa-play"></i> Generate</button>
                   </div>
                 </div>
               </form>
