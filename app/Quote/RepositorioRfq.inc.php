@@ -129,20 +129,13 @@ class RepositorioRfq {
     return $quotes;
   }
 
-  public static function obtener_cotizaciones_por_canal_usuario_cargo($conexion, $canal, $id_usuario, $cargo) {
+  public static function obtener_cotizaciones_por_canal_usuario_cargo($conexion, $canal) {
     $cotizaciones = [];
     if (isset($conexion)) {
       try {
-        if ($cargo < 5) {
-          $sql = "SELECT * FROM rfq WHERE canal = :canal AND completado = 0 AND status = 0 AND award = 0 AND (comments = 'Working on it' OR comments = 'No comments' OR comments = '') ORDER BY id DESC";
-          $sentencia = $conexion->prepare($sql);
-          $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
-        } else if ($cargo > 4) {
-          $sql = "SELECT * FROM rfq WHERE canal = :canal AND usuario_designado = :id_usuario AND completado = 0 AND status = 0 AND award = 0 AND (comments = 'Working on it' OR comments = 'No comments' OR comments = '') ORDER BY id DESC";
-          $sentencia = $conexion->prepare($sql);
-          $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
-          $sentencia->bindParam(':id_usuario', $id_usuario, PDO::PARAM_STR);
-        }
+        $sql = "SELECT * FROM rfq WHERE canal = :canal AND completado = 0 AND status = 0 AND award = 0 AND (comments = 'Working on it' OR comments = 'No comments' OR comments = '') ORDER BY id DESC";
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(PDO::FETCH_ASSOC);
         if (count($resultado)) {
@@ -188,9 +181,10 @@ class RepositorioRfq {
     <?php
   }
 
-  public static function escribir_cotizaciones_por_canal_usuario_cargo($canal, $id_usuario, $cargo) {
+  public static function escribir_cotizaciones_por_canal_usuario_cargo($canal) {
+    // echo $canal;
     Conexion::abrir_conexion();
-    $cotizaciones = self::obtener_cotizaciones_por_canal_usuario_cargo(Conexion::obtener_conexion(), $canal, $id_usuario, $cargo);
+    $cotizaciones = self::obtener_cotizaciones_por_canal_usuario_cargo(Conexion::obtener_conexion(), $canal);
     Conexion::cerrar_conexion();
     if (count($cotizaciones)) {
       ?>
@@ -352,7 +346,7 @@ class RepositorioRfq {
     }
   }
 
-  public static function obtener_cotizaciones_completadas_por_canal($conexion, $canal, $id_usuario, $cargo) {
+  public static function obtener_cotizaciones_completadas_por_canal($conexion, $canal) {
     $cotizaciones = [];
     if (isset($conexion)) {
       try {
@@ -418,9 +412,9 @@ class RepositorioRfq {
     <?php
   }
 
-  public static function escribir_cotizaciones_completadas_por_canal($canal, $id_usuario, $cargo) {
+  public static function escribir_cotizaciones_completadas_por_canal($canal) {
     Conexion::abrir_conexion();
-    $cotizaciones = self::obtener_cotizaciones_completadas_por_canal(Conexion::obtener_conexion(), $canal, $id_usuario, $cargo);
+    $cotizaciones = self::obtener_cotizaciones_completadas_por_canal(Conexion::obtener_conexion(), $canal);
     Conexion::cerrar_conexion();
     if (count($cotizaciones)) {
       ?>
@@ -451,7 +445,7 @@ class RepositorioRfq {
     }
   }
 
-  public static function obtener_cotizaciones_submitted_por_canal($conexion, $canal, $id_usuario, $cargo) {
+  public static function obtener_cotizaciones_submitted_por_canal($conexion, $canal) {
     $cotizaciones = [];
     if (isset($conexion)) {
       try {
@@ -518,9 +512,9 @@ class RepositorioRfq {
     <?php
   }
 
-  public static function escribir_cotizaciones_submitted_por_canal($canal, $id_usuario, $cargo) {
+  public static function escribir_cotizaciones_submitted_por_canal($canal) {
     Conexion::abrir_conexion();
-    $cotizaciones = self::obtener_cotizaciones_submitted_por_canal(Conexion::obtener_conexion(), $canal, $id_usuario, $cargo);
+    $cotizaciones = self::obtener_cotizaciones_submitted_por_canal(Conexion::obtener_conexion(), $canal);
     Conexion::cerrar_conexion();
     if (count($cotizaciones)) {
       ?>
@@ -551,7 +545,7 @@ class RepositorioRfq {
     }
   }
 
-  public static function obtener_cotizaciones_award_por_canal($conexion, $canal, $id_usuario, $cargo) {
+  public static function obtener_cotizaciones_award_por_canal($conexion, $canal) {
     $cotizaciones = [];
     if (isset($conexion)) {
       try {
@@ -617,9 +611,9 @@ class RepositorioRfq {
     <?php
   }
 
-  public static function escribir_cotizaciones_award_por_canal($canal, $id_usuario, $cargo) {
+  public static function escribir_cotizaciones_award_por_canal($canal) {
     Conexion::abrir_conexion();
-    $cotizaciones = self::obtener_cotizaciones_award_por_canal(Conexion::obtener_conexion(), $canal, $id_usuario, $cargo);
+    $cotizaciones = self::obtener_cotizaciones_award_por_canal(Conexion::obtener_conexion(), $canal);
     Conexion::cerrar_conexion();
     if (count($cotizaciones)) {
       ?>

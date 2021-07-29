@@ -69,117 +69,18 @@
     include_once 'plantillas/services/services.inc.php';
   }
   Conexion::abrir_conexion();
-  ?>
-  <h3 class="text-center text-info">TOTAL: $ <?php echo number_format($cotizacion_recuperada-> obtener_total_price() + ServiceRepository::get_total(Conexion::obtener_conexion(), $id_rfq), 2); ?></h3>
-  <?php
+  $total_services = ServiceRepository::get_total(Conexion::obtener_conexion(), $id_rfq);
   $re_quote_exists = ReQuoteRepository::re_quote_exists(Conexion::obtener_conexion(), $cotizacion_recuperada-> obtener_id());
   $items_exists = RepositorioItem::items_exists(Conexion::obtener_conexion(), $cotizacion_recuperada-> obtener_id());
   Conexion::cerrar_conexion();
-  if($cotizacion_recuperada-> obtener_canal() == 'Chemonics' || $cotizacion_recuperada-> obtener_canal() == 'Ebay & Amazon'){
-    if(!$cotizacion_recuperada->obtener_award()){
-      ?>
-      <div class="custom-control custom-checkbox">
-        <input type="checkbox" class="custom-control-input" name="award" value="si" <?php if ($cotizacion_recuperada->obtener_award()) { echo 'checked'; } ?> id="award">
-        <label class="custom-control-label" for="award">Award</label>
-      </div>
-      <?php
-    }
-  }else{
-    if($cotizacion_recuperada-> obtener_fullfillment() && !is_null($cotizacion_recuperada-> obtener_fulfillment_profit()) || !is_null($cotizacion_recuperada-> obtener_services_fulfillment_profit())){
-      ?>
-      <div class="custom-control custom-checkbox">
-        <input type="checkbox" class="custom-control-input" name="invoice" value="si" <?php if ($cotizacion_recuperada->obtener_invoice()) { echo 'checked'; } ?> id="invoice">
-        <label class="custom-control-label" for="invoice">Invoice</label>
-      </div>
-      <?php
-    }else if($cotizacion_recuperada->obtener_completado() && $cotizacion_recuperada->obtener_status() && $cotizacion_recuperada->obtener_award() && !$cotizacion_recuperada-> obtener_fullfillment() && $_SESSION['cargo'] < 4){
-      if(($items_exists && $re_quote_exists) || (!$items_exists && $cotizacion_recuperada-> obtener_type_of_bid() == 'Services')){
-        ?>
-        <div class="custom-control custom-checkbox">
-          <input type="checkbox" class="custom-control-input" name="fulfillment" value="si" <?php if ($cotizacion_recuperada->obtener_fullfillment()) { echo 'checked'; } ?> id="fulfillment">
-          <label class="custom-control-label" for="fulfillment">Fulfillment</label>
-        </div>
-        <?php
-      }
-    }else if ($cotizacion_recuperada->obtener_completado() && $cotizacion_recuperada->obtener_status() && !$cotizacion_recuperada->obtener_award() && $_SESSION['cargo'] < 4) {
-      ?>
-        <div class="custom-control custom-checkbox">
-          <input type="checkbox" class="custom-control-input" name="award" value="si" <?php if ($cotizacion_recuperada->obtener_award()) { echo 'checked'; } ?> id="award">
-          <label class="custom-control-label" for="award">Award</label>
-        </div>
-        <?php
-      } else if ($cotizacion_recuperada->obtener_completado() && !$cotizacion_recuperada->obtener_status() && !$cotizacion_recuperada->obtener_award()) {
-        ?>
-        <div class="custom-control custom-checkbox">
-          <input type="checkbox" class="custom-control-input" name="status" value="si" <?php if ($cotizacion_recuperada->obtener_status()) { echo 'checked'; } ?> id="status">
-          <label class="custom-control-label" for="status">Submitted</label>
-        </div>
-        <?php
-      } else if (!$cotizacion_recuperada->obtener_completado() && !$cotizacion_recuperada->obtener_status() && !$cotizacion_recuperada->obtener_award()) {
-        ?>
-        <div class="custom-control custom-checkbox">
-          <input type="checkbox" class="custom-control-input" name="completado" value="si" <?php if ($cotizacion_recuperada->obtener_completado()) { echo 'checked';} ?> id="completado">
-          <label class="custom-control-label" for="completado">Completed</label>
-        </div>
-      <?php
-    }
-  }
   ?>
+  <h3 class="text-center text-info">TOTAL: $ <?php echo number_format($cotizacion_recuperada-> obtener_total_price() + $total_services, 2); ?></h3>
+  <?php include_once 'forms/quote/templates/status_checkbox.inc.php'; ?>
   </div>
   <div class="card-footer footer_item" id="footer_lg">
-    <?php
-    $canal = Input::translate_channel($cotizacion_recuperada-> obtener_canal());
-    if($cotizacion_recuperada-> obtener_invoice()){
-      echo '<a class="btn btn-primary" id="go_back" href="' . INVOICE_QUOTES . '"><i class="fa fa-reply"></i></a>';
-    }else if($cotizacion_recuperada-> obtener_fullfillment()){
-      echo '<a class="btn btn-primary" id="go_back" href="' . FULFILLMENT_QUOTES . '"><i class="fa fa-reply"></i></a>';
-    }else if ($cotizacion_recuperada->obtener_award() && ($cotizacion_recuperada->obtener_comments() == 'No comments' || $cotizacion_recuperada->obtener_comments() == 'Working on it' || $cotizacion_recuperada-> obtener_comments() == 'QuickBooks')) {
-      echo '<a class="btn btn-primary" id="go_back" href="' . AWARD . $canal . '"><i class="fa fa-reply"></i></a>';
-    } else if ($cotizacion_recuperada->obtener_status() && ($cotizacion_recuperada->obtener_comments() == 'No comments' || $cotizacion_recuperada->obtener_comments() == 'Working on it' || $cotizacion_recuperada-> obtener_comments() == 'QuickBooks')) {
-      echo '<a class="btn btn-primary" id="go_back" href="' . SUBMITTED . $canal . '"><i class="fa fa-reply"></i></a>';
-    } else if ($cotizacion_recuperada->obtener_completado() && ($cotizacion_recuperada->obtener_comments() == 'No comments' || $cotizacion_recuperada->obtener_comments() == 'Working on it' || $cotizacion_recuperada-> obtener_comments() == 'QuickBooks')) {
-      echo '<a class="btn btn-primary" id="go_back" href="' . COMPLETADOS . $canal . '"><i class="fa fa-reply"></i></a>';
-    } else if ($cotizacion_recuperada->obtener_comments() == 'No Bid' || $cotizacion_recuperada->obtener_comments() == 'Manufacturer in the Bid' || $cotizacion_recuperada->obtener_comments() == 'Expired due date' || $cotizacion_recuperada->obtener_comments() == 'Supplier did not provide a quote' || $cotizacion_recuperada->obtener_comments() == 'Others') {
-      echo '<a class="btn btn-primary" id="go_back" href="' . NO_BID . '"><i class="fa fa-reply"></i></a>';
-    }else if($cotizacion_recuperada-> obtener_comments() == 'No submitted'){
-      echo '<a class="btn btn-primary" id="go_back" href="' . NO_SUBMITTED . '"><i class="fa fa-reply"></i></a>';
-    }else if(!empty($cotizacion_recuperada-> obtener_canal())){
-      echo '<a class="btn btn-primary" id="go_back" href="' . COTIZACIONES . $canal . '"><i class="fa fa-reply"></i></a>';
-    }
-    ?>
+    <?php include_once 'forms/quote/templates/go_back_button.inc.php'; ?>
     <button type="submit" class="btn btn-success" id="save_item" name="guardar_cambios_cotizacion"><i class="fa fa-check"></i> Save</button>
-    <?php
-    if($cotizacion_recuperada-> obtener_canal() != 'FedBid' && $cotizacion_recuperada-> obtener_canal() != 'Chemonics' && $cotizacion_recuperada-> obtener_canal() != 'Ebay & Amazon'){
-      ?>
-      <a class="btn btn-primary add_item_charter" href="<?php echo ADD_ITEM . '/' . $cotizacion_recuperada->obtener_id(); ?>"><i class="fa fa-plus-circle"></i> Add item</a>
-      <?php
-    }
-    ?>
+    <?php include_once 'forms/quote/templates/add_item.inc.php'; ?>
     <a href="#" id="add_comment" class="btn btn-primary add_item_charter"><i class="fas fa-plus"></i> Add comment</a>
-    <div class="btn-group dropup">
-      <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Actions
-      </button>
-      <div class="dropdown-menu">
-        <?php
-        if($cotizacion_recuperada-> obtener_fullfillment() && $re_quote_exists){
-          ?>
-          <a class="dropdown-item" href="<?php echo TRACKING . $cotizacion_recuperada-> obtener_id(); ?>">Tracking</a>
-          <?php
-        }
-        if($cotizacion_recuperada-> obtener_canal() != 'Chemonics' && $cotizacion_recuperada-> obtener_canal() != 'Ebay & Amazon'){
-          if($cotizacion_recuperada-> obtener_award() && $items_exists){
-            ?>
-            <a href="<?php echo RE_QUOTE . $cotizacion_recuperada-> obtener_id(); ?>" class="dropdown-item">Re-quote</a>
-            <?php
-          }
-        }
-        if($cotizacion_recuperada-> obtener_fullfillment()){
-          ?>
-          <a href="<?php echo FULFILLMENT . $cotizacion_recuperada-> obtener_id(); ?>" class="dropdown-item">Fulfillment</a>
-          <?php
-        }
-        ?>
-      </div>
-    </div>
+    <?php include_once 'forms/quote/templates/actions_button.inc.php'; ?>
   </div>

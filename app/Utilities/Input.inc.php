@@ -90,6 +90,39 @@ class Input{
     return $canal;
   }
 
+  public static function inverse_translate_channel($channel){
+    switch ($channel) {
+      case 'gsa_buy':
+        $canal = 'GSA-Buy';
+        break;
+      case 'fedbid':
+        $canal = 'FedBid';
+        break;
+      case 'emails':
+        $canal = 'E-mails';
+        break;
+      case 'mailbox':
+        $canal = 'Mailbox';
+        break;
+      case 'findfrp':
+        $canal = 'FindFRP';
+        break;
+      case 'embassies':
+        $canal = 'Embassies';
+        break;
+      case 'fbo':
+        $canal = 'FBO';
+        break;
+      case 'chemonics':
+        $canal = 'Chemonics';
+        break;
+      case 'ebay_amazon':
+        $canal = 'Ebay & Amazon';
+        break;
+    }
+    return $canal;
+  }
+
   public static function save_files($path, $files, $temp_files){
     mkdir($path, 0777);
     $documentos = array_filter($files);

@@ -36,7 +36,6 @@ Conexion::cerrar_conexion();
               <div class="card-footer footer_item">
                 <a class="btn btn-primary" id="go_back" href="<?php echo EDITAR_COTIZACION . '/' . $re_quote-> get_id_rfq(); ?>"><i class="fa fa-reply"></i></a>
                 <button type="submit" class="btn btn-success" name="save_re_quote"><i class="fas fa-check"></i> Save</button>
-                <!-- <a href="<?php echo ADD_RE_QUOTE_ITEM . $re_quote-> get_id(); ?>" class="btn btn-primary"><i class="fas fa-plus"></i> Add item</a> -->
               </div>
             </form>
           </div>
@@ -45,24 +44,5 @@ Conexion::cerrar_conexion();
     </div>
   </section>
 </div>
-<!--*************************************************MODAL TO SHOW AUDIT TRAILS*************************************************************-->
-<div class="modal fade" id="audit_trails_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Audit Trails</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <?php
-        Conexion::abrir_conexion();
-        ReQuoteAuditTrailRepository::display_audit_trails(Conexion::obtener_conexion(), $re_quote-> get_id());
-        Conexion::cerrar_conexion();
-        ?>
-      </div>
-    </div>
-  </div>
-</div>
+<?php include_once 'plantillas/re_quote/modals/audit_trails_modal.inc.php'; ?>
 <script src="<?php echo RUTA_JS; ?>reQuote.js"></script>
