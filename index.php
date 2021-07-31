@@ -112,6 +112,9 @@ if ($partes_ruta[0] == 'rfq') {
         $gestor_actual = '';
         $ruta_elegida = 'vistas/perfil.php';
         break;
+      case 'email':
+        $ruta_elegida = 'email.php';
+        break;
       case 'genera_usuario':
         $ruta_elegida = 'herramientas/genera_usuario.php';
         break;
