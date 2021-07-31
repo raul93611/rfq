@@ -10,29 +10,6 @@ class Email{
 
   public static function send_email_quote_awarded($to, $quote_id, $address){
     $subject = "Awarded quote";
-    // $message = '
-    // <html>
-    // <body style="margin:0;border-radius: 10px; padding:10px; width:600px;" bgcolor="white">
-    // <table align="center" border="0" cellpadding="0" cellspacing="0" style="box-shadow: 5px 10px 8px #888888;width:400px;padding:10px;border-radius: 10px; border-collapse: separate;" bgcolor="#FFFFFF">
-    //   <tr>
-    //     <td align="center" style="padding: 10px;">
-    //       <img src="https://www.elogicportal.com/congratulation_img.png" alt="Logo" style="width:300px;border:0;"/>
-    //     </td>
-    //   </tr>
-    //   <tr>
-    //     <td align="center" style="color: #333538; padding: 10px; font-size: 25px;">
-    //       <span>Your proposal# ' . $quote_id . ' has been accepted by:<br>' . $address . '</span>
-    //     </td>
-    //   </tr>
-    //   <tr>
-    //     <td align="center" style="padding: 10px;">
-    //       <img src="https://www.elogicportal.com/rfp/img/eP_logo_home.png" alt="Logo" style="width:50px;border:0;"/>
-    //     </td>
-    //   </tr>
-    // </table>
-    // </body>
-    // </html>
-    // ';
     $message = '
     <html xmlns="http://www.w3.org/1999/xhtml">
       <head>
@@ -68,7 +45,7 @@ class Email{
                     <tr>
                       <td class="header" style="box-sizing: border-box; font-family: -apple-system, Roboto, Helvetica, Arial, sans-serif; position: relative; padding: 25px 0; text-align: center;">
                         <a target="_blank" rel="noopener noreferrer" href="#" style="box-sizing: border-box; font-family: -apple-system, Roboto, Helvetica, Arial, sans-serif; position: relative; color: #3d4852; font-size: 19px; font-weight: bold; text-decoration: none; display: inline-block;">
-                          <img src="https://www.elogicportal.com/rfq/img/eP_logo_home.png" class="logo" alt="Laravel Logo" style="box-sizing: border-box; font-family: -apple-system, Roboto, Helvetica, Arial, sans-serif; position: relative; max-width: 100%; border: none; height: 40px; max-height: 40px; width: 60px;">
+                          <img src="' . RUTA_IMG . 'eP_logo_home.png" class="logo" alt="Laravel Logo" style="box-sizing: border-box; font-family: -apple-system, Roboto, Helvetica, Arial, sans-serif; position: relative; max-width: 100%; border: none; height: 40px; max-height: 40px; width: 60px;">
                         </a>
                       </td>
                     </tr>
@@ -81,7 +58,7 @@ class Email{
                             <tr>
                               <td class="content-cell" style="box-sizing: border-box; font-family: -apple-system, Roboto, Helvetica, Arial, sans-serif; position: relative; max-width: 100vw; padding: 32px;">
                                 <h1 style="box-sizing: border-box; font-family: -apple-system, Roboto, Helvetica, Arial, sans-serif; position: relative; color: #3d4852; font-size: 18px; font-weight: bold; margin-top: 0; text-align: left;">Hello!</h1>
-                                <p style="box-sizing: border-box; font-family: -apple-system, Roboto, Helvetica, Arial, sans-serif; position: relative; font-size: 16px; line-height: 1.5em; margin-top: 0; text-align: left;">asdasdsadsad</p>
+                                <p style="box-sizing: border-box; font-family: -apple-system, Roboto, Helvetica, Arial, sans-serif; position: relative; font-size: 16px; line-height: 1.5em; margin-top: 0; text-align: left;">Your proposal# ' . $quote_id . ' has been accepted</p>
                                 <table class="action" align="center" width="100%" cellpadding="0" cellspacing="0" role="presentation" style="box-sizing: border-box; font-family: -apple-system, Roboto, Helvetica, Arial, sans-serif; position: relative; -premailer-cellpadding: 0; -premailer-cellspacing: 0; -premailer-width: 100%; margin: 30px auto; padding: 0; text-align: center; width: 100%;">
                                   <tbody>
                                     <tr>
@@ -93,10 +70,7 @@ class Email{
                                                 <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="box-sizing: border-box; font-family: -apple-system, Roboto, Helvetica, Arial, sans-serif; position: relative;">
                                                   <tbody>
                                                     <tr>
-                                                      <img src="https://www.elogicportal.com/rfq/img/congratulation_img.png" class="logo" alt="Laravel Logo" style="box-sizing: border-box; font-family: -apple-system, Roboto, Helvetica, Arial, sans-serif; position: relative; max-width: 100%; border: none; height: 100px; max-height: 100px; width: 100px;">
-                                                      <td style="box-sizing: border-box; font-family: -apple-system, Roboto, Helvetica, Arial, sans-serif; position: relative;">
-                                                        <a target="_blank" rel="noopener noreferrer" href="http://blog.test/posts" class="button button-primary" style="box-sizing: border-box; font-family: -apple-system, Roboto, Helvetica, Arial, sans-serif; position: relative; -webkit-text-size-adjust: none; border-radius: 4px; color: #fff; display: inline-block; overflow: hidden; text-decoration: none; background-color: #2d3748; border-bottom: 8px solid #2d3748; border-left: 18px solid #2d3748; border-right: 18px solid #2d3748; border-top: 8px solid #2d3748;">See message</a>
-                                                      </td>
+                                                      <img src="' . RUTA_IMG . 'congratulation_img.png" class="logo" alt="Laravel Logo" style="box-sizing: border-box; font-family: -apple-system, Roboto, Helvetica, Arial, sans-serif; position: relative; max-width: 100%; border: none; height: 300px; max-height: 300px; width: 300px;">
                                                     </tr>
                                                   </tbody>
                                                 </table>
@@ -115,8 +89,8 @@ class Email{
                                   <tbody>
                                     <tr>
                                       <td style="box-sizing: border-box; font-family: -apple-system, Roboto, Helvetica, Arial, sans-serif; position: relative;">
-                                        <p style="box-sizing: border-box; font-family: -apple-system, Roboto, Helvetica, Arial, sans-serif; position: relative; line-height: 1.5em; margin-top: 0; text-align: left; font-size: 14px;">If you’re having trouble clicking the "See message" button, copy and paste the URL below
-                                          into your web browser: <span class="break-all" style="box-sizing: border-box; font-family: -apple-system, Roboto, Helvetica, Arial, sans-serif; position: relative; word-break: break-all;"><a target="_blank" rel="noopener noreferrer" href="http://blog.test/posts" style="box-sizing: border-box; font-family: -apple-system, Roboto, Helvetica, Arial, sans-serif; position: relative; color: #3869d4;">http://blog.test/posts</a></span></p>
+                                        <p style="box-sizing: border-box; font-family: -apple-system, Roboto, Helvetica, Arial, sans-serif; position: relative; line-height: 1.5em; margin-top: 0; text-align: left; font-size: 14px;">If you’re having trouble seeing this message, report the problem to
+                                          : <span class="break-all" style="box-sizing: border-box; font-family: -apple-system, Roboto, Helvetica, Arial, sans-serif; position: relative; word-break: break-all;"><a target="_blank" rel="noopener noreferrer" href="mailto:raul93611@gmail.com" style="box-sizing: border-box; font-family: -apple-system, Roboto, Helvetica, Arial, sans-serif; position: relative; color: #3869d4;">raul93611@gmail.com</a></span></p>
                                       </td>
                                     </tr>
                                   </tbody>
@@ -133,7 +107,7 @@ class Email{
                           <tbody>
                             <tr>
                               <td class="content-cell" align="center" style="box-sizing: border-box; font-family: -apple-system, Roboto, Helvetica, Arial, sans-serif; position: relative; max-width: 100vw; padding: 32px;">
-                                <p style="box-sizing: border-box; font-family: -apple-system, Roboto, Helvetica, Arial, sans-serif; position: relative; line-height: 1.5em; margin-top: 0; color: #b0adc5; font-size: 12px; text-align: center;">© 2021 Laravel. All rights reserved.</p>
+                                <p style="box-sizing: border-box; font-family: -apple-system, Roboto, Helvetica, Arial, sans-serif; position: relative; line-height: 1.5em; margin-top: 0; color: #b0adc5; font-size: 12px; text-align: center;">© 2021 E-logic. All rights reserved.</p>
                               </td>
                             </tr>
                           </tbody>
@@ -149,7 +123,7 @@ class Email{
       </body>
     </html>
     ';
-    echo self::send_email($to, 'E-logic', $subject, $message);
+    self::send_email($to, 'E-logic', $subject, $message);
   }
 }
 ?>
