@@ -506,7 +506,7 @@ class RepositorioUsuario {
         Conexion::cerrar_conexion();
       }
     }
-    return array($nombres_usuario, $cotizaciones_completadas, $cotizaciones_completadas_pasadas, $cotizaciones_ganadas);
+    return array($nombres_usuario, $cotizaciones_completadas, $cotizaciones_completadas_pasadas, $cotizaciones_ganadas, $cotizaciones_ganadas_pasadas);
   }
 
   public static function edit_user($conexion, $password, $username, $nombres, $apellidos, $cargo, $email, $id_user) {
