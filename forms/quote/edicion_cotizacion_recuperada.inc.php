@@ -79,7 +79,7 @@
   </div>
   <div class="card-footer footer_item" id="footer_lg">
     <?php include_once 'forms/quote/templates/go_back_button.inc.php'; ?>
-    <button type="submit" class="btn btn-success" id="save_item" name="guardar_cambios_cotizacion"><i class="fa fa-check"></i> Save</button>
+    <button type="submit" class="btn btn-success" name="guardar_cambios_cotizacion"><i class="fa fa-check"></i> Save</button>
     <?php include_once 'forms/quote/templates/add_item.inc.php'; ?>
     <a href="#" id="add_comment" class="btn btn-primary add_item_charter"><i class="fas fa-plus"></i> Add comment</a>
     <?php include_once 'forms/quote/templates/actions_button.inc.php'; ?>

@@ -36,11 +36,14 @@ class Rfq {
   private $total_services_fulfillment;
   private $invoice;
   private $invoice_date;
+  private $multi_year_project;
+  private $total_price_confirmation;
 
   public function __construct($id, $id_usuario, $usuario_designado, $canal, $email_code, $type_of_bid, $issue_date, $end_date, $status,
   $completado, $total_cost, $total_price, $comments, $award, $fecha_completado, $fecha_submitted, $fecha_award, $payment_terms, $address,
   $ship_to, $expiration_date, $ship_via, $taxes, $profit, $additional, $shipping, $shipping_cost, $fullfillment, $fulfillment_date, $contract_number,
-  $fulfillment_profit, $services_fulfillment_profit, $total_fulfillment, $total_services_fulfillment, $invoice, $invoice_date) {
+  $fulfillment_profit, $services_fulfillment_profit, $total_fulfillment, $total_services_fulfillment, $invoice, $invoice_date, $multi_year_project,
+  $total_price_confirmation) {
     $this->id = $id;
     $this->id_usuario = $id_usuario;
     $this->usuario_designado = $usuario_designado;
@@ -77,6 +80,8 @@ class Rfq {
     $this-> total_services_fulfillment = $total_services_fulfillment;
     $this-> invoice = $invoice;
     $this-> invoice_date = $invoice_date;
+    $this-> multi_year_project = $multi_year_project;
+    $this-> total_price_confirmation = $total_price_confirmation;
   }
 
   public function obtener_id() {
@@ -221,6 +226,22 @@ class Rfq {
 
   public function obtener_invoice_date(){
     return $this-> invoice_date;
+  }
+
+  public function obtener_multi_year_project(){
+    return $this-> multi_year_project;
+  }
+
+  public function obtener_total_price_confirmation(){
+    return $this-> total_price_confirmation;
+  }
+
+  public function obtener_real_fulfillment_profit(){
+    return $this-> total_price_confirmation - ($this-> total_fulfillment + $this-> total_services_fulfillment);
+  }
+
+  public function obtener_real_fulfillment_profit_percentage(){
+    return 100*($this-> obtener_real_fulfillment_profit()/$this-> total_price_confirmation);
   }
 }
 ?>

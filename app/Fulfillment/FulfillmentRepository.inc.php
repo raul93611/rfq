@@ -34,16 +34,12 @@ class FulfillmentRepository{
             }
             ?>
             <tr>
-              <td colspan="5"></td>
+              <td colspan="5">Total RFQ (from Proposal):</td>
               <td><?php echo $quote-> obtener_total_price(); ?></td>
               <td colspan="5"></td>
               <td><?php echo $quote-> obtener_total_fulfillment(); ?></td>
               <td></td>
-              <td><?php echo $quote-> obtener_fulfillment_profit(); ?></td>
-            </tr>
-            <tr>
-              <td colspan="13"></td>
-              <td>% <?php echo number_format(100*(1-($quote-> obtener_total_fulfillment()/$quote-> obtener_total_price())), 2); ?></td>
+              <td></td>
             </tr>
           </tbody>
         </table>
@@ -225,16 +221,12 @@ class FulfillmentRepository{
             }
             ?>
             <tr>
-              <td colspan="5"></td>
+              <td colspan="5">Total RFP (from Proposal):</td>
               <td><?php echo $total; ?></td>
               <td colspan="5"></td>
               <td><?php echo $quote-> obtener_total_services_fulfillment(); ?></td>
               <td></td>
-              <td><?php echo $quote-> obtener_services_fulfillment_profit(); ?></td>
-            </tr>
-            <tr>
-              <td colspan="13"></td>
-              <td>% <?php echo number_format(100*(1-($quote-> obtener_total_services_fulfillment()/$total)), 2); ?></td>
+              <td></td>
             </tr>
           </tbody>
         </table>

@@ -1,4 +1,16 @@
 $(document).ready(function () {
+  if($('#fulfillment').length != 0 ){
+    $('#fulfillment').click(function (){
+      if( $(this).prop('checked') ) {
+        $('#total_price_confirmation_modal').modal({
+          backdrop: 'static',
+          keyboard: false
+        });
+      }
+    });
+  }
+
+
   var monto = [];
   var quantity = [];
 

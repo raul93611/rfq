@@ -37,11 +37,14 @@
     </div>
     <div class="card-body">
       <div class="row">
-        <div class="col-md-6">
-          <h3 class="text-info text-center">Total: $ <?php echo number_format($quote-> obtener_total_price() + $total_services, 2); ?></h3>
+        <div class="col-md-4">
+          <h3 class="text-info text-center">Total Price Confirmated: $ <?php echo number_format($quote-> obtener_total_price_confirmation(), 2); ?></h3>
         </div>
-        <div class="col-md-6">
-          <h3 class="text-info text-center">Total profit: $ <?php echo number_format($quote-> obtener_services_fulfillment_profit() + $quote-> obtener_fulfillment_profit(), 2); ?></h3>
+        <div class="col-md-4">
+          <h3 class="text-info text-center">Total profit: $ <?php echo number_format($quote-> obtener_real_fulfillment_profit(), 2); ?></h3>
+        </div>
+        <div class="col-md-4">
+          <h3 class="text-info text-center">Total profit(%): <?php echo number_format($quote-> obtener_real_fulfillment_profit_percentage(), 2); ?></h3>
         </div>
       </div>
     </div>

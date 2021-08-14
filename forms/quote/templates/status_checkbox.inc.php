@@ -16,30 +16,30 @@ if($cotizacion_recuperada-> obtener_canal() == 'Chemonics' || $cotizacion_recupe
       <label class="custom-control-label" for="invoice">Invoice</label>
     </div>
     <?php
-  }else if($cotizacion_recuperada->obtener_award()){
+  }else if($cotizacion_recuperada->obtener_award() && !$cotizacion_recuperada-> obtener_fullfillment()){
     if(($items_exists && $re_quote_exists) || (!$items_exists && $cotizacion_recuperada-> obtener_type_of_bid() == 'Services')){
       ?>
-      <div class="custom-control custom-checkbox">
+      <div id="id1" class="custom-control custom-checkbox">
         <input type="checkbox" class="custom-control-input" name="fulfillment" value="si" <?php if ($cotizacion_recuperada->obtener_fullfillment()) { echo 'checked'; } ?> id="fulfillment">
         <label class="custom-control-label" for="fulfillment">Fulfillment</label>
       </div>
       <?php
     }
-  }else if ($cotizacion_recuperada->obtener_status()) {
+  }else if ($cotizacion_recuperada->obtener_status() && !$cotizacion_recuperada-> obtener_award()) {
     ?>
       <div class="custom-control custom-checkbox">
         <input type="checkbox" class="custom-control-input" name="award" value="si" <?php if ($cotizacion_recuperada->obtener_award()) { echo 'checked'; } ?> id="award">
         <label class="custom-control-label" for="award">Award</label>
       </div>
       <?php
-    } else if ($cotizacion_recuperada->obtener_completado()) {
+    } else if ($cotizacion_recuperada->obtener_completado() && !$cotizacion_recuperada-> obtener_status()) {
       ?>
       <div class="custom-control custom-checkbox">
         <input type="checkbox" class="custom-control-input" name="status" value="si" <?php if ($cotizacion_recuperada->obtener_status()) { echo 'checked'; } ?> id="status">
         <label class="custom-control-label" for="status">Submitted</label>
       </div>
       <?php
-    } else {
+    } else if(!$cotizacion_recuperada-> obtener_completado()){
       ?>
       <div class="custom-control custom-checkbox">
         <input type="checkbox" class="custom-control-input" name="completado" value="si" <?php if ($cotizacion_recuperada->obtener_completado()) { echo 'checked';} ?> id="completado">

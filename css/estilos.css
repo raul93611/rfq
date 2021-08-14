@@ -161,17 +161,7 @@ body{
 #go_back:hover{
   background-color: #C0C5CA !important;
   border-color: #C0C5CA !important;
-}
-
-#save_item{
-  background-color: #03D3AB !important;
-  border-color: #03D3AB !important;
-}
-
-#save_item:hover{
-  background-color: #35DCBC !important;
-  border-color: #35DCBC !important;
-}
+} 
 
 .add_item_charter{
   background-color: #40B7EE !important;

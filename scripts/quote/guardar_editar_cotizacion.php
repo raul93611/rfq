@@ -43,7 +43,12 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
       }
     }else if(!$cotizacion_recuperada-> obtener_fullfillment()){
       if(isset($_POST['fulfillment']) && $_POST['fulfillment'] == 'si'){
-        RepositorioRfq::check_fulfillment_and_date(Conexion::obtener_conexion(), $_POST['id_rfq']);
+        if(isset($_POST['multi_year_project']) && $_POST['multi_year_project'] == '1'){
+          $multi_year_project = 1;
+        }else{
+          $multi_year_project = 0;
+        }
+        RepositorioRfq::check_fulfillment_and_date(Conexion::obtener_conexion(), $_POST['total_price_confirmation'], $multi_year_project, $_POST['id_rfq']);
         AuditTrailRepository::quote_status_audit_trail(Conexion::obtener_conexion(), 'Fulfillment', $_POST['id_rfq']);
         Redireccion::redirigir(FULFILLMENT_QUOTES);
       }
