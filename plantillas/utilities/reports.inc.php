@@ -26,6 +26,7 @@
                     <?php $report = $_POST['report'] ?? ''; ?>
                     <select class="form-control form-control-sm" name="report">
                       <option value="profit" <?php echo $report == 'profit' ? 'selected' : ''; ?>>Profit</option>
+                      <option value="award" <?php echo $report == 'award' ? 'selected' : ''; ?>>Award</option>
                     </select>
                   </div>
                 </div>

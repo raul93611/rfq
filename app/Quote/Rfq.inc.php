@@ -92,6 +92,13 @@ class Rfq {
     return $this->id_usuario;
   }
 
+  public function obtener_designated_username(){
+    Conexion::abrir_conexion();
+    $usuario = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), $this-> usuario_designado);
+    Conexion::cerrar_conexion();
+    return $usuario-> obtener_nombre_usuario();
+  }
+
   public function obtener_usuario_designado(){
     return $this->usuario_designado;
   }
@@ -242,6 +249,21 @@ class Rfq {
 
   public function obtener_real_fulfillment_profit_percentage(){
     return 100*($this-> obtener_real_fulfillment_profit()/$this-> total_price_confirmation);
+  }
+
+  public function obtener_quote_total_price(){
+    Conexion::abrir_conexion();
+    $total_services = ServiceRepository::get_total(Conexion::obtener_conexion(), $this-> id);
+    Conexion::cerrar_conexion();
+    return $this-> total_price + $total_services;
+  }
+
+  public function obtener_quote_profit(){
+    return $this-> obtener_quote_total_price() - $this-> total_cost;
+  }
+
+  public function obtener_quote_profit_percentage(){
+    return 100*($this-> obtener_quote_profit()/$this-> obtener_quote_total_price());
   }
 }
 ?>
