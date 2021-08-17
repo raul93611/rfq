@@ -147,5 +147,35 @@ class ExcelRepository{
     $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($total_profit = $total['total_price'] - $total['total_cost'], 2) . "\n" . number_format(100*($total_profit/$total['total_price']), 2) . '%');
     $spreadsheet->getActiveSheet()->getStyle($x.$y)->getAlignment()->setWrapText(true);$x++;
   }
+
+  public static function submitted_report($connection, $month, $year, $spreadsheet){
+    $quotes = Report::get_submitted_report($connection, $month, $year);
+    $total['total_cost']= 0;
+    $total['total_price']= 0;
+
+    $y = 2;
+    foreach ($quotes as $key => $quote) {
+      $x = 'A';
+      $total['total_cost'] += $quote-> obtener_total_cost();
+      $total['total_price'] += $quote-> obtener_quote_total_price();
+
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, RepositorioComment::mysql_date_to_english_format($quote-> obtener_fecha_submitted()));$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_id());$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_designated_username());$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_canal());$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_type_of_bid());$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_total_cost());$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_quote_total_price());$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_total_price() + $total_services - $quote-> obtener_total_cost() . "\n" . number_format(100*(($quote-> obtener_total_price() + $total_services - $quote-> obtener_total_cost())/($total_services + $quote-> obtener_total_price())), 2) . '%');
+      $spreadsheet->getActiveSheet()->getStyle($x.$y)->getAlignment()->setWrapText(true);$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_type_of_bid() == 'Services' ? 'RFP' : 'RFQ');
+      $y++;
+    }
+    $x = 'C';
+    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($total['total_cost'], 2));$x++;
+    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($total['total_price'], 2));$x++;
+    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($total_profit = $total['total_price'] - $total['total_cost'], 2) . "\n" . number_format(100*($total_profit/$total['total_price']), 2) . '%');
+    $spreadsheet->getActiveSheet()->getStyle($x.$y)->getAlignment()->setWrapText(true);$x++;
+  }
 }
 ?>
