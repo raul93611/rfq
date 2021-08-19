@@ -134,6 +134,7 @@ class Report{
         <tr>
           <th>AWARD DATE</th>
           <th>PROPOSAL #</th>
+          <th>CODE</th>
           <th>DESIGNATED USER</th>
           <th>CHANNEL</th>
           <th>TYPE OF BID</th>
@@ -156,6 +157,7 @@ class Report{
                   <?php echo $quote-> obtener_id(); ?>
                 </a>
               </td>
+              <td><?php echo $quote-> obtener_email_code(); ?></td>
               <td><?php echo $quote-> obtener_designated_username(); ?></td>
               <td><?php echo $quote-> obtener_canal(); ?></td>
               <td><?php echo $quote-> obtener_type_of_bid(); ?></td>
@@ -219,6 +221,7 @@ class Report{
         <tr>
           <th>SUBMITTED DATE</th>
           <th>PROPOSAL #</th>
+          <th>CODE</th>
           <th>DESIGNATED USER</th>
           <th>CHANNEL</th>
           <th>TYPE OF BID</th>
@@ -241,6 +244,7 @@ class Report{
                   <?php echo $quote-> obtener_id(); ?>
                 </a>
               </td>
+              <td><?php echo $quote-> obtener_email_code(); ?></td>
               <td><?php echo $quote-> obtener_designated_username(); ?></td>
               <td><?php echo $quote-> obtener_canal(); ?></td>
               <td><?php echo $quote-> obtener_type_of_bid(); ?></td>
