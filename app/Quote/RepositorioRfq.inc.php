@@ -182,7 +182,6 @@ class RepositorioRfq {
   }
 
   public static function escribir_cotizaciones_por_canal_usuario_cargo($canal) {
-    // echo $canal;
     Conexion::abrir_conexion();
     $cotizaciones = self::obtener_cotizaciones_por_canal_usuario_cargo(Conexion::obtener_conexion(), $canal);
     Conexion::cerrar_conexion();

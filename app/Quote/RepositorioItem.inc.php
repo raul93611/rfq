@@ -169,14 +169,27 @@ class RepositorioItem {
     if (count($items)) {
       ?>
       <br>
-      <a target="_blank" href="<?php echo PDF_TABLA_ITEMS . $id_rfq; ?>" class="ml-2 float-right btn btn-primary"><i class="fa fa-file"></i> PDF</a>
-      <?php
-      if($re_quote_exists){
-        ?>
-        <a target="_blank" href="<?php echo EXCEL_ITEMS_TABLE . $id_rfq; ?>" class="float-right btn btn-primary"><i class="fa fa-file"></i> EXCEL</a>
-        <?php
-      }
-      ?>
+      <div class="dropdown">
+        <button class="float-right btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Downloads
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a target="_blank" href="<?php echo PDF_TABLA_ITEMS . $id_rfq; ?>" class="dropdown-item">PDF - Items table</a>
+          <?php if($re_quote_exists)?><a target="_blank" href="<?php echo EXCEL_ITEMS_TABLE . $id_rfq; ?>" class="dropdown-item">EXCEL - Quote&Re-quote</a>
+          <?php
+          if($cotizacion-> obtener_canal() != 'FedBid'){
+            ?>
+            <a class="dropdown-item" href="<?php echo PROPOSAL . '/' . $cotizacion->obtener_id(); ?>" target="_blank">Proposal</a>
+            <?php
+            if ($cotizacion->obtener_canal() == 'GSA-Buy') {
+              ?>
+              <a class="dropdown-item" href="<?php echo PROPOSAL_GSA . '/' . $cotizacion->obtener_id(); ?>" target="_blank">GSA Proposal</a>
+              <?php
+            }
+          }
+          ?>
+        </div>
+      </div>
       <div class="row">
         <div class="col-md-3">
           <label>Taxes (%):</label>
