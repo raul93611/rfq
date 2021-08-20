@@ -237,6 +237,9 @@ if ($partes_ruta[0] == 'rfq') {
         case 'invoice_quotes':
           $gestor_actual = 'invoice_quotes';
           break;
+        case 'submitted_invoice_quotes':
+          $gestor_actual = 'submitted_invoice_quotes';
+          break;
         case 'no_bid':
           $gestor_actual = 'no_bid';
           break;

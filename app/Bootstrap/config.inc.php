@@ -138,6 +138,7 @@ define('DELETE_RE_QUOTE_SUBITEM_PROVIDER', SERVIDOR . 'delete_re_quote_subitem_p
 /***********************************************************************************/
 define('FULFILLMENT_QUOTES', PERFIL . 'fulfillment_quotes');
 define('INVOICE_QUOTES', PERFIL . 'invoice_quotes');
+define('SUBMITTED_INVOICE_QUOTES', PERFIL . 'submitted_invoice_quotes');
 /******************************************************************************/
 define('REMOVE_AWARD', SERVIDOR . 'remove_award/');
 define('REMOVE_FULFILLMENT', SERVIDOR . 'remove_fulfillment/');

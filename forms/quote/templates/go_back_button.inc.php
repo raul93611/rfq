@@ -1,6 +1,8 @@
 <?php
 $canal = Input::translate_channel($cotizacion_recuperada-> obtener_canal());
-if($cotizacion_recuperada-> obtener_invoice()){
+if($cotizacion_recuperada-> obtener_submitted_invoice()){
+  echo '<a class="btn btn-primary" id="go_back" href="' . SUBMITTED_INVOICE_QUOTES . '"><i class="fa fa-reply"></i></a>';
+}else if($cotizacion_recuperada-> obtener_invoice()){
   echo '<a class="btn btn-primary" id="go_back" href="' . INVOICE_QUOTES . '"><i class="fa fa-reply"></i></a>';
 }else if($cotizacion_recuperada-> obtener_fullfillment()){
   echo '<a class="btn btn-primary" id="go_back" href="' . FULFILLMENT_QUOTES . '"><i class="fa fa-reply"></i></a>';

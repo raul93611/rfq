@@ -301,6 +301,14 @@
           </a>
         </li>
         <li class="nav-item">
+          <a href="<?php echo SUBMITTED_INVOICE_QUOTES; ?>" class="nav-link <?php echo $gestor_actual == 'submitted_invoice_quotes' ? 'active' : ''; ?>">
+            <i class="nav-icon fas fa-th"></i>
+            <p>
+              Submitted Invoice Quotes
+            </p>
+          </a>
+        </li>
+        <li class="nav-item">
           <a href="<?php echo NO_BID; ?>" class="nav-link <?php echo $gestor_actual == 'no_bid' ? 'active' : ''; ?>">
             <i class="nav-icon fas fa-th"></i>
             <p>

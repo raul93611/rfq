@@ -54,6 +54,8 @@ CREATE TABLE rfq(
   invoice_date DATE,
   multi_year_project TINYINT,
   total_price_confirmation DECIMAL(10,2),
+  submitted_invoice TINYINT,
+  submitted_invoice_date DATE,
   PRIMARY KEY(id),
   FOREIGN KEY(id_usuario)
       REFERENCES usuarios(id)

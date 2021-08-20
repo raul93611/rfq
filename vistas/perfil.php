@@ -140,6 +140,9 @@ switch ($gestor_actual) {
   case 'invoice_quotes':
     include_once 'plantillas/invoice/invoice_quotes.inc.php';
     break;
+  case 'submitted_invoice_quotes':
+    include_once 'plantillas/submitted_invoice/submitted_invoice_quotes.inc.php';
+    break;
   case 'no_submitted':
     include_once 'plantillas/no_submitted/no_submitted.inc.php';
     break;

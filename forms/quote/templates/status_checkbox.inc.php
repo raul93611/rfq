@@ -9,7 +9,14 @@ if($cotizacion_recuperada-> obtener_canal() == 'Chemonics' || $cotizacion_recupe
     <?php
   }
 }else{
-  if($cotizacion_recuperada-> obtener_fullfillment() && !is_null($cotizacion_recuperada-> obtener_fulfillment_profit()) || !is_null($cotizacion_recuperada-> obtener_services_fulfillment_profit())){
+  if($cotizacion_recuperada-> obtener_invoice()){
+    ?>
+    <div class="custom-control custom-checkbox">
+      <input type="checkbox" class="custom-control-input" name="submitted_invoice" value="si" <?php if ($cotizacion_recuperada->obtener_submitted_invoice()) { echo 'checked'; } ?> id="submitted_invoice">
+      <label class="custom-control-label" for="submitted_invoice">Submitted Invoice</label>
+    </div>
+    <?php
+  }else if($cotizacion_recuperada-> obtener_fullfillment() && !is_null($cotizacion_recuperada-> obtener_fulfillment_profit()) || !is_null($cotizacion_recuperada-> obtener_services_fulfillment_profit())){
     ?>
     <div class="custom-control custom-checkbox">
       <input type="checkbox" class="custom-control-input" name="invoice" value="si" <?php if ($cotizacion_recuperada->obtener_invoice()) { echo 'checked'; } ?> id="invoice">
