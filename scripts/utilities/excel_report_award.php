@@ -15,19 +15,20 @@ $spreadsheet->getProperties()->setCreator('E-logic.Inc')
 
 $spreadsheet->setActiveSheetIndex(0)->setCellValue('A1', 'AWARD DATE');
 $spreadsheet->setActiveSheetIndex(0)->setCellValue('B1', 'PROPOSAL #');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('C1', 'CODE');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('D1', 'DESIGNATED USER');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('E1', 'CHANNEL');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('F1', 'TYPE OF BID');
-$spreadsheet->getActiveSheet()->getStyle('G1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('197bff');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('G1', 'TOTAL COST');
+$spreadsheet->setActiveSheetIndex(0)->setCellValue('C1', 'CONTRACT NUMBER');
+$spreadsheet->setActiveSheetIndex(0)->setCellValue('D1', 'CODE');
+$spreadsheet->setActiveSheetIndex(0)->setCellValue('E1', 'DESIGNATED USER');
+$spreadsheet->setActiveSheetIndex(0)->setCellValue('F1', 'CHANNEL');
+$spreadsheet->setActiveSheetIndex(0)->setCellValue('G1', 'TYPE OF BID');
 $spreadsheet->getActiveSheet()->getStyle('H1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('197bff');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('H1', 'TOTAL PRICE');
+$spreadsheet->setActiveSheetIndex(0)->setCellValue('H1', 'TOTAL COST');
 $spreadsheet->getActiveSheet()->getStyle('I1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('197bff');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('I1', 'PROFIT');
+$spreadsheet->setActiveSheetIndex(0)->setCellValue('I1', 'TOTAL PRICE');
 $spreadsheet->getActiveSheet()->getStyle('J1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('197bff');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('J1', 'PROFIT (%)');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('K1', 'TYPE');
+$spreadsheet->setActiveSheetIndex(0)->setCellValue('J1', 'PROFIT');
+$spreadsheet->getActiveSheet()->getStyle('K1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('197bff');
+$spreadsheet->setActiveSheetIndex(0)->setCellValue('K1', 'PROFIT (%)');
+$spreadsheet->setActiveSheetIndex(0)->setCellValue('L1', 'TYPE');
 
 Conexion::abrir_conexion();
 ExcelRepository::award_report(Conexion::obtener_conexion(), $_POST['month'], $_POST['year'], $spreadsheet);

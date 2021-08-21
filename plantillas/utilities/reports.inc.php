@@ -28,6 +28,7 @@
                       <option value="profit" <?php echo $report == 'profit' ? 'selected' : ''; ?>>Profit</option>
                       <option value="award" <?php echo $report == 'award' ? 'selected' : ''; ?>>Award</option>
                       <option value="submitted" <?php echo $report == 'submitted' ? 'selected' : ''; ?>>Submitted</option>
+                      <option value="re_quote" <?php echo $report == 're_quote' ? 'selected' : ''; ?>>Re-Quote</option>
                     </select>
                   </div>
                 </div>
