@@ -19,5 +19,9 @@ echo json_encode(array(
   'monthly_completed_quotes_by_user' => $cotizaciones_completadas_anual_usuarios,
   'monthly_awards_quotes_by_user' => $cotizaciones_ganadas_anual_usuarios,
   'monthly_price_awards_quotes_by_user' => $cotizaciones_ganadas_anual_usuarios_monto,
+  'total_annual_awards_amounts' => number_format(array_sum($monthly_price_awards), 2),
+  'past_total_annual_awards_amounts' => number_format(array_sum($past_monthly_price_awards), 2),
+  'total_annual_awards' => array_sum($monthly_awards),
+  'past_total_annual_awards' => array_sum($past_monthly_awards)
 ));
 ?>

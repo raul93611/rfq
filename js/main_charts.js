@@ -6,6 +6,11 @@ $(document).ready(function () {
       contentType: "application/json; charset=utf-8",
       method: "GET",
       success: function(data) {
+        $('#annual_awards_amounts .current').html('$ ' + data.total_annual_awards_amounts);
+        $('#annual_awards_amounts .past').html('$ ' + data.past_total_annual_awards_amounts);
+        $('#annual_awards .current').html(data.total_annual_awards);
+        $('#annual_awards .past').html(data.past_total_annual_awards);
+
         var usernames = data.usernames;
         var chartdata = {
           labels: usernames,
@@ -42,7 +47,7 @@ $(document).ready(function () {
           labels: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
           datasets: [
             {
-              label: 'Annual awards(by amount)',
+              label: 'Annual awards(by amount) ',
               backgroundColor: '#13A8F0',
               borderColor: '#13A8F0',
               data: data.monthly_price_awards
