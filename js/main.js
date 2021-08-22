@@ -1,4 +1,13 @@
 $(document).ready(function () {
+  /***********************************VARIABLES INICIALES PARA EL BORRADO*********************/
+  var link_to_delete;
+  var alert_delete_system = $('#alert_delete_system');
+  var continue_button = $('#continue_button');
+  function habilitar_continue_button(boton){
+    alert_delete_system.modal();
+    link_to_delete = boton.attr('href');
+    continue_button.attr('href', link_to_delete);
+  }
   /**************************************FONT COLOR FOR TEXTAREAS***********/
   $('.summernote_textarea').summernote({
     callbacks: {
@@ -46,7 +55,7 @@ $(document).ready(function () {
             caption: file,
             url: '/rfq/delete_document/' + $('input[name="id_rfq"]').val() + '/' + file,
             downloadUrl: '/rfq/documentos/' + $('input[name="id_rfq"]').val() + '/' + file,
-            key: i
+            key: '/rfq/delete_document/' + $('input[name="id_rfq"]').val() + '/' + file
           });
         });
 
@@ -64,6 +73,21 @@ $(document).ready(function () {
           {
             showZoom: false,
           }
+        });
+
+        $("#archivos_ejemplo").on('filepredelete', function(event, key, jqXHR, data) {
+          alert_delete_system.modal();
+          continue_button.attr('href', key);
+          continue_button.on('click', function(){
+            $.ajax({
+              url: key,
+              type: 'POST',
+              success: function(res){
+                location.reload();
+              }
+            });
+          });
+          return true;
         });
       },
       error: function(data) {
@@ -97,15 +121,6 @@ $(document).ready(function () {
     $('#add_comment').click(function(){
       $('#nuevo_comment').modal();
     });
-  }
-  /***********************************VARIABLES INICIALES PARA EL BORRADO*********************/
-  var link_to_delete;
-  var alert_delete_system = $('#alert_delete_system');
-  var continue_button = $('#continue_button');
-  function habilitar_continue_button(boton){
-    alert_delete_system.modal();
-    link_to_delete = boton.attr('href');
-    continue_button.attr('href', link_to_delete);
   }
   /***********************************ALERT EN BOTONES PARA BORRAR ITEMS******************/
   $('.delete_item_button').click(function(){
