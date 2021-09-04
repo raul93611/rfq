@@ -86,6 +86,9 @@ class Input{
       case 'Ebay & Amazon':
         $canal = 'ebay_amazon';
         break;
+      case 'Stars III':
+        $canal = 'starsiii';
+        break;
     }
     return $canal;
   }
@@ -118,6 +121,9 @@ class Input{
         break;
       case 'ebay_amazon':
         $canal = 'Ebay & Amazon';
+        break;
+      case 'starsiii':
+        $canal = 'Stars III';
         break;
     }
     return $canal;

@@ -13,6 +13,7 @@ if($cotizacion-> obtener_type_of_bid() == 'Services'){
 Conexion::cerrar_conexion();
 $fecha_completado = RepositorioComment::mysql_date_to_english_format($cotizacion->obtener_fecha_completado());
 $expiration_date = RepositorioComment::mysql_date_to_english_format($cotizacion->obtener_expiration_date());
+$logo = $cotizacion-> obtener_canal() == 'Stars III' ? 'logoSinergy.png' : 'logo_proposal.jpg';
 try{
   $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
   $fontDirs = $defaultConfig['fontDir'];
@@ -81,7 +82,7 @@ try{
   <table border=0 width="100%">
     <tr>
       <td width="400">
-      <img style="width:350px;height:130px;" src="img/logo_proposal.jpg">
+      <img style="width:350px;height:130px;" src="img/' . $logo . '">
       </td>
       <td align="right">
         <span class="color letra_grande">PROPOSAL</span>

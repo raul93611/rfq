@@ -58,6 +58,7 @@
         <option <?php if($cotizacion_recuperada-> obtener_canal() == 'FBO'){echo 'selected';} ?>>FBO</option>
         <option <?php if($cotizacion_recuperada-> obtener_canal() == 'Chemonics'){echo 'selected';} ?>>Chemonics</option>
         <option <?php if($cotizacion_recuperada-> obtener_canal() == 'Ebay & Amazon'){echo 'selected';} ?>>Ebay & Amazon</option>
+        <option <?php if($cotizacion_recuperada-> obtener_canal() == 'Stars III'){echo 'selected';} ?>>Stars III</option>
       </select>
       <input type="hidden" name="canal_original" value="<?php echo $cotizacion_recuperada-> obtener_canal(); ?>">
     </div>

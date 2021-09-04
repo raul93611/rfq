@@ -111,6 +111,12 @@
                 <p>Ebay & Amazon</p>
               </a>
             </li>
+            <li class="nav-item">
+              <a href="<?php echo STARSIII; ?>" class="nav-link <?php echo $cotizacion == 'starsiii' ? 'active' : ''; ?>">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Stars III</p>
+              </a>
+            </li>
           </ul>
         </li>
         <li class="nav-item" <?php echo $gestor_actual == 'completados' ? 'menu-open' : ''; ?>>
@@ -164,6 +170,12 @@
                 <p>FBO</p>
               </a>
             </li>
+            <li class="nav-item">
+              <a href="<?php echo STARSIII_COMPLETADOS; ?>" class="nav-link <?php echo $cotizacion == 'starsiii_completados' ? 'active' : ''; ?>">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Stars III</p>
+              </a>
+            </li>
           </ul>
         </li>
         <li class="nav-item" <?php echo $gestor_actual == 'submitted' ? 'menu-open' : ''; ?>>
@@ -215,6 +227,12 @@
               <a href="<?php echo FBO_SUBMITTED; ?>" class="nav-link <?php echo $cotizacion == 'fbo_submitted' ? 'active' : ''; ?>">
                 <i class="far fa-circle nav-icon"></i>
                 <p>FBO</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="<?php echo STARSIII_SUBMITTED; ?>" class="nav-link <?php echo $cotizacion == 'starsiii_submitted' ? 'active' : ''; ?>">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Stars III</p>
               </a>
             </li>
           </ul>
@@ -280,6 +298,12 @@
               <a href="<?php echo EBAY_AMAZON_AWARD; ?>" class="nav-link <?php echo $cotizacion == 'ebay_amazon_award' ? 'active' : ''; ?>">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Ebay & Amazon</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="<?php echo STARSIII_AWARD; ?>" class="nav-link <?php echo $cotizacion == 'starsiii_award' ? 'active' : ''; ?>">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Stars III</p>
               </a>
             </li>
           </ul>

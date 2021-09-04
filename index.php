@@ -477,122 +477,19 @@ if ($partes_ruta[0] == 'rfq') {
           break;
         case 'cotizaciones':
           $gestor_actual = 'cotizaciones';
-          switch ($partes_ruta[3]) {
-            case 'gsa_buy':
-              $cotizacion = 'gsa_buy';
-              break;
-            case 'fedbid':
-              $cotizacion = 'fedbid';
-              break;
-            case 'emails':
-              $cotizacion = 'emails';
-              break;
-            case 'mailbox':
-              $cotizacion = 'mailbox';
-              break;
-            case 'findfrp':
-              $cotizacion = 'findfrp';
-              break;
-            case 'embassies':
-              $cotizacion = 'embassies';
-              break;
-            case 'fbo':
-              $cotizacion = 'fbo';
-              break;
-            case 'chemonics':
-              $cotizacion = 'chemonics';
-              break;
-            case 'ebay_amazon':
-              $cotizacion = 'ebay_amazon';
-              break;
-            case 'nuevo':
-              $cotizacion = 'nuevo';
-              break;
-          }
+          $cotizacion = $partes_ruta[3];
           break;
         case 'completados':
           $gestor_actual = 'completados';
-          switch ($partes_ruta[3]) {
-            case 'gsa_buy':
-              $cotizacion = 'gsa_buy_completados';
-              break;
-            case 'fedbid':
-              $cotizacion = 'fedbid_completados';
-              break;
-            case 'emails':
-              $cotizacion = 'emails_completados';
-              break;
-            case 'mailbox':
-              $cotizacion = 'mailbox_completados';
-              break;
-            case 'findfrp':
-              $cotizacion = 'findfrp_completados';
-              break;
-            case 'embassies':
-              $cotizacion = 'embassies_completados';
-              break;
-            case 'fbo':
-              $cotizacion = 'fbo_completados';
-              break;
-          }
+          $cotizacion = $partes_ruta[3] . '_completados';
           break;
         case 'submitted':
           $gestor_actual = 'submitted';
-          switch ($partes_ruta[3]){
-            case 'gsa_buy':
-              $cotizacion = 'gsa_buy_submitted';
-              break;
-            case 'fedbid':
-              $cotizacion = 'fedbid_submitted';
-              break;
-            case 'emails':
-              $cotizacion = 'emails_submitted';
-              break;
-            case 'mailbox':
-              $cotizacion = 'mailbox_submitted';
-              break;
-            case 'findfrp':
-              $cotizacion = 'findfrp_submitted';
-              break;
-            case 'embassies':
-              $cotizacion = 'embassies_submitted';
-              break;
-            case 'fbo':
-              $cotizacion = 'fbo_submitted';
-              break;
-          }
+          $cotizacion = $partes_ruta[3] . '_submitted';
           break;
         case 'award':
           $gestor_actual = 'award';
-          switch ($partes_ruta[3]){
-            case 'gsa_buy':
-              $cotizacion = 'gsa_buy_award';
-              break;
-            case 'fedbid':
-              $cotizacion = 'fedbid_award';
-              break;
-            case 'emails':
-              $cotizacion = 'emails_award';
-              break;
-            case 'mailbox':
-              $cotizacion = 'mailbox_award';
-              break;
-            case 'findfrp':
-              $cotizacion = 'findfrp_award';
-              break;
-            case 'embassies':
-              $cotizacion = 'embassies_award';
-              break;
-            case 'fbo':
-              $cotizacion = 'fbo_award';
-              break;
-            case 'chemonics':
-              $cotizacion = 'chemonics_award';
-              break;
-            case 'ebay_amazon':
-              $cotizacion = 'ebay_amazon_award';
-              break;
-          }
+          $cotizacion = $partes_ruta[3] . '_award';
           break;
         case 'edit_user':
           $id_user = $partes_ruta[3];

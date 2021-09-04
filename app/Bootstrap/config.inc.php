@@ -25,6 +25,7 @@ define('EMBASSIES', COTIZACIONES . 'embassies');
 define('FBO', COTIZACIONES . 'fbo');
 define('CHEMONICS', COTIZACIONES . 'chemonics');
 define('EBAY_AMAZON', COTIZACIONES . 'ebay_amazon');
+define('STARSIII', COTIZACIONES . 'starsiii');
 /*********************************COMPLETED*************************************/
 define('COMPLETADOS', PERFIL . 'completados/');
 define('GSA_BUY_COMPLETADOS', COMPLETADOS . 'gsa_buy');
@@ -34,6 +35,7 @@ define('MAILBOX_COMPLETADOS', COMPLETADOS . 'mailbox');
 define('FINDFRP_COMPLETADOS', COMPLETADOS . 'findfrp');
 define('EMBASSIES_COMPLETADOS', COMPLETADOS . 'embassies');
 define('FBO_COMPLETADOS', COMPLETADOS . 'fbo');
+define('STARSIII_COMPLETADOS', COMPLETADOS . 'starsiii');
 /*******************************SUBMITTED***************************************/
 define('SUBMITTED', PERFIL . 'submitted/');
 define('GSA_BUY_SUBMITTED', SUBMITTED . 'gsa_buy');
@@ -43,6 +45,7 @@ define('MAILBOX_SUBMITTED', SUBMITTED . 'mailbox');
 define('FINDFRP_SUBMITTED', SUBMITTED . 'findfrp');
 define('EMBASSIES_SUBMITTED', SUBMITTED . 'embassies');
 define('FBO_SUBMITTED', SUBMITTED . 'fbo');
+define('STARSIII_SUBMITTED', SUBMITTED . 'starsiii');
 /****************************AWARD**********************************************/
 define('AWARD', PERFIL . 'award/');
 define('GSA_BUY_AWARD', AWARD . 'gsa_buy');
@@ -54,6 +57,7 @@ define('EMBASSIES_AWARD', AWARD . 'embassies');
 define('FBO_AWARD', AWARD . 'fbo');
 define('CHEMONICS_AWARD', AWARD . 'chemonics');
 define('EBAY_AMAZON_AWARD', AWARD . 'ebay_amazon');
+define('STARSIII_AWARD', AWARD . 'starsiii');
 /***************************QUOTES OPTIONS**************************************/
 define('COPY_QUOTE', SERVIDOR . 'copy_quote/');
 define('NUEVA_COTIZACION', COTIZACIONES . 'nuevo');

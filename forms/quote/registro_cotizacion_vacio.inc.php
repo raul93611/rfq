@@ -65,6 +65,7 @@
           <option>FBO</option>
           <option>Chemonics</option>
           <option>Ebay & Amazon</option>
+          <option>Stars III</option>
         </select>
       </div>
     </div>
