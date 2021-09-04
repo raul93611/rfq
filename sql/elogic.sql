@@ -53,7 +53,6 @@ CREATE TABLE rfq(
   invoice TINYINT,
   invoice_date DATE,
   multi_year_project TINYINT,
-  total_price_confirmation DECIMAL(10,2),
   submitted_invoice TINYINT,
   submitted_invoice_date DATE,
   PRIMARY KEY(id),

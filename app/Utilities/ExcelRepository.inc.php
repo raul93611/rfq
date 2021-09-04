@@ -75,7 +75,6 @@ class ExcelRepository{
     $total['total_price']= 0;
     $total['re_quote_total_cost']= 0;
     $total['fulfillment_total_cost']= 0;
-    $total['total_price_confirmation']= 0;
 
     $y = 3;
     foreach ($quotes as $key => $quote) {
@@ -85,7 +84,6 @@ class ExcelRepository{
       $total['total_price'] += $quote-> obtener_quote_total_price();
       $total['re_quote_total_cost'] += $re_quote-> get_total_cost();
       $total['fulfillment_total_cost'] += $quote-> obtener_total_fulfillment() + $quote-> obtener_total_services_fulfillment();
-      $total['total_price_confirmation'] += $quote-> obtener_total_price_confirmation();
 
       $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, RepositorioComment::mysql_date_to_english_format($quote-> obtener_invoice_date()));$x++;
       $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_id());$x++;
@@ -98,7 +96,7 @@ class ExcelRepository{
       $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_quote_total_price() - $re_quote-> get_total_cost() . "\n" . number_format(100*(($quote-> obtener_quote_total_price() - $re_quote-> get_total_cost())/$quote-> obtener_quote_total_price()), 2) . '%');
       $spreadsheet->getActiveSheet()->getStyle($x.$y)->getAlignment()->setWrapText(true);$x++;
       $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_total_fulfillment() + $quote-> obtener_total_services_fulfillment());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_total_price_confirmation());$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_quote_total_price());$x++;
       $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($quote-> obtener_real_fulfillment_profit(), 2) . "\n" . number_format($quote-> obtener_real_fulfillment_profit_percentage(), 2));
       $spreadsheet->getActiveSheet()->getStyle($x.$y)->getAlignment()->setWrapText(true);$x++;
       $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_type_of_bid() == 'Services' ? 'RFP' : 'RFQ');
@@ -114,8 +112,8 @@ class ExcelRepository{
     $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($re_quote_total_profit = $total['total_price'] - $total['re_quote_total_cost'], 2) . "\n" . number_format(100*($re_quote_total_profit/$total['total_price']), 2) . '%');
     $spreadsheet->getActiveSheet()->getStyle($x.$y)->getAlignment()->setWrapText(true);$x++;
     $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($total['fulfillment_total_cost'], 2));$x++;
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($total['total_price_confirmation'], 2));$x++;
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($fulfillment_total_profit = $total['total_price_confirmation'] - $total['fulfillment_total_cost'], 2) . "\n" . number_format(100*($fulfillment_total_profit/$total['total_price_confirmation']), 2) . '%');
+    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($total['total_price'], 2));$x++;
+    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($fulfillment_total_profit = $total['total_price'] - $total['fulfillment_total_cost'], 2) . "\n" . number_format(100*($fulfillment_total_profit/$total['total_price']), 2) . '%');
     $spreadsheet->getActiveSheet()->getStyle($x.$y)->getAlignment()->setWrapText(true);$x++;
   }
 
@@ -187,8 +185,6 @@ class ExcelRepository{
     $total['total_cost']= 0;
     $total['total_price']= 0;
     $total['re_quote_total_cost']= 0;
-    $total['fulfillment_total_cost']= 0;
-    $total['total_price_confirmation']= 0;
 
     $y = 3;
     foreach ($quotes as $key => $quote) {
@@ -197,8 +193,6 @@ class ExcelRepository{
       $total['total_cost'] += $quote-> obtener_total_cost();
       $total['total_price'] += $quote-> obtener_quote_total_price();
       $total['re_quote_total_cost'] += $re_quote-> get_total_cost();
-      $total['fulfillment_total_cost'] += $quote-> obtener_total_fulfillment() + $quote-> obtener_total_services_fulfillment();
-      $total['total_price_confirmation'] += $quote-> obtener_total_price_confirmation();
 
       $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, RepositorioComment::mysql_date_to_english_format($quote-> obtener_fulfillment_date()));$x++;
       $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_id());$x++;

@@ -6,7 +6,6 @@ class Report{
     $total['total_price']= 0;
     $total['re_quote_total_cost']= 0;
     $total['fulfillment_total_cost']= 0;
-    $total['total_price_confirmation']= 0;
     ?>
     <div class="my-3">
       <i class="fas fa-square text-primary"></i> Quote <br>
@@ -39,7 +38,6 @@ class Report{
             $total['total_price'] += $quote-> obtener_quote_total_price();
             $total['re_quote_total_cost'] += $re_quote-> get_total_cost();
             $total['fulfillment_total_cost'] += $quote-> obtener_total_fulfillment() + $quote-> obtener_total_services_fulfillment();
-            $total['total_price_confirmation'] += $quote-> obtener_total_price_confirmation();
             ?>
             <tr class="<?php echo $quote-> obtener_multi_year_project() ? 'bg-danger' : ''; ?>">
               <td style="width: 100px;"><?php echo RepositorioComment::mysql_date_to_english_format($quote-> obtener_invoice_date()); ?></td>
@@ -63,7 +61,7 @@ class Report{
                 <?php echo number_format(100*(($quote-> obtener_quote_total_price() - $re_quote-> get_total_cost())/$quote-> obtener_quote_total_price()), 2) . '%'; ?>
               </td>
               <td><?php echo $quote-> obtener_total_fulfillment() + $quote-> obtener_total_services_fulfillment(); ?></td>
-              <td><?php echo $quote-> obtener_total_price_confirmation(); ?></td>
+              <td><?php echo $quote-> obtener_quote_total_price(); ?></td>
               <td>
                 <?php echo number_format($quote-> obtener_real_fulfillment_profit(), 2); ?>
                 <br>
@@ -91,9 +89,9 @@ class Report{
       </div>
       <div class="col-md-4">
         <i class="fas fa-square text-success"></i> Total Cost: $ <?php echo number_format($total['fulfillment_total_cost'], 2); ?> <br>
-        <i class="fas fa-square text-success"></i> Total Price: $ <?php echo number_format($total['total_price_confirmation'], 2); ?> <br>
-        <i class="fas fa-square text-success"></i> Total Profit: $ <?php echo number_format($fulfillment_total_profit = $total['total_price_confirmation'] - $total['fulfillment_total_cost'], 2); ?> <br>
-        <i class="fas fa-square text-success"></i> Total Profit(%): <?php echo number_format(100*($fulfillment_total_profit/$total['total_price_confirmation']), 2); ?>
+        <i class="fas fa-square text-success"></i> Total Price: $ <?php echo number_format($total['total_price'], 2); ?> <br>
+        <i class="fas fa-square text-success"></i> Total Profit: $ <?php echo number_format($fulfillment_total_profit = $total['total_price'] - $total['fulfillment_total_cost'], 2); ?> <br>
+        <i class="fas fa-square text-success"></i> Total Profit(%): <?php echo number_format(100*($fulfillment_total_profit/$total['total_price']), 2); ?>
       </div>
     </div>
     <?php
@@ -111,7 +109,7 @@ class Report{
         $result = $sentence-> fetchAll(PDO::FETCH_ASSOC);
         if(count($result)){
           foreach ($result as $row) {
-            $quotes[] = new Rfq($row['id'], $row['id_usuario'], $row['usuario_designado'], $row['canal'], $row['email_code'], $row['type_of_bid'], $row['issue_date'], $row['end_date'], $row['status'], $row['completado'], $row['total_cost'], $row['total_price'], $row['comments'], $row['award'], $row['fecha_completado'], $row['fecha_submitted'], $row['fecha_award'], $row['payment_terms'], $row['address'], $row['ship_to'], $row['expiration_date'], $row['ship_via'], $row['taxes'], $row['profit'], $row['additional'], $row['shipping'], $row['shipping_cost'], $row['fullfillment'], $row['fulfillment_date'], $row['contract_number'], $row['fulfillment_profit'], $row['services_fulfillment_profit'], $row['total_fulfillment'], $row['total_services_fulfillment'], $row['invoice'], $row['invoice_date'], $row['multi_year_project'], $row['total_price_confirmation'], $row['submitted_invoice'], $row['submitted_invoice_date']);
+            $quotes[] = new Rfq($row['id'], $row['id_usuario'], $row['usuario_designado'], $row['canal'], $row['email_code'], $row['type_of_bid'], $row['issue_date'], $row['end_date'], $row['status'], $row['completado'], $row['total_cost'], $row['total_price'], $row['comments'], $row['award'], $row['fecha_completado'], $row['fecha_submitted'], $row['fecha_award'], $row['payment_terms'], $row['address'], $row['ship_to'], $row['expiration_date'], $row['ship_via'], $row['taxes'], $row['profit'], $row['additional'], $row['shipping'], $row['shipping_cost'], $row['fullfillment'], $row['fulfillment_date'], $row['contract_number'], $row['fulfillment_profit'], $row['services_fulfillment_profit'], $row['total_fulfillment'], $row['total_services_fulfillment'], $row['invoice'], $row['invoice_date'], $row['multi_year_project'], $row['submitted_invoice'], $row['submitted_invoice_date']);
           }
         }
       }catch(PDOException $ex){
@@ -200,7 +198,7 @@ class Report{
         $result = $sentence-> fetchAll(PDO::FETCH_ASSOC);
         if(count($result)){
           foreach ($result as $row) {
-            $quotes[] = new Rfq($row['id'], $row['id_usuario'], $row['usuario_designado'], $row['canal'], $row['email_code'], $row['type_of_bid'], $row['issue_date'], $row['end_date'], $row['status'], $row['completado'], $row['total_cost'], $row['total_price'], $row['comments'], $row['award'], $row['fecha_completado'], $row['fecha_submitted'], $row['fecha_award'], $row['payment_terms'], $row['address'], $row['ship_to'], $row['expiration_date'], $row['ship_via'], $row['taxes'], $row['profit'], $row['additional'], $row['shipping'], $row['shipping_cost'], $row['fullfillment'], $row['fulfillment_date'], $row['contract_number'], $row['fulfillment_profit'], $row['services_fulfillment_profit'], $row['total_fulfillment'], $row['total_services_fulfillment'], $row['invoice'], $row['invoice_date'], $row['multi_year_project'], $row['total_price_confirmation'], $row['submitted_invoice'], $row['submitted_invoice_date']);
+            $quotes[] = new Rfq($row['id'], $row['id_usuario'], $row['usuario_designado'], $row['canal'], $row['email_code'], $row['type_of_bid'], $row['issue_date'], $row['end_date'], $row['status'], $row['completado'], $row['total_cost'], $row['total_price'], $row['comments'], $row['award'], $row['fecha_completado'], $row['fecha_submitted'], $row['fecha_award'], $row['payment_terms'], $row['address'], $row['ship_to'], $row['expiration_date'], $row['ship_via'], $row['taxes'], $row['profit'], $row['additional'], $row['shipping'], $row['shipping_cost'], $row['fullfillment'], $row['fulfillment_date'], $row['contract_number'], $row['fulfillment_profit'], $row['services_fulfillment_profit'], $row['total_fulfillment'], $row['total_services_fulfillment'], $row['invoice'], $row['invoice_date'], $row['multi_year_project'], $row['submitted_invoice'], $row['submitted_invoice_date']);
           }
         }
       }catch(PDOException $ex){
@@ -287,7 +285,7 @@ class Report{
         $result = $sentence-> fetchAll(PDO::FETCH_ASSOC);
         if(count($result)){
           foreach ($result as $row) {
-            $quotes[] = new Rfq($row['id'], $row['id_usuario'], $row['usuario_designado'], $row['canal'], $row['email_code'], $row['type_of_bid'], $row['issue_date'], $row['end_date'], $row['status'], $row['completado'], $row['total_cost'], $row['total_price'], $row['comments'], $row['award'], $row['fecha_completado'], $row['fecha_submitted'], $row['fecha_award'], $row['payment_terms'], $row['address'], $row['ship_to'], $row['expiration_date'], $row['ship_via'], $row['taxes'], $row['profit'], $row['additional'], $row['shipping'], $row['shipping_cost'], $row['fullfillment'], $row['fulfillment_date'], $row['contract_number'], $row['fulfillment_profit'], $row['services_fulfillment_profit'], $row['total_fulfillment'], $row['total_services_fulfillment'], $row['invoice'], $row['invoice_date'], $row['multi_year_project'], $row['total_price_confirmation'], $row['submitted_invoice'], $row['submitted_invoice_date']);
+            $quotes[] = new Rfq($row['id'], $row['id_usuario'], $row['usuario_designado'], $row['canal'], $row['email_code'], $row['type_of_bid'], $row['issue_date'], $row['end_date'], $row['status'], $row['completado'], $row['total_cost'], $row['total_price'], $row['comments'], $row['award'], $row['fecha_completado'], $row['fecha_submitted'], $row['fecha_award'], $row['payment_terms'], $row['address'], $row['ship_to'], $row['expiration_date'], $row['ship_via'], $row['taxes'], $row['profit'], $row['additional'], $row['shipping'], $row['shipping_cost'], $row['fullfillment'], $row['fulfillment_date'], $row['contract_number'], $row['fulfillment_profit'], $row['services_fulfillment_profit'], $row['total_fulfillment'], $row['total_services_fulfillment'], $row['invoice'], $row['invoice_date'], $row['multi_year_project'], $row['submitted_invoice'], $row['submitted_invoice_date']);
           }
         }
       }catch(PDOException $ex){
@@ -389,7 +387,7 @@ class Report{
         $result = $sentence-> fetchAll(PDO::FETCH_ASSOC);
         if(count($result)){
           foreach ($result as $row) {
-            $quotes[] = new Rfq($row['id'], $row['id_usuario'], $row['usuario_designado'], $row['canal'], $row['email_code'], $row['type_of_bid'], $row['issue_date'], $row['end_date'], $row['status'], $row['completado'], $row['total_cost'], $row['total_price'], $row['comments'], $row['award'], $row['fecha_completado'], $row['fecha_submitted'], $row['fecha_award'], $row['payment_terms'], $row['address'], $row['ship_to'], $row['expiration_date'], $row['ship_via'], $row['taxes'], $row['profit'], $row['additional'], $row['shipping'], $row['shipping_cost'], $row['fullfillment'], $row['fulfillment_date'], $row['contract_number'], $row['fulfillment_profit'], $row['services_fulfillment_profit'], $row['total_fulfillment'], $row['total_services_fulfillment'], $row['invoice'], $row['invoice_date'], $row['multi_year_project'], $row['total_price_confirmation'], $row['submitted_invoice'], $row['submitted_invoice_date']);
+            $quotes[] = new Rfq($row['id'], $row['id_usuario'], $row['usuario_designado'], $row['canal'], $row['email_code'], $row['type_of_bid'], $row['issue_date'], $row['end_date'], $row['status'], $row['completado'], $row['total_cost'], $row['total_price'], $row['comments'], $row['award'], $row['fecha_completado'], $row['fecha_submitted'], $row['fecha_award'], $row['payment_terms'], $row['address'], $row['ship_to'], $row['expiration_date'], $row['ship_via'], $row['taxes'], $row['profit'], $row['additional'], $row['shipping'], $row['shipping_cost'], $row['fullfillment'], $row['fulfillment_date'], $row['contract_number'], $row['fulfillment_profit'], $row['services_fulfillment_profit'], $row['total_fulfillment'], $row['total_services_fulfillment'], $row['invoice'], $row['invoice_date'], $row['multi_year_project'], $row['submitted_invoice'], $row['submitted_invoice_date']);
           }
         }
       }catch(PDOException $ex){

@@ -57,7 +57,6 @@ include_once 'plantillas/quote/modals/comments_modal.inc.php';
 include_once 'plantillas/quote/modals/audit_trails_modal.inc.php';
 include_once 'plantillas/services/modals/add_service_modal.inc.php';
 include_once 'plantillas/services/modals/edit_service_modal.inc.php';
-include_once 'plantillas/quote/modals/total_price_confirmation_modal.inc.php';
 ?>
 <script src="<?php echo RUTA_JS; ?>services.js"></script>
 <script src="<?php echo RUTA_JS; ?>quote.js"></script>
