@@ -311,6 +311,11 @@ class Report{
         <tr>
           <th>FULFILLMENT DATE</th>
           <th>PROPOSAL #</th>
+          <th>DESIGNATED USER</th>
+          <th>CHANNEL</th>
+          <th>CODE</th>
+          <th>TYPE OF BID</th>
+          <th>AWARD DATE</th>
           <th>CONTRACT NUMBER</th>
           <th class="bg-primary">TOTAL COST</th>
           <th class="bg-primary">TOTAL PRICE</th>
@@ -336,6 +341,11 @@ class Report{
                   <?php echo $quote-> obtener_id(); ?>
                 </a>
               </td>
+              <td><?php echo $quote-> obtener_designated_username(); ?></td>
+              <td><?php echo $quote-> obtener_canal(); ?></td>
+              <td><?php echo $quote-> obtener_email_code(); ?></td>
+              <td><?php echo $quote-> obtener_type_of_bid(); ?></td>
+              <td><?php echo RepositorioComment::mysql_date_to_english_format($quote-> obtener_fecha_award()); ?></td>
               <td><?php echo $quote-> obtener_contract_number(); ?></td>
               <td><?php echo $quote-> obtener_total_cost(); ?></td>
               <td><?php echo $quote-> obtener_quote_total_price(); ?></td>
