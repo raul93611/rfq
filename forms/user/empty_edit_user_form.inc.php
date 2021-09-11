@@ -23,10 +23,9 @@ if($_SESSION['cargo'] != 1){
   <div class="form-group">
     <label for="cargo">Level:</label>
     <select class="form-control" name="cargo" id="cargo">
-      <option value="boss" <?php if($user-> obtener_cargo() == 2){echo 'selected';} ?>>Boss</option>
-      <option value="head_of_area" <?php if($user-> obtener_cargo() == 3){echo 'selected';} ?>>Head of area</option>
-      <option value="common_user" <?php if($user-> obtener_cargo() == 4){echo 'selected';} ?>>Common user</option>
-      <option value="rookie" <?php if($user-> obtener_cargo() == 5){echo 'selected';} ?>>Rookie</option>
+      <option value="2" <?php if($user-> obtener_cargo() == 2){echo 'selected';} ?>>Fulfillment</option>
+      <option value="3" <?php if($user-> obtener_cargo() == 3){echo 'selected';} ?>>RFQ</option>
+      <option value="4" <?php if($user-> obtener_cargo() == 4){echo 'selected';} ?>>Accounting</option>
     </select>
   </div>
   <div class="form-group">

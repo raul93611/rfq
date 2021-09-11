@@ -57,5 +57,22 @@ class Usuario{
   public function obtener_hash_recover_email(){
     return $this-> hash_recover_email;
   }
+
+  public function obtener_role(){
+    switch ($this-> cargo) {
+      case 2:
+        $cargo = 'Fulfillment';
+        break;
+      case 3:
+        $cargo = 'RFQ';
+        break;
+      case 4:
+        $cargo = 'Accounting';
+        break;
+      default:
+        break;
+    }
+    return $cargo;
+  }
 }
 ?>

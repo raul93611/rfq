@@ -31,10 +31,9 @@
   <div class="form-group">
     <label for="cargo">Position:</label>
     <select class="form-control" name="cargo" id="cargo">
-      <option value="boss">Boss</option>
-      <option value="head_of_area">Head of area</option>
-      <option value="common_user">Common user</option>
-      <option value="rookie">Rookie</option>
+      <option value="2">Fulfillment</option>
+      <option value="3">RFQ</option>
+      <option value="4">Accounting</option>
     </select>
   </div>
 </div>

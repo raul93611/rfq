@@ -183,11 +183,16 @@ $(document).ready(function () {
     'order': [[ 4, "desc" ]]
   });
 
+  $('#tabla_usuarios').DataTable({
+    'pageLength': 50,
+    'order': [[ 4, "asc" ]]
+  });
+
   $('#tabla_busqueda').DataTable({
     'pageLength': 50
   });
 
-  $('#tabla_usuarios, .invoice_table').DataTable({
+  $('.invoice_table').DataTable({
     'order': [[ 3, "desc" ]],
     'pageLength': 50
   });

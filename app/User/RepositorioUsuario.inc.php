@@ -249,7 +249,7 @@ class RepositorioUsuario {
     $usuarios = [];
     if (isset($conexion)) {
       try {
-        $sql = "SELECT * FROM usuarios WHERE cargo != 1 ORDER BY id";
+        $sql = "SELECT * FROM usuarios WHERE cargo != 1";
         $sentencia = $conexion->prepare($sql);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(PDO::FETCH_ASSOC);
@@ -272,7 +272,7 @@ class RepositorioUsuario {
     ?>
     <tr>
       <td><?php echo $usuario-> obtener_id(); ?></td>
-      <td><?php echo $usuario-> obtener_cargo(); ?></td>
+      <td><?php echo $usuario-> obtener_role(); ?></td>
       <td><?php echo $usuario-> obtener_nombres(); ?></td>
       <td><?php echo $usuario-> obtener_apellidos(); ?></td>
       <td class='text-center'>
@@ -336,7 +336,7 @@ class RepositorioUsuario {
         <thead>
           <tr>
             <th id="id">Id</th>
-            <th>Level</th>
+            <th>Role</th>
             <th>First names</th>
             <th>Last names</th>
             <th id="disable_user">Options</th>
