@@ -52,7 +52,7 @@ CREATE TABLE rfq(
   total_services_fulfillment DECIMAL(10,2),
   invoice TINYINT,
   invoice_date DATE,
-  multi_year_project TINYINT,
+  multi_year_project INT,
   submitted_invoice TINYINT,
   submitted_invoice_date DATE,
   PRIMARY KEY(id),

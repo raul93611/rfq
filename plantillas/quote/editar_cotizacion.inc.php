@@ -13,10 +13,13 @@ if(is_null($cotizacion_recuperada)){
   <section class="content-header">
     <div class="container-fluid">
       <div class="row mb-2">
-        <div class="col-md-2">
-          <h1>Proposal # <?php echo $cotizacion_recuperada-> obtener_id(); ?></h1>
+        <div class="col-md-3">
+          <h1>Proposal # <?php echo $cotizacion_recuperada-> obtener_id(); ?>
+            <?php include_once 'templates/multi_year_project_dropdown.inc.php'; ?>
+          </h1>
         </div>
-        <div class="col-md-8 text-center">
+        <div class="col-md-7 text-center">
+
           <?php
           include_once 'plantillas/quote/templates/copy_quote_button.inc.php';
           include_once 'plantillas/quote/templates/comments_button.inc.php';

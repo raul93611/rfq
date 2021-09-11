@@ -4,7 +4,7 @@ class RepositorioRfq {
     $cotizacion_insertada = false;
     if (isset($conexion)) {
       try {
-        $sql = 'INSERT INTO rfq(id_usuario, usuario_designado, canal, email_code, type_of_bid, issue_date, end_date, status, completado, total_cost, total_price, comments, award, fecha_completado, fecha_submitted, fecha_award, payment_terms, address, ship_to, expiration_date, ship_via, taxes, profit, additional, shipping, shipping_cost, fullfillment, fulfillment_date, contract_number) VALUES(:id_usuario, :usuario_designado, :canal, :email_code, :type_of_bid, :issue_date, :end_date, :status, :completado, :total_cost, :total_price, :comments, :award, :fecha_completado, :fecha_submitted, :fecha_award, :payment_terms, :address, :ship_to, :expiration_date, :ship_via, :taxes, :profit, :additional, :shipping, :shipping_cost, :fullfillment, :fulfillment_date, :contract_number)';
+        $sql = 'INSERT INTO rfq(id_usuario, usuario_designado, canal, email_code, type_of_bid, issue_date, end_date, status, completado, total_cost, total_price, comments, award, fecha_completado, fecha_submitted, fecha_award, payment_terms, address, ship_to, expiration_date, ship_via, taxes, profit, additional, shipping, shipping_cost, fullfillment, fulfillment_date, contract_number, fulfillment_profit, services_fulfillment_profit, total_fulfillment, total_services_fulfillment, invoice, invoice_date, multi_year_project, submitted_invoice, submitted_invoice_date) VALUES(:id_usuario, :usuario_designado, :canal, :email_code, :type_of_bid, :issue_date, :end_date, :status, :completado, :total_cost, :total_price, :comments, :award, :fecha_completado, :fecha_submitted, :fecha_award, :payment_terms, :address, :ship_to, :expiration_date, :ship_via, :taxes, :profit, :additional, :shipping, :shipping_cost, :fullfillment, :fulfillment_date, :contract_number, :fulfillment_profit, :services_fulfillment_profit, :total_fulfillment, :total_services_fulfillment, :invoice, :invoice_date, :multi_year_project, :submitted_invoice, :submitted_invoice_date)';
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindParam(':id_usuario', $cotizacion->obtener_id_usuario(), PDO::PARAM_STR);
         $sentencia->bindParam(':usuario_designado', $cotizacion->obtener_usuario_designado(), PDO::PARAM_STR);
@@ -35,6 +35,15 @@ class RepositorioRfq {
         $sentencia-> bindParam(':fullfillment', $cotizacion-> obtener_fullfillment(), PDO::PARAM_STR);
         $sentencia-> bindParam(':fulfillment_date', $cotizacion-> obtener_fulfillment_date(), PDO::PARAM_STR);
         $sentencia-> bindParam(':contract_number', $cotizacion-> obtener_contract_number(), PDO::PARAM_STR);
+        $sentencia-> bindParam(':fulfillment_profit', $cotizacion-> obtener_fulfillment_profit(), PDO::PARAM_STR);
+        $sentencia-> bindParam(':services_fulfillment_profit', $cotizacion-> obtener_services_fulfillment_profit(), PDO::PARAM_STR);
+        $sentencia-> bindParam(':total_fulfillment', $cotizacion-> obtener_total_fulfillment(), PDO::PARAM_STR);
+        $sentencia-> bindParam(':total_services_fulfillment', $cotizacion-> obtener_total_services_fulfillment(), PDO::PARAM_STR);
+        $sentencia-> bindParam(':invoice', $cotizacion-> obtener_invoice(), PDO::PARAM_STR);
+        $sentencia-> bindParam(':invoice_date', $cotizacion-> obtener_invoice_date(), PDO::PARAM_STR);
+        $sentencia-> bindParam(':multi_year_project', $cotizacion-> obtener_multi_year_project(), PDO::PARAM_STR);
+        $sentencia-> bindParam(':submitted_invoice', $cotizacion-> obtener_submitted_invoice(), PDO::PARAM_STR);
+        $sentencia-> bindParam(':submitted_invoice_date', $cotizacion-> obtener_submitted_invoice_date(), PDO::PARAM_STR);
         $resultado = $sentencia->execute();
         $id = $conexion->lastInsertId();
         if ($resultado) {
@@ -83,6 +92,27 @@ class RepositorioRfq {
       }
     }
     return $email_code_existe;
+  }
+
+  public static function get_child_quotes($conexion, $id_parent){
+    $quotes = [];
+    if(isset($conexion)){
+      try{
+        $sql = 'SELECT * FROM rfq WHERE multi_year_project = :multi_year_project';
+        $sentencia = $conexion-> prepare($sql);
+        $sentencia-> bindParam(':multi_year_project', $id_parent, PDO::PARAM_STR);
+        $sentencia-> execute();
+        $resultado = $sentencia-> fetchAll(PDO::FETCH_ASSOC);
+        if (count($resultado)) {
+          foreach ($resultado as $fila) {
+            $quotes[] = new Rfq($fila['id'], $fila['id_usuario'], $fila['usuario_designado'], $fila['canal'], $fila['email_code'], $fila['type_of_bid'], $fila['issue_date'], $fila['end_date'], $fila['status'], $fila['completado'], $fila['total_cost'], $fila['total_price'], $fila['comments'], $fila['award'], $fila['fecha_completado'], $fila['fecha_submitted'], $fila['fecha_award'], $fila['payment_terms'], $fila['address'], $fila['ship_to'], $fila['expiration_date'], $fila['ship_via'], $fila['taxes'], $fila['profit'], $fila['additional'], $fila['shipping'], $fila['shipping_cost'], $fila['fullfillment'], $fila['fulfillment_date'], $fila['fulfillment_date'], $fila['contract_number'], $fila['fulfillment_profit'], $fila['services_fulfillment_profit'], $fila['total_fulfillment'], $fila['total_services_fulfillment'], $fila['invoice'], $fila['invoice_date'], $fila['invoice'], $fila['invoice_date'], $fila['multi_year_project'], $fila['submitted_invoice'], $fila['submitted_invoice_date']);
+          }
+        }
+      }catch(PDOException $ex){
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $quotes;
   }
 
   public static function get_all_submitted_quotes_between_dates($conexion, $date_from, $date_to){
@@ -1685,6 +1715,19 @@ class RepositorioRfq {
     if(isset($conexion)){
       try{
         $sql = 'UPDATE rfq SET fullfillment = 0 WHERE id = :id_rfq';
+        $sentencia = $conexion-> prepare($sql);
+        $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia-> execute();
+      }catch(PDOException $ex){
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+  }
+
+  public static function remove_relation($conexion, $id_rfq){
+    if(isset($conexion)){
+      try{
+        $sql = 'UPDATE rfq SET multi_year_project = null WHERE id = :id_rfq';
         $sentencia = $conexion-> prepare($sql);
         $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia-> execute();

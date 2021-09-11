@@ -146,6 +146,8 @@ define('SUBMITTED_INVOICE_QUOTES', PERFIL . 'submitted_invoice_quotes');
 /******************************************************************************/
 define('REMOVE_AWARD', SERVIDOR . 'remove_award/');
 define('REMOVE_FULFILLMENT', SERVIDOR . 'remove_fulfillment/');
+define('REMOVE_SLAVE', SERVIDOR . 'remove_slave/');
+define('REMOVE_MASTER', SERVIDOR . 'remove_master/');
 /******************************************************************************/
 define('ADD_SERVICE', SERVIDOR . 'add_service');
 define('LOAD_SERVICE', SERVIDOR . 'load_service/');

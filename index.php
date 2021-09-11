@@ -124,6 +124,12 @@ if ($partes_ruta[0] == 'rfq') {
       case 'logout':
         $ruta_elegida = 'scripts/user/logout.php';
         break;
+      case 'remove_slave':
+        $ruta_elegida = 'scripts/quote/remove_slave.php';
+        break;
+      case 'remove_master':
+        $ruta_elegida = 'scripts/quote/remove_master.php';
+        break;
       case 'pdf_report':
         $gestor_actual = 'pdf_report';
         $ruta_elegida = 'scripts/pdf_report.php';

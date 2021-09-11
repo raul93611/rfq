@@ -270,5 +270,13 @@ class Rfq {
   public function obtener_submitted_invoice_date(){
     return $this-> submitted_invoice_date;
   }
+
+  public function obtener_child_quotes(){
+    Conexion::abrir_conexion();
+    $child_quotes = RepositorioRfq::get_child_quotes(Conexion::obtener_conexion(), $this-> id);
+    Conexion::cerrar_conexion();
+
+    return $child_quotes;
+  }
 }
 ?>
