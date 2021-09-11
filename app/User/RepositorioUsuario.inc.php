@@ -63,24 +63,6 @@ class RepositorioUsuario {
     return $usuario;
   }
 
-  public static function obtener_usuario_0($conexion) {
-    $usuario = null;
-    if (isset($conexion)) {
-      try {
-        $sql = "SELECT * FROM usuarios WHERE cargo = 0";
-        $sentencia = $conexion->prepare($sql);
-        $sentencia->execute();
-        $resultado = $sentencia->fetch(PDO::FETCH_ASSOC);
-        if (!empty($resultado)) {
-          $usuario = new Usuario($resultado['id'], $resultado['nombre_usuario'], $resultado['password'], $resultado['nombres'], $resultado['apellidos'], $resultado['cargo'], $resultado['email'], $resultado['status'], $resultado['hash_recover_email']);
-        }
-      } catch (PDOException $ex) {
-        print 'ERROR:' . $ex->getMessage() . '<br>';
-      }
-    }
-    return $usuario;
-  }
-
   public static function eliminar_hash_recover_email($conexion, $id_usuario){
     if(isset($conexion)){
       try{
@@ -263,31 +245,11 @@ class RepositorioUsuario {
     return $total_usuarios;
   }
 
-  public static function get_all_users_level_3($conexion) {
-    $usuarios = [];
-    if (isset($conexion)) {
-      try {
-        $sql = "SELECT * FROM usuarios WHERE cargo = 3 ORDER BY id";
-        $sentencia = $conexion->prepare($sql);
-        $sentencia->execute();
-        $resultado = $sentencia->fetchAll(PDO::FETCH_ASSOC);
-        if (count($resultado)) {
-          foreach ($resultado as $fila) {
-            $usuarios [] = new Usuario($fila['id'], $fila['nombre_usuario'], $fila['password'], $fila['nombres'], $fila['apellidos'], $fila['cargo'], $fila['email'], $fila['status'], $fila['hash_recover_email']);
-          }
-        }
-      } catch (PDOException $ex) {
-        print 'ERROR:' . $ex->getMessage() . '<br>';
-      }
-    }
-    return $usuarios;
-  }
-
   public static function obtener_todos_usuarios($conexion) {
     $usuarios = [];
     if (isset($conexion)) {
       try {
-        $sql = "SELECT * FROM usuarios WHERE cargo != 1 AND cargo != 0 ORDER BY id";
+        $sql = "SELECT * FROM usuarios WHERE cargo != 1 ORDER BY id";
         $sentencia = $conexion->prepare($sql);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(PDO::FETCH_ASSOC);
@@ -396,7 +358,27 @@ class RepositorioUsuario {
     $usuarios = [];
     if (isset($conexion)) {
       try {
-        $sql = "SELECT * FROM usuarios WHERE cargo > 2 AND status = 1";
+        $sql = "SELECT * FROM usuarios WHERE cargo = 3 AND status = 1";
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(PDO::FETCH_ASSOC);
+        if (count($resultado)) {
+          foreach ($resultado as $fila) {
+            $usuarios [] = new Usuario($fila['id'], $fila['nombre_usuario'], $fila['password'], $fila['nombres'], $fila['apellidos'], $fila['cargo'], $fila['email'], $fila['status'], $fila['hash_recover_email']);
+          }
+        }
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $usuarios;
+  }
+
+  public static function get_fulfillment_users($conexion) {
+    $usuarios = [];
+    if (isset($conexion)) {
+      try {
+        $sql = "SELECT * FROM usuarios WHERE cargo = 2 AND status = 1";
         $sentencia = $conexion->prepare($sql);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(PDO::FETCH_ASSOC);
@@ -431,37 +413,6 @@ class RepositorioUsuario {
             $sql1 = 'SELECT COUNT(*) as cotizaciones_pasadas FROM rfq WHERE usuario_designado = :usuario_designado AND status = 1 AND MONTH(fecha_submitted) = MONTH(DATE_SUB(CURDATE(), INTERVAL 1 MONTH)) AND YEAR(fecha_submitted) = YEAR(DATE_SUB(CURDATE(), INTERVAL 1 MONTH))';
             break;
         }
-        $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':usuario_designado', $id_usuario, PDO::PARAM_STR);
-        $sentencia->execute();
-
-        $sentencia1 = $conexion->prepare($sql1);
-        $sentencia1->bindParam(':usuario_designado', $id_usuario, PDO::PARAM_STR);
-        $sentencia1->execute();
-
-        $resultado = $sentencia->fetch(PDO::FETCH_ASSOC);
-        $resultado1 = $sentencia1->fetch(PDO::FETCH_ASSOC);
-
-        if (!empty($resultado)) {
-          $cotizaciones = $resultado['cotizaciones'];
-        }
-        if (!empty($resultado1)) {
-          $cotizaciones_pasadas = $resultado1['cotizaciones_pasadas'];
-        }
-      } catch (PDOException $ex) {
-        print 'ERROR:' . $ex->getMessage() . '<br>';
-      }
-    }
-    return array($cotizaciones, $cotizaciones_pasadas);
-  }
-
-  public static function obtener_cotizaciones_no_sometidas_por_usuario($conexion, $id_usuario) {
-    $cotizaciones = 0;
-    $cotizaciones_pasadas = 0;
-    if (isset($conexion)) {
-      try {
-        $sql = 'SELECT COUNT(*) as cotizaciones FROM rfq WHERE usuario_designado = :usuario_designado AND comments = "Not submitted" AND MONTH(fecha_completado) = MONTH(CURDATE()) AND YEAR(fecha_completado) = YEAR(CURDATE())';
-        $sql1 = 'SELECT COUNT(*) as cotizaciones_pasadas FROM rfq WHERE usuario_designado = :usuario_designado AND comments = "Not submitted" AND MONTH(fecha_completado) = MONTH(DATE_SUB(CURDATE(), INTERVAL 1 MONTH)) AND YEAR(fecha_completado) = YEAR(DATE_SUB(CURDATE(), INTERVAL 1 MONTH))';
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindParam(':usuario_designado', $id_usuario, PDO::PARAM_STR);
         $sentencia->execute();
@@ -614,35 +565,6 @@ class RepositorioUsuario {
       }
     }
     return array($cotizaciones_ganadas_anual_usuarios, $cotizaciones_ganadas_anual_usuarios_monto);
-  }
-
-  public static function obtener_cotizaciones_not_submitted_por_usuario_y_mes($conexion){
-    $usuarios = self::obtener_usuarios_rfq($conexion);
-    $cotizaciones_not_submitted_anual_usuarios = [];
-    if(isset($conexion)){
-      try{
-        foreach ($usuarios as $usuario) {
-          $cotizaciones_not_submitted_anual_por_usuario = [];
-          $id_usuario = $usuario-> obtener_id();
-          for($i = 1; $i <= 12; $i++){
-            $sql = 'SELECT COUNT(*) as cotizaciones_not_submitted_usuario_mes FROM rfq WHERE usuario_designado = :id_usuario  AND comments = "Not submitted" AND MONTH(fecha_completado) = ' . $i . ' AND YEAR(fecha_completado) = YEAR(NOW())';
-            $sentencia = $conexion-> prepare($sql);
-            $sentencia-> bindParam(':id_usuario', $id_usuario, PDO::PARAM_STR);
-            $sentencia-> execute();
-            $resultado = $sentencia-> fetch(PDO::FETCH_ASSOC);
-            if (!empty($resultado)) {
-              $cotizaciones_not_submitted_anual_por_usuario[$i - 1] = $resultado['cotizaciones_not_submitted_usuario_mes'];
-            } else {
-              $cotizaciones_not_submitted_anual_por_usuario[$i - 1] = 0;
-            }
-          }
-          $cotizaciones_not_submitted_anual_usuarios[] = $cotizaciones_not_submitted_anual_por_usuario;
-        }
-      }catch(PDOException $ex){
-        print 'ERROR:' . $ex->getMessage() . '<br>';
-      }
-    }
-    return $cotizaciones_not_submitted_anual_usuarios;
   }
 }
 ?>
