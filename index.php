@@ -438,6 +438,14 @@ if ($partes_ruta[0] == 'rfq') {
         $id_fulfillment_service = $partes_ruta[2];
         $ruta_elegida = 'scripts/fulfillment/load_fulfillment_service.php';
         break;
+      case 'mark_as_pending':
+        $id_rfq = $partes_ruta[2];
+        $ruta_elegida = 'scripts/fulfillment/mark_as_pending.php';
+        break;
+      case 'unmark_as_pending':
+        $id_rfq = $partes_ruta[2];
+        $ruta_elegida = 'scripts/fulfillment/unmark_as_pending.php';
+        break;
       default:
       break;
     }

@@ -39,11 +39,49 @@ class Rfq {
   private $multi_year_project;
   private $submitted_invoice;
   private $submitted_invoice_date;
+  private $fulfillment_pending;
 
-  public function __construct($id, $id_usuario, $usuario_designado, $canal, $email_code, $type_of_bid, $issue_date, $end_date, $status,
-  $completado, $total_cost, $total_price, $comments, $award, $fecha_completado, $fecha_submitted, $fecha_award, $payment_terms, $address,
-  $ship_to, $expiration_date, $ship_via, $taxes, $profit, $additional, $shipping, $shipping_cost, $fullfillment, $fulfillment_date, $contract_number,
-  $fulfillment_profit, $services_fulfillment_profit, $total_fulfillment, $total_services_fulfillment, $invoice, $invoice_date, $multi_year_project, $submitted_invoice, $submitted_invoice_date) {
+  public function __construct($id,
+    $id_usuario,
+    $usuario_designado,
+    $canal,
+    $email_code,
+    $type_of_bid,
+    $issue_date,
+    $end_date,
+    $status,
+    $completado,
+    $total_cost,
+    $total_price,
+    $comments,
+    $award,
+    $fecha_completado,
+    $fecha_submitted,
+    $fecha_award,
+    $payment_terms,
+    $address,
+    $ship_to,
+    $expiration_date,
+    $ship_via,
+    $taxes,
+    $profit,
+    $additional,
+    $shipping,
+    $shipping_cost,
+    $fullfillment,
+    $fulfillment_date,
+    $contract_number,
+    $fulfillment_profit,
+    $services_fulfillment_profit,
+    $total_fulfillment,
+    $total_services_fulfillment,
+    $invoice,
+    $invoice_date,
+    $multi_year_project,
+    $submitted_invoice,
+    $submitted_invoice_date,
+    $fulfillment_pending
+  ) {
     $this->id = $id;
     $this->id_usuario = $id_usuario;
     $this->usuario_designado = $usuario_designado;
@@ -83,6 +121,7 @@ class Rfq {
     $this-> multi_year_project = $multi_year_project;
     $this-> submitted_invoice = $submitted_invoice;
     $this-> submitted_invoice_date = $submitted_invoice_date;
+    $this-> fulfillment_pending = $fulfillment_pending;
   }
 
   public function obtener_id() {
@@ -260,7 +299,11 @@ class Rfq {
   }
 
   public function obtener_quote_profit_percentage(){
-    return 100*($this-> obtener_quote_profit()/$this-> obtener_quote_total_price());
+    if($this-> obtener_quote_total_price()){
+      return 100*($this-> obtener_quote_profit()/$this-> obtener_quote_total_price());
+    }else{
+      return 0;
+    }
   }
 
   public function obtener_submitted_invoice(){
@@ -277,6 +320,10 @@ class Rfq {
     Conexion::cerrar_conexion();
 
     return $child_quotes;
+  }
+
+  public function obtener_fulfillment_pending(){
+    return $this-> fulfillment_pending;
   }
 }
 ?>

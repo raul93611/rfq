@@ -394,6 +394,26 @@ class RepositorioUsuario {
     return $usuarios;
   }
 
+  public static function get_accounting_users($conexion) {
+    $usuarios = [];
+    if (isset($conexion)) {
+      try {
+        $sql = "SELECT * FROM usuarios WHERE cargo = 4 AND status = 1";
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(PDO::FETCH_ASSOC);
+        if (count($resultado)) {
+          foreach ($resultado as $fila) {
+            $usuarios [] = new Usuario($fila['id'], $fila['nombre_usuario'], $fila['password'], $fila['nombres'], $fila['apellidos'], $fila['cargo'], $fila['email'], $fila['status'], $fila['hash_recover_email']);
+          }
+        }
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $usuarios;
+  }
+
   public static function obtener_cotizaciones_por_usuario($conexion, $id_usuario, $tipo) {
     $cotizaciones = 0;
     $cotizaciones_pasadas = 0;

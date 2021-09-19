@@ -11,11 +11,17 @@ Conexion::cerrar_conexion();
   <section class="content-header">
     <div class="container-fluid">
       <div class="row mb-2">
-        <div class="col-sm-2">
+        <div class="col-sm-4">
           <h1>Fulfillment table</h1>
         </div>
-        <div class="col-sm-8 text-center">
-          <?php include_once 'plantillas/fulfillment/templates/comments_button.inc.php'; ?>
+        <div class="col-sm-4 text-center">
+          <?php
+          include_once 'plantillas/fulfillment/templates/comments_button.inc.php';
+          include_once 'plantillas/fulfillment/templates/pending_button.inc.php';
+          ?>
+        </div>
+        <div class="col-sm-4 text-right">
+          <?php include_once 'templates/pending_status.inc.php'; ?>
         </div>
       </div>
     </div>

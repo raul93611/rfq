@@ -55,6 +55,7 @@ CREATE TABLE rfq(
   multi_year_project INT,
   submitted_invoice TINYINT,
   submitted_invoice_date DATE,
+  fulfillment_pending TINYINT,
   PRIMARY KEY(id),
   FOREIGN KEY(id_usuario)
       REFERENCES usuarios(id)
@@ -311,6 +312,15 @@ CREATE TABLE trackings_subitems(
 
 /*FULFILLMENT*/
 
+CREATE TABLE fulfillment_versions(
+  id INT NOT NULL AUTO_INCREMENT UNIQUE,
+  id_rfq INT NOT NULL,
+  version INT,
+  id_items VARCHAR(255),
+  id_subitems VARCHAR(255),
+  id_services VARCHAR(255),
+);
+
 CREATE TABLE fulfillment_items(
   id INT NOT NULL AUTO_INCREMENT UNIQUE,
   id_item INT NOT NULL,
@@ -403,6 +413,10 @@ INSERT INTO type_of_bids (type_of_bid) VALUES
 ('Services');
 
 INSERT INTO providers_list (company_name) VALUES
+('TRINT'),
+('MOTION  ARRAY'),
+('HODGO'),
+('ZOOM'),
 ('A-I CONSOLIDATED INC'),
 ('Ali Pacheco V'),
 ('Amazon'),
