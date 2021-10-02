@@ -50,6 +50,7 @@ if (isset($_POST['registrar_cotizacion'])) {
       0
     );
     list($cotizacion_insertada, $id_rfq) = RepositorioRfq::insertar_cotizacion(Conexion::obtener_conexion(), $cotizacion);
+    AuditTrailRepository::quote_status_audit_trail(Conexion::obtener_conexion(), 'Created', $id_rfq);
     Conexion::cerrar_conexion();
     if ($cotizacion_insertada) {
       $directorio = $_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $id_rfq;
