@@ -1,5 +1,21 @@
 <?php
 class FulfillmentItemRepository{
+  public static function array_to_object($sentence){
+    $objects = [];
+    while ($row = $sentence-> fetch(PDO::FETCH_ASSOC)) {
+      $objects[] = new FulfillmentItem($row['id'], $row['id_item'], $row['provider'], $row['quantity'], $row['unit_cost'], $row['other_cost'], $row['real_cost'], $row['payment_term'], $row['net30_cc']);
+    }
+
+    return $objects;
+  }
+
+  public static function single_result_to_object($sentence){
+    $row = $sentence-> fetch(PDO::FETCH_ASSOC);
+    $object = new FulfillmentItem($row['id'], $row['id_item'], $row['provider'], $row['quantity'], $row['unit_cost'], $row['other_cost'], $row['real_cost'], $row['payment_term'], $row['net30_cc']);
+
+    return $object;
+  }
+
   public static function get_all_by_id_item($connection, $id_item){
     $items = [];
     if(isset($connection)){
@@ -8,12 +24,7 @@ class FulfillmentItemRepository{
         $sentence = $connection-> prepare($sql);
         $sentence-> bindParam(':id_item', $id_item, PDO::PARAM_STR);
         $sentence-> execute();
-        $result = $sentence-> fetchAll(PDO::FETCH_ASSOC);
-        if(count($result)){
-          foreach ($result as $row) {
-            $items[] = new FulfillmentItem($row['id'], $row['id_item'], $row['provider'], $row['quantity'], $row['unit_cost'], $row['other_cost'], $row['real_cost'], $row['payment_term']);
-          }
-        }
+        $items = self::array_to_object($sentence);
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
@@ -24,7 +35,7 @@ class FulfillmentItemRepository{
   public static function insert($connection, $fulfillment_item){
     if(isset($connection)){
       try{
-        $sql = 'INSERT INTO fulfillment_items(id_item, provider, quantity, unit_cost, other_cost, real_cost, payment_term) VALUES(:id_item, :provider, :quantity, :unit_cost, :other_cost, :real_cost, :payment_term)';
+        $sql = 'INSERT INTO fulfillment_items(id_item, provider, quantity, unit_cost, other_cost, real_cost, payment_term, net30_cc) VALUES(:id_item, :provider, :quantity, :unit_cost, :other_cost, :real_cost, :payment_term, :net30_cc)';
         $sentence = $connection-> prepare($sql);
         $sentence-> bindParam(':id_item', $fulfillment_item-> get_id_item(), PDO::PARAM_STR);
         $sentence-> bindParam(':provider', $fulfillment_item-> get_provider(), PDO::PARAM_STR);
@@ -33,6 +44,7 @@ class FulfillmentItemRepository{
         $sentence-> bindParam(':other_cost', $fulfillment_item-> get_other_cost(), PDO::PARAM_STR);
         $sentence-> bindParam(':real_cost', $fulfillment_item-> get_real_cost(), PDO::PARAM_STR);
         $sentence-> bindParam(':payment_term', $fulfillment_item-> get_payment_term(), PDO::PARAM_STR);
+        $sentence-> bindParam(':net30_cc', $fulfillment_item-> get_net30_cc(), PDO::PARAM_STR);
         $sentence-> execute();
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -40,10 +52,10 @@ class FulfillmentItemRepository{
     }
   }
 
-  public static function update($connection, $id_fulfillment_item, $provider, $quantity, $unit_cost, $other_cost, $real_cost, $payment_term){
+  public static function update($connection, $id_fulfillment_item, $provider, $quantity, $unit_cost, $other_cost, $real_cost, $payment_term, $net30_cc){
     if(isset($connection)){
       try{
-        $sql = 'UPDATE fulfillment_items SET provider = :provider, quantity = :quantity, unit_cost = :unit_cost, other_cost = :other_cost, real_cost = :real_cost, payment_term = :payment_term WHERE id = :id_fulfillment_item';
+        $sql = 'UPDATE fulfillment_items SET provider = :provider, quantity = :quantity, unit_cost = :unit_cost, other_cost = :other_cost, real_cost = :real_cost, payment_term = :payment_term, net30_cc = :net30_cc WHERE id = :id_fulfillment_item';
         $sentence = $connection-> prepare($sql);
         $sentence-> bindParam(':provider', $provider, PDO::PARAM_STR);
         $sentence-> bindParam(':quantity', $quantity, PDO::PARAM_STR);
@@ -51,6 +63,7 @@ class FulfillmentItemRepository{
         $sentence-> bindParam(':other_cost', $other_cost, PDO::PARAM_STR);
         $sentence-> bindParam(':real_cost', $real_cost, PDO::PARAM_STR);
         $sentence-> bindParam(':payment_term', $payment_term, PDO::PARAM_STR);
+        $sentence-> bindParam(':net30_cc', $net30_cc, PDO::PARAM_STR);
         $sentence-> bindParam(':id_fulfillment_item', $id_fulfillment_item, PDO::PARAM_STR);
         $sentence-> execute();
       }catch(PDOException $ex){
@@ -99,10 +112,7 @@ class FulfillmentItemRepository{
         $sentence = $connection-> prepare($sql);
         $sentence-> bindParam(':id_fulfillment_item', $id_fulfillment_item, PDO::PARAM_STR);
         $sentence-> execute();
-        $result = $sentence-> fetch(PDO::FETCH_ASSOC);
-        if(!empty($result)){
-          $item = new FulfillmentItem($result['id'], $result['id_item'], $result['provider'], $result['quantity'], $result['unit_cost'], $result['other_cost'], $result['real_cost'], $result['payment_term']);
-        }
+        $item = self::single_result_to_object($sentence);
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }

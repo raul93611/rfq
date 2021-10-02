@@ -312,15 +312,6 @@ CREATE TABLE trackings_subitems(
 
 /*FULFILLMENT*/
 
-CREATE TABLE fulfillment_versions(
-  id INT NOT NULL AUTO_INCREMENT UNIQUE,
-  id_rfq INT NOT NULL,
-  version INT,
-  id_items VARCHAR(255),
-  id_subitems VARCHAR(255),
-  id_services VARCHAR(255),
-);
-
 CREATE TABLE fulfillment_items(
   id INT NOT NULL AUTO_INCREMENT UNIQUE,
   id_item INT NOT NULL,
@@ -330,6 +321,7 @@ CREATE TABLE fulfillment_items(
   other_cost DECIMAL(20,2) NOT NULL,
   real_cost DECIMAL(20,2) NOT NULL,
   payment_term VARCHAR(255) NOT NULL,
+  net30_cc TINYINT,
   PRIMARY KEY(id),
   FOREIGN KEY(id_item)
     REFERENCES item(id)
@@ -346,6 +338,7 @@ CREATE TABLE fulfillment_subitems(
   other_cost DECIMAL(20,2) NOT NULL,
   real_cost DECIMAL(20,2) NOT NULL,
   payment_term VARCHAR(255) NOT NULL,
+  net30_cc TINYINT,
   PRIMARY KEY(id),
   FOREIGN KEY(id_subitem)
     REFERENCES subitems(id)

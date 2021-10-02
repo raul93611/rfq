@@ -8,8 +8,9 @@ class FulfillmentItem{
   private $other_cost;
   private $real_cost;
   private $payment_term;
+  private $net30_cc;
 
-  public function __construct($id, $id_item, $provider, $quantity, $unit_cost, $other_cost, $real_cost, $payment_term){
+  public function __construct($id, $id_item, $provider, $quantity, $unit_cost, $other_cost, $real_cost, $payment_term, $net30_cc){
     $this-> id = $id;
     $this-> id_item = $id_item;
     $this-> provider = $provider;
@@ -18,6 +19,7 @@ class FulfillmentItem{
     $this-> other_cost = $other_cost;
     $this-> real_cost = $real_cost;
     $this-> payment_term = $payment_term;
+    $this-> net30_cc = $net30_cc;
   }
 
   public function get_id(){
@@ -50,6 +52,10 @@ class FulfillmentItem{
 
   public function get_payment_term(){
     return $this-> payment_term;
+  }
+
+  public function get_net30_cc(){
+    return $this-> net30_cc;
   }
 }
 ?>

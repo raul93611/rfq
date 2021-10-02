@@ -24,6 +24,7 @@ class FulfillmentRepository{
               <th class="thin">OTHER COST</th>
               <th>REAL COST</th>
               <th>PAYMENT TERM</th>
+              <th>NET30/CC</th>
               <th>PROFIT</th>
             </tr>
           </thead>
@@ -38,6 +39,7 @@ class FulfillmentRepository{
               <td><?php echo $quote-> obtener_total_price(); ?></td>
               <td colspan="5"></td>
               <td><?php echo $quote-> obtener_total_fulfillment(); ?></td>
+              <td></td>
               <td></td>
               <td></td>
             </tr>
@@ -89,6 +91,7 @@ class FulfillmentRepository{
         <td><?php echo $fulfillment_items[0]-> get_other_cost(); ?></td>
         <td><?php echo $fulfillment_items[0]-> get_real_cost(); ?></td>
         <td><?php echo $fulfillment_items[0]-> get_payment_term(); ?></td>
+        <td class="text-center"><?php echo $fulfillment_items[0]-> get_net30_cc() ? '<i class="fas fa-check text-success"></i>' : '<i class="fas fa-times text-danger"></i>'; ?></td>
         <td rowspan="<?php echo $fulfillment_items_quantity; ?>"><?php echo $item-> obtener_fulfillment_profit(); ?></td>
         <?php
       ?>
@@ -108,6 +111,7 @@ class FulfillmentRepository{
         <td><?php echo $fulfillment_item-> get_other_cost(); ?></td>
         <td><?php echo $fulfillment_item-> get_real_cost(); ?></td>
         <td><?php echo $fulfillment_item-> get_payment_term(); ?></td>
+        <td class="text-center"><?php echo $fulfillment_item-> get_net30_cc() ? '<i class="fas fa-check text-success"></i>' : '<i class="fas fa-times text-danger"></i>'; ?></td>
       </tr>
       <?php
     }
@@ -161,6 +165,7 @@ class FulfillmentRepository{
           <td><?php echo $fulfillment_subitems[0]-> get_other_cost(); ?></td>
           <td><?php echo $fulfillment_subitems[0]-> get_real_cost(); ?></td>
           <td><?php echo $fulfillment_subitems[0]-> get_payment_term(); ?></td>
+          <td class="text-center"><?php echo $fulfillment_subitems[0]-> get_net30_cc() ? '<i class="fas fa-check text-success"></i>' : '<i class="fas fa-times text-danger"></i>'; ?></td>
           <td rowspan="<?php echo $fulfillment_subitems_quantity; ?>"><?php echo $subitem-> obtener_fulfillment_profit(); ?></td>
           <?php
         ?>
@@ -180,6 +185,7 @@ class FulfillmentRepository{
           <td><?php echo $fulfillment_subitem-> get_other_cost(); ?></td>
           <td><?php echo $fulfillment_subitem-> get_real_cost(); ?></td>
           <td><?php echo $fulfillment_subitem-> get_payment_term(); ?></td>
+          <td class="text-center"><?php echo $fulfillment_subitem-> get_payment_term() ? '<i class="fas fa-check text-success"></i>' : '<i class="fas fa-times text-danger"></i>'; ?></td>
         </tr>
         <?php
       }
