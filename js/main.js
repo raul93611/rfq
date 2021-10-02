@@ -122,6 +122,11 @@ $(document).ready(function () {
       $('#nuevo_comment').modal();
     });
   }
+  /***********************************COPY ALERT******************/
+  $('#copy_quote').click(function(){
+    habilitar_continue_button($(this));
+    return false;
+  });
   /***********************************ALERT EN BOTONES PARA BORRAR ITEMS******************/
   $('.delete_item_button').click(function(){
     habilitar_continue_button($(this));
