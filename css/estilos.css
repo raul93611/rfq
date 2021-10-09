@@ -161,7 +161,7 @@ body{
 #go_back:hover{
   background-color: #C0C5CA !important;
   border-color: #C0C5CA !important;
-} 
+}
 
 .add_item_charter{
   background-color: #40B7EE !important;
@@ -194,6 +194,10 @@ body{
 /*******************************table buttons************************/
 .btn-warning{
     font-size: 0.9em !important;
+}
+
+table .btn{
+  font-size: 0.9em !important;
 }
 /************************************************************************************************/
 /***************************************alerts****************************************************/
@@ -320,6 +324,12 @@ table{
 
 .card-documents .close{
   color: #13A8F0 !important;
+}
+
+.error_message{
+  font-size: 0.9em;
+  color: red;
+  display: none;
 }
 
 @media only screen and (max-width: 1000px){

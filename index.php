@@ -1,6 +1,6 @@
 <?php
-// error_reporting(E_ALL);
-// ini_set('display_errors', '1');
+  // error_reporting(E_ALL);
+  // ini_set('display_errors', '1');
 session_save_path('temp');
 session_start();
 include_once 'app/Bootstrap/config.inc.php';
@@ -215,6 +215,18 @@ if ($partes_ruta[0] == 'rfq') {
       case 'delete_fulfillment_service':
         $ruta_elegida = 'scripts/fulfillment/delete_fulfillment_service.php';
         break;
+      case 'save_provider':
+        $ruta_elegida = 'scripts/providers/save_provider.php';
+        break;
+      case 'load_providers_table':
+        $ruta_elegida = 'scripts/providers/load_providers_table.php';
+        break;
+      case 'update_provider':
+        $ruta_elegida = 'scripts/providers/update_provider.php';
+        break;
+      case 'delete_provider':
+        $ruta_elegida = 'scripts/providers/delete_provider.php';
+        break;
     }
   } else if (count($partes_ruta) == 3) {
     switch ($partes_ruta[1]) {
@@ -254,6 +266,9 @@ if ($partes_ruta[0] == 'rfq') {
           break;
         case 'cancelled':
           $gestor_actual = 'cancelled';
+          break;
+        case 'providers':
+          $gestor_actual = 'providers';
           break;
       }
       break;
@@ -445,6 +460,10 @@ if ($partes_ruta[0] == 'rfq') {
       case 'unmark_as_pending':
         $id_rfq = $partes_ruta[2];
         $ruta_elegida = 'scripts/fulfillment/unmark_as_pending.php';
+        break;
+      case 'load_provider':
+        $id_provider = $partes_ruta[2];
+        $ruta_elegida = 'scripts/providers/load_provider.php';
         break;
       default:
       break;

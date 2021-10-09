@@ -155,6 +155,9 @@ switch ($gestor_actual) {
   case 'fulfillment':
     include_once 'plantillas/fulfillment/fulfillment.inc.php';
     break;
+  case 'providers':
+    include_once 'plantillas/providers/providers.inc.php';
+    break;
 }
 include_once 'plantillas/utilities/documento_cierre.inc.php';
 ?>

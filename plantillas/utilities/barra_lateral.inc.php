@@ -372,6 +372,14 @@
             </p>
           </a>
         </li>
+        <li class="nav-item">
+          <a href="<?php echo PROVIDERS; ?>" class="nav-link <?php echo $gestor_actual == 'providers' ? 'active' : ''; ?>">
+            <i class="nav-icon far fa-address-book"></i>
+            <p>
+              Providers
+            </p>
+          </a>
+        </li>
       </ul>
     </nav>
   </div>

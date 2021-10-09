@@ -172,6 +172,8 @@ define('SAVE_FULFILLMENT_SERVICE', SERVIDOR . 'save_fulfillment_service');
 define('MARK_AS_PENDING', SERVIDOR . 'mark_as_pending/');
 define('UNMARK_AS_PENDING', SERVIDOR . 'unmark_as_pending/');
 /******************************************************************************/
+define('PROVIDERS', PERFIL . 'providers');
+/******************************************************************************/
 define('EMPLOYEE_DOCS', SERVIDOR . 'employee_docs/');
 define('REPORTS_DOCS', SERVIDOR . 'reports/');
 define('DOCS', SERVIDOR . 'documentos/');
