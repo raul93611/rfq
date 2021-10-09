@@ -380,6 +380,14 @@
             </p>
           </a>
         </li>
+        <li class="nav-item">
+          <a href="<?php echo PAYMENT_TERMS; ?>" class="nav-link <?php echo $gestor_actual == 'payment_terms' ? 'active' : ''; ?>">
+            <i class="nav-icon far fa-address-book"></i>
+            <p>
+              Payment Terms
+            </p>
+          </a>
+        </li>
       </ul>
     </nav>
   </div>

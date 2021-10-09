@@ -92,7 +92,7 @@ class ProviderListRepository{
     Conexion::abrir_conexion();
     $result = self::name_uniqueness(Conexion::obtener_conexion(), $name);
     Conexion::cerrar_conexion();
-    $provider = $result ? new ProviderList('', $_POST['name']) : false;
+    $provider = $result ? new ProviderList('', $name) : false;
 
     return $provider;
   }

@@ -173,6 +173,7 @@ define('MARK_AS_PENDING', SERVIDOR . 'mark_as_pending/');
 define('UNMARK_AS_PENDING', SERVIDOR . 'unmark_as_pending/');
 /******************************************************************************/
 define('PROVIDERS', PERFIL . 'providers');
+define('PAYMENT_TERMS', PERFIL . 'payment_terms');
 /******************************************************************************/
 define('EMPLOYEE_DOCS', SERVIDOR . 'employee_docs/');
 define('REPORTS_DOCS', SERVIDOR . 'reports/');

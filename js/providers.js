@@ -6,7 +6,6 @@ $(document).ready(function () {
     ]
   });
 
-
   $('#add_provider').click(function (){
     $('#add_provider_modal').modal();
   });
@@ -51,7 +50,6 @@ $(document).ready(function () {
     $('#continue_button').attr('data', $(this).attr('data'));
     $('#alert_delete_system').modal();
   });
-
 
   $('#continue_button').click(function(){
     $.ajax({

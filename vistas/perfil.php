@@ -158,6 +158,9 @@ switch ($gestor_actual) {
   case 'providers':
     include_once 'plantillas/providers/providers.inc.php';
     break;
+  case 'payment_terms':
+    include_once 'plantillas/payment_terms/payment_terms.inc.php';
+    break;
 }
 include_once 'plantillas/utilities/documento_cierre.inc.php';
 ?>

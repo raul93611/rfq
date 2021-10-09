@@ -227,6 +227,18 @@ if ($partes_ruta[0] == 'rfq') {
       case 'delete_provider':
         $ruta_elegida = 'scripts/providers/delete_provider.php';
         break;
+      case 'load_payment_terms_table':
+        $ruta_elegida = 'scripts/payment_terms/load_payment_terms_table.php';
+        break;
+      case 'save_payment_term':
+        $ruta_elegida = 'scripts/payment_terms/save_payment_term.php';
+        break;
+      case 'update_payment_term':
+        $ruta_elegida = 'scripts/payment_terms/update_payment_term.php';
+        break;
+      case 'delete_payment_term':
+        $ruta_elegida = 'scripts/payment_terms/delete_payment_term.php';
+        break;
     }
   } else if (count($partes_ruta) == 3) {
     switch ($partes_ruta[1]) {
@@ -269,6 +281,9 @@ if ($partes_ruta[0] == 'rfq') {
           break;
         case 'providers':
           $gestor_actual = 'providers';
+          break;
+        case 'payment_terms':
+          $gestor_actual = 'payment_terms';
           break;
       }
       break;
@@ -464,6 +479,10 @@ if ($partes_ruta[0] == 'rfq') {
       case 'load_provider':
         $id_provider = $partes_ruta[2];
         $ruta_elegida = 'scripts/providers/load_provider.php';
+        break;
+      case 'load_payment_term':
+        $id_payment_term = $partes_ruta[2];
+        $ruta_elegida = 'scripts/payment_terms/load_payment_term.php';
         break;
       default:
       break;
