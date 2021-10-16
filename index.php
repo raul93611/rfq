@@ -1,6 +1,6 @@
 <?php
-  // error_reporting(E_ALL);
-  // ini_set('display_errors', '1');
+// error_reporting(E_ALL);
+// ini_set('display_errors', '1');
 session_save_path('temp');
 session_start();
 include_once 'app/Bootstrap/config.inc.php';
@@ -94,6 +94,12 @@ include_once 'app/PaymentTerm/PaymentTerm.inc.php';
 include_once 'app/PaymentTerm/PaymentTermRepository.inc.php';
 
 include_once 'app/Report/Report.inc.php';
+
+include_once 'app/Task/Task.inc.php';
+include_once 'app/Task/TaskRepository.inc.php';
+
+include_once 'app/TaskComment/TaskComment.inc.php';
+include_once 'app/TaskComment/TaskCommentRepository.inc.php';
 
 $componentes_url = parse_url($_SERVER['REQUEST_URI']);
 $ruta = $componentes_url['path'];
@@ -239,6 +245,21 @@ if ($partes_ruta[0] == 'rfq') {
       case 'delete_payment_term':
         $ruta_elegida = 'scripts/payment_terms/delete_payment_term.php';
         break;
+      case 'save_task':
+        $ruta_elegida = 'scripts/tasks/save_task.php';
+        break;
+      case 'load_tasks_board':
+        $ruta_elegida = 'scripts/tasks/load_tasks_board.php';
+        break;
+      case 'update_task':
+        $ruta_elegida = 'scripts/tasks/update_task.php';
+        break;
+      case 'load_my_tasks_board':
+        $ruta_elegida = 'scripts/tasks/load_my_tasks_board.php';
+        break;
+      case 'load_tasks_done_table':
+        $ruta_elegida = 'scripts/tasks/load_tasks_done_table.php';
+        break;
     }
   } else if (count($partes_ruta) == 3) {
     switch ($partes_ruta[1]) {
@@ -284,6 +305,15 @@ if ($partes_ruta[0] == 'rfq') {
           break;
         case 'payment_terms':
           $gestor_actual = 'payment_terms';
+          break;
+        case 'charts':
+          $gestor_actual = 'charts';
+          break;
+        case 'my_tasks':
+          $gestor_actual = 'my_tasks';
+          break;
+        case 'tasks_done':
+          $gestor_actual = 'tasks_done';
           break;
       }
       break;
@@ -483,6 +513,10 @@ if ($partes_ruta[0] == 'rfq') {
       case 'load_payment_term':
         $id_payment_term = $partes_ruta[2];
         $ruta_elegida = 'scripts/payment_terms/load_payment_term.php';
+        break;
+      case 'load_task':
+        $id_task = $partes_ruta[2];
+        $ruta_elegida = 'scripts/tasks/load_task.php';
         break;
       default:
       break;

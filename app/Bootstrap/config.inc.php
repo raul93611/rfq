@@ -175,6 +175,11 @@ define('UNMARK_AS_PENDING', SERVIDOR . 'unmark_as_pending/');
 define('PROVIDERS', PERFIL . 'providers');
 define('PAYMENT_TERMS', PERFIL . 'payment_terms');
 /******************************************************************************/
+define('CHARTS', PERFIL . 'charts');
+/******************************************************************************/
+define('MY_TASKS', PERFIL . 'my_tasks');
+define('TASKS_DONE', PERFIL . 'tasks_done');
+/******************************************************************************/
 define('EMPLOYEE_DOCS', SERVIDOR . 'employee_docs/');
 define('REPORTS_DOCS', SERVIDOR . 'reports/');
 define('DOCS', SERVIDOR . 'documentos/');

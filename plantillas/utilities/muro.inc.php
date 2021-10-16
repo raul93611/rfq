@@ -4,7 +4,7 @@ switch($_SESSION['cargo']){
     include_once 'plantillas/utilities/muro_admin.inc.php';
     break;
   default :
-    include_once 'plantillas/utilities/muro_default.inc.php';
+    include_once 'plantillas/tasks/tasks.inc.php';
     break;
 }
 ?>

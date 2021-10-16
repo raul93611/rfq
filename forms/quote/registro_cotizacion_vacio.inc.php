@@ -14,8 +14,6 @@
         Conexion::abrir_conexion();
         $usuarios = RepositorioUsuario::obtener_usuarios_rfq(Conexion::obtener_conexion());
         Conexion::cerrar_conexion();
-        ?>
-        <?php
         if (count($usuarios)) {
           ?>
           <label for="usuario_designado">Designated user:</label>

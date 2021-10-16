@@ -161,6 +161,15 @@ switch ($gestor_actual) {
   case 'payment_terms':
     include_once 'plantillas/payment_terms/payment_terms.inc.php';
     break;
+  case 'charts':
+    include_once 'plantillas/utilities/charts.inc.php';
+    break;
+  case 'my_tasks':
+    include_once 'plantillas/tasks/my_tasks.inc.php';
+    break;
+  case 'tasks_done':
+    include_once 'plantillas/tasks/tasks_done.inc.php';
+    break;
 }
 include_once 'plantillas/utilities/documento_cierre.inc.php';
 ?>

@@ -380,60 +380,32 @@ CREATE TABLE payment_terms(
   PRIMARY KEY(id)
 );
 
+CREATE TABLE tasks(
+  id INT NOT NULL AUTO_INCREMENT UNIQUE,
+  id_user INT NOT NULL,
+  assigned_user INT NOT NULL,
+  id_rfq INT,
+  title VARCHAR(255) NOT NULL,
+  message TEXT CHARACTER SET utf8,
+  status VARCHAR(255),
+  PRIMARY KEY(id),
+  FOREIGN KEY(id_user)
+    REFERENCES usuarios(id)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT
+);
+
+CREATE TABLE task_comments(
+  id INT NOT NULL AUTO_INCREMENT UNIQUE,
+  id_task INT NOT NULL,
+  id_user INT NOT NULL,
+  comment TEXT CHARACTER SET utf8 NOT NULL,
+  created_at DATETIME,
+  PRIMARY KEY(id),
+  FOREIGN KEY(id_task)
+    REFERENCES tasks(id)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT
+);
+
 ALTER TABLE rfq AUTO_INCREMENT = 300;
-
-INSERT INTO type_of_bids (type_of_bid) VALUES
-('Audio Visual'),
-('Back Up Batteries'),
-('Cameras'),
-('Computer Peripherals'),
-('Computers'),
-('Medical'),
-('Miscellaneous'),
-('Monitor & Televisions'),
-('Office Supplies'),
-('Peripherals'),
-('Portable Radios'),
-('Printers'),
-('Servers'),
-('Software'),
-('Tactical'),
-('Tools'),
-('Scanners'),
-('Projectors'),
-('Video Cameras'),
-('Phones'),
-('Services');
-
-INSERT INTO providers_list (company_name) VALUES
-('TRINT'),
-('MOTION  ARRAY'),
-('HODGO'),
-('ZOOM'),
-('A-I CONSOLIDATED INC'),
-('Ali Pacheco V'),
-('Amazon'),
-('ANIXTER Inc.'),
-('Axxera'),
-('B&H PHOTO-VIDEO'),
-('CITI Inc.'),
-('Control Cable, Inc.'),
-('DarkTrace Limited'),
-('DLT SOLUTIONS LLC'),
-('FedBid'),
-('GLOBAL EQUIPMENT COMPANY INC'),
-('Insight Public Sector, Inc.'),
-('Kron Technologies Inc'),
-('Mythics'),
-('Sunhillo Corporation'),
-('Synamedia Vividtec Holdings, Inc.'),
-('Synnex Corporation'),
-('Tech Data Corp'),
-('ULINE'),
-('UPS');
-
-INSERT INTO payment_terms (payment_term) VALUES
-('Amex Credit Card'),
-('Mercury Credit Card'),
-('Capital Credit Card'),
-('Net 30 terms');

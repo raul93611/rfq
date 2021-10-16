@@ -265,6 +265,26 @@ class RepositorioUsuario {
     return $usuarios;
   }
 
+  public static function get_enable_users($conexion) {
+    $usuarios = [];
+    if (isset($conexion)) {
+      try {
+        $sql = "SELECT * FROM usuarios WHERE cargo != 1 AND status = 1";
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(PDO::FETCH_ASSOC);
+        if (count($resultado)) {
+          foreach ($resultado as $fila) {
+            $usuarios [] = new Usuario($fila['id'], $fila['nombre_usuario'], $fila['password'], $fila['nombres'], $fila['apellidos'], $fila['cargo'], $fila['email'], $fila['status'], $fila['hash_recover_email']);
+          }
+        }
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $usuarios;
+  }
+
   public static function escribir_usuario($usuario) {
     if (!isset($usuario)) {
       return;
