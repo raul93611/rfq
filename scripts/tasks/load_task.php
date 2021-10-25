@@ -26,15 +26,26 @@ Conexion::cerrar_conexion();
       <h4>Title: <?php echo $task-> get_title(); ?></h4>
       <div class="form-group">
         <label for="assigned_user">Assigned user:</label>
-        <select id="assigned_user" class="form-control form-control-sm" name="assigned_user">
-          <?php
-          foreach ($users as $user) {
-            ?>
-            <option value="<?php echo $user-> obtener_id(); ?>" <?php echo $user-> obtener_id() == $task-> get_assigned_user() ? 'selected' : ''; ?>><?php echo $user-> obtener_nombre_usuario(); ?></option>
-            <?php
-          }
+        <?php
+        if($task-> get_status() == 'done'){
           ?>
-        </select>
+          <input type="hidden" name="assigned_user" value="<?php echo $task-> get_assigned_user(); ?>">
+          <p><?php echo $task-> get_assigned_user_name(); ?></p>
+          <?php
+        }else{
+          ?>
+          <select id="assigned_user" class="form-control form-control-sm" name="assigned_user">
+            <?php
+            foreach ($users as $user) {
+              ?>
+              <option value="<?php echo $user-> obtener_id(); ?>" <?php echo $user-> obtener_id() == $task-> get_assigned_user() ? 'selected' : ''; ?>><?php echo $user-> obtener_nombre_usuario(); ?></option>
+              <?php
+            }
+            ?>
+          </select>
+          <?php
+        }
+        ?>
       </div>
       <div class="form-group">
         <label>Message:</label>

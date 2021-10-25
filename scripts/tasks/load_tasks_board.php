@@ -76,6 +76,9 @@ conexion::cerrar_conexion();
         <?php
       }
       ?>
+      <div class="text-center">
+        <a href="<?php echo TASKS_DONE; ?>" class="btn btn-link">View all</a>
+      </div>
     </div>
   </div>
 </div>

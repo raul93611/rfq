@@ -85,6 +85,21 @@ class TaskRepository{
     $tasks = [];
     if(isset($connection)){
       try{
+        $sql = 'SELECT * FROM tasks WHERE status = "done" ORDER BY id DESC LIMIT 10';
+        $sentence = $connection-> prepare($sql);
+        $sentence-> execute();
+        $tasks = self::array_to_object($sentence);
+      }catch(PDOException $ex){
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $tasks;
+  }
+
+  public static function get_all_done($connection){
+    $tasks = [];
+    if(isset($connection)){
+      try{
         $sql = 'SELECT * FROM tasks WHERE status = "done" ORDER BY id DESC';
         $sentence = $connection-> prepare($sql);
         $sentence-> execute();

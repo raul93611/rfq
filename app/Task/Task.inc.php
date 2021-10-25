@@ -59,5 +59,20 @@ class Task{
     Conexion::cerrar_conexion();
     return $user-> obtener_nombre_usuario();
   }
+
+  public function get_users_to_notify($auth_user){
+    $users = [];
+    Conexion::abrir_conexion();
+    if($auth_user == $this-> id_user){
+      $users[] = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), $this-> assigned_user);
+    }else if($auth_user == $this-> assigned_user){
+      $users[] = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), $this-> id_user);
+    }else{
+      $users[] = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), $this-> assigned_user);
+      $users[] = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), $this-> id_user);
+    }
+    Conexion::cerrar_conexion();
+    return $users;
+  }
 }
 ?>

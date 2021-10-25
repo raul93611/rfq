@@ -1,7 +1,7 @@
 <?php
 header('Content-Type: application/json');
 Conexion::abrir_conexion();
-$tasks = TaskRepository::get_done(Conexion::obtener_conexion());
+$tasks = TaskRepository::get_all_done(Conexion::obtener_conexion());
 Conexion::cerrar_conexion();
 $json = [];
 foreach ($tasks as $key => $task) {
