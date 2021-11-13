@@ -40,6 +40,8 @@ class Rfq {
   private $submitted_invoice;
   private $submitted_invoice_date;
   private $fulfillment_pending;
+  private $fulfillment_shipping_cost;
+  private $fulfillment_shipping;
 
   public function __construct($id,
     $id_usuario,
@@ -80,7 +82,9 @@ class Rfq {
     $multi_year_project,
     $submitted_invoice,
     $submitted_invoice_date,
-    $fulfillment_pending
+    $fulfillment_pending,
+    $fulfillment_shipping_cost,
+    $fulfillment_shipping
   ) {
     $this->id = $id;
     $this->id_usuario = $id_usuario;
@@ -122,6 +126,8 @@ class Rfq {
     $this-> submitted_invoice = $submitted_invoice;
     $this-> submitted_invoice_date = $submitted_invoice_date;
     $this-> fulfillment_pending = $fulfillment_pending;
+    $this-> fulfillment_shipping_cost = $fulfillment_shipping_cost;
+    $this-> fulfillment_shipping = $fulfillment_shipping;
   }
 
   public function obtener_id() {
@@ -324,6 +330,14 @@ class Rfq {
 
   public function obtener_fulfillment_pending(){
     return $this-> fulfillment_pending;
+  }
+
+  public function obtener_fulfillment_shipping_cost(){
+    return $this-> fulfillment_shipping_cost;
+  }
+
+  public function obtener_fulfillment_shipping(){
+    return $this-> fulfillment_shipping;
   }
 }
 ?>

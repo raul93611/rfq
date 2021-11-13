@@ -1,4 +1,19 @@
 $(document).ready(function () {
+  /***********************************FULFILLMENT SHIPPING******************/
+  $('#fulfillment_page').on('click', '#edit_fulfillment_shipping', function(){
+    $('#edit_fulfillment_shipping_modal form').load('/rfq/load_fulfillment_shipping/' + $(this).attr('data'), function(){
+      $('#edit_fulfillment_shipping_modal').modal();
+    });
+  });
+
+  $('#edit_fulfillment_shipping_form').submit(function(){
+    $.post('/rfq/update_fulfillment_shipping', $(this).serialize(), function(res){
+      $('#edit_fulfillment_shipping_form')[0].reset();
+      $('#edit_fulfillment_shipping_modal').modal('hide');
+      $('#fulfillment_page').load('/rfq/load_fulfillment_page/' + res.id_rfq);
+    });
+    return false;
+  });
   /***********************************FULFILLMENT SERVICES******************/
   $('#fulfillment_page').on('click', '.add_fulfillment_service_button', function(){
     var id_service = $(this).attr('name');
@@ -10,7 +25,6 @@ $(document).ready(function () {
     $.post('/rfq/save_fulfillment_service', $(this).serialize(), function(res){
       $('#add_fulfillment_service_form')[0].reset();
       $('#new_fulfillment_service_modal').modal('hide');
-      console.log(res);
       $('#fulfillment_page').load('/rfq/load_fulfillment_page/' + res.id_rfq);
     });
     return false;

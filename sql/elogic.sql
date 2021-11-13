@@ -56,6 +56,8 @@ CREATE TABLE rfq(
   submitted_invoice TINYINT,
   submitted_invoice_date DATE,
   fulfillment_pending TINYINT,
+  fulfillment_shipping_cost DECIMAL(10,2),
+  fulfillment_shipping VARCHAR(255),
   PRIMARY KEY(id),
   FOREIGN KEY(id_usuario)
       REFERENCES usuarios(id)

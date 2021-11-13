@@ -35,7 +35,21 @@ class FulfillmentRepository{
             }
             ?>
             <tr>
-              <td colspan="5">Total RFQ (from Proposal):</td>
+              <td class="align-middle text-center">
+                <button type="button" id="edit_fulfillment_shipping" data="<?php echo $quote-> obtener_id(); ?>" class="btn btn-warning" name=""><i class="fas fa-pen"></i></button>
+              </td>
+              <td colspan="4">Shipping (from Proposal): <?php echo $quote-> obtener_shipping(); ?></td>
+              <td>$ <?php echo $quote-> obtener_shipping_cost(); ?></td>
+              <td></td>
+              <td colspan="4">Shipping: <?php echo $quote-> obtener_fulfillment_shipping(); ?></td>
+              <td>$ <?php echo $quote-> obtener_fulfillment_shipping_cost(); ?></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td colspan="4">Total RFQ (from Proposal):</td>
               <td><?php echo $quote-> obtener_total_price(); ?></td>
               <td colspan="5"></td>
               <td><?php echo $quote-> obtener_total_fulfillment(); ?></td>

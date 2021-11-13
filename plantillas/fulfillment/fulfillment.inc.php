@@ -39,6 +39,7 @@ Conexion::cerrar_conexion();
   </section>
 </div>
 <?php
+include_once 'modals/edit_fulfillment_shipping_modal.inc.php';
 include_once 'plantillas/fulfillment/modals/edit_fulfillment_subitem_modal.inc.php';
 include_once 'plantillas/fulfillment/modals/edit_fulfillment_item_modal.inc.php';
 include_once 'plantillas/fulfillment/modals/add_fulfillment_item_modal.inc.php';

@@ -260,6 +260,9 @@ if ($partes_ruta[0] == 'rfq') {
       case 'load_tasks_done_table':
         $ruta_elegida = 'scripts/tasks/load_tasks_done_table.php';
         break;
+      case 'update_fulfillment_shipping':
+        $ruta_elegida = 'scripts/fulfillment/update_fulfillment_shipping.php';
+        break;
     }
   } else if (count($partes_ruta) == 3) {
     switch ($partes_ruta[1]) {
@@ -501,6 +504,10 @@ if ($partes_ruta[0] == 'rfq') {
       case 'load_fulfillment_service':
         $id_fulfillment_service = $partes_ruta[2];
         $ruta_elegida = 'scripts/fulfillment/load_fulfillment_service.php';
+        break;
+      case 'load_fulfillment_shipping':
+        $id_rfq = $partes_ruta[2];
+        $ruta_elegida = 'scripts/fulfillment/load_fulfillment_shipping.php';
         break;
       case 'mark_as_pending':
         $id_rfq = $partes_ruta[2];
