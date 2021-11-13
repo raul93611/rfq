@@ -30,6 +30,7 @@ Conexion::cerrar_conexion();
             <div class="card-footer footer_item">
               <a class="btn btn-primary" id="go_back" href="<?php echo EDITAR_COTIZACION . '/' . $quote-> obtener_id(); ?>"><i class="fa fa-reply"></i></a>
               <a href="<?php echo TRACKING_PDF . $quote-> obtener_id(); ?>" target="_blank" class="btn btn-primary"><i class="fas fa-file"></i></a>
+              <a href="<?php echo TRACKING_EXCEL . $quote-> obtener_id(); ?>" target="_blank" class="btn btn-success"><i class="fas fa-file-excel"></i></a>
             </div>
           </div>
         </div>

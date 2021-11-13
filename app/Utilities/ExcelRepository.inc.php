@@ -1,5 +1,68 @@
 <?php
 class ExcelRepository{
+  public static function print_tracking($connection, $spreadsheet, $quote, $re_quote){
+    $items = RepositorioItem::obtener_items_por_id_rfq($connection, $quote-> obtener_id());
+    $re_quote_items = ReQuoteItemRepository::get_re_quote_items_by_id_re_quote($connection, $re_quote-> get_id());
+
+    $y = 5;
+    $a = 1;
+    foreach ($items as $key => $item) {
+      $re_quote_item = $re_quote_items[$key];
+      $trackings = TrackingRepository::get_all_trackings_by_id_item($connection, $item-> obtener_id());
+      $x = 'A';
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $a);$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, "Brand name: " . $re_quote_item-> get_brand() . "\n Part number: " . $re_quote_item-> get_part_number() . "\n Description: " . mb_substr($re_quote_item-> get_description(), 0, 150));
+      $spreadsheet->getActiveSheet()->getStyle($x.$y)->getAlignment()->setWrapText(true);$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $re_quote_item-> get_quantity());$x++;
+      if(count($trackings)){
+        $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings[0]-> get_quantity());$x++;
+        $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings[0]-> get_tracking_number());$x++;
+        $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, RepositorioComment::mysql_date_to_english_format($trackings[0]-> get_delivery_date()));$x++;
+        $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings[0]-> get_signed_by());$x++;
+        for ($i=1; $i < count($trackings); $i++) {
+          $y++;
+          $x = 'D';
+          $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings[$i]-> get_quantity());$x++;
+          $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings[$i]-> get_tracking_number());$x++;
+          $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, RepositorioComment::mysql_date_to_english_format($trackings[$i]-> get_delivery_date()));$x++;
+          $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings[$i]-> get_signed_by());$x++;
+        }
+      }
+      $y++;
+      $subitems = RepositorioSubitem::obtener_subitems_por_id_item($connection, $item-> obtener_id());
+      $re_quote_subitems = ReQuoteSubitemRepository::get_re_quote_subitems_by_id_re_quote_item($connection, $re_quote_item-> get_id());
+      if(count($subitems)){
+        foreach ($subitems as $key => $subitem){
+          $x = 'A';
+
+          $re_quote_subitem = $re_quote_subitems[$key];
+          $trackings_subitems = TrackingSubitemRepository::get_all_trackings_by_id_subitem($connection, $subitem-> obtener_id());
+          $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, '');$x++;
+          $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, "Brand name: " . $re_quote_subitem-> get_brand() . "\n Part number: " . $re_quote_subitem-> get_part_number() . "\n Description: " . mb_substr($re_quote_subitem-> get_description(), 0, 150));
+          $spreadsheet->getActiveSheet()->getStyle($x.$y)->getAlignment()->setWrapText(true);$x++;
+          $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $re_quote_subitem-> get_quantity());$x++;
+
+          if(count($trackings_subitems)){
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings_subitems[0]-> get_quantity());$x++;
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings_subitems[0]-> get_tracking_number());$x++;
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, RepositorioComment::mysql_date_to_english_format($trackings_subitems[0]-> get_delivery_date()));$x++;
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings_subitems[0]-> get_signed_by());$x++;
+            for ($i = 1; $i < count($trackings_subitems); $i++) {
+              $y++;
+              $x = 'D';
+              $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings_subitems[$i]-> get_quantity());$x++;
+              $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings_subitems[$i]-> get_tracking_number());$x++;
+              $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, RepositorioComment::mysql_date_to_english_format($trackings_subitems[$i]-> get_delivery_date()));$x++;
+              $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings_subitems[$i]-> get_signed_by());$x++;
+            }
+          }
+          $y++;
+        }
+      }
+      $a++;
+    }
+  }
+
   public static function print_items($connection, $spreadsheet, $providers_name, $requote_providers_name, $requote, $id_rfq){
     $i = 2;
     $j = 1;

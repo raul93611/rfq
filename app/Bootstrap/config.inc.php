@@ -160,6 +160,7 @@ define('SAVE_TRACKING_SUBITEM', SERVIDOR . 'save_tracking_subitem');
 define('DELETE_TRACKING', SERVIDOR . 'delete_tracking/');
 define('DELETE_TRACKING_SUBITEM', SERVIDOR . 'delete_tracking_subitem/');
 define('TRACKING_PDF', SERVIDOR . 'tracking_pdf/');
+define('TRACKING_EXCEL', SERVIDOR . 'tracking_excel/');
 /******************************************************************************/
 define('FULFILLMENT', PERFIL . 'fulfillment/');
 define('SAVE_FULFILLMENT_ITEM', SERVIDOR . 'save_fulfillment_item');

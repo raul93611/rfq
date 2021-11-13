@@ -470,6 +470,10 @@ if ($partes_ruta[0] == 'rfq') {
         $id_rfq = $partes_ruta[2];
         $ruta_elegida = 'scripts/tracking/tracking_pdf.php';
         break;
+      case 'tracking_excel':
+        $id_rfq = $partes_ruta[2];
+        $ruta_elegida = 'scripts/tracking/tracking_excel.php';
+        break;
       case 'load_tracking':
         $id_tracking = $partes_ruta[2];
         $ruta_elegida = 'scripts/tracking/load_tracking.php';
