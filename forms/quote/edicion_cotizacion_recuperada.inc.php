@@ -7,7 +7,7 @@
       <h6><b>Type of Bid:</b> <small><?php echo $cotizacion_recuperada-> obtener_type_of_bid() ; ?></small></h6>
       <h6><b>Issue Date:</b> <small><?php echo $cotizacion_recuperada->obtener_issue_date(); ?></small></h6>
       <h6><b>End Date:</b> <small><?php echo $cotizacion_recuperada->obtener_end_date(); ?></small></h6>
-      <h6><b>Channel:</b> <small><?php echo $cotizacion_recuperada-> obtener_canal() ?></small></h6>
+      <h6><b>Channel:</b> <small><?php echo $cotizacion_recuperada-> print_channel() ?></small></h6>
       <h6><b>Designated User:</b> <small><?php echo Input::get_designated_user($cotizacion_recuperada); ?></small></h6>
       <h6><b>Completed Date:</b> <small><?php if($cotizacion_recuperada->obtener_fecha_completado() != '0000-00-00'){echo RepositorioComment::mysql_date_to_english_format($cotizacion_recuperada->obtener_fecha_completado());} ?></small></h6>
       <h6><b>Expiration Date:</b> <small><?php if($cotizacion_recuperada->obtener_expiration_date() != '0000-00-00'){echo RepositorioComment::mysql_date_to_english_format($cotizacion_recuperada->obtener_expiration_date());} ?></small></h6>

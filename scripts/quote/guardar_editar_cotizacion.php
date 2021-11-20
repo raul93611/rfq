@@ -12,26 +12,25 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
     RepositorioRfq::guardar_total_price_chemonics(Conexion::obtener_conexion(), $_POST['total_price_chemonics'], $_POST['id_rfq']);
   }
   $cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $_POST['id_rfq']);
-  $canal = Input::translate_channel($cotizacion_recuperada->obtener_canal());
   if($cotizacion_recuperada-> obtener_canal() == 'Chemonics' || $cotizacion_recuperada-> obtener_canal() == 'Ebay & Amazon'){
     if(isset($_POST['award']) && $_POST['award'] == 'si'){
       RepositorioRfq::check_completed(Conexion::obtener_conexion(), $_POST['id_rfq']);
       RepositorioRfq::actualizar_fecha_y_submitted(Conexion::obtener_conexion(), $_POST['id_rfq']);
       RepositorioRfq::actualizar_fecha_y_award(Conexion::obtener_conexion(), $_POST['id_rfq']);
-      Redireccion::redirigir(AWARD . $canal);
+      Redireccion::redirigir(AWARD . $cotizacion_recuperada->obtener_canal());
     }
   }else{
     if (!$cotizacion_recuperada->obtener_completado()) {
       if (isset($_POST['completado']) && $_POST['completado'] == 'si') {
         RepositorioRfq::check_completed(Conexion::obtener_conexion(), $_POST['id_rfq']);
         AuditTrailRepository::quote_status_audit_trail(Conexion::obtener_conexion(), 'Completed', $_POST['id_rfq']);
-        Redireccion::redirigir(COMPLETADOS . $canal);
+        Redireccion::redirigir(COMPLETADOS . $cotizacion_recuperada->obtener_canal());
       }
     } else if (!$cotizacion_recuperada->obtener_status()) {
       if (isset($_POST['status']) && $_POST['status'] == 'si') {
         AuditTrailRepository::quote_status_audit_trail(Conexion::obtener_conexion(), 'Submitted', $_POST['id_rfq']);
         RepositorioRfq::actualizar_fecha_y_submitted(Conexion::obtener_conexion(), $_POST['id_rfq']);
-        Redireccion::redirigir(COMPLETADOS . $canal);
+        Redireccion::redirigir(COMPLETADOS . $cotizacion_recuperada->obtener_canal());
       }
     }else if(!$cotizacion_recuperada-> obtener_award()){
       if(isset($_POST['award']) && $_POST['award'] == 'si'){
@@ -39,7 +38,7 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
         $usuario = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), $cotizacion_recuperada-> obtener_usuario_designado());
         Email::send_email_quote_awarded($usuario-> obtener_email(), $cotizacion_recuperada-> obtener_id(), nl2br($_POST['address']));
         AuditTrailRepository::quote_status_audit_trail(Conexion::obtener_conexion(), 'Awarded', $_POST['id_rfq']);
-        Redireccion::redirigir(AWARD . $canal);
+        Redireccion::redirigir(AWARD . $cotizacion_recuperada->obtener_canal());
       }
     }else if(!$cotizacion_recuperada-> obtener_fullfillment()){
       if(isset($_POST['fulfillment']) && $_POST['fulfillment'] == 'si'){

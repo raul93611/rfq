@@ -59,8 +59,7 @@ if (isset($_POST['registrar_cotizacion'])) {
       $documentos = $_FILES['documentos']['name'];
       $temp_documents = $_FILES['documentos']['tmp_name'];
       Input::save_files($directorio, $documentos, $temp_documents);
-      $canal = Input::translate_channel($cotizacion-> obtener_canal());
-      Redireccion::redirigir1(COTIZACIONES . $canal);
+      Redireccion::redirigir1(COTIZACIONES . $cotizacion-> obtener_canal());
     }
   }
 }

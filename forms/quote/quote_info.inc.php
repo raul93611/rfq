@@ -50,12 +50,12 @@
       <label for="canal">Channel:</label>
       <select class="form-control form-control-sm" name="canal" id="canal">
         <option <?php if($cotizacion_recuperada-> obtener_canal() == 'GSA-Buy'){echo 'selected';} ?>>GSA-Buy</option>
-        <option <?php if($cotizacion_recuperada-> obtener_canal() == 'FedBid'){echo 'selected';} ?>>FedBid</option>
+        <option value="Fedbid" <?php if($cotizacion_recuperada-> obtener_canal() == 'FedBid'){echo 'selected';} ?>>Unison</option>
         <option <?php if($cotizacion_recuperada-> obtener_canal() == 'E-mails'){echo 'selected';} ?>>E-mails</option>
         <option <?php if($cotizacion_recuperada-> obtener_canal() == 'Mailbox'){echo 'selected';} ?>>Mailbox</option>
         <option <?php if($cotizacion_recuperada-> obtener_canal() == 'FindFRP'){echo 'selected';} ?>>FindFRP</option>
         <option <?php if($cotizacion_recuperada-> obtener_canal() == 'Embassies'){echo 'selected';} ?>>Embassies</option>
-        <option <?php if($cotizacion_recuperada-> obtener_canal() == 'FBO'){echo 'selected';} ?>>FBO</option>
+        <option value="FBO" <?php if($cotizacion_recuperada-> obtener_canal() == 'FBO'){echo 'selected';} ?>>SAM</option>
         <option <?php if($cotizacion_recuperada-> obtener_canal() == 'Chemonics'){echo 'selected';} ?>>Chemonics</option>
         <option <?php if($cotizacion_recuperada-> obtener_canal() == 'Ebay & Amazon'){echo 'selected';} ?>>Ebay & Amazon</option>
         <option <?php if($cotizacion_recuperada-> obtener_canal() == 'Stars III'){echo 'selected';} ?>>Stars III</option>

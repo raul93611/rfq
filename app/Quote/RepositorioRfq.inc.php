@@ -1425,7 +1425,7 @@ class RepositorioRfq {
         </a>
       </td>
       <td><?php echo $quote-> obtener_email_code(); ?></td>
-      <td><?php echo $quote-> obtener_canal(); ?></td>
+      <td><?php echo $quote-> print_channel(); ?></td>
       <td><?php echo isset($re_quote) ? '$' . $re_quote-> get_total_price() : 'No Re-Quote'; ?></td>
       <td><?php echo $fulfillment_date; ?></td>
       <td><?php echo $quote-> obtener_fecha_award(); ?></td>
@@ -1490,7 +1490,7 @@ class RepositorioRfq {
         </a>
       </td>
       <td><?php echo $quote-> obtener_email_code(); ?></td>
-      <td><?php echo $quote-> obtener_canal(); ?></td>
+      <td><?php echo $quote-> print_channel(); ?></td>
       <td><?php echo $invoice_date; ?></td>
       <td class="text-center"><?php echo $quote-> obtener_type_of_bid() == 'Services' ? '<i class="text-success fas fa-check"></i>' : '<i class="text-danger fas fa-times"></i>'; ?></td>
     </tr>
@@ -1553,7 +1553,7 @@ class RepositorioRfq {
         </a>
       </td>
       <td><?php echo $quote-> obtener_email_code(); ?></td>
-      <td><?php echo $quote-> obtener_canal(); ?></td>
+      <td><?php echo $quote-> print_channel(); ?></td>
       <td><?php echo $submitted_invoice_date; ?></td>
       <td class="text-center"><?php echo $quote-> obtener_type_of_bid() == 'Services' ? '<i class="text-success fas fa-check"></i>' : '<i class="text-danger fas fa-times"></i>'; ?></td>
     </tr>

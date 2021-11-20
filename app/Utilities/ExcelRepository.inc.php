@@ -196,7 +196,7 @@ class ExcelRepository{
       $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_contract_number());$x++;
       $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_email_code());$x++;
       $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_designated_username());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_canal());$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> print_channel());$x++;
       $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_type_of_bid());$x++;
       $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_total_cost());$x++;
       $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_quote_total_price());$x++;
@@ -227,7 +227,7 @@ class ExcelRepository{
       $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_id());$x++;
       $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_email_code());$x++;
       $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_designated_username());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_canal());$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> print_channel());$x++;
       $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_type_of_bid());$x++;
       $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_total_cost());$x++;
       $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_quote_total_price());$x++;
@@ -260,7 +260,7 @@ class ExcelRepository{
       $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, RepositorioComment::mysql_date_to_english_format($quote-> obtener_fulfillment_date()));$x++;
       $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_id());$x++;
       $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_designated_username());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_canal());$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> print_channel());$x++;
       $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_email_code());$x++;
       $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_type_of_bid());$x++;
       $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, RepositorioComment::mysql_date_to_english_format($quote-> obtener_fecha_award()));$x++;
@@ -304,7 +304,7 @@ class ExcelRepository{
       $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, RepositorioComment::mysql_date_to_english_format($quote-> obtener_fulfillment_date()));$x++;
       $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_id());$x++;
       $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_designated_username());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_canal());$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> print_channel());$x++;
       $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_email_code());$x++;
       $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_type_of_bid());$x++;
       $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, RepositorioComment::mysql_date_to_english_format($quote-> obtener_fecha_award()));$x++;

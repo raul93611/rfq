@@ -154,7 +154,7 @@ class Report{
               <td><?php echo $quote-> obtener_contract_number(); ?></td>
               <td><?php echo $quote-> obtener_email_code(); ?></td>
               <td><?php echo $quote-> obtener_designated_username(); ?></td>
-              <td><?php echo $quote-> obtener_canal(); ?></td>
+              <td><?php echo $quote-> print_channel(); ?></td>
               <td><?php echo $quote-> obtener_type_of_bid(); ?></td>
               <td><?php echo $quote-> obtener_total_cost(); ?></td>
               <td><?php echo $quote-> obtener_quote_total_price(); ?></td>
@@ -236,7 +236,7 @@ class Report{
               </td>
               <td><?php echo $quote-> obtener_email_code(); ?></td>
               <td><?php echo $quote-> obtener_designated_username(); ?></td>
-              <td><?php echo $quote-> obtener_canal(); ?></td>
+              <td><?php echo $quote-> print_channel(); ?></td>
               <td><?php echo $quote-> obtener_type_of_bid(); ?></td>
               <td><?php echo $quote-> obtener_total_cost(); ?></td>
               <td><?php echo $quote-> obtener_quote_total_price(); ?></td>
@@ -327,7 +327,7 @@ class Report{
                 </a>
               </td>
               <td><?php echo $quote-> obtener_designated_username(); ?></td>
-              <td><?php echo $quote-> obtener_canal(); ?></td>
+              <td><?php echo $quote-> print_channel(); ?></td>
               <td><?php echo $quote-> obtener_email_code(); ?></td>
               <td><?php echo $quote-> obtener_type_of_bid(); ?></td>
               <td><?php echo RepositorioComment::mysql_date_to_english_format($quote-> obtener_fecha_award()); ?></td>
@@ -434,7 +434,7 @@ class Report{
                 </a>
               </td>
               <td><?php echo $quote-> obtener_designated_username(); ?></td>
-              <td><?php echo $quote-> obtener_canal(); ?></td>
+              <td><?php echo $quote-> print_channel(); ?></td>
               <td><?php echo $quote-> obtener_email_code(); ?></td>
               <td><?php echo $quote-> obtener_type_of_bid(); ?></td>
               <td><?php echo RepositorioComment::mysql_date_to_english_format($quote-> obtener_fecha_award()); ?></td>

@@ -186,7 +186,7 @@ class RepositorioItem {
             <?php
             if ($cotizacion->obtener_canal() == 'GSA-Buy') {
               ?>
-              <a class="dropdown-item" href="<?php echo PROPOSAL_GSA . '/' . $cotizacion->obtener_id(); ?>" target="_blank"><?php echo $cotizacion->obtener_canal(); ?>GSA Proposal</a>
+              <a class="dropdown-item" href="<?php echo PROPOSAL_GSA . '/' . $cotizacion->obtener_id(); ?>" target="_blank">GSA Proposal</a>
               <?php
             }
           }

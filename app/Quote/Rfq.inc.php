@@ -153,6 +153,19 @@ class Rfq {
     return $this->canal;
   }
 
+  public function print_channel(){
+    $channel = $this-> canal;
+    switch ($this-> canal) {
+      case 'FedBid':
+        $channel = 'Unison';
+        break;
+      case 'FBO':
+        $channel = 'SAM';
+        break;
+    }
+    return $channel;
+  }
+
   public function obtener_email_code() {
     return $this->email_code;
   }

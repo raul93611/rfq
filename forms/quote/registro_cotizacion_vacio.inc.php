@@ -55,12 +55,12 @@
         <label for="canal">Channel:</label>
         <select class="form-control form-control-sm" name="canal" id="canal">
           <option>GSA-Buy</option>
-          <option>FedBid</option>
+          <option value="FedBid">Unison</option>
           <option>E-mails</option>
           <option>Mailbox</option>
           <option>FindFRP</option>
           <option>Embassies</option>
-          <option>FBO</option>
+          <option value="FBO">SAM</option>
           <option>Chemonics</option>
           <option>Ebay & Amazon</option>
           <option>Stars III</option>

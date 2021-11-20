@@ -574,19 +574,19 @@ if ($partes_ruta[0] == 'rfq') {
           break;
         case 'cotizaciones':
           $gestor_actual = 'cotizaciones';
-          $cotizacion = $partes_ruta[3];
+          $cotizacion = urldecode($partes_ruta[3]);
           break;
         case 'completados':
           $gestor_actual = 'completados';
-          $cotizacion = $partes_ruta[3] . '_completados';
+          $cotizacion = urldecode($partes_ruta[3]);
           break;
         case 'submitted':
           $gestor_actual = 'submitted';
-          $cotizacion = $partes_ruta[3] . '_submitted';
+          $cotizacion = urldecode($partes_ruta[3]);
           break;
         case 'award':
           $gestor_actual = 'award';
-          $cotizacion = $partes_ruta[3] . '_award';
+          $cotizacion = urldecode($partes_ruta[3]);
           break;
         case 'edit_user':
           $id_user = $partes_ruta[3];

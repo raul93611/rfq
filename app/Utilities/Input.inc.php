@@ -57,73 +57,14 @@ class Input{
     return $designated_user;
   }
 
-  public static function translate_channel($channel){
+  public static function printable_channel($channel){
+    $canal = $channel;
     switch ($channel) {
-      case 'GSA-Buy':
-        $canal = 'gsa_buy';
-        break;
       case 'FedBid':
-        $canal = 'fedbid';
-        break;
-      case 'E-mails':
-        $canal = 'emails';
-        break;
-      case 'Mailbox':
-        $canal = 'mailbox';
-        break;
-      case 'FindFRP':
-        $canal = 'findfrp';
-        break;
-      case 'Embassies':
-        $canal = 'embassies';
+        $canal = 'Unison';
         break;
       case 'FBO':
-        $canal = 'fbo';
-        break;
-      case 'Chemonics':
-        $canal = 'chemonics';
-        break;
-      case 'Ebay & Amazon':
-        $canal = 'ebay_amazon';
-        break;
-      case 'Stars III':
-        $canal = 'starsiii';
-        break;
-    }
-    return $canal;
-  }
-
-  public static function inverse_translate_channel($channel){
-    switch ($channel) {
-      case 'gsa_buy':
-        $canal = 'GSA-Buy';
-        break;
-      case 'fedbid':
-        $canal = 'FedBid';
-        break;
-      case 'emails':
-        $canal = 'E-mails';
-        break;
-      case 'mailbox':
-        $canal = 'Mailbox';
-        break;
-      case 'findfrp':
-        $canal = 'FindFRP';
-        break;
-      case 'embassies':
-        $canal = 'Embassies';
-        break;
-      case 'fbo':
-        $canal = 'FBO';
-        break;
-      case 'chemonics':
-        $canal = 'Chemonics';
-        break;
-      case 'ebay_amazon':
-        $canal = 'Ebay & Amazon';
-        break;
-      case 'starsiii':
-        $canal = 'Stars III';
+        $canal = 'SAM';
         break;
     }
     return $canal;
