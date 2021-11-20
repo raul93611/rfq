@@ -27,6 +27,7 @@ class ReQuoteRepository{
     if(!$re_quote_exists){
       $re_quote = new ReQuote('', $id_rfq, $cotizacion-> obtener_total_cost(), $cotizacion-> obtener_total_price(), $cotizacion-> obtener_payment_terms(), $cotizacion-> obtener_taxes(), $cotizacion-> obtener_profit(), $cotizacion-> obtener_additional(), $cotizacion-> obtener_shipping_cost(), $cotizacion-> obtener_shipping());
       $id_re_quote = ReQuoteRepository::insert_re_quote($connection, $re_quote);
+      AuditTrailRepository::re_quote_status_audit_trail($connection, 'Created', $id_rfq);
       $items = RepositorioItem::obtener_items_por_id_rfq($connection, $id_rfq);
       if(count($items)){
         foreach ($items as $key => $item) {

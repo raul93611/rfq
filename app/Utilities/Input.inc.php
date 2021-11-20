@@ -3,13 +3,12 @@ class Input{
   public static function print_designated_user($quote){
     if ($quote->obtener_completado() || $quote-> obtener_status()) {
       Conexion::abrir_conexion();
-      $usuario = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), $quote-> obtener_usuario_designado());
+      $usuario = self::get_designated_user($quote);
       Conexion::cerrar_conexion();
       ?>
       <label for="usuario_designado">Designated user:</label>
-      <input type="text" name="usuario_designado" class="form-control form-control-sm" value="<?php echo $usuario->obtener_nombre_usuario(); ?>" readonly>
-      <input type="hidden" name="designated_user_original" value="<?php echo $usuario->obtener_nombre_usuario(); ?>">
-      <input type="hidden" value="<?php echo $usuario-> obtener_nombre_usuario(); ?>" name="usuario_designado">
+      <input type="text" name="usuario_designado" class="form-control form-control-sm" value="<?php echo $usuario; ?>" readonly>
+      <input type="hidden" name="designated_user_original" value="<?php echo $usuario; ?>">
       <?php
     } else {
       ?>
@@ -17,12 +16,14 @@ class Input{
         <?php
         Conexion::abrir_conexion();
         $usuarios = RepositorioUsuario::obtener_usuarios_rfq(Conexion::obtener_conexion());
+        $designated_user = self::get_designated_user($quote);
         Conexion::cerrar_conexion();
         ?>
         <?php
         if (count($usuarios)) {
           ?>
           <label for="usuario_designado">Designated user:</label>
+          <input type="hidden" name="designated_user_original" value="<?php echo $designated_user; ?>">
           <select id="usuario_designado" class="form-control form-control-sm" name="usuario_designado">
             <?php
             foreach ($usuarios as $usuario) {
@@ -70,7 +71,7 @@ class Input{
     return $canal;
   }
 
-  public static function save_files($path, $files){
+  public static function save_files($path, $files, $id_rfq){
     mkdir($path, 0777);
     $documentos = array_filter($files['name']);
     $total = count($documentos);
@@ -81,6 +82,11 @@ class Input{
         $file = preg_replace('/[^a-z0-9-_\-\.]/i','_',$file);
         $new_path = $path . '/' . $file;
         move_uploaded_file($tmp_path, $new_path);
+      }
+      if(!empty($file)){
+        Conexion::abrir_conexion();
+        AuditTrailRepository::document_updated(Conexion::obtener_conexion(), 'uploaded', $file, $id_rfq);
+        Conexion::cerrar_conexion();
       }
     }
   }

@@ -1,6 +1,6 @@
 <?php
 Conexion::abrir_conexion();
-ReQuoteRepository::create_re_quote(Conexion::obtener_conexion(), $id_rfq);
+$id_requote = ReQuoteRepository::create_re_quote(Conexion::obtener_conexion(), $id_rfq);
 $re_quote = ReQuoteRepository::get_re_quote_by_id_rfq(Conexion::obtener_conexion(), $id_rfq);
 Conexion::cerrar_conexion();
 ?>

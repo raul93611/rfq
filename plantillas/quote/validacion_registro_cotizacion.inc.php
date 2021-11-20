@@ -63,12 +63,7 @@ if (isset($_POST['registrar_cotizacion'])) {
     if ($cotizacion_insertada) {
       $directorio = $_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $id_rfq;
       $documentos = $_FILES['documentos'];
-      Input::save_files($directorio, $documentos);
-      Conexion::abrir_conexion();
-      foreach ($documentos['name'] as $key => $document_name) {
-        AuditTrailRepository::document_uploaded(Conexion::obtener_conexion(), $document_name, $id_rfq);
-      }
-      Conexion::cerrar_conexion();
+      Input::save_files($directorio, $documentos, $id_rfq);
       Redireccion::redirigir1(COTIZACIONES . $cotizacion-> obtener_canal());
     }
   }
