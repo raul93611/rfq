@@ -53,12 +53,22 @@ if (isset($_POST['registrar_cotizacion'])) {
     );
     list($cotizacion_insertada, $id_rfq) = RepositorioRfq::insertar_cotizacion(Conexion::obtener_conexion(), $cotizacion);
     AuditTrailRepository::quote_status_audit_trail(Conexion::obtener_conexion(), 'Created', $id_rfq);
+    AuditTrailRepository::create_audit_trail_modified(Conexion::obtener_conexion(), 'Designated user', $_POST['usuario_designado'], '', $id_rfq);
+    AuditTrailRepository::create_audit_trail_modified(Conexion::obtener_conexion(), 'Channel', $_POST['canal'], '', $id_rfq);
+    AuditTrailRepository::create_audit_trail_modified(Conexion::obtener_conexion(), 'Code', $validador->obtener_email_code(), '', $id_rfq);
+    AuditTrailRepository::create_audit_trail_modified(Conexion::obtener_conexion(), 'Type of Bid', $_POST['type_of_bid'], '', $id_rfq);
+    AuditTrailRepository::create_audit_trail_modified(Conexion::obtener_conexion(), 'Issue Date', $validador->obtener_issue_date(), '', $id_rfq);
+    AuditTrailRepository::create_audit_trail_modified(Conexion::obtener_conexion(), 'End Date', $validador->obtener_end_date(), '', $id_rfq);
     Conexion::cerrar_conexion();
     if ($cotizacion_insertada) {
       $directorio = $_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $id_rfq;
-      $documentos = $_FILES['documentos']['name'];
-      $temp_documents = $_FILES['documentos']['tmp_name'];
-      Input::save_files($directorio, $documentos, $temp_documents);
+      $documentos = $_FILES['documentos'];
+      Input::save_files($directorio, $documentos);
+      Conexion::abrir_conexion();
+      foreach ($documentos['name'] as $key => $document_name) {
+        AuditTrailRepository::document_uploaded(Conexion::obtener_conexion(), $document_name, $id_rfq);
+      }
+      Conexion::cerrar_conexion();
       Redireccion::redirigir1(COTIZACIONES . $cotizacion-> obtener_canal());
     }
   }

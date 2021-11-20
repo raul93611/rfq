@@ -70,13 +70,13 @@ class Input{
     return $canal;
   }
 
-  public static function save_files($path, $files, $temp_files){
+  public static function save_files($path, $files){
     mkdir($path, 0777);
-    $documentos = array_filter($files);
+    $documentos = array_filter($files['name']);
     $total = count($documentos);
     for ($i = 0; $i < $total; $i++) {
-      $tmp_path = $temp_files[$i];
-      $file = $files[$i];
+      $tmp_path = $files['tmp_name'][$i];
+      $file = $files['name'][$i];
       if ($tmp_path != '') {
         $file = preg_replace('/[^a-z0-9-_\-\.]/i','_',$file);
         $new_path = $path . '/' . $file;

@@ -299,5 +299,11 @@ class AuditTrailRepository{
     $audit_trail = new AuditTrail('', $id_rfq, $_SESSION['nombre_usuario'], $message, '');
     self::insert_audit_trail($connection, $audit_trail);
   }
+
+  public static function document_uploaded($connection, $document_name, $id_rfq){
+    $message = 'Document Uploaded:<br><b>' . $document_name . '</b>';
+    $audit_trail = new AuditTrail('', $id_rfq, $_SESSION['nombre_usuario'], $message, '');
+    self::insert_audit_trail($connection, $audit_trail);
+  }
 }
 ?>
