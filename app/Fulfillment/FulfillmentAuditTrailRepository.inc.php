@@ -155,7 +155,7 @@ class FulfillmentAuditTrailRepository{
       $original_field = 'Empty';
     }
     if($field != $original_field){
-      $message = '<a class="audit_trail_link" href="#" data=".subitem' . $id_subitem . '"><b>Subitem</b></a> modified:<br><b>' . $field_name . '</b> modified:<br><b>' . $original_field . ' > ' . $field . '</b>';
+      $message = '<a class="audit_trail_link" href="#" data=".subitem' . $id_subitem . '"><b>Charge</b></a> modified:<br><b>' . $field_name . '</b> modified:<br><b>' . $original_field . ' > ' . $field . '</b>';
       $audit_trail = new AuditTrail('', $id_rfq, $_SESSION['nombre_usuario'], $message, '');
       self::insert_audit_trail($connection, $audit_trail);
     }
