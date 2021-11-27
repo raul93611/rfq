@@ -1,4 +1,25 @@
 $(document).ready(function () {
+  /***********************************FULFILLMENT AUDIT TRAILS******************/
+  const btnAuditTrail = $('#fulfillment_audit_trails_button');
+  const auditTrailModal = $('#fulfillment_audit_trails_modal');
+  const auditTrailModalBody = $('#fulfillment_audit_trails_modal .modal-body');
+  const auditTrailLink = $('.audit_trail_link');
+
+  btnAuditTrail.click(function(){
+    auditTrailModalBody.load('/rfq/load_fulfillment_audit_trails', {id_rfq: $(this).attr('data')}, function(){
+      auditTrailModal.modal();
+    });
+  });
+
+  auditTrailModal.on('click', '.audit_trail_link', function(){
+    auditTrailModal.modal('hide');
+    const id = $(this).attr('data');
+    $(id).addClass('highlight');
+    setTimeout(function() {
+      $(id).removeClass('highlight');
+    }, 5000);
+  });
+
   /***********************************FULFILLMENT SHIPPING******************/
   $('#fulfillment_page').on('click', '#edit_fulfillment_shipping', function(){
     $('#edit_fulfillment_shipping_modal form').load('/rfq/load_fulfillment_shipping/' + $(this).attr('data'), function(){

@@ -10,6 +10,7 @@ Conexion::cerrar_conexion();
     <div class="col-md-12">
       <div class="form-group">
         <label>Provider:</label>
+        <input type="hidden" name="provider_original" value="<?php echo $fulfillment_item-> get_provider(); ?>">
         <select name="provider" class="custom-select">
           <?php
           foreach ($providers_list as $key => $provider) {
@@ -22,18 +23,22 @@ Conexion::cerrar_conexion();
       </div>
       <div class="form-group">
         <label for="quantity">Quantity:</label>
+        <input type="hidden" name="quantity_original" value="<?php echo $fulfillment_item-> get_quantity(); ?>">
         <input type="number" id="quantity" class="form-control form-control-sm" name="quantity" value="<?php echo $fulfillment_item-> get_quantity(); ?>">
       </div>
       <div class="form-group">
         <label for="unit_cost">Unit Cost:</label>
+        <input type="hidden" name="unit_cost_original" value="<?php echo $fulfillment_item-> get_unit_cost(); ?>">
         <input type="number" step=".01" id="unit_cost" class="form-control form-control-sm" name="unit_cost" value="<?php echo $fulfillment_item-> get_unit_cost(); ?>">
       </div>
       <div class="form-group">
         <label for="other_cost">Other Cost:</label>
+        <input type="hidden" name="other_cost_original" value="<?php echo $fulfillment_item-> get_other_cost(); ?>">
         <input type="number" step=".01" id="other_cost" class="form-control form-control-sm" name="other_cost" value="<?php echo $fulfillment_item-> get_other_cost(); ?>">
       </div>
       <div class="form-group">
         <label for="payment_term">Payment Term:</label>
+        <input type="hidden" name="payment_term_original" value="<?php echo $fulfillment_item-> get_payment_term(); ?>">
         <select class="custom-select" name="payment_term" id="payment_term">
           <?php
             foreach ($payment_terms as $key => $payment_term) {
@@ -45,6 +50,7 @@ Conexion::cerrar_conexion();
         </select>
       </div>
       <div class="custom-control custom-checkbox">
+        <input type="hidden" name="net30_cc_original" value="<?php echo $fulfillment_item-> get_net30_cc(); ?>">
         <input type="checkbox" class="custom-control-input" id="net30_cc" name="net30_cc" value="1" <?php echo $fulfillment_item-> get_net30_cc() ? 'checked' : ''; ?>>
         <label class="custom-control-label" for="net30_cc">Net 30/CC</label><br>
         <span class="text-muted">If checked a 2.99% will be apply to the result.</span>

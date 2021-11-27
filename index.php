@@ -101,6 +101,8 @@ include_once 'app/Task/TaskRepository.inc.php';
 include_once 'app/TaskComment/TaskComment.inc.php';
 include_once 'app/TaskComment/TaskCommentRepository.inc.php';
 
+include_once 'app/Fulfillment/FulfillmentAuditTrailRepository.inc.php';
+
 $componentes_url = parse_url($_SERVER['REQUEST_URI']);
 $ruta = $componentes_url['path'];
 
@@ -262,6 +264,9 @@ if ($partes_ruta[0] == 'rfq') {
         break;
       case 'update_fulfillment_shipping':
         $ruta_elegida = 'scripts/fulfillment/update_fulfillment_shipping.php';
+        break;
+      case 'load_fulfillment_audit_trails':
+        $ruta_elegida = 'scripts/fulfillment/load_fulfillment_audit_trails.php';
         break;
     }
   } else if (count($partes_ruta) == 3) {

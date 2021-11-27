@@ -46,10 +46,12 @@ class FulfillmentItemRepository{
         $sentence-> bindParam(':payment_term', $fulfillment_item-> get_payment_term(), PDO::PARAM_STR);
         $sentence-> bindParam(':net30_cc', $fulfillment_item-> get_net30_cc(), PDO::PARAM_STR);
         $sentence-> execute();
+        $id = $connection-> lastInsertId();
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
+    return $id;
   }
 
   public static function update($connection, $id_fulfillment_item, $provider, $quantity, $unit_cost, $other_cost, $real_cost, $payment_term, $net30_cc){

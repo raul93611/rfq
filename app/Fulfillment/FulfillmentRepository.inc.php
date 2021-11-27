@@ -95,17 +95,17 @@ class FulfillmentRepository{
       <?php
   if(count($fulfillment_items)){
         ?>
-        <td class="align-middle text-center">
+        <td class="item<?php echo $fulfillment_items[0]-> get_id(); ?> align-middle text-center">
           <a href="#" data="<?php echo $fulfillment_items[0]-> get_id(); ?>" id_item="<?php echo $item-> obtener_id(); ?>" class="delete_fulfillment_item_button mb-2 btn btn-warning"><i class="fas fa-trash"></i></a><br>
           <a href="#" data="<?php echo $fulfillment_items[0]-> get_id(); ?>" class="edit_fulfillment_item_button btn btn-warning"><i class="fas fa-pen"></i></a>
         </td>
-        <td><?php echo $fulfillment_items[0]-> get_provider(); ?></td>
-        <td><?php echo $fulfillment_items[0]-> get_quantity(); ?></td>
-        <td><?php echo $fulfillment_items[0]-> get_unit_cost(); ?></td>
-        <td><?php echo $fulfillment_items[0]-> get_other_cost(); ?></td>
-        <td><?php echo $fulfillment_items[0]-> get_real_cost(); ?></td>
-        <td><?php echo $fulfillment_items[0]-> get_payment_term(); ?></td>
-        <td class="text-center"><?php echo $fulfillment_items[0]-> get_net30_cc() ? '<i class="fas fa-check text-success"></i>' : '<i class="fas fa-times text-danger"></i>'; ?></td>
+        <td class="item<?php echo $fulfillment_items[0]-> get_id(); ?>"><?php echo $fulfillment_items[0]-> get_provider(); ?></td>
+        <td class="item<?php echo $fulfillment_items[0]-> get_id(); ?>"><?php echo $fulfillment_items[0]-> get_quantity(); ?></td>
+        <td class="item<?php echo $fulfillment_items[0]-> get_id(); ?>"><?php echo $fulfillment_items[0]-> get_unit_cost(); ?></td>
+        <td class="item<?php echo $fulfillment_items[0]-> get_id(); ?>"><?php echo $fulfillment_items[0]-> get_other_cost(); ?></td>
+        <td class="item<?php echo $fulfillment_items[0]-> get_id(); ?>"><?php echo $fulfillment_items[0]-> get_real_cost(); ?></td>
+        <td class="item<?php echo $fulfillment_items[0]-> get_id(); ?>"><?php echo $fulfillment_items[0]-> get_payment_term(); ?></td>
+        <td class="item<?php echo $fulfillment_items[0]-> get_id(); ?> text-center"><?php echo $fulfillment_items[0]-> get_net30_cc() ? '<i class="fas fa-check text-success"></i>' : '<i class="fas fa-times text-danger"></i>'; ?></td>
         <td rowspan="<?php echo $fulfillment_items_quantity; ?>"><?php echo $item-> obtener_fulfillment_profit(); ?></td>
         <?php
       ?>
@@ -114,7 +114,7 @@ class FulfillmentRepository{
     for ($j = 1; $j < count($fulfillment_items); $j++) {
       $fulfillment_item = $fulfillment_items[$j];
       ?>
-      <tr>
+      <tr class="item<?php echo $fulfillment_item-> get_id(); ?>">
         <td class="align-middle text-center">
           <a href="#" data="<?php echo $fulfillment_item-> get_id(); ?>" id_item="<?php echo $item-> obtener_id(); ?>" class="delete_fulfillment_item_button mb-2 btn btn-warning"><i class="fas fa-trash"></i></a><br>
           <a href="#" data="<?php echo $fulfillment_item-> get_id(); ?>" class="edit_fulfillment_item_button btn btn-warning"><i class="fas fa-pen"></i></a>
@@ -169,17 +169,17 @@ class FulfillmentRepository{
       <?php
     if(count($fulfillment_subitems)){
           ?>
-          <td class="align-middle text-center">
+          <td class="subitem<?php echo $fulfillment_subitems[0]-> get_id(); ?> align-middle text-center">
             <a href="#" data="<?php echo $fulfillment_subitems[0]-> get_id(); ?>" id_rfq="<?php echo $id_rfq; ?>" id_subitem="<?php echo $subitem-> obtener_id(); ?>" class="delete_fulfillment_subitem_button mb-2 btn btn-warning"><i class="fas fa-trash"></i></a><br>
             <a href="#" data="<?php echo $fulfillment_subitems[0]-> get_id(); ?>" class="edit_fulfillment_subitem_button btn btn-warning"><i class="fas fa-pen"></i></a>
           </td>
-          <td><?php echo $fulfillment_subitems[0]-> get_provider(); ?></td>
-          <td><?php echo $fulfillment_subitems[0]-> get_quantity(); ?></td>
-          <td><?php echo $fulfillment_subitems[0]-> get_unit_cost(); ?></td>
-          <td><?php echo $fulfillment_subitems[0]-> get_other_cost(); ?></td>
-          <td><?php echo $fulfillment_subitems[0]-> get_real_cost(); ?></td>
-          <td><?php echo $fulfillment_subitems[0]-> get_payment_term(); ?></td>
-          <td class="text-center"><?php echo $fulfillment_subitems[0]-> get_net30_cc() ? '<i class="fas fa-check text-success"></i>' : '<i class="fas fa-times text-danger"></i>'; ?></td>
+          <td class="subitem<?php echo $fulfillment_subitems[0]-> get_id(); ?>"><?php echo $fulfillment_subitems[0]-> get_provider(); ?></td>
+          <td class="subitem<?php echo $fulfillment_subitems[0]-> get_id(); ?>"><?php echo $fulfillment_subitems[0]-> get_quantity(); ?></td>
+          <td class="subitem<?php echo $fulfillment_subitems[0]-> get_id(); ?>"><?php echo $fulfillment_subitems[0]-> get_unit_cost(); ?></td>
+          <td class="subitem<?php echo $fulfillment_subitems[0]-> get_id(); ?>"><?php echo $fulfillment_subitems[0]-> get_other_cost(); ?></td>
+          <td class="subitem<?php echo $fulfillment_subitems[0]-> get_id(); ?>"><?php echo $fulfillment_subitems[0]-> get_real_cost(); ?></td>
+          <td class="subitem<?php echo $fulfillment_subitems[0]-> get_id(); ?>"><?php echo $fulfillment_subitems[0]-> get_payment_term(); ?></td>
+          <td class="subitem<?php echo $fulfillment_subitems[0]-> get_id(); ?> text-center"><?php echo $fulfillment_subitems[0]-> get_net30_cc() ? '<i class="fas fa-check text-success"></i>' : '<i class="fas fa-times text-danger"></i>'; ?></td>
           <td rowspan="<?php echo $fulfillment_subitems_quantity; ?>"><?php echo $subitem-> obtener_fulfillment_profit(); ?></td>
           <?php
         ?>
@@ -188,7 +188,7 @@ class FulfillmentRepository{
       for ($j = 1; $j < count($fulfillment_subitems); $j++) {
         $fulfillment_subitem = $fulfillment_subitems[$j];
         ?>
-        <tr>
+        <tr class="subitem<?php echo $fulfillment_subitem-> get_id(); ?>">
           <td class="align-middle text-center">
             <a href="#" data="<?php echo $fulfillment_subitem-> get_id(); ?>" id_rfq="<?php echo $id_rfq; ?>" id_subitem="<?php echo $subitem-> obtener_id(); ?>" class="delete_fulfillment_subitem_button mb-2 btn btn-warning"><i class="fas fa-trash"></i></a><br>
             <a href="#" data="<?php echo $fulfillment_subitem-> get_id(); ?>" class="edit_fulfillment_subitem_button btn btn-warning"><i class="fas fa-pen"></i></a>
@@ -199,7 +199,7 @@ class FulfillmentRepository{
           <td><?php echo $fulfillment_subitem-> get_other_cost(); ?></td>
           <td><?php echo $fulfillment_subitem-> get_real_cost(); ?></td>
           <td><?php echo $fulfillment_subitem-> get_payment_term(); ?></td>
-          <td class="text-center"><?php echo $fulfillment_subitem-> get_payment_term() ? '<i class="fas fa-check text-success"></i>' : '<i class="fas fa-times text-danger"></i>'; ?></td>
+          <td class="text-center"><?php echo $fulfillment_subitem-> get_net30_cc() ? '<i class="fas fa-check text-success"></i>' : '<i class="fas fa-times text-danger"></i>'; ?></td>
         </tr>
         <?php
       }
@@ -280,16 +280,16 @@ class FulfillmentRepository{
       <?php
     if(count($fulfillment_services)){
           ?>
-          <td class="align-middle text-center">
+          <td class="service<?php echo $fulfillment_services[0]-> get_id(); ?> align-middle text-center">
             <a href="#" data="<?php echo $fulfillment_services[0]-> get_id(); ?>" id_service="<?php echo $service-> get_id(); ?>" class="delete_fulfillment_service_button mb-2 btn btn-warning"><i class="fas fa-trash"></i></a><br>
             <a href="#" data="<?php echo $fulfillment_services[0]-> get_id(); ?>" class="edit_fulfillment_service_button btn btn-warning"><i class="fas fa-pen"></i></a>
           </td>
-          <td><?php echo $fulfillment_services[0]-> get_provider(); ?></td>
-          <td><?php echo $fulfillment_services[0]-> get_quantity(); ?></td>
-          <td><?php echo $fulfillment_services[0]-> get_unit_cost(); ?></td>
-          <td><?php echo $fulfillment_services[0]-> get_other_cost(); ?></td>
-          <td><?php echo $fulfillment_services[0]-> get_real_cost(); ?></td>
-          <td><?php echo $fulfillment_services[0]-> get_payment_term(); ?></td>
+          <td class="service<?php echo $fulfillment_services[0]-> get_id(); ?>"><?php echo $fulfillment_services[0]-> get_provider(); ?></td>
+          <td class="service<?php echo $fulfillment_services[0]-> get_id(); ?>"><?php echo $fulfillment_services[0]-> get_quantity(); ?></td>
+          <td class="service<?php echo $fulfillment_services[0]-> get_id(); ?>"><?php echo $fulfillment_services[0]-> get_unit_cost(); ?></td>
+          <td class="service<?php echo $fulfillment_services[0]-> get_id(); ?>"><?php echo $fulfillment_services[0]-> get_other_cost(); ?></td>
+          <td class="service<?php echo $fulfillment_services[0]-> get_id(); ?>"><?php echo $fulfillment_services[0]-> get_real_cost(); ?></td>
+          <td class="service<?php echo $fulfillment_services[0]-> get_id(); ?>"><?php echo $fulfillment_services[0]-> get_payment_term(); ?></td>
           <td rowspan="<?php echo $fulfillment_services_quantity; ?>"><?php echo $service-> get_fulfillment_profit(); ?></td>
           <?php
         ?>
@@ -298,7 +298,7 @@ class FulfillmentRepository{
       for ($j = 1; $j < count($fulfillment_services); $j++) {
         $fulfillment_service = $fulfillment_services[$j];
         ?>
-        <tr>
+        <tr class="service<?php echo $fulfillment_service-> get_id(); ?>">
           <td class="align-middle text-center">
             <a href="#" data="<?php echo $fulfillment_service-> get_id(); ?>" id_service="<?php echo $service-> get_id(); ?>" class="delete_fulfillment_service_button mb-2 btn btn-warning"><i class="fas fa-trash"></i></a><br>
             <a href="#" data="<?php echo $fulfillment_service-> get_id(); ?>" class="edit_fulfillment_service_button btn btn-warning"><i class="fas fa-pen"></i></a>

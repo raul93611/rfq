@@ -34,10 +34,12 @@ class FulfillmentServiceRepository{
         $sentence-> bindParam(':real_cost', $fulfillment_service-> get_real_cost(), PDO::PARAM_STR);
         $sentence-> bindParam(':payment_term', $fulfillment_service-> get_payment_term(), PDO::PARAM_STR);
         $sentence-> execute();
+        $id = $connection-> lastInsertId();
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
+    return $id;
   }
 
   public static function update($connection, $id_fulfillment_service, $provider, $quantity, $unit_cost, $other_cost, $real_cost, $payment_term){

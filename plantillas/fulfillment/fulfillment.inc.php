@@ -19,6 +19,7 @@ Conexion::cerrar_conexion();
           include_once 'plantillas/fulfillment/templates/comments_button.inc.php';
           include_once 'plantillas/fulfillment/templates/pending_button.inc.php';
           ?>
+          <button type="button" class="btn btn-info" id="fulfillment_audit_trails_button" data="<?php echo $id_rfq; ?>" name="button">Audit Trails</button>
         </div>
         <div class="col-sm-4 text-right">
           <?php include_once 'templates/pending_status.inc.php'; ?>
@@ -48,5 +49,6 @@ include_once 'plantillas/fulfillment/modals/add_fulfillment_service_modal.inc.ph
 include_once 'plantillas/fulfillment/modals/edit_fulfillment_service_modal.inc.php';
 include_once 'plantillas/fulfillment/modals/new_comment_modal.inc.php';
 include_once 'plantillas/fulfillment/modals/comments_modal.inc.php';
+include_once 'modals/audit_trails_modal.inc.php';
 ?>
 <script src="<?php echo RUTA_JS; ?>fulfillment.js"></script>

@@ -249,7 +249,7 @@ table{
   background-color: #f4f6f9;
 }
 
-#tabla_items tr.highlight, #re_quote_data tr.highlight{
+#tabla_items tr.highlight, #re_quote_data tr.highlight, #fulfillment_page .highlight{
   animation-name: target-fade;
   animation-duration: 5s;
 }
