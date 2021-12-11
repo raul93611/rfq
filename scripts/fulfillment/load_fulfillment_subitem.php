@@ -49,11 +49,9 @@ Conexion::cerrar_conexion();
           ?>
         </select>
       </div>
-      <div class="custom-control custom-checkbox">
-        <input type="hidden" name="net30_cc_original" value="<?php echo $fulfillment_subitem-> get_net30_cc(); ?>">
-        <input type="checkbox" class="custom-control-input" id="net30_cc" name="net30_cc" value="1" <?php echo $fulfillment_subitem-> get_net30_cc() ? 'checked' : ''; ?>>
-        <label class="custom-control-label" for="net30_cc">Net 30/CC</label><br>
-        <span class="text-muted">If checked a 2.99% will be apply to the result.</span>
+      <div class="form-group">
+        <label for="comment">Comment:</label>
+        <textarea id="comment" name="comment" class="form-control form-control-sm" rows="5"><?php echo $fulfillment_subitem-> get_comments(); ?></textarea>
       </div>
     </div>
   </div>

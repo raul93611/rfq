@@ -1,4 +1,10 @@
 $(document).ready(function () {
+  // $('[data-toggle="tooltip"]').tooltip();
+  $('body').tooltip({
+    selector: '[data-toggle="tooltip"]',
+    trigger: 'click',
+    placement: 'left',
+  });
   /***********************************FULFILLMENT AUDIT TRAILS******************/
   const btnAuditTrail = $('#fulfillment_audit_trails_button');
   const auditTrailModal = $('#fulfillment_audit_trails_modal');

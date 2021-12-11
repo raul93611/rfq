@@ -24,7 +24,7 @@ class FulfillmentRepository{
               <th class="thin">OTHER COST</th>
               <th>REAL COST</th>
               <th>PAYMENT TERM</th>
-              <th>NET30/CC</th>
+              <th>COMMENT</th>
               <th>PROFIT</th>
             </tr>
           </thead>
@@ -105,7 +105,11 @@ class FulfillmentRepository{
         <td class="item<?php echo $fulfillment_items[0]-> get_id(); ?>"><?php echo $fulfillment_items[0]-> get_other_cost(); ?></td>
         <td class="item<?php echo $fulfillment_items[0]-> get_id(); ?>"><?php echo $fulfillment_items[0]-> get_real_cost(); ?></td>
         <td class="item<?php echo $fulfillment_items[0]-> get_id(); ?>"><?php echo $fulfillment_items[0]-> get_payment_term(); ?></td>
-        <td class="item<?php echo $fulfillment_items[0]-> get_id(); ?> text-center"><?php echo $fulfillment_items[0]-> get_net30_cc() ? '<i class="fas fa-check text-success"></i>' : '<i class="fas fa-times text-danger"></i>'; ?></td>
+        <td class="item<?php echo $fulfillment_items[0]-> get_id(); ?> text-center">
+          <button type="button" class="btn btn-link" data-toggle="tooltip" data-html="true" title="<?php echo !empty($fulfillment_items[0]-> get_comments()) ? nl2br($fulfillment_items[0]-> get_comments()) : 'No comments'; ?>">
+            <i class="fas fa-comment fa-2x"></i>
+          </button>
+        </td>
         <td rowspan="<?php echo $fulfillment_items_quantity; ?>"><?php echo $item-> obtener_fulfillment_profit(); ?></td>
         <?php
       ?>
@@ -125,7 +129,11 @@ class FulfillmentRepository{
         <td><?php echo $fulfillment_item-> get_other_cost(); ?></td>
         <td><?php echo $fulfillment_item-> get_real_cost(); ?></td>
         <td><?php echo $fulfillment_item-> get_payment_term(); ?></td>
-        <td class="text-center"><?php echo $fulfillment_item-> get_net30_cc() ? '<i class="fas fa-check text-success"></i>' : '<i class="fas fa-times text-danger"></i>'; ?></td>
+        <td class="text-center">
+          <button type="button" class="btn btn-link" data-toggle="tooltip" data-html="true" title="<?php echo !empty($fulfillment_item-> get_comments()) ? nl2br($fulfillment_item-> get_comments()) : 'No comments'; ?>">
+            <i class="fas fa-comment fa-2x"></i>
+          </button>
+        </td>
       </tr>
       <?php
     }
@@ -179,7 +187,11 @@ class FulfillmentRepository{
           <td class="subitem<?php echo $fulfillment_subitems[0]-> get_id(); ?>"><?php echo $fulfillment_subitems[0]-> get_other_cost(); ?></td>
           <td class="subitem<?php echo $fulfillment_subitems[0]-> get_id(); ?>"><?php echo $fulfillment_subitems[0]-> get_real_cost(); ?></td>
           <td class="subitem<?php echo $fulfillment_subitems[0]-> get_id(); ?>"><?php echo $fulfillment_subitems[0]-> get_payment_term(); ?></td>
-          <td class="subitem<?php echo $fulfillment_subitems[0]-> get_id(); ?> text-center"><?php echo $fulfillment_subitems[0]-> get_net30_cc() ? '<i class="fas fa-check text-success"></i>' : '<i class="fas fa-times text-danger"></i>'; ?></td>
+          <td class="subitem<?php echo $fulfillment_subitems[0]-> get_id(); ?> text-center">
+            <button type="button" class="btn btn-link" data-toggle="tooltip" data-html="true" title="<?php echo !empty($fulfillment_subitems[0]-> get_comments()) ? nl2br($fulfillment_subitems[0]-> get_comments()): 'No comments'; ?>">
+              <i class="fas fa-comment fa-2x"></i>
+            </button>
+          </td>
           <td rowspan="<?php echo $fulfillment_subitems_quantity; ?>"><?php echo $subitem-> obtener_fulfillment_profit(); ?></td>
           <?php
         ?>
@@ -199,7 +211,11 @@ class FulfillmentRepository{
           <td><?php echo $fulfillment_subitem-> get_other_cost(); ?></td>
           <td><?php echo $fulfillment_subitem-> get_real_cost(); ?></td>
           <td><?php echo $fulfillment_subitem-> get_payment_term(); ?></td>
-          <td class="text-center"><?php echo $fulfillment_subitem-> get_net30_cc() ? '<i class="fas fa-check text-success"></i>' : '<i class="fas fa-times text-danger"></i>'; ?></td>
+          <td class="text-center">
+            <button type="button" class="btn btn-link" data-toggle="tooltip" data-html="true" title="<?php echo !empty($fulfillment_subitem-> get_comments()) ? nl2br($fulfillment_subitem-> get_comments()) : 'No comments'; ?>">
+              <i class="fas fa-comment fa-2x"></i>
+            </button>
+          </td>
         </tr>
         <?php
       }

@@ -88,22 +88,20 @@ class FulfillmentAuditTrailRepository{
     <?php
   }
 
-  public static function edit_item_events($connection, $provider, $provider_original, $quantity, $quantity_original, $unit_cost, $unit_cost_original, $other_cost, $other_cost_original, $payment_term, $payment_term_original, $net_30, $net_30_original, $id_item, $id_rfq){
+  public static function edit_item_events($connection, $provider, $provider_original, $quantity, $quantity_original, $unit_cost, $unit_cost_original, $other_cost, $other_cost_original, $payment_term, $payment_term_original, $id_item, $id_rfq){
     self::create_audit_trail_item_modified($connection, 'Provider', $provider, $provider_original, $id_item, $id_rfq);
     self::create_audit_trail_item_modified($connection, 'Quantity', $quantity, $quantity_original, $id_item, $id_rfq);
     self::create_audit_trail_item_modified($connection, 'Unit Cost', $unit_cost, $unit_cost_original, $id_item, $id_rfq);
     self::create_audit_trail_item_modified($connection, 'Other Cost', $other_cost, $other_cost_original, $id_item, $id_rfq);
     self::create_audit_trail_item_modified($connection, 'Payment Term', $payment_term, $payment_term_original, $id_item, $id_rfq);
-    self::create_audit_trail_item_modified($connection, 'Net30/CC', $net_30, $net_30_original, $id_item, $id_rfq);
   }
 
-  public static function edit_subitem_events($connection, $provider, $provider_original, $quantity, $quantity_original, $unit_cost, $unit_cost_original, $other_cost, $other_cost_original, $payment_term, $payment_term_original, $net_30, $net_30_original, $id_subitem, $id_rfq){
+  public static function edit_subitem_events($connection, $provider, $provider_original, $quantity, $quantity_original, $unit_cost, $unit_cost_original, $other_cost, $other_cost_original, $payment_term, $payment_term_original, $id_subitem, $id_rfq){
     self::create_audit_trail_subitem_modified($connection, 'Provider', $provider, $provider_original, $id_subitem, $id_rfq);
     self::create_audit_trail_subitem_modified($connection, 'Quantity', $quantity, $quantity_original, $id_subitem, $id_rfq);
     self::create_audit_trail_subitem_modified($connection, 'Unit Cost', $unit_cost, $unit_cost_original, $id_subitem, $id_rfq);
     self::create_audit_trail_subitem_modified($connection, 'Other Cost', $other_cost, $other_cost_original, $id_subitem, $id_rfq);
     self::create_audit_trail_subitem_modified($connection, 'Payment Term', $payment_term, $payment_term_original, $id_subitem, $id_rfq);
-    self::create_audit_trail_subitem_modified($connection, 'Net30/CC', $net_30, $net_30_original, $id_subitem, $id_rfq);
   }
 
   public static function edit_service_events($connection, $provider, $provider_original, $quantity, $quantity_original, $unit_cost, $unit_cost_original, $other_cost, $other_cost_original, $payment_term, $payment_term_original, $id_service, $id_rfq){
