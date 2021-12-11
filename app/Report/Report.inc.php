@@ -79,19 +79,19 @@ class Report{
         <i class="fas fa-square text-primary"></i> Total Cost: $ <?php echo number_format($total['total_cost'], 2); ?> <br>
         <i class="fas fa-square text-primary"></i> Total Price: $ <?php echo number_format($total['total_price'], 2); ?> <br>
         <i class="fas fa-square text-primary"></i> Total Profit: $ <?php echo number_format($total_profit = $total['total_price'] - $total['total_cost'], 2); ?> <br>
-        <i class="fas fa-square text-primary"></i> Total Profit(%): <?php echo number_format(100*($total_profit/$total['total_price']), 2); ?>
+        <i class="fas fa-square text-primary"></i> Total Profit(%): <?php echo $total['total_price'] ? number_format(100*($total_profit/$total['total_price']), 2) : 0; ?>
       </div>
       <div class="col-md-4">
         <i class="fas fa-square text-warning"></i> Total Cost: $ <?php echo number_format($total['re_quote_total_cost'], 2); ?> <br>
         <i class="fas fa-square text-warning"></i> Total Price: $ <?php echo number_format($total['total_price'], 2); ?> <br>
         <i class="fas fa-square text-warning"></i> Total Profit: $ <?php echo number_format($re_quote_total_profit = $total['total_price'] - $total['re_quote_total_cost'], 2); ?> <br>
-        <i class="fas fa-square text-warning"></i> Total Profit(%): <?php echo number_format(100*($re_quote_total_profit/$total['total_price']), 2); ?>
+        <i class="fas fa-square text-warning"></i> Total Profit(%): <?php echo $total['total_price'] ? number_format(100*($re_quote_total_profit/$total['total_price']), 2) : 0; ?>
       </div>
       <div class="col-md-4">
         <i class="fas fa-square text-success"></i> Total Cost: $ <?php echo number_format($total['fulfillment_total_cost'], 2); ?> <br>
         <i class="fas fa-square text-success"></i> Total Price: $ <?php echo number_format($total['total_price'], 2); ?> <br>
         <i class="fas fa-square text-success"></i> Total Profit: $ <?php echo number_format($fulfillment_total_profit = $total['total_price'] - $total['fulfillment_total_cost'], 2); ?> <br>
-        <i class="fas fa-square text-success"></i> Total Profit(%): <?php echo number_format(100*($fulfillment_total_profit/$total['total_price']), 2); ?>
+        <i class="fas fa-square text-success"></i> Total Profit(%): <?php echo $total['total_price'] ? number_format(100*($fulfillment_total_profit/$total['total_price']), 2) : 0; ?>
       </div>
     </div>
     <?php
@@ -175,7 +175,7 @@ class Report{
         <i class="fas fa-square text-primary"></i> Total Cost: $ <?php echo number_format($total['total_cost'], 2); ?> <br>
         <i class="fas fa-square text-primary"></i> Total Price: $ <?php echo number_format($total['total_price'], 2); ?> <br>
         <i class="fas fa-square text-primary"></i> Total Profit: $ <?php echo number_format($total_profit = $total['total_price'] - $total['total_cost'], 2); ?> <br>
-        <i class="fas fa-square text-primary"></i> Total Profit(%): <?php echo number_format(100*($total_profit/$total['total_price']), 2); ?>
+        <i class="fas fa-square text-primary"></i> Total Profit(%): <?php echo $total['total_price'] ? number_format(100*($total_profit/$total['total_price']), 2) : 0; ?>
       </div>
     </div>
     <?php
@@ -358,13 +358,13 @@ class Report{
         <i class="fas fa-square text-primary"></i> Total Cost: $ <?php echo number_format($total['total_cost'], 2); ?> <br>
         <i class="fas fa-square text-primary"></i> Total Price: $ <?php echo number_format($total['total_price'], 2); ?> <br>
         <i class="fas fa-square text-primary"></i> Total Profit: $ <?php echo number_format($total_profit = $total['total_price'] - $total['total_cost'], 2); ?> <br>
-        <i class="fas fa-square text-primary"></i> Total Profit(%): <?php echo number_format(100*($total_profit/$total['total_price']), 2); ?>
+        <i class="fas fa-square text-primary"></i> Total Profit(%): <?php echo $total['total_price'] ? number_format(100*($total_profit/$total['total_price']), 2) : 0; ?>
       </div>
       <div class="col-md-6">
         <i class="fas fa-square text-warning"></i> Total Cost: $ <?php echo number_format($total['re_quote_total_cost'], 2); ?> <br>
         <i class="fas fa-square text-warning"></i> Total Price: $ <?php echo number_format($total['total_price'], 2); ?> <br>
         <i class="fas fa-square text-warning"></i> Total Profit: $ <?php echo number_format($re_quote_total_profit = $total['total_price'] - $total['re_quote_total_cost'], 2); ?> <br>
-        <i class="fas fa-square text-warning"></i> Total Profit(%): <?php echo number_format(100*($re_quote_total_profit/$total['total_price']), 2); ?>
+        <i class="fas fa-square text-warning"></i> Total Profit(%): <?php echo $total['total_price'] ?  number_format(100*($re_quote_total_profit/$total['total_price']), 2) : 0; ?>
       </div>
     </div>
     <?php
@@ -465,13 +465,13 @@ class Report{
         <i class="fas fa-square text-primary"></i> Total Cost: $ <?php echo number_format($total['total_cost'], 2); ?> <br>
         <i class="fas fa-square text-primary"></i> Total Price: $ <?php echo number_format($total['total_price'], 2); ?> <br>
         <i class="fas fa-square text-primary"></i> Total Profit: $ <?php echo number_format($total_profit = $total['total_price'] - $total['total_cost'], 2); ?> <br>
-        <i class="fas fa-square text-primary"></i> Total Profit(%): <?php echo number_format(100*($total_profit/$total['total_price']), 2); ?>
+        <i class="fas fa-square text-primary"></i> Total Profit(%): <?php echo $total['total_price'] ? number_format(100*($total_profit/$total['total_price']), 2) : 0; ?>
       </div>
       <div class="col-md-6">
         <i class="fas fa-square text-warning"></i> Total Cost: $ <?php echo number_format($total['re_quote_total_cost'], 2); ?> <br>
         <i class="fas fa-square text-warning"></i> Total Price: $ <?php echo number_format($total['total_price'], 2); ?> <br>
         <i class="fas fa-square text-warning"></i> Total Profit: $ <?php echo number_format($re_quote_total_profit = $total['total_price'] - $total['re_quote_total_cost'], 2); ?> <br>
-        <i class="fas fa-square text-warning"></i> Total Profit(%): <?php echo number_format(100*($re_quote_total_profit/$total['total_price']), 2); ?>
+        <i class="fas fa-square text-warning"></i> Total Profit(%): <?php echo $total['total_price'] ? number_format(100*($re_quote_total_profit/$total['total_price']), 2) : 0; ?>
       </div>
     </div>
     <?php

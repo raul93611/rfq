@@ -29,7 +29,7 @@
                       <option value="award" <?php echo $report == 'award' ? 'selected' : ''; ?>>Award</option>
                       <option value="submitted" <?php echo $report == 'submitted' ? 'selected' : ''; ?>>Submitted</option>
                       <option value="re_quote" <?php echo $report == 're_quote' ? 'selected' : ''; ?>>Re-Quote</option>
-                      <option value="fulfillment_pending" <?php echo $report == 'fulfillment_pending' ? 'selected' : ''; ?>>Fulfillment pending</option>
+                      <option value="fulfillment_pending" <?php echo $report == 'fulfillment_pending' ? 'selected' : ''; ?>>Fulfillment Partial Invoices</option>
                     </select>
                   </div>
                 </div>
