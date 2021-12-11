@@ -103,6 +103,9 @@ include_once 'app/TaskComment/TaskCommentRepository.inc.php';
 
 include_once 'app/Fulfillment/FulfillmentAuditTrailRepository.inc.php';
 
+include_once 'app/TypeOfContract/TypeOfContract.inc.php';
+include_once 'app/TypeOfContract/TypeOfContractRepository.inc.php';
+
 $componentes_url = parse_url($_SERVER['REQUEST_URI']);
 $ruta = $componentes_url['path'];
 

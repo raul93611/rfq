@@ -58,6 +58,7 @@ CREATE TABLE rfq(
   fulfillment_pending TINYINT,
   fulfillment_shipping_cost DECIMAL(10,2),
   fulfillment_shipping VARCHAR(255),
+  type_of_contract VARCHAR(255),
   PRIMARY KEY(id),
   FOREIGN KEY(id_usuario)
       REFERENCES usuarios(id)
@@ -381,6 +382,20 @@ CREATE TABLE payment_terms(
   payment_term VARCHAR(255) NOT NULL,
   PRIMARY KEY(id)
 );
+
+CREATE TABLE type_of_contracts (
+  id INT NOT NULL AUTO_INCREMENT UNIQUE,
+  type_of_contract VARCHAR(255) NOT NULL,
+  PRIMARY KEY(id)
+);
+
+INSERT INTO type_of_contracts (type_of_contract)
+VALUES
+('RFQ'),
+('RFP Maintenance'),
+('RFP Installation'),
+('Professional Services'),
+('Moving and Logistics');
 
 CREATE TABLE tasks(
   id INT NOT NULL AUTO_INCREMENT UNIQUE,

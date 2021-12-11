@@ -43,6 +43,7 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
     }else if(!$cotizacion_recuperada-> obtener_fullfillment()){
       if(isset($_POST['fulfillment']) && $_POST['fulfillment'] == 'si'){
         RepositorioRfq::check_fulfillment_and_date(Conexion::obtener_conexion(), $_POST['id_rfq']);
+        RepositorioRfq::set_type_of_contract(Conexion::obtener_conexion(), $_POST['type_of_contract'], $_POST['id_rfq']);
         $fulfillment_users = RepositorioUsuario::get_fulfillment_users(Conexion::obtener_conexion());
         Email::send_email_fulfillment_quote($fulfillment_users, $cotizacion_recuperada);
         AuditTrailRepository::quote_status_audit_trail(Conexion::obtener_conexion(), 'Fulfillment', $_POST['id_rfq']);

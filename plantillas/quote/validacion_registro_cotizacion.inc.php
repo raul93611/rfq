@@ -49,6 +49,7 @@ if (isset($_POST['registrar_cotizacion'])) {
       null,
       0,
       0,
+      null,
       null
     );
     list($cotizacion_insertada, $id_rfq) = RepositorioRfq::insertar_cotizacion(Conexion::obtener_conexion(), $cotizacion);

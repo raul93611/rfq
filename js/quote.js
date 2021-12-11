@@ -313,4 +313,17 @@ $(document).ready(function () {
     $('#total_quantity').html(total_quantity);
     $('#total_additional').html('$ ' + total_additional);
   });
+
+  const fulfillmentCheckbox = $('#fulfillment');
+  const typeOfContractModal = $('#type_of_contract_modal');
+  const typeOfContractSelect = $('select[name="type_of_contract"]');
+
+  fulfillmentCheckbox.change(function () {
+    if($(this).is(':checked')){
+      typeOfContractModal.modal({
+        backdrop: 'static',
+        keyboard: false
+      });
+    };
+  })
 });
