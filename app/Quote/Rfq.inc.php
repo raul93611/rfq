@@ -43,6 +43,7 @@ class Rfq {
   private $fulfillment_shipping_cost;
   private $fulfillment_shipping;
   private $type_of_contract;
+  private $net30_fulfillment;
 
   public function __construct($id,
     $id_usuario,
@@ -86,7 +87,8 @@ class Rfq {
     $fulfillment_pending,
     $fulfillment_shipping_cost,
     $fulfillment_shipping,
-    $type_of_contract
+    $type_of_contract,
+    $net30_fulfillment
   ) {
     $this->id = $id;
     $this->id_usuario = $id_usuario;
@@ -131,6 +133,7 @@ class Rfq {
     $this-> fulfillment_shipping_cost = $fulfillment_shipping_cost;
     $this-> fulfillment_shipping = $fulfillment_shipping;
     $this-> type_of_contract = $type_of_contract;
+    $this-> net30_fulfillment = $net30_fulfillment;
   }
 
   public function obtener_id() {
@@ -358,6 +361,10 @@ class Rfq {
 
   public function obtener_type_of_contract(){
     return $this-> type_of_contract;
+  }
+
+  public function obtener_net30_fulfillment(){
+    return $this-> net30_fulfillment;
   }
 }
 ?>

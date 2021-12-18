@@ -44,6 +44,7 @@ $cotizacion_copia = new Rfq('',
   0,
   0,
   null,
+  null,
   null
 );
 list($cotizacion_insertada, $id_rfq_copia) = RepositorioRfq::insertar_cotizacion(Conexion::obtener_conexion(), $cotizacion_copia);

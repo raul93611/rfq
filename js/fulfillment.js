@@ -1,5 +1,26 @@
 $(document).ready(function () {
-  // $('[data-toggle="tooltip"]').tooltip();
+  const net30Checkbox = $('#net30_cc');
+  const fulfillmentPage = $('#fulfillment_page');
+  let net30Fulfillment;
+  fulfillmentPage.on('change', '#net30_cc', function(){
+    if($(this).is(':checked')){
+      net30Fulfillment = 1;
+    }else{
+      net30Fulfillment = 0;
+    }
+    $.ajax({
+      url: '/rfq/save_net_30/',
+      data: {
+        id_rfq: $(this).attr('data'),
+        value: net30Fulfillment
+      },
+      type: 'POST',
+      success: function(res){
+        $('#fulfillment_page').load('/rfq/load_fulfillment_page/' + res.id_rfq);
+      }
+    });
+  });
+  /***********************************TOOLTIP INITIALIZATION******************/
   $('body').tooltip({
     selector: '[data-toggle="tooltip"]',
     trigger: 'click',

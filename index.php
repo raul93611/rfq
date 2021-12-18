@@ -271,6 +271,9 @@ if ($partes_ruta[0] == 'rfq') {
       case 'load_fulfillment_audit_trails':
         $ruta_elegida = 'scripts/fulfillment/load_fulfillment_audit_trails.php';
         break;
+      case 'save_net_30':
+        $ruta_elegida = 'scripts/fulfillment/save_net_30.php';
+        break;
     }
   } else if (count($partes_ruta) == 3) {
     switch ($partes_ruta[1]) {

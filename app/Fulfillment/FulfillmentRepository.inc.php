@@ -7,6 +7,11 @@ class FulfillmentRepository{
     Conexion::cerrar_conexion();
     if(count($items)){
       ?>
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" data="<?php echo $id_rfq; ?>" class="custom-control-input" id="net30_cc" <?php echo $quote-> obtener_net30_fulfillment() ? 'checked' : ''; ?>>
+        <label class="custom-control-label" for="net30_cc">Net30/CC</label>
+      </div>
+      <br>
       <div class="table-responsive">
         <table id="fulfillment_items_table" class="table table-bordered table-hover">
           <thead>

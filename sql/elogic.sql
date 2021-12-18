@@ -59,6 +59,7 @@ CREATE TABLE rfq(
   fulfillment_shipping_cost DECIMAL(10,2),
   fulfillment_shipping VARCHAR(255),
   type_of_contract VARCHAR(255),
+  net30_fulfillment TINYINT NOT NULL,
   PRIMARY KEY(id),
   FOREIGN KEY(id_usuario)
       REFERENCES usuarios(id)
