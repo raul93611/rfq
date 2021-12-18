@@ -57,12 +57,10 @@
           <option>GSA-Buy</option>
           <option value="FedBid">Unison</option>
           <option>E-mails</option>
-          <option>Mailbox</option>
-          <option>FindFRP</option>
           <option>Embassies</option>
           <option value="FBO">SAM</option>
-          <option>Chemonics</option>
           <option>Ebay & Amazon</option>
+          <option>Seaport</option>
           <option>Stars III</option>
         </select>
       </div>

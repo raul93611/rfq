@@ -129,6 +129,12 @@
               </a>
             </li>
             <li class="nav-item">
+              <a href="<?php echo SEAPORT; ?>" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Seaport</p>
+              </a>
+            </li>
+            <li class="nav-item">
               <a href="<?php echo CHEMONICS; ?>" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Chemonics</p>
@@ -200,6 +206,12 @@
               </a>
             </li>
             <li class="nav-item">
+              <a href="<?php echo SEAPORT_COMPLETADOS; ?>" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Seaport</p>
+              </a>
+            </li>
+            <li class="nav-item">
               <a href="<?php echo STARSIII_COMPLETADOS; ?>" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Stars III</p>
@@ -259,6 +271,12 @@
               </a>
             </li>
             <li class="nav-item">
+              <a href="<?php echo SEAPORT_SUBMITTED; ?>" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Seaport</p>
+              </a>
+            </li>
+            <li class="nav-item">
               <a href="<?php echo STARSIII_SUBMITTED; ?>" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Stars III</p>
@@ -315,6 +333,12 @@
               <a href="<?php echo FBO_AWARD; ?>" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>SAM</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="<?php echo SEAPORT_AWARD; ?>" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Seaport</p>
               </a>
             </li>
             <li class="nav-item">
