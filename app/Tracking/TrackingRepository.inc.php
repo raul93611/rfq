@@ -15,7 +15,7 @@ class TrackingRepository{
             <tr>
               <th class="thin">OPTIONS</th>
               <th class="thin">#</th>
-              <th class="description">PROJECT SPECIFICATIONS</th>
+              <th class="description">E-LOGIC PROPOSAL</th>
               <th class="thin">QTY(ordered)</th>
               <th class="thin">OPTIONS</th>
               <th class="thin">QTY(shipped)</th>

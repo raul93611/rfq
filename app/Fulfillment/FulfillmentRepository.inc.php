@@ -18,7 +18,7 @@ class FulfillmentRepository{
             <tr>
               <th class="thin">OPTIONS</th>
               <th class="thin">#</th>
-              <th class="description">PROJECT SPECIFICATIONS</th>
+              <th class="description">E-LOGIC PROPOSAL</th>
               <th class="thin">QTY</th>
               <th class="thin">UNIT PRICE</th>
               <th class="thin">TOTAL PRICE</th>
