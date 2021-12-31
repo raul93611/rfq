@@ -18,7 +18,7 @@ class TaskCommentRepository{
 
   public static function validate($request){
     $comment = Input::test_input($request['comment']);
-    $task_comment = !empty($comment) ?  new TaskComment('', $request['id_task'], $_SESSION['id_usuario'], $comment, '') : false;
+    $task_comment = !empty($comment) ?  new TaskComment('', $request['id_task'], $_SESSION['user']-> obtener_id(), $comment, '') : false;
 
     return $task_comment;
   }

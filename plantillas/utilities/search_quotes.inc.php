@@ -2,7 +2,7 @@
 $cotizaciones = [];
 if(isset($_POST['buscar'])){
   Conexion::abrir_conexion();
-  $cotizaciones = RepositorioRfq::obtener_resultados_busqueda(Conexion::obtener_conexion(), $_POST['termino_busqueda'], $_SESSION['cargo'], $_SESSION['id_usuario']);
+  $cotizaciones = RepositorioRfq::obtener_resultados_busqueda(Conexion::obtener_conexion(), $_POST['termino_busqueda']);
   Conexion::cerrar_conexion();
 }
 ?>

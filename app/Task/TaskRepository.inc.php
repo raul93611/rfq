@@ -117,7 +117,7 @@ class TaskRepository{
       try{
         $sql = 'SELECT * FROM tasks WHERE status = "todo" AND assigned_user = :assigned_user ORDER BY id DESC';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':assigned_user', $_SESSION['id_usuario'], PDO::PARAM_STR);
+        $sentence-> bindParam(':assigned_user', $_SESSION['user']-> obtener_id(), PDO::PARAM_STR);
         $sentence-> execute();
         $tasks = self::array_to_object($sentence);
       }catch(PDOException $ex){
@@ -133,7 +133,7 @@ class TaskRepository{
       try{
         $sql = 'SELECT * FROM tasks WHERE status = "in_progress" AND assigned_user = :assigned_user ORDER BY id DESC';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':assigned_user', $_SESSION['id_usuario'], PDO::PARAM_STR);
+        $sentence-> bindParam(':assigned_user', $_SESSION['user']-> obtener_id(), PDO::PARAM_STR);
         $sentence-> execute();
         $tasks = self::array_to_object($sentence);
       }catch(PDOException $ex){
@@ -149,7 +149,7 @@ class TaskRepository{
       try{
         $sql = 'SELECT * FROM tasks WHERE status = "done" AND assigned_user = :assigned_user ORDER BY id DESC';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':assigned_user', $_SESSION['id_usuario'], PDO::PARAM_STR);
+        $sentence-> bindParam(':assigned_user', $_SESSION['user']-> obtener_id(), PDO::PARAM_STR);
         $sentence-> execute();
         $tasks = self::array_to_object($sentence);
       }catch(PDOException $ex){

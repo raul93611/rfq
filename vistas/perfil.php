@@ -38,7 +38,7 @@ switch ($gestor_actual) {
     include_once 'plantillas/re_quote/edit_re_quote_subitem_provider.inc.php';
     break;
   case 'registro':
-    if ($_SESSION['cargo'] == 1) {
+    if ($_SESSION['user']-> is_admin()) {
       include_once 'plantillas/user/registro.inc.php';
     } else {
       include_once 'plantillas/utilities/muro.inc.php';
@@ -46,6 +46,9 @@ switch ($gestor_actual) {
     break;
   case 'search_quotes':
     include_once 'plantillas/utilities/search_quotes.inc.php';
+    break;
+  case 'users':
+    include_once 'plantillas/utilities/muro_admin.inc.php';
     break;
   case 'employee_docs_page':
     include_once 'plantillas/utilities/employee_docs_page.inc.php';

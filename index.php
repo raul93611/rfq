@@ -1,8 +1,6 @@
 <?php
 // error_reporting(E_ALL);
 // ini_set('display_errors', '1');
-session_save_path('temp');
-session_start();
 include_once 'app/Bootstrap/config.inc.php';
 include_once 'app/Bootstrap/Conexion.inc.php';
 include_once 'app/Bootstrap/ControlSesion.inc.php';
@@ -105,6 +103,9 @@ include_once 'app/Fulfillment/FulfillmentAuditTrailRepository.inc.php';
 
 include_once 'app/TypeOfContract/TypeOfContract.inc.php';
 include_once 'app/TypeOfContract/TypeOfContractRepository.inc.php';
+
+session_start();
+session_save_path('temp');
 
 $componentes_url = parse_url($_SERVER['REQUEST_URI']);
 $ruta = $componentes_url['path'];
@@ -282,6 +283,9 @@ if ($partes_ruta[0] == 'rfq') {
       switch ($partes_ruta[2]) {
         case 'registro':
           $gestor_actual = 'registro';
+          break;
+        case 'users':
+          $gestor_actual = 'users';
           break;
         case 'search_quotes':
           $gestor_actual = 'search_quotes';

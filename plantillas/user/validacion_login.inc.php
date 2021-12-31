@@ -4,16 +4,11 @@ if(isset($_POST['iniciar_sesion'])){
   $validador = new ValidadorLogin($_POST['nombre_usuario'], $_POST['password'], Conexion::obtener_conexion());
   Conexion::cerrar_conexion();
   if($validador-> obtener_error() == '' && !is_null($validador-> obtener_usuario())){
-    ControlSesion::iniciar_sesion($validador-> obtener_usuario()-> obtener_id(), $validador-> obtener_usuario()-> obtener_nombre_usuario(), $validador-> obtener_usuario()-> obtener_cargo());
-    switch($_SESSION['cargo']){
-      case 1:
-      case 2:
-      case 4:
-        Redireccion::redirigir1(PERFIL);
-        break;
-      case 3:
-        Redireccion::redirigir1(CHARTS);
-        break;
+    ControlSesion::iniciar_sesion($validador-> obtener_usuario());
+    if($_SESSION['user']-> is_admin() || $_SESSION['user']-> is_fulfillment() || $_SESSION['user']-> is_accounting()){
+      Redireccion::redirigir1(PERFIL);
+    }else if($_SESSION['user']-> is_rfq()){
+      Redireccion::redirigir1(CHARTS);
     }
   }
 }

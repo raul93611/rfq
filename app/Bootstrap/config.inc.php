@@ -10,6 +10,7 @@ define('ERROR', SERVIDOR . 'error');
 define('PERFIL', SERVIDOR . 'perfil/');
 define('LOGOUT', SERVIDOR . 'logout');
 define('REGISTRO', PERFIL . 'registro');
+define('USERS', PERFIL . 'users');
 define('EDIT_USER', PERFIL . 'edit_user/');
 define('DISABLE_USER', SERVIDOR . 'disable_user/');
 define('ENABLE_USER', SERVIDOR . 'enable_user/');

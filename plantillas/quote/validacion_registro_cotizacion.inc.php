@@ -9,7 +9,7 @@ if (isset($_POST['registrar_cotizacion'])) {
     Conexion::abrir_conexion();
     $cotizacion = new Rfq(
       '',
-      $_SESSION['id_usuario'],
+      $_SESSION['user']-> obtener_id(),
       $usuario_designado,
       $_POST['canal'],
       $validador->obtener_email_code(),

@@ -43,7 +43,35 @@ class Usuario{
   }
 
   public function obtener_cargo(){
-    return $this-> cargo;
+    return explode(',', $this-> cargo);
+  }
+
+  public function is_admin(){
+    if(in_array(1, $this-> obtener_cargo())){
+      return true;
+    }
+    return false;
+  }
+
+  public function is_fulfillment(){
+    if(in_array(2, $this-> obtener_cargo())){
+      return true;
+    }
+    return false;
+  }
+
+  public function is_rfq(){
+    if(in_array(3, $this-> obtener_cargo())){
+      return true;
+    }
+    return false;
+  }
+
+  public function is_accounting(){
+    if(in_array(4, $this-> obtener_cargo())){
+      return true;
+    }
+    return false;
   }
 
   public function obtener_email(){
@@ -59,20 +87,23 @@ class Usuario{
   }
 
   public function obtener_role(){
-    switch ($this-> cargo) {
-      case 2:
-        $cargo = 'Fulfillment';
+    $display_role = [];
+    foreach ($this-> obtener_cargo() as $key => $role) {
+      switch ($role) {
+        case 2:
+        $display_role[] = 'Fulfillment';
         break;
-      case 3:
-        $cargo = 'RFQ';
+        case 3:
+        $display_role[] = 'RFQ';
         break;
-      case 4:
-        $cargo = 'Accounting';
+        case 4:
+        $display_role[] = 'Accounting';
         break;
-      default:
+        default:
         break;
+      }
     }
-    return $cargo;
+    return implode(',', $display_role);
   }
 }
 ?>

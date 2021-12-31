@@ -3,7 +3,7 @@ session_start();
 Conexion::abrir_conexion();
 $cotizacion = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
 $cotizacion_copia = new Rfq('',
-  $_SESSION['id_usuario'],
+  $_SESSION['user']-> obtener_id(),
   $cotizacion-> obtener_usuario_designado(),
   $cotizacion-> obtener_canal(),
   $cotizacion-> obtener_email_code() . '(copia)',

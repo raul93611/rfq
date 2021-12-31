@@ -378,7 +378,7 @@ class RepositorioUsuario {
     $usuarios = [];
     if (isset($conexion)) {
       try {
-        $sql = "SELECT * FROM usuarios WHERE cargo = 3 AND status = 1";
+        $sql = "SELECT * FROM usuarios WHERE cargo LIKE '%3%' AND status = 1";
         $sentencia = $conexion->prepare($sql);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(PDO::FETCH_ASSOC);
@@ -398,7 +398,7 @@ class RepositorioUsuario {
     $usuarios = [];
     if (isset($conexion)) {
       try {
-        $sql = "SELECT * FROM usuarios WHERE cargo = 2 AND status = 1";
+        $sql = "SELECT * FROM usuarios WHERE cargo LIKE '%2%' AND status = 1";
         $sentencia = $conexion->prepare($sql);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(PDO::FETCH_ASSOC);
@@ -418,7 +418,7 @@ class RepositorioUsuario {
     $usuarios = [];
     if (isset($conexion)) {
       try {
-        $sql = "SELECT * FROM usuarios WHERE cargo = 4 AND status = 1";
+        $sql = "SELECT * FROM usuarios WHERE cargo LIKE '%4%' AND status = 1";
         $sentencia = $conexion->prepare($sql);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(PDO::FETCH_ASSOC);

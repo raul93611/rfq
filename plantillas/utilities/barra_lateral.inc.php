@@ -9,7 +9,7 @@
         <img src="<?php echo RUTA_IMG; ?>user.png" class="img-circle elevation-2" alt="User Image">
       </div>
       <div class="info">
-        <a href="#" class="d-block"><?php echo $_SESSION['nombre_usuario']; ?></a>
+        <a href="#" class="d-block"><?php echo $_SESSION['user']-> obtener_nombre_usuario(); ?></a>
       </div>
     </div>
     <nav class="mt-2">
@@ -50,13 +50,30 @@
           </a>
         </li>
         <?php
-        if ($_SESSION['cargo'] == 1) {
+        if ($_SESSION['user']-> is_admin()) {
         ?>
-        <li class="nav-item has-treeview menu-open">
-          <a href="<?php echo REGISTRO; ?>" class="nav-link <?php echo $gestor_actual == 'registro' || $gestor_actual == 'registro_correcto' ? 'active' : ''; ?>">
-            <i class="fa fa-users nav-icon"></i>
-            <p>User register</p>
+        <li class="nav-item <?php echo $gestor_actual == 'edit_user' || $gestor_actual == 'users' || $gestor_actual == 'registro' || $gestor_actual == 'registro_correcto' ? 'menu-open' : ''; ?>">
+          <a href="#" class="nav-link <?php echo $gestor_actual == 'edit_user' || $gestor_actual == 'users' || $gestor_actual == 'registro' || $gestor_actual == 'registro_correcto' ? 'active' : ''; ?>">
+            <i class="nav-icon fas fa-users"></i>
+            <p>
+              Users
+              <i class="right fa fa-angle-left"></i>
+            </p>
           </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="<?php echo USERS; ?>" class="nav-link <?php echo $gestor_actual == 'users' ? 'active' : ''; ?>">
+                <i class="far fa-circle nav-icon"></i>
+                <p>All Users</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="<?php echo REGISTRO; ?>" class="nav-link <?php echo $gestor_actual == 'registro' || $gestor_actual == 'registro_correcto' ? 'active' : ''; ?>">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Register</p>
+              </a>
+            </li>
+          </ul>
         </li>
         <?php
         }

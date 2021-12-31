@@ -2,7 +2,7 @@
 Conexion::abrir_conexion();
 $user = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), $id_user);
 Conexion::cerrar_conexion();
-if($_SESSION['cargo'] != 1){
+if(!$_SESSION['user']-> is_admin()){
   Redireccion::redirigir1(PERFIL);
 }
 ?>
@@ -21,20 +21,31 @@ if($_SESSION['cargo'] != 1){
     <input type="text" class="form-control" id="apellidos" name="apellidos" placeholder="Last names ..." required value="<?php echo $user-> obtener_apellidos(); ?>">
   </div>
   <div class="form-group">
-    <label for="cargo">Level:</label>
-    <select class="form-control" name="cargo" id="cargo">
-      <option value="2" <?php if($user-> obtener_cargo() == 2){echo 'selected';} ?>>Fulfillment</option>
-      <option value="3" <?php if($user-> obtener_cargo() == 3){echo 'selected';} ?>>RFQ</option>
-      <option value="4" <?php if($user-> obtener_cargo() == 4){echo 'selected';} ?>>Accounting</option>
-    </select>
-  </div>
-  <div class="form-group">
     <label for="email">Email:</label>
     <input type="email" class="form-control" id="email" name="email" placeholder="Email ..." required value="<?php echo $user-> obtener_email(); ?>">
   </div>
   <div class="form-group">
     <label for="password1">Password:</label>
     <input type="password" class="form-control" id="password1" name="password1" placeholder="Password">
+  </div>
+  <div class="form-group">
+    <label for="cargo">Roles:</label>
+    <div class="custom-control custom-checkbox">
+      <input type="checkbox" name="cargo[]" value="1" class="custom-control-input" id="admin" <?php echo $user-> is_admin() ? 'checked' : ''; ?>>
+      <label class="custom-control-label" for="admin">Admin</label>
+    </div>
+    <div class="custom-control custom-checkbox">
+      <input type="checkbox" name="cargo[]" value="3" class="custom-control-input" id="rfq" <?php echo $user-> is_rfq() ? 'checked' : ''; ?>>
+      <label class="custom-control-label" for="rfq">RFQ</label>
+    </div>
+    <div class="custom-control custom-checkbox">
+      <input type="checkbox" name="cargo[]" value="2" class="custom-control-input" id="fulfillment" <?php echo $user-> is_fulfillment() ? 'checked' : ''; ?>>
+      <label class="custom-control-label" for="fulfillment">Fulfillment</label>
+    </div>
+    <div class="custom-control custom-checkbox">
+      <input type="checkbox" name="cargo[]" value="4" class="custom-control-input" id="accounting" <?php echo $user-> is_accounting() ? 'checked' : ''; ?>>
+      <label class="custom-control-label" for="accounting">Accounting</label>
+    </div>
   </div>
 </div>
 <div class="card-footer">

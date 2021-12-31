@@ -5,7 +5,7 @@
         <div class="col-sm-6">
           <h1 class="m-0 text-dark">Hi,
             <?php
-            echo $_SESSION['nombre_usuario'];
+            echo $_SESSION['user']-> obtener_nombre_usuario();
             ?>
           </h1>
         </div>
