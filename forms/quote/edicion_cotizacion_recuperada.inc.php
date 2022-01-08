@@ -39,21 +39,6 @@
   ?>
   <input type="hidden" name="id_rfq" value="<?php echo $cotizacion_recuperada->obtener_id(); ?>">
   <?php
-  if($cotizacion_recuperada-> obtener_canal() == 'FedBid'){
-    ?>
-    <div class="row">
-      <div class="col-md-6">
-        <label for="total_cost_fedbid">Total cost:</label>
-        <input type="number" step=".01" name="total_cost_fedbid" class="form-control form-control-sm" value="<?php echo $cotizacion_recuperada-> obtener_total_cost(); ?>">
-      </div>
-      <div class="col-md-6">
-        <label for="total_price_fedbid">Total price:</label>
-        <input type="number" step=".01" name="total_price_fedbid" class="form-control form-control-sm" value="<?php echo $cotizacion_recuperada-> obtener_total_price(); ?>">
-      </div>
-    </div>
-    <br>
-    <?php
-  }
   if($cotizacion_recuperada-> obtener_canal() == 'Chemonics' || $cotizacion_recuperada-> obtener_canal() == 'Ebay & Amazon'){
     ?>
     <div class="row">
