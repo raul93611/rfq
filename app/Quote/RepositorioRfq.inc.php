@@ -1456,7 +1456,7 @@ class RepositorioRfq {
     $quotes = [];
     if(isset($connection)){
       try{
-        $sql = 'SELECT * FROM rfq WHERE fullfillment = 1 AND invoice IS NULL OR invoice = 0';
+        $sql = 'SELECT * FROM rfq WHERE fullfillment = 1 AND (invoice IS NULL OR invoice = 0)';
         $sentence = $connection-> prepare($sql);
         $sentence-> execute();
         $quotes = self::array_to_object($sentence);
@@ -1519,7 +1519,7 @@ class RepositorioRfq {
     $quotes = [];
     if(isset($connection)){
       try{
-        $sql = 'SELECT * FROM rfq WHERE invoice = 1';
+        $sql = 'SELECT * FROM rfq WHERE invoice = 1 AND (submitted_invoice IS NULL OR submitted_invoice = 0)';
         $sentence = $connection-> prepare($sql);
         $sentence-> execute();
         $quotes = self::array_to_object($sentence);
