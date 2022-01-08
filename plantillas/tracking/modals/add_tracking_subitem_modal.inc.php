@@ -9,19 +9,21 @@
       </div>
       <div class="modal-body">
         <form id="add_tracking_subitem_form" method="post" enctype="multipart/form-data" action="<?php echo SAVE_TRACKING_SUBITEM; ?>">
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="quantity_shipped">Quantity(shipped):</label>
-                <input type="number" step=".01" class="form-control form-control-sm" name="quantity_shipped" id="quantity_shipped" value="0">
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="delivery_date">Delivery date:</label>
-                <input type="text" id="delivery_date_subitem" class="form-control form-control-sm" name="delivery_date" value="">
-              </div>
-            </div>
+          <div class="form-group">
+            <label for="quantity_shipped">Quantity(shipped):</label>
+            <input type="number" step=".01" class="form-control form-control-sm" name="quantity_shipped" id="quantity_shipped" value="0">
+          </div>
+          <div class="form-group">
+            <label for="delivery_date">Delivery date:</label>
+            <input type="text" id="delivery_date_subitem" class="form-control form-control-sm" name="delivery_date" value="">
+          </div>
+          <div class="form-group">
+            <label for="due_date">Due date:</label>
+            <input type="text" id="due_date" class="form-control form-control-sm" name="due_date" value="">
+          </div>
+          <div class="form-group">
+            <label for="carrier">Carrier:</label>
+            <input type="text" id="carrier" name="carrier" class="form-control form-control-sm" value="">
           </div>
           <div class="form-group">
             <label for="tracking_number">Tracking #:</label>
@@ -30,6 +32,10 @@
           <div class="form-group">
             <label for="signed_by">Signed by:</label>
             <input type="text" id="signed_by" name="signed_by" class="form-control form-control-sm" value="">
+          </div>
+          <div class="form-group">
+            <label for="comments">Comment:</label>
+            <textarea class="form-control form-control-sm" name="comments" rows="5" id="comments"></textarea>
           </div>
           <input type="hidden" id="id_subitem" name="id_subitem" value="">
         </form>

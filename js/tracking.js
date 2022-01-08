@@ -1,11 +1,16 @@
 $(document).ready(function () {
+  $('body').tooltip({
+    selector: '[data-toggle="tooltip"]',
+    trigger: 'click',
+    placement: 'left',
+  });
   /*********************************TRACKINGS*******************************/
   $('#tracking_box').on('click', '.add_tracking_button', function(){
     var id_item = $(this).attr('name');
     $('#new_tracking #id_item').val(id_item);
     $('#new_tracking').modal();
   });
-  $('#delivery_date').daterangepicker({
+  $('#delivery_date, #due_date').daterangepicker({
     singleDatePicker: true
   });
   $('#tracking_box').on('click', '.edit_tracking', function(){

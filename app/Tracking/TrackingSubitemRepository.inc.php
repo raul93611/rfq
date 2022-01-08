@@ -1,15 +1,34 @@
 <?php
 class TrackingSubitemRepository{
+  public static function array_to_object($sentence){
+    $objects = [];
+    while ($result = $sentence-> fetch(PDO::FETCH_ASSOC)) {
+      $objects[] = new TrackingSubitem($result['id'], $result['id_subitem'], $result['quantity'], $result['carrier'], $result['tracking_number'], $result['delivery_date'], $result['due_date'], $result['signed_by'], $result['comments']);
+    }
+
+    return $objects;
+  }
+
+  public static function single_result_to_object($sentence){
+    $result = $sentence-> fetch(PDO::FETCH_ASSOC);
+    $object = new TrackingSubitem($result['id'], $result['id_subitem'], $result['quantity'], $result['carrier'], $result['tracking_number'], $result['delivery_date'], $result['due_date'], $result['signed_by'], $result['comments']);
+
+    return $object;
+  }
+
   public static function insert_tracking($connection, $tracking){
     if(isset($connection)){
       try{
-        $sql = 'INSERT INTO trackings_subitems(id_subitem, quantity, tracking_number, delivery_date, signed_by) VALUES(:id_subitem, :quantity, :tracking_number, :delivery_date, :signed_by)';
+        $sql = 'INSERT INTO trackings_subitems(id_subitem, quantity, carrier, tracking_number, delivery_date, due_date, signed_by, comments) VALUES(:id_subitem, :quantity, :carrier, :tracking_number, :delivery_date, :due_date, :signed_by, :comments)';
         $sentence = $connection-> prepare($sql);
         $sentence-> bindParam(':id_subitem', $tracking-> get_id_subitem(), PDO::PARAM_STR);
         $sentence-> bindParam(':quantity', $tracking-> get_quantity(), PDO::PARAM_STR);
+        $sentence-> bindParam(':carrier', $tracking-> get_carrier(), PDO::PARAM_STR);
         $sentence-> bindParam(':tracking_number', $tracking-> get_tracking_number(), PDO::PARAM_STR);
         $sentence-> bindParam(':delivery_date', $tracking-> get_delivery_date(), PDO::PARAM_STR);
+        $sentence-> bindParam(':due_date', $tracking-> get_due_date(), PDO::PARAM_STR);
         $sentence-> bindParam(':signed_by', $tracking-> get_signed_by(), PDO::PARAM_STR);
+        $sentence-> bindParam(':comments', $tracking-> get_comments(), PDO::PARAM_STR);
         $sentence-> execute();
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -25,12 +44,7 @@ class TrackingSubitemRepository{
         $sentence = $connection-> prepare($sql);
         $sentence-> bindParam(':id_subitem', $id_subitem, PDO::PARAM_STR);
         $sentence-> execute();
-        $result = $sentence-> fetchAll(PDO::FETCH_ASSOC);
-        if(count($result)){
-          foreach ($result as $row) {
-            $trackings_subitems[] = new TrackingSubitem($row['id'], $row['id_subitem'], $row['quantity'], $row['tracking_number'], $row['delivery_date'], $row['signed_by']);
-          }
-        }
+        $trackings_subitems = self::array_to_object($sentence);
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
@@ -46,10 +60,7 @@ class TrackingSubitemRepository{
         $sentence = $connection-> prepare($sql);
         $sentence-> bindParam(':id_tracking_subitem', $id_tracking_subitem, PDO::PARAM_STR);
         $sentence-> execute();
-        $result = $sentence-> fetch(PDO::FETCH_ASSOC);
-        if(!empty($result)){
-          $tracking_subitem = new TrackingSubitem($result['id'], $result['id_subitem'], $result['quantity'], $result['tracking_number'], $result['delivery_date'], $result['signed_by']);
-        }
+        $tracking_subitem = self::single_result_to_object($sentence);
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
@@ -89,15 +100,18 @@ class TrackingSubitemRepository{
     return $sum_tracking_subitem;
   }
 
-  public static function update_tracking_subitem($connection, $quantity, $tracking_number, $delivery_date, $signed_by, $id_tracking_subitem){
+  public static function update_tracking_subitem($connection, $quantity, $carrier, $tracking_number, $delivery_date, $due_date, $signed_by, $comments, $id_tracking_subitem){
     if(isset($connection)){
       try{
-        $sql = 'UPDATE trackings_subitems SET quantity = :quantity, tracking_number = :tracking_number, delivery_date = :delivery_date, signed_by = :signed_by WHERE id = :id_tracking_subitem';
+        $sql = 'UPDATE trackings_subitems SET quantity = :quantity, carrier = :carrier, tracking_number = :tracking_number, delivery_date = :delivery_date, due_date = :due_date, signed_by = :signed_by, comments = :comments WHERE id = :id_tracking_subitem';
         $sentence = $connection-> prepare($sql);
         $sentence-> bindParam(':quantity', $quantity, PDO::PARAM_STR);
+        $sentence-> bindParam(':carrier', $carrier, PDO::PARAM_STR);
         $sentence-> bindParam(':tracking_number', $tracking_number, PDO::PARAM_STR);
         $sentence-> bindParam(':delivery_date', $delivery_date, PDO::PARAM_STR);
+        $sentence-> bindParam(':due_date', $due_date, PDO::PARAM_STR);
         $sentence-> bindParam(':signed_by', $signed_by, PDO::PARAM_STR);
+        $sentence-> bindParam(':comments', $comments, PDO::PARAM_STR);
         $sentence-> bindParam(':id_tracking_subitem', $id_tracking_subitem, PDO::PARAM_STR);
         $sentence-> execute();
       }catch(PDOException $ex){

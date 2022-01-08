@@ -1,5 +1,106 @@
 <?php
 class TrackingRepository{
+  public static function array_to_object($sentence){
+    $objects = [];
+    while ($result = $sentence-> fetch(PDO::FETCH_ASSOC)) {
+      $objects[] = new Tracking($result['id'], $result['id_item'], $result['quantity'], $result['carrier'], $result['tracking_number'], $result['delivery_date'], $result['due_date'], $result['signed_by'], $result['comments']);
+    }
+
+    return $objects;
+  }
+
+  public static function single_result_to_object($sentence){
+    $result = $sentence-> fetch(PDO::FETCH_ASSOC);
+    $object = new Tracking($result['id'], $result['id_item'], $result['quantity'], $result['carrier'], $result['tracking_number'], $result['delivery_date'], $result['due_date'], $result['signed_by'], $result['comments']);
+
+    return $object;
+  }
+
+  public static function get_all_trackings_by_id_item($connection, $id_item){
+    $trackings = [];
+    if(isset($connection)){
+      try{
+        $sql = 'SELECT * FROM trackings WHERE id_item = :id_item';
+        $sentence = $connection-> prepare($sql);
+        $sentence-> bindParam(':id_item', $id_item, PDO::PARAM_STR);
+        $sentence-> execute();
+        $trackings = self::array_to_object($sentence);
+      }catch(PDOException $ex){
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $trackings;
+  }
+
+  public static function get_tracking_by_id($connection, $id_tracking){
+    $tracking = null;
+    if(isset($connection)){
+      try{
+        $sql = 'SELECT * FROM trackings WHERE id = :id_tracking';
+        $sentence = $connection-> prepare($sql);
+        $sentence-> bindParam(':id_tracking', $id_tracking, PDO::PARAM_STR);
+        $sentence-> execute();
+        $tracking = self::single_result_to_object($sentence);
+      }catch(PDOException $ex){
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $tracking;
+  }
+
+  public static function insert_tracking($connection, $tracking){
+    if(isset($connection)){
+      try{
+        $sql = 'INSERT INTO trackings(id_item, quantity, carrier, tracking_number, delivery_date, due_date, signed_by, comments) VALUES(:id_item, :quantity, :carrier, :tracking_number, :delivery_date, :due_date, :signed_by, :comments)';
+        $sentence = $connection-> prepare($sql);
+        $sentence-> bindParam(':id_item', $tracking-> get_id_item(), PDO::PARAM_STR);
+        $sentence-> bindParam(':quantity', $tracking-> get_quantity(), PDO::PARAM_STR);
+        $sentence-> bindParam(':carrier', $tracking-> get_carrier(), PDO::PARAM_STR);
+        $sentence-> bindParam(':tracking_number', $tracking-> get_tracking_number(), PDO::PARAM_STR);
+        $sentence-> bindParam(':delivery_date', $tracking-> get_delivery_date(), PDO::PARAM_STR);
+        $sentence-> bindParam(':due_date', $tracking-> get_due_date(), PDO::PARAM_STR);
+        $sentence-> bindParam(':signed_by', $tracking-> get_signed_by(), PDO::PARAM_STR);
+        $sentence-> bindParam(':comments', $tracking-> get_comments(), PDO::PARAM_STR);
+        $sentence-> execute();
+      }catch(PDOException $ex){
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+  }
+
+  public static function update_tracking($connection, $quantity, $carrier, $tracking_number, $delivery_date, $due_date, $signed_by, $comments, $id_tracking){
+    if(isset($connection)){
+      try{
+        $sql = 'UPDATE trackings SET quantity = :quantity, carrier = :carrier, tracking_number = :tracking_number, delivery_date = :delivery_date, due_date = :due_date, signed_by = :signed_by, comments = :comments WHERE id = :id_tracking';
+        $sentence = $connection-> prepare($sql);
+        $sentence-> bindParam(':quantity', $quantity, PDO::PARAM_STR);
+        $sentence-> bindParam(':carrier', $carrier, PDO::PARAM_STR);
+        $sentence-> bindParam(':tracking_number', $tracking_number, PDO::PARAM_STR);
+        $sentence-> bindParam(':delivery_date', $delivery_date, PDO::PARAM_STR);
+        $sentence-> bindParam(':due_date', $due_date, PDO::PARAM_STR);
+        $sentence-> bindParam(':signed_by', $signed_by, PDO::PARAM_STR);
+        $sentence-> bindParam(':comments', $comments, PDO::PARAM_STR);
+        $sentence-> bindParam(':id_tracking', $id_tracking, PDO::PARAM_STR);
+        $sentence-> execute();
+      }catch(PDOException $ex){
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+  }
+
+  public static function delete_tracking($connection, $id_tracking){
+    if(isset($connection)){
+      try{
+        $sql = 'DELETE FROM trackings WHERE id = :id_tracking';
+        $sentence = $connection-> prepare($sql);
+        $sentence-> bindParam(':id_tracking', $id_tracking, PDO::PARAM_STR);
+        $sentence-> execute();
+      }catch(PDOException $ex){
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+  }
+
   public static function tracking_list_items($id_rfq){
     Conexion::abrir_conexion();
     $quote = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
@@ -19,9 +120,12 @@ class TrackingRepository{
               <th class="thin">QTY(ordered)</th>
               <th class="thin">OPTIONS</th>
               <th class="thin">QTY(shipped)</th>
+              <th>CARRIER</th>
               <th>TRACKING</th>
               <th>DELIVERY DATE</th>
+              <th>DUE DATE</th>
               <th>SIGNED BY</th>
+              <th>COMMENT</th>
             </tr>
           </thead>
           <tbody>
@@ -72,9 +176,16 @@ class TrackingRepository{
           <a href="#" data="<?php echo $trackings[0]-> get_id(); ?>" class="edit_tracking btn btn-warning"><i class="fas fa-pen"></i></a>
         </td>
         <td><?php echo $trackings[0]-> get_quantity(); ?></td>
+        <td><?php echo $trackings[0]-> get_carrier(); ?></td>
         <td><?php echo nl2br($trackings[0]-> get_tracking_number()); ?></td>
         <td><?php echo RepositorioComment::mysql_date_to_english_format($trackings[0]-> get_delivery_date()); ?></td>
+        <td><?php echo RepositorioComment::mysql_date_to_english_format($trackings[0]-> get_due_date()); ?></td>
         <td><?php echo $trackings[0]-> get_signed_by(); ?></td>
+        <td>
+          <button type="button" class="btn btn-link" data-toggle="tooltip" data-html="true" title="<?php echo !empty($trackings[0]-> get_comments()) ? nl2br($trackings[0]-> get_comments()) : 'No comments'; ?>">
+            <i class="fas fa-comment fa-2x"></i>
+          </button>
+        </td>
         <?php
       ?>
     </tr>
@@ -88,9 +199,16 @@ class TrackingRepository{
           <a href="#" data="<?php echo $tracking-> get_id(); ?>" class="edit_tracking btn btn-warning"><i class="fas fa-pen"></i></a>
         </td>
         <td><?php echo $tracking-> get_quantity(); ?></td>
+        <td><?php echo $tracking-> get_carrier(); ?></td>
         <td><?php echo nl2br($tracking-> get_tracking_number()); ?></td>
         <td><?php echo RepositorioComment::mysql_date_to_english_format($tracking-> get_delivery_date()); ?></td>
+        <td><?php echo RepositorioComment::mysql_date_to_english_format($tracking-> get_due_date()); ?></td>
         <td><?php echo $tracking-> get_signed_by(); ?></td>
+        <td>
+          <button type="button" class="btn btn-link" data-toggle="tooltip" data-html="true" title="<?php echo !empty($tracking-> get_comments()) ? nl2br($tracking-> get_comments()) : 'No comments'; ?>">
+            <i class="fas fa-comment fa-2x"></i>
+          </button>
+        </td>
       </tr>
       <?php
     }
@@ -107,33 +225,12 @@ class TrackingRepository{
     }
   }
 
-  public static function get_all_trackings_by_id_item($connection, $id_item){
-    $trackings = [];
-    if(isset($connection)){
-      try{
-        $sql = 'SELECT * FROM trackings WHERE id_item = :id_item';
-        $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_item', $id_item, PDO::PARAM_STR);
-        $sentence-> execute();
-        $result = $sentence-> fetchAll(PDO::FETCH_ASSOC);
-        if(count($result)){
-          foreach ($result as $row) {
-            $trackings[] = new Tracking($row['id'], $row['id_item'], $row['quantity'], $row['tracking_number'], $row['delivery_date'], $row['signed_by']);
-          }
-        }
-      }catch(PDOException $ex){
-        print 'ERROR:' . $ex->getMessage() . '<br>';
-      }
-    }
-    return $trackings;
-  }
-
   public static function tracking_list_subitem($subitem, $re_quote_subitem){
     if(!isset($subitem)){
       return;
     }
     Conexion::abrir_conexion();
-    $trackings_subitems = TrackingRepository::get_all_trackings_by_id_subitem(Conexion::obtener_conexion(), $subitem-> obtener_id());
+    $trackings_subitems = TrackingSubitemRepository::get_all_trackings_by_id_subitem(Conexion::obtener_conexion(), $subitem-> obtener_id());
     Conexion::cerrar_conexion();
     if(!count($trackings_subitems)){
       $trackings_quantity = 1;
@@ -162,9 +259,16 @@ class TrackingRepository{
             <a href="#" data="<?php echo $trackings_subitems[0]-> get_id(); ?>" class="edit_tracking_subitem btn btn-warning"><i class="fas fa-pen"></i></a>
           </td>
           <td><?php echo $trackings_subitems[0]-> get_quantity(); ?></td>
+          <td><?php echo $trackings_subitems[0]-> get_carrier(); ?></td>
           <td><?php echo nl2br($trackings_subitems[0]-> get_tracking_number()); ?></td>
           <td><?php echo RepositorioComment::mysql_date_to_english_format($trackings_subitems[0]-> get_delivery_date()); ?></td>
+          <td><?php echo RepositorioComment::mysql_date_to_english_format($trackings_subitems[0]-> get_due_date()); ?></td>
           <td><?php echo $trackings_subitems[0]-> get_signed_by(); ?></td>
+          <td>
+            <button type="button" class="btn btn-link" data-toggle="tooltip" data-html="true" title="<?php echo !empty($trackings_subitems[0]-> get_comments()) ? nl2br($trackings_subitems[0]-> get_comments()) : 'No comments'; ?>">
+              <i class="fas fa-comment fa-2x"></i>
+            </button>
+          </td>
           <?php
         ?>
       </tr>
@@ -178,98 +282,18 @@ class TrackingRepository{
             <a href="#" data="<?php echo $tracking-> get_id(); ?>" class="edit_tracking_subitem btn btn-warning"><i class="fas fa-pen"></i></a>
           </td>
           <td><?php echo $tracking-> get_quantity(); ?></td>
+          <td><?php echo $tracking-> get_carrier(); ?></td>
           <td><?php echo nl2br($tracking-> get_tracking_number()); ?></td>
           <td><?php echo RepositorioComment::mysql_date_to_english_format($tracking-> get_delivery_date()); ?></td>
+          <td><?php echo RepositorioComment::mysql_date_to_english_format($tracking-> get_due_date()); ?></td>
           <td><?php echo $tracking-> get_signed_by(); ?></td>
+          <td>
+            <button type="button" class="btn btn-link" data-toggle="tooltip" data-html="true" title="<?php echo !empty($tracking-> get_comments()) ? nl2br($tracking-> get_comments()) : 'No comments'; ?>">
+              <i class="fas fa-comment fa-2x"></i>
+            </button>
+          </td>
         </tr>
         <?php
-      }
-    }
-  }
-
-  public static function get_all_trackings_by_id_subitem($connection, $id_subitem){
-    $trackings_subitems = [];
-    if(isset($connection)){
-      try{
-        $sql = 'SELECT * FROM trackings_subitems WHERE id_subitem = :id_subitem';
-        $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_subitem', $id_subitem, PDO::PARAM_STR);
-        $sentence-> execute();
-        $result = $sentence-> fetchAll(PDO::FETCH_ASSOC);
-        if(count($result)){
-          foreach ($result as $row) {
-            $trackings_subitems[] = new TrackingSubitem($row['id'], $row['id_subitem'], $row['quantity'], $row['tracking_number'], $row['delivery_date'], $row['signed_by']);
-          }
-        }
-      }catch(PDOException $ex){
-        print 'ERROR:' . $ex->getMessage() . '<br>';
-      }
-    }
-    return $trackings_subitems;
-  }
-
-  public static function insert_tracking($connection, $tracking){
-    if(isset($connection)){
-      try{
-        $sql = 'INSERT INTO trackings(id_item, quantity, tracking_number, delivery_date, signed_by) VALUES(:id_item, :quantity, :tracking_number, :delivery_date, :signed_by)';
-        $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_item', $tracking-> get_id_item(), PDO::PARAM_STR);
-        $sentence-> bindParam(':quantity', $tracking-> get_quantity(), PDO::PARAM_STR);
-        $sentence-> bindParam(':tracking_number', $tracking-> get_tracking_number(), PDO::PARAM_STR);
-        $sentence-> bindParam(':delivery_date', $tracking-> get_delivery_date(), PDO::PARAM_STR);
-        $sentence-> bindParam(':signed_by', $tracking-> get_signed_by(), PDO::PARAM_STR);
-        $sentence-> execute();
-      }catch(PDOException $ex){
-        print 'ERROR:' . $ex->getMessage() . '<br>';
-      }
-    }
-  }
-
-  public static function get_tracking_by_id($connection, $id_tracking){
-    $tracking = null;
-    if(isset($connection)){
-      try{
-        $sql = 'SELECT * FROM trackings WHERE id = :id_tracking';
-        $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_tracking', $id_tracking, PDO::PARAM_STR);
-        $sentence-> execute();
-        $result = $sentence-> fetch(PDO::FETCH_ASSOC);
-        if(!empty($result)){
-          $tracking = new Tracking($result['id'], $result['id_item'], $result['quantity'], $result['tracking_number'], $result['delivery_date'], $result['signed_by']);
-        }
-      }catch(PDOException $ex){
-        print 'ERROR:' . $ex->getMessage() . '<br>';
-      }
-    }
-    return $tracking;
-  }
-
-  public static function update_tracking($connection, $quantity, $tracking_number, $delivery_date, $signed_by, $id_tracking){
-    if(isset($connection)){
-      try{
-        $sql = 'UPDATE trackings SET quantity = :quantity, tracking_number = :tracking_number, delivery_date = :delivery_date, signed_by = :signed_by WHERE id = :id_tracking';
-        $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':quantity', $quantity, PDO::PARAM_STR);
-        $sentence-> bindParam(':tracking_number', $tracking_number, PDO::PARAM_STR);
-        $sentence-> bindParam(':delivery_date', $delivery_date, PDO::PARAM_STR);
-        $sentence-> bindParam(':signed_by', $signed_by, PDO::PARAM_STR);
-        $sentence-> bindParam(':id_tracking', $id_tracking, PDO::PARAM_STR);
-        $sentence-> execute();
-      }catch(PDOException $ex){
-        print 'ERROR:' . $ex->getMessage() . '<br>';
-      }
-    }
-  }
-
-  public static function delete_tracking($connection, $id_tracking){
-    if(isset($connection)){
-      try{
-        $sql = 'DELETE FROM trackings WHERE id = :id_tracking';
-        $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_tracking', $id_tracking, PDO::PARAM_STR);
-        $sentence-> execute();
-      }catch(PDOException $ex){
-        print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
   }

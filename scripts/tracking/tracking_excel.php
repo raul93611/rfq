@@ -44,25 +44,17 @@ $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, 'QTY(ORDERED)');$x++
 $spreadsheet->getActiveSheet()->getStyle($x . $y)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('ed9191');
 $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, 'QTY(SHIPPED)');$x++;
 $spreadsheet->getActiveSheet()->getStyle($x . $y)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('ed9191');
+$spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, 'CARRIER');$x++;
+$spreadsheet->getActiveSheet()->getStyle($x . $y)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('ed9191');
 $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, 'TRACKING #');$x++;
 $spreadsheet->getActiveSheet()->getStyle($x . $y)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('ed9191');
 $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, 'DELIVERY DATE');$x++;
 $spreadsheet->getActiveSheet()->getStyle($x . $y)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('ed9191');
+$spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, 'DUE DATE');$x++;
+$spreadsheet->getActiveSheet()->getStyle($x . $y)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('ed9191');
 $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, 'SIGNED BY');$x++;
-
-// $items = RepositorioItem::obtener_items_por_id_rfq(Conexion::obtener_conexion(), $id_rfq);
-// $re_quote_items = ReQuoteItemRepository::get_re_quote_items_by_id_re_quote(Conexion::obtener_conexion(), $re_quote-> get_id());
-//
-// $y = 5;
-// $a = 1;
-// foreach ($items as $key => $item) {
-//   $x = 'A';
-//   // $trackings = TrackingRepository::get_all_trackings_by_id_item($connection, $item-> obtener_id());
-//   $spreadsheet->setActiveSheetIndex(0)->setCellValue('A5', '2222');$x++;
-//   // $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, "Brand name: " . $re_quote_item-> get_brand() . "\n Part number: " . $re_quote_item-> get_part_number() . "\n Description: " . nl2br(wordwrap(mb_substr($re_quote_item-> get_description(), 0, 150), 70, "<br>", true)));
-//   // $spreadsheet->getActiveSheet()->getStyle($x.$y)->getAlignment()->setWrapText(true);$x++;
-//   $y++;
-// }
+$spreadsheet->getActiveSheet()->getStyle($x . $y)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('ed9191');
+$spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, 'COMMENT');$x++;
 
 ExcelRepository::print_tracking(Conexion::obtener_conexion(), $spreadsheet, $quote, $re_quote);
 Conexion::cerrar_conexion();

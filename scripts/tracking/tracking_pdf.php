@@ -90,9 +90,12 @@ try{
         <th>PROJECT ESPC.</th>
         <th class="quantity">QTY(ordered)</th>
         <th class="quantity">QTY(shipped)</th>
+        <th>CARRIER</th>
         <th>TRACKING #</th>
         <th>DELIVERY DATE</th>
+        <th>DUE DATE</th>
         <th>SIGNED BY</th>
+        <th>COMMENT</th>
       </tr>
     ';
     $a = 1;
@@ -114,18 +117,24 @@ try{
       if(count($trackings)){
         $html .= '
         <td>' . $trackings[0]-> get_quantity() . '</td>
-        <td>' . $trackings[0]-> get_tracking_number() . '</td>
+        <td>' . $trackings[0]-> get_carrier() . '</td>
+        <td>' . nl2br($trackings[0]-> get_tracking_number()) . '</td>
         <td>' . RepositorioComment::mysql_date_to_english_format($trackings[0]-> get_delivery_date()) . '</td>
+        <td>' . RepositorioComment::mysql_date_to_english_format($trackings[0]-> get_due_date()) . '</td>
         <td>' . $trackings[0]-> get_signed_by() . '</td>
+        <td>' . nl2br($trackings[0]-> get_comments()) . '</td>
         </tr>';
         for ($j = 1; $j < count($trackings); $j++) {
           $tracking = $trackings[$j];
           $html .= '
           <tr>
           <td>' . $tracking-> get_quantity() . '</td>
+          <td>' . $tracking-> get_carrier() . '</td>
           <td>' . nl2br($tracking-> get_tracking_number()) . '</td>
           <td>' . RepositorioComment::mysql_date_to_english_format($tracking-> get_delivery_date()) . '</td>
+          <td>' . RepositorioComment::mysql_date_to_english_format($tracking-> get_due_date()) . '</td>
           <td>' . $tracking-> get_signed_by() . '</td>
+          <td>' . nl2br($tracking-> get_comments()) . '</td>
           </tr>
           ';
         }
@@ -154,9 +163,12 @@ try{
           if(count($trackings_subitems)){
             $html .= '
             <td>' . $trackings_subitems[0]-> get_quantity() . '</td>
-            <td>' . $trackings_subitems[0]-> get_tracking_number() . '</td>
+            <td>' . $trackings_subitems[0]-> get_carrier() . '</td>
+            <td>' . nl2br($trackings_subitems[0]-> get_tracking_number()) . '</td>
             <td>' . RepositorioComment::mysql_date_to_english_format($trackings_subitems[0]-> get_delivery_date()) . '</td>
+            <td>' . RepositorioComment::mysql_date_to_english_format($trackings_subitems[0]-> get_due_date()) . '</td>
             <td>' . $trackings_subitems[0]-> get_signed_by() . '</td>
+            <td>' . nl2br($trackings_subitems[0]-> get_comments()) . '</td>
             </tr>
             ';
             for ($l = 1; $l < count($trackings_subitems); $l++) {
@@ -164,9 +176,12 @@ try{
               $html .= '
               <tr>
               <td>' . $tracking_subitem-> get_quantity() . '</td>
+              <td>' . $tracking_subitem-> get_carrier() . '</td>
               <td>' . nl2br($tracking_subitem-> get_tracking_number()) . '</td>
               <td>' . RepositorioComment::mysql_date_to_english_format($tracking_subitem-> get_delivery_date()) . '</td>
+              <td>' . RepositorioComment::mysql_date_to_english_format($tracking_subitem-> get_due_date()) . '</td>
               <td>' . $tracking_subitem-> get_signed_by() . '</td>
+              <td>' . nl2br($tracking_subitem-> get_comments()) . '</td>
               </tr>
               ';
             }
@@ -175,6 +190,13 @@ try{
       }
     $a++;
     }
+    $html .= '
+      <tr>
+        <td colspan="10" style="text-align:center;">
+        <b>E-Logic</b> wants you to be satisfied with your purchase, help us to achieve it. Before you accept the delivery of your items, please inspect it. If any issue exists, you may refuse delivery. Once you have accepted delivery you have 30 days to contact us regarding defects, damage or other issues. <b>E-Logic</b> will not be able to arrange a replacement once this period has elapsed.
+        </td>
+      </tr>
+    ';
     $html .= '</table>';
   }
   $mpdf->SetHTMLFooter('

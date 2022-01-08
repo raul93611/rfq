@@ -16,16 +16,22 @@ class ExcelRepository{
       $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $re_quote_item-> get_quantity());$x++;
       if(count($trackings)){
         $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings[0]-> get_quantity());$x++;
+        $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings[0]-> get_carrier());$x++;
         $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings[0]-> get_tracking_number());$x++;
         $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, RepositorioComment::mysql_date_to_english_format($trackings[0]-> get_delivery_date()));$x++;
+        $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, RepositorioComment::mysql_date_to_english_format($trackings[0]-> get_due_date()));$x++;
         $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings[0]-> get_signed_by());$x++;
+        $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings[0]-> get_comments());$x++;
         for ($i=1; $i < count($trackings); $i++) {
           $y++;
           $x = 'D';
           $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings[$i]-> get_quantity());$x++;
+          $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings[$i]-> get_carrier());$x++;
           $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings[$i]-> get_tracking_number());$x++;
           $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, RepositorioComment::mysql_date_to_english_format($trackings[$i]-> get_delivery_date()));$x++;
+          $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, RepositorioComment::mysql_date_to_english_format($trackings[$i]-> get_due_date()));$x++;
           $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings[$i]-> get_signed_by());$x++;
+          $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings[$i]-> get_comments());$x++;
         }
       }
       $y++;
@@ -44,16 +50,22 @@ class ExcelRepository{
 
           if(count($trackings_subitems)){
             $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings_subitems[0]-> get_quantity());$x++;
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings_subitems[0]-> get_carrier());$x++;
             $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings_subitems[0]-> get_tracking_number());$x++;
             $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, RepositorioComment::mysql_date_to_english_format($trackings_subitems[0]-> get_delivery_date()));$x++;
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, RepositorioComment::mysql_date_to_english_format($trackings_subitems[0]-> get_due_date()));$x++;
             $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings_subitems[0]-> get_signed_by());$x++;
+            $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings_subitems[0]-> get_comments());$x++;
             for ($i = 1; $i < count($trackings_subitems); $i++) {
               $y++;
               $x = 'D';
               $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings_subitems[$i]-> get_quantity());$x++;
+              $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings_subitems[$i]-> get_carrier());$x++;
               $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings_subitems[$i]-> get_tracking_number());$x++;
               $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, RepositorioComment::mysql_date_to_english_format($trackings_subitems[$i]-> get_delivery_date()));$x++;
+              $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, RepositorioComment::mysql_date_to_english_format($trackings_subitems[$i]-> get_due_date()));$x++;
               $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings_subitems[$i]-> get_signed_by());$x++;
+              $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings_subitems[$i]-> get_comments());$x++;
             }
           }
           $y++;
