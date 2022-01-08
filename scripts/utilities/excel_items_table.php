@@ -12,7 +12,6 @@ Conexion::abrir_conexion();
 $providers_name = RepositorioRfq::get_all_providers_name(Conexion::obtener_conexion(), $id_rfq);
 $requote = ReQuoteRepository::get_re_quote_by_id_rfq(Conexion::obtener_conexion(), $id_rfq);
 $requote_providers_name = ReQuoteRepository::get_all_providers_name(Conexion::obtener_conexion(), $requote-> get_id());
-$x = 'A';
 
 $spreadsheet = new Spreadsheet();
 $spreadsheet->getProperties()->setCreator('E-logic.Inc')
@@ -22,32 +21,43 @@ $spreadsheet->getProperties()->setCreator('E-logic.Inc')
     ->setDescription('QuoteItemsTable')
     ->setKeywords('QuoteItemsTable')
     ->setCategory('QuoteItemsTable');
+$alphabet = range('A', 'Z');
+$x = 5;
+$spreadsheet->getActiveSheet()->mergeCells($alphabet[$x] . '1:' . $alphabet[$x - 1 + count($providers_name)] . '1');
+$spreadsheet->getActiveSheet()->getStyle($alphabet[$x] . '1:' . $alphabet[$x - 1 + count($providers_name)] . '1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('4be3e3');
+$spreadsheet->setActiveSheetIndex(0)->setCellValue($alphabet[$x] . '1', 'QUOTE');
 
+$x = $x + count($providers_name);
+$spreadsheet->getActiveSheet()->mergeCells($alphabet[$x] . '1:' . $alphabet[$x - 1 + count($requote_providers_name)] . '1');
+$spreadsheet->getActiveSheet()->getStyle($alphabet[$x] . '1:' . $alphabet[$x - 1 + count($requote_providers_name)] . '1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('03befc');
+$spreadsheet->setActiveSheetIndex(0)->setCellValue($alphabet[$x] . '1', 'RE-QUOTE');
+
+$x = 'A';
 $spreadsheet->setActiveSheetIndex(0);
-$spreadsheet->getActiveSheet()->getStyle($x . '1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('ed9191');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue($x . '1', '#');$x++;
-$spreadsheet->getActiveSheet()->getStyle($x . '1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('ed9191');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue($x . '1', 'PROJECT SPECIFICATIONS');$x++;
-$spreadsheet->getActiveSheet()->getStyle($x . '1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('ed9191');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue($x . '1', 'E-LOGIC PROPOSAL');$x++;
-$spreadsheet->getActiveSheet()->getStyle($x . '1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('e8c92e');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue($x . '1', 'PART NUMBER');$x++;
-$spreadsheet->getActiveSheet()->getStyle($x . '1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('c2e34b');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue($x . '1', 'QUANTITY');$x++;
+$spreadsheet->getActiveSheet()->getStyle($x . '2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('ed9191');
+$spreadsheet->setActiveSheetIndex(0)->setCellValue($x . '2', '#');$x++;
+$spreadsheet->getActiveSheet()->getStyle($x . '2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('ed9191');
+$spreadsheet->setActiveSheetIndex(0)->setCellValue($x . '2', 'PROJECT SPECIFICATIONS');$x++;
+$spreadsheet->getActiveSheet()->getStyle($x . '2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('ed9191');
+$spreadsheet->setActiveSheetIndex(0)->setCellValue($x . '2', 'E-LOGIC PROPOSAL');$x++;
+$spreadsheet->getActiveSheet()->getStyle($x . '2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('e8c92e');
+$spreadsheet->setActiveSheetIndex(0)->setCellValue($x . '2', 'PART NUMBER');$x++;
+$spreadsheet->getActiveSheet()->getStyle($x . '2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('c2e34b');
+$spreadsheet->setActiveSheetIndex(0)->setCellValue($x . '2', 'QUANTITY');$x++;
 foreach ($providers_name as $i => $provider_name) {
-  $spreadsheet->getActiveSheet()->getStyle($x . '1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('4be3e3');
-  $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . '1', strtoupper($provider_name));
+  $spreadsheet->getActiveSheet()->getStyle($x . '2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('4be3e3');
+  $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . '2', strtoupper($provider_name));
   $x++;
 }
 foreach ($requote_providers_name as $i => $requote_provider_name) {
-  $spreadsheet->getActiveSheet()->getStyle($x . '1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('03befc');
-  $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . '1', strtoupper($requote_provider_name));
+  $spreadsheet->getActiveSheet()->getStyle($x . '2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('03befc');
+  $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . '2', strtoupper($requote_provider_name));
   $x++;
 }
-$spreadsheet->getActiveSheet()->getStyle($x . '1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('668fe8');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue($x . '1', 'PRICE FOR CLIENT');$x++;
-$spreadsheet->getActiveSheet()->getStyle($x . '1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('668fe8');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue($x . '1', 'TOTAL PRICE');$x++;
+$spreadsheet->getActiveSheet()->getStyle($x . '2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('668fe8');
+$spreadsheet->setActiveSheetIndex(0)->setCellValue($x . '2', 'PRICE FOR CLIENT');$x++;
+$spreadsheet->getActiveSheet()->getStyle($x . '2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('668fe8');
+$spreadsheet->setActiveSheetIndex(0)->setCellValue($x . '2', 'TOTAL PRICE');$x++;
 
 ExcelRepository::print_items(Conexion::obtener_conexion(), $spreadsheet, $providers_name, $requote_providers_name, $requote, $id_rfq);
 

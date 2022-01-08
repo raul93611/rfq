@@ -64,7 +64,7 @@ class ExcelRepository{
   }
 
   public static function print_items($connection, $spreadsheet, $providers_name, $requote_providers_name, $requote, $id_rfq){
-    $i = 2;
+    $i = 3;
     $j = 1;
     $quote = RepositorioRfq::obtener_cotizacion_por_id($connection, $id_rfq);
     $items = RepositorioItem::obtener_items_por_id_rfq($connection, $id_rfq);
