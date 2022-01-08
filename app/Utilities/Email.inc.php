@@ -128,7 +128,7 @@ class Email{
 
   public static function send_email_fulfillment_quote($users, $quote){
     foreach ($users as $key => $user) {
-      $subject = 'New Order - Proposal #: ' . $quote-> obtener_id() . 'Contract #: ' . $quote-> obtener_contract_number();
+      $subject = 'New Order - Proposal #: ' . $quote-> obtener_id() . ' Contract #: ' . $quote-> obtener_contract_number();
       $message = '
       <html xmlns="http://www.w3.org/1999/xhtml">
         <head>
@@ -250,7 +250,7 @@ class Email{
 
   public static function send_email_invoice_quote($users, $quote){
     foreach ($users as $key => $user) {
-      $subject = 'New Order - Proposal #: ' . $quote-> obtener_id() . 'Contract #: ' . $quote-> obtener_contract_number();
+      $subject = 'New Order - Proposal #: ' . $quote-> obtener_id() . ' Contract #: ' . $quote-> obtener_contract_number();
       $message = '
       <html xmlns="http://www.w3.org/1999/xhtml">
         <head>
