@@ -382,7 +382,7 @@
           <a href="<?php echo FULFILLMENT_QUOTES; ?>" class="nav-link <?php echo $gestor_actual == 'fulfillment_quotes' ? 'active' : ''; ?>">
             <i class="nav-icon fas fa-th"></i>
             <p>
-              Fulfillment Quotes
+              Fulfillment
             </p>
           </a>
         </li>
@@ -390,7 +390,7 @@
           <a href="<?php echo INVOICE_QUOTES; ?>" class="nav-link <?php echo $gestor_actual == 'invoice_quotes' ? 'active' : ''; ?>">
             <i class="nav-icon fas fa-th"></i>
             <p>
-              Invoice Quotes
+              Invoice
             </p>
           </a>
         </li>
@@ -398,7 +398,7 @@
           <a href="<?php echo SUBMITTED_INVOICE_QUOTES; ?>" class="nav-link <?php echo $gestor_actual == 'submitted_invoice_quotes' ? 'active' : ''; ?>">
             <i class="nav-icon fas fa-th"></i>
             <p>
-              Submitted Invoice Quotes
+              Submitted Invoice
             </p>
           </a>
         </li>

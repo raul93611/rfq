@@ -2,6 +2,7 @@
 // error_reporting(E_ALL);
 // ini_set('display_errors', '1');
 include_once 'app/Bootstrap/config.inc.php';
+include_once 'app/Bootstrap/routes.inc.php';
 include_once 'app/Bootstrap/Conexion.inc.php';
 include_once 'app/Bootstrap/ControlSesion.inc.php';
 include_once 'app/Bootstrap/Redireccion.inc.php';
@@ -463,6 +464,14 @@ if ($partes_ruta[0] == 'rfq') {
       case 'remove_fulfillment':
         $id_rfq = $partes_ruta[2];
         $ruta_elegida = 'scripts/quote/remove_fulfillment.php';
+        break;
+      case 'remove_invoice':
+        $id_rfq = $partes_ruta[2];
+        $ruta_elegida = 'scripts/quote/remove_invoice.php';
+        break;
+      case 'remove_submitted_invoice':
+        $id_rfq = $partes_ruta[2];
+        $ruta_elegida = 'scripts/quote/remove_submitted_invoice.php';
         break;
       case 'reload_requote':
         $id_rfq = $partes_ruta[2];
