@@ -9,7 +9,7 @@ include_once 'plantillas/user/validacion_recover_password_form.inc.php';
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Home</title>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" crossorigin="anonymous">
-    <link rel="stylesheet" href="rfq/dist/css/adminlte.min.css">
+    <link rel="stylesheet" type="text/css" href="<?php echo DIST; ?>css/adminlte.min.css"/>
     <link rel="Shortcut Icon" href="<?php echo RUTA_IMG; ?>eP_favicon.png" type="image/x-icon" />
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     <link rel="stylesheet" id="fondo" href="css/fondo1.css">

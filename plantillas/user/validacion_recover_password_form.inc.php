@@ -22,19 +22,7 @@ if(isset($_POST['send'])){
     RepositorioUsuario::guardar_url_secreta(Conexion::obtener_conexion(), $usuario-> obtener_id(), $url_secreta);
     Conexion::cerrar_conexion();
     $to = $usuario-> obtener_email();
-    $subject = 'Restart your password';
-    $headers = "MIME-Version: 1.0\r\n";
-    $headers .= "Content-type: text/html; charset=UTF-8\r\n";
-    $headers .= "From: E-logic <elogic@e-logic.us>\r\n";
-    $message = '
-    <html>
-    <body>
-    <h3>Restart your password:</h3>
-    <p><a href="https://www.elogicportal.com/rfq/restart_password/' . $url_secreta . '">Restart your password</a></p>
-    </body>
-    </html>
-    ';
-    mail($to, $subject, $message, $headers);
+    Email::send_email_restart_password($usuario-> obtener_email(), $url_secreta);
   }
 }
 ?>
