@@ -144,8 +144,8 @@ class ExcelRepository{
     return array($i, $x);
   }
 
-  public static function profit_report($connection, $month, $year, $spreadsheet){
-    $quotes = Report::get_profit_report($connection, $month, $year);
+  public static function profit_report($connection, $type, $quarter, $month, $year, $spreadsheet){
+    $quotes = Report::get_profit_report($connection, $type, $quarter, $month, $year);
     $total['total_cost']= 0;
     $total['total_price']= 0;
     $total['re_quote_total_cost']= 0;
@@ -174,7 +174,7 @@ class ExcelRepository{
       $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_quote_total_price());$x++;
       $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($quote-> obtener_real_fulfillment_profit(), 2) . "\n" . number_format($quote-> obtener_real_fulfillment_profit_percentage(), 2));
       $spreadsheet->getActiveSheet()->getStyle($x.$y)->getAlignment()->setWrapText(true);$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_type_of_bid() == 'Services' ? 'RFP' : 'RFQ');
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_type_of_contract());
       $y++;
     }
     $x = 'C';
@@ -192,8 +192,8 @@ class ExcelRepository{
     $spreadsheet->getActiveSheet()->getStyle($x.$y)->getAlignment()->setWrapText(true);$x++;
   }
 
-  public static function award_report($connection, $month, $year, $spreadsheet){
-    $quotes = Report::get_award_report($connection, $month, $year);
+  public static function award_report($connection, $type, $quarter, $month, $year, $spreadsheet){
+    $quotes = Report::get_award_report($connection, $type, $quarter, $month, $year);
     $total['total_cost']= 0;
     $total['total_price']= 0;
 
@@ -212,9 +212,9 @@ class ExcelRepository{
       $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_type_of_bid());$x++;
       $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_total_cost());$x++;
       $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_quote_total_price());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_quote_total_price() - $quote-> obtener_total_cost());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format(100*(($quote-> obtener_quote_total_price() - $quote-> obtener_total_cost())/$quote-> obtener_quote_total_price()), 2) . '%');$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_type_of_bid() == 'Services' ? 'RFP' : 'RFQ');
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_quote_profit());$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($quote-> obtener_quote_profit_percentage(), 2) . '%');$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_type_of_contract());
       $y++;
     }
     $x = 'H';
@@ -224,8 +224,8 @@ class ExcelRepository{
     $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format(100*($total_profit/$total['total_price']), 2) . '%');$x++;
   }
 
-  public static function submitted_report($connection, $month, $year, $spreadsheet){
-    $quotes = Report::get_submitted_report($connection, $month, $year);
+  public static function submitted_report($connection, $type, $quarter, $month, $year, $spreadsheet){
+    $quotes = Report::get_submitted_report($connection, $type, $quarter, $month, $year);
     $total['total_cost']= 0;
     $total['total_price']= 0;
 
@@ -243,9 +243,9 @@ class ExcelRepository{
       $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_type_of_bid());$x++;
       $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_total_cost());$x++;
       $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_quote_total_price());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_quote_total_price() - $quote-> obtener_total_cost());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format(100*(($quote-> obtener_quote_total_price() - $quote-> obtener_total_cost())/$quote-> obtener_quote_total_price()), 2) . '%');$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_type_of_bid() == 'Services' ? 'RFP' : 'RFQ');
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_quote_profit());$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($quote-> obtener_quote_profit_percentage(), 2) . '%');$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_type_of_contract());
       $y++;
     }
     $x = 'G';
@@ -255,8 +255,8 @@ class ExcelRepository{
     $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format(100*($total_profit/$total['total_price']), 2) . '%');$x++;
   }
 
-  public static function re_quote_report($connection, $month, $year, $spreadsheet){
-    $quotes = Report::get_re_quote_report($connection, $month, $year);
+  public static function re_quote_report($connection, $type, $quarter, $month, $year, $spreadsheet){
+    $quotes = Report::get_re_quote_report($connection, $type, $quarter, $month, $year);
     $total['total_cost']= 0;
     $total['total_price']= 0;
     $total['re_quote_total_cost']= 0;
@@ -285,7 +285,7 @@ class ExcelRepository{
       $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_quote_total_price());$x++;
       $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_quote_total_price() - $re_quote-> get_total_cost());$x++;
       $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format(100*(($quote-> obtener_quote_total_price() - $re_quote-> get_total_cost())/$quote-> obtener_quote_total_price()), 2) . '%');$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_type_of_bid() == 'Services' ? 'RFP' : 'RFQ');
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_type_of_contract());
       $y++;
     }
     $x = 'I';
@@ -329,7 +329,7 @@ class ExcelRepository{
       $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_quote_total_price());$x++;
       $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_quote_total_price() - $re_quote-> get_total_cost());$x++;
       $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format(100*(($quote-> obtener_quote_total_price() - $re_quote-> get_total_cost())/$quote-> obtener_quote_total_price()), 2) . '%');$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_type_of_bid() == 'Services' ? 'RFP' : 'RFQ');
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_type_of_contract());
       $y++;
     }
     $x = 'I';

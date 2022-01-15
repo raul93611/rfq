@@ -20,7 +20,20 @@
               <h3 class="card-title"><i class="fas fa-hand-point-right"></i> Choose</h3>
             </div>
             <div class="card-body">
+              <?php $type = $_POST['type'] ?? 'monthly';?>
+              <div class="btn-group btn-block btn-group-toggle mb-4" data-toggle="buttons">
+                <label id="monthly" class="btn bg-olive <?php echo $type == 'monthly' ? 'active' : ''; ?>">
+                  <input type="radio" autocomplete="off" value="monthly" <?php echo $type == 'monthly' ? 'checked' : ''; ?>> Monthly
+                </label>
+                <label id="quarterly" class="btn bg-olive <?php echo $type == 'quarterly' ? 'active' : ''; ?>">
+                  <input type="radio" autocomplete="off" value="quarterly" <?php echo $type == 'quarterly' ? 'checked' : ''; ?>> Quarterly
+                </label>
+                <label id="yearly" class="btn bg-olive <?php echo $type == 'yearly' ? 'active' : ''; ?>">
+                  <input type="radio"  autocomplete="off" value="yearly" <?php echo $type == 'yearly' ? 'checked' : ''; ?>> Yearly
+                </label>
+              </div>
               <form action="<?php echo REPORTS; ?>" method="post">
+                <input type="hidden" name="type" value="<?php echo $type; ?>">
                 <div class="row">
                   <div class="col-md-12">
                     <?php $report = $_POST['report'] ?? ''; ?>
@@ -35,7 +48,7 @@
                 </div>
                 <div class="row mt-4">
                   <div class="col-md-6">
-                    <h4><i class="fas fa-calendar-alt"></i> Month</h4>
+                    <h4><i class="fas fa-calendar-alt"></i> Month(s)</h4>
                     <div class="row mt-4">
                       <div class="col-md-12">
                         <?php $month = $_POST['month'] ?? ''; ?>
@@ -52,6 +65,13 @@
                           <option value="10" <?php echo $month == 10 ? 'selected' : ''; ?>>October</option>
                           <option value="11" <?php echo $month == 11 ? 'selected' : ''; ?>>November</option>
                           <option value="12" <?php echo $month == 12 ? 'selected' : ''; ?>>December</option>
+                        </select>
+                        <?php $quarter = $_POST['quarter'] ?? ''; ?>
+                        <select class="custom-select" name="quarter">
+                          <option value="1" <?php echo $quarter == 1 ? 'selected' : ''; ?>>Q1</option>
+                          <option value="2" <?php echo $quarter == 2 ? 'selected' : ''; ?>>Q2</option>
+                          <option value="3" <?php echo $quarter == 3 ? 'selected' : ''; ?>>Q3</option>
+                          <option value="4" <?php echo $quarter == 4 ? 'selected' : ''; ?>>Q4</option>
                         </select>
                       </div>
                     </div>

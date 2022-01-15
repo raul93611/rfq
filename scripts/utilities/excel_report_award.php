@@ -31,7 +31,7 @@ $spreadsheet->setActiveSheetIndex(0)->setCellValue('K1', 'PROFIT (%)');
 $spreadsheet->setActiveSheetIndex(0)->setCellValue('L1', 'TYPE');
 
 Conexion::abrir_conexion();
-ExcelRepository::award_report(Conexion::obtener_conexion(), $_POST['month'], $_POST['year'], $spreadsheet);
+ExcelRepository::award_report(Conexion::obtener_conexion(), $_POST['type'], $_POST['quarter'], $_POST['month'], $_POST['year'], $spreadsheet);
 Conexion::cerrar_conexion();
 
 $spreadsheet->setActiveSheetIndex(0);

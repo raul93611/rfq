@@ -56,7 +56,7 @@ $spreadsheet->setActiveSheetIndex(0)->setCellValue('P2', 'PROFIT(%)');
 $spreadsheet->setActiveSheetIndex(0)->setCellValue('Q2', 'TYPE');
 
 Conexion::abrir_conexion();
-ExcelRepository::re_quote_report(Conexion::obtener_conexion(), $_POST['month'], $_POST['year'], $spreadsheet);
+ExcelRepository::re_quote_report(Conexion::obtener_conexion(), $_POST['type'], $_POST['quarter'], $_POST['month'], $_POST['year'], $spreadsheet);
 Conexion::cerrar_conexion();
 
 $spreadsheet->setActiveSheetIndex(0);

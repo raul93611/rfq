@@ -1,7 +1,7 @@
 <?php
 class Report{
-  public static function profit_report($connection, $month, $year){
-    $quotes = self::get_profit_report($connection, $month, $year);
+  public static function profit_report($connection, $type, $quarter, $month, $year){
+    $quotes = self::get_profit_report($connection, $type, $quarter, $month, $year);
     $total['total_cost']= 0;
     $total['total_price']= 0;
     $total['re_quote_total_cost']= 0;
@@ -67,7 +67,7 @@ class Report{
                 <br>
                 <?php echo number_format($quote-> obtener_real_fulfillment_profit_percentage(), 2) . '%'; ?>
               </td>
-              <td><?php echo $quote-> obtener_type_of_bid() == 'Services' ? 'RFP' : 'RFQ'; ?></td>
+              <td><?php echo $quote-> obtener_type_of_contract(); ?></td>
             </tr>
             <?php
           }
@@ -97,14 +97,42 @@ class Report{
     <?php
   }
 
-  public static function get_profit_report($connection, $month, $year){
+  public static function get_profit_report($connection, $type, $quarter, $month, $year){
     $quotes = [];
     if(isset($connection)){
       try{
-        $sql = 'SELECT * FROM rfq WHERE invoice = 1 AND MONTH(invoice_date) = :month AND YEAR(invoice_date) = :year';
-        $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':month', $month, PDO::PARAM_STR);
-        $sentence-> bindParam(':year', $year, PDO::PARAM_STR);
+        switch ($type) {
+          case 'monthly':
+            $sql = 'SELECT * FROM rfq WHERE invoice = 1 AND MONTH(invoice_date) = :month AND YEAR(invoice_date) = :year';
+            $sentence = $connection-> prepare($sql);
+            $sentence-> bindParam(':month', $month, PDO::PARAM_STR);
+            $sentence-> bindParam(':year', $year, PDO::PARAM_STR);
+            break;
+          case 'quarterly':
+            switch ($quarter) {
+              case 1:
+                $period = 'BETWEEN 1 AND 3';
+                break;
+              case 2:
+                $period = 'BETWEEN 4 AND 6';
+                break;
+              case 3:
+                $period = 'BETWEEN 7 AND 9';
+                break;
+              case 4:
+                $period = 'BETWEEN 10 AND 12';
+                break;
+            }
+            $sql = 'SELECT * FROM rfq WHERE invoice = 1 AND MONTH(invoice_date) ' . $period . ' AND YEAR(invoice_date) = :year';
+            $sentence = $connection-> prepare($sql);
+            $sentence-> bindParam(':year', $year, PDO::PARAM_STR);
+            break;
+          case 'yearly':
+            $sql = 'SELECT * FROM rfq WHERE invoice = 1 AND YEAR(invoice_date) = :year';
+            $sentence = $connection-> prepare($sql);
+            $sentence-> bindParam(':year', $year, PDO::PARAM_STR);
+            break;
+        }
         $sentence-> execute();
         $quotes = RepositorioRfq::array_to_object($sentence);
       }catch(PDOException $ex){
@@ -114,8 +142,8 @@ class Report{
     return $quotes;
   }
 
-  public static function award_report($connection, $month, $year){
-    $quotes = self::get_award_report($connection, $month, $year);
+  public static function award_report($connection, $type, $quarter, $month, $year){
+    $quotes = self::get_award_report($connection, $type, $quarter, $month, $year);
     $total['total_cost']= 0;
     $total['total_price']= 0;
     ?>
@@ -163,7 +191,7 @@ class Report{
                 <br>
                 <?php echo number_format($quote-> obtener_quote_profit_percentage(), 2) . '%'; ?>
               </td>
-              <td><?php echo $quote-> obtener_type_of_bid() == 'Services' ? 'RFP' : 'RFQ'; ?></td>
+              <td><?php echo $quote-> obtener_type_of_contract(); ?></td>
             </tr>
             <?php
           }
@@ -181,14 +209,42 @@ class Report{
     <?php
   }
 
-  public static function get_award_report($connection, $month, $year){
+  public static function get_award_report($connection, $type, $quarter, $month, $year){
     $quotes = [];
     if(isset($connection)){
       try{
-        $sql = 'SELECT * FROM rfq WHERE award = 1 AND MONTH(fecha_award) = :month AND YEAR(fecha_award) = :year';
-        $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':month', $month, PDO::PARAM_STR);
-        $sentence-> bindParam(':year', $year, PDO::PARAM_STR);
+        switch ($type) {
+          case 'monthly':
+            $sql = 'SELECT * FROM rfq WHERE award = 1 AND MONTH(fecha_award) = :month AND YEAR(fecha_award) = :year';
+            $sentence = $connection-> prepare($sql);
+            $sentence-> bindParam(':month', $month, PDO::PARAM_STR);
+            $sentence-> bindParam(':year', $year, PDO::PARAM_STR);
+            break;
+          case 'quarterly':
+            switch ($quarter) {
+              case 1:
+                $period = 'BETWEEN 1 AND 3';
+                break;
+              case 2:
+                $period = 'BETWEEN 4 AND 6';
+                break;
+              case 3:
+                $period = 'BETWEEN 7 AND 9';
+                break;
+              case 4:
+                $period = 'BETWEEN 10 AND 12';
+                break;
+            }
+            $sql = 'SELECT * FROM rfq WHERE award = 1 AND MONTH(fecha_award) ' . $period . ' AND YEAR(fecha_award) = :year';
+            $sentence = $connection-> prepare($sql);
+            $sentence-> bindParam(':year', $year, PDO::PARAM_STR);
+            break;
+          case 'yearly':
+            $sql = 'SELECT * FROM rfq WHERE award = 1 AND YEAR(fecha_award) = :year';
+            $sentence = $connection-> prepare($sql);
+            $sentence-> bindParam(':year', $year, PDO::PARAM_STR);
+            break;
+        }
         $sentence-> execute();
         $quotes = RepositorioRfq::array_to_object($sentence);
       }catch(PDOException $ex){
@@ -198,8 +254,8 @@ class Report{
     return $quotes;
   }
 
-  public static function submitted_report($connection, $month, $year){
-    $quotes = self::get_submitted_report($connection, $month, $year);
+  public static function submitted_report($connection, $type, $quarter, $month, $year){
+    $quotes = self::get_submitted_report($connection, $type, $quarter, $month, $year);
     $total['total_cost']= 0;
     $total['total_price']= 0;
     ?>
@@ -245,7 +301,7 @@ class Report{
                 <br>
                 <?php echo number_format($quote-> obtener_quote_profit_percentage(), 2) . '%'; ?>
               </td>
-              <td><?php echo $quote-> obtener_type_of_bid() == 'Services' ? 'RFP' : 'RFQ'; ?></td>
+              <td><?php echo $quote-> obtener_type_of_contract(); ?></td>
             </tr>
             <?php
           }
@@ -263,14 +319,42 @@ class Report{
     <?php
   }
 
-  public static function get_submitted_report($connection, $month, $year){
+  public static function get_submitted_report($connection, $type, $quarter, $month, $year){
     $quotes = [];
     if(isset($connection)){
       try{
-        $sql = 'SELECT * FROM rfq WHERE status = 1 AND MONTH(fecha_submitted) = :month AND YEAR(fecha_submitted) = :year';
-        $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':month', $month, PDO::PARAM_STR);
-        $sentence-> bindParam(':year', $year, PDO::PARAM_STR);
+        switch ($type) {
+          case 'monthly':
+            $sql = 'SELECT * FROM rfq WHERE status = 1 AND MONTH(fecha_submitted) = :month AND YEAR(fecha_submitted) = :year';
+            $sentence = $connection-> prepare($sql);
+            $sentence-> bindParam(':month', $month, PDO::PARAM_STR);
+            $sentence-> bindParam(':year', $year, PDO::PARAM_STR);
+            break;
+          case 'quarterly':
+            switch ($quarter) {
+              case 1:
+                $period = 'BETWEEN 1 AND 3';
+                break;
+              case 2:
+                $period = 'BETWEEN 4 AND 6';
+                break;
+              case 3:
+                $period = 'BETWEEN 7 AND 9';
+                break;
+              case 4:
+                $period = 'BETWEEN 10 AND 12';
+                break;
+            }
+            $sql = 'SELECT * FROM rfq WHERE status = 1 AND MONTH(fecha_submitted) ' . $period . ' AND YEAR(fecha_submitted) = :year';
+            $sentence = $connection-> prepare($sql);
+            $sentence-> bindParam(':year', $year, PDO::PARAM_STR);
+            break;
+          case 'yearly':
+            $sql = 'SELECT * FROM rfq WHERE status = 1 AND YEAR(fecha_submitted) = :year';
+            $sentence = $connection-> prepare($sql);
+            $sentence-> bindParam(':year', $year, PDO::PARAM_STR);
+            break;
+        }
         $sentence-> execute();
         $quotes = RepositorioRfq::array_to_object($sentence);
       }catch(PDOException $ex){
@@ -280,8 +364,8 @@ class Report{
     return $quotes;
   }
 
-  public static function re_quote_report($connection, $month, $year){
-    $quotes = self::get_re_quote_report($connection, $month, $year);
+  public static function re_quote_report($connection, $type, $quarter, $month, $year){
+    $quotes = self::get_re_quote_report($connection, $type, $quarter, $month, $year);
     $total['total_cost']= 0;
     $total['total_price']= 0;
     $total['re_quote_total_cost']= 0;
@@ -346,7 +430,7 @@ class Report{
                 <br>
                 <?php echo number_format(100*(($quote-> obtener_quote_total_price() - $re_quote-> get_total_cost())/$quote-> obtener_quote_total_price()), 2) . '%'; ?>
               </td>
-              <td><?php echo $quote-> obtener_type_of_bid() == 'Services' ? 'RFP' : 'RFQ'; ?></td>
+              <td><?php echo $quote-> obtener_type_of_contract(); ?></td>
             </tr>
             <?php
           }
@@ -370,14 +454,42 @@ class Report{
     <?php
   }
 
-  public static function get_re_quote_report($connection, $month, $year){
+  public static function get_re_quote_report($connection, $type, $quarter, $month, $year){
     $quotes = [];
     if(isset($connection)){
       try{
-        $sql = 'SELECT * FROM rfq WHERE fullfillment = 1 AND MONTH(fulfillment_date) = :month AND YEAR(fulfillment_date) = :year';
-        $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':month', $month, PDO::PARAM_STR);
-        $sentence-> bindParam(':year', $year, PDO::PARAM_STR);
+        switch ($type) {
+          case 'monthly':
+            $sql = 'SELECT * FROM rfq WHERE fullfillment = 1 AND MONTH(fulfillment_date) = :month AND YEAR(fulfillment_date) = :year';
+            $sentence = $connection-> prepare($sql);
+            $sentence-> bindParam(':month', $month, PDO::PARAM_STR);
+            $sentence-> bindParam(':year', $year, PDO::PARAM_STR);
+            break;
+          case 'quarterly':
+            switch ($quarter) {
+              case 1:
+                $period = 'BETWEEN 1 AND 3';
+                break;
+              case 2:
+                $period = 'BETWEEN 4 AND 6';
+                break;
+              case 3:
+                $period = 'BETWEEN 7 AND 9';
+                break;
+              case 4:
+                $period = 'BETWEEN 10 AND 12';
+                break;
+            }
+            $sql = 'SELECT * FROM rfq WHERE fullfillment = 1 AND MONTH(fulfillment_date) ' . $period . ' AND YEAR(fulfillment_date) = :year';
+            $sentence = $connection-> prepare($sql);
+            $sentence-> bindParam(':year', $year, PDO::PARAM_STR);
+            break;
+          case 'yearly':
+            $sql = 'SELECT * FROM rfq WHERE fullfillment = 1 AND YEAR(fulfillment_date) = :year';
+            $sentence = $connection-> prepare($sql);
+            $sentence-> bindParam(':year', $year, PDO::PARAM_STR);
+            break;
+        }
         $sentence-> execute();
         $quotes = RepositorioRfq::array_to_object($sentence);
       }catch(PDOException $ex){
@@ -453,7 +565,7 @@ class Report{
                 <br>
                 <?php echo number_format(100*(($quote-> obtener_quote_total_price() - $re_quote-> get_total_cost())/$quote-> obtener_quote_total_price()), 2) . '%'; ?>
               </td>
-              <td><?php echo $quote-> obtener_type_of_bid() == 'Services' ? 'RFP' : 'RFQ'; ?></td>
+              <td><?php echo $quote-> obtener_type_of_contract(); ?></td>
             </tr>
             <?php
           }
