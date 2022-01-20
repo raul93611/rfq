@@ -5,9 +5,6 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
   $cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $_POST['id_rfq']);
   RepositorioRfq::insert_calc(Conexion::obtener_conexion(), $_POST['id_items'], $_POST['id_subitems'], $_POST['partes_total_price'], $_POST['partes_total_price_subitems'], $_POST['unit_prices'], $_POST['unit_prices_subitems'], $_POST['additional'], $_POST['additional_subitems']);
   RepositorioRfq::update_variables(Conexion::obtener_conexion(), $_POST['payment_terms'], $_POST['taxes'], $_POST['profit'], $_POST['total_cost'], $_POST['total_price'], $_POST['additional_general'], htmlspecialchars($_POST['shipping']), $_POST['shipping_cost'], $_POST['id_rfq']);
-  if($cotizacion_recuperada-> obtener_canal() == 'FedBid'){
-    RepositorioRfq::guardar_total_price_total_cost_fedbid(Conexion::obtener_conexion(), $_POST['total_cost_fedbid'], $_POST['total_price_fedbid'], $_POST['id_rfq']);
-  }
   if($cotizacion_recuperada-> obtener_canal() == 'Chemonics' || $cotizacion_recuperada-> obtener_canal() == 'Ebay & Amazon'){
     RepositorioRfq::guardar_total_price_chemonics(Conexion::obtener_conexion(), $_POST['total_price_chemonics'], $_POST['id_rfq']);
   }
