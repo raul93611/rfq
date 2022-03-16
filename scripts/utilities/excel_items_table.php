@@ -2,6 +2,7 @@
 use PhpOffice\PhpSpreadsheet\Helper\Sample;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 require_once 'vendor_excel/phpoffice/phpspreadsheet/src/Bootstrap.php';
 $helper = new Sample();
 if ($helper->isCli()) {
@@ -21,16 +22,15 @@ $spreadsheet->getProperties()->setCreator('E-logic.Inc')
     ->setDescription('QuoteItemsTable')
     ->setKeywords('QuoteItemsTable')
     ->setCategory('QuoteItemsTable');
-$alphabet = range('A', 'Z');
-$x = 5;
-$spreadsheet->getActiveSheet()->mergeCells($alphabet[$x] . '1:' . $alphabet[$x - 1 + count($providers_name)] . '1');
-$spreadsheet->getActiveSheet()->getStyle($alphabet[$x] . '1:' . $alphabet[$x - 1 + count($providers_name)] . '1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('4be3e3');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue($alphabet[$x] . '1', 'QUOTE');
+$x = 6;
+$spreadsheet->getActiveSheet()->mergeCells(Coordinate::stringFromColumnIndex($x) . '1:' . Coordinate::stringFromColumnIndex($x - 1 + count($providers_name)) . '1');
+$spreadsheet->getActiveSheet()->getStyle(Coordinate::stringFromColumnIndex($x) . '1:' . Coordinate::stringFromColumnIndex($x - 1 + count($providers_name)) . '1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('4be3e3');
+$spreadsheet->setActiveSheetIndex(0)->setCellValue(Coordinate::stringFromColumnIndex($x) . '1', 'QUOTE');
 
 $x = $x + count($providers_name);
-$spreadsheet->getActiveSheet()->mergeCells($alphabet[$x] . '1:' . $alphabet[$x - 1 + count($requote_providers_name)] . '1');
-$spreadsheet->getActiveSheet()->getStyle($alphabet[$x] . '1:' . $alphabet[$x - 1 + count($requote_providers_name)] . '1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('03befc');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue($alphabet[$x] . '1', 'RE-QUOTE');
+$spreadsheet->getActiveSheet()->mergeCells(Coordinate::stringFromColumnIndex($x) . '1:' . Coordinate::stringFromColumnIndex($x - 1 + count($requote_providers_name)) . '1');
+$spreadsheet->getActiveSheet()->getStyle(Coordinate::stringFromColumnIndex($x) . '1:' . Coordinate::stringFromColumnIndex($x - 1 + count($requote_providers_name)) . '1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('03befc');
+$spreadsheet->setActiveSheetIndex(0)->setCellValue(Coordinate::stringFromColumnIndex($x) . '1', 'RE-QUOTE');
 
 $x = 'A';
 $spreadsheet->setActiveSheetIndex(0);
