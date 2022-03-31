@@ -105,15 +105,10 @@ try{
       Conexion::abrir_conexion();
       $trackings = TrackingRepository::get_all_trackings_by_id_item(Conexion::obtener_conexion(), $item-> obtener_id());
       Conexion::cerrar_conexion();
-      if(!count($trackings)){
-        $trackings_quantity = 1;
-      }else{
-        $trackings_quantity = count($trackings);
-      }
       $html .= '<tr>
-          <td rowspan="' . $trackings_quantity . '">' . $a . '</td>
-          <td rowspan="' . $trackings_quantity . '"><b>Brand name:</b> ' . $re_quote_item-> get_brand() . '<br><b>Part number:</b> ' . $re_quote_item-> get_part_number() . '<br><b>Item description:</b> ' . nl2br(wordwrap(mb_substr($re_quote_item-> get_description(), 0, 150), 70, '<br>', true)) . '</td>
-          <td rowspan="' . $trackings_quantity . '" style="text-align:right;">' . $re_quote_item-> get_quantity() . '</td>';
+          <td style="border-bottom: 0px solid;">' . $a . '</td>
+          <td style="border-bottom: 0px solid;"><b>Brand name:</b> ' . $re_quote_item-> get_brand() . '<br><b>Part number:</b> ' . $re_quote_item-> get_part_number() . '<br><b>Item description:</b> ' . nl2br(wordwrap(mb_substr($re_quote_item-> get_description(), 0, 150), 70, '<br>', true)) . '</td>
+          <td style="text-align:right;border-bottom: 0px solid;">' . $re_quote_item-> get_quantity() . '</td>';
       if(count($trackings)){
         $html .= '
         <td>' . $trackings[0]-> get_quantity() . '</td>
@@ -128,6 +123,9 @@ try{
           $tracking = $trackings[$j];
           $html .= '
           <tr>
+          <td style="border-top: 0px solid;border-bottom: 0px solid;"></td>
+          <td style="border-top: 0px solid;border-bottom: 0px solid;"></td>
+          <td style="border-top: 0px solid;border-bottom: 0px solid;"></td>
           <td>' . $tracking-> get_quantity() . '</td>
           <td>' . $tracking-> get_carrier() . '</td>
           <td>' . nl2br($tracking-> get_tracking_number()) . '</td>
@@ -150,16 +148,11 @@ try{
           Conexion::abrir_conexion();
           $trackings_subitems = TrackingSubitemRepository::get_all_trackings_by_id_subitem(Conexion::obtener_conexion(), $subitem-> obtener_id());
           Conexion::cerrar_conexion();
-          if(!count($trackings_subitems)){
-            $trackings_subitems_quantity = 1;
-          }else{
-            $trackings_subitems_quantity = count($trackings_subitems);
-          }
           $html .= '
           <tr>
-          <td rowspan="' . $trackings_subitems_quantity . '"></td>
-          <td rowspan="' . $trackings_subitems_quantity . '"><b>Brand name:</b> ' . $re_quote_subitem-> get_brand() . '<br><b>Part number:</b> ' . $re_quote_subitem-> get_part_number() . '<br><b>Item description:</b><br> ' . nl2br(wordwrap(mb_substr($re_quote_subitem-> get_description(), 0, 150), 70, '<br>', true)) . '</td>
-          <td rowspan="' . $trackings_subitems_quantity . '" style="text-align:right;">' . $re_quote_subitem-> get_quantity() . '</td>';
+          <td style="border-bottom: 0px solid;"></td>
+          <td style="border-bottom: 0px solid;"><b>Brand name:</b> ' . $re_quote_subitem-> get_brand() . '<br><b>Part number:</b> ' . $re_quote_subitem-> get_part_number() . '<br><b>Item description:</b><br> ' . nl2br(wordwrap(mb_substr($re_quote_subitem-> get_description(), 0, 150), 70, '<br>', true)) . '</td>
+          <td style="text-align:right;border-bottom: 0px solid;">' . $re_quote_subitem-> get_quantity() . '</td>';
           if(count($trackings_subitems)){
             $html .= '
             <td>' . $trackings_subitems[0]-> get_quantity() . '</td>
@@ -175,6 +168,9 @@ try{
               $tracking_subitem = $trackings_subitems[$l];
               $html .= '
               <tr>
+              <td style="border-top: 0px solid;border-bottom: 0px solid;"></td>
+              <td style="border-top: 0px solid;border-bottom: 0px solid;"></td>
+              <td style="border-top: 0px solid;border-bottom: 0px solid;"></td>
               <td>' . $tracking_subitem-> get_quantity() . '</td>
               <td>' . $tracking_subitem-> get_carrier() . '</td>
               <td>' . nl2br($tracking_subitem-> get_tracking_number()) . '</td>
