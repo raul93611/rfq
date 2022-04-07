@@ -1,4 +1,5 @@
 $(document).ready(function () {
+  /****************************************************************************/
   const net30Checkbox = $('#net30_cc');
   const fulfillmentPage = $('#fulfillment_page');
   let net30Fulfillment;
@@ -48,8 +49,11 @@ $(document).ready(function () {
   });
 
   /***********************************FULFILLMENT SHIPPING******************/
+  let counterShipping = $('#edit_fulfillment_shipping_modal form').attr('data');
+
   $('#fulfillment_page').on('click', '#edit_fulfillment_shipping', function(){
     $('#edit_fulfillment_shipping_modal form').load('/rfq/load_fulfillment_shipping/' + $(this).attr('data'), function(){
+      if(!+counterShipping)$('.remove_shipping').attr('disabled', 'disabled');
       $('#edit_fulfillment_shipping_modal').modal();
     });
   });
@@ -61,6 +65,36 @@ $(document).ready(function () {
       $('#fulfillment_page').load('/rfq/load_fulfillment_page/' + res.id_rfq);
     });
     return false;
+  });
+
+
+
+  $('#edit_fulfillment_shipping_modal form').on('click', '.add_shipping', function(){
+    counterShipping++;
+    $('input[name="shipping_counter"]').val(counterShipping);
+    const shippingFields = `
+    <div class="shipping${counterShipping}">
+      <div class="form-group">
+      <label for="fulfillment_shipping${counterShipping}">Description:</label>
+      <input type="hidden" name="fulfillment_shipping_original${counterShipping}" value="">
+      <input type="text" class="form-control form-control-sm" id="fulfillment_shipping${counterShipping}" name="fulfillment_shipping${counterShipping}" value="">
+      </div>
+      <div class="form-group">
+      <label for="amount${counterShipping}">Amount:</label>
+      <input type="hidden" name="amount_original${counterShipping}" value="">
+      <input type="number" step=".01" id="amount${counterShipping}" class="form-control form-control-sm" name="amount${counterShipping}" value="">
+      </div>
+    </div>
+    `;
+    $('.shipping_container').append(shippingFields);
+    if(counterShipping)$('.remove_shipping').removeAttr('disabled');
+  });
+
+  $('#edit_fulfillment_shipping_modal form').on('click', '.remove_shipping', function(){
+    $(`.shipping${counterShipping}`).remove();
+    counterShipping--;
+    $('input[name="shipping_counter"]').val(counterShipping);
+    if(!counterShipping)$('.remove_shipping').attr('disabled', 'disabled');
   });
   /***********************************FULFILLMENT SERVICES******************/
   $('#fulfillment_page').on('click', '.add_fulfillment_service_button', function(){

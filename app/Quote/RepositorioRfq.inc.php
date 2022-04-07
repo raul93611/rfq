@@ -360,7 +360,7 @@ class RepositorioRfq {
       $quote = self::obtener_cotizacion_por_id($connection, $id_rfq);
       $items = RepositorioItem::obtener_items_por_id_rfq($connection, $id_rfq);
       $net30_fulfillment = $quote-> obtener_total_price()*0.029*$quote-> obtener_net30_fulfillment();
-      $total_cost += $quote-> obtener_fulfillment_shipping_cost();
+      $total_cost += array_sum(explode('|', $quote-> obtener_fulfillment_shipping_cost()));
       foreach ($items as $i => $item) {
         $total_profit += $item-> obtener_fulfillment_profit();
         $total_cost += FulfillmentItemRepository::get_total_cost($connection, $item-> obtener_id());

@@ -46,8 +46,12 @@ class FulfillmentRepository{
               <td colspan="4">Shipping (from Proposal): <?php echo $quote-> obtener_shipping(); ?></td>
               <td>$ <?php echo $quote-> obtener_shipping_cost(); ?></td>
               <td></td>
-              <td colspan="4">Shipping: <?php echo $quote-> obtener_fulfillment_shipping(); ?></td>
-              <td>$ <?php echo $quote-> obtener_fulfillment_shipping_cost(); ?></td>
+              <td colspan="4">
+                <?php echo str_replace('|', '<br>', $quote-> obtener_fulfillment_shipping()); ?>
+              </td>
+              <td>
+                <?php echo str_replace('|', '<br>', $quote-> obtener_fulfillment_shipping_cost()); ?>
+              </td>
               <td></td>
               <td></td>
               <td></td>

@@ -112,9 +112,14 @@ class FulfillmentAuditTrailRepository{
     self::create_audit_trail_service_modified($connection, 'Payment Term', $payment_term, $payment_term_original, $id_service, $id_rfq);
   }
 
-  public static function shipping_event($connection, $shipping, $shipping_original, $shipping_cost, $shipping_cost_original, $id_rfq){
-    self::create_audit_trail_shipping_modified($connection, 'Shipping', $shipping, $shipping_original, $id_rfq);
-    self::create_audit_trail_shipping_modified($connection, 'Shipping Cost', $shipping_cost, $shipping_cost_original, $id_rfq);
+  public static function shipping_event($connection, $shippings, $shippings_original, $shippings_cost, $shippings_cost_original, $id_rfq){
+    foreach ($shippings as $key => $shipping) {
+      $shipping_original = $shippings_original[$key];
+      $shipping_cost = $shippings_cost[$key];
+      $shipping_cost_original = $shippings_cost_original[$key];
+      self::create_audit_trail_shipping_modified($connection, 'Shipping', $shipping, $shipping_original, $id_rfq);
+      self::create_audit_trail_shipping_modified($connection, 'Shipping Cost', $shipping_cost, $shipping_cost_original, $id_rfq);
+    }
   }
 
   public static function create_audit_trail_shipping_modified($connection, $field_name, $field, $original_field, $id_rfq){
