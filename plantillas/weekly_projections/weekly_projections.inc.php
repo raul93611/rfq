@@ -3,7 +3,7 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0 text-dark">Quotes</h1>
+          <h1 class="m-0 text-dark">Weekly Projections</h1>
         </div>
         <div class="col-sm-6">
         </div>
@@ -14,16 +14,7 @@
     <div class="container-fluid">
       <div class="row">
         <section class="col-12">
-          <div class="card">
-            <div class="card-header">
-              <h3 class="card-title">Invoice</h3>
-            </div>
-            <div class="card-body">
-              <?php
-              RepositorioRfq::print_invoice_quotes();
-              ?>
-            </div>
-          </div>
+            <iframe width="100%" height="780"frameborder="0" src="https://docs.google.com/spreadsheets/d/1s4Uq2Yv1j2T6CBDzKEUzdoFz_Wl9IOpRyU42iSZBVw4/edit?usp=sharing"></iframe>
         </section>
       </div>
     </div>

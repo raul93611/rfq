@@ -173,6 +173,9 @@ switch ($gestor_actual) {
   case 'tasks_done':
     include_once 'plantillas/tasks/tasks_done.inc.php';
     break;
+  case 'weekly_projections':
+    include_once 'plantillas/weekly_projections/weekly_projections.inc.php';
+    break;
 }
 include_once 'plantillas/utilities/documento_cierre.inc.php';
 ?>

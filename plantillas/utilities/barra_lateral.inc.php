@@ -427,6 +427,14 @@
           </a>
         </li>
         <li class="nav-item">
+          <a href="<?php echo WEEKLY_PROJECTIONS; ?>" class="nav-link <?php echo $gestor_actual == 'weekly_projections' ? 'active' : ''; ?>">
+            <i class="nav-icon fas fa-th"></i>
+            <p>
+              Weekly Projections
+            </p>
+          </a>
+        </li>
+        <li class="nav-item">
           <a href="<?php echo EMPLOYEE_DOCS_PAGE; ?>" class="nav-link <?php echo $gestor_actual == 'employee_docs_page' ? 'active' : ''; ?>">
             <i class="nav-icon fas fa-file"></i>
             <p>

@@ -68,6 +68,7 @@ define('SAVE_QUOTE_INFO', SERVIDOR . 'save_quote_info');
 define('NO_BID', PERFIL . 'no_bid');
 define('NO_SUBMITTED', PERFIL . 'no_submitted');
 define('CANCELLED', PERFIL . 'cancelled');
+define('WEEKLY_PROJECTIONS', PERFIL . 'weekly_projections');
 /***************************PROPOSAL********************************************/
 define('PROPOSAL', SERVIDOR . 'proposal');
 define('PROPOSAL_GSA', SERVIDOR . 'proposal_gsa');

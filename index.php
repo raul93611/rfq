@@ -334,6 +334,9 @@ if ($partes_ruta[0] == 'rfq') {
         case 'tasks_done':
           $gestor_actual = 'tasks_done';
           break;
+        case 'weekly_projections':
+          $gestor_actual = 'weekly_projections';
+          break;
       }
       break;
       case 'proposal':
