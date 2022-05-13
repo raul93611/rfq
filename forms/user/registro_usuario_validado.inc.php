@@ -29,12 +29,23 @@
     <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
   </div>
   <div class="form-group">
-    <label for="cargo">Position:</label>
-    <select class="form-control" name="cargo" id="cargo">
-      <option value="2">Fulfillment</option>
-      <option value="3">RFQ</option>
-      <option value="4">Accounting</option>
-    </select>
+    <label for="cargo">Roles:</label>
+    <div class="custom-control custom-checkbox">
+      <input type="checkbox" name="cargo[]" value="1" class="custom-control-input" id="admin">
+      <label class="custom-control-label" for="admin">Admin</label>
+    </div>
+    <div class="custom-control custom-checkbox">
+      <input type="checkbox" name="cargo[]" value="3" class="custom-control-input" id="rfq">
+      <label class="custom-control-label" for="rfq">RFQ</label>
+    </div>
+    <div class="custom-control custom-checkbox">
+      <input type="checkbox" name="cargo[]" value="2" class="custom-control-input" id="fulfillment">
+      <label class="custom-control-label" for="fulfillment">Fulfillment</label>
+    </div>
+    <div class="custom-control custom-checkbox">
+      <input type="checkbox" name="cargo[]" value="4" class="custom-control-input" id="accounting">
+      <label class="custom-control-label" for="accounting">Accounting</label>
+    </div>
   </div>
 </div>
 <div class="card-footer">

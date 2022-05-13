@@ -10,7 +10,7 @@ class RepositorioUsuario {
         $sentencia->bindParam(':password', $usuario->obtener_password(), PDO::PARAM_STR);
         $sentencia->bindParam(':nombres', $usuario->obtener_nombres(), PDO::PARAM_STR);
         $sentencia->bindParam(':apellidos', $usuario->obtener_apellidos(), PDO::PARAM_STR);
-        $sentencia->bindParam(':cargo', $usuario->obtener_cargo(), PDO::PARAM_STR);
+        $sentencia->bindParam(':cargo', $usuario->obtener_cargo_string(), PDO::PARAM_STR);
         $sentencia->bindParam(':email', $usuario->obtener_email(), PDO::PARAM_STR);
         $sentencia-> bindParam(':status', $usuario-> obtener_status(), PDO::PARAM_STR);
         $sentencia-> bindParam(':hash_recover_email', $usuario-> obtener_hash_recover_email(), PDO::PARAM_STR);
