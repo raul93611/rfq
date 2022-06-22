@@ -215,8 +215,6 @@ class TrackingRepository{
   }
     Conexion::abrir_conexion();
     $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Conexion::obtener_conexion(), $item-> obtener_id());
-    Conexion::cerrar_conexion();
-    Conexion::abrir_conexion();
     $re_quote_subitems = ReQuoteSubitemRepository::get_re_quote_subitems_by_id_re_quote_item(Conexion::obtener_conexion(), $re_quote_item-> get_id());
     Conexion::cerrar_conexion();
     foreach ($subitems as $key => $subitem) {

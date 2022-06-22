@@ -66,6 +66,7 @@ class ReQuoteRepository{
 
   public static function delete_whole_requote($connection, $id_rfq){
     $requote = self::get_re_quote_by_id_rfq($connection, $id_rfq);
+    if(!$requote) return;
     $items = ReQuoteItemRepository::get_re_quote_items_by_id_re_quote($connection, $requote-> get_id());
     foreach ($items as $key => $item) {
       $subitems = ReQuoteSubitemRepository::get_re_quote_subitems_by_id_re_quote_item($connection, $item-> get_id());
