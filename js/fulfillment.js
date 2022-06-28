@@ -25,7 +25,7 @@ $(document).ready(function () {
   $('body').tooltip({
     selector: '[data-toggle="tooltip"]',
     trigger: 'click',
-    placement: 'left',
+    placement: 'top',
   });
   /***********************************FULFILLMENT AUDIT TRAILS******************/
   const btnAuditTrail = $('#fulfillment_audit_trails_button');

@@ -62,6 +62,7 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
       if(isset($_POST['invoice']) && $_POST['invoice'] == 'si'){
         Conexion::abrir_conexion();
         RepositorioRfq::check_invoice_and_date(Conexion::obtener_conexion(), $_POST['id_rfq']);
+        RepositorioRfq::set_sales_commission(Conexion::obtener_conexion(), $_POST['sales_commission'], $_POST['sales_commission_comment'], $_POST['id_rfq']);
         $accounting_users = RepositorioUsuario::get_accounting_users(Conexion::obtener_conexion());
         Email::send_email_invoice_quote($accounting_users, $cotizacion_recuperada);
         AuditTrailRepository::quote_status_audit_trail(Conexion::obtener_conexion(), 'Invoice', $_POST['id_rfq']);

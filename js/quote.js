@@ -313,7 +313,7 @@ $(document).ready(function () {
     $('#total_quantity').html(total_quantity);
     $('#total_additional').html('$ ' + total_additional);
   });
-
+  /***************************************TYPE OF CONTRACT MODAL**************************************************/
   const fulfillmentCheckbox = $('#fulfillment');
   const typeOfContractModal = $('#type_of_contract_modal');
   const typeOfContractSelect = $('select[name="type_of_contract"]');
@@ -321,6 +321,18 @@ $(document).ready(function () {
   fulfillmentCheckbox.change(function () {
     if($(this).is(':checked')){
       typeOfContractModal.modal({
+        backdrop: 'static',
+        keyboard: false
+      });
+    }
+  })
+  /***************************************SALES COMMISSION MODAL**************************************************/
+  const invoiceCheckbox = $('#invoice');
+  const salesComissionModal = $('#sales_commission_modal');
+
+  invoiceCheckbox.change(function () {
+    if($(this).is(':checked')){
+      salesComissionModal.modal({
         backdrop: 'static',
         keyboard: false
       });

@@ -105,6 +105,9 @@ include_once 'app/Fulfillment/FulfillmentAuditTrailRepository.inc.php';
 include_once 'app/TypeOfContract/TypeOfContract.inc.php';
 include_once 'app/TypeOfContract/TypeOfContractRepository.inc.php';
 
+include_once 'app/SalesCommission/SalesCommission.inc.php';
+include_once 'app/SalesCommission/SalesCommissionRepository.inc.php';
+
 session_start();
 session_save_path('temp');
 

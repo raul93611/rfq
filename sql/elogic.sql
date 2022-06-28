@@ -60,6 +60,8 @@ CREATE TABLE rfq(
   fulfillment_shipping VARCHAR(255),
   type_of_contract VARCHAR(255),
   net30_fulfillment TINYINT,
+  sales_commission VARCHAR(255),
+  sales_commission_comment TEXT CHARACTER SET utf8,
   PRIMARY KEY(id),
   FOREIGN KEY(id_usuario)
       REFERENCES usuarios(id)
@@ -405,6 +407,18 @@ VALUES
 ('RFP Installation'),
 ('Professional Services'),
 ('Moving and Logistics');
+
+CREATE TABLE sales_commissions (
+  id INT NOT NULL AUTO_INCREMENT UNIQUE,
+  sales_commission VARCHAR(255) NOT NULL,
+  PRIMARY KEY(id)
+);
+
+INSERT INTO sales_commissions (sales_commission)
+VALUES
+('No commission'),
+('Same commission'),
+('Other commission');
 
 CREATE TABLE tasks(
   id INT NOT NULL AUTO_INCREMENT UNIQUE,

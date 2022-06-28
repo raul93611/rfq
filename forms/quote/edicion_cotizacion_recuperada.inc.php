@@ -59,7 +59,6 @@
   $items_exists = RepositorioItem::items_exists(Conexion::obtener_conexion(), $cotizacion_recuperada-> obtener_id());
   Conexion::cerrar_conexion();
   ?>
-  <h3 class="text-center text-info">TOTAL: $ <?php echo number_format($cotizacion_recuperada-> obtener_total_price() + $total_services, 2); ?></h3>
   <?php include_once 'forms/quote/templates/status_checkbox.inc.php'; ?>
   </div>
   <div class="card-footer footer_item" id="footer_lg">
