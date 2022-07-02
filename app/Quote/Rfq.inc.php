@@ -380,5 +380,13 @@ class Rfq {
   public function obtener_sales_commission_comment(){
     return $this-> sales_commission_comment;
   }
+
+  public function isServices($service){
+    $services = ['Services', 'Audio Visual'];
+    if(in_array($service, $services)){
+      return true;
+    }
+    return false;
+  }
 }
 ?>

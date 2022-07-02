@@ -50,7 +50,7 @@
     <br>
     <?php
   }
-  if($cotizacion_recuperada-> obtener_type_of_bid() == 'Services'){
+  if($cotizacion_recuperada-> isServices($cotizacion_recuperada-> obtener_type_of_bid())){
     include_once 'plantillas/services/services.inc.php';
   }
   Conexion::abrir_conexion();
