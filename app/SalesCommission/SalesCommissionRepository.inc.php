@@ -4,7 +4,7 @@ class SalesCommissionRepository{
     $sales_commissions = [];
     if(isset($connection)){
       try{
-        $sql = 'SELECT * FROM sales_commissions ORDER BY sales_commission ASC';
+        $sql = 'SELECT * FROM sales_commissions ORDER BY id ASC';
         $sentence = $connection-> prepare($sql);
         $sentence-> execute();
         $result = $sentence-> fetchAll(PDO::FETCH_ASSOC);
