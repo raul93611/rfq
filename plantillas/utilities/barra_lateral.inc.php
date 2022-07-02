@@ -17,6 +17,7 @@
         <?php
         include_once 'tasks_sidebar.inc.php';
         include_once 'charts_sidebar.inc.php';
+        include_once 'search_quotes_sidebar.inc.php';
         include_once 'users_sidebar.inc.php';
         include_once 'sales_sidebar.inc.php';
         include_once 'fulfillment_sidebar.inc.php';
