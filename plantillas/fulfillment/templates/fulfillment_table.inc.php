@@ -21,7 +21,7 @@
     </div>
     <div id="fulfillment_services_box" class="card-body">
       <?php
-      if($quote-> obtener_type_of_bid() == 'Services'){
+      if($quote-> isServices()){
         FulfillmentRepository::services_list($id_rfq);
       }else{
         ?>

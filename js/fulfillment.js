@@ -1,5 +1,36 @@
 $(document).ready(function () {
   /****************************************************************************/
+  $('#fulfillment_page').on('click', '.reviewed_button', function(){
+    $.ajax({
+      url: '/rfq/mark_as_reviewed/',
+      data: {
+        id_fulfillment_item: $(this).attr('data'),
+        id_item: $(this).attr('id_item')
+      },
+      type: 'POST',
+      success: function(res){
+        $('#fulfillment_page').load('/rfq/load_fulfillment_page/' + res.id_rfq);
+      }
+    });
+    return false;
+  });
+
+  $('#fulfillment_page').on('click', '.subitem_reviewed_button', function(){
+    $.ajax({
+      url: '/rfq/mark_subitem_as_reviewed/',
+      data: {
+        id_fulfillment_subitem: $(this).attr('data'),
+        id_subitem: $(this).attr('id_subitem'),
+        id_rfq: $(this).attr('id_rfq')
+      },
+      type: 'POST',
+      success: function(res){
+        $('#fulfillment_page').load('/rfq/load_fulfillment_page/' + res.id_rfq);
+      }
+    });
+    return false;
+  });
+  /****************************************************************************/
   const net30Checkbox = $('#net30_cc');
   const fulfillmentPage = $('#fulfillment_page');
   let net30Fulfillment;

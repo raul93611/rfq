@@ -24,7 +24,7 @@ if($cotizacion_recuperada-> obtener_canal() == 'Chemonics' || $cotizacion_recupe
     </div>
     <?php
   }else if($cotizacion_recuperada->obtener_award() && !$cotizacion_recuperada-> obtener_fullfillment()){
-    if(($items_exists && $re_quote_exists) || (!$items_exists && $cotizacion_recuperada-> isServices($cotizacion_recuperada-> obtener_type_of_bid()))){
+    if(($items_exists && $re_quote_exists) || (!$items_exists && $cotizacion_recuperada-> isServices())){
       ?>
       <div id="id1" class="custom-control custom-checkbox">
         <input type="checkbox" class="custom-control-input" name="fulfillment" value="si" <?php if ($cotizacion_recuperada->obtener_fullfillment()) { echo 'checked'; } ?> id="fulfillment">

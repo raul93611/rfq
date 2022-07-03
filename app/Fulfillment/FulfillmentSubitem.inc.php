@@ -9,8 +9,9 @@ class FulfillmentSubitem{
   private $real_cost;
   private $payment_term;
   private $comments;
+  private $reviewed;
 
-  public function __construct($id, $id_subitem, $provider, $quantity, $unit_cost, $other_cost, $real_cost, $payment_term, $comments){
+  public function __construct($id, $id_subitem, $provider, $quantity, $unit_cost, $other_cost, $real_cost, $payment_term, $comments, $reviewed){
     $this-> id = $id;
     $this-> id_subitem = $id_subitem;
     $this-> provider = $provider;
@@ -20,6 +21,7 @@ class FulfillmentSubitem{
     $this-> real_cost = $real_cost;
     $this-> payment_term = $payment_term;
     $this-> comments = $comments;
+    $this-> reviewed = $reviewed;
   }
 
   public function get_id(){
@@ -56,6 +58,10 @@ class FulfillmentSubitem{
 
   public function get_comments(){
     return $this-> comments;
+  }
+
+  public function get_reviewed(){
+    return $this-> reviewed;
   }
 }
 ?>

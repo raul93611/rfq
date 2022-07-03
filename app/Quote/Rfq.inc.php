@@ -381,9 +381,9 @@ class Rfq {
     return $this-> sales_commission_comment;
   }
 
-  public function isServices($service){
+  public function isServices(){
     $services = ['Services', 'Audio Visual'];
-    if(in_array($service, $services)){
+    if(in_array($this-> obtener_type_of_bid(), $services)){
       return true;
     }
     return false;

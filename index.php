@@ -231,6 +231,12 @@ if ($partes_ruta[0] == 'rfq') {
       case 'delete_fulfillment_service':
         $ruta_elegida = 'scripts/fulfillment/delete_fulfillment_service.php';
         break;
+      case 'mark_as_reviewed':
+        $ruta_elegida = 'scripts/fulfillment/mark_as_reviewed.php';
+        break;
+      case 'mark_subitem_as_reviewed':
+        $ruta_elegida = 'scripts/fulfillment/mark_subitem_as_reviewed.php';
+        break;
       case 'save_provider':
         $ruta_elegida = 'scripts/providers/save_provider.php';
         break;
@@ -283,65 +289,65 @@ if ($partes_ruta[0] == 'rfq') {
   } else if (count($partes_ruta) == 3) {
     switch ($partes_ruta[1]) {
       case 'perfil':
-      $ruta_elegida = 'vistas/perfil.php';
-      switch ($partes_ruta[2]) {
-        case 'registro':
-          $gestor_actual = 'registro';
-          break;
-        case 'users':
-          $gestor_actual = 'users';
-          break;
-        case 'search_quotes':
-          $gestor_actual = 'search_quotes';
-          break;
-        case 'employee_docs_page':
-          $gestor_actual = 'employee_docs_page';
-          break;
-        case 'reports':
-          if(isset($_POST['generate_excel_report'])){
-            $ruta_elegida = 'scripts/utilities/excel_report_' . $_POST['report'] . '.php';
-          }else {
-            $gestor_actual = 'reports';
-          }
-          break;
-        case 'fulfillment_quotes':
-          $gestor_actual = 'fulfillment_quotes';
-          break;
-        case 'invoice_quotes':
-          $gestor_actual = 'invoice_quotes';
-          break;
-        case 'submitted_invoice_quotes':
-          $gestor_actual = 'submitted_invoice_quotes';
-          break;
-        case 'no_bid':
-          $gestor_actual = 'no_bid';
-          break;
-        case 'no_submitted':
-          $gestor_actual = 'no_submitted';
-          break;
-        case 'cancelled':
-          $gestor_actual = 'cancelled';
-          break;
-        case 'providers':
-          $gestor_actual = 'providers';
-          break;
-        case 'payment_terms':
-          $gestor_actual = 'payment_terms';
-          break;
-        case 'charts':
-          $gestor_actual = 'charts';
-          break;
-        case 'my_tasks':
-          $gestor_actual = 'my_tasks';
-          break;
-        case 'tasks_done':
-          $gestor_actual = 'tasks_done';
-          break;
-        case 'weekly_projections':
-          $gestor_actual = 'weekly_projections';
-          break;
-      }
-      break;
+        $ruta_elegida = 'vistas/perfil.php';
+        switch ($partes_ruta[2]) {
+          case 'registro':
+            $gestor_actual = 'registro';
+            break;
+          case 'users':
+            $gestor_actual = 'users';
+            break;
+          case 'search_quotes':
+            $gestor_actual = 'search_quotes';
+            break;
+          case 'employee_docs_page':
+            $gestor_actual = 'employee_docs_page';
+            break;
+          case 'reports':
+            if (isset($_POST['generate_excel_report'])) {
+              $ruta_elegida = 'scripts/utilities/excel_report_' . $_POST['report'] . '.php';
+            } else {
+              $gestor_actual = 'reports';
+            }
+            break;
+          case 'fulfillment_quotes':
+            $gestor_actual = 'fulfillment_quotes';
+            break;
+          case 'invoice_quotes':
+            $gestor_actual = 'invoice_quotes';
+            break;
+          case 'submitted_invoice_quotes':
+            $gestor_actual = 'submitted_invoice_quotes';
+            break;
+          case 'no_bid':
+            $gestor_actual = 'no_bid';
+            break;
+          case 'no_submitted':
+            $gestor_actual = 'no_submitted';
+            break;
+          case 'cancelled':
+            $gestor_actual = 'cancelled';
+            break;
+          case 'providers':
+            $gestor_actual = 'providers';
+            break;
+          case 'payment_terms':
+            $gestor_actual = 'payment_terms';
+            break;
+          case 'charts':
+            $gestor_actual = 'charts';
+            break;
+          case 'my_tasks':
+            $gestor_actual = 'my_tasks';
+            break;
+          case 'tasks_done':
+            $gestor_actual = 'tasks_done';
+            break;
+          case 'weekly_projections':
+            $gestor_actual = 'weekly_projections';
+            break;
+        }
+        break;
       case 'proposal':
         $id_rfq = $partes_ruta[2];
         $ruta_elegida = 'scripts/utilities/proposal.php';
@@ -560,14 +566,14 @@ if ($partes_ruta[0] == 'rfq') {
         $ruta_elegida = 'scripts/tasks/load_task.php';
         break;
       default:
-      break;
+        break;
     }
   } else if (count($partes_ruta) == 4) {
-    if($partes_ruta[1] == 'delete_document'){
+    if ($partes_ruta[1] == 'delete_document') {
       $id_rfq = $partes_ruta[2];
       $archivo = $partes_ruta[3];
       $ruta_elegida = 'scripts/utilities/delete_document.php';
-    }else if($partes_ruta[1] == 'perfil'){
+    } else if ($partes_ruta[1] == 'perfil') {
       $ruta_elegida = 'vistas/perfil.php';
       switch ($partes_ruta[2]) {
         case 'add_re_quote_item':
@@ -694,4 +700,3 @@ if ($partes_ruta[0] == 'rfq') {
   }
 }
 include_once $ruta_elegida;
-?>

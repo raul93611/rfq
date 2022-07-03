@@ -4,7 +4,7 @@ Conexion::abrir_conexion();
 $cotizacion = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
 $usuario_designado = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), $cotizacion->obtener_usuario_designado());
 $items = RepositorioItem::obtener_items_por_id_rfq(Conexion::obtener_conexion(), $id_rfq);
-if($cotizacion-> obtener_type_of_bid() == 'Services'){
+if($cotizacion-> isServices()){
   $services = ServiceRepository::get_services(Conexion::obtener_conexion(), $id_rfq);
   $total_service = ServiceRepository::get_total(Conexion::obtener_conexion(), $id_rfq);
 }else{

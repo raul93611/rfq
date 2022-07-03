@@ -3,7 +3,7 @@ class FulfillmentItemRepository{
   public static function array_to_object($sentence){
     $objects = [];
     while ($row = $sentence-> fetch(PDO::FETCH_ASSOC)) {
-      $objects[] = new FulfillmentItem($row['id'], $row['id_item'], $row['provider'], $row['quantity'], $row['unit_cost'], $row['other_cost'], $row['real_cost'], $row['payment_term'], $row['comments']);
+      $objects[] = new FulfillmentItem($row['id'], $row['id_item'], $row['provider'], $row['quantity'], $row['unit_cost'], $row['other_cost'], $row['real_cost'], $row['payment_term'], $row['comments'], $row['reviewed']);
     }
 
     return $objects;
@@ -11,7 +11,7 @@ class FulfillmentItemRepository{
 
   public static function single_result_to_object($sentence){
     $row = $sentence-> fetch(PDO::FETCH_ASSOC);
-    $object = new FulfillmentItem($row['id'], $row['id_item'], $row['provider'], $row['quantity'], $row['unit_cost'], $row['other_cost'], $row['real_cost'], $row['payment_term'], $row['comments']);
+    $object = new FulfillmentItem($row['id'], $row['id_item'], $row['provider'], $row['quantity'], $row['unit_cost'], $row['other_cost'], $row['real_cost'], $row['payment_term'], $row['comments'], $row['reviewed']);
 
     return $object;
   }
@@ -66,6 +66,19 @@ class FulfillmentItemRepository{
         $sentence-> bindParam(':real_cost', $real_cost, PDO::PARAM_STR);
         $sentence-> bindParam(':payment_term', $payment_term, PDO::PARAM_STR);
         $sentence-> bindParam(':comments', $comment, PDO::PARAM_STR);
+        $sentence-> bindParam(':id_fulfillment_item', $id_fulfillment_item, PDO::PARAM_STR);
+        $sentence-> execute();
+      }catch(PDOException $ex){
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+  }
+
+  public static function mark_as_reviewed($connection, $id_fulfillment_item){
+    if(isset($connection)){
+      try{
+        $sql = 'UPDATE fulfillment_items SET reviewed = 1 - reviewed WHERE id = :id_fulfillment_item';
+        $sentence = $connection-> prepare($sql);
         $sentence-> bindParam(':id_fulfillment_item', $id_fulfillment_item, PDO::PARAM_STR);
         $sentence-> execute();
       }catch(PDOException $ex){

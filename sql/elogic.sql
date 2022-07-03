@@ -335,6 +335,7 @@ CREATE TABLE fulfillment_items(
   payment_term VARCHAR(255) NOT NULL,
   net30_cc TINYINT,
   comments TEXT CHARACTER SET utf8 NOT NULL,
+  reviewed INT DEFAULT 0,
   PRIMARY KEY(id),
   FOREIGN KEY(id_item)
     REFERENCES item(id)
@@ -353,6 +354,7 @@ CREATE TABLE fulfillment_subitems(
   payment_term VARCHAR(255) NOT NULL,
   net30_cc TINYINT,
   comments TEXT CHARACTER SET utf8 NOT NULL,
+  reviewed INT DEFAULT 0,
   PRIMARY KEY(id),
   FOREIGN KEY(id_subitem)
     REFERENCES subitems(id)
@@ -369,6 +371,7 @@ CREATE TABLE fulfillment_services(
   other_cost DECIMAL(20,2) NOT NULL,
   real_cost DECIMAL(20,2) NOT NULL,
   payment_term VARCHAR(255) NOT NULL,
+  reviewed INT DEFAULT 0,
   PRIMARY KEY(id),
   FOREIGN KEY(id_service)
     REFERENCES services(id)

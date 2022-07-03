@@ -11,7 +11,7 @@ class FulfillmentServiceRepository{
         $result = $sentence-> fetchAll(PDO::FETCH_ASSOC);
         if(count($result)){
           foreach ($result as $row) {
-            $services[] = new FulfillmentService($row['id'], $row['id_service'], $row['provider'], $row['quantity'], $row['unit_cost'], $row['other_cost'], $row['real_cost'], $row['payment_term']);
+            $services[] = new FulfillmentService($row['id'], $row['id_service'], $row['provider'], $row['quantity'], $row['unit_cost'], $row['other_cost'], $row['real_cost'], $row['payment_term'], $row['reviewed']);
           }
         }
       }catch(PDOException $ex){
@@ -103,7 +103,7 @@ class FulfillmentServiceRepository{
         $sentence-> execute();
         $result = $sentence-> fetch(PDO::FETCH_ASSOC);
         if(!empty($result)){
-          $item = new FulfillmentService($result['id'], $result['id_service'], $result['provider'], $result['quantity'], $result['unit_cost'], $result['other_cost'], $result['real_cost'], $result['payment_term']);
+          $item = new FulfillmentService($result['id'], $result['id_service'], $result['provider'], $result['quantity'], $result['unit_cost'], $result['other_cost'], $result['real_cost'], $result['payment_term'], $result['reviewed']);
         }
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
