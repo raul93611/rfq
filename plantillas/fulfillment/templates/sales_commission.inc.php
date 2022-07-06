@@ -8,7 +8,7 @@ switch ($quote->obtener_sales_commission()) {
     break;
   case 'Same commission':
     $sales_commission = [
-      '$' . $quote->obtener_quote_total_price() - $re_quote->get_total_cost() . ' / ' . number_format(100 * (($quote->obtener_quote_total_price() - $re_quote->get_total_cost()) / $quote->obtener_quote_total_price()), 2) . '%',
+      '$' . number_format($quote->obtener_quote_total_price() - $re_quote->get_total_cost(), 2) . ' / ' . number_format(100 * (($quote->obtener_quote_total_price() - $re_quote->get_total_cost()) / $quote->obtener_quote_total_price()), 2) . '%',
       '$' . number_format(($quote->obtener_quote_total_price() - $re_quote->get_total_cost()) * 0.03, 2)
     ];
     break;
