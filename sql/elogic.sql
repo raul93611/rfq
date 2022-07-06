@@ -62,6 +62,7 @@ CREATE TABLE rfq(
   net30_fulfillment TINYINT,
   sales_commission VARCHAR(255),
   sales_commission_comment TEXT CHARACTER SET utf8,
+  services_payment_term VARCHAR(255) DEFAULT 'Net 30',
   PRIMARY KEY(id),
   FOREIGN KEY(id_usuario)
       REFERENCES usuarios(id)

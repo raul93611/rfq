@@ -46,6 +46,7 @@ class Rfq {
   private $net30_fulfillment;
   private $sales_commission;
   private $sales_commission_comment;
+  private $services_payment_term;
 
   public function __construct($id,
     $id_usuario,
@@ -92,7 +93,8 @@ class Rfq {
     $type_of_contract,
     $net30_fulfillment,
     $sales_commission,
-    $sales_commission_comment
+    $sales_commission_comment,
+    $services_payment_term
   ) {
     $this->id = $id;
     $this->id_usuario = $id_usuario;
@@ -140,6 +142,7 @@ class Rfq {
     $this-> net30_fulfillment = $net30_fulfillment;
     $this-> sales_commission = $sales_commission;
     $this-> sales_commission_comment = $sales_commission_comment;
+    $this-> services_payment_term = $services_payment_term;
   }
 
   public function obtener_id() {
@@ -322,16 +325,19 @@ class Rfq {
     Conexion::abrir_conexion();
     $total_services = ServiceRepository::get_total(Conexion::obtener_conexion(), $this-> id);
     Conexion::cerrar_conexion();
-    return $this-> total_price + $total_services;
+    return number_format($this-> total_price + $total_services, 2);
   }
 
   public function obtener_quote_profit(){
-    return $this-> obtener_quote_total_price() - $this-> total_cost;
+    Conexion::abrir_conexion();
+    $total_services = ServiceRepository::get_total(Conexion::obtener_conexion(), $this-> id);
+    Conexion::cerrar_conexion();
+    return number_format($this-> obtener_quote_total_price() - ($this-> total_cost + $total_services), 2);
   }
 
   public function obtener_quote_profit_percentage(){
     if($this-> obtener_quote_total_price()){
-      return 100*($this-> obtener_quote_profit()/$this-> obtener_quote_total_price());
+      return number_format(100*($this-> obtener_quote_profit()/$this-> obtener_quote_total_price()), 2);
     }else{
       return 0;
     }
@@ -387,6 +393,10 @@ class Rfq {
       return true;
     }
     return false;
+  }
+
+  public function obtener_services_payment_term(){
+    return $this-> services_payment_term;
   }
 }
 ?>

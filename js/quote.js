@@ -338,4 +338,30 @@ $(document).ready(function () {
       });
     }
   })
+  /***************************************/
+  const unitPriceFields = [];
+  const servicesQuantityFields = [];
+  $('#services_table tbody .service_item').each(function () {
+    unitPriceFields.push(+$(this).find('td').eq(4).text());
+    servicesQuantityFields.push(+$(this).find('td').eq(3).text());
+  });
+
+  const calcServices = function () {
+    const paymentTerms = $('input:radio[name=services_payment_term]:checked').val() === 'Net 30/CC' ? 1.0299 : 1;
+    let totalServices = 0;
+
+    $('#services_table tbody .service_item').each(function (i, element) {
+      const newUnitPrice = (unitPriceFields[i] * paymentTerms).toFixed(2);
+      const newTotalPrice = (newUnitPrice * servicesQuantityFields[i]).toFixed(2);
+      totalServices += +newTotalPrice;
+
+      $(this).find('td').eq(4).html(newUnitPrice);
+      $(this).find('td').eq(5).html(newTotalPrice);
+    });
+
+    $('#total_service').html('$ ' + totalServices.toFixed(2));
+  }
+
+  const servicesPaymentTerms = setInterval(calcServices, 100);
+  $('#form_edited_quote').submit(calcServices);
 });

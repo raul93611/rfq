@@ -10,6 +10,7 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
   }
   $cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $_POST['id_rfq']);
   AuditTrailRepository::items_table_events(Conexion::obtener_conexion(), $_POST['taxes'], $_POST['taxes_original'], $_POST['profit'], $_POST['profit_original'], $_POST['additional_general'], $_POST['additional_general_original'], $_POST['payment_terms'], $_POST['payment_terms_original'], $_POST['shipping'], $_POST['shipping_original'], $_POST['shipping_cost'], $_POST['shipping_cost_original'], $_POST['id_rfq']);
+  ServiceRepository::calc_items_with_CC(Conexion::obtener_conexion(), $_POST['services_payment_term'], $_POST['id_rfq']);
   Conexion::cerrar_conexion();
   if($cotizacion_recuperada-> obtener_canal() == 'Chemonics' || $cotizacion_recuperada-> obtener_canal() == 'Ebay & Amazon'){
     if(isset($_POST['award']) && $_POST['award'] == 'si'){

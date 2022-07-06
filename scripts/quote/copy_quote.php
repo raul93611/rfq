@@ -47,7 +47,8 @@ $cotizacion_copia = new Rfq('',
   null,
   null,
   null,
-  null
+  null,
+  'Net 30'
 );
 list($cotizacion_insertada, $id_rfq_copia) = RepositorioRfq::insertar_cotizacion(Conexion::obtener_conexion(), $cotizacion_copia);
 AuditTrailRepository::quote_status_audit_trail(Conexion::obtener_conexion(), 'Copied', $id_rfq_copia);

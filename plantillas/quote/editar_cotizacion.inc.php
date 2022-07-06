@@ -56,13 +56,13 @@ if(is_null($cotizacion_recuperada)){
             <div class="card-body">
               <div class="row">
                 <div class="col-md-4">
-                  <h3 class="text-info text-center">Total Price: $ <?php echo number_format($cotizacion_recuperada-> obtener_quote_total_price(), 2); ?></h3>
+                  <h3 class="text-info text-center">Total Price: $ <?php echo $cotizacion_recuperada-> obtener_quote_total_price(); ?></h3>
                 </div>
                 <div class="col-md-4">
-                  <h3 class="text-info text-center">Total profit: $ <?php echo number_format($cotizacion_recuperada-> obtener_quote_profit(), 2); ?></h3>
+                  <h3 class="text-info text-center">Total profit: $ <?php echo $cotizacion_recuperada-> obtener_quote_profit(); ?></h3>
                 </div>
                 <div class="col-md-4">
-                  <h3 class="text-info text-center">Total profit(%): <?php echo number_format($cotizacion_recuperada-> obtener_quote_profit_percentage(), 2); ?></h3>
+                  <h3 class="text-info text-center">Total profit(%): <?php echo $cotizacion_recuperada-> obtener_quote_profit_percentage(); ?></h3>
                 </div>
               </div>
             </div>

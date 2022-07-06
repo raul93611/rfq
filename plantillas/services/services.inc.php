@@ -8,7 +8,7 @@
   <div class="col-md-12">
     <?php
     Conexion::abrir_conexion();
-    ServiceRepository::display_services(Conexion::obtener_conexion(), $cotizacion_recuperada->obtener_id());
+    ServiceRepository::display_services(Conexion::obtener_conexion(), $cotizacion_recuperada);
     Conexion::cerrar_conexion();
     ?>
   </div>
