@@ -290,7 +290,7 @@ class FulfillmentRepository
       <tbody>
         <?php
         foreach ($services as $i => $service) {
-          self::service_list($service, $i, $id_rfq);
+          self::service_list($service, $i, $quote-> obtener_services_payment_term());
         }
         ?>
         <tr>
@@ -308,8 +308,9 @@ class FulfillmentRepository
       }
     }
 
-    public static function service_list($service, $i, $id_rfq)
+    public static function service_list($service, $i, $payment_term)
     {
+      $payment_term = $payment_term == 'Net 30/CC' ? 1.03 : 1;
       if (!isset($service)) {
         return;
       }
@@ -329,7 +330,7 @@ class FulfillmentRepository
   <td rowspan="<?php echo $fulfillment_services_quantity; ?>"><?php echo $i + 1; ?></td>
   <td rowspan="<?php echo $fulfillment_services_quantity; ?>"><?php echo $service->get_description(); ?></td>
   <td rowspan="<?php echo $fulfillment_services_quantity; ?>"><?php echo $service->get_quantity(); ?></td>
-  <td rowspan="<?php echo $fulfillment_services_quantity; ?>"><?php echo $service->get_unit_price(); ?></td>
+  <td rowspan="<?php echo $fulfillment_services_quantity; ?>"><?php echo number_format($service->get_unit_price() * $payment_term, 2); ?></td>
   <td rowspan="<?php echo $fulfillment_services_quantity; ?>"><?php echo $service->get_total_price(); ?></td>
   <?php
       if (count($fulfillment_services)) {

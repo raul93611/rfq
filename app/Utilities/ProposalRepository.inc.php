@@ -139,7 +139,7 @@ class ProposalRepository{
   }
 
   public static function print_subitem_pdf($quote, $subitem, $payment_terms){
-    $html .= '
+    $html = '
       <tr>
       <td></td>
       <td><b>Brand name:</b> ' . $subitem-> obtener_brand_project() . '<br><b>Part number:</b> ' . $subitem-> obtener_part_number_project() . '<br><b>Item description:</b><br> ' . nl2br(wordwrap(mb_substr($subitem->obtener_description_project(), 0, 150), 70, '<br>', true)) . '</td>}
@@ -186,7 +186,7 @@ class ProposalRepository{
 
   public static function print_item_pdf_re_quote($re_quote_item, $items, $a, $i){
     $item = $items[$i];
-    $html .= '
+    $html = '
     <tr>
     <td>' . $a . '</td>
     <td><b>Brand name:</b>' . $re_quote_item-> get_brand_project() . '<br><b>Part number:</b>' . $re_quote_item-> get_part_number_project() . '<br><b>Item description:</b>' . nl2br(mb_substr($re_quote_item-> get_description_project(), 0, 150)) . '</td>
@@ -256,7 +256,7 @@ class ProposalRepository{
 
   public static function print_subitem_pdf_re_quote($re_quote_subitem, $j, $subitems){
     $subitem = $subitems[$j];
-    $html .= '
+    $html = '
     <tr>
     <td></td>
     <td><b>Brand name:</b>' . $re_quote_subitem-> get_brand_project() . '<br><b>Part number:</b>' . $re_quote_subitem-> get_part_number_project() . '<br><b>Item description:</b><br>' . nl2br(mb_substr($re_quote_subitem-> get_description_project(), 0, 150)) . '</td>
@@ -319,12 +319,13 @@ class ProposalRepository{
     return $html;
   }
 
-  public static function print_service($service, $a){
+  public static function print_service($payment_term, $service, $a){
+    $payment_term = $payment_term == 'Net 30/CC' ? 1.03 : 1;
     $html = '<tr>
       <td style="border-bottom: 0;">' . $a . '</td>
       <td style="border-bottom: 0;">' . nl2br($service-> get_description()) . '</td>
       <td style="text-align:right;border-bottom: 0;">' .  $service-> get_quantity() . '</td>
-      <td style="text-align:right;border-bottom: 0;">$ ' . number_format($service-> get_unit_price(), 2) . '</td>
+      <td style="text-align:right;border-bottom: 0;">$ ' . number_format($service-> get_unit_price() * $payment_term, 2) . '</td>
       <td style="text-align:right;border-bottom: 0;">$ ' . number_format($service-> get_total_price(), 2) . '</td>
       </tr>';
     return $html;

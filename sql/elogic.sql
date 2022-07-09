@@ -36,7 +36,7 @@ CREATE TABLE rfq(
   payment_terms VARCHAR(100) NOT NULL,
   address TEXT CHARACTER SET utf8 NOT NULL,
   ship_to TEXT CHARACTER SET utf8 NOT NULL,
-  expiration_date DATE NOT NULL,
+  expiration_date DATE,
   ship_via VARCHAR(100) NOT NULL,
   taxes DECIMAL(10,2) NOT NULL,
   profit DECIMAL(10,2) NOT NULL,

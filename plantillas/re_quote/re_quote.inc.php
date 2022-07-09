@@ -3,6 +3,7 @@ Conexion::abrir_conexion();
 $quote = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
 $id_requote = ReQuoteRepository::create_re_quote(Conexion::obtener_conexion(), $id_rfq);
 $re_quote = ReQuoteRepository::get_re_quote_by_id_rfq(Conexion::obtener_conexion(), $id_rfq);
+$total_service = ServiceRepository::get_total(Conexion::obtener_conexion(), $id_rfq);
 Conexion::cerrar_conexion();
 ?>
 <div class="content-wrapper">
@@ -37,6 +38,18 @@ Conexion::cerrar_conexion();
             </div>
             <div class="card card-primary">
               <div class="card-header">
+                <h3 class="card-title"><i class="fas fa-dollar-sign"></i> Total Services</h3>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-12">
+                    <h3 class="text-info text-center">Total Price: $ <?php echo number_format($total_service, 2); ?></h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card card-primary">
+              <div class="card-header">
                 <h3 class="card-title"><i class="fas fa-dollar-sign"></i> Total</h3>
               </div>
               <div class="card-body">
@@ -45,10 +58,10 @@ Conexion::cerrar_conexion();
                     <h3 class="text-info text-center">Total Price: $ <?php echo number_format($quote-> obtener_quote_total_price(), 2); ?></h3>
                   </div>
                   <div class="col-md-4">
-                    <h3 class="text-info text-center">Total profit: $ <?php echo number_format($quote-> obtener_quote_total_price() - $re_quote-> get_total_cost(), 2); ?></h3>
+                    <h3 class="text-info text-center">Total profit: $ <?php echo number_format($quote-> obtener_re_quote_profit(), 2); ?></h3>
                   </div>
                   <div class="col-md-4">
-                    <h3 class="text-info text-center">Total profit(%): <?php echo number_format(100*(($quote-> obtener_quote_total_price() - $re_quote-> get_total_cost())/$quote-> obtener_quote_total_price()), 2); ?></h3>
+                    <h3 class="text-info text-center">Total profit(%): <?php echo number_format($quote-> obtener_re_quote_profit_percentage(), 2); ?></h3>
                   </div>
                 </div>
               </div>

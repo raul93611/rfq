@@ -175,7 +175,7 @@ try{
       }
       if(isset($services)){
         foreach ($services as $key => $service) {
-          $html .= ProposalRepository::print_service($service, $a);
+          $html .= ProposalRepository::print_service($cotizacion-> obtener_services_payment_term(), $service, $a);
           $a++;
         }
       }
