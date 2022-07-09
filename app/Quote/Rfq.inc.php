@@ -325,19 +325,19 @@ class Rfq {
     Conexion::abrir_conexion();
     $total_services = ServiceRepository::get_total(Conexion::obtener_conexion(), $this-> id);
     Conexion::cerrar_conexion();
-    return number_format($this-> total_price + $total_services, 2);
+    return $this-> total_price + $total_services;
   }
 
   public function obtener_quote_profit(){
     Conexion::abrir_conexion();
     $total_services = ServiceRepository::get_total(Conexion::obtener_conexion(), $this-> id);
     Conexion::cerrar_conexion();
-    return number_format($this-> obtener_quote_total_price() - ($this-> total_cost + $total_services), 2);
+    return $this-> obtener_quote_total_price() - ($this-> total_cost + $total_services);
   }
 
   public function obtener_quote_profit_percentage(){
     if($this-> obtener_quote_total_price()){
-      return number_format(100*($this-> obtener_quote_profit()/$this-> obtener_quote_total_price()), 2);
+      return 100*($this-> obtener_quote_profit()/$this-> obtener_quote_total_price());
     }else{
       return 0;
     }
