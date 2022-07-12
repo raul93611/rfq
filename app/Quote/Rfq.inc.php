@@ -354,14 +354,27 @@ class Rfq
     return $this->multi_year_project;
   }
 
+  //fulfillment amounts
+  public function obtener_fulfillment_total_cost(){
+    return $this->total_fulfillment + $this->total_services_fulfillment;
+  }
+
   public function obtener_real_fulfillment_profit()
   {
-    return $this->obtener_quote_total_price() - ($this->total_fulfillment + $this->total_services_fulfillment);
+    return $this->obtener_quote_total_price() - $this-> obtener_fulfillment_total_cost();
   }
 
   public function obtener_real_fulfillment_profit_percentage()
   {
     return 100 * ($this->obtener_real_fulfillment_profit() / $this->obtener_quote_total_price());
+  }
+
+  //quote amounts
+  public function obtener_quote_total_cost(){
+    Conexion::abrir_conexion();
+    $total_services = ServiceRepository::get_total(Conexion::obtener_conexion(), $this->id);
+    Conexion::cerrar_conexion();
+    return $this->total_cost + $total_services;
   }
 
   public function obtener_quote_total_price()
@@ -373,11 +386,8 @@ class Rfq
   }
 
   public function obtener_quote_profit()
-  {
-    Conexion::abrir_conexion();
-    $total_services = ServiceRepository::get_total(Conexion::obtener_conexion(), $this->id);
-    Conexion::cerrar_conexion();
-    return $this->obtener_quote_total_price() - ($this->total_cost + $total_services);
+  { 
+    return $this->obtener_quote_total_price() - $this-> obtener_quote_total_cost();
   }
 
   public function obtener_quote_profit_percentage()
@@ -389,13 +399,18 @@ class Rfq
     }
   }
 
-  public function obtener_re_quote_profit()
-  {
+  //reQuote amounts
+  public function obtener_re_quote_total_cost(){
     Conexion::abrir_conexion();
     $re_quote = ReQuoteRepository::get_re_quote_by_id_rfq(Conexion::obtener_conexion(), $this->id);
     $total_services = ServiceRepository::get_total(Conexion::obtener_conexion(), $this->id);
     Conexion::cerrar_conexion();
-    return $this->obtener_quote_total_price() - ($re_quote->get_total_cost() + $total_services);
+    return $re_quote->get_total_cost() + $total_services;
+  }
+
+  public function obtener_re_quote_profit()
+  {
+    return $this->obtener_quote_total_price() - $this-> obtener_re_quote_total_cost();
   }
 
   public function obtener_re_quote_profit_percentage(){

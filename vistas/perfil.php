@@ -158,6 +158,9 @@ switch ($gestor_actual) {
   case 'fulfillment':
     include_once 'plantillas/fulfillment/fulfillment.inc.php';
     break;
+  case 'kpi':
+    include_once 'plantillas/kpi/kpi.inc.php';
+    break;
   case 'providers':
     include_once 'plantillas/providers/providers.inc.php';
     break;

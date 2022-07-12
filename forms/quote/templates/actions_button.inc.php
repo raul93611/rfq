@@ -19,6 +19,7 @@
     if($cotizacion_recuperada-> obtener_fullfillment()){
       ?>
       <a href="<?php echo FULFILLMENT . $cotizacion_recuperada-> obtener_id(); ?>" class="dropdown-item">Fulfillment</a>
+      <a href="<?php echo KPI . $cotizacion_recuperada-> obtener_id(); ?>" class="dropdown-item">KPI</a>
       <?php
     }
     ?>

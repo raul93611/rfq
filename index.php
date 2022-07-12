@@ -565,6 +565,10 @@ if ($partes_ruta[0] == 'rfq') {
         $id_task = $partes_ruta[2];
         $ruta_elegida = 'scripts/tasks/load_task.php';
         break;
+      case 'kpi':
+        $id_rfq = $partes_ruta[2];
+        $ruta_elegida = 'scripts/kpi/load_kpi_charts.php';
+        break;
       default:
         break;
     }
@@ -638,6 +642,10 @@ if ($partes_ruta[0] == 'rfq') {
           break;
         case 'fulfillment':
           $gestor_actual = 'fulfillment';
+          $id_rfq = $partes_ruta[3];
+          break;
+        case 'kpi':
+          $gestor_actual = 'kpi';
           $id_rfq = $partes_ruta[3];
           break;
         default:
