@@ -39,7 +39,7 @@ $(document).ready(function () {
 
   if($('#archivos_ejemplo').length != 0){
     $.ajax({
-      url: '/rfq/get_quote_files/' + $('[name="id_rfq"]').val(),
+      url: '/rfq/quote/get_quote_files/' + $('[name="id_rfq"]').val(),
       dataType: 'json',
       contentType: "application/json; charset=utf-8",
       method: "GET",
@@ -53,16 +53,16 @@ $(document).ready(function () {
           filesConfig.push({
             previewAsData: false,
             caption: file,
-            url: '/rfq/delete_document/' + $('input[name="id_rfq"]').val() + '/' + file,
+            url: '/rfq/quote/delete_document/' + $('input[name="id_rfq"]').val() + '/' + file,
             downloadUrl: '/rfq/documentos/' + $('input[name="id_rfq"]').val() + '/' + file,
-            key: '/rfq/delete_document/' + $('input[name="id_rfq"]').val() + '/' + file
+            key: '/rfq/quote/delete_document/' + $('input[name="id_rfq"]').val() + '/' + file
           });
         });
 
         $('#archivos_ejemplo').fileinput({
           theme: 'explorer-fa',
           mainClass: 'input-group-sm',
-          uploadUrl: '/rfq/load_img/' + $('input[name="id_rfq"]').val(),
+          uploadUrl: '/rfq/quote/load_img/' + $('input[name="id_rfq"]').val(),
           overwriteInitial: false,
           initialPreviewAsData: true,
           initialPreview: filesIcon,
@@ -78,7 +78,8 @@ $(document).ready(function () {
         $("#archivos_ejemplo").on('filepredelete', function(event, key, jqXHR, data) {
           alert_delete_system.modal();
           continue_button.attr('href', key);
-          continue_button.on('click', function(){
+          continue_button.on('click', function(e){
+            e.preventDefault();
             $.ajax({
               url: key,
               type: 'POST',

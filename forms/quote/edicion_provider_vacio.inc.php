@@ -1,10 +1,12 @@
-<input type="hidden" name="id_provider" value="<?php echo $id_provider; ?>">
-<input type="hidden" name="id_rfq" value="<?php echo $item-> obtener_id_rfq(); ?>">
 <?php
 Conexion::abrir_conexion();
+$provider = RepositorioProvider::obtener_provider_por_id(Conexion::obtener_conexion(), $id_provider);
+$item = RepositorioItem::obtener_item_por_id(Conexion::obtener_conexion(), $provider->obtener_id_item());
 $cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $item-> obtener_id_rfq());
 Conexion::cerrar_conexion();
 ?>
+<input type="hidden" name="id_provider" value="<?php echo $id_provider; ?>">
+<input type="hidden" name="id_rfq" value="<?php echo $item-> obtener_id_rfq(); ?>">
 <div class="card-body">
   <div class="row">
     <div class="col-md-6">

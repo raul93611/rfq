@@ -8,7 +8,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form id="add_fulfillment_service_form" method="post" enctype="multipart/form-data" action="<?php echo SAVE_FULFILLMENT_SERVICE; ?>">
+        <form id="add_fulfillment_service_form" method="post" enctype="multipart/form-data" action="">
           <div class="row">
             <div class="col-md-12">
               <div class="form-group">

@@ -1,16 +1,10 @@
 <li class="nav-item 
 <?php
-echo $gestor_actual == 'fulfillment_quotes' ||
-  $gestor_actual == 'weekly_projections' ||
-  $gestor_actual == 'payment_terms' ||
-  $gestor_actual == 'providers' ? 'menu-open' : '';
+echo $partes_ruta[2] == 'fulfillment' ? 'menu-open' : '';
 ?>">
   <a href="#" class="nav-link 
   <?php 
-  echo $gestor_actual == 'fulfillment_quotes' || 
-  $gestor_actual == 'weekly_projections' || 
-  $gestor_actual == 'payment_terms' || 
-  $gestor_actual == 'providers' ? 'active' : ''; 
+  echo $partes_ruta[2] == 'fulfillment' ? 'active' : ''; 
   ?>">
     <i class="nav-icon fas fa-tag"></i>
     <p>
@@ -20,7 +14,7 @@ echo $gestor_actual == 'fulfillment_quotes' ||
   </a>
   <ul class="nav nav-treeview">
     <li class="nav-item">
-      <a href="<?php echo FULFILLMENT_QUOTES; ?>" class="nav-link <?php echo $gestor_actual == 'fulfillment_quotes' ? 'active' : ''; ?>">
+      <a href="<?php echo FULFILLMENT_QUOTES; ?>" class="nav-link <?php echo $partes_ruta[3] == 'fulfillment_quotes' ? 'active' : ''; ?>">
         <i class="nav-icon fas fa-th"></i>
         <p>
           Fulfillment
@@ -28,7 +22,7 @@ echo $gestor_actual == 'fulfillment_quotes' ||
       </a>
     </li>
     <li class="nav-item">
-      <a href="<?php echo WEEKLY_PROJECTIONS; ?>" class="nav-link <?php echo $gestor_actual == 'weekly_projections' ? 'active' : ''; ?>">
+      <a href="<?php echo WEEKLY_PROJECTIONS; ?>" class="nav-link <?php echo $partes_ruta[3] == 'weekly_projections' ? 'active' : ''; ?>">
         <i class="nav-icon fas fa-th"></i>
         <p>
           Weekly Projections
@@ -36,7 +30,7 @@ echo $gestor_actual == 'fulfillment_quotes' ||
       </a>
     </li>
     <li class="nav-item">
-      <a href="<?php echo PROVIDERS; ?>" class="nav-link <?php echo $gestor_actual == 'providers' ? 'active' : ''; ?>">
+      <a href="<?php echo PROVIDERS; ?>" class="nav-link <?php echo $partes_ruta[3] == 'providers' ? 'active' : ''; ?>">
         <i class="nav-icon far fa-address-book"></i>
         <p>
           Providers
@@ -44,7 +38,7 @@ echo $gestor_actual == 'fulfillment_quotes' ||
       </a>
     </li>
     <li class="nav-item">
-      <a href="<?php echo PAYMENT_TERMS; ?>" class="nav-link <?php echo $gestor_actual == 'payment_terms' ? 'active' : ''; ?>">
+      <a href="<?php echo PAYMENT_TERMS; ?>" class="nav-link <?php echo $partes_ruta[3] == 'payment_terms' ? 'active' : ''; ?>">
         <i class="nav-icon far fa-address-book"></i>
         <p>
           Payment Terms
