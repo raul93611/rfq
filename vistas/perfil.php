@@ -150,11 +150,11 @@ switch ($partes_ruta[2]) {
     include_once 'plantillas/utilities/employee_docs_page.inc.php';
     break;
   case 'reports':
-    if (isset($_POST['generate_excel_report'])) {
-      $ruta_elegida = 'scripts/utilities/excel_report_' . $_POST['report'] . '.php';
-    } else {
+    // if (isset($_POST['generate_excel_report'])) {
+    //   $ruta_elegida = 'scripts/utilities/excel_report_' . $_POST['report'] . '.php';
+    // } else {
       include_once 'plantillas/utilities/reports.inc.php';
-    }
+    // }
     break;
   case 'fulfillment':
     switch ($partes_ruta[3]) {

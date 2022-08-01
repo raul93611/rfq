@@ -69,7 +69,7 @@ if (isset($_POST['registrar_cotizacion'])) {
       $directorio = $_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $id_rfq;
       $documentos = $_FILES['documentos'];
       Input::save_files($directorio, $documentos, $id_rfq);
-      Redireccion::redirigir1(COTIZACIONES . $cotizacion-> obtener_canal());
+      Redireccion::redirigir1(CHANNEL . $cotizacion-> obtener_canal());
     }
   }
 }

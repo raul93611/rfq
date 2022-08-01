@@ -28,7 +28,7 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
         RepositorioRfq::check_completed(Conexion::obtener_conexion(), $_POST['id_rfq']);
         AuditTrailRepository::quote_status_audit_trail(Conexion::obtener_conexion(), 'Completed', $_POST['id_rfq']);
         Conexion::cerrar_conexion();
-        Redireccion::redirigir(COMPLETADOS . $cotizacion_recuperada->obtener_canal());
+        Redireccion::redirigir(COMPLETED . $cotizacion_recuperada->obtener_canal());
       }
     } else if (!$cotizacion_recuperada->obtener_status()) {
       if (isset($_POST['status']) && $_POST['status'] == 'si') {
@@ -36,7 +36,7 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
         AuditTrailRepository::quote_status_audit_trail(Conexion::obtener_conexion(), 'Submitted', $_POST['id_rfq']);
         RepositorioRfq::actualizar_fecha_y_submitted(Conexion::obtener_conexion(), $_POST['id_rfq']);
         Conexion::cerrar_conexion();
-        Redireccion::redirigir(COMPLETADOS . $cotizacion_recuperada->obtener_canal());
+        Redireccion::redirigir(COMPLETED . $cotizacion_recuperada->obtener_canal());
       }
     }else if(!$cotizacion_recuperada-> obtener_award()){
       if(isset($_POST['award']) && $_POST['award'] == 'si'){

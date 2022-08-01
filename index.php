@@ -127,7 +127,7 @@ switch ($partes_ruta[1]) {
     $ruta_elegida = 'scripts/utilities/main_charts.php';
     break;
   case 'perfil':
-    $ruta_elegida = 'vistas/perfil.php';
+    $ruta_elegida = isset($_POST['generate_excel_report']) ? $ruta_elegida = 'scripts/utilities/excel_report_' . $_POST['report'] . '.php' :  'vistas/perfil.php';
     break;
   case 'email':
     $ruta_elegida = 'email.php';

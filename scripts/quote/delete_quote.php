@@ -19,5 +19,5 @@ if(!is_null($cuestionario)){
 }
 RepositorioRfq::delete_quote(Conexion::obtener_conexion(), $cotizacion-> obtener_id());
 Conexion::cerrar_conexion();
-Redireccion::redirigir(COTIZACIONES . $cotizacion-> obtener_canal());
+Redireccion::redirigir(CHANNEL . $cotizacion-> obtener_canal());
 ?>
