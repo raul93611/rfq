@@ -324,6 +324,13 @@ CREATE TABLE trackings_subitems(
 );
 
 /*FULFILLMENT*/
+CREATE TABLE invoices(
+  id INT NOT NULL AUTO_INCREMENT UNIQUE,
+  id_rfq INT NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  created_at DATETIME,
+  PRIMARY KEY(id)
+);
 
 CREATE TABLE fulfillment_items(
   id INT NOT NULL AUTO_INCREMENT UNIQUE,
@@ -337,6 +344,7 @@ CREATE TABLE fulfillment_items(
   net30_cc TINYINT,
   comments TEXT CHARACTER SET utf8 NOT NULL,
   reviewed INT DEFAULT 0,
+  created_at DATETIME,
   PRIMARY KEY(id),
   FOREIGN KEY(id_item)
     REFERENCES item(id)
@@ -356,6 +364,7 @@ CREATE TABLE fulfillment_subitems(
   net30_cc TINYINT,
   comments TEXT CHARACTER SET utf8 NOT NULL,
   reviewed INT DEFAULT 0,
+  created_at DATETIME,
   PRIMARY KEY(id),
   FOREIGN KEY(id_subitem)
     REFERENCES subitems(id)
@@ -373,6 +382,7 @@ CREATE TABLE fulfillment_services(
   real_cost DECIMAL(20,2) NOT NULL,
   payment_term VARCHAR(255) NOT NULL,
   reviewed INT DEFAULT 0,
+  created_at DATETIME,
   PRIMARY KEY(id),
   FOREIGN KEY(id_service)
     REFERENCES services(id)

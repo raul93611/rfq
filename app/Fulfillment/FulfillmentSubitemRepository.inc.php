@@ -3,7 +3,7 @@ class FulfillmentSubitemRepository{
   public static function array_to_object($sentence){
     $objects = [];
     while ($row = $sentence-> fetch(PDO::FETCH_ASSOC)) {
-      $objects[] = new FulfillmentSubitem($row['id'], $row['id_subitem'], $row['provider'], $row['quantity'], $row['unit_cost'], $row['other_cost'], $row['real_cost'], $row['payment_term'], $row['comments'], $row['reviewed']);
+      $objects[] = new FulfillmentSubitem($row['id'], $row['id_subitem'], $row['provider'], $row['quantity'], $row['unit_cost'], $row['other_cost'], $row['real_cost'], $row['payment_term'], $row['comments'], $row['reviewed'], $row['created_at']);
     }
 
     return $objects;
@@ -11,7 +11,7 @@ class FulfillmentSubitemRepository{
 
   public static function single_result_to_object($sentence){
     $row = $sentence-> fetch(PDO::FETCH_ASSOC);
-    $object = new FulfillmentSubitem($row['id'], $row['id_subitem'], $row['provider'], $row['quantity'], $row['unit_cost'], $row['other_cost'], $row['real_cost'], $row['payment_term'], $row['comments'], $row['reviewed']);
+    $object = new FulfillmentSubitem($row['id'], $row['id_subitem'], $row['provider'], $row['quantity'], $row['unit_cost'], $row['other_cost'], $row['real_cost'], $row['payment_term'], $row['comments'], $row['reviewed'], $row['created_at']);
 
     return $object;
   }
@@ -32,10 +32,28 @@ class FulfillmentSubitemRepository{
     return $subitems;
   }
 
+  public static function get_all_by_id_subitem_from_to($connection, $id_subitem, $from, $to){
+    $items = [];
+    if(isset($connection)){
+      try{
+        $sql = 'SELECT * FROM fulfillment_subitems WHERE id_subitem = :id_subitem AND created_at BETWEEN :from AND :to';
+        $sentence = $connection-> prepare($sql);
+        $sentence-> bindParam(':id_subitem', $id_subitem, PDO::PARAM_STR);
+        $sentence-> bindParam(':from', $from, PDO::PARAM_STR);
+        $sentence-> bindParam(':to', $to, PDO::PARAM_STR);
+        $sentence-> execute();
+        $items = self::array_to_object($sentence);
+      }catch(PDOException $ex){
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $items;
+  }
+
   public static function insert($connection, $fulfillment_subitem){
     if(isset($connection)){
       try{
-        $sql = 'INSERT INTO fulfillment_subitems(id_subitem, provider, quantity, unit_cost, other_cost, real_cost, payment_term, comments) VALUES(:id_subitem, :provider, :quantity, :unit_cost, :other_cost, :real_cost, :payment_term, :comments)';
+        $sql = 'INSERT INTO fulfillment_subitems(id_subitem, provider, quantity, unit_cost, other_cost, real_cost, payment_term, comments, created_at) VALUES(:id_subitem, :provider, :quantity, :unit_cost, :other_cost, :real_cost, :payment_term, :comments, NOW())';
         $sentence = $connection-> prepare($sql);
         $sentence-> bindParam(':id_subitem', $fulfillment_subitem-> get_id_subitem(), PDO::PARAM_STR);
         $sentence-> bindParam(':provider', $fulfillment_subitem-> get_provider(), PDO::PARAM_STR);
@@ -107,6 +125,27 @@ class FulfillmentSubitemRepository{
         $sql = 'SELECT SUM(real_cost) as total_cost FROM fulfillment_subitems WHERE id_subitem = :id_subitem';
         $sentence = $connection-> prepare($sql);
         $sentence-> bindParam(':id_subitem', $id_subitem, PDO::PARAM_STR);
+        $sentence-> execute();
+        $result = $sentence-> fetch(PDO::FETCH_ASSOC);
+        if(!empty($result)){
+          $total = $result['total_cost'];
+        }
+      }catch(PDOException $ex){
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $total;
+  }
+
+  public static function get_total_cost_from_to($connection, $id_subitem, $from, $to){
+    $total = 0;
+    if(isset($connection)){
+      try{
+        $sql = 'SELECT SUM(real_cost) as total_cost FROM fulfillment_subitems WHERE id_subitem = :id_subitem AND created_at BETWEEN :from AND :to';
+        $sentence = $connection-> prepare($sql);
+        $sentence-> bindParam(':id_subitem', $id_subitem, PDO::PARAM_STR);
+        $sentence-> bindParam(':from', $from, PDO::PARAM_STR);
+        $sentence-> bindParam(':to', $to, PDO::PARAM_STR);
         $sentence-> execute();
         $result = $sentence-> fetch(PDO::FETCH_ASSOC);
         if(!empty($result)){

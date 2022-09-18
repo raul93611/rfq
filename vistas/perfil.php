@@ -150,14 +150,14 @@ switch ($partes_ruta[2]) {
     include_once 'plantillas/utilities/employee_docs_page.inc.php';
     break;
   case 'reports':
-    // if (isset($_POST['generate_excel_report'])) {
-    //   $ruta_elegida = 'scripts/utilities/excel_report_' . $_POST['report'] . '.php';
-    // } else {
       include_once 'plantillas/utilities/reports.inc.php';
-    // }
     break;
   case 'fulfillment':
     switch ($partes_ruta[3]) {
+      case 'invoice':
+        $id_invoice = $partes_ruta[4];
+        include_once 'plantillas/fulfillment/invoice.inc.php';
+        break;
       case 'fulfillment_quotes':
         include_once 'plantillas/fulfillment/fulfillment_quotes.inc.php';
         break;

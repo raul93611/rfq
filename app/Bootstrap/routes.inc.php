@@ -74,6 +74,9 @@ define('RELOAD_REQUOTE', RE_QUOTE_SC . 'reload_requote/');
 define('FULFILLMENT_SC', SERVIDOR . 'fulfillment/');
 define('MARK_AS_PENDING', FULFILLMENT_SC . 'mark_as_pending/');
 define('UNMARK_AS_PENDING', FULFILLMENT_SC . 'unmark_as_pending/');
+define('SAVE_INVOICE', FULFILLMENT_SC . 'save_invoice');
+define('DELETE_INVOICE', FULFILLMENT_SC . 'delete_invoice/');
+define('UPDATE_INVOICE', FULFILLMENT_SC . 'update_invoice/');
 /********************************USER VIEWS*****************************************/
 define('USER', PERFIL . 'user/');
 define('REGISTRO', USER . 'registro');
@@ -160,6 +163,7 @@ define('FULFILLMENT_QUOTES', FULFILLMENT . 'fulfillment_quotes');
 define('PROVIDERS', FULFILLMENT . 'providers');
 define('PAYMENT_TERMS', FULFILLMENT . 'payment_terms');
 define('WEEKLY_PROJECTIONS', FULFILLMENT . 'weekly_projections');
+define('INVOICE', FULFILLMENT . 'invoice/');
 /********************************ACCOUNTING VIEWS*****************************************/
 define('ACCOUNTING', PERFIL . 'accounting/');
 define('INVOICE_QUOTES', ACCOUNTING . 'invoice_quotes');

@@ -9,8 +9,9 @@ class FulfillmentService{
   private $real_cost;
   private $payment_term;
   private $reviewed;
+  private $created_at;
 
-  public function __construct($id, $id_service, $provider, $quantity, $unit_cost, $other_cost, $real_cost, $payment_term, $reviewed){
+  public function __construct($id, $id_service, $provider, $quantity, $unit_cost, $other_cost, $real_cost, $payment_term, $reviewed, $created_at){
     $this-> id = $id;
     $this-> id_service = $id_service;
     $this-> provider = $provider;
@@ -20,6 +21,7 @@ class FulfillmentService{
     $this-> real_cost = $real_cost;
     $this-> payment_term = $payment_term;
     $this-> reviewed = $reviewed;
+    $this-> created_at = $created_at;
   }
 
   public function get_id(){
@@ -56,6 +58,10 @@ class FulfillmentService{
 
   public function get_reviewed(){
     return $this-> reviewed;
+  }
+
+  public function get_created_at(){
+    return $this-> created_at;
   }
 }
 ?>

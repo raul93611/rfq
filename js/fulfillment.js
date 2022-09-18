@@ -1,4 +1,18 @@
 $(document).ready(function () {
+  /***************************************Invoices*************************************/
+  const addInvoiceBtn = $('#add_invoice');
+  const addInvoiceModal = $('#add_invoice_modal');
+  addInvoiceBtn.click(function (e) {
+    e.preventDefault();
+    addInvoiceModal.modal();
+  });
+
+  const editInvoiceBtn = $('#edit_invoice');
+  const editInvoiceModal = $('#edit_invoice_modal');
+  editInvoiceBtn.click(function () {
+    console.log('asdsadas');
+    editInvoiceModal.modal();
+  });
   /****************************************************************************/
   $('#fulfillment_page').on('click', '.reviewed_button', function(){
     $.ajax({

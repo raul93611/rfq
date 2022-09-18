@@ -108,6 +108,9 @@ include_once 'app/TypeOfContract/TypeOfContractRepository.inc.php';
 include_once 'app/SalesCommission/SalesCommission.inc.php';
 include_once 'app/SalesCommission/SalesCommissionRepository.inc.php';
 
+include_once 'app/Invoice/Invoice.inc.php';
+include_once 'app/Invoice/InvoiceRepository.inc.php';
+
 session_start();
 session_save_path('temp');
 
@@ -493,6 +496,16 @@ switch ($partes_ruta[1]) {
       case 'unmark_as_pending':
         $id_rfq = $partes_ruta[3];
         $ruta_elegida = 'scripts/fulfillment/unmark_as_pending.php';
+        break;
+      case 'save_invoice':
+        $ruta_elegida = 'scripts/fulfillment/save_invoice.php';
+        break;
+      case 'delete_invoice':
+        $id_invoice = $partes_ruta[3];
+        $ruta_elegida = 'scripts/fulfillment/delete_invoice.php';
+        break;
+      case 'update_invoice':
+        $ruta_elegida = 'scripts/fulfillment/update_invoice.php';
         break;
       default:
         break;

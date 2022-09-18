@@ -264,18 +264,22 @@ class RepositorioItem
               $k = self::escribir_item($item, $k, $i + 1);
             }
             ?>
-            <td colspan="5" class="display-4"><b>
-                <h4>TOTAL:</h4>
-              </b></td>
-            <td id="total_quantity"></td>
-            <td></td>
-            <td id="total_additional"></td>
-            <td></td>
-            <td id="total1"></td>
-            <td></td>
-            <td id="total2"></td>
-            <td id="dif_total"></td>
           </tbody>
+          <thead>
+            <tr>
+              <th colspan="5" class="display-4"><b>
+                  <h4>TOTAL:</h4>
+                </b></th>
+              <th id="total_quantity"></th>
+              <th></th>
+              <th id="total_additional"></th>
+              <th></th>
+              <th id="total1"></th>
+              <th></th>
+              <th id="total2"></th>
+              <th id="dif_total"></th>
+            </tr>
+          </thead>
         </table>
       </div>
       <?php
