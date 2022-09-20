@@ -1001,8 +1001,10 @@ class RepositorioRfq {
     if (isset($conexion)) {
       try {
         for ($i = 1; $i <= 12; $i++) {
-          $sql1 = 'SELECT SUM(total_price) as amount, COUNT(*) as awards FROM rfq WHERE award = 1 AND MONTH(fecha_award) =' . $i . ' AND YEAR(fecha_award) = YEAR(CURDATE())';
-          $sql2 = 'SELECT SUM(total_price) as past_amount, COUNT(*) as past_awards FROM rfq WHERE award = 1 AND MONTH(fecha_award) =' . $i . ' AND YEAR(fecha_award) = YEAR(DATE_SUB(NOW(),INTERVAL 1 YEAR))';
+          // $sql1 = 'SELECT SUM(total_price) as amount, COUNT(*) as awards FROM rfq WHERE award = 1 AND MONTH(fecha_award) =' . $i . ' AND YEAR(fecha_award) = YEAR(CURDATE())';
+          $sql1 = 'SELECT (SUM(rfq.total_price) + (SELECT IFNULL(SUM(services.total_price), 0) FROM rfq RIGHT JOIN services ON rfq.id = services.id_rfq WHERE rfq.award = 1 AND MONTH(rfq.fecha_award) =' . $i . ' AND YEAR(rfq.fecha_award) = YEAR(CURDATE()))) as amount, COUNT(*) as awards FROM rfq WHERE rfq.award = 1 AND MONTH(rfq.fecha_award) =' . $i . ' AND YEAR(rfq.fecha_award) = YEAR(CURDATE())';
+          // $sql2 = 'SELECT SUM(total_price) as past_amount, COUNT(*) as past_awards FROM rfq WHERE award = 1 AND MONTH(fecha_award) =' . $i . ' AND YEAR(fecha_award) = YEAR(DATE_SUB(NOW(),INTERVAL 1 YEAR))';
+          $sql2 = 'SELECT (SUM(rfq.total_price) + (SELECT IFNULL(SUM(services.total_price), 0) FROM rfq RIGHT JOIN services ON rfq.id = services.id_rfq WHERE rfq.award = 1 AND MONTH(rfq.fecha_award) =' . $i . ' AND YEAR(rfq.fecha_award) = YEAR(DATE_SUB(NOW(),INTERVAL 1 YEAR)))) as amount, COUNT(*) as awards FROM rfq WHERE rfq.award = 1 AND MONTH(rfq.fecha_award) =' . $i . ' AND YEAR(rfq.fecha_award) = YEAR(DATE_SUB(NOW(),INTERVAL 1 YEAR))';
           $sentencia1 = $conexion->prepare($sql1);
           $sentencia2 = $conexion->prepare($sql2);
           $sentencia1-> execute();
