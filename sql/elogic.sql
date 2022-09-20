@@ -371,3 +371,18 @@ CREATE TABLE fulfillment_audit_trails(
   FOREIGN KEY(id_rfq) REFERENCES rfq(id) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 ALTER TABLE rfq AUTO_INCREMENT = 300;
+SELECT (
+    SUM(rfq.total_price) + (
+      SELECT IFNULL(SUM(services.total_price), 0)
+      FROM rfq
+        RIGHT JOIN services ON rfq.id = services.id_rfq
+      WHERE rfq.award = 1
+        AND MONTH(rfq.fecha_award) = 8
+        AND YEAR(rfq.fecha_award) = YEAR(DATE_SUB(NOW(), INTERVAL 1 YEAR))
+    )
+  ) as amount,
+  COUNT(*) as awards
+FROM rfq
+WHERE rfq.award = 1
+  AND MONTH(rfq.fecha_award) = 8
+  AND YEAR(rfq.fecha_award) = YEAR(DATE_SUB(NOW(), INTERVAL 1 YEAR))
