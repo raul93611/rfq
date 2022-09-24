@@ -4,7 +4,9 @@ Conexion::abrir_conexion();
 $cotizacion = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
 $re_quote = ReQuoteRepository::get_re_quote_by_id_rfq(Conexion::obtener_conexion(), $id_rfq);
 $re_quote_items = ReQuoteItemRepository::get_re_quote_items_by_id_re_quote(Conexion::obtener_conexion(), $re_quote-> get_id());
+$re_quote_services = ReQuoteServiceRepository::get_services(Conexion::obtener_conexion(), $re_quote-> get_id());
 $items = RepositorioItem::obtener_items_por_id_rfq(Conexion::obtener_conexion(), $id_rfq);
+$services = ServiceRepository::get_services(Conexion::obtener_conexion(), $id_rfq);
 $usuario_designado = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), $cotizacion->obtener_usuario_designado());
 Conexion::cerrar_conexion();
 $partes_fecha_completado = explode('-', $cotizacion->obtener_fecha_completado());
@@ -136,6 +138,12 @@ try{
       $html .= ProposalRepository::print_item_pdf_re_quote($re_quote_item, $items, $a, $key);
       $a++;
     }
+    if(count($re_quote_services)){
+      foreach ($re_quote_services as $key => $re_quote_service) {
+        $html .= ProposalRepository::print_service_pdf_re_quote($re_quote-> get_services_payment_term(), $cotizacion-> obtener_services_payment_term(), $re_quote_service, $services, $a, $key);
+        $a++;
+      }
+    }
     $html .= '
     <tr>
     <td style="border:none;"></td>
@@ -151,9 +159,9 @@ try{
     <td style="border:none;"></td>
     <td style="border:none;"></td>
     <td style="font-size:12pt;">TOTAL:</td>
-    <td>$ ' . number_format($re_quote-> get_total_cost(), 2) . '</td>
+    <td>$ ' . number_format($cotizacion-> obtener_re_quote_total_cost(), 2) . '</td>
     <td></td>
-    <td style="font-size:12pt;text-align:right;">$ ' . number_format($cotizacion-> obtener_total_price(), 2) . '</td>
+    <td style="font-size:12pt;text-align:right;">$ ' . number_format($cotizacion-> obtener_quote_total_price(), 2) . '</td>
     </tr>
     <tr>
     <td style="border:none;"></td>
@@ -164,7 +172,7 @@ try{
     <td style="border:none;"></td>
     <td style="border:none;"></td>
     <td style="font-size:12pt;">PROFIT:</td>
-    <td style="font-size:12pt;text-align:right;">$ ' . number_format($cotizacion-> obtener_total_price() - $re_quote-> get_total_cost(), 2) . '</td>
+    <td style="font-size:12pt;text-align:right;">$ ' . number_format($cotizacion-> obtener_re_quote_profit(), 2) . '</td>
     </tr>
     <tr>
     <td style="border:none;"></td>
@@ -175,7 +183,7 @@ try{
     <td style="border:none;"></td>
     <td style="border:none;"></td>
     <td style="border:none;"></td>
-    <td style="font-size:12pt;text-align:right;">' . number_format((($cotizacion-> obtener_total_price() - $re_quote-> get_total_cost())/$cotizacion-> obtener_total_price())*100, 2) . ' %</td>
+    <td style="font-size:12pt;text-align:right;">' . number_format($cotizacion-> obtener_re_quote_profit_percentage(), 2) . ' %</td>
     </tr>
     </table>
     ';

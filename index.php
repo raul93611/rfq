@@ -111,6 +111,9 @@ include_once 'app/SalesCommission/SalesCommissionRepository.inc.php';
 include_once 'app/Invoice/Invoice.inc.php';
 include_once 'app/Invoice/InvoiceRepository.inc.php';
 
+include_once 'app/ReQuote/ReQuoteService.inc.php';
+include_once 'app/ReQuote/ReQuoteServiceRepository.inc.php';
+
 session_start();
 session_save_path('temp');
 
@@ -364,6 +367,14 @@ switch ($partes_ruta[1]) {
       case 'reload_requote':
         $id_rfq = $partes_ruta[3];
         $ruta_elegida = 'scripts/re_quote/reload_requote.php';
+        break;
+      case 'load_service':
+        $id_service = $partes_ruta[3];
+        $ruta_elegida = 'scripts/re_quote/load_service.php';
+        break;
+      case 'update_service':
+        $id_service = $partes_ruta[3];
+        $ruta_elegida = 'scripts/re_quote/update_service.php';
         break;
       default:
         break;

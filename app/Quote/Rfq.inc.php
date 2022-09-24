@@ -403,7 +403,7 @@ class Rfq
   public function obtener_re_quote_total_cost(){
     Conexion::abrir_conexion();
     $re_quote = ReQuoteRepository::get_re_quote_by_id_rfq(Conexion::obtener_conexion(), $this->id);
-    $total_services = ServiceRepository::get_total(Conexion::obtener_conexion(), $this->id);
+    $total_services = ReQuoteServiceRepository::get_total(Conexion::obtener_conexion(), $re_quote->get_id());
     Conexion::cerrar_conexion();
     return $re_quote->get_total_cost() + $total_services;
   }

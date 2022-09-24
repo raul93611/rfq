@@ -10,8 +10,9 @@ class ReQuote{
   private $additional;
   private $shipping_cost;
   private $shipping;
+  private $services_payment_term;
 
-  public function __construct($id, $id_rfq, $total_cost, $total_price, $payment_terms, $taxes, $profit, $additional, $shipping_cost, $shipping){
+  public function __construct($id, $id_rfq, $total_cost, $total_price, $payment_terms, $taxes, $profit, $additional, $shipping_cost, $shipping, $services_payment_term){
     $this-> id = $id;
     $this-> id_rfq = $id_rfq;
     $this-> total_cost = $total_cost;
@@ -22,6 +23,7 @@ class ReQuote{
     $this-> additional = $additional;
     $this-> shipping_cost = $shipping_cost;
     $this-> shipping = $shipping;
+    $this-> services_payment_term = $services_payment_term;
   }
 
   public function get_id(){
@@ -62,6 +64,10 @@ class ReQuote{
 
   public function get_shipping(){
     return $this-> shipping;
+  }
+
+  public function get_services_payment_term(){
+    return $this-> services_payment_term;
   }
 }
 ?>

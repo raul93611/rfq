@@ -1,5 +1,23 @@
 <?php
 class ReQuoteRepository{
+  public static function array_to_object($sentence)
+  {
+    $objects = [];
+    while ($row = $sentence->fetch(PDO::FETCH_ASSOC)) {
+      $objects[] = new ReQuote($row['id'], $row['id_rfq'], $row['total_cost'], $row['total_price'], $row['payment_terms'], $row['taxes'], $row['profit'], $row['additional'], $row['shipping_cost'], $row['shipping'], $row['services_payment_term']);
+    }
+
+    return $objects;
+  }
+
+  public static function single_result_to_object($sentence)
+  {
+    $row = $sentence->fetch(PDO::FETCH_ASSOC);
+    $object = new ReQuote($row['id'], $row['id_rfq'], $row['total_cost'], $row['total_price'], $row['payment_terms'], $row['taxes'], $row['profit'], $row['additional'], $row['shipping_cost'], $row['shipping'], $row['services_payment_term']);
+
+    return $object;
+  }
+
   public static function re_quote_exists($connection, $id_rfq){
     $re_quote_exists = true;
     if(isset($connection)){
@@ -25,7 +43,7 @@ class ReQuoteRepository{
     $re_quote_exists = ReQuoteRepository::re_quote_exists($connection, $id_rfq);
     $cotizacion = RepositorioRfq::obtener_cotizacion_por_id($connection, $id_rfq);
     if(!$re_quote_exists){
-      $re_quote = new ReQuote('', $id_rfq, $cotizacion-> obtener_total_cost(), $cotizacion-> obtener_total_price(), $cotizacion-> obtener_payment_terms(), $cotizacion-> obtener_taxes(), $cotizacion-> obtener_profit(), $cotizacion-> obtener_additional(), $cotizacion-> obtener_shipping_cost(), $cotizacion-> obtener_shipping());
+      $re_quote = new ReQuote('', $id_rfq, $cotizacion-> obtener_total_cost(), $cotizacion-> obtener_total_price(), $cotizacion-> obtener_payment_terms(), $cotizacion-> obtener_taxes(), $cotizacion-> obtener_profit(), $cotizacion-> obtener_additional(), $cotizacion-> obtener_shipping_cost(), $cotizacion-> obtener_shipping(), $cotizacion-> obtener_services_payment_term());
       $id_re_quote = ReQuoteRepository::insert_re_quote($connection, $re_quote);
       AuditTrailRepository::re_quote_status_audit_trail($connection, 'Created', $id_rfq);
       $items = RepositorioItem::obtener_items_por_id_rfq($connection, $id_rfq);
@@ -56,6 +74,15 @@ class ReQuoteRepository{
           }
         }
       }
+      if($cotizacion-> isServices()){
+        $services = ServiceRepository::get_services($connection, $cotizacion-> obtener_id());
+        if(count($services)){
+          foreach ($services as $key => $service) {
+            $re_quote_service = new ReQuoteService('', $id_re_quote, $service-> get_description(), $service-> get_quantity(), $service-> get_unit_price(), $service-> get_total_price());
+            ReQuoteServiceRepository::insert($connection, $re_quote_service);
+          }
+        }
+      }
     }
   }
 
@@ -75,6 +102,7 @@ class ReQuoteRepository{
       }
       ReQuoteItemRepository::delete_re_quote_item($connection, $item-> get_id());
     }
+    ReQuoteServiceRepository::delete_by_id_re_quote($connection, $requote-> get_id());
     ReQuoteAuditTrailRepository::delete_audit_trails($connection, $requote-> get_id());
     self::delete_requote($connection, $requote-> get_id());
   }
@@ -95,7 +123,7 @@ class ReQuoteRepository{
   public static function insert_re_quote($connection, $re_quote){
     if(isset($connection)){
       try{
-        $sql = 'INSERT INTO re_quotes(id_rfq, total_cost, total_price, payment_terms, taxes, profit, additional, shipping_cost, shipping) VALUES(:id_rfq, :total_cost, :total_price, :payment_terms, :taxes, :profit, :additional, :shipping_cost, :shipping)';
+        $sql = 'INSERT INTO re_quotes(id_rfq, total_cost, total_price, payment_terms, taxes, profit, additional, shipping_cost, shipping, services_payment_term) VALUES(:id_rfq, :total_cost, :total_price, :payment_terms, :taxes, :profit, :additional, :shipping_cost, :shipping, :services_payment_term)';
         $sentence = $connection-> prepare($sql);
         $sentence-> bindParam(':id_rfq', $re_quote-> get_id_rfq(), PDO::PARAM_STR);
         $sentence-> bindParam(':total_cost', $re_quote-> get_total_cost(), PDO::PARAM_STR);
@@ -106,6 +134,7 @@ class ReQuoteRepository{
         $sentence-> bindParam(':additional', $re_quote-> get_additional(), PDO::PARAM_STR);
         $sentence-> bindParam(':shipping_cost', $re_quote-> get_shipping_cost(), PDO::PARAM_STR);
         $sentence-> bindParam(':shipping', $re_quote-> get_shipping(), PDO::PARAM_STR);
+        $sentence-> bindParam(':services_payment_term', $re_quote-> get_services_payment_term(), PDO::PARAM_STR);
         $sentence-> execute();
         $id = $connection-> lastInsertId();
       }catch(PDOException $ex){
@@ -123,10 +152,7 @@ class ReQuoteRepository{
         $sentence = $connection-> prepare($sql);
         $sentence-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentence-> execute();
-        $result = $sentence-> fetch(PDO::FETCH_ASSOC);
-        if(!empty($result)){
-          $re_quote = new ReQuote($result['id'], $result['id_rfq'], $result['total_cost'], $result['total_price'], $result['payment_terms'], $result['taxes'], $result['profit'], $result['additional'], $result['shipping_cost'], $result['shipping']);
-        }
+        $re_quote = self::single_result_to_object($sentence);
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
@@ -142,10 +168,7 @@ class ReQuoteRepository{
         $sentence = $connection-> prepare($sql);
         $sentence-> bindParam(':id_re_quote', $id_re_quote, PDO::PARAM_STR);
         $sentence-> execute();
-        $result = $sentence-> fetch(PDO::FETCH_ASSOC);
-        if(!empty($result)){
-          $re_quote = new ReQuote($result['id'], $result['id_rfq'], $result['total_cost'], $result['total_price'], $result['payment_terms'], $result['taxes'], $result['profit'], $result['additional'], $result['shipping_cost'], $result['shipping']);
-        }
+        $re_quote = self::single_result_to_object($sentence);
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
@@ -153,15 +176,16 @@ class ReQuoteRepository{
     return $re_quote;
   }
 
-  public static function update_re_quote($connection, $payment_terms, $total_cost, $shipping, $shipping_cost, $id_re_quote){
+  public static function update_re_quote($connection, $payment_terms, $total_cost, $shipping, $shipping_cost, $services_payment_term, $id_re_quote){
     if(isset($connection)){
       try{
-        $sql = 'UPDATE re_quotes SET payment_terms = :payment_terms, total_cost = :total_cost, shipping = :shipping, shipping_cost = :shipping_cost WHERE id = :id_re_quote';
+        $sql = 'UPDATE re_quotes SET payment_terms = :payment_terms, total_cost = :total_cost, shipping = :shipping, shipping_cost = :shipping_cost, services_payment_term = :services_payment_term WHERE id = :id_re_quote';
         $sentence = $connection-> prepare($sql);
         $sentence-> bindParam(':payment_terms', $payment_terms, PDO::PARAM_STR);
         $sentence-> bindParam(':total_cost', $total_cost, PDO::PARAM_STR);
         $sentence-> bindParam(':shipping', $shipping, PDO::PARAM_STR);
         $sentence-> bindParam(':shipping_cost', $shipping_cost, PDO::PARAM_STR);
+        $sentence-> bindParam(':services_payment_term', $services_payment_term, PDO::PARAM_STR);
         $sentence-> bindParam(':id_re_quote', $id_re_quote, PDO::PARAM_STR);
         $sentence-> execute();
       }catch(PDOException $ex){

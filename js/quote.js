@@ -96,7 +96,7 @@ $(document).ready(function () {
     $('#total2').html('$ ' + totalPrice.toFixed(2));
     $('#dif_total').html('$ ' + profit + '<br>' + percentageProfit + '%');
     $('#total_quantity').html(totalQuantity);
-    $('#totalAdditional').html('$ ' + totalAdditional);
+    $('#total_additional').html('$ ' + totalAdditional.toFixed(2));
   };
 
   if ($('#form_edited_quote').length != 0) {
@@ -128,7 +128,7 @@ $(document).ready(function () {
       });
     }
   })
-  /***************************************/
+  /*************************SERVICES**************/
   const unitPriceFields = [];
   const servicesQuantityFields = [];
   $('#services_table tbody .service_item').each(function () {

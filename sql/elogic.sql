@@ -152,6 +152,7 @@ CREATE TABLE re_quotes(
   additional DECIMAL(20, 2) NOT NULL,
   shipping_cost DECIMAL (20, 2) NOT NULL,
   shipping VARCHAR(255) NOT NULL,
+  services_payment_term VARCHAR(255) DEFAULT 'Net 30',
   PRIMARY KEY(id),
   FOREIGN KEY(id_rfq) REFERENCES rfq(id) ON UPDATE CASCADE ON DELETE RESTRICT
 );
@@ -224,6 +225,16 @@ CREATE TABLE re_quote_subitem_providers(
   price DECIMAL(20, 2) NOT NULL,
   PRIMARY KEY(id),
   FOREIGN KEY(id_re_quote_subitem) REFERENCES re_quote_subitems(id) ON UPDATE CASCADE ON DELETE RESTRICT
+);
+CREATE TABLE re_quote_services(
+  id INT NOT NULL AUTO_INCREMENT UNIQUE,
+  id_re_quote INT NOT NULL,
+  description TEXT CHARACTER SET utf8 NOT NULL,
+  quantity INT NOT NULL,
+  unit_price DECIMAL(10, 2) NOT NULL,
+  total_price DECIMAL(10, 2) NOT NULL,
+  PRIMARY KEY(id),
+  FOREIGN KEY(id_re_quote) REFERENCES re_quotes(id) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 /*TRACKINGS*/
 CREATE TABLE trackings(
@@ -371,18 +382,3 @@ CREATE TABLE fulfillment_audit_trails(
   FOREIGN KEY(id_rfq) REFERENCES rfq(id) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 ALTER TABLE rfq AUTO_INCREMENT = 300;
-SELECT (
-    SUM(rfq.total_price) + (
-      SELECT IFNULL(SUM(services.total_price), 0)
-      FROM rfq
-        RIGHT JOIN services ON rfq.id = services.id_rfq
-      WHERE rfq.award = 1
-        AND MONTH(rfq.fecha_award) = 8
-        AND YEAR(rfq.fecha_award) = YEAR(DATE_SUB(NOW(), INTERVAL 1 YEAR))
-    )
-  ) as amount,
-  COUNT(*) as awards
-FROM rfq
-WHERE rfq.award = 1
-  AND MONTH(rfq.fecha_award) = 8
-  AND YEAR(rfq.fecha_award) = YEAR(DATE_SUB(NOW(), INTERVAL 1 YEAR))

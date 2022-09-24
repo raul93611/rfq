@@ -70,6 +70,7 @@ define('DELETE_RE_QUOTE_SUBITEM_PROVIDER', RE_QUOTE_SC . 'delete_re_quote_subite
 define('DELETE_RE_QUOTE_SUBITEM', RE_QUOTE_SC . 'delete_re_quote_subitem/');
 define('DELETE_RE_QUOTE_ITEM', RE_QUOTE_SC . 'delete_re_quote_item/');
 define('RELOAD_REQUOTE', RE_QUOTE_SC . 'reload_requote/');
+define('UPDATE_SERVICE_RE_QUOTE', RE_QUOTE_SC . 'update_service');
 /********************************FULFILLMENT SCRIPTS*****************************************/
 define('FULFILLMENT_SC', SERVIDOR . 'fulfillment/');
 define('MARK_AS_PENDING', FULFILLMENT_SC . 'mark_as_pending/');

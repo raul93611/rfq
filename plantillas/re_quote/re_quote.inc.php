@@ -41,11 +41,9 @@ Conexion::cerrar_conexion();
                 <h3 class="card-title"><i class="fas fa-dollar-sign"></i> Total Services</h3>
               </div>
               <div class="card-body">
-                <div class="row">
-                  <div class="col-md-12">
-                    <h3 class="text-info text-center">Total Price: $ <?php echo number_format($total_service, 2); ?></h3>
-                  </div>
-                </div>
+                <?php
+                  include_once 're_quote_services.inc.php';
+                ?>
               </div>
             </div>
             <div class="card card-primary">
@@ -76,5 +74,8 @@ Conexion::cerrar_conexion();
     </div>
   </section>
 </div>
-<?php include_once 'plantillas/re_quote/modals/audit_trails_modal.inc.php'; ?>
+<?php 
+include_once 'plantillas/re_quote/modals/audit_trails_modal.inc.php'; 
+include_once 'modals/edit_service_modal.inc.php';
+?>
 <script src="<?php echo RUTA_JS; ?>reQuote.js"></script>
