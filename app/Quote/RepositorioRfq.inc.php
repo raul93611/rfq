@@ -933,7 +933,7 @@ class RepositorioRfq {
       <td><?php echo $cotizacion->obtener_type_of_bid(); ?></td>
       <td><?php echo $cotizacion->obtener_id(); ?></td>
       <td><?php echo $cotizacion->obtener_comments(); ?></td>
-      <td>$ <?php echo $cotizacion-> obtener_total_price(); ?></td>
+      <td>$ <?php echo $cotizacion-> obtener_quote_total_price(); ?></td>
       <?php
       if($cotizacion-> obtener_canal() != 'FedBid'){
         if ($cotizacion->obtener_canal() != 'GSA-Buy') {
@@ -1497,6 +1497,7 @@ class RepositorioRfq {
     $re_quote = ReQuoteRepository::get_re_quote_by_id_rfq(Conexion::obtener_conexion(), $quote-> obtener_id());
     Conexion::cerrar_conexion();
     $fulfillment_date = RepositorioComment::mysql_datetime_to_english_format($quote-> obtener_fulfillment_date());
+    $award_date = RepositorioComment::mysql_datetime_to_english_format($quote-> obtener_fecha_award());
     ?>
     <tr>
       <td>
@@ -1508,7 +1509,7 @@ class RepositorioRfq {
       <td><?php echo $quote-> print_channel(); ?></td>
       <td><?php echo isset($re_quote) ? '$' . $re_quote-> get_total_price() : 'No Re-Quote'; ?></td>
       <td><?php echo $fulfillment_date; ?></td>
-      <td><?php echo $quote-> obtener_fecha_award(); ?></td>
+      <td><?php echo $award_date; ?></td>
       <td><?php echo $quote-> obtener_type_of_contract(); ?></td>
     </tr>
     <?php
