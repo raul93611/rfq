@@ -933,7 +933,7 @@ class RepositorioRfq {
       <td><?php echo $cotizacion->obtener_type_of_bid(); ?></td>
       <td><?php echo $cotizacion->obtener_id(); ?></td>
       <td><?php echo $cotizacion->obtener_comments(); ?></td>
-      <td>$ <?php echo $cotizacion-> obtener_quote_total_price(); ?></td>
+      <td>$ <?php echo number_format($cotizacion-> obtener_quote_total_price(), 2); ?></td>
       <?php
       if($cotizacion-> obtener_canal() != 'FedBid'){
         if ($cotizacion->obtener_canal() != 'GSA-Buy') {

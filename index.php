@@ -139,7 +139,7 @@ switch ($partes_ruta[1]) {
     $ruta_elegida = 'email.php';
     break;
   case 'genera_usuario':
-    $ruta_elegida = 'herramientas/genera_usuario.php';
+    $ruta_elegida = 'herramientas/generate_services_re_quote.php';
     break;
   case 'logout':
     $ruta_elegida = 'scripts/user/logout.php';
