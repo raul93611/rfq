@@ -156,6 +156,12 @@ echo $partes_ruta[2] == 'quote' ? 'menu-open' : '';
           </a>
         </li>
         <li class="nav-item">
+          <a href="<?php echo EBAY_AMAZON_COMPLETADOS; ?>" class="nav-link <?php echo $partes_ruta[4] == 'Ebay%20&%20Amazon' ? 'active' : ''; ?>">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Ebay & Amazon</p>
+          </a>
+        </li>
+        <li class="nav-item">
           <a href="<?php echo STARSIII_COMPLETADOS; ?>" class="nav-link <?php echo $partes_ruta[4] == 'Stars%20III' ? 'active' : ''; ?>">
             <i class="far fa-circle nav-icon"></i>
             <p>Stars III</p>
@@ -218,6 +224,12 @@ echo $partes_ruta[2] == 'quote' ? 'menu-open' : '';
           <a href="<?php echo SEAPORT_SUBMITTED; ?>" class="nav-link <?php echo $partes_ruta[4] == 'Seaport' ? 'active' : ''; ?>">
             <i class="far fa-circle nav-icon"></i>
             <p>Seaport</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="<?php echo EBAY_AMAZON_SUBMITTED; ?>" class="nav-link <?php echo $partes_ruta[4] == 'Ebay%20&%20Amazon' ? 'active' : ''; ?>">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Ebay & Amazon</p>
           </a>
         </li>
         <li class="nav-item">

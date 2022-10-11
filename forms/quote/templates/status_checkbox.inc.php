@@ -1,5 +1,5 @@
 <?php
-if($cotizacion_recuperada-> obtener_canal() == 'Chemonics' || $cotizacion_recuperada-> obtener_canal() == 'Ebay & Amazon'){
+if($cotizacion_recuperada-> obtener_canal() == 'Chemonics'){
   if(!$cotizacion_recuperada->obtener_award()){
     ?>
     <div class="custom-control custom-checkbox">

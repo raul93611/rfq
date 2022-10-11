@@ -39,7 +39,7 @@
   ?>
   <input type="hidden" name="id_rfq" value="<?php echo $cotizacion_recuperada->obtener_id(); ?>">
   <?php
-  if($cotizacion_recuperada-> obtener_canal() == 'Chemonics' || $cotizacion_recuperada-> obtener_canal() == 'Ebay & Amazon'){
+  if($cotizacion_recuperada-> obtener_canal() == 'Chemonics'){
     ?>
     <div class="row">
       <div class="col-md-12">

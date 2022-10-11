@@ -25,7 +25,7 @@ if (isset($_POST['registrar_cotizacion'])) {
       null,
       null,
       null,
-      '',
+      'Net 30',
       '',
       '',
       null,

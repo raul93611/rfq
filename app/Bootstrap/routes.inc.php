@@ -113,6 +113,7 @@ define('FINDFRP_COMPLETADOS', COMPLETED . 'FindFRP');
 define('EMBASSIES_COMPLETADOS', COMPLETED . 'Embassies');
 define('FBO_COMPLETADOS', COMPLETED . 'FBO');
 define('SEAPORT_COMPLETADOS', COMPLETED . 'Seaport');
+define('EBAY_AMAZON_COMPLETADOS', COMPLETED . 'Ebay & Amazon');
 define('STARSIII_COMPLETADOS', COMPLETED . 'Stars III');
 /*******************************SUBMITTED***************************************/
 define('SUBMITTED', QUOTE . 'submitted/');
@@ -124,6 +125,7 @@ define('FINDFRP_SUBMITTED', SUBMITTED . 'FindFRP');
 define('EMBASSIES_SUBMITTED', SUBMITTED . 'Embassies');
 define('FBO_SUBMITTED', SUBMITTED . 'FBO');
 define('SEAPORT_SUBMITTED', SUBMITTED . 'Seaport');
+define('EBAY_AMAZON_SUBMITTED', SUBMITTED . 'Ebay & Amazon');
 define('STARSIII_SUBMITTED', SUBMITTED . 'Stars III');
 /****************************AWARD**********************************************/
 define('AWARD', QUOTE . 'award/');
