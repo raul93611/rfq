@@ -80,6 +80,6 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
       }
     }
   }
-  // Redireccion::redirigir(EDITAR_COTIZACION . '/' . $_POST['id_rfq']);
+  Redireccion::redirigir(EDITAR_COTIZACION . '/' . $_POST['id_rfq']);
 }
 ?>
