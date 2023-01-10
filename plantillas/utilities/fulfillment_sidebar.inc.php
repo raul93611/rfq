@@ -25,7 +25,15 @@ echo $partes_ruta[2] == 'fulfillment' ? 'menu-open' : '';
       <a href="<?php echo WEEKLY_PROJECTIONS; ?>" class="nav-link <?php echo $partes_ruta[3] == 'weekly_projections' ? 'active' : ''; ?>">
         <i class="nav-icon fas fa-th"></i>
         <p>
-          Weekly Projections
+          Weekly Projections 2022
+        </p>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="<?php echo WEEKLY_PROJECTIONS_2023; ?>" class="nav-link <?php echo $partes_ruta[3] == 'weekly_projections_2023' ? 'active' : ''; ?>">
+        <i class="nav-icon fas fa-th"></i>
+        <p>
+          Weekly Projections 2023
         </p>
       </a>
     </li>

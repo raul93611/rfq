@@ -166,6 +166,7 @@ define('FULFILLMENT_QUOTES', FULFILLMENT . 'fulfillment_quotes');
 define('PROVIDERS', FULFILLMENT . 'providers');
 define('PAYMENT_TERMS', FULFILLMENT . 'payment_terms');
 define('WEEKLY_PROJECTIONS', FULFILLMENT . 'weekly_projections');
+define('WEEKLY_PROJECTIONS_2023', FULFILLMENT . 'weekly_projections_2023');
 define('INVOICE', FULFILLMENT . 'invoice/');
 /********************************ACCOUNTING VIEWS*****************************************/
 define('ACCOUNTING', PERFIL . 'accounting/');

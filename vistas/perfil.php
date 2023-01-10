@@ -150,7 +150,7 @@ switch ($partes_ruta[2]) {
     include_once 'plantillas/utilities/employee_docs_page.inc.php';
     break;
   case 'reports':
-      include_once 'plantillas/utilities/reports.inc.php';
+    include_once 'plantillas/utilities/reports.inc.php';
     break;
   case 'fulfillment':
     switch ($partes_ruta[3]) {
@@ -169,6 +169,9 @@ switch ($partes_ruta[2]) {
         break;
       case 'weekly_projections':
         include_once 'plantillas/weekly_projections/weekly_projections.inc.php';
+        break;
+      case 'weekly_projections_2023':
+        include_once 'plantillas/weekly_projections/weekly_projections_2023.inc.php';
         break;
       default:
         $id_rfq = $partes_ruta[3];
