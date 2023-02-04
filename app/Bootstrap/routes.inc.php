@@ -177,12 +177,15 @@ define('TASKS', PERFIL . 'tasks/');
 define('MY_TASKS', TASKS . 'my_tasks');
 define('TASKS_DONE', TASKS . 'tasks_done');
 define('ALL_TASKS', TASKS . 'all_tasks');
+/********************************REPORTS VIEWS*****************************************/
+define('REPORTS', PERFIL . 'reports/');
+define('REPORTS_TABLES', REPORTS . 'reports_tables');
+define('REPORTS_CHARTS', REPORTS . 'reports_charts');
 /********************************OTHER VIEWS*****************************************/
 define('CHARTS', PERFIL . 'charts');
 define('SEARCH_QUOTES', PERFIL . 'search_quotes');
 define('TRACKING', PERFIL . 'tracking/');
 define('KPI', PERFIL . 'kpi/');
-define('REPORTS', PERFIL . 'reports');
 define('EMPLOYEE_DOCS_PAGE', PERFIL . 'employee_docs_page/');
 /******************************************************************************/
 define('EMPLOYEE_DOCS', SERVIDOR . 'employee_docs/');

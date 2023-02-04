@@ -150,7 +150,16 @@ switch ($partes_ruta[2]) {
     include_once 'plantillas/utilities/employee_docs_page.inc.php';
     break;
   case 'reports':
-    include_once 'plantillas/utilities/reports.inc.php';
+    switch ($partes_ruta[3]) {
+      case 'reports_tables':
+        include_once 'plantillas/utilities/reports_tables.inc.php';
+        break;
+      case 'reports_charts':
+        include_once 'plantillas/utilities/reports_charts.inc.php';
+        break;
+      default:
+        break;
+    }
     break;
   case 'fulfillment':
     switch ($partes_ruta[3]) {
