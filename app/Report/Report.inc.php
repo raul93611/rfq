@@ -1,5 +1,54 @@
 <?php
 class Report {
+  public static function profit_chart($connection, $type, $quarter, $month, $year) {
+    $array_total_cost_quote = array();
+    $array_total_price_quote = array();
+    $array_total_profit_quote = array();
+    $array_total_cost_requote = array();
+    $array_total_price_requote = array();
+    $array_total_profit_requote = array();
+    $array_total_cost_fulfillment = array();
+    $array_total_price_fulfillment = array();
+    $array_total_profit_fulfillment = array();
+    for ($i = 1; $i <= 12; $i++) {
+      $quotes = self::get_profit_report($connection, 'monthly', $quarter, $i, $year);
+      $total_cost_quote = 0;
+      $total_price_quote = 0;
+      $total_cost_requote = 0;
+      $total_cost_fulfillment = 0;
+      foreach ($quotes as $key => $quote) {
+        $re_quote = ReQuoteRepository::get_re_quote_by_id_rfq($connection, $quote->obtener_id());
+        $total_cost_quote += $quote->obtener_total_cost();
+        $total_price_quote += $quote->obtener_quote_total_price();
+        $total_cost_requote += $re_quote->get_total_cost();
+        $total_cost_fulfillment += $quote->obtener_fulfillment_total_cost();
+      }
+      $array_total_cost_quote[] = $total_cost_quote;
+      $array_total_price_quote[] = $total_price_quote;
+      $array_total_profit_quote[] = $total_price_quote - $total_cost_quote;
+
+      $array_total_cost_requote[] = $total_cost_requote;
+      $array_total_price_requote[] = $total_price_quote;
+      $array_total_profit_requote[] = $total_price_quote - $total_cost_requote;
+
+      $array_total_cost_fulfillment[] = $total_cost_fulfillment;
+      $array_total_price_fulfillment[] = $total_price_quote;
+      $array_total_profit_fulfillment[] = $total_price_quote - $total_cost_fulfillment;
+    }
+
+    return array(
+      $array_total_cost_quote,
+      $array_total_price_quote,
+      $array_total_profit_quote,
+      $array_total_cost_requote,
+      $array_total_price_requote,
+      $array_total_profit_requote,
+      $array_total_cost_fulfillment,
+      $array_total_price_fulfillment,
+      $array_total_profit_fulfillment,
+    );
+  }
+
   public static function profit_report($connection, $type, $quarter, $month, $year) {
     $quotes = self::get_profit_report($connection, $type, $quarter, $month, $year);
     $total['total_cost'] = 0;
@@ -58,7 +107,7 @@ class Report {
             <td>
               <?php echo $quote->obtener_quote_total_price() - $re_quote->get_total_cost(); ?>
               <br>
-              <?php echo number_format(100 * (($quote->obtener_quote_total_price() - $re_quote->get_total_cost()) / $quote->obtener_quote_total_price()), 2) . '%'; ?>
+              <?php echo $quote->obtener_quote_total_price() ? number_format(100 * (($quote->obtener_quote_total_price() - $re_quote->get_total_cost()) / $quote->obtener_quote_total_price()), 2) . '%' : '0%'; ?>
             </td>
             <td><?php echo $quote->obtener_total_fulfillment() + $quote->obtener_total_services_fulfillment(); ?></td>
             <td><?php echo $quote->obtener_quote_total_price(); ?></td>
@@ -214,7 +263,7 @@ class Report {
     $array_total_price = array();
     $array_total_profit = array();
     $array_total_profit_percentage = array();
-    for ($i=1; $i <= 12; $i++) { 
+    for ($i = 1; $i <= 12; $i++) {
       $quotes = self::get_award_report($connection, 'monthly', $quarter, $i, $year);
       $total_cost = 0;
       $total_price = 0;

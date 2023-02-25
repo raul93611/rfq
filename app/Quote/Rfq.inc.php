@@ -324,7 +324,7 @@ class Rfq {
   }
 
   public function obtener_real_fulfillment_profit_percentage() {
-    return 100 * ($this->obtener_real_fulfillment_profit() / $this->obtener_quote_total_price());
+    return $this->obtener_quote_total_price() ? 100 * ($this->obtener_real_fulfillment_profit() / $this->obtener_quote_total_price()) : 0;
   }
 
   //quote amounts
