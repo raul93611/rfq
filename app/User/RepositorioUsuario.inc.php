@@ -577,7 +577,7 @@ class RepositorioUsuario {
           $id_usuario = $usuario-> obtener_id();
           for($i = 1; $i <= 12; $i++){
             $sql = 'SELECT COUNT(*) as cotizaciones_ganadas_usuario_mes FROM rfq WHERE usuario_designado = :id_usuario  AND award = 1 AND MONTH(fecha_award) = ' . $i . ' AND YEAR(fecha_award) = YEAR(NOW())';
-            $sql1 = 'SELECT SUM(total_price) as monto FROM rfq WHERE usuario_designado = :id_usuario AND award = 1 AND MONTH(fecha_award) = ' . $i . ' AND YEAR(fecha_award) = YEAR(NOW())';
+            $sql1 = 'SELECT * FROM rfq WHERE usuario_designado = :id_usuario AND award = 1 AND MONTH(fecha_award) = ' . $i . ' AND YEAR(fecha_award) = YEAR(NOW())';
             $sentencia = $conexion-> prepare($sql);
             $sentencia1 = $conexion-> prepare($sql1);
             $sentencia-> bindParam(':id_usuario', $id_usuario, PDO::PARAM_STR);
@@ -585,16 +585,15 @@ class RepositorioUsuario {
             $sentencia-> execute();
             $sentencia1-> execute();
             $resultado = $sentencia-> fetch(PDO::FETCH_ASSOC);
-            $resultado1 = $sentencia1-> fetch(PDO::FETCH_ASSOC);
+            $quotes = RepositorioRfq::array_to_object($sentencia1);
             if (!empty($resultado)) {
               $cotizaciones_ganadas_anual_por_usuario[$i - 1] = $resultado['cotizaciones_ganadas_usuario_mes'];
             } else {
               $cotizaciones_ganadas_anual_por_usuario[$i - 1] = 0;
             }
-            if(is_null($resultado1['monto'])){
-              $cotizaciones_ganadas_anual_por_usuario_monto[$i - 1] = 0;
-            }else{
-              $cotizaciones_ganadas_anual_por_usuario_monto[$i - 1] = $resultado1['monto'];
+            $cotizaciones_ganadas_anual_por_usuario_monto[$i - 1] = 0;
+            foreach ($quotes as $key => $quote) {
+              $cotizaciones_ganadas_anual_por_usuario_monto[$i - 1] += $quote-> obtener_quote_total_price();
             }
           }
           $cotizaciones_ganadas_anual_usuarios[] = $cotizaciones_ganadas_anual_por_usuario;

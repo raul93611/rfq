@@ -17,10 +17,14 @@
     <div class="col-md-4">
       <h6><b>Address:</b></h6>
       <p><?php echo nl2br($cotizacion_recuperada->obtener_address()); ?></p>
+      <h6><b>City:</b> <small><?php echo $cotizacion_recuperada->obtener_city(); ?></small></h6>
+      <h6><b>Zip Code:</b> <small><?php echo $cotizacion_recuperada->obtener_zip_code(); ?></small></h6>
     </div>
     <div class="col-md-4">
       <h6><b>Ship To:</b></h6>
       <p><?php echo nl2br($cotizacion_recuperada-> obtener_ship_to()); ?></p>
+      <h6><b>State:</b> <small><?php echo $cotizacion_recuperada->obtener_state(); ?></small></h6>
+      <h6><b>Client:</b> <small><?php echo $cotizacion_recuperada->obtener_client(); ?></small></h6>
     </div>
   </div>
   <div class="row">

@@ -60,6 +60,10 @@ CREATE TABLE rfq(
   sales_commission VARCHAR(255),
   sales_commission_comment TEXT CHARACTER SET utf8,
   services_payment_term VARCHAR(255) DEFAULT 'Net 30',
+  city VARCHAR(255),
+  zip_code VARCHAR(255),
+  state VARCHAR(255),
+  client VARCHAR(255),
   PRIMARY KEY(id),
   FOREIGN KEY(id_usuario) REFERENCES usuarios(id) ON UPDATE CASCADE ON DELETE RESTRICT
 );

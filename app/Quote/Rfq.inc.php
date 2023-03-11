@@ -47,6 +47,10 @@ class Rfq {
   private $sales_commission;
   private $sales_commission_comment;
   private $services_payment_term;
+  private $city;
+  private $zip_code;
+  private $state;
+  private $client;
 
   public function __construct(
     $id,
@@ -95,7 +99,11 @@ class Rfq {
     $net30_fulfillment,
     $sales_commission,
     $sales_commission_comment,
-    $services_payment_term
+    $services_payment_term,
+    $city,
+    $zip_code,
+    $state,
+    $client
   ) {
     $this->id = $id;
     $this->id_usuario = $id_usuario;
@@ -144,6 +152,10 @@ class Rfq {
     $this->sales_commission = $sales_commission;
     $this->sales_commission_comment = $sales_commission_comment;
     $this->services_payment_term = $services_payment_term;
+    $this->city = $city;
+    $this->zip_code = $zip_code;
+    $this->state = $state;
+    $this->client = $client;
   }
 
   public function obtener_id() {
@@ -429,5 +441,21 @@ class Rfq {
 
   public function obtener_services_payment_term() {
     return $this->services_payment_term;
+  }
+
+  public function obtener_city() {
+    return $this->city;
+  }
+
+  public function obtener_zip_code() {
+    return $this->zip_code;
+  }
+
+  public function obtener_state(){
+    return $this->state;
+  }
+
+  public function obtener_client(){
+    return $this->client;
   }
 }
