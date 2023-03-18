@@ -82,13 +82,13 @@
   <div class="col-md-6">
     <div class="form-group">
       <label for="city">City:</label>
-      <input type="text" class="form-control form-control-sm" id="city" name="city" placeholder="City ..." required value="<?php echo $cotizacion_recuperada->obtener_city(); ?>">
+      <input type="text" class="form-control form-control-sm" id="city" name="city" placeholder="City ..." value="<?php echo $cotizacion_recuperada->obtener_city(); ?>">
     </div>
   </div>
   <div class="col-md-6">
     <div class="form-group">
       <label for="zip_code">Zip Code:</label>
-      <input type="text" class="form-control form-control-sm" id="zip_code" name="zip_code" placeholder="Zip Code ..." required value="<?php echo $cotizacion_recuperada->obtener_zip_code(); ?>">
+      <input type="text" class="form-control form-control-sm" id="zip_code" name="zip_code" placeholder="Zip Code ..." value="<?php echo $cotizacion_recuperada->obtener_zip_code(); ?>">
     </div>
   </div>
   <div class="col-md-6">
@@ -108,7 +108,7 @@
   <div class="col-md-6">
     <div class="form-group">
       <label for="client">Client:</label>
-      <input type="text" class="form-control form-control-sm" id="client" name="client" placeholder="Client name ..." required value="<?php echo $cotizacion_recuperada->obtener_client(); ?>">
+      <input type="text" class="form-control form-control-sm" id="client" name="client" placeholder="Client name ..." value="<?php echo $cotizacion_recuperada->obtener_client(); ?>">
     </div>
   </div>
   <div class="col-md-12">

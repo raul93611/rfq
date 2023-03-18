@@ -64,6 +64,7 @@ CREATE TABLE rfq(
   zip_code VARCHAR(255),
   state VARCHAR(255),
   client VARCHAR(255),
+  deleted TINYINT DEFAULT 0,
   PRIMARY KEY(id),
   FOREIGN KEY(id_usuario) REFERENCES usuarios(id) ON UPDATE CASCADE ON DELETE RESTRICT
 );

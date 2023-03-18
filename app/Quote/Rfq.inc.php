@@ -51,6 +51,7 @@ class Rfq {
   private $zip_code;
   private $state;
   private $client;
+  private $deleted;
 
   public function __construct(
     $id,
@@ -103,7 +104,8 @@ class Rfq {
     $city,
     $zip_code,
     $state,
-    $client
+    $client,
+    $deleted
   ) {
     $this->id = $id;
     $this->id_usuario = $id_usuario;
@@ -156,6 +158,7 @@ class Rfq {
     $this->zip_code = $zip_code;
     $this->state = $state;
     $this->client = $client;
+    $this->deleted = $deleted;
   }
 
   public function obtener_id() {
@@ -439,6 +442,23 @@ class Rfq {
     return false;
   }
 
+  public function isEnabledToInvoice() {
+    return $this->obtener_fullfillment() &&
+      !is_null($this->obtener_fulfillment_profit()) ||
+      !is_null($this->obtener_services_fulfillment_profit());
+  }
+
+  public function isEnabledToFulfillment() {
+    Conexion::abrir_conexion();
+    $re_quote_exists = ReQuoteRepository::re_quote_exists(Conexion::obtener_conexion(), $this->id);
+    Conexion::cerrar_conexion();
+    return !$this->obtener_fullfillment() &&
+      $re_quote_exists &&
+      strlen($this->city) &&
+      strlen($this->zip_code) &&
+      strlen($this->client);
+  }
+
   public function obtener_services_payment_term() {
     return $this->services_payment_term;
   }
@@ -451,11 +471,15 @@ class Rfq {
     return $this->zip_code;
   }
 
-  public function obtener_state(){
+  public function obtener_state() {
     return $this->state;
   }
 
-  public function obtener_client(){
+  public function obtener_client() {
     return $this->client;
+  }
+
+  public function getDeleted() {
+    return $this->deleted;
   }
 }

@@ -87,7 +87,7 @@ class RepositorioRfq {
     $email_code_existe = true;
     if (isset($conexion)) {
       try {
-        $sql = 'SELECT * FROM rfq WHERE email_code = :email_code';
+        $sql = 'SELECT * FROM rfq WHERE deleted = 0 AND email_code = :email_code';
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindParam(':email_code', $email_code, PDO::PARAM_STR);
         $sentencia->execute();
@@ -107,7 +107,7 @@ class RepositorioRfq {
   public static function array_to_object($sentence) {
     $objects = [];
     while ($result = $sentence->fetch(PDO::FETCH_ASSOC)) {
-      $objects[] = new Rfq($result['id'], $result['id_usuario'], $result['usuario_designado'], $result['canal'], $result['email_code'], $result['type_of_bid'], $result['issue_date'], $result['end_date'], $result['status'], $result['completado'], $result['total_cost'], $result['total_price'], $result['comments'], $result['award'], $result['fecha_completado'], $result['fecha_submitted'], $result['fecha_award'], $result['payment_terms'], $result['address'], $result['ship_to'], $result['expiration_date'], $result['ship_via'], $result['taxes'], $result['profit'], $result['additional'], $result['shipping'], $result['shipping_cost'], $result['fullfillment'], $result['fulfillment_date'], $result['contract_number'], $result['fulfillment_profit'], $result['services_fulfillment_profit'], $result['total_fulfillment'], $result['total_services_fulfillment'], $result['invoice'], $result['invoice_date'], $result['multi_year_project'], $result['submitted_invoice'], $result['submitted_invoice_date'], $result['fulfillment_pending'], $result['fulfillment_shipping_cost'], $result['fulfillment_shipping'], $result['type_of_contract'], $result['net30_fulfillment'], $result['net30_shipping'], $result['sales_commission'], $result['sales_commission_comment'], $result['services_payment_term'], $result['city'], $result['zip_code'], $result['state'], $result['client']);
+      $objects[] = new Rfq($result['id'], $result['id_usuario'], $result['usuario_designado'], $result['canal'], $result['email_code'], $result['type_of_bid'], $result['issue_date'], $result['end_date'], $result['status'], $result['completado'], $result['total_cost'], $result['total_price'], $result['comments'], $result['award'], $result['fecha_completado'], $result['fecha_submitted'], $result['fecha_award'], $result['payment_terms'], $result['address'], $result['ship_to'], $result['expiration_date'], $result['ship_via'], $result['taxes'], $result['profit'], $result['additional'], $result['shipping'], $result['shipping_cost'], $result['fullfillment'], $result['fulfillment_date'], $result['contract_number'], $result['fulfillment_profit'], $result['services_fulfillment_profit'], $result['total_fulfillment'], $result['total_services_fulfillment'], $result['invoice'], $result['invoice_date'], $result['multi_year_project'], $result['submitted_invoice'], $result['submitted_invoice_date'], $result['fulfillment_pending'], $result['fulfillment_shipping_cost'], $result['fulfillment_shipping'], $result['type_of_contract'], $result['net30_fulfillment'], $result['net30_shipping'], $result['sales_commission'], $result['sales_commission_comment'], $result['services_payment_term'], $result['city'], $result['zip_code'], $result['state'], $result['client'], $result['deleted']);
     }
 
     return $objects;
@@ -115,7 +115,7 @@ class RepositorioRfq {
 
   public static function single_result_to_object($sentence) {
     $result = $sentence->fetch(PDO::FETCH_ASSOC);
-    $object = new Rfq($result['id'], $result['id_usuario'], $result['usuario_designado'], $result['canal'], $result['email_code'], $result['type_of_bid'], $result['issue_date'], $result['end_date'], $result['status'], $result['completado'], $result['total_cost'], $result['total_price'], $result['comments'], $result['award'], $result['fecha_completado'], $result['fecha_submitted'], $result['fecha_award'], $result['payment_terms'], $result['address'], $result['ship_to'], $result['expiration_date'], $result['ship_via'], $result['taxes'], $result['profit'], $result['additional'], $result['shipping'], $result['shipping_cost'], $result['fullfillment'], $result['fulfillment_date'], $result['contract_number'], $result['fulfillment_profit'], $result['services_fulfillment_profit'], $result['total_fulfillment'], $result['total_services_fulfillment'], $result['invoice'], $result['invoice_date'], $result['multi_year_project'], $result['submitted_invoice'], $result['submitted_invoice_date'], $result['fulfillment_pending'], $result['fulfillment_shipping_cost'], $result['fulfillment_shipping'], $result['type_of_contract'], $result['net30_fulfillment'], $result['sales_commission'], $result['sales_commission_comment'], $result['services_payment_term'], $result['city'], $result['zip_code'], $result['state'], $result['client']);
+    $object = new Rfq($result['id'], $result['id_usuario'], $result['usuario_designado'], $result['canal'], $result['email_code'], $result['type_of_bid'], $result['issue_date'], $result['end_date'], $result['status'], $result['completado'], $result['total_cost'], $result['total_price'], $result['comments'], $result['award'], $result['fecha_completado'], $result['fecha_submitted'], $result['fecha_award'], $result['payment_terms'], $result['address'], $result['ship_to'], $result['expiration_date'], $result['ship_via'], $result['taxes'], $result['profit'], $result['additional'], $result['shipping'], $result['shipping_cost'], $result['fullfillment'], $result['fulfillment_date'], $result['contract_number'], $result['fulfillment_profit'], $result['services_fulfillment_profit'], $result['total_fulfillment'], $result['total_services_fulfillment'], $result['invoice'], $result['invoice_date'], $result['multi_year_project'], $result['submitted_invoice'], $result['submitted_invoice_date'], $result['fulfillment_pending'], $result['fulfillment_shipping_cost'], $result['fulfillment_shipping'], $result['type_of_contract'], $result['net30_fulfillment'], $result['sales_commission'], $result['sales_commission_comment'], $result['services_payment_term'], $result['city'], $result['zip_code'], $result['state'], $result['client'], $result['deleted']);
 
     return $object;
   }
@@ -124,7 +124,7 @@ class RepositorioRfq {
     $quotes = [];
     if (isset($conexion)) {
       try {
-        $sql = 'SELECT * FROM rfq WHERE multi_year_project = :multi_year_project';
+        $sql = 'SELECT * FROM rfq WHERE deleted = 0 AND multi_year_project = :multi_year_project';
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindParam(':multi_year_project', $id_parent, PDO::PARAM_STR);
         $sentencia->execute();
@@ -140,7 +140,7 @@ class RepositorioRfq {
     $quotes = [];
     if (isset($conexion)) {
       try {
-        $sql = 'SELECT * FROM rfq WHERE status = 1 AND completado = 1 AND fecha_submitted BETWEEN :date_from AND :date_to';
+        $sql = 'SELECT * FROM rfq WHERE deleted = 0 AND status = 1 AND completado = 1 AND fecha_submitted BETWEEN :date_from AND :date_to';
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindParam(':date_from', $date_from, PDO::PARAM_STR);
         $sentencia->bindParam(':date_to', $date_to, PDO::PARAM_STR);
@@ -157,7 +157,7 @@ class RepositorioRfq {
     $quotes = [];
     if (isset($conexion)) {
       try {
-        $sql = 'SELECT * FROM rfq WHERE award =1 AND status = 1 AND completado = 1 AND fecha_award BETWEEN :date_from AND :date_to';
+        $sql = 'SELECT * FROM rfq WHERE deleted = 0 AND award =1 AND status = 1 AND completado = 1 AND fecha_award BETWEEN :date_from AND :date_to';
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindParam(':date_from', $date_from, PDO::PARAM_STR);
         $sentencia->bindParam(':date_to', $date_to, PDO::PARAM_STR);
@@ -174,7 +174,7 @@ class RepositorioRfq {
     $cotizaciones = [];
     if (isset($conexion)) {
       try {
-        $sql = "SELECT * FROM rfq WHERE canal = :canal AND completado = 0 AND status = 0 AND award = 0 AND (comments = 'Working on it' OR comments = 'No comments' OR comments = '') ORDER BY id DESC";
+        $sql = "SELECT * FROM rfq WHERE deleted = 0 AND canal = :canal AND completado = 0 AND status = 0 AND award = 0 AND (comments = 'Working on it' OR comments = 'No comments' OR comments = '') ORDER BY id DESC";
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
         $sentencia->execute();
@@ -258,7 +258,7 @@ class RepositorioRfq {
     $cotizacion_recuperada = null;
     if (isset($conexion)) {
       try {
-        $sql = "SELECT * FROM rfq WHERE id = :id_rfq";
+        $sql = "SELECT * FROM rfq WHERE deleted = 0 AND id = :id_rfq";
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia->execute();
@@ -484,7 +484,7 @@ class RepositorioRfq {
     $cotizaciones = [];
     if (isset($conexion)) {
       try {
-        $sql = "SELECT * FROM rfq WHERE canal = :canal AND completado = 1 AND status = 0 AND award = 0 AND (comments = 'No comments' OR comments = 'Working on it') ORDER BY fecha_completado DESC";
+        $sql = "SELECT * FROM rfq WHERE deleted = 0 AND canal = :canal AND completado = 1 AND status = 0 AND award = 0 AND (comments = 'No comments' OR comments = 'Working on it') ORDER BY fecha_completado DESC";
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
         $sentencia->execute();
@@ -582,7 +582,7 @@ class RepositorioRfq {
     $cotizaciones = [];
     if (isset($conexion)) {
       try {
-        $sql = "SELECT * FROM rfq WHERE completado = 1 AND status = 1 AND award = 0 AND canal = :canal AND comments = 'No comments' ORDER BY fecha_submitted DESC LIMIT 100";
+        $sql = "SELECT * FROM rfq WHERE deleted = 0 AND completado = 1 AND status = 1 AND award = 0 AND canal = :canal AND comments = 'No comments' ORDER BY fecha_submitted DESC LIMIT 100";
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
         $sentencia->execute();
@@ -678,7 +678,7 @@ class RepositorioRfq {
     $cotizaciones = [];
     if (isset($conexion)) {
       try {
-        $sql = "SELECT * FROM rfq WHERE completado = 1 AND status = 1 AND award = 1 AND fullfillment = 0 AND canal = :canal AND (comments = 'No comments' OR comments = 'QuickBooks') ORDER BY fecha_award DESC";
+        $sql = "SELECT * FROM rfq WHERE deleted = 0 AND completado = 1 AND status = 1 AND award = 1 AND fullfillment = 0 AND canal = :canal AND (comments = 'No comments' OR comments = 'QuickBooks') ORDER BY fecha_award DESC";
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
         $sentencia->execute();
@@ -776,7 +776,7 @@ class RepositorioRfq {
     $cotizaciones = [];
     if (isset($conexion)) {
       try {
-        $sql = "SELECT * FROM rfq WHERE comments = 'No Bid' OR comments = 'Manufacturer in the Bid' OR comments = 'Expired due date' OR comments = 'Supplier did not provide a quote' OR comments = 'Others' ORDER BY id DESC";
+        $sql = "SELECT * FROM rfq WHERE deleted = 0 AND comments = 'No Bid' OR comments = 'Manufacturer in the Bid' OR comments = 'Expired due date' OR comments = 'Supplier did not provide a quote' OR comments = 'Others' ORDER BY id DESC";
         $sentencia = $conexion->prepare($sql);
         $sentencia->execute();
         $cotizaciones = self::array_to_object($sentencia);
@@ -849,7 +849,7 @@ class RepositorioRfq {
     $cotizaciones = [];
     if (isset($conexion)) {
       try {
-        $sql = "SELECT * FROM rfq WHERE comments = 'Cancelled' ORDER BY id DESC";
+        $sql = "SELECT * FROM rfq WHERE deleted = 0 AND comments = 'Cancelled' ORDER BY id DESC";
         $sentencia = $conexion->prepare($sql);
         $sentencia->execute();
         $cotizaciones = self::array_to_object($sentencia);
@@ -894,7 +894,7 @@ class RepositorioRfq {
     $cotizaciones = [];
     if (isset($conexion)) {
       try {
-        $sql = "SELECT * FROM rfq WHERE comments = 'Not submitted' ORDER BY id DESC";
+        $sql = "SELECT * FROM rfq WHERE deleted = 0 AND comments = 'Not submitted' ORDER BY id DESC";
         $sentencia = $conexion->prepare($sql);
         $sentencia->execute();
         $cotizaciones = self::array_to_object($sentencia);
@@ -984,7 +984,7 @@ class RepositorioRfq {
     $termino_busqueda = '%' . trim($termino_busqueda) . '%';
     if (isset($conexion)) {
       try {
-        $sql = '(SELECT * FROM rfq WHERE (contract_number LIKE :termino_busqueda OR id LIKE :termino_busqueda OR email_code LIKE :termino_busqueda OR total_price LIKE :termino_busqueda OR address LIKE :termino_busqueda OR ship_to LIKE :termino_busqueda)) UNION (SELECT rfq.* FROM rfq INNER JOIN item ON rfq.id = item.id_rfq WHERE (item.brand LIKE :termino_busqueda OR item.brand_project LIKE :termino_busqueda OR item.part_number LIKE :termino_busqueda OR item.part_number_project LIKE :termino_busqueda OR item.description LIKE :termino_busqueda OR item.description_project LIKE :termino_busqueda)) UNION (SELECT rfq.* FROM rfq INNER JOIN item ON rfq.id = item.id_rfq INNER JOIN subitems ON item.id = subitems.id_item WHERE (subitems.brand LIKE :termino_busqueda OR subitems.brand_project LIKE :termino_busqueda OR subitems.part_number LIKE :termino_busqueda OR subitems.part_number_project LIKE :termino_busqueda OR subitems.description LIKE :termino_busqueda OR subitems.description_project LIKE :termino_busqueda))';
+        $sql = '(SELECT * FROM rfq WHERE deleted = 0 AND (contract_number LIKE :termino_busqueda OR id LIKE :termino_busqueda OR email_code LIKE :termino_busqueda OR total_price LIKE :termino_busqueda OR address LIKE :termino_busqueda OR ship_to LIKE :termino_busqueda)) UNION (SELECT rfq.* FROM rfq INNER JOIN item ON rfq.id = item.id_rfq WHERE (item.brand LIKE :termino_busqueda OR item.brand_project LIKE :termino_busqueda OR item.part_number LIKE :termino_busqueda OR item.part_number_project LIKE :termino_busqueda OR item.description LIKE :termino_busqueda OR item.description_project LIKE :termino_busqueda)) UNION (SELECT rfq.* FROM rfq INNER JOIN item ON rfq.id = item.id_rfq INNER JOIN subitems ON item.id = subitems.id_item WHERE (subitems.brand LIKE :termino_busqueda OR subitems.brand_project LIKE :termino_busqueda OR subitems.part_number LIKE :termino_busqueda OR subitems.part_number_project LIKE :termino_busqueda OR subitems.description LIKE :termino_busqueda OR subitems.description_project LIKE :termino_busqueda))';
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindParam(':termino_busqueda', $termino_busqueda, PDO::PARAM_STR);
         $sentencia->execute();
@@ -1240,247 +1240,12 @@ class RepositorioRfq {
   public static function delete_quote($conexion, $id_rfq) {
     if (isset($conexion)) {
       try {
-        $sql = 'DELETE FROM rfq WHERE id = :id_rfq';
+        $sql = 'UPDATE rfq SET deleted = 1 WHERE id = :id_rfq';
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia->execute();
       } catch (PDOException $ex) {
         print "ERROR:" . $ex->getMessage() . "<br>";
-      }
-    }
-  }
-
-  public static function quote_rfq_exists($conexion, $id_project) {
-    $quote_rfq_exists = true;
-    if (isset($conexion)) {
-      try {
-        $sql = 'SELECT * FROM rfq WHERE rfp = :id_project';
-        $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':id_project', $id_project, PDO::PARAM_STR);
-        $sentencia->execute();
-        $resultado = $sentencia->fetchAll(PDO::FETCH_ASSOC);
-        if (count($resultado)) {
-          $quote_rfq_exists = true;
-        } else {
-          $quote_rfq_exists = false;
-        }
-      } catch (PDOException $ex) {
-        print 'ERROR:' . $ex->getMessage() . '<br>';
-      }
-    }
-    return $quote_rfq_exists;
-  }
-
-  public static function print_final_quote($id_rfq) {
-    Conexion::abrir_conexion();
-    $cotizacion = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
-    $items = RepositorioItem::obtener_items_por_id_rfq(Conexion::obtener_conexion(), $id_rfq);
-    Conexion::cerrar_conexion();
-    if ($cotizacion->obtener_canal() == 'FedBid') {
-    ?>
-      <div class="row">
-        <div class="col-md-6">
-          <label>Total cost:</label>
-        </div>
-        <div class="col-md-6">
-          $ <?php echo $cotizacion->obtener_total_cost(); ?>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6">
-          <label>Total price:</label>
-        </div>
-        <div class="col-md-6">
-          $ <?php echo $cotizacion->obtener_total_price(); ?>
-        </div>
-      </div>
-    <?php
-    } else {
-    ?>
-      <div class="row">
-        <div class="col-md-3">
-          <b>Taxes:</b> <?php echo $cotizacion->obtener_taxes(); ?>%<br>
-        </div>
-        <div class="col-md-3">
-          <b>Profit:</b> <?php echo $cotizacion->obtener_profit(); ?>%<br>
-        </div>
-        <div class="col-md-3">
-          <b>Additional general:</b> $ <?php echo $cotizacion->obtener_additional(); ?>
-        </div>
-        <div class="col-md-3">
-          <b>Payment terms:</b> <?php echo $cotizacion->obtener_payment_terms(); ?>
-        </div>
-      </div>
-      <br>
-      <?php
-      if (count($items)) {
-      ?>
-        <table class="table table-bordered" style="width:100%;">
-          <tr>
-            <th class="quantity">#</th>
-            <th style="width:200px;">PROJECT ESPC.</th>
-            <th style="width:200px;">E-LOGIC PROP.</th>
-            <th>WEBSITE</th>
-            <th class="quantity">QTY</th>
-            <th>PROVIDER</th>
-            <th>ADDITIONAL</th>
-            <th>BEST UNIT COST</th>
-            <th>TOTAL COST</th>
-            <th>PRICE FOR CLIENT</th>
-            <th>TOTAL PRICE</th>
-          </tr>
-          <?php
-          $a = 1;
-          if ($cotizacion->obtener_payment_terms() == 'Net 30/CC') {
-            $payment_terms = 1.0299;
-          } else {
-            $payment_terms = 1;
-          }
-          for ($i = 0; $i < count($items); $i++) {
-            $item = $items[$i];
-          ?>
-            <tr>
-              <td><?php echo $a; ?></td>
-              <td><b>Brand name:</b><?php echo $item->obtener_brand_project(); ?><br><b>Part number:</b><?php echo $item->obtener_part_number_project(); ?><br><b>Item description:</b><?php echo nl2br(mb_substr($item->obtener_description_project(), 0, 150)); ?></td>
-              <td><b>Brand name:</b><?php echo $item->obtener_brand(); ?><br><b>Part number:</b><?php echo $item->obtener_part_number(); ?><br><b> Item description:</b><br><?php echo nl2br(mb_substr($item->obtener_description(), 0, 150)); ?></td>
-              <td><a target="_blank" href="<?php echo $item->obtener_website(); ?>">Provider Website</a></td>
-              <td style="text-align:right;"><?php echo $item->obtener_quantity(); ?></td>
-              <td style="width: 200px;">
-                <?php
-                Conexion::abrir_conexion();
-                $providers = RepositorioProvider::obtener_providers_por_id_item(Conexion::obtener_conexion(), $item->obtener_id());
-                Conexion::cerrar_conexion();
-                if (count($providers)) {
-                  Conexion::abrir_conexion();
-                  $provider_menor = RepositorioProvider::obtener_provider_por_id(Conexion::obtener_conexion(), $item->obtener_provider_menor());
-                  Conexion::cerrar_conexion();
-                  if (count($providers)) {
-                    foreach ($providers as $provider) {
-                ?>
-                      <div class="row">
-                        <div class="col-md-6">
-                          <b><?php echo $provider->obtener_provider(); ?>:</b>
-                        </div>
-                        <div class="col-md-6">
-                          $ <?php echo number_format($provider->obtener_price(), 2); ?>
-                        </div>
-                      </div>
-                  <?php
-                    }
-                  }
-                  ?>
-              </td>
-              <td>$ <?php echo number_format($item->obtener_additional(), 2); ?></td>
-              <td>$
-                <?php
-                  $best_unit_price = $provider_menor->obtener_price() * $payment_terms * (1 + ($cotizacion->obtener_taxes() / 100)) + $item->obtener_additional() + $cotizacion->obtener_additional();
-                  echo number_format($best_unit_price, 2);
-                ?>
-              </td>
-              <td>$ <?php echo number_format(round($best_unit_price, 2) * $item->obtener_quantity(), 2); ?></td>
-              <td style="text-align:right;">$ <?php echo number_format($item->obtener_unit_price(), 2); ?></td>
-              <td style="text-align:right;">$ <?php echo number_format($item->obtener_total_price(), 2); ?></td>
-            <?php
-                } else {
-            ?>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            <?php
-                }
-            ?>
-            </tr>
-            <?php
-            Conexion::abrir_conexion();
-            $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Conexion::obtener_conexion(), $item->obtener_id());
-            Conexion::cerrar_conexion();
-            for ($j = 0; $j < count($subitems); $j++) {
-              $subitem = $subitems[$j];
-            ?>
-              <tr>
-                <td></td>
-                <td><b>Brand name:</b><?php echo $subitem->obtener_brand_project(); ?><br><b>Part number:</b><?php echo $subitem->obtener_part_number_project(); ?><br><b>Item description:</b><br><?php echo nl2br(mb_substr($subitem->obtener_description_project(), 0, 150)); ?></td>
-                <td><b>Brand name:</b><?php echo $subitem->obtener_brand(); ?><br><b>Part number:</b> <?php echo $item->obtener_part_number(); ?><br><b> Item description:</b><br> <?php echo nl2br(mb_substr($item->obtener_description(), 0, 150)); ?></td>
-                <td><a target="_blank" href="<?php echo $subitem->obtener_website(); ?>">Provider Website</a></td>
-                <td style="text-align:right;"><?php echo $subitem->obtener_quantity(); ?></td>
-                <?php
-                Conexion::abrir_conexion();
-                $providers_subitem = RepositorioProviderSubitem::obtener_providers_subitem_por_id_subitem(Conexion::obtener_conexion(), $subitem->obtener_id());
-                Conexion::cerrar_conexion();
-                if (count($providers_subitem)) {
-                ?>
-                  <td>
-                    <?php
-                    Conexion::abrir_conexion();
-                    $provider_subitem_menor = RepositorioProviderSubitem::obtener_provider_subitem_por_id(Conexion::obtener_conexion(), $subitem->obtener_provider_menor());
-                    Conexion::cerrar_conexion();
-                    if (count($providers_subitem)) {
-                      foreach ($providers_subitem as $provider_subitem) {
-                    ?>
-                        <div class="row">
-                          <div class="col-md-6">
-                            <b><?php echo $provider_subitem->obtener_provider(); ?>:</b>
-                          </div>
-                          <div class="col-md-6">
-                            $ <?php echo $provider_subitem->obtener_price(); ?>
-                          </div>
-                        </div>
-                    <?php
-                      }
-                    }
-                    ?>
-                  </td>
-                  <td>$ <?php echo number_format($subitem->obtener_additional(), 2); ?></td>
-                  <td>$
-                    <?php
-                    $best_unit_price = $provider_subitem_menor->obtener_price() * $payment_terms * (1 + ($cotizacion->obtener_taxes() / 100)) + $subitem->obtener_additional() + $cotizacion->obtener_additional();
-                    echo number_format($best_unit_price, 2);
-                    ?>
-                  </td>
-                  <td>$ <?php echo number_format(round($best_unit_price, 2) * $subitem->obtener_quantity(), 2); ?></td>
-                  <td style="text-align:right;">$ <?php echo number_format($subitem->obtener_unit_price(), 2); ?></td>
-                  <td style="text-align:right;">$ <?php echo number_format($subitem->obtener_total_price(), 2); ?></td>
-                <?php
-                } else {
-                ?>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                <?php
-                }
-                ?>
-              </tr>
-          <?php
-            }
-            $a++;
-          }
-          ?>
-          <tr>
-            <td style="border:none;"></td>
-            <td colspan="9" style="font-size:10pt;"><?php echo nl2br($cotizacion->obtener_shipping()); ?></td>
-            <td style="text-align:right;">$ <?php echo number_format($cotizacion->obtener_shipping_cost(), 2); ?></td>
-          </tr>
-          <tr>
-            <td style="border:none;"></td>
-            <td style="border:none;"></td>
-            <td style="border:none;"></td>
-            <td style="border:none;"></td>
-            <td style="border:none;"></td>
-            <td style="border:none;"></td>
-            <td style="border:none;"></td>
-            <td style="font-size:12pt;">TOTAL:</td>
-            <td>$ <?php echo number_format($cotizacion->obtener_total_cost(), 2); ?></td>
-            <td></td>
-            <td style="font-size:12pt;text-align:right;">$ <?php echo number_format($cotizacion->obtener_total_price(), 2); ?></td>
-          </tr>
-        </table>
-      <?php
       }
     }
   }
@@ -1545,7 +1310,7 @@ class RepositorioRfq {
     $quotes = [];
     if (isset($connection)) {
       try {
-        $sql = 'SELECT * FROM rfq WHERE fullfillment = 1 AND (invoice IS NULL OR invoice = 0)';
+        $sql = 'SELECT * FROM rfq WHERE deleted = 0 AND fullfillment = 1 AND (invoice IS NULL OR invoice = 0)';
         $sentence = $connection->prepare($sql);
         $sentence->execute();
         $quotes = self::array_to_object($sentence);
@@ -1608,7 +1373,7 @@ class RepositorioRfq {
     $quotes = [];
     if (isset($connection)) {
       try {
-        $sql = 'SELECT * FROM rfq WHERE invoice = 1 AND (submitted_invoice IS NULL OR submitted_invoice = 0)';
+        $sql = 'SELECT * FROM rfq WHERE deleted = 0 AND invoice = 1 AND (submitted_invoice IS NULL OR submitted_invoice = 0)';
         $sentence = $connection->prepare($sql);
         $sentence->execute();
         $quotes = self::array_to_object($sentence);
@@ -1671,7 +1436,7 @@ class RepositorioRfq {
     $quotes = [];
     if (isset($connection)) {
       try {
-        $sql = 'SELECT * FROM rfq WHERE submitted_invoice = 1';
+        $sql = 'SELECT * FROM rfq WHERE deleted = 0 AND submitted_invoice = 1';
         $sentence = $connection->prepare($sql);
         $sentence->execute();
         $quotes = self::array_to_object($sentence);

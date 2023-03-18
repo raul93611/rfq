@@ -152,7 +152,7 @@ class Report {
       try {
         switch ($type) {
           case 'monthly':
-            $sql = 'SELECT * FROM rfq WHERE invoice = 1 AND MONTH(invoice_date) = :month AND YEAR(invoice_date) = :year';
+            $sql = 'SELECT * FROM rfq WHERE deleted = 0 AND invoice = 1 AND MONTH(invoice_date) = :month AND YEAR(invoice_date) = :year';
             $sentence = $connection->prepare($sql);
             $sentence->bindParam(':month', $month, PDO::PARAM_STR);
             $sentence->bindParam(':year', $year, PDO::PARAM_STR);
@@ -172,12 +172,12 @@ class Report {
                 $period = 'BETWEEN 10 AND 12';
                 break;
             }
-            $sql = 'SELECT * FROM rfq WHERE invoice = 1 AND MONTH(invoice_date) ' . $period . ' AND YEAR(invoice_date) = :year';
+            $sql = 'SELECT * FROM rfq WHERE deleted = 0 AND invoice = 1 AND MONTH(invoice_date) ' . $period . ' AND YEAR(invoice_date) = :year';
             $sentence = $connection->prepare($sql);
             $sentence->bindParam(':year', $year, PDO::PARAM_STR);
             break;
           case 'yearly':
-            $sql = 'SELECT * FROM rfq WHERE invoice = 1 AND YEAR(invoice_date) = :year';
+            $sql = 'SELECT * FROM rfq WHERE deleted = 0 AND invoice = 1 AND YEAR(invoice_date) = :year';
             $sentence = $connection->prepare($sql);
             $sentence->bindParam(':year', $year, PDO::PARAM_STR);
             break;
@@ -286,7 +286,7 @@ class Report {
       try {
         switch ($type) {
           case 'monthly':
-            $sql = 'SELECT * FROM rfq WHERE award = 1 AND MONTH(fecha_award) = :month AND YEAR(fecha_award) = :year';
+            $sql = 'SELECT * FROM rfq WHERE deleted = 0 AND award = 1 AND MONTH(fecha_award) = :month AND YEAR(fecha_award) = :year';
             $sentence = $connection->prepare($sql);
             $sentence->bindParam(':month', $month, PDO::PARAM_STR);
             $sentence->bindParam(':year', $year, PDO::PARAM_STR);
@@ -306,12 +306,12 @@ class Report {
                 $period = 'BETWEEN 10 AND 12';
                 break;
             }
-            $sql = 'SELECT * FROM rfq WHERE award = 1 AND MONTH(fecha_award) ' . $period . ' AND YEAR(fecha_award) = :year';
+            $sql = 'SELECT * FROM rfq WHERE deleted = 0 AND award = 1 AND MONTH(fecha_award) ' . $period . ' AND YEAR(fecha_award) = :year';
             $sentence = $connection->prepare($sql);
             $sentence->bindParam(':year', $year, PDO::PARAM_STR);
             break;
           case 'yearly':
-            $sql = 'SELECT * FROM rfq WHERE award = 1 AND YEAR(fecha_award) = :year';
+            $sql = 'SELECT * FROM rfq WHERE deleted = 0 AND award = 1 AND YEAR(fecha_award) = :year';
             $sentence = $connection->prepare($sql);
             $sentence->bindParam(':year', $year, PDO::PARAM_STR);
             break;
@@ -396,7 +396,7 @@ class Report {
       try {
         switch ($type) {
           case 'monthly':
-            $sql = 'SELECT * FROM rfq WHERE status = 1 AND MONTH(fecha_submitted) = :month AND YEAR(fecha_submitted) = :year';
+            $sql = 'SELECT * FROM rfq WHERE deleted = 0 AND status = 1 AND MONTH(fecha_submitted) = :month AND YEAR(fecha_submitted) = :year';
             $sentence = $connection->prepare($sql);
             $sentence->bindParam(':month', $month, PDO::PARAM_STR);
             $sentence->bindParam(':year', $year, PDO::PARAM_STR);
@@ -416,12 +416,12 @@ class Report {
                 $period = 'BETWEEN 10 AND 12';
                 break;
             }
-            $sql = 'SELECT * FROM rfq WHERE status = 1 AND MONTH(fecha_submitted) ' . $period . ' AND YEAR(fecha_submitted) = :year';
+            $sql = 'SELECT * FROM rfq WHERE deleted = 0 AND status = 1 AND MONTH(fecha_submitted) ' . $period . ' AND YEAR(fecha_submitted) = :year';
             $sentence = $connection->prepare($sql);
             $sentence->bindParam(':year', $year, PDO::PARAM_STR);
             break;
           case 'yearly':
-            $sql = 'SELECT * FROM rfq WHERE status = 1 AND YEAR(fecha_submitted) = :year';
+            $sql = 'SELECT * FROM rfq WHERE deleted = 0 AND status = 1 AND YEAR(fecha_submitted) = :year';
             $sentence = $connection->prepare($sql);
             $sentence->bindParam(':year', $year, PDO::PARAM_STR);
             break;
@@ -531,7 +531,7 @@ class Report {
       try {
         switch ($type) {
           case 'monthly':
-            $sql = 'SELECT * FROM rfq WHERE fullfillment = 1 AND MONTH(fulfillment_date) = :month AND YEAR(fulfillment_date) = :year';
+            $sql = 'SELECT * FROM rfq WHERE deleted = 0 AND fullfillment = 1 AND MONTH(fulfillment_date) = :month AND YEAR(fulfillment_date) = :year';
             $sentence = $connection->prepare($sql);
             $sentence->bindParam(':month', $month, PDO::PARAM_STR);
             $sentence->bindParam(':year', $year, PDO::PARAM_STR);
@@ -551,12 +551,12 @@ class Report {
                 $period = 'BETWEEN 10 AND 12';
                 break;
             }
-            $sql = 'SELECT * FROM rfq WHERE fullfillment = 1 AND MONTH(fulfillment_date) ' . $period . ' AND YEAR(fulfillment_date) = :year';
+            $sql = 'SELECT * FROM rfq WHERE deleted = 0 AND fullfillment = 1 AND MONTH(fulfillment_date) ' . $period . ' AND YEAR(fulfillment_date) = :year';
             $sentence = $connection->prepare($sql);
             $sentence->bindParam(':year', $year, PDO::PARAM_STR);
             break;
           case 'yearly':
-            $sql = 'SELECT * FROM rfq WHERE fullfillment = 1 AND YEAR(fulfillment_date) = :year';
+            $sql = 'SELECT * FROM rfq WHERE deleted = 0 AND fullfillment = 1 AND YEAR(fulfillment_date) = :year';
             $sentence = $connection->prepare($sql);
             $sentence->bindParam(':year', $year, PDO::PARAM_STR);
             break;
@@ -664,7 +664,7 @@ class Report {
     $quotes = [];
     if (isset($connection)) {
       try {
-        $sql = 'SELECT * FROM rfq WHERE fulfillment_pending = 1';
+        $sql = 'SELECT * FROM rfq WHERE deleted = 0 AND fulfillment_pending = 1';
         $sentence = $connection->prepare($sql);
         $sentence->execute();
         $quotes = RepositorioRfq::array_to_object($sentence);

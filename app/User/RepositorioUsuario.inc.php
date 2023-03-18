@@ -577,7 +577,7 @@ class RepositorioUsuario {
           $id_usuario = $usuario-> obtener_id();
           for($i = 1; $i <= 12; $i++){
             $sql = 'SELECT COUNT(*) as cotizaciones_ganadas_usuario_mes FROM rfq WHERE usuario_designado = :id_usuario  AND award = 1 AND MONTH(fecha_award) = ' . $i . ' AND YEAR(fecha_award) = YEAR(NOW())';
-            $sql1 = 'SELECT * FROM rfq WHERE usuario_designado = :id_usuario AND award = 1 AND MONTH(fecha_award) = ' . $i . ' AND YEAR(fecha_award) = YEAR(NOW())';
+            $sql1 = 'SELECT * FROM rfq WHERE deleted = 0 AND usuario_designado = :id_usuario AND award = 1 AND MONTH(fecha_award) = ' . $i . ' AND YEAR(fecha_award) = YEAR(NOW())';
             $sentencia = $conexion-> prepare($sql);
             $sentencia1 = $conexion-> prepare($sql1);
             $sentencia-> bindParam(':id_usuario', $id_usuario, PDO::PARAM_STR);
