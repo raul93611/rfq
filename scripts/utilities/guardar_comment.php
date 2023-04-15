@@ -1,5 +1,4 @@
 <?php
-session_start();
 if(isset($_POST['guardar_comment'])){
   Conexion::abrir_conexion();
   $comment = new Comment('', $_POST['id_rfq'], $_SESSION['user']-> obtener_id(), $_POST['comment_rfq'], '');

@@ -1,5 +1,4 @@
 <?php
-session_start();
 if (isset($_POST['guardar_cambios_cotizacion'])) {
   Conexion::abrir_conexion();
   $cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $_POST['id_rfq']);

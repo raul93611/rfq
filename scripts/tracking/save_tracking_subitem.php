@@ -1,5 +1,4 @@
 <?php
-session_start();
 if(isset($_POST['save_tracking_subitem'])){
   Conexion::abrir_conexion();
   $subitem = RepositorioSubitem::obtener_subitem_por_id(Conexion::obtener_conexion(), $_POST['id_subitem']);

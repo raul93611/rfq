@@ -1,5 +1,4 @@
 <?php
-session_start();
 if(isset($_POST['guardar_provider_subitem'])){
   Conexion::abrir_conexion();
   $provider_subitem = new ProviderSubitem('', $_POST['id_subitem'], $_POST['provider'], $_POST['price']);
