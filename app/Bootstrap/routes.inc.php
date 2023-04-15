@@ -20,6 +20,7 @@ define('REMOVE_AWARD', QUOTE_SC . 'remove_award/');
 define('REMOVE_FULFILLMENT', QUOTE_SC . 'remove_fulfillment/');
 define('REMOVE_INVOICE', QUOTE_SC . 'remove_invoice/');
 define('REMOVE_SUBMITTED_INVOICE', QUOTE_SC . 'remove_submitted_invoice/');
+define('SAVE_CHECKLIST', QUOTE_SC . 'save_checklist/');
 /********************************SERVICE SCRIPTS*****************************************/
 define('SERVICE_SC', QUOTE_SC . 'service/');
 define('ADD_SERVICE', SERVICE_SC . 'add_service');
@@ -90,6 +91,7 @@ define('NO_SUBMITTED', QUOTE . 'no_submitted');
 define('CANCELLED', QUOTE . 'cancelled');
 define('NUEVA_COTIZACION', QUOTE . 'nuevo');
 define('EDITAR_COTIZACION', QUOTE . 'editar_cotizacion');
+define('CHECKLIST', QUOTE . 'checklist/');
 /********************************CHANNELS VIEWS*****************************************/
 define('CHANNEL', QUOTE . 'channel/');
 define('GSA_BUY', CHANNEL . 'GSA-Buy');
@@ -168,7 +170,7 @@ define('PAYMENT_TERMS', FULFILLMENT . 'payment_terms');
 define('WEEKLY_PROJECTIONS', FULFILLMENT . 'weekly_projections');
 define('WEEKLY_PROJECTIONS_2023', FULFILLMENT . 'weekly_projections_2023');
 define('INVOICE', FULFILLMENT . 'invoice/');
-/********************************ACCOUNTING VIEWS*****************************************/
+/********************************ACCOUNTING_CHECKBOX VIEWS*****************************************/
 define('ACCOUNTING', PERFIL . 'accounting/');
 define('INVOICE_QUOTES', ACCOUNTING . 'invoice_quotes');
 define('SUBMITTED_INVOICE_QUOTES', ACCOUNTING . 'submitted_invoice_quotes');
@@ -247,5 +249,34 @@ define('STATES', [
   'WV' => 'West Virginia',
   'WI' => 'Wisconsin',
   'WY' => 'Wyoming',
+  'OTHER' => 'Other',
+]);
+define('SET_SIDE', [
+  'Full & Open',
+  'SB',
+  '8A',
+  'HUBZONE',
+]);
+define('FILE_DOCUMENT', [
+  'proposal' => 'Proposal',
+  'contract_confirmation' => 'Contract/Confirmation',
+  'original_request' => 'Original Request (RFQ/RFP)',
+  'requote_original' => 'Re - Quote Original',
+  'sow_expenses' => 'SOW Expenses',
+  'draft_pmp' => 'Draft PMP',
+  'cc_authorization_format' => 'CC Authorization Format',
+  'email_confirmation' => 'Email Confirmation',
+]);
+define('ACCOUNTING_CHECKBOX', [
+  'dos_payment' => 'DOS Payment',
+  'wawf' => 'WAWF',
+  'ipp' => 'IPP',
+  'dc_portal' => 'DC Portal',
+]);
+define('SHIPPING_ADDRESS', [
+  'apo' => 'APO',
+  'pouch' => 'POUCH',
+  'client_location' => 'CLIENT LOCATION',
+  'f_forward' => 'F FORWARD',
 ]);
 ?>

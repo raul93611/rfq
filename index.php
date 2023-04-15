@@ -158,8 +158,8 @@ switch ($partes_ruta[1]) {
       case 'guardar_comment':
         $ruta_elegida = 'scripts/utilities/guardar_comment.php';
         break;
-      case 'save_quote_info':
-        $ruta_elegida = 'scripts/quote/save_quote_info.php';
+      case 'save_checklist':
+        $ruta_elegida = 'scripts/quote/save_checklist.php';
         break;
       case 'service':
         switch ($partes_ruta[3]) {

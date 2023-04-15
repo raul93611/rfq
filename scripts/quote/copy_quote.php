@@ -54,7 +54,15 @@ $cotizacion_copia = new Rfq(
   $cotizacion->obtener_zip_code(),
   $cotizacion->obtener_state(),
   $cotizacion->obtener_client(),
-  0
+  0,
+  $cotizacion->getSetSide(),
+  $cotizacion->getPoc(),
+  $cotizacion->getCo(),
+  $cotizacion->getEstimatedDeliveryDate(),
+  $cotizacion->getShippingAddress(),
+  $cotizacion->getSpecialRequirements(),
+  $cotizacion->getFileDocument(),
+  $cotizacion->getAccounting()
 );
 list($cotizacion_insertada, $id_rfq_copia) = RepositorioRfq::insertar_cotizacion(Conexion::obtener_conexion(), $cotizacion_copia);
 AuditTrailRepository::quote_status_audit_trail(Conexion::obtener_conexion(), 'Copied', $id_rfq_copia);

@@ -107,7 +107,7 @@ class RepositorioRfq {
   public static function array_to_object($sentence) {
     $objects = [];
     while ($result = $sentence->fetch(PDO::FETCH_ASSOC)) {
-      $objects[] = new Rfq($result['id'], $result['id_usuario'], $result['usuario_designado'], $result['canal'], $result['email_code'], $result['type_of_bid'], $result['issue_date'], $result['end_date'], $result['status'], $result['completado'], $result['total_cost'], $result['total_price'], $result['comments'], $result['award'], $result['fecha_completado'], $result['fecha_submitted'], $result['fecha_award'], $result['payment_terms'], $result['address'], $result['ship_to'], $result['expiration_date'], $result['ship_via'], $result['taxes'], $result['profit'], $result['additional'], $result['shipping'], $result['shipping_cost'], $result['fullfillment'], $result['fulfillment_date'], $result['contract_number'], $result['fulfillment_profit'], $result['services_fulfillment_profit'], $result['total_fulfillment'], $result['total_services_fulfillment'], $result['invoice'], $result['invoice_date'], $result['multi_year_project'], $result['submitted_invoice'], $result['submitted_invoice_date'], $result['fulfillment_pending'], $result['fulfillment_shipping_cost'], $result['fulfillment_shipping'], $result['type_of_contract'], $result['net30_fulfillment'], $result['net30_shipping'], $result['sales_commission'], $result['sales_commission_comment'], $result['services_payment_term'], $result['city'], $result['zip_code'], $result['state'], $result['client'], $result['deleted']);
+      $objects[] = new Rfq($result['id'], $result['id_usuario'], $result['usuario_designado'], $result['canal'], $result['email_code'], $result['type_of_bid'], $result['issue_date'], $result['end_date'], $result['status'], $result['completado'], $result['total_cost'], $result['total_price'], $result['comments'], $result['award'], $result['fecha_completado'], $result['fecha_submitted'], $result['fecha_award'], $result['payment_terms'], $result['address'], $result['ship_to'], $result['expiration_date'], $result['ship_via'], $result['taxes'], $result['profit'], $result['additional'], $result['shipping'], $result['shipping_cost'], $result['fullfillment'], $result['fulfillment_date'], $result['contract_number'], $result['fulfillment_profit'], $result['services_fulfillment_profit'], $result['total_fulfillment'], $result['total_services_fulfillment'], $result['invoice'], $result['invoice_date'], $result['multi_year_project'], $result['submitted_invoice'], $result['submitted_invoice_date'], $result['fulfillment_pending'], $result['fulfillment_shipping_cost'], $result['fulfillment_shipping'], $result['type_of_contract'], $result['net30_fulfillment'], $result['net30_shipping'], $result['sales_commission'], $result['sales_commission_comment'], $result['services_payment_term'], $result['city'], $result['zip_code'], $result['state'], $result['client'], $result['deleted'], $result['set_side'], $result['poc'], $result['co'], $result['estimated_delivery_date'], $result['shipping_address'], $result['special_requirements'], $result['file_document'], $result['accounting']);
     }
 
     return $objects;
@@ -115,7 +115,7 @@ class RepositorioRfq {
 
   public static function single_result_to_object($sentence) {
     $result = $sentence->fetch(PDO::FETCH_ASSOC);
-    $object = new Rfq($result['id'], $result['id_usuario'], $result['usuario_designado'], $result['canal'], $result['email_code'], $result['type_of_bid'], $result['issue_date'], $result['end_date'], $result['status'], $result['completado'], $result['total_cost'], $result['total_price'], $result['comments'], $result['award'], $result['fecha_completado'], $result['fecha_submitted'], $result['fecha_award'], $result['payment_terms'], $result['address'], $result['ship_to'], $result['expiration_date'], $result['ship_via'], $result['taxes'], $result['profit'], $result['additional'], $result['shipping'], $result['shipping_cost'], $result['fullfillment'], $result['fulfillment_date'], $result['contract_number'], $result['fulfillment_profit'], $result['services_fulfillment_profit'], $result['total_fulfillment'], $result['total_services_fulfillment'], $result['invoice'], $result['invoice_date'], $result['multi_year_project'], $result['submitted_invoice'], $result['submitted_invoice_date'], $result['fulfillment_pending'], $result['fulfillment_shipping_cost'], $result['fulfillment_shipping'], $result['type_of_contract'], $result['net30_fulfillment'], $result['sales_commission'], $result['sales_commission_comment'], $result['services_payment_term'], $result['city'], $result['zip_code'], $result['state'], $result['client'], $result['deleted']);
+    $object = new Rfq($result['id'], $result['id_usuario'], $result['usuario_designado'], $result['canal'], $result['email_code'], $result['type_of_bid'], $result['issue_date'], $result['end_date'], $result['status'], $result['completado'], $result['total_cost'], $result['total_price'], $result['comments'], $result['award'], $result['fecha_completado'], $result['fecha_submitted'], $result['fecha_award'], $result['payment_terms'], $result['address'], $result['ship_to'], $result['expiration_date'], $result['ship_via'], $result['taxes'], $result['profit'], $result['additional'], $result['shipping'], $result['shipping_cost'], $result['fullfillment'], $result['fulfillment_date'], $result['contract_number'], $result['fulfillment_profit'], $result['services_fulfillment_profit'], $result['total_fulfillment'], $result['total_services_fulfillment'], $result['invoice'], $result['invoice_date'], $result['multi_year_project'], $result['submitted_invoice'], $result['submitted_invoice_date'], $result['fulfillment_pending'], $result['fulfillment_shipping_cost'], $result['fulfillment_shipping'], $result['type_of_contract'], $result['net30_fulfillment'], $result['sales_commission'], $result['sales_commission_comment'], $result['services_payment_term'], $result['city'], $result['zip_code'], $result['state'], $result['client'], $result['deleted'], $result['set_side'], $result['poc'], $result['co'], $result['estimated_delivery_date'], $result['shipping_address'], $result['special_requirements'], $result['file_document'], $result['accounting']);
 
     return $object;
   }
@@ -341,11 +341,66 @@ class RepositorioRfq {
     }
   }
 
-  public static function actualizar_rfq_inicio($conexion, $expiration_date, $fecha_completado, $ship_to, $address, $ship_via, $comments, $designated_user, $email_code, $type_of_bid, $issue_date, $end_date, $canal, $contract_number, $city, $zip_code, $state, $client, $id_rfq) {
+  public static function actualizar_rfq_inicio(
+    $conexion,
+    $expiration_date,
+    $fecha_completado,
+    $ship_to,
+    $address,
+    $ship_via,
+    $comments,
+    $designated_user,
+    $email_code,
+    $type_of_bid,
+    $issue_date,
+    $end_date,
+    $canal,
+    $contract_number,
+    $city,
+    $zip_code,
+    $state,
+    $client,
+    $set_side,
+    $poc,
+    $co,
+    $estimated_delivery_date,
+    $file_document,
+    $accounting,
+    $shipping_address,
+    $special_requirements,
+    $id_rfq
+  ) {
     $cotizacion_editada = false;
     if (isset($conexion)) {
       try {
-        $sql = "UPDATE rfq SET expiration_date = :expiration_date, fecha_completado = :fecha_completado, ship_to = :ship_to, address = :address, ship_via = :ship_via, comments = :comments, usuario_designado = :usuario_designado, email_code = :email_code, type_of_bid = :type_of_bid, issue_date = :issue_date, end_date = :end_date, canal = :canal, contract_number = :contract_number, city = :city, zip_code = :zip_code, state = :state, client = :client WHERE id = :id_rfq";
+        $sql = "UPDATE rfq SET 
+        expiration_date = :expiration_date, 
+        fecha_completado = :fecha_completado, 
+        ship_to = :ship_to, 
+        address = :address, 
+        ship_via = :ship_via, 
+        comments = :comments, 
+        usuario_designado = :usuario_designado, 
+        email_code = :email_code, 
+        type_of_bid = :type_of_bid, 
+        issue_date = :issue_date, 
+        end_date = :end_date, 
+        canal = :canal, 
+        contract_number = :contract_number, 
+        city = :city, 
+        zip_code = :zip_code, 
+        state = :state, 
+        client = :client, 
+        set_side = :set_side, 
+        poc = :poc, 
+        co = :co, 
+        estimated_delivery_date = :estimated_delivery_date, 
+        file_document = :file_document,
+        accounting = :accounting,
+        shipping_address = :shipping_address,
+        special_requirements = :special_requirements
+        WHERE id = :id_rfq
+        ";
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindParam(':usuario_designado', $designated_user, PDO::PARAM_STR);
         $sentencia->bindParam(':comments', $comments, PDO::PARAM_STR);
@@ -364,6 +419,14 @@ class RepositorioRfq {
         $sentencia->bindParam(':zip_code', $zip_code, PDO::PARAM_STR);
         $sentencia->bindParam(':state', $state, PDO::PARAM_STR);
         $sentencia->bindParam(':client', $client, PDO::PARAM_STR);
+        $sentencia->bindParam(':set_side', $set_side, PDO::PARAM_STR);
+        $sentencia->bindParam(':poc', $poc, PDO::PARAM_STR);
+        $sentencia->bindParam(':co', $co, PDO::PARAM_STR);
+        $sentencia->bindParam(':estimated_delivery_date', $estimated_delivery_date, PDO::PARAM_STR);
+        $sentencia->bindParam(':file_document', $file_document, PDO::PARAM_STR);
+        $sentencia->bindParam(':accounting', $accounting, PDO::PARAM_STR);
+        $sentencia->bindParam(':shipping_address', $shipping_address, PDO::PARAM_STR);
+        $sentencia->bindParam(':special_requirements', $special_requirements, PDO::PARAM_STR);
         $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia->execute();
         if ($sentencia) {
@@ -1255,7 +1318,7 @@ class RepositorioRfq {
     $quotes = self::get_all_fulfillment_quotes(Conexion::obtener_conexion());
     Conexion::cerrar_conexion();
     if (count($quotes)) {
-      ?>
+    ?>
       <table class="fulfillment_table table table-bordered">
         <thead>
           <tr>

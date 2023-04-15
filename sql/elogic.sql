@@ -65,6 +65,14 @@ CREATE TABLE rfq(
   state VARCHAR(255),
   client VARCHAR(255),
   deleted TINYINT DEFAULT 0,
+  set_side VARCHAR(255),
+  poc VARCHAR(255),
+  co VARCHAR(255),
+  estimated_delivery_date DATE,
+  shipping_address VARCHAR(255),
+  special_requirements TEXT CHARACTER SET utf8,
+  file_document VARCHAR(255),
+  accounting VARCHAR(255),
   PRIMARY KEY(id),
   FOREIGN KEY(id_usuario) REFERENCES usuarios(id) ON UPDATE CASCADE ON DELETE RESTRICT
 );

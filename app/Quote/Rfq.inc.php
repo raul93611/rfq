@@ -52,6 +52,14 @@ class Rfq {
   private $state;
   private $client;
   private $deleted;
+  private $set_side;
+  private $poc;
+  private $co;
+  private $estimated_delivery_date;
+  private $shipping_address;
+  private $special_requirements;
+  private $file_document;
+  private $accounting;
 
   public function __construct(
     $id,
@@ -105,7 +113,15 @@ class Rfq {
     $zip_code,
     $state,
     $client,
-    $deleted
+    $deleted,
+    $set_side,
+    $poc,
+    $co,
+    $estimated_delivery_date,
+    $shipping_address,
+    $special_requirements,
+    $file_document,
+    $accounting,
   ) {
     $this->id = $id;
     $this->id_usuario = $id_usuario;
@@ -159,6 +175,14 @@ class Rfq {
     $this->state = $state;
     $this->client = $client;
     $this->deleted = $deleted;
+    $this->set_side = $set_side;
+    $this->poc = $poc;
+    $this->co = $co;
+    $this->estimated_delivery_date = $estimated_delivery_date;
+    $this->shipping_address = $shipping_address;
+    $this->special_requirements = $special_requirements;
+    $this->file_document = $file_document;
+    $this->accounting = $accounting;
   }
 
   public function obtener_id() {
@@ -350,11 +374,15 @@ class Rfq {
     return $this->total_cost + $total_services;
   }
 
-  public function obtener_quote_total_price() {
+  public function getTotalQuoteServices(){
     Conexion::abrir_conexion();
     $total_services = ServiceRepository::get_total(Conexion::obtener_conexion(), $this->id);
     Conexion::cerrar_conexion();
-    return $this->total_price + $total_services;
+    return $total_services;
+  }
+
+  public function obtener_quote_total_price() {
+    return $this->total_price + $this->getTotalQuoteServices();
   }
 
   public function obtener_quote_profit() {
@@ -456,7 +484,11 @@ class Rfq {
       $re_quote_exists &&
       strlen($this->city) &&
       strlen($this->zip_code) &&
-      strlen($this->client);
+      strlen($this->client) &&
+      strlen($this->set_side) &&
+      strlen($this->poc) &&
+      strlen($this->co) &&
+      strlen($this->estimated_delivery_date);
   }
 
   public function obtener_services_payment_term() {
@@ -481,5 +513,37 @@ class Rfq {
 
   public function getDeleted() {
     return $this->deleted;
+  }
+
+  public function getSetSide(){
+    return $this->set_side;
+  }
+
+  public function getPoc(){
+    return $this->poc;
+  }
+
+  public function getCo(){
+    return $this->co;
+  }
+
+  public function getEstimatedDeliveryDate(){
+    return $this->estimated_delivery_date;
+  }
+
+  public function getShippingAddress(){
+    return $this->shipping_address;
+  }
+
+  public function getSpecialRequirements(){
+    return $this->special_requirements;
+  }
+
+  public function getFileDocument(){
+    return explode('|' ,$this->file_document);
+  }
+
+  public function getAccounting(){
+    return explode('|', $this->accounting);
   }
 }

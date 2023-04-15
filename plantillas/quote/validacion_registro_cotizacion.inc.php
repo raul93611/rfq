@@ -59,7 +59,15 @@ if (isset($_POST['registrar_cotizacion'])) {
       $_POST['zip_code'],
       $_POST['state'],
       $_POST['client'],
-      0
+      0,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
     );
     list($cotizacion_insertada, $id_rfq) = RepositorioRfq::insertar_cotizacion(Conexion::obtener_conexion(), $cotizacion);
     AuditTrailRepository::quote_status_audit_trail(Conexion::obtener_conexion(), 'Created', $id_rfq);
