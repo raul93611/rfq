@@ -31,8 +31,8 @@ if(isset($_POST['save_checklist'])){
     $_POST['poc'], 
     $_POST['co'], 
     $estimated_delivery_date,
-    implode('|', $_POST['file_document']),
-    implode('|', $_POST['accounting']),
+    implode('|', (array)$_POST['file_document']),
+    implode('|', (array)$_POST['accounting']),
     $_POST['shipping_address'],
     $_POST['special_requirements'],
     $_POST['id_rfq']
@@ -43,5 +43,5 @@ if(isset($_POST['save_checklist'])){
   if ($usuario_antiguo->obtener_nombre_usuario() != $_POST['usuario_designado']) {
     Redireccion::redirigir(CHANNEL . $cotizacion_recuperada->obtener_canal());
   }
-  // Redireccion::redirigir(CHECKLIST . $_POST['id_rfq']);
+  Redireccion::redirigir(CHECKLIST . $_POST['id_rfq']);
 }
