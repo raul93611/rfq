@@ -1,5 +1,7 @@
 <?php
 if(isset($_POST['save_checklist'])){
+  $file_document = is_null($_POST['file_document']) ? [] : $_POST['file_document'];
+  $accounting = is_null($_POST['accounting']) ? [] : $_POST['accounting'];
   $fecha_completado = RepositorioComment::english_format_to_mysql_date($_POST['completed_date']);
   $expiration_date = RepositorioComment::english_format_to_mysql_date($_POST['expiration_date']);
   $estimated_delivery_date = !empty($_POST['estimated_delivery_date']) ? RepositorioComment::english_format_to_mysql_date($_POST['estimated_delivery_date']) : null;
@@ -31,8 +33,8 @@ if(isset($_POST['save_checklist'])){
     $_POST['poc'], 
     $_POST['co'], 
     $estimated_delivery_date,
-    implode('|', $_POST['file_document']),
-    implode('|', $_POST['accounting']),
+    implode('|', $file_document),
+    implode('|', $accounting),
     $_POST['shipping_address'],
     $_POST['special_requirements'],
     $_POST['id_rfq']
