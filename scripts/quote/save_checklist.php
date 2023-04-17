@@ -31,8 +31,8 @@ if(isset($_POST['save_checklist'])){
     $_POST['poc'], 
     $_POST['co'], 
     $estimated_delivery_date,
-    implode('|', (array)$_POST['file_document']),
-    implode('|', (array)$_POST['accounting']),
+    implode('|', explode(',',(string)$_POST['file_document'])),
+    implode('|', explode(',', (string)$_POST['accounting'])),
     $_POST['shipping_address'],
     $_POST['special_requirements'],
     $_POST['id_rfq']
