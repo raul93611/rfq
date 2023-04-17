@@ -1,6 +1,5 @@
 <?php
 if(isset($_POST['save_checklist'])){
-  print_r($_POST['file_document']);
   $fecha_completado = RepositorioComment::english_format_to_mysql_date($_POST['completed_date']);
   $expiration_date = RepositorioComment::english_format_to_mysql_date($_POST['expiration_date']);
   $estimated_delivery_date = !empty($_POST['estimated_delivery_date']) ? RepositorioComment::english_format_to_mysql_date($_POST['estimated_delivery_date']) : null;
@@ -44,5 +43,5 @@ if(isset($_POST['save_checklist'])){
   if ($usuario_antiguo->obtener_nombre_usuario() != $_POST['usuario_designado']) {
     Redireccion::redirigir(CHANNEL . $cotizacion_recuperada->obtener_canal());
   }
-  Redireccion::redirigir(CHECKLIST . $_POST['id_rfq']);
+  // Redireccion::redirigir(CHECKLIST . $_POST['id_rfq']);
 }
