@@ -43,5 +43,5 @@ if(isset($_POST['save_checklist'])){
   if ($usuario_antiguo->obtener_nombre_usuario() != $_POST['usuario_designado']) {
     Redireccion::redirigir(CHANNEL . $cotizacion_recuperada->obtener_canal());
   }
-  // Redireccion::redirigir(CHECKLIST . $_POST['id_rfq']);
+  Redireccion::redirigir(CHECKLIST . $_POST['id_rfq']);
 }
