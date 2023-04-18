@@ -7,8 +7,10 @@ $items = RepositorioItem::obtener_items_por_id_rfq(Conexion::obtener_conexion(),
 if($cotizacion-> isServices()){
   $services = ServiceRepository::get_services(Conexion::obtener_conexion(), $id_rfq);
   $total_service = ServiceRepository::get_total(Conexion::obtener_conexion(), $id_rfq);
+  $payment_terms = $cotizacion-> obtener_services_payment_term();
 }else{
   $total_service = 0;
+  $payment_terms = $cotizacion-> obtener_payment_terms();
 }
 Conexion::cerrar_conexion();
 $fecha_completado = RepositorioComment::mysql_date_to_english_format($cotizacion->obtener_fecha_completado());
@@ -129,8 +131,8 @@ try{
       <td style="text-align:center;">' . $cotizacion->obtener_ship_via() . '</td>
       <td style="text-align:center;">' . $cotizacion->obtener_email_code() . '</td>
       <td style="text-align:center;">' . $usuario_designado->obtener_nombres() . ' ' . $usuario_designado->obtener_apellidos() . '</td>
-          <td style="text-align:center;">' . $usuario_designado->obtener_email() . '</td>
-      <td style="text-align:center;">' . $cotizacion->obtener_payment_terms() . '</td>
+      <td style="text-align:center;">' . $usuario_designado->obtener_email() . '</td>
+      <td style="text-align:center;">' . $payment_terms . '</td>
     </tr>
   </table><br>';
       if ($encabezado) {
@@ -195,7 +197,7 @@ try{
       <td style="font-size:12pt;text-align:right;">$ ' . number_format($cotizacion->obtener_total_price() + $total_service, 2) . '</td>
     </tr>';
       $html .= '</table>';
-  if ($cotizacion->obtener_payment_terms() == 'Net 30') {
+  if ($payment_terms == 'Net 30') {
     $html .= '<br><div class="color letra_chiquita"><b>PAYMENT TERMS</b><br><b>NET TERMS: </b>30 Days<br><b>CREDIT CARD PAYMENT: </b>Please add an additional 3% to process credit card payments.</div>';
   }
   $html .= '</body></html>';

@@ -72,6 +72,33 @@
               ?>
             </div>
           </div>
+          <div class="card-documents card card-primary">
+            <div class="card-header">
+              <h3 class="card-title"><i class="fas fa-file"></i> Letter of Authorization</h3>
+            </div>
+            <div class="card-body">
+              <?php
+              $directory = $_SERVER['DOCUMENT_ROOT'] . '/rfq/employee_docs/letter_of_authorization/';
+              if (is_dir($directory)) {
+                  $manager = opendir($directory);
+                  echo '<div class="list-group">';
+                  $folder = @scandir($directory);
+                  if(count($folder) <= 2){
+                    echo '<h3 class="text-center text-danger"><i class="fa fa-times"></i> No files!</h3>';
+                  }
+                  while (($file = readdir($manager)) !== false) {
+                      $complete_directory = $directory . "/" . $file;
+                      if ($file != "." && $file != "..") {
+                          $file_url = str_replace(' ', '%20', $file);
+                          echo '<li class="list-group-item">' . $file . '<a download href="' . EMPLOYEE_DOCS . 'letter_of_authorization/' . $file_url . '" class="close float-right"><i class="fas fa-file-download"></i></a></li>';
+                      }
+                  }
+                  closedir($manager);
+                  echo "</div>";
+              }
+              ?>
+            </div>
+          </div>
         </div>
         <div class="col-md-6">
           <div class="card-documents card card-primary">
@@ -93,6 +120,33 @@
                       if ($file != "." && $file != "..") {
                           $file_url = str_replace(' ', '%20', $file);
                           echo '<li class="list-group-item">' . $file . '<a download href="' . EMPLOYEE_DOCS . 'accounting/' . $file_url . '" class="close float-right"><i class="fas fa-file-download"></i></a></li>';
+                      }
+                  }
+                  closedir($manager);
+                  echo "</div>";
+              }
+              ?>
+            </div>
+          </div>
+          <div class="card-documents card card-primary">
+            <div class="card-header">
+              <h3 class="card-title"><i class="fas fa-file"></i> Tax Exemption</h3>
+            </div>
+            <div class="card-body">
+              <?php
+              $directory = $_SERVER['DOCUMENT_ROOT'] . '/rfq/employee_docs/tax_exemption/';
+              if (is_dir($directory)) {
+                  $manager = opendir($directory);
+                  echo '<div class="list-group">';
+                  $folder = @scandir($directory);
+                  if(count($folder) <= 2){
+                    echo '<h3 class="text-center text-danger"><i class="fa fa-times"></i> No files!</h3>';
+                  }
+                  while (($file = readdir($manager)) !== false) {
+                      $complete_directory = $directory . "/" . $file;
+                      if ($file != "." && $file != "..") {
+                          $file_url = str_replace(' ', '%20', $file);
+                          echo '<li class="list-group-item">' . $file . '<a download href="' . EMPLOYEE_DOCS . 'tax_exemption/' . $file_url . '" class="close float-right"><i class="fas fa-file-download"></i></a></li>';
                       }
                   }
                   closedir($manager);

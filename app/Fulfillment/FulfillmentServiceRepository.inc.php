@@ -1,5 +1,21 @@
 <?php
 class FulfillmentServiceRepository{
+  public static function array_to_object($sentence){
+    $objects = [];
+    while ($row = $sentence-> fetch(PDO::FETCH_ASSOC)) {
+      $objects[] = new FulfillmentService($row['id'], $row['id_service'], $row['provider'], $row['quantity'], $row['unit_cost'], $row['other_cost'], $row['real_cost'], $row['payment_term'], $row['reviewed'], $row['created_at']);
+    }
+
+    return $objects;
+  }
+
+  public static function single_result_to_object($sentence){
+    $row = $sentence-> fetch(PDO::FETCH_ASSOC);
+    $object = new FulfillmentService($row['id'], $row['id_service'], $row['provider'], $row['quantity'], $row['unit_cost'], $row['other_cost'], $row['real_cost'], $row['payment_term'], $row['reviewed'], $row['created_at']);
+
+    return $object;
+  }
+
   public static function get_all_by_id_service($connection, $id_service){
     $services = [];
     if(isset($connection)){
@@ -8,12 +24,25 @@ class FulfillmentServiceRepository{
         $sentence = $connection-> prepare($sql);
         $sentence-> bindParam(':id_service', $id_service, PDO::PARAM_STR);
         $sentence-> execute();
-        $result = $sentence-> fetchAll(PDO::FETCH_ASSOC);
-        if(count($result)){
-          foreach ($result as $row) {
-            $services[] = new FulfillmentService($row['id'], $row['id_service'], $row['provider'], $row['quantity'], $row['unit_cost'], $row['other_cost'], $row['real_cost'], $row['payment_term'], $row['reviewed']);
-          }
-        }
+        $services = self::array_to_object($sentence);
+      }catch(PDOException $ex){
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $services;
+  }
+
+  public static function get_all_by_id_service_from_to($connection, $id_service, $from, $to){
+    $services = [];
+    if(isset($connection)){
+      try{
+        $sql = 'SELECT * FROM fulfillment_services WHERE id_service = :id_service AND created_at BETWEEN :from AND :to';
+        $sentence = $connection-> prepare($sql);
+        $sentence-> bindParam(':id_service', $id_service, PDO::PARAM_STR);
+        $sentence-> bindParam(':from', $from, PDO::PARAM_STR);
+        $sentence-> bindParam(':to', $to, PDO::PARAM_STR);
+        $sentence-> execute();
+        $services = self::array_to_object($sentence);
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
@@ -24,7 +53,7 @@ class FulfillmentServiceRepository{
   public static function insert($connection, $fulfillment_service){
     if(isset($connection)){
       try{
-        $sql = 'INSERT INTO fulfillment_services(id_service, provider, quantity, unit_cost, other_cost, real_cost, payment_term) VALUES(:id_service, :provider, :quantity, :unit_cost, :other_cost, :real_cost, :payment_term)';
+        $sql = 'INSERT INTO fulfillment_services(id_service, provider, quantity, unit_cost, other_cost, real_cost, payment_term, created_at) VALUES(:id_service, :provider, :quantity, :unit_cost, :other_cost, :real_cost, :payment_term, NOW())';
         $sentence = $connection-> prepare($sql);
         $sentence-> bindParam(':id_service', $fulfillment_service-> get_id_service(), PDO::PARAM_STR);
         $sentence-> bindParam(':provider', $fulfillment_service-> get_provider(), PDO::PARAM_STR);
@@ -93,6 +122,27 @@ class FulfillmentServiceRepository{
     return $total;
   }
 
+  public static function get_total_cost_from_to($connection, $id_service, $from, $to){
+    $total = 0;
+    if(isset($connection)){
+      try{
+        $sql = 'SELECT SUM(real_cost) as total_cost FROM fulfillment_services WHERE id_service = :id_service AND created_at BETWEEN :from AND :to';
+        $sentence = $connection-> prepare($sql);
+        $sentence-> bindParam(':id_service', $id_service, PDO::PARAM_STR);
+        $sentence-> bindParam(':from', $from, PDO::PARAM_STR);
+        $sentence-> bindParam(':to', $to, PDO::PARAM_STR);
+        $sentence-> execute();
+        $result = $sentence-> fetch(PDO::FETCH_ASSOC);
+        if(!empty($result)){
+          $total = $result['total_cost'];
+        }
+      }catch(PDOException $ex){
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $total;
+  }
+
   public static function get_one($connection, $id_fulfillment_service){
     $item = null;
     if(isset($connection)){
@@ -101,10 +151,7 @@ class FulfillmentServiceRepository{
         $sentence = $connection-> prepare($sql);
         $sentence-> bindParam(':id_fulfillment_service', $id_fulfillment_service, PDO::PARAM_STR);
         $sentence-> execute();
-        $result = $sentence-> fetch(PDO::FETCH_ASSOC);
-        if(!empty($result)){
-          $item = new FulfillmentService($result['id'], $result['id_service'], $result['provider'], $result['quantity'], $result['unit_cost'], $result['other_cost'], $result['real_cost'], $result['payment_term'], $result['reviewed']);
-        }
+        $item = self::single_result_to_object($sentence);
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }

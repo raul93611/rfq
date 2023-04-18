@@ -5,7 +5,7 @@
   </div>
   <div class="form-group">
     <label for="quantity">Quantity:</label>
-    <input type="number" name="quantity" class="form-control form-control-sm" value="">
+    <input type="number" step=".01" name="quantity" class="form-control form-control-sm" value="">
   </div>
   <div class="form-group">
     <label for="unit_price">Unit Price:</label>

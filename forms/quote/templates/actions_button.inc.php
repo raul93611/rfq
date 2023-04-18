@@ -9,8 +9,8 @@
       <a class="dropdown-item" href="<?php echo TRACKING . $cotizacion_recuperada-> obtener_id(); ?>">Tracking</a>
       <?php
     }
-    if($cotizacion_recuperada-> obtener_canal() != 'Chemonics' && $cotizacion_recuperada-> obtener_canal() != 'Ebay & Amazon'){
-      if($cotizacion_recuperada-> obtener_award() && $items_exists){
+    if($cotizacion_recuperada-> obtener_canal() != 'Chemonics'){
+      if($cotizacion_recuperada-> obtener_award()){
         ?>
         <a href="<?php echo RE_QUOTE . $cotizacion_recuperada-> obtener_id(); ?>" class="dropdown-item">Re-quote</a>
         <?php

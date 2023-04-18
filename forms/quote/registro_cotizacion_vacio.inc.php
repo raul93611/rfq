@@ -15,20 +15,36 @@
         $usuarios = RepositorioUsuario::obtener_usuarios_rfq(Conexion::obtener_conexion());
         Conexion::cerrar_conexion();
         if (count($usuarios)) {
-          ?>
+        ?>
           <label for="usuario_designado">Designated user:</label>
           <select id="usuario_designado" class="form-control form-control-sm" name="usuario_designado">
             <?php
             foreach ($usuarios as $usuario) {
-              ?>
+            ?>
               <option><?php echo $usuario->obtener_nombre_usuario(); ?></option>
-              <?php
+            <?php
             }
             ?>
           </select>
-          <?php
+        <?php
         }
         ?>
+      </div>
+      <div class="form-group">
+        <label for="city">City:</label>
+        <input type="text" class="form-control form-control-sm" id="city" name="city" placeholder="City ...">
+      </div>
+      <div class="form-group">
+        <label for="state">State:</label>
+        <select id="state" class="form-control form-control-sm" name="state">
+          <?php
+          foreach (STATES as $key => $state) {
+          ?>
+            <option value="<?php echo $key; ?>"><?php echo $state; ?></option>
+          <?php
+          }
+          ?>
+        </select>
       </div>
     </div>
     <div class="col-md-6">
@@ -40,9 +56,9 @@
           $type_of_bids = TypeOfBidRepository::get_all(Conexion::obtener_conexion());
           Conexion::cerrar_conexion();
           foreach ($type_of_bids as $key => $type_of_bid) {
-            ?>
-            <option><?php echo $type_of_bid-> get_type_of_bid(); ?></option>
-            <?php
+          ?>
+            <option><?php echo $type_of_bid->get_type_of_bid(); ?></option>
+          <?php
           }
           ?>
         </select>
@@ -63,6 +79,14 @@
           <option>Seaport</option>
           <option>Stars III</option>
         </select>
+      </div>
+      <div class="form-group">
+        <label for="zip_code">Zip Code:</label>
+        <input type="text" class="form-control form-control-sm" id="zip_code" name="zip_code" placeholder="Zip Code ...">
+      </div>
+      <div class="form-group">
+        <label for="client">Client:</label>
+        <input type="text" class="form-control form-control-sm" id="client" name="client" placeholder="Client name ...">
       </div>
     </div>
   </div>

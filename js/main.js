@@ -3,7 +3,7 @@ $(document).ready(function () {
   var link_to_delete;
   var alert_delete_system = $('#alert_delete_system');
   var continue_button = $('#continue_button');
-  function habilitar_continue_button(boton){
+  function habilitar_continue_button(boton) {
     alert_delete_system.modal();
     link_to_delete = boton.attr('href');
     continue_button.attr('href', link_to_delete);
@@ -37,13 +37,13 @@ $(document).ready(function () {
     }
   });
 
-  if($('#archivos_ejemplo').length != 0){
+  if ($('#archivos_ejemplo').length != 0) {
     $.ajax({
-      url: '/rfq/get_quote_files/' + $('[name="id_rfq"]').val(),
+      url: '/rfq/quote/get_quote_files/' + $('[name="id_rfq"]').val(),
       dataType: 'json',
       contentType: "application/json; charset=utf-8",
       method: "GET",
-      success: function(data) {
+      success: function (data) {
         var files = data.files;
         var filesIcon = [];
         var filesConfig = [];
@@ -53,16 +53,16 @@ $(document).ready(function () {
           filesConfig.push({
             previewAsData: false,
             caption: file,
-            url: '/rfq/delete_document/' + $('input[name="id_rfq"]').val() + '/' + file,
+            url: '/rfq/quote/delete_document/' + $('input[name="id_rfq"]').val() + '/' + file,
             downloadUrl: '/rfq/documentos/' + $('input[name="id_rfq"]').val() + '/' + file,
-            key: '/rfq/delete_document/' + $('input[name="id_rfq"]').val() + '/' + file
+            key: '/rfq/quote/delete_document/' + $('input[name="id_rfq"]').val() + '/' + file
           });
         });
 
         $('#archivos_ejemplo').fileinput({
           theme: 'explorer-fa',
           mainClass: 'input-group-sm',
-          uploadUrl: '/rfq/load_img/' + $('input[name="id_rfq"]').val(),
+          uploadUrl: '/rfq/quote/load_img/' + $('input[name="id_rfq"]').val(),
           overwriteInitial: false,
           initialPreviewAsData: true,
           initialPreview: filesIcon,
@@ -75,14 +75,15 @@ $(document).ready(function () {
           }
         });
 
-        $("#archivos_ejemplo").on('filepredelete', function(event, key, jqXHR, data) {
+        $("#archivos_ejemplo").on('filepredelete', function (event, key, jqXHR, data) {
           alert_delete_system.modal();
           continue_button.attr('href', key);
-          continue_button.on('click', function(){
+          continue_button.on('click', function (e) {
+            e.preventDefault();
             $.ajax({
               url: key,
               type: 'POST',
-              success: function(res){
+              success: function (res) {
                 location.reload();
               }
             });
@@ -90,80 +91,90 @@ $(document).ready(function () {
           return true;
         });
       },
-      error: function(data) {
+      error: function (data) {
         console.log(data);
       }
     });
   }
   /*********************AUDIT TRAILS*********************************************/
-  $('.audit_trail').click(function(){
+  $('.audit_trail').click(function () {
     $('#audit_trails_modal').modal('hide');
     var element = $(this).attr('href');
     $(element).addClass('highlight');
-    setTimeout(function() {
+    setTimeout(function () {
       $(element).removeClass('highlight');
     }, 5000);
   });
-  $('#audit_trails_button').click(function(){
+  $('#audit_trails_button').click(function () {
     $('#audit_trails_modal').modal();
   });
   /***********************QUOTE INFO MODAL****************************************/
-  $('#quote_info_button').click(function(){
+  $('#quote_info_button').click(function () {
     $('#quote_info_modal').modal();
   });
   /**************************************BOTON MOSTRAR COMENTARIOS************************/
-  $('#mostrar_comentarios').click(function(){
+  $('#mostrar_comentarios').click(function () {
     $('#todos_commentarios_quote').modal();
   });
 
   /*************************************NUEVO COMENTARIO***********************************/
-  if($('#nuevo_comment').length != 0){
-    $('#add_comment').click(function(){
+  if ($('#nuevo_comment').length != 0) {
+    $('#add_comment').click(function () {
       $('#nuevo_comment').modal();
     });
   }
   /***********************************COPY ALERT******************/
-  $('#copy_quote').click(function(){
+  $('#copy_quote').click(function () {
     habilitar_continue_button($(this));
     return false;
   });
   /***********************************ALERT EN BOTONES PARA BORRAR ITEMS******************/
-  $('.delete_item_button').click(function(){
+  $('.delete_item_button').click(function () {
     habilitar_continue_button($(this));
     return false;
   });
   /**********************************ALERT EN BOTONES PARA BORRAR SUBITEMS******************/
-  $('.delete_subitem_button').click(function(){
+  $('.delete_subitem_button').click(function () {
     habilitar_continue_button($(this));
     return false;
   });
   /******************************ALERT EN BOTONES PARA BORRAR PROVIDER DE ITEMS**************/
-  $('.delete_provider_item_button').click(function(){
+  $('.delete_provider_item_button').click(function () {
     habilitar_continue_button($(this));
     return false;
   });
   /******************************ALERT EN BOTONES PARA BORRAR PROVIDER SUBITEMS*************/
-  $('.delete_provider_subitem_button').click(function(){
+  $('.delete_provider_subitem_button').click(function () {
     habilitar_continue_button($(this));
     return false;
   });
   /******************************ALERT EN BOTONES PARA BORRAR DOCUMENTOS********************/
-  $('.delete_document_button').click(function(){
+  $('.delete_document_button').click(function () {
     habilitar_continue_button($(this));
     return false;
   });
   /****************************ALERT EN BOTONES PARA BORRAR QUOTES**************************/
-  $('.delete_quote_button').click(function(){
+  $('.delete_quote_button').click(function () {
     habilitar_continue_button($(this));
     return false;
   });
-/************************************TOGGLE BUTTON PARA LA BARRA LATERAL*********************/
-  $('#sidebar_collapse').on('click', function(){
+  /************************************TOGGLE BUTTON PARA LA BARRA LATERAL*********************/
+  $('#sidebar_collapse').on('click', function () {
     $('#footer_item').toggleClass('footer_item1');
   });
-/**************************************DATEPICKER PARA CAMPOS TIPO DATE*********************/
+  /**************************************DATEPICKER PARA CAMPOS TIPO DATE*********************/
   $('.date').daterangepicker({
-    singleDatePicker: true
+    singleDatePicker: true,
+    autoUpdateInput: false,
+    autoApply: true
+  });
+
+  $('.date').on('apply.daterangepicker', function (ev, picker) {
+    $(this).val(picker.startDate.format('MM/DD/YYYY'));
+  });
+
+  $('.date').on('cancel.daterangepicker', function (ev, picker) {
+    $(this).val('');
   });
 
   $('#end_date').daterangepicker({
@@ -172,7 +183,8 @@ $(document).ready(function () {
     timePicker24Hour: true,
     locale: {
       format: 'MM/DD/YYYY HH:mm'
-    }
+    },
+    autoApply: true
   });
   /************************************DATETABLES JQUERY PARA TABLAS**************************/
   $.fn.dataTable.moment('MM/DD/YYYY');
@@ -180,17 +192,17 @@ $(document).ready(function () {
 
   $('#tabla').DataTable({
     'pageLength': 50,
-    'order': [[ 3, "desc" ]]
+    'order': [[3, "desc"]]
   });
 
   $('#tabla_quotes').DataTable({
     'pageLength': 50,
-    'order': [[ 4, "desc" ]]
+    'order': [[4, "desc"]]
   });
 
   $('#tabla_usuarios').DataTable({
     'pageLength': 50,
-    'order': [[ 4, "asc" ]]
+    'order': [[4, "asc"]]
   });
 
   $('#tabla_busqueda').DataTable({
@@ -198,12 +210,12 @@ $(document).ready(function () {
   });
 
   $('.invoice_table').DataTable({
-    'order': [[ 3, "desc" ]],
+    'order': [[3, "desc"]],
     'pageLength': 50
   });
 
   $('.fulfillment_table').DataTable({
-    'order': [[ 4, "desc" ]],
+    'order': [[4, "desc"]],
     'pageLength': 50
   });
 

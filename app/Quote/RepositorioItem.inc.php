@@ -1,8 +1,6 @@
 <?php
-class RepositorioItem
-{
-  public static function insertar_item($conexion, $item)
-  {
+class RepositorioItem {
+  public static function insertar_item($conexion, $item) {
     if (isset($conexion)) {
       try {
         $sql = 'INSERT INTO item(id_rfq, id_usuario, provider_menor, brand, brand_project, part_number, part_number_project, description, description_project, quantity, unit_price, total_price, comments, website, additional) VALUES(:id_rfq, :id_usuario, :provider_menor, :brand, :brand_project, :part_number, :part_number_project, :description, :description_project, :quantity, :unit_price, :total_price, :comments, :website, :additional)';
@@ -31,8 +29,7 @@ class RepositorioItem
     return $id;
   }
 
-  public static function actualizar_provider_menor_item($conexion, $provider_menor, $id_item)
-  {
+  public static function actualizar_provider_menor_item($conexion, $provider_menor, $id_item) {
     $item_editado = false;
     if (isset($conexion)) {
       try {
@@ -51,8 +48,7 @@ class RepositorioItem
     return $item_editado;
   }
 
-  public static function obtener_items_por_id_rfq($conexion, $id_rfq)
-  {
+  public static function obtener_items_por_id_rfq($conexion, $id_rfq) {
     $items = [];
     if (isset($conexion)) {
       try {
@@ -73,8 +69,7 @@ class RepositorioItem
     return $items;
   }
 
-  public static function items_exists($connection, $id_rfq)
-  {
+  public static function items_exists($connection, $id_rfq) {
     $items = 0;
     if (isset($connection)) {
       try {
@@ -93,8 +88,7 @@ class RepositorioItem
     return $items;
   }
 
-  public static function escribir_item($item, $i, $numeracion)
-  {
+  public static function escribir_item($item, $i, $numeracion) {
     if (!isset($item)) {
       return;
     }
@@ -163,8 +157,7 @@ class RepositorioItem
     return $j;
   }
 
-  public static function escribir_items($id_rfq)
-  {
+  public static function escribir_items($id_rfq) {
     Conexion::abrir_conexion();
     $cotizacion = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
     $items = self::obtener_items_por_id_rfq(Conexion::obtener_conexion(), $id_rfq);
@@ -264,18 +257,22 @@ class RepositorioItem
               $k = self::escribir_item($item, $k, $i + 1);
             }
             ?>
-            <td colspan="5" class="display-4"><b>
-                <h4>TOTAL:</h4>
-              </b></td>
-            <td id="total_quantity"></td>
-            <td></td>
-            <td id="total_additional"></td>
-            <td></td>
-            <td id="total1"></td>
-            <td></td>
-            <td id="total2"></td>
-            <td id="dif_total"></td>
           </tbody>
+          <thead>
+            <tr>
+              <th colspan="5" class="display-4"><b>
+                  <h4>TOTAL:</h4>
+                </b></th>
+              <th id="total_quantity"></th>
+              <th></th>
+              <th id="total_additional"></th>
+              <th></th>
+              <th id="total1"></th>
+              <th></th>
+              <th id="total2"></th>
+              <th id="dif_total"></th>
+            </tr>
+          </thead>
         </table>
       </div>
       <?php
@@ -332,8 +329,7 @@ class RepositorioItem
     }
   }
 
-  public static function obtener_item_por_id($conexion, $id_item)
-  {
+  public static function obtener_item_por_id($conexion, $id_item) {
     $item = null;
     if (isset($conexion)) {
       try {
@@ -352,8 +348,7 @@ class RepositorioItem
     return $item;
   }
 
-  public static function actualizar_item($conexion, $id_item, $brand, $brand_project, $part_number, $part_number_project, $description, $description_project, $quantity, $comments, $website)
-  {
+  public static function actualizar_item($conexion, $id_item, $brand, $brand_project, $part_number, $part_number_project, $description, $description_project, $quantity, $comments, $website) {
     $item_editado = false;
     if (isset($conexion)) {
       try {
@@ -380,8 +375,7 @@ class RepositorioItem
     return $item_editado;
   }
 
-  public static function insertar_calculos($conexion, $unit_price, $total_price, $additional, $id_item)
-  {
+  public static function insertar_calculos($conexion, $unit_price, $total_price, $additional, $id_item) {
     $item_editado = false;
     if (isset($conexion)) {
       try {
@@ -402,8 +396,7 @@ class RepositorioItem
     return $item_editado;
   }
 
-  public static function set_fulfillment_profit($conexion, $fulfillment_profit, $id_item)
-  {
+  public static function set_fulfillment_profit($conexion, $fulfillment_profit, $id_item) {
     if (isset($conexion)) {
       try {
         $sql = 'UPDATE item SET fulfillment_profit = :fulfillment_profit WHERE id = :id_item';
@@ -417,8 +410,7 @@ class RepositorioItem
     }
   }
 
-  public static function delete_item($conexion, $id_item)
-  {
+  public static function delete_item($conexion, $id_item) {
     if (isset($conexion)) {
       try {
         $conexion->beginTransaction();

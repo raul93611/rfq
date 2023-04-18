@@ -76,4 +76,38 @@ $(document).ready(function () {
     var percentage_profit_rq = ((profit_rq/total_ganado)*100).toFixed(2);
     $('#profit_rq').html('$ ' + profit_rq + '<br>' + percentage_profit_rq + '%');
   });
+  /****************************SERVICES*******************************************/
+  const unitPriceFields = [];
+  const servicesQuantityFields = [];
+  $('#services_table tbody .service_item').each(function () {
+    unitPriceFields.push(+$(this).find('td').eq(4).text());
+    servicesQuantityFields.push(+$(this).find('td').eq(3).text());
+  });
+
+  const calcServices = function () {
+    const paymentTerms = $('input:radio[name=services_payment_term]:checked').val() === 'Net 30/CC' ? 1.0299 : 1;
+    let totalServices = 0;
+
+    $('#services_table tbody .service_item').each(function (i, element) {
+      const newUnitPrice = (unitPriceFields[i] * paymentTerms).toFixed(2);
+      const newTotalPrice = (newUnitPrice * servicesQuantityFields[i]).toFixed(2);
+      totalServices += +newTotalPrice;
+
+      $(this).find('td').eq(4).html(newUnitPrice);
+      $(this).find('td').eq(5).html(newTotalPrice);
+    });
+
+    $('#total_service').html('$ ' + totalServices.toFixed(2));
+  }
+
+  const servicesPaymentTerms = setInterval(calcServices, 100);
+  $('#form_edited_quote').submit(calcServices);
+
+  //edit service modal
+  $('#services_table').on('click', '.edit_service', function(){
+    $('#edit_service_modal form').load('/rfq/re_quote_sc/load_service/' + $(this).attr('data'), function(){
+      console.log($(this).attr('data'));
+      $('#edit_service_modal').modal();
+    });
+  });
 });

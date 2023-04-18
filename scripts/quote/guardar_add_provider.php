@@ -1,5 +1,4 @@
 <?php
-session_start();
 if(isset($_POST['guardar_provider'])){
   Conexion::abrir_conexion();
   $provider = new Provider('', $_POST['id_item'], $_POST['provider'], $_POST['price']);

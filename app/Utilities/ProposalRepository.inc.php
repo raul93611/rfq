@@ -319,6 +319,23 @@ class ProposalRepository{
     return $html;
   }
 
+  public static function print_service_pdf_re_quote($re_quote_payment_term, $payment_term, $re_quote_service, $services, $i){
+    $payment_term = $payment_term == 'Net 30/CC' ? 1.03 : 1;
+    $re_quote_payment_term = $re_quote_payment_term == 'Net 30/CC' ? 1.03 : 1;
+    $service = $services[$i];
+    $html = '
+    <tr>
+      <td>' . $i . '</td>
+      <td>' . nl2br($re_quote_service-> get_description()) . '</td>
+      <td style="text-align:right;">' . $re_quote_service-> get_quantity() . '</td>
+      <td>$ ' . number_format($re_quote_service-> get_unit_price() * $re_quote_payment_term, 2) . '</td>
+      <td>$ ' . number_format($re_quote_service-> get_total_price(), 2) . '</td>
+    </tr>
+    ';
+
+    return $html;
+  }
+
   public static function print_service($payment_term, $service, $a){
     $payment_term = $payment_term == 'Net 30/CC' ? 1.03 : 1;
     $html = '<tr>

@@ -32,7 +32,7 @@
                   <input type="radio"  autocomplete="off" value="yearly" <?php echo $type == 'yearly' ? 'checked' : ''; ?>> Yearly
                 </label>
               </div>
-              <form action="<?php echo REPORTS; ?>" method="post">
+              <form action="<?php echo REPORTS_TABLES; ?>" method="post">
                 <input type="hidden" name="type" value="<?php echo $type; ?>">
                 <div class="row">
                   <div class="col-md-12">

@@ -1,6 +1,5 @@
 <?php
-class Rfq
-{
+class Rfq {
   private $id;
   private $id_usuario;
   private $usuario_designado;
@@ -48,6 +47,19 @@ class Rfq
   private $sales_commission;
   private $sales_commission_comment;
   private $services_payment_term;
+  private $city;
+  private $zip_code;
+  private $state;
+  private $client;
+  private $deleted;
+  private $set_side;
+  private $poc;
+  private $co;
+  private $estimated_delivery_date;
+  private $shipping_address;
+  private $special_requirements;
+  private $file_document;
+  private $accounting;
 
   public function __construct(
     $id,
@@ -96,7 +108,20 @@ class Rfq
     $net30_fulfillment,
     $sales_commission,
     $sales_commission_comment,
-    $services_payment_term
+    $services_payment_term,
+    $city,
+    $zip_code,
+    $state,
+    $client,
+    $deleted,
+    $set_side,
+    $poc,
+    $co,
+    $estimated_delivery_date,
+    $shipping_address,
+    $special_requirements,
+    $file_document,
+    $accounting,
   ) {
     $this->id = $id;
     $this->id_usuario = $id_usuario;
@@ -145,38 +170,45 @@ class Rfq
     $this->sales_commission = $sales_commission;
     $this->sales_commission_comment = $sales_commission_comment;
     $this->services_payment_term = $services_payment_term;
+    $this->city = $city;
+    $this->zip_code = $zip_code;
+    $this->state = $state;
+    $this->client = $client;
+    $this->deleted = $deleted;
+    $this->set_side = $set_side;
+    $this->poc = $poc;
+    $this->co = $co;
+    $this->estimated_delivery_date = $estimated_delivery_date;
+    $this->shipping_address = $shipping_address;
+    $this->special_requirements = $special_requirements;
+    $this->file_document = $file_document;
+    $this->accounting = $accounting;
   }
 
-  public function obtener_id()
-  {
+  public function obtener_id() {
     return $this->id;
   }
 
-  public function obtener_id_usuario()
-  {
+  public function obtener_id_usuario() {
     return $this->id_usuario;
   }
 
-  public function obtener_designated_username()
-  {
+  public function obtener_designated_username() {
     Conexion::abrir_conexion();
     $usuario = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), $this->usuario_designado);
     Conexion::cerrar_conexion();
     return $usuario->obtener_nombre_usuario();
   }
 
-  public function obtener_usuario_designado()
-  {
+  public function obtener_usuario_designado() {
     return $this->usuario_designado;
   }
 
-  public function obtener_canal()
-  {
+  public function obtener_canal() {
     return $this->canal;
   }
 
-  public function print_channel()
-  {
+  public function print_channel() {
     $channel = $this->canal;
     switch ($this->canal) {
       case 'FedBid':
@@ -189,209 +221,175 @@ class Rfq
     return $channel;
   }
 
-  public function obtener_email_code()
-  {
+  public function obtener_email_code() {
     return $this->email_code;
   }
 
-  public function obtener_type_of_bid()
-  {
+  public function obtener_type_of_bid() {
     return $this->type_of_bid;
   }
 
-  public function obtener_issue_date()
-  {
+  public function obtener_issue_date() {
     return $this->issue_date;
   }
 
-  public function obtener_end_date()
-  {
+  public function obtener_end_date() {
     return $this->end_date;
   }
 
-  public function obtener_status()
-  {
+  public function obtener_status() {
     return $this->status;
   }
 
-  public function obtener_completado()
-  {
+  public function obtener_completado() {
     return $this->completado;
   }
 
-  public function obtener_total_cost()
-  {
+  public function obtener_total_cost() {
     return $this->total_cost;
   }
 
-  public function obtener_total_price()
-  {
+  public function obtener_total_price() {
     return $this->total_price;
   }
 
-  public function obtener_comments()
-  {
+  public function obtener_comments() {
     return $this->comments;
   }
 
-  public function obtener_award()
-  {
+  public function obtener_award() {
     return $this->award;
   }
 
-  public function obtener_fecha_completado()
-  {
+  public function obtener_fecha_completado() {
     return $this->fecha_completado;
   }
 
-  public function obtener_fecha_submitted()
-  {
+  public function obtener_fecha_submitted() {
     return $this->fecha_submitted;
   }
 
-  public function obtener_fecha_award()
-  {
+  public function obtener_fecha_award() {
     return $this->fecha_award;
   }
 
-  public function obtener_payment_terms()
-  {
+  public function obtener_payment_terms() {
     return $this->payment_terms;
   }
 
-  public function obtener_address()
-  {
+  public function obtener_address() {
     return $this->address;
   }
 
-  public function obtener_ship_to()
-  {
+  public function obtener_ship_to() {
     return $this->ship_to;
   }
 
-  public function obtener_expiration_date()
-  {
+  public function obtener_expiration_date() {
     return $this->expiration_date;
   }
 
-  public function obtener_ship_via()
-  {
+  public function obtener_ship_via() {
     return $this->ship_via;
   }
 
-  public function obtener_taxes()
-  {
+  public function obtener_taxes() {
     return $this->taxes;
   }
 
-  public function obtener_profit()
-  {
+  public function obtener_profit() {
     return $this->profit;
   }
 
-  public function obtener_additional()
-  {
+  public function obtener_additional() {
     return $this->additional;
   }
 
-  public function obtener_shipping()
-  {
+  public function obtener_shipping() {
     return $this->shipping;
   }
 
-  public function obtener_shipping_cost()
-  {
+  public function obtener_shipping_cost() {
     return $this->shipping_cost;
   }
 
-  public function obtener_fullfillment()
-  {
+  public function obtener_fullfillment() {
     return $this->fullfillment;
   }
 
-  public function obtener_fulfillment_date()
-  {
+  public function obtener_fulfillment_date() {
     return $this->fulfillment_date;
   }
 
-  public function obtener_contract_number()
-  {
+  public function obtener_contract_number() {
     return $this->contract_number;
   }
 
-  public function obtener_fulfillment_profit()
-  {
+  public function obtener_fulfillment_profit() {
     return $this->fulfillment_profit;
   }
 
-  public function obtener_services_fulfillment_profit()
-  {
+  public function obtener_services_fulfillment_profit() {
     return $this->services_fulfillment_profit;
   }
 
-  public function obtener_total_fulfillment()
-  {
+  public function obtener_total_fulfillment() {
     return $this->total_fulfillment;
   }
 
-  public function obtener_total_services_fulfillment()
-  {
+  public function obtener_total_services_fulfillment() {
     return $this->total_services_fulfillment;
   }
 
-  public function obtener_invoice()
-  {
+  public function obtener_invoice() {
     return $this->invoice;
   }
 
-  public function obtener_invoice_date()
-  {
+  public function obtener_invoice_date() {
     return $this->invoice_date;
   }
 
-  public function obtener_multi_year_project()
-  {
+  public function obtener_multi_year_project() {
     return $this->multi_year_project;
   }
 
   //fulfillment amounts
-  public function obtener_fulfillment_total_cost(){
+  public function obtener_fulfillment_total_cost() {
     return $this->total_fulfillment + $this->total_services_fulfillment;
   }
 
-  public function obtener_real_fulfillment_profit()
-  {
-    return $this->obtener_quote_total_price() - $this-> obtener_fulfillment_total_cost();
+  public function obtener_real_fulfillment_profit() {
+    return $this->obtener_quote_total_price() - $this->obtener_fulfillment_total_cost();
   }
 
-  public function obtener_real_fulfillment_profit_percentage()
-  {
-    return 100 * ($this->obtener_real_fulfillment_profit() / $this->obtener_quote_total_price());
+  public function obtener_real_fulfillment_profit_percentage() {
+    return $this->obtener_quote_total_price() ? 100 * ($this->obtener_real_fulfillment_profit() / $this->obtener_quote_total_price()) : 0;
   }
 
   //quote amounts
-  public function obtener_quote_total_cost(){
+  public function obtener_quote_total_cost() {
     Conexion::abrir_conexion();
     $total_services = ServiceRepository::get_total(Conexion::obtener_conexion(), $this->id);
     Conexion::cerrar_conexion();
     return $this->total_cost + $total_services;
   }
 
-  public function obtener_quote_total_price()
-  {
+  public function getTotalQuoteServices(){
     Conexion::abrir_conexion();
     $total_services = ServiceRepository::get_total(Conexion::obtener_conexion(), $this->id);
     Conexion::cerrar_conexion();
-    return $this->total_price + $total_services;
+    return $total_services;
   }
 
-  public function obtener_quote_profit()
-  { 
-    return $this->obtener_quote_total_price() - $this-> obtener_quote_total_cost();
+  public function obtener_quote_total_price() {
+    return $this->total_price + $this->getTotalQuoteServices();
   }
 
-  public function obtener_quote_profit_percentage()
-  {
+  public function obtener_quote_profit() {
+    return $this->obtener_quote_total_price() - $this->obtener_quote_total_cost();
+  }
+
+  public function obtener_quote_profit_percentage() {
     if ($this->obtener_quote_total_price()) {
       return 100 * ($this->obtener_quote_profit() / $this->obtener_quote_total_price());
     } else {
@@ -400,20 +398,19 @@ class Rfq
   }
 
   //reQuote amounts
-  public function obtener_re_quote_total_cost(){
+  public function obtener_re_quote_total_cost() {
     Conexion::abrir_conexion();
     $re_quote = ReQuoteRepository::get_re_quote_by_id_rfq(Conexion::obtener_conexion(), $this->id);
-    $total_services = ServiceRepository::get_total(Conexion::obtener_conexion(), $this->id);
+    $total_services = ReQuoteServiceRepository::get_total(Conexion::obtener_conexion(), $re_quote->get_id());
     Conexion::cerrar_conexion();
     return $re_quote->get_total_cost() + $total_services;
   }
 
-  public function obtener_re_quote_profit()
-  {
-    return $this->obtener_quote_total_price() - $this-> obtener_re_quote_total_cost();
+  public function obtener_re_quote_profit() {
+    return $this->obtener_quote_total_price() - $this->obtener_re_quote_total_cost();
   }
 
-  public function obtener_re_quote_profit_percentage(){
+  public function obtener_re_quote_profit_percentage() {
     if ($this->obtener_quote_total_price()) {
       return 100 * ($this->obtener_re_quote_profit() / $this->obtener_quote_total_price());
     } else {
@@ -421,18 +418,15 @@ class Rfq
     }
   }
 
-  public function obtener_submitted_invoice()
-  {
+  public function obtener_submitted_invoice() {
     return $this->submitted_invoice;
   }
 
-  public function obtener_submitted_invoice_date()
-  {
+  public function obtener_submitted_invoice_date() {
     return $this->submitted_invoice_date;
   }
 
-  public function obtener_child_quotes()
-  {
+  public function obtener_child_quotes() {
     Conexion::abrir_conexion();
     $child_quotes = RepositorioRfq::get_child_quotes(Conexion::obtener_conexion(), $this->id);
     Conexion::cerrar_conexion();
@@ -440,52 +434,116 @@ class Rfq
     return $child_quotes;
   }
 
-  public function obtener_fulfillment_pending()
-  {
+  public function obtener_fulfillment_pending() {
     return $this->fulfillment_pending;
   }
 
-  public function obtener_fulfillment_shipping_cost()
-  {
+  public function obtener_fulfillment_shipping_cost() {
     return $this->fulfillment_shipping_cost;
   }
 
-  public function obtener_fulfillment_shipping()
-  {
+  public function obtener_fulfillment_shipping() {
     return $this->fulfillment_shipping;
   }
 
-  public function obtener_type_of_contract()
-  {
+  public function obtener_type_of_contract() {
     return $this->type_of_contract;
   }
 
-  public function obtener_net30_fulfillment()
-  {
+  public function obtener_net30_fulfillment() {
     return $this->net30_fulfillment;
   }
 
-  public function obtener_sales_commission()
-  {
+  public function obtener_sales_commission() {
     return $this->sales_commission;
   }
 
-  public function obtener_sales_commission_comment()
-  {
+  public function obtener_sales_commission_comment() {
     return $this->sales_commission_comment;
   }
 
-  public function isServices()
-  {
-    $services = ['Services', 'Audio Visual'];
+  public function isServices() {
+    $services = ['Services', 'Audio Visual', 'Computers', 'Audio Visual'];
     if (in_array($this->obtener_type_of_bid(), $services)) {
       return true;
     }
     return false;
   }
 
-  public function obtener_services_payment_term()
-  {
+  public function isEnabledToInvoice() {
+    return $this->obtener_fullfillment() &&
+      !is_null($this->obtener_fulfillment_profit()) ||
+      !is_null($this->obtener_services_fulfillment_profit());
+  }
+
+  public function isEnabledToFulfillment() {
+    Conexion::abrir_conexion();
+    $re_quote_exists = ReQuoteRepository::re_quote_exists(Conexion::obtener_conexion(), $this->id);
+    Conexion::cerrar_conexion();
+    return !$this->obtener_fullfillment() &&
+      $re_quote_exists &&
+      strlen($this->city) &&
+      strlen($this->zip_code) &&
+      strlen($this->client) &&
+      strlen($this->set_side) &&
+      strlen($this->poc) &&
+      strlen($this->co) &&
+      strlen($this->estimated_delivery_date);
+  }
+
+  public function obtener_services_payment_term() {
     return $this->services_payment_term;
+  }
+
+  public function obtener_city() {
+    return $this->city;
+  }
+
+  public function obtener_zip_code() {
+    return $this->zip_code;
+  }
+
+  public function obtener_state() {
+    return $this->state;
+  }
+
+  public function obtener_client() {
+    return $this->client;
+  }
+
+  public function getDeleted() {
+    return $this->deleted;
+  }
+
+  public function getSetSide(){
+    return $this->set_side;
+  }
+
+  public function getPoc(){
+    return $this->poc;
+  }
+
+  public function getCo(){
+    return $this->co;
+  }
+
+  public function getEstimatedDeliveryDate(){
+    return $this->estimated_delivery_date;
+  }
+
+  public function getShippingAddress(){
+    return $this->shipping_address;
+  }
+
+  public function getSpecialRequirements(){
+    return $this->special_requirements;
+  }
+
+  public function getFileDocument(){
+    return explode('|' ,$this->file_document);
+  }
+
+  public function getAccounting(){
+    return explode('|', $this->accounting);
   }
 }

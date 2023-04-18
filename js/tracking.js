@@ -14,7 +14,7 @@ $(document).ready(function () {
     singleDatePicker: true
   });
   $('#tracking_box').on('click', '.edit_tracking', function(){
-    $('#edit_tracking_modal form').load('/rfq/load_tracking/' + $(this).attr('data'), function(){
+    $('#edit_tracking_modal form').load('/rfq/tracking/load_tracking/' + $(this).attr('data'), function(){
       $('.date').daterangepicker({
         singleDatePicker: true
       });
@@ -24,9 +24,9 @@ $(document).ready(function () {
   });
 
   $('#edit_tracking_form').submit(function(){
-    $.post('/rfq/save_edit_tracking', $(this).serialize(), function(res){
+    $.post('/rfq/tracking/save_edit_tracking', $(this).serialize(), function(res){
       $('#edit_tracking_modal').modal('hide');
-      $('#tracking_box').load('/rfq/load_tracking_box/' + res.id_rfq);
+      $('#tracking_box').load('/rfq/tracking/load_tracking_box/' + res.id_rfq);
     });
     return false;
   });
@@ -40,7 +40,7 @@ $(document).ready(function () {
     singleDatePicker: true
   });
   $('#tracking_box').on('click', '.edit_tracking_subitem', function(){
-    $('#edit_tracking_subitem_modal form').load('/rfq/load_tracking_subitem/' + $(this).attr('data'), function(){
+    $('#edit_tracking_subitem_modal form').load('/rfq/tracking/load_tracking_subitem/' + $(this).attr('data'), function(){
       $('.date').daterangepicker({
         singleDatePicker: true
       });
@@ -49,9 +49,9 @@ $(document).ready(function () {
     return false;
   });
   $('#edit_tracking_subitem_form').submit(function(){
-    $.post('/rfq/save_edit_tracking_subitem', $(this).serialize(), function(res){
+    $.post('/rfq/tracking/save_edit_tracking_subitem', $(this).serialize(), function(res){
       $('#edit_tracking_subitem_modal').modal('hide');
-      $('#tracking_box').load('/rfq/load_tracking_box/' + res.id_rfq);
+      $('#tracking_box').load('/rfq/tracking/load_tracking_box/' + res.id_rfq);
     });
     return false;
   });

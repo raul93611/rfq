@@ -8,7 +8,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form id="add_fulfillment_subitem_form" method="post" enctype="multipart/form-data" action="<?php echo SAVE_FULFILLMENT_SUBITEM; ?>">
+        <form id="add_fulfillment_subitem_form" method="post" enctype="multipart/form-data" action="">
           <div class="row">
             <div class="col-md-12">
               <div class="form-group">
@@ -33,7 +33,7 @@
               </div>
               <div class="form-group">
                 <label for="other_cost">Other Cost:</label>
-                <input type="number" step=".01" id="other_cost" class="form-control form-control-sm" name="other_cost" value="">
+                <input type="number" step=".01" id="other_cost" class="form-control form-control-sm" name="other_cost" value="0">
               </div>
               <div class="form-group">
                 <label for="payment_term">Payment Term:</label>

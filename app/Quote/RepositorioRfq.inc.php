@@ -4,7 +4,7 @@ class RepositorioRfq {
     $cotizacion_insertada = false;
     if (isset($conexion)) {
       try {
-        $sql = 'INSERT INTO rfq(id_usuario, usuario_designado, canal, email_code, type_of_bid, issue_date, end_date, status, completado, total_cost, total_price, comments, award, fecha_completado, fecha_submitted, fecha_award, payment_terms, address, ship_to, expiration_date, ship_via, taxes, profit, additional, shipping, shipping_cost, fullfillment, fulfillment_date, contract_number, fulfillment_profit, services_fulfillment_profit, total_fulfillment, total_services_fulfillment, invoice, invoice_date, multi_year_project, submitted_invoice, submitted_invoice_date, fulfillment_pending, fulfillment_shipping_cost, fulfillment_shipping, type_of_contract, net30_fulfillment, sales_commission) VALUES(:id_usuario, :usuario_designado, :canal, :email_code, :type_of_bid, :issue_date, :end_date, :status, :completado, :total_cost, :total_price, :comments, :award, :fecha_completado, :fecha_submitted, :fecha_award, :payment_terms, :address, :ship_to, :expiration_date, :ship_via, :taxes, :profit, :additional, :shipping, :shipping_cost, :fullfillment, :fulfillment_date, :contract_number, :fulfillment_profit, :services_fulfillment_profit, :total_fulfillment, :total_services_fulfillment, :invoice, :invoice_date, :multi_year_project, :submitted_invoice, :submitted_invoice_date, :fulfillment_pending, :fulfillment_shipping_cost, :fulfillment_shipping, :type_of_contract, :net30_fulfillment, :sales_commission)';
+        $sql = 'INSERT INTO rfq(id_usuario, usuario_designado, canal, email_code, type_of_bid, issue_date, end_date, status, completado, total_cost, total_price, comments, award, fecha_completado, fecha_submitted, fecha_award, payment_terms, address, ship_to, expiration_date, ship_via, taxes, profit, additional, shipping, shipping_cost, fullfillment, fulfillment_date, contract_number, fulfillment_profit, services_fulfillment_profit, total_fulfillment, total_services_fulfillment, invoice, invoice_date, multi_year_project, submitted_invoice, submitted_invoice_date, fulfillment_pending, fulfillment_shipping_cost, fulfillment_shipping, type_of_contract, net30_fulfillment, sales_commission, city, zip_code, state, client) VALUES(:id_usuario, :usuario_designado, :canal, :email_code, :type_of_bid, :issue_date, :end_date, :status, :completado, :total_cost, :total_price, :comments, :award, :fecha_completado, :fecha_submitted, :fecha_award, :payment_terms, :address, :ship_to, :expiration_date, :ship_via, :taxes, :profit, :additional, :shipping, :shipping_cost, :fullfillment, :fulfillment_date, :contract_number, :fulfillment_profit, :services_fulfillment_profit, :total_fulfillment, :total_services_fulfillment, :invoice, :invoice_date, :multi_year_project, :submitted_invoice, :submitted_invoice_date, :fulfillment_pending, :fulfillment_shipping_cost, :fulfillment_shipping, :type_of_contract, :net30_fulfillment, :sales_commission, :city, :zip_code, :state, :client)';
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindParam(':id_usuario', $cotizacion->obtener_id_usuario(), PDO::PARAM_STR);
         $sentencia->bindParam(':usuario_designado', $cotizacion->obtener_usuario_designado(), PDO::PARAM_STR);
@@ -32,24 +32,28 @@ class RepositorioRfq {
         $sentencia->bindParam(':additional', $cotizacion->obtener_additional(), PDO::PARAM_STR);
         $sentencia->bindParam(':shipping', $cotizacion->obtener_shipping(), PDO::PARAM_STR);
         $sentencia->bindParam(':shipping_cost', $cotizacion->obtener_shipping_cost(), PDO::PARAM_STR);
-        $sentencia-> bindParam(':fullfillment', $cotizacion-> obtener_fullfillment(), PDO::PARAM_STR);
-        $sentencia-> bindParam(':fulfillment_date', $cotizacion-> obtener_fulfillment_date(), PDO::PARAM_STR);
-        $sentencia-> bindParam(':contract_number', $cotizacion-> obtener_contract_number(), PDO::PARAM_STR);
-        $sentencia-> bindParam(':fulfillment_profit', $cotizacion-> obtener_fulfillment_profit(), PDO::PARAM_STR);
-        $sentencia-> bindParam(':services_fulfillment_profit', $cotizacion-> obtener_services_fulfillment_profit(), PDO::PARAM_STR);
-        $sentencia-> bindParam(':total_fulfillment', $cotizacion-> obtener_total_fulfillment(), PDO::PARAM_STR);
-        $sentencia-> bindParam(':total_services_fulfillment', $cotizacion-> obtener_total_services_fulfillment(), PDO::PARAM_STR);
-        $sentencia-> bindParam(':invoice', $cotizacion-> obtener_invoice(), PDO::PARAM_STR);
-        $sentencia-> bindParam(':invoice_date', $cotizacion-> obtener_invoice_date(), PDO::PARAM_STR);
-        $sentencia-> bindParam(':multi_year_project', $cotizacion-> obtener_multi_year_project(), PDO::PARAM_STR);
-        $sentencia-> bindParam(':submitted_invoice', $cotizacion-> obtener_submitted_invoice(), PDO::PARAM_STR);
-        $sentencia-> bindParam(':submitted_invoice_date', $cotizacion-> obtener_submitted_invoice_date(), PDO::PARAM_STR);
-        $sentencia-> bindParam(':fulfillment_pending', $cotizacion-> obtener_fulfillment_pending(), PDO::PARAM_STR);
-        $sentencia-> bindParam(':fulfillment_shipping_cost', $cotizacion-> obtener_fulfillment_shipping_cost(), PDO::PARAM_STR);
-        $sentencia-> bindParam(':fulfillment_shipping', $cotizacion-> obtener_fulfillment_shipping(), PDO::PARAM_STR);
-        $sentencia-> bindParam(':type_of_contract', $cotizacion-> obtener_type_of_contract(), PDO::PARAM_STR);
-        $sentencia-> bindParam(':net30_fulfillment', $cotizacion-> obtener_net30_fulfillment(), PDO::PARAM_STR);
-        $sentencia-> bindParam(':sales_commission', $cotizacion-> obtener_sales_commission(), PDO::PARAM_STR);
+        $sentencia->bindParam(':fullfillment', $cotizacion->obtener_fullfillment(), PDO::PARAM_STR);
+        $sentencia->bindParam(':fulfillment_date', $cotizacion->obtener_fulfillment_date(), PDO::PARAM_STR);
+        $sentencia->bindParam(':contract_number', $cotizacion->obtener_contract_number(), PDO::PARAM_STR);
+        $sentencia->bindParam(':fulfillment_profit', $cotizacion->obtener_fulfillment_profit(), PDO::PARAM_STR);
+        $sentencia->bindParam(':services_fulfillment_profit', $cotizacion->obtener_services_fulfillment_profit(), PDO::PARAM_STR);
+        $sentencia->bindParam(':total_fulfillment', $cotizacion->obtener_total_fulfillment(), PDO::PARAM_STR);
+        $sentencia->bindParam(':total_services_fulfillment', $cotizacion->obtener_total_services_fulfillment(), PDO::PARAM_STR);
+        $sentencia->bindParam(':invoice', $cotizacion->obtener_invoice(), PDO::PARAM_STR);
+        $sentencia->bindParam(':invoice_date', $cotizacion->obtener_invoice_date(), PDO::PARAM_STR);
+        $sentencia->bindParam(':multi_year_project', $cotizacion->obtener_multi_year_project(), PDO::PARAM_STR);
+        $sentencia->bindParam(':submitted_invoice', $cotizacion->obtener_submitted_invoice(), PDO::PARAM_STR);
+        $sentencia->bindParam(':submitted_invoice_date', $cotizacion->obtener_submitted_invoice_date(), PDO::PARAM_STR);
+        $sentencia->bindParam(':fulfillment_pending', $cotizacion->obtener_fulfillment_pending(), PDO::PARAM_STR);
+        $sentencia->bindParam(':fulfillment_shipping_cost', $cotizacion->obtener_fulfillment_shipping_cost(), PDO::PARAM_STR);
+        $sentencia->bindParam(':fulfillment_shipping', $cotizacion->obtener_fulfillment_shipping(), PDO::PARAM_STR);
+        $sentencia->bindParam(':type_of_contract', $cotizacion->obtener_type_of_contract(), PDO::PARAM_STR);
+        $sentencia->bindParam(':net30_fulfillment', $cotizacion->obtener_net30_fulfillment(), PDO::PARAM_STR);
+        $sentencia->bindParam(':sales_commission', $cotizacion->obtener_sales_commission(), PDO::PARAM_STR);
+        $sentencia->bindParam(':city', $cotizacion->obtener_city(), PDO::PARAM_STR);
+        $sentencia->bindParam(':zip_code', $cotizacion->obtener_zip_code(), PDO::PARAM_STR);
+        $sentencia->bindParam(':state', $cotizacion->obtener_state(), PDO::PARAM_STR);
+        $sentencia->bindParam(':client', $cotizacion->obtener_client(), PDO::PARAM_STR);
         $resultado = $sentencia->execute();
         $id = $conexion->lastInsertId();
         if ($resultado) {
@@ -62,7 +66,7 @@ class RepositorioRfq {
     return array($cotizacion_insertada, $id);
   }
 
-  public static function insert_calc($connection, $id_items, $id_subitems, $total_prices, $subitem_total_prices, $unit_prices, $subitem_unit_prices, $additionals, $additional_subitems){
+  public static function insert_calc($connection, $id_items, $id_subitems, $total_prices, $subitem_total_prices, $unit_prices, $subitem_unit_prices, $additionals, $additional_subitems) {
     $id_items = explode(',', $id_items);
     $id_subitems = explode(',', $id_subitems);
     $total_prices = explode(',', $total_prices);
@@ -83,7 +87,7 @@ class RepositorioRfq {
     $email_code_existe = true;
     if (isset($conexion)) {
       try {
-        $sql = 'SELECT * FROM rfq WHERE email_code = :email_code';
+        $sql = 'SELECT * FROM rfq WHERE deleted = 0 AND email_code = :email_code';
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindParam(':email_code', $email_code, PDO::PARAM_STR);
         $sentencia->execute();
@@ -100,66 +104,66 @@ class RepositorioRfq {
     return $email_code_existe;
   }
 
-  public static function array_to_object($sentence){
+  public static function array_to_object($sentence) {
     $objects = [];
-    while ($result = $sentence-> fetch(PDO::FETCH_ASSOC)) {
-      $objects[] = new Rfq($result['id'], $result['id_usuario'], $result['usuario_designado'], $result['canal'], $result['email_code'], $result['type_of_bid'], $result['issue_date'], $result['end_date'], $result['status'], $result['completado'], $result['total_cost'], $result['total_price'], $result['comments'], $result['award'], $result['fecha_completado'], $result['fecha_submitted'], $result['fecha_award'], $result['payment_terms'], $result['address'], $result['ship_to'], $result['expiration_date'], $result['ship_via'], $result['taxes'], $result['profit'], $result['additional'], $result['shipping'], $result['shipping_cost'], $result['fullfillment'], $result['fulfillment_date'], $result['contract_number'], $result['fulfillment_profit'], $result['services_fulfillment_profit'], $result['total_fulfillment'], $result['total_services_fulfillment'], $result['invoice'], $result['invoice_date'], $result['multi_year_project'], $result['submitted_invoice'], $result['submitted_invoice_date'], $result['fulfillment_pending'], $result['fulfillment_shipping_cost'], $result['fulfillment_shipping'], $result['type_of_contract'], $result['net30_fulfillment'], $result['net30_shipping'], $result['sales_commission'], $result['sales_commission_comment'], $result['services_payment_term']);
+    while ($result = $sentence->fetch(PDO::FETCH_ASSOC)) {
+      $objects[] = new Rfq($result['id'], $result['id_usuario'], $result['usuario_designado'], $result['canal'], $result['email_code'], $result['type_of_bid'], $result['issue_date'], $result['end_date'], $result['status'], $result['completado'], $result['total_cost'], $result['total_price'], $result['comments'], $result['award'], $result['fecha_completado'], $result['fecha_submitted'], $result['fecha_award'], $result['payment_terms'], $result['address'], $result['ship_to'], $result['expiration_date'], $result['ship_via'], $result['taxes'], $result['profit'], $result['additional'], $result['shipping'], $result['shipping_cost'], $result['fullfillment'], $result['fulfillment_date'], $result['contract_number'], $result['fulfillment_profit'], $result['services_fulfillment_profit'], $result['total_fulfillment'], $result['total_services_fulfillment'], $result['invoice'], $result['invoice_date'], $result['multi_year_project'], $result['submitted_invoice'], $result['submitted_invoice_date'], $result['fulfillment_pending'], $result['fulfillment_shipping_cost'], $result['fulfillment_shipping'], $result['type_of_contract'], $result['net30_fulfillment'], $result['net30_shipping'], $result['sales_commission'], $result['sales_commission_comment'], $result['services_payment_term'], $result['city'], $result['zip_code'], $result['state'], $result['client'], $result['deleted'], $result['set_side'], $result['poc'], $result['co'], $result['estimated_delivery_date'], $result['shipping_address'], $result['special_requirements'], $result['file_document'], $result['accounting']);
     }
 
     return $objects;
   }
 
-  public static function single_result_to_object($sentence){
-    $result = $sentence-> fetch(PDO::FETCH_ASSOC);
-    $object = new Rfq($result['id'], $result['id_usuario'], $result['usuario_designado'], $result['canal'], $result['email_code'], $result['type_of_bid'], $result['issue_date'], $result['end_date'], $result['status'], $result['completado'], $result['total_cost'], $result['total_price'], $result['comments'], $result['award'], $result['fecha_completado'], $result['fecha_submitted'], $result['fecha_award'], $result['payment_terms'], $result['address'], $result['ship_to'], $result['expiration_date'], $result['ship_via'], $result['taxes'], $result['profit'], $result['additional'], $result['shipping'], $result['shipping_cost'], $result['fullfillment'], $result['fulfillment_date'], $result['contract_number'], $result['fulfillment_profit'], $result['services_fulfillment_profit'], $result['total_fulfillment'], $result['total_services_fulfillment'], $result['invoice'], $result['invoice_date'], $result['multi_year_project'], $result['submitted_invoice'], $result['submitted_invoice_date'], $result['fulfillment_pending'], $result['fulfillment_shipping_cost'], $result['fulfillment_shipping'], $result['type_of_contract'], $result['net30_fulfillment'], $result['sales_commission'], $result['sales_commission_comment'], $result['services_payment_term']);
+  public static function single_result_to_object($sentence) {
+    $result = $sentence->fetch(PDO::FETCH_ASSOC);
+    $object = new Rfq($result['id'], $result['id_usuario'], $result['usuario_designado'], $result['canal'], $result['email_code'], $result['type_of_bid'], $result['issue_date'], $result['end_date'], $result['status'], $result['completado'], $result['total_cost'], $result['total_price'], $result['comments'], $result['award'], $result['fecha_completado'], $result['fecha_submitted'], $result['fecha_award'], $result['payment_terms'], $result['address'], $result['ship_to'], $result['expiration_date'], $result['ship_via'], $result['taxes'], $result['profit'], $result['additional'], $result['shipping'], $result['shipping_cost'], $result['fullfillment'], $result['fulfillment_date'], $result['contract_number'], $result['fulfillment_profit'], $result['services_fulfillment_profit'], $result['total_fulfillment'], $result['total_services_fulfillment'], $result['invoice'], $result['invoice_date'], $result['multi_year_project'], $result['submitted_invoice'], $result['submitted_invoice_date'], $result['fulfillment_pending'], $result['fulfillment_shipping_cost'], $result['fulfillment_shipping'], $result['type_of_contract'], $result['net30_fulfillment'], $result['sales_commission'], $result['sales_commission_comment'], $result['services_payment_term'], $result['city'], $result['zip_code'], $result['state'], $result['client'], $result['deleted'], $result['set_side'], $result['poc'], $result['co'], $result['estimated_delivery_date'], $result['shipping_address'], $result['special_requirements'], $result['file_document'], $result['accounting']);
 
     return $object;
   }
 
-  public static function get_child_quotes($conexion, $id_parent){
+  public static function get_child_quotes($conexion, $id_parent) {
     $quotes = [];
-    if(isset($conexion)){
-      try{
-        $sql = 'SELECT * FROM rfq WHERE multi_year_project = :multi_year_project';
-        $sentencia = $conexion-> prepare($sql);
-        $sentencia-> bindParam(':multi_year_project', $id_parent, PDO::PARAM_STR);
-        $sentencia-> execute();
+    if (isset($conexion)) {
+      try {
+        $sql = 'SELECT * FROM rfq WHERE deleted = 0 AND multi_year_project = :multi_year_project';
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindParam(':multi_year_project', $id_parent, PDO::PARAM_STR);
+        $sentencia->execute();
         $quotes = self::array_to_object($sentencia);
-      }catch(PDOException $ex){
+      } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
     return $quotes;
   }
 
-  public static function get_all_submitted_quotes_between_dates($conexion, $date_from, $date_to){
+  public static function get_all_submitted_quotes_between_dates($conexion, $date_from, $date_to) {
     $quotes = [];
-    if(isset($conexion)){
-      try{
-        $sql = 'SELECT * FROM rfq WHERE status = 1 AND completado = 1 AND fecha_submitted BETWEEN :date_from AND :date_to';
-        $sentencia = $conexion-> prepare($sql);
-        $sentencia-> bindParam(':date_from', $date_from, PDO::PARAM_STR);
-        $sentencia-> bindParam(':date_to', $date_to, PDO::PARAM_STR);
-        $sentencia-> execute();
+    if (isset($conexion)) {
+      try {
+        $sql = 'SELECT * FROM rfq WHERE deleted = 0 AND status = 1 AND completado = 1 AND fecha_submitted BETWEEN :date_from AND :date_to';
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindParam(':date_from', $date_from, PDO::PARAM_STR);
+        $sentencia->bindParam(':date_to', $date_to, PDO::PARAM_STR);
+        $sentencia->execute();
         $quotes = self::array_to_object($sentencia);
-      }catch(PDOException $ex){
+      } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
     return $quotes;
   }
 
-  public static function get_all_award_quotes_between_dates($conexion, $date_from, $date_to){
+  public static function get_all_award_quotes_between_dates($conexion, $date_from, $date_to) {
     $quotes = [];
-    if(isset($conexion)){
-      try{
-        $sql = 'SELECT * FROM rfq WHERE award =1 AND status = 1 AND completado = 1 AND fecha_award BETWEEN :date_from AND :date_to';
-        $sentencia = $conexion-> prepare($sql);
-        $sentencia-> bindParam(':date_from', $date_from, PDO::PARAM_STR);
-        $sentencia-> bindParam(':date_to', $date_to, PDO::PARAM_STR);
-        $sentencia-> execute();
+    if (isset($conexion)) {
+      try {
+        $sql = 'SELECT * FROM rfq WHERE deleted = 0 AND award =1 AND status = 1 AND completado = 1 AND fecha_award BETWEEN :date_from AND :date_to';
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindParam(':date_from', $date_from, PDO::PARAM_STR);
+        $sentencia->bindParam(':date_to', $date_to, PDO::PARAM_STR);
+        $sentencia->execute();
         $quotes = self::array_to_object($sentencia);
-      }catch(PDOException $ex){
+      } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
@@ -170,7 +174,7 @@ class RepositorioRfq {
     $cotizaciones = [];
     if (isset($conexion)) {
       try {
-        $sql = "SELECT * FROM rfq WHERE canal = :canal AND completado = 0 AND status = 0 AND award = 0 AND (comments = 'Working on it' OR comments = 'No comments' OR comments = '') ORDER BY id DESC";
+        $sql = "SELECT * FROM rfq WHERE deleted = 0 AND canal = :canal AND completado = 0 AND status = 0 AND award = 0 AND (comments = 'Working on it' OR comments = 'No comments' OR comments = '') ORDER BY id DESC";
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
         $sentencia->execute();
@@ -186,11 +190,13 @@ class RepositorioRfq {
     if (!isset($cotizacion)) {
       return;
     }
-    ?>
-    <tr <?php if($cotizacion->obtener_comments() == 'Working on it'){echo 'class="waiting_for"';} ?>>
+?>
+    <tr <?php if ($cotizacion->obtener_comments() == 'Working on it') {
+          echo 'class="waiting_for"';
+        } ?>>
       <td>
         <a href="<?php echo EDITAR_COTIZACION . '/' . $cotizacion->obtener_id(); ?>" class="btn-block">
-            <?php echo $cotizacion->obtener_id(); ?>
+          <?php echo $cotizacion->obtener_id(); ?>
         </a>
       </td>
       <td>
@@ -205,7 +211,11 @@ class RepositorioRfq {
       <td><?php echo $cotizacion->obtener_issue_date(); ?></td>
       <td><?php echo $cotizacion->obtener_end_date(); ?></td>
       <td><?php echo $cotizacion->obtener_email_code(); ?></td>
-      <td class="text-center"><?php if($cotizacion-> obtener_type_of_bid()){echo '<i class="text-success fas fa-check"></i>';}else{echo '<i class="text-danger fas fa-times"></i>';} ?></td>
+      <td class="text-center"><?php if ($cotizacion->obtener_type_of_bid()) {
+                                echo '<i class="text-success fas fa-check"></i>';
+                              } else {
+                                echo '<i class="text-danger fas fa-times"></i>';
+                              } ?></td>
       <td class="text-center">
         <a href="<?php echo DELETE_QUOTE . '/' . $cotizacion->obtener_id(); ?>" class="delete_quote_button text-danger"><i class="fa fa-times"></i> Delete</a>
       </td>
@@ -218,7 +228,7 @@ class RepositorioRfq {
     $cotizaciones = self::obtener_cotizaciones_por_canal_usuario_cargo(Conexion::obtener_conexion(), $canal);
     Conexion::cerrar_conexion();
     if (count($cotizaciones)) {
-      ?>
+    ?>
       <table id="tabla_quotes" class="table table-bordered table-hover">
         <thead>
           <tr>
@@ -240,7 +250,7 @@ class RepositorioRfq {
           ?>
         </tbody>
       </table>
-      <?php
+    <?php
     }
   }
 
@@ -248,7 +258,7 @@ class RepositorioRfq {
     $cotizacion_recuperada = null;
     if (isset($conexion)) {
       try {
-        $sql = "SELECT * FROM rfq WHERE id = :id_rfq";
+        $sql = "SELECT * FROM rfq WHERE deleted = 0 AND id = :id_rfq";
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia->execute();
@@ -260,98 +270,165 @@ class RepositorioRfq {
     return $cotizacion_recuperada;
   }
 
-  public static function check_fullfillment($conexion, $id_rfq){
-    if(isset($conexion)){
-      try{
+  public static function check_fullfillment($conexion, $id_rfq) {
+    if (isset($conexion)) {
+      try {
         $sql = 'UPDATE rfq SET fullfillment = 1 WHERE id = :id_rfq';
-        $sentencia = $conexion-> prepare($sql);
-        $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-        $sentencia-> execute();
-      }catch(PDOException $ex){
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia->execute();
+      } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
   }
 
-  public static function set_services_payment_term($conexion, $payment_term, $id_rfq){
-    if(isset($conexion)){
-      try{
+  public static function set_services_payment_term($conexion, $payment_term, $id_rfq) {
+    if (isset($conexion)) {
+      try {
         $sql = 'UPDATE rfq SET services_payment_term = :services_payment_term WHERE id = :id_rfq';
-        $sentencia = $conexion-> prepare($sql);
-        $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-        $sentencia-> bindParam(':services_payment_term', $payment_term, PDO::PARAM_STR);
-        $sentencia-> execute();
-      }catch(PDOException $ex){
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia->bindParam(':services_payment_term', $payment_term, PDO::PARAM_STR);
+        $sentencia->execute();
+      } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
   }
 
-  public static function set_type_of_contract($conexion, $type_of_contract, $id_rfq){
-    if(isset($conexion)){
-      try{
+  public static function set_type_of_contract($conexion, $type_of_contract, $id_rfq) {
+    if (isset($conexion)) {
+      try {
         $sql = 'UPDATE rfq SET type_of_contract = :type_of_contract WHERE id = :id_rfq';
-        $sentencia = $conexion-> prepare($sql);
-        $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-        $sentencia-> bindParam(':type_of_contract', $type_of_contract, PDO::PARAM_STR);
-        $sentencia-> execute();
-      }catch(PDOException $ex){
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia->bindParam(':type_of_contract', $type_of_contract, PDO::PARAM_STR);
+        $sentencia->execute();
+      } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
   }
 
-  public static function set_sales_commission($conexion, $sales_commission, $sales_commission_comment, $id_rfq){
-    if(isset($conexion)){
-      try{
+  public static function set_sales_commission($conexion, $sales_commission, $sales_commission_comment, $id_rfq) {
+    if (isset($conexion)) {
+      try {
         $sql = 'UPDATE rfq SET sales_commission = :sales_commission, sales_commission_comment = :sales_commission_comment WHERE id = :id_rfq';
-        $sentencia = $conexion-> prepare($sql);
-        $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-        $sentencia-> bindParam(':sales_commission', $sales_commission, PDO::PARAM_STR);
-        $sentencia-> bindParam(':sales_commission_comment', $sales_commission_comment, PDO::PARAM_STR);
-        $sentencia-> execute();
-      }catch(PDOException $ex){
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia->bindParam(':sales_commission', $sales_commission, PDO::PARAM_STR);
+        $sentencia->bindParam(':sales_commission_comment', $sales_commission_comment, PDO::PARAM_STR);
+        $sentencia->execute();
+      } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
   }
 
-  public static function update_fulfillment_shipping($connection, $fulfillment_shipping, $fulfillment_shipping_cost, $id_rfq){
-    if(isset($connection)){
-      try{
+  public static function update_fulfillment_shipping($connection, $fulfillment_shipping, $fulfillment_shipping_cost, $id_rfq) {
+    if (isset($connection)) {
+      try {
         $sql = 'UPDATE rfq SET fulfillment_shipping = :fulfillment_shipping, fulfillment_shipping_cost = :fulfillment_shipping_cost WHERE id = :id_rfq';
-        $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-        $sentence-> bindParam(':fulfillment_shipping', $fulfillment_shipping, PDO::PARAM_STR);
-        $sentence-> bindParam(':fulfillment_shipping_cost', $fulfillment_shipping_cost, PDO::PARAM_STR);
-        $sentence-> execute();
-      }catch(PDOException $ex){
+        $sentence = $connection->prepare($sql);
+        $sentence->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentence->bindParam(':fulfillment_shipping', $fulfillment_shipping, PDO::PARAM_STR);
+        $sentence->bindParam(':fulfillment_shipping_cost', $fulfillment_shipping_cost, PDO::PARAM_STR);
+        $sentence->execute();
+      } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
   }
 
-  public static function actualizar_rfq_inicio($conexion, $expiration_date, $fecha_completado, $ship_to, $address, $ship_via, $comments, $designated_user, $email_code, $type_of_bid, $issue_date, $end_date, $canal, $contract_number, $id_rfq) {
+  public static function actualizar_rfq_inicio(
+    $conexion,
+    $expiration_date,
+    $fecha_completado,
+    $ship_to,
+    $address,
+    $ship_via,
+    $comments,
+    $designated_user,
+    $email_code,
+    $type_of_bid,
+    $issue_date,
+    $end_date,
+    $canal,
+    $contract_number,
+    $city,
+    $zip_code,
+    $state,
+    $client,
+    $set_side,
+    $poc,
+    $co,
+    $estimated_delivery_date,
+    $file_document,
+    $accounting,
+    $shipping_address,
+    $special_requirements,
+    $id_rfq
+  ) {
     $cotizacion_editada = false;
     if (isset($conexion)) {
       try {
-        $sql = "UPDATE rfq SET expiration_date = :expiration_date, fecha_completado = :fecha_completado, ship_to = :ship_to, address = :address, ship_via = :ship_via, comments = :comments, usuario_designado = :usuario_designado, email_code = :email_code, type_of_bid = :type_of_bid, issue_date = :issue_date, end_date = :end_date, canal = :canal, contract_number = :contract_number WHERE id = :id_rfq";
+        $sql = "UPDATE rfq SET 
+        expiration_date = :expiration_date, 
+        fecha_completado = :fecha_completado, 
+        ship_to = :ship_to, 
+        address = :address, 
+        ship_via = :ship_via, 
+        comments = :comments, 
+        usuario_designado = :usuario_designado, 
+        email_code = :email_code, 
+        type_of_bid = :type_of_bid, 
+        issue_date = :issue_date, 
+        end_date = :end_date, 
+        canal = :canal, 
+        contract_number = :contract_number, 
+        city = :city, 
+        zip_code = :zip_code, 
+        state = :state, 
+        client = :client, 
+        set_side = :set_side, 
+        poc = :poc, 
+        co = :co, 
+        estimated_delivery_date = :estimated_delivery_date, 
+        file_document = :file_document,
+        accounting = :accounting,
+        shipping_address = :shipping_address,
+        special_requirements = :special_requirements
+        WHERE id = :id_rfq
+        ";
         $sentencia = $conexion->prepare($sql);
-        $sentencia-> bindParam(':usuario_designado', $designated_user, PDO::PARAM_STR);
-        $sentencia-> bindParam(':comments', $comments, PDO::PARAM_STR);
-        $sentencia-> bindParam(':ship_via', $ship_via, PDO::PARAM_STR);
-        $sentencia-> bindParam(':address', $address, PDO::PARAM_STR);
-        $sentencia-> bindParam(':ship_to', $ship_to, PDO::PARAM_STR);
-        $sentencia-> bindParam(':fecha_completado', $fecha_completado, PDO::PARAM_STR);
-        $sentencia-> bindParam(':expiration_date', $expiration_date, PDO::PARAM_STR);
-        $sentencia-> bindParam(':email_code', $email_code, PDO::PARAM_STR);
-        $sentencia-> bindParam(':type_of_bid', $type_of_bid, PDO::PARAM_STR);
-        $sentencia-> bindParam(':issue_date', $issue_date, PDO::PARAM_STR);
-        $sentencia-> bindParam(':end_date', $end_date, PDO::PARAM_STR);
-        $sentencia-> bindParam(':canal', $canal, PDO::PARAM_STR);
-        $sentencia-> bindParam(':contract_number', $contract_number, PDO::PARAM_STR);
-        $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-        $sentencia-> execute();
+        $sentencia->bindParam(':usuario_designado', $designated_user, PDO::PARAM_STR);
+        $sentencia->bindParam(':comments', $comments, PDO::PARAM_STR);
+        $sentencia->bindParam(':ship_via', $ship_via, PDO::PARAM_STR);
+        $sentencia->bindParam(':address', $address, PDO::PARAM_STR);
+        $sentencia->bindParam(':ship_to', $ship_to, PDO::PARAM_STR);
+        $sentencia->bindParam(':fecha_completado', $fecha_completado, PDO::PARAM_STR);
+        $sentencia->bindParam(':expiration_date', $expiration_date, PDO::PARAM_STR);
+        $sentencia->bindParam(':email_code', $email_code, PDO::PARAM_STR);
+        $sentencia->bindParam(':type_of_bid', $type_of_bid, PDO::PARAM_STR);
+        $sentencia->bindParam(':issue_date', $issue_date, PDO::PARAM_STR);
+        $sentencia->bindParam(':end_date', $end_date, PDO::PARAM_STR);
+        $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
+        $sentencia->bindParam(':contract_number', $contract_number, PDO::PARAM_STR);
+        $sentencia->bindParam(':city', $city, PDO::PARAM_STR);
+        $sentencia->bindParam(':zip_code', $zip_code, PDO::PARAM_STR);
+        $sentencia->bindParam(':state', $state, PDO::PARAM_STR);
+        $sentencia->bindParam(':client', $client, PDO::PARAM_STR);
+        $sentencia->bindParam(':set_side', $set_side, PDO::PARAM_STR);
+        $sentencia->bindParam(':poc', $poc, PDO::PARAM_STR);
+        $sentencia->bindParam(':co', $co, PDO::PARAM_STR);
+        $sentencia->bindParam(':estimated_delivery_date', $estimated_delivery_date, PDO::PARAM_STR);
+        $sentencia->bindParam(':file_document', $file_document, PDO::PARAM_STR);
+        $sentencia->bindParam(':accounting', $accounting, PDO::PARAM_STR);
+        $sentencia->bindParam(':shipping_address', $shipping_address, PDO::PARAM_STR);
+        $sentencia->bindParam(':special_requirements', $special_requirements, PDO::PARAM_STR);
+        $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia->execute();
         if ($sentencia) {
           $cotizacion_editada = true;
         }
@@ -383,21 +460,21 @@ class RepositorioRfq {
     }
   }
 
-  public static function set_fulfillment_profit_and_total($connection, $id_rfq){
+  public static function set_fulfillment_profit_and_total($connection, $id_rfq) {
     if (isset($connection)) {
       $total_profit = 0;
       $total_cost = 0;
       $quote = self::obtener_cotizacion_por_id($connection, $id_rfq);
       $items = RepositorioItem::obtener_items_por_id_rfq($connection, $id_rfq);
-      $net30_fulfillment = $quote-> obtener_total_price()*0.029*$quote-> obtener_net30_fulfillment();
-      $total_cost += array_sum(explode('|', $quote-> obtener_fulfillment_shipping_cost()));
+      $net30_fulfillment = $quote->obtener_total_price() * 0.029 * $quote->obtener_net30_fulfillment();
+      $total_cost += array_sum(explode('|', $quote->obtener_fulfillment_shipping_cost()));
       foreach ($items as $i => $item) {
-        $total_profit += $item-> obtener_fulfillment_profit();
-        $total_cost += FulfillmentItemRepository::get_total_cost($connection, $item-> obtener_id());
-        $subitems = RepositorioSubitem::obtener_subitems_por_id_item($connection, $item-> obtener_id());
+        $total_profit += $item->obtener_fulfillment_profit();
+        $total_cost += FulfillmentItemRepository::get_total_cost($connection, $item->obtener_id());
+        $subitems = RepositorioSubitem::obtener_subitems_por_id_item($connection, $item->obtener_id());
         foreach ($subitems as $j => $subitem) {
-          $total_profit += $subitem-> obtener_fulfillment_profit();
-          $total_cost += FulfillmentSubitemRepository::get_total_cost($connection, $subitem-> obtener_id());
+          $total_profit += $subitem->obtener_fulfillment_profit();
+          $total_cost += FulfillmentSubitemRepository::get_total_cost($connection, $subitem->obtener_id());
         }
       }
       $total_cost += $net30_fulfillment;
@@ -414,14 +491,32 @@ class RepositorioRfq {
     }
   }
 
-  public static function set_services_fulfillment_profit_and_total($connection, $id_rfq){
+  public static function get_fulfillment_total_from_to($connection, $id_rfq, $from, $to) {
+    if (isset($connection)) {
+      $total_cost = 0;
+      $quote = self::obtener_cotizacion_por_id($connection, $id_rfq);
+      $items = RepositorioItem::obtener_items_por_id_rfq($connection, $id_rfq);
+      $net30_fulfillment = $quote->obtener_total_price() * 0.029 * $quote->obtener_net30_fulfillment();
+      // $total_cost += array_sum(explode('|', $quote-> obtener_fulfillment_shipping_cost()));
+      foreach ($items as $i => $item) {
+        $total_cost += FulfillmentItemRepository::get_total_cost_from_to($connection, $item->obtener_id(), $from, $to);
+        $subitems = RepositorioSubitem::obtener_subitems_por_id_item($connection, $item->obtener_id());
+        foreach ($subitems as $j => $subitem) {
+          $total_cost += FulfillmentSubitemRepository::get_total_cost_from_to($connection, $subitem->obtener_id(), $from, $to);
+        }
+      }
+    }
+    return $total_cost;
+  }
+
+  public static function set_services_fulfillment_profit_and_total($connection, $id_rfq) {
     if (isset($connection)) {
       $total_cost = 0;
       $total_profit = 0;
       $services = ServiceRepository::get_services($connection, $id_rfq);
       foreach ($services as $i => $service) {
-        $total_profit += $service-> get_fulfillment_profit();
-        $total_cost += FulfillmentServiceRepository::get_total_cost($connection, $service-> get_id());
+        $total_profit += $service->get_fulfillment_profit();
+        $total_cost += FulfillmentServiceRepository::get_total_cost($connection, $service->get_id());
       }
       try {
         $sql = 'UPDATE rfq SET services_fulfillment_profit = :services_fulfillment_profit, total_services_fulfillment = :total_services_fulfillment WHERE id = :id_rfq';
@@ -436,11 +531,23 @@ class RepositorioRfq {
     }
   }
 
+  public static function get_services_fulfillment_total_from_to($connection, $id_rfq, $from, $to) {
+    if (isset($connection)) {
+      $total_cost = 0;
+      $services = ServiceRepository::get_services($connection, $id_rfq);
+      foreach ($services as $i => $service) {
+        $total_cost += FulfillmentServiceRepository::get_total_cost_from_to($connection, $service->get_id(), $from, $to);
+      }
+    }
+
+    return $total_cost;
+  }
+
   public static function obtener_cotizaciones_completadas_por_canal($conexion, $canal) {
     $cotizaciones = [];
     if (isset($conexion)) {
       try {
-        $sql = "SELECT * FROM rfq WHERE canal = :canal AND completado = 1 AND status = 0 AND award = 0 AND (comments = 'No comments' OR comments = 'Working on it') ORDER BY fecha_completado DESC";
+        $sql = "SELECT * FROM rfq WHERE deleted = 0 AND canal = :canal AND completado = 1 AND status = 0 AND award = 0 AND (comments = 'No comments' OR comments = 'Working on it') ORDER BY fecha_completado DESC";
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
         $sentencia->execute();
@@ -459,10 +566,12 @@ class RepositorioRfq {
     $partes_fecha_completado = explode('-', $cotizacion->obtener_fecha_completado());
     $fecha_completado = $partes_fecha_completado[1] . '/' . $partes_fecha_completado[2] . '/' . $partes_fecha_completado[0];
     ?>
-    <tr <?php if($cotizacion->obtener_comments() == 'Working on it'){echo 'class="waiting_for"';} ?>>
+    <tr <?php if ($cotizacion->obtener_comments() == 'Working on it') {
+          echo 'class="waiting_for"';
+        } ?>>
       <td>
         <a href="<?php echo EDITAR_COTIZACION . '/' . $cotizacion->obtener_id(); ?>" class="btn-block">
-            <?php echo $cotizacion->obtener_email_code(); ?>
+          <?php echo $cotizacion->obtener_email_code(); ?>
         </a>
       </td>
       <td>
@@ -480,19 +589,19 @@ class RepositorioRfq {
       <td><?php echo $cotizacion->obtener_id(); ?></td>
       <td><?php echo $cotizacion->obtener_comments(); ?></td>
       <?php
-      if($cotizacion-> obtener_canal() != 'FedBid'){
+      if ($cotizacion->obtener_canal() != 'FedBid') {
         if ($cotizacion->obtener_canal() != 'GSA-Buy') {
-          ?>
+      ?>
           <td class="text-center"><a class="btn btn-sm calculate" href="<?php echo PROPOSAL . '/' . $cotizacion->obtener_id(); ?>" target="_blank"><i class="fa fa-copy"></i></a></td>
-          <?php
+        <?php
         } else {
-          ?>
+        ?>
           <td class="text-center"><a class="btn btn-sm calculate" href="<?php echo PROPOSAL . '/' . $cotizacion->obtener_id(); ?>" target="_blank"><i class="fa fa-copy"></i></a>&nbsp;&nbsp;<a class="btn btn-primary btn-sm" href="<?php echo PROPOSAL_GSA . '/' . $cotizacion->obtener_id(); ?>" target="_blank"><i class="fa fa-copy"></i></a></td>
-          <?php
+      <?php
         }
       }
       ?>
-      <td class="text-center"><?php echo $cotizacion-> isServices() ? '<i class="text-success fas fa-check"></i>' : '<i class="text-danger fas fa-times"></i>'; ?></td>
+      <td class="text-center"><?php echo $cotizacion->isServices() ? '<i class="text-success fas fa-check"></i>' : '<i class="text-danger fas fa-times"></i>'; ?></td>
     </tr>
     <?php
   }
@@ -502,7 +611,7 @@ class RepositorioRfq {
     $cotizaciones = self::obtener_cotizaciones_completadas_por_canal(Conexion::obtener_conexion(), $canal);
     Conexion::cerrar_conexion();
     if (count($cotizaciones)) {
-      ?>
+    ?>
       <table id="tabla" class="table table-bordered table-responsive-md">
         <thead>
           <tr>
@@ -514,19 +623,21 @@ class RepositorioRfq {
             <th>COMPLETED DATE</th>
             <th>PROPOSAL</th>
             <th>COMMENTS</th>
-            <?php if($canal != 'FedBid'){echo '<th>GENERATE PROPOSAL</th>';} ?>
+            <?php if ($canal != 'FedBid') {
+              echo '<th>GENERATE PROPOSAL</th>';
+            } ?>
             <td>RFP</td>
           </tr>
         </thead>
         <tbody>
           <?php
-          foreach($cotizaciones as $cotizacion){
+          foreach ($cotizaciones as $cotizacion) {
             self::escribir_cotizacion_completada($cotizacion);
           }
           ?>
         </tbody>
       </table>
-      <?php
+    <?php
     }
   }
 
@@ -534,7 +645,7 @@ class RepositorioRfq {
     $cotizaciones = [];
     if (isset($conexion)) {
       try {
-        $sql = "SELECT * FROM rfq WHERE completado = 1 AND status = 1 AND award = 0 AND canal = :canal AND comments = 'No comments' ORDER BY fecha_submitted DESC LIMIT 100";
+        $sql = "SELECT * FROM rfq WHERE deleted = 0 AND completado = 1 AND status = 1 AND award = 0 AND canal = :canal AND comments = 'No comments' ORDER BY fecha_submitted DESC LIMIT 100";
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
         $sentencia->execute();
@@ -574,19 +685,19 @@ class RepositorioRfq {
       <td><?php echo $cotizacion->obtener_id(); ?></td>
       <td><?php echo $cotizacion->obtener_comments(); ?></td>
       <?php
-      if($cotizacion-> obtener_canal() != 'FedBid'){
+      if ($cotizacion->obtener_canal() != 'FedBid') {
         if ($cotizacion->obtener_canal() != 'GSA-Buy') {
-          ?>
+      ?>
           <td class="text-center"><a class="btn btn-sm calculate" href="<?php echo PROPOSAL . '/' . $cotizacion->obtener_id(); ?>" target="_blank"><i class="fa fa-copy"></i></a></td>
-          <?php
+        <?php
         } else {
-          ?>
+        ?>
           <td class="text-center"><a class="btn btn-sm calculate" href="<?php echo PROPOSAL . '/' . $cotizacion->obtener_id(); ?>" target="_blank"><i class="fa fa-copy"></i></a>&nbsp;&nbsp;<a class="btn btn-primary btn-sm" href="<?php echo PROPOSAL_GSA . '/' . $cotizacion->obtener_id(); ?>" target="_blank"><i class="fa fa-copy"></i></a></td>
-          <?php
+      <?php
         }
       }
       ?>
-      <td class="text-center"><?php echo $cotizacion-> isServices() ? '<i class="text-success fas fa-check"></i>' : '<i class="text-danger fas fa-times"></i>'; ?></td>
+      <td class="text-center"><?php echo $cotizacion->isServices() ? '<i class="text-success fas fa-check"></i>' : '<i class="text-danger fas fa-times"></i>'; ?></td>
     </tr>
     <?php
   }
@@ -596,8 +707,8 @@ class RepositorioRfq {
     $cotizaciones = self::obtener_cotizaciones_submitted_por_canal(Conexion::obtener_conexion(), $canal);
     Conexion::cerrar_conexion();
     if (count($cotizaciones)) {
-      ?>
-      <table  id="tabla" class="table table-bordered table-responsive-md">
+    ?>
+      <table id="tabla" class="table table-bordered table-responsive-md">
         <thead>
           <tr>
             <th>CODE</th>
@@ -608,19 +719,21 @@ class RepositorioRfq {
             <th>SUBMITTED DATE</th>
             <th>PROPOSAL</th>
             <th>COMMENTS</th>
-            <?php if($canal != 'FedBid'){echo '<th>GENERATE PROPOSAL</th>';} ?>
+            <?php if ($canal != 'FedBid') {
+              echo '<th>GENERATE PROPOSAL</th>';
+            } ?>
             <td>RFP</td>
           </tr>
         </thead>
         <tbody>
           <?php
-          foreach($cotizaciones as $cotizacion){
+          foreach ($cotizaciones as $cotizacion) {
             self::escribir_cotizacion_submitted($cotizacion);
           }
           ?>
         </tbody>
       </table>
-      <?php
+    <?php
     }
   }
 
@@ -628,7 +741,7 @@ class RepositorioRfq {
     $cotizaciones = [];
     if (isset($conexion)) {
       try {
-        $sql = "SELECT * FROM rfq WHERE completado = 1 AND status = 1 AND award = 1 AND fullfillment = 0 AND canal = :canal AND (comments = 'No comments' OR comments = 'QuickBooks') ORDER BY fecha_award DESC";
+        $sql = "SELECT * FROM rfq WHERE deleted = 0 AND completado = 1 AND status = 1 AND award = 1 AND fullfillment = 0 AND canal = :canal AND (comments = 'No comments' OR comments = 'QuickBooks') ORDER BY fecha_award DESC";
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
         $sentencia->execute();
@@ -647,7 +760,9 @@ class RepositorioRfq {
     $partes_fecha_award = explode('-', $cotizacion->obtener_fecha_award());
     $fecha_award = $partes_fecha_award[1] . '/' . $partes_fecha_award[2] . '/' . $partes_fecha_award[0];
     ?>
-    <tr <?php if($cotizacion->obtener_comments() == 'QuickBooks'){echo 'class="quickbooks"';} ?>>
+    <tr <?php if ($cotizacion->obtener_comments() == 'QuickBooks') {
+          echo 'class="quickbooks"';
+        } ?>>
       <td>
         <a href="<?php echo EDITAR_COTIZACION . '/' . $cotizacion->obtener_id(); ?>" class="btn-block">
           <?php echo $cotizacion->obtener_email_code(); ?>
@@ -668,19 +783,19 @@ class RepositorioRfq {
       <td><?php echo $cotizacion->obtener_id(); ?></td>
       <td><?php echo $cotizacion->obtener_comments(); ?></td>
       <?php
-      if($cotizacion-> obtener_canal() != 'FedBid' && $cotizacion-> obtener_canal() != 'Chemonics' && $cotizacion-> obtener_canal() != 'Ebay & Amazon'){
+      if ($cotizacion->obtener_canal() != 'FedBid' && $cotizacion->obtener_canal() != 'Chemonics') {
         if ($cotizacion->obtener_canal() != 'GSA-Buy') {
-          ?>
+      ?>
           <td class="text-center"><a class="btn btn-sm calculate" href="<?php echo PROPOSAL . '/' . $cotizacion->obtener_id(); ?>" target="_blank"><i class="fa fa-copy"></i></a></td>
-          <?php
+        <?php
         } else {
-          ?>
+        ?>
           <td class="text-center"><a class="btn btn-sm calculate" href="<?php echo PROPOSAL . '/' . $cotizacion->obtener_id(); ?>" target="_blank"><i class="fa fa-copy"></i></a>&nbsp;&nbsp;<a class="btn btn-primary btn-sm" href="<?php echo PROPOSAL_GSA . '/' . $cotizacion->obtener_id(); ?>" target="_blank"><i class="fa fa-copy"></i></a></td>
-          <?php
+      <?php
         }
       }
       ?>
-      <td class="text-center"><?php echo $cotizacion-> isServices() ? '<i class="text-success fas fa-check"></i>' : '<i class="text-danger fas fa-times"></i>'; ?></td>
+      <td class="text-center"><?php echo $cotizacion->isServices() ? '<i class="text-success fas fa-check"></i>' : '<i class="text-danger fas fa-times"></i>'; ?></td>
     </tr>
     <?php
   }
@@ -690,7 +805,7 @@ class RepositorioRfq {
     $cotizaciones = self::obtener_cotizaciones_award_por_canal(Conexion::obtener_conexion(), $canal);
     Conexion::cerrar_conexion();
     if (count($cotizaciones)) {
-      ?>
+    ?>
       <table id="tabla" class="table table-bordered table-responsive-md">
         <thead>
           <tr>
@@ -702,7 +817,9 @@ class RepositorioRfq {
             <th>AWARD DATE</th>
             <th>PROPOSAL</th>
             <th>COMMENTS</th>
-            <?php if($canal != 'FedBid' && $canal != 'Chemonics' && $canal != 'Ebay & Amazon'){echo '<th>GENERATE PROPOSAL</th>';} ?>
+            <?php if ($canal != 'FedBid' && $canal != 'Chemonics') {
+              echo '<th>GENERATE PROPOSAL</th>';
+            } ?>
             <th>RFP</th>
           </tr>
         </thead>
@@ -714,7 +831,7 @@ class RepositorioRfq {
           ?>
         </tbody>
       </table>
-      <?php
+    <?php
     }
   }
 
@@ -722,7 +839,7 @@ class RepositorioRfq {
     $cotizaciones = [];
     if (isset($conexion)) {
       try {
-        $sql = "SELECT * FROM rfq WHERE comments = 'No Bid' OR comments = 'Manufacturer in the Bid' OR comments = 'Expired due date' OR comments = 'Supplier did not provide a quote' OR comments = 'Others' ORDER BY id DESC";
+        $sql = "SELECT * FROM rfq WHERE deleted = 0 AND comments = 'No Bid' OR comments = 'Manufacturer in the Bid' OR comments = 'Expired due date' OR comments = 'Supplier did not provide a quote' OR comments = 'Others' ORDER BY id DESC";
         $sentencia = $conexion->prepare($sql);
         $sentencia->execute();
         $cotizaciones = self::array_to_object($sentencia);
@@ -741,7 +858,7 @@ class RepositorioRfq {
     <tr>
       <td>
         <a href="<?php echo EDITAR_COTIZACION . '/' . $cotizacion->obtener_id(); ?>" class="btn-block">
-            <?php echo $cotizacion->obtener_email_code(); ?>
+          <?php echo $cotizacion->obtener_email_code(); ?>
         </a>
       </td>
       <td>
@@ -766,7 +883,7 @@ class RepositorioRfq {
     $cotizaciones = self::obtener_cotizaciones_no_bid(Conexion::obtener_conexion());
     Conexion::cerrar_conexion();
     if (count($cotizaciones)) {
-      ?>
+    ?>
       <table id="tabla" class="table table-bordered table-responsive-md">
         <thead>
           <tr>
@@ -787,7 +904,7 @@ class RepositorioRfq {
           ?>
         </tbody>
       </table>
-      <?php
+    <?php
     }
   }
 
@@ -795,7 +912,7 @@ class RepositorioRfq {
     $cotizaciones = [];
     if (isset($conexion)) {
       try {
-        $sql = "SELECT * FROM rfq WHERE comments = 'Cancelled' ORDER BY id DESC";
+        $sql = "SELECT * FROM rfq WHERE deleted = 0 AND comments = 'Cancelled' ORDER BY id DESC";
         $sentencia = $conexion->prepare($sql);
         $sentencia->execute();
         $cotizaciones = self::array_to_object($sentencia);
@@ -811,7 +928,7 @@ class RepositorioRfq {
     $cotizaciones = self::obtener_cotizaciones_cancelled(Conexion::obtener_conexion());
     Conexion::cerrar_conexion();
     if (count($cotizaciones)) {
-      ?>
+    ?>
       <table id="tabla" class="table table-bordered table-responsive-md">
         <thead>
           <tr>
@@ -832,7 +949,7 @@ class RepositorioRfq {
           ?>
         </tbody>
       </table>
-      <?php
+    <?php
     }
   }
 
@@ -840,7 +957,7 @@ class RepositorioRfq {
     $cotizaciones = [];
     if (isset($conexion)) {
       try {
-        $sql = "SELECT * FROM rfq WHERE comments = 'Not submitted' ORDER BY id DESC";
+        $sql = "SELECT * FROM rfq WHERE deleted = 0 AND comments = 'Not submitted' ORDER BY id DESC";
         $sentencia = $conexion->prepare($sql);
         $sentencia->execute();
         $cotizaciones = self::array_to_object($sentencia);
@@ -851,12 +968,12 @@ class RepositorioRfq {
     return $cotizaciones;
   }
 
-  public static function escribir_tabla_cotizaciones_no_submitted(){
+  public static function escribir_tabla_cotizaciones_no_submitted() {
     Conexion::abrir_conexion();
     $cotizaciones = self::obtener_cotizaciones_no_submitted(Conexion::obtener_conexion());
     Conexion::cerrar_conexion();
-    if(count($cotizaciones)){
-      ?>
+    if (count($cotizaciones)) {
+    ?>
       <table id="tabla" class="table table-bordered table-responsive-md">
         <thead>
           <tr>
@@ -877,7 +994,7 @@ class RepositorioRfq {
           ?>
         </tbody>
       </table>
-      <?php
+    <?php
     }
   }
 
@@ -886,7 +1003,9 @@ class RepositorioRfq {
       return;
     }
     ?>
-    <tr <?php if($cotizacion->obtener_comments() == 'QuickBooks'){echo 'class="quickbooks"';} ?>>
+    <tr <?php if ($cotizacion->obtener_comments() == 'QuickBooks') {
+          echo 'class="quickbooks"';
+        } ?>>
       <td>
         <a href="<?php echo EDITAR_COTIZACION . '/' . $cotizacion->obtener_id(); ?>" class="btn-block">
           <?php echo $cotizacion->obtener_email_code(); ?>
@@ -903,24 +1022,24 @@ class RepositorioRfq {
       <td><?php echo $cotizacion->obtener_type_of_bid(); ?></td>
       <td><?php echo $cotizacion->obtener_id(); ?></td>
       <td><?php echo $cotizacion->obtener_comments(); ?></td>
-      <td>$ <?php echo $cotizacion-> obtener_total_price(); ?></td>
+      <td>$ <?php echo number_format($cotizacion->obtener_quote_total_price(), 2); ?></td>
       <?php
-      if($cotizacion-> obtener_canal() != 'FedBid'){
+      if ($cotizacion->obtener_canal() != 'FedBid') {
         if ($cotizacion->obtener_canal() != 'GSA-Buy') {
-          ?>
-          <td class="text-center"><a class="btn btn-sm calculate" href="<?php echo PROPOSAL . '/' . $cotizacion->obtener_id(); ?>" target="_blank"><i class="fa fa-copy"></i></a></td>
-          <?php
-        } else {
-          ?>
-          <td class="text-center"><a class="btn btn-sm calculate" href="<?php echo PROPOSAL . '/' . $cotizacion->obtener_id(); ?>" target="_blank"><i class="fa fa-copy"></i></a>&nbsp;&nbsp;<a class="btn btn-primary btn-sm" href="<?php echo PROPOSAL_GSA . '/' . $cotizacion->obtener_id(); ?>" target="_blank"><i class="fa fa-copy"></i></a></td>
-          <?php
-        }
-      }else{
-        ?><td></td><?php
-      }
       ?>
+          <td class="text-center"><a class="btn btn-sm calculate" href="<?php echo PROPOSAL . '/' . $cotizacion->obtener_id(); ?>" target="_blank"><i class="fa fa-copy"></i></a></td>
+        <?php
+        } else {
+        ?>
+          <td class="text-center"><a class="btn btn-sm calculate" href="<?php echo PROPOSAL . '/' . $cotizacion->obtener_id(); ?>" target="_blank"><i class="fa fa-copy"></i></a>&nbsp;&nbsp;<a class="btn btn-primary btn-sm" href="<?php echo PROPOSAL_GSA . '/' . $cotizacion->obtener_id(); ?>" target="_blank"><i class="fa fa-copy"></i></a></td>
+        <?php
+        }
+      } else {
+        ?><td></td><?php
+                  }
+                    ?>
     </tr>
-    <?php
+  <?php
   }
 
   public static function obtener_resultados_busqueda($conexion, $termino_busqueda) {
@@ -929,9 +1048,9 @@ class RepositorioRfq {
     if (isset($conexion)) {
       try {
         $sql = '(SELECT * FROM rfq WHERE (contract_number LIKE :termino_busqueda OR id LIKE :termino_busqueda OR email_code LIKE :termino_busqueda OR total_price LIKE :termino_busqueda OR address LIKE :termino_busqueda OR ship_to LIKE :termino_busqueda)) UNION (SELECT rfq.* FROM rfq INNER JOIN item ON rfq.id = item.id_rfq WHERE (item.brand LIKE :termino_busqueda OR item.brand_project LIKE :termino_busqueda OR item.part_number LIKE :termino_busqueda OR item.part_number_project LIKE :termino_busqueda OR item.description LIKE :termino_busqueda OR item.description_project LIKE :termino_busqueda)) UNION (SELECT rfq.* FROM rfq INNER JOIN item ON rfq.id = item.id_rfq INNER JOIN subitems ON item.id = subitems.id_item WHERE (subitems.brand LIKE :termino_busqueda OR subitems.brand_project LIKE :termino_busqueda OR subitems.part_number LIKE :termino_busqueda OR subitems.part_number_project LIKE :termino_busqueda OR subitems.description LIKE :termino_busqueda OR subitems.description_project LIKE :termino_busqueda))';
-        $sentencia = $conexion-> prepare($sql);
-        $sentencia-> bindParam(':termino_busqueda', $termino_busqueda, PDO::PARAM_STR);
-        $sentencia-> execute();
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindParam(':termino_busqueda', $termino_busqueda, PDO::PARAM_STR);
+        $sentencia->execute();
         $cotizaciones = self::array_to_object($sentencia);
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -941,7 +1060,7 @@ class RepositorioRfq {
   }
 
   public static function escribir_resultados_busqueda($cotizaciones) {
-    ?>
+  ?>
     <table id="tabla_busqueda" class="table table-bordered table-responsive-md">
       <thead>
         <tr>
@@ -971,14 +1090,16 @@ class RepositorioRfq {
     if (isset($conexion)) {
       try {
         for ($i = 1; $i <= 12; $i++) {
-          $sql1 = 'SELECT SUM(total_price) as amount, COUNT(*) as awards FROM rfq WHERE award = 1 AND MONTH(fecha_award) =' . $i . ' AND YEAR(fecha_award) = YEAR(CURDATE())';
-          $sql2 = 'SELECT SUM(total_price) as past_amount, COUNT(*) as past_awards FROM rfq WHERE award = 1 AND MONTH(fecha_award) =' . $i . ' AND YEAR(fecha_award) = YEAR(DATE_SUB(NOW(),INTERVAL 1 YEAR))';
+          // $sql1 = 'SELECT SUM(total_price) as amount, COUNT(*) as awards FROM rfq WHERE award = 1 AND MONTH(fecha_award) =' . $i . ' AND YEAR(fecha_award) = YEAR(CURDATE())';
+          $sql1 = 'SELECT (SUM(rfq.total_price) + (SELECT IFNULL(SUM(services.total_price), 0) FROM rfq RIGHT JOIN services ON rfq.id = services.id_rfq WHERE rfq.award = 1 AND MONTH(rfq.fecha_award) =' . $i . ' AND YEAR(rfq.fecha_award) = YEAR(CURDATE()))) as amount, COUNT(*) as awards FROM rfq WHERE rfq.award = 1 AND MONTH(rfq.fecha_award) =' . $i . ' AND YEAR(rfq.fecha_award) = YEAR(CURDATE())';
+          // $sql2 = 'SELECT SUM(total_price) as past_amount, COUNT(*) as past_awards FROM rfq WHERE award = 1 AND MONTH(fecha_award) =' . $i . ' AND YEAR(fecha_award) = YEAR(DATE_SUB(NOW(),INTERVAL 1 YEAR))';
+          $sql2 = 'SELECT (SUM(rfq.total_price) + (SELECT IFNULL(SUM(services.total_price), 0) FROM rfq RIGHT JOIN services ON rfq.id = services.id_rfq WHERE rfq.award = 1 AND MONTH(rfq.fecha_award) =' . $i . ' AND YEAR(rfq.fecha_award) = YEAR(DATE_SUB(NOW(),INTERVAL 1 YEAR)))) as past_amount, COUNT(*) as past_awards FROM rfq WHERE rfq.award = 1 AND MONTH(rfq.fecha_award) =' . $i . ' AND YEAR(rfq.fecha_award) = YEAR(DATE_SUB(NOW(),INTERVAL 1 YEAR))';
           $sentencia1 = $conexion->prepare($sql1);
           $sentencia2 = $conexion->prepare($sql2);
-          $sentencia1-> execute();
-          $sentencia2-> execute();
-          $resultado1 = $sentencia1-> fetch(PDO::FETCH_ASSOC);
-          $resultado2 = $sentencia2-> fetch(PDO::FETCH_ASSOC);
+          $sentencia1->execute();
+          $sentencia2->execute();
+          $resultado1 = $sentencia1->fetch(PDO::FETCH_ASSOC);
+          $resultado2 = $sentencia2->fetch(PDO::FETCH_ASSOC);
 
           $amount[$i - 1] = is_null($resultado1['amount']) ? 0 : $resultado1['amount'];
           $awards[$i - 1] = is_null($resultado1['awards']) ? 0 : $resultado1['awards'];
@@ -992,47 +1113,47 @@ class RepositorioRfq {
     return array($amount, $past_amount, $awards, $past_awards);
   }
 
-  public static function obtener_comments($conexion){
+  public static function obtener_comments($conexion) {
     $no_bid = 0;
     $manufacturer_in_the_bid = 0;
     $expired_due_date = 0;
     $supplier_did_not_provide_a_quote = 0;
     $others = 0;
-    if(isset($conexion)){
-      try{
+    if (isset($conexion)) {
+      try {
         $sql = 'SELECT COUNT(*) as no_bid FROM rfq WHERE comments = "No Bid" AND YEAR(fecha_completado) = YEAR(CURDATE())';
-        $sql1 = 'SELECT COUNT(*) as manufacturer_in_bid FROM rfq WHERE comments = "Manufacturer in the Bid" AND YEAR(fecha_completado) = YEAR(CURDATE())';// AND YEAR(fecha_completado) = YEAR(CURDATE())
+        $sql1 = 'SELECT COUNT(*) as manufacturer_in_bid FROM rfq WHERE comments = "Manufacturer in the Bid" AND YEAR(fecha_completado) = YEAR(CURDATE())'; // AND YEAR(fecha_completado) = YEAR(CURDATE())
         $sql2 = 'SELECT COUNT(*) as expired_due_date FROM rfq WHERE comments = "Expired due date" AND YEAR(fecha_completado) = YEAR(CURDATE())';
         $sql3 = 'SELECT COUNT(*) as supplier_did_not_provide_a_quote FROM rfq WHERE comments = "Supplier did not provide a quote" AND YEAR(fecha_completado) = YEAR(CURDATE())';
         $sql4 = 'SELECT COUNT(*) as others FROM rfq WHERE comments = "Others" AND YEAR(fecha_completado) = YEAR(CURDATE())';
-        $sentencia = $conexion-> prepare($sql);
-        $sentencia1 = $conexion-> prepare($sql1);
-        $sentencia2 = $conexion-> prepare($sql2);
-        $sentencia3 = $conexion-> prepare($sql3);
-        $sentencia4 = $conexion-> prepare($sql4);
-        $sentencia-> execute();
-        $sentencia1-> execute();
-        $sentencia2-> execute();
-        $sentencia3-> execute();
-        $sentencia4-> execute();
-        $resultado = $sentencia-> fetch();
-        $resultado1 = $sentencia1-> fetch();
-        $resultado2 = $sentencia2-> fetch();
-        $resultado3 = $sentencia3-> fetch();
-        $resultado4 = $sentencia4-> fetch();
-        if(!empty($resultado)){
+        $sentencia = $conexion->prepare($sql);
+        $sentencia1 = $conexion->prepare($sql1);
+        $sentencia2 = $conexion->prepare($sql2);
+        $sentencia3 = $conexion->prepare($sql3);
+        $sentencia4 = $conexion->prepare($sql4);
+        $sentencia->execute();
+        $sentencia1->execute();
+        $sentencia2->execute();
+        $sentencia3->execute();
+        $sentencia4->execute();
+        $resultado = $sentencia->fetch();
+        $resultado1 = $sentencia1->fetch();
+        $resultado2 = $sentencia2->fetch();
+        $resultado3 = $sentencia3->fetch();
+        $resultado4 = $sentencia4->fetch();
+        if (!empty($resultado)) {
           $no_bid = $resultado['no_bid'];
         }
-        if(!empty($resultado1)){
+        if (!empty($resultado1)) {
           $manufacturer_in_the_bid = $resultado1['manufacturer_in_bid'];
         }
-        if(!empty($resultado2)){
+        if (!empty($resultado2)) {
           $expired_due_date = $resultado2['expired_due_date'];
         }
-        if(!empty($resultado3)){
+        if (!empty($resultado3)) {
           $supplier_did_not_provide_a_quote = $resultado3['supplier_did_not_provide_a_quote'];
         }
-        if(!empty($resultado4)){
+        if (!empty($resultado4)) {
           $others = $resultado4['others'];
         }
       } catch (PDOException $ex) {
@@ -1060,7 +1181,7 @@ class RepositorioRfq {
     return $rfq_editado;
   }
 
-  public static function check_completed($conexion, $id_rfq){
+  public static function check_completed($conexion, $id_rfq) {
     $rfq_editado = false;
     if (isset($conexion)) {
       try {
@@ -1150,289 +1271,54 @@ class RepositorioRfq {
     return $rfq_editado;
   }
 
-  public static function guardar_total_price_total_cost_fedbid($conexion, $total_cost_fedbid, $total_price_fedbid, $id_rfq){
-    if(isset($conexion)){
-      try{
+  public static function guardar_total_price_total_cost_fedbid($conexion, $total_cost_fedbid, $total_price_fedbid, $id_rfq) {
+    if (isset($conexion)) {
+      try {
         $sql = 'UPDATE rfq SET total_cost = :total_cost_fedbid, total_price = :total_price_fedbid WHERE id = :id_rfq';
-        $sentencia = $conexion-> prepare($sql);
-        $sentencia-> bindParam(':total_cost_fedbid', $total_cost_fedbid,PDO::PARAM_STR);
-        $sentencia-> bindParam(':total_price_fedbid', $total_price_fedbid, PDO::PARAM_STR);
-        $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-        $sentencia-> execute();
-      }catch(PDOException $ex){
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindParam(':total_cost_fedbid', $total_cost_fedbid, PDO::PARAM_STR);
+        $sentencia->bindParam(':total_price_fedbid', $total_price_fedbid, PDO::PARAM_STR);
+        $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia->execute();
+      } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
   }
 
-  public static function guardar_total_price_chemonics($conexion, $total_price_chemonics, $id_rfq){
-    if(isset($conexion)){
-      try{
+  public static function guardar_total_price_chemonics($conexion, $total_price_chemonics, $id_rfq) {
+    if (isset($conexion)) {
+      try {
         $sql = 'UPDATE rfq SET total_price = :total_price_chemonics WHERE id = :id_rfq';
-        $sentencia = $conexion-> prepare($sql);
-        $sentencia-> bindParam(':total_price_chemonics', $total_price_chemonics, PDO::PARAM_STR);
-        $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-        $sentencia-> execute();
-      }catch(PDOException $ex){
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindParam(':total_price_chemonics', $total_price_chemonics, PDO::PARAM_STR);
+        $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia->execute();
+      } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
   }
 
-  public static function delete_quote($conexion, $id_rfq){
-    if(isset($conexion)){
-      try{
-        $sql = 'DELETE FROM rfq WHERE id = :id_rfq';
-        $sentencia= $conexion->prepare($sql);
-        $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-        $sentencia-> execute();
-      }catch(PDOException $ex){
+  public static function delete_quote($conexion, $id_rfq) {
+    if (isset($conexion)) {
+      try {
+        $sql = 'UPDATE rfq SET deleted = 1 WHERE id = :id_rfq';
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia->execute();
+      } catch (PDOException $ex) {
         print "ERROR:" . $ex->getMessage() . "<br>";
       }
     }
   }
 
-  public static function quote_rfq_exists($conexion, $id_project){
-    $quote_rfq_exists = true;
-    if(isset($conexion)){
-      try{
-        $sql = 'SELECT * FROM rfq WHERE rfp = :id_project';
-        $sentencia = $conexion-> prepare($sql);
-        $sentencia-> bindParam(':id_project', $id_project, PDO::PARAM_STR);
-        $sentencia-> execute();
-        $resultado = $sentencia-> fetchAll(PDO::FETCH_ASSOC);
-        if(count($resultado)){
-          $quote_rfq_exists = true;
-        }else{
-          $quote_rfq_exists = false;
-        }
-      }catch(PDOException $ex){
-        print 'ERROR:' . $ex->getMessage() . '<br>';
-      }
-    }
-    return $quote_rfq_exists;
-  }
-
-  public static function print_final_quote($id_rfq){
-    Conexion::abrir_conexion();
-    $cotizacion = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
-    $items = RepositorioItem::obtener_items_por_id_rfq(Conexion::obtener_conexion(), $id_rfq);
-    Conexion::cerrar_conexion();
-    if($cotizacion-> obtener_canal() == 'FedBid'){
-      ?>
-      <div class="row">
-        <div class="col-md-6">
-          <label>Total cost:</label>
-        </div>
-        <div class="col-md-6">
-          $ <?php echo $cotizacion-> obtener_total_cost(); ?>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6">
-          <label>Total price:</label>
-        </div>
-        <div class="col-md-6">
-          $ <?php echo $cotizacion-> obtener_total_price(); ?>
-        </div>
-      </div>
-      <?php
-    }else{
-      ?>
-      <div class="row">
-        <div class="col-md-3">
-          <b>Taxes:</b> <?php echo $cotizacion-> obtener_taxes(); ?>%<br>
-        </div>
-        <div class="col-md-3">
-          <b>Profit:</b> <?php echo $cotizacion-> obtener_profit(); ?>%<br>
-        </div>
-        <div class="col-md-3">
-          <b>Additional general:</b> $ <?php echo $cotizacion-> obtener_additional(); ?>
-        </div>
-        <div class="col-md-3">
-          <b>Payment terms:</b> <?php echo $cotizacion-> obtener_payment_terms(); ?>
-        </div>
-      </div>
-      <br>
-      <?php
-      if (count($items)) {
-        ?>
-        <table class="table table-bordered" style="width:100%;">
-          <tr>
-            <th class="quantity">#</th>
-            <th style="width:200px;">PROJECT ESPC.</th>
-            <th style="width:200px;">E-LOGIC PROP.</th>
-            <th>WEBSITE</th>
-            <th class="quantity">QTY</th>
-            <th>PROVIDER</th>
-            <th>ADDITIONAL</th>
-            <th>BEST UNIT COST</th>
-            <th>TOTAL COST</th>
-            <th>PRICE FOR CLIENT</th>
-            <th>TOTAL PRICE</th>
-          </tr>
-        <?php
-        $a = 1;
-        if($cotizacion-> obtener_payment_terms() == 'Net 30/CC'){
-          $payment_terms = 1.0299;
-        }else{
-          $payment_terms = 1;
-        }
-        for ($i = 0; $i < count($items); $i++) {
-          $item = $items[$i];
-          ?>
-          <tr>
-            <td><?php echo $a; ?></td>
-            <td><b>Brand name:</b><?php echo $item-> obtener_brand_project(); ?><br><b>Part number:</b><?php echo $item-> obtener_part_number_project(); ?><br><b>Item description:</b><?php echo nl2br(mb_substr($item-> obtener_description_project(), 0, 150)); ?></td>
-            <td><b>Brand name:</b><?php echo $item->obtener_brand(); ?><br><b>Part number:</b><?php echo $item->obtener_part_number(); ?><br><b> Item description:</b><br><?php echo nl2br(mb_substr($item->obtener_description(), 0, 150)); ?></td>
-            <td><a target="_blank" href="<?php echo $item-> obtener_website(); ?>">Provider Website</a></td>
-            <td style="text-align:right;"><?php echo $item->obtener_quantity(); ?></td>
-            <td style="width: 200px;">
-          <?php
-          Conexion::abrir_conexion();
-          $providers = RepositorioProvider::obtener_providers_por_id_item(Conexion::obtener_conexion(), $item-> obtener_id());
-          Conexion::cerrar_conexion();
-          if(count($providers)){
-            Conexion::abrir_conexion();
-            $provider_menor = RepositorioProvider::obtener_provider_por_id(Conexion::obtener_conexion(), $item-> obtener_provider_menor());
-            Conexion::cerrar_conexion();
-            if(count($providers)){
-              foreach ($providers as $provider) {
-                ?>
-                <div class="row">
-                  <div class="col-md-6">
-                    <b><?php echo $provider-> obtener_provider(); ?>:</b>
-                  </div>
-                  <div class="col-md-6">
-                    $ <?php echo number_format($provider-> obtener_price(), 2); ?>
-                  </div>
-                </div>
-                <?php
-              }
-            }
-            ?>
-            </td>
-            <td>$ <?php echo number_format($item-> obtener_additional(), 2); ?></td>
-            <td>$
-            <?php
-            $best_unit_price = $provider_menor-> obtener_price()*$payment_terms*(1+($cotizacion-> obtener_taxes()/100)) + $item-> obtener_additional() + $cotizacion-> obtener_additional();
-            echo number_format($best_unit_price, 2);
-            ?>
-            </td>
-            <td>$ <?php echo number_format(round($best_unit_price, 2) * $item-> obtener_quantity(), 2); ?></td>
-            <td style="text-align:right;">$ <?php echo number_format($item->obtener_unit_price(), 2); ?></td>
-            <td style="text-align:right;">$ <?php echo number_format($item->obtener_total_price(), 2); ?></td>
-            <?php
-          }else{
-            ?>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <?php
-          }
-          ?>
-        </tr>
-          <?php
-          Conexion::abrir_conexion();
-          $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Conexion::obtener_conexion(), $item-> obtener_id());
-          Conexion::cerrar_conexion();
-          for($j = 0; $j < count($subitems); $j++){
-            $subitem = $subitems[$j];
-            ?>
-        <tr>
-          <td></td>
-          <td><b>Brand name:</b><?php echo $subitem-> obtener_brand_project(); ?><br><b>Part number:</b><?php echo $subitem-> obtener_part_number_project(); ?><br><b>Item description:</b><br><?php echo nl2br(mb_substr($subitem->obtener_description_project(), 0, 150)); ?></td>
-          <td><b>Brand name:</b><?php echo $subitem->obtener_brand(); ?><br><b>Part number:</b> <?php echo $item->obtener_part_number(); ?><br><b> Item description:</b><br> <?php echo nl2br(mb_substr($item->obtener_description(), 0, 150)); ?></td>
-          <td><a target="_blank" href="<?php echo $subitem-> obtener_website(); ?>">Provider Website</a></td>
-          <td style="text-align:right;"><?php echo $subitem-> obtener_quantity(); ?></td>
-            <?php
-              Conexion::abrir_conexion();
-              $providers_subitem = RepositorioProviderSubitem::obtener_providers_subitem_por_id_subitem(Conexion::obtener_conexion(), $subitem-> obtener_id());
-              Conexion::cerrar_conexion();
-              if(count($providers_subitem)){
-                ?>
-          <td>
-                <?php
-                  Conexion::abrir_conexion();
-                  $provider_subitem_menor = RepositorioProviderSubitem::obtener_provider_subitem_por_id(Conexion::obtener_conexion(), $subitem-> obtener_provider_menor());
-                  Conexion::cerrar_conexion();
-                  if(count($providers_subitem)){
-                    foreach ($providers_subitem as $provider_subitem) {
-                      ?>
-                      <div class="row">
-                        <div class="col-md-6">
-                          <b><?php echo $provider_subitem-> obtener_provider(); ?>:</b>
-                        </div>
-                        <div class="col-md-6">
-                          $ <?php echo $provider_subitem-> obtener_price(); ?>
-                        </div>
-                      </div>
-                      <?php
-                    }
-                  }
-                  ?>
-          </td>
-          <td>$ <?php echo number_format($subitem-> obtener_additional(), 2); ?></td>
-          <td>$
-                  <?php
-                  $best_unit_price = $provider_subitem_menor-> obtener_price()*$payment_terms*(1+($cotizacion-> obtener_taxes()/100)) + $subitem-> obtener_additional() + $cotizacion-> obtener_additional();
-                  echo number_format($best_unit_price, 2);
-                  ?>
-          </td>
-          <td>$ <?php echo number_format(round($best_unit_price, 2) * $subitem-> obtener_quantity(), 2); ?></td>
-          <td style="text-align:right;">$ <?php echo number_format($subitem-> obtener_unit_price(), 2); ?></td>
-          <td style="text-align:right;">$ <?php echo number_format($subitem-> obtener_total_price(), 2); ?></td>
-                  <?php
-                }else{
-                  ?>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-                  <?php
-                }
-                ?>
-        </tr>
-                <?php
-              }
-              $a++;
-            }
-      ?>
-        <tr>
-          <td style="border:none;"></td>
-          <td colspan="9" style="font-size:10pt;"><?php echo nl2br($cotizacion->obtener_shipping()); ?></td>
-          <td style="text-align:right;">$ <?php echo number_format($cotizacion->obtener_shipping_cost(), 2); ?></td>
-        </tr>
-        <tr>
-          <td style="border:none;"></td>
-          <td style="border:none;"></td>
-          <td style="border:none;"></td>
-          <td style="border:none;"></td>
-          <td style="border:none;"></td>
-          <td style="border:none;"></td>
-          <td style="border:none;"></td>
-          <td style="font-size:12pt;">TOTAL:</td>
-          <td>$ <?php echo number_format($cotizacion-> obtener_total_cost(), 2); ?></td>
-          <td></td>
-          <td style="font-size:12pt;text-align:right;">$ <?php echo number_format($cotizacion->obtener_total_price(), 2); ?></td>
-        </tr>
-      </table>
-      <?php
-      }
-    }
-  }
-
-  public static function print_fulfillment_quotes(){
+  public static function print_fulfillment_quotes() {
     Conexion::abrir_conexion();
     $quotes = self::get_all_fulfillment_quotes(Conexion::obtener_conexion());
     Conexion::cerrar_conexion();
-    if(count($quotes)){
-      ?>
+    if (count($quotes)) {
+    ?>
       <table class="fulfillment_table table table-bordered">
         <thead>
           <tr>
@@ -1453,56 +1339,57 @@ class RepositorioRfq {
           ?>
         </tbody>
       </table>
-      <?php
+    <?php
     }
   }
 
-  public static function print_fulfillment_quote($quote){
-    if(!isset($quote)){
+  public static function print_fulfillment_quote($quote) {
+    if (!isset($quote)) {
       return;
     }
     Conexion::abrir_conexion();
-    $re_quote = ReQuoteRepository::get_re_quote_by_id_rfq(Conexion::obtener_conexion(), $quote-> obtener_id());
+    $re_quote = ReQuoteRepository::get_re_quote_by_id_rfq(Conexion::obtener_conexion(), $quote->obtener_id());
     Conexion::cerrar_conexion();
-    $fulfillment_date = RepositorioComment::mysql_datetime_to_english_format($quote-> obtener_fulfillment_date());
+    $fulfillment_date = RepositorioComment::mysql_datetime_to_english_format($quote->obtener_fulfillment_date());
+    $award_date = RepositorioComment::mysql_datetime_to_english_format($quote->obtener_fecha_award());
     ?>
     <tr>
       <td>
-        <a href="<?php echo EDITAR_COTIZACION . '/' . $quote-> obtener_id(); ?>" class="btn-block">
-          <?php echo $quote-> obtener_id(); ?>
+        <a href="<?php echo EDITAR_COTIZACION . '/' . $quote->obtener_id(); ?>" class="btn-block">
+          <?php echo $quote->obtener_id(); ?>
         </a>
       </td>
-      <td><?php echo $quote-> obtener_email_code(); ?></td>
-      <td><?php echo $quote-> print_channel(); ?></td>
-      <td><?php echo isset($re_quote) ? '$' . $re_quote-> get_total_price() : 'No Re-Quote'; ?></td>
+      <td><?php echo $quote->obtener_email_code(); ?></td>
+      <td><?php echo $quote->print_channel(); ?></td>
+      <td><?php echo isset($re_quote) ? '$' . $re_quote->get_total_price() : 'No Re-Quote'; ?></td>
       <td><?php echo $fulfillment_date; ?></td>
-      <td><?php echo $quote-> obtener_fecha_award(); ?></td>
-      <td><?php echo $quote-> obtener_type_of_contract(); ?></td>
+      <td><?php echo $award_date; ?></td>
+      <td><?php echo $quote->obtener_type_of_contract(); ?></td>
     </tr>
     <?php
   }
 
-  public static function get_all_fulfillment_quotes($connection){
+  public static function get_all_fulfillment_quotes($connection) {
     $quotes = [];
-    if(isset($connection)){
-      try{
-        $sql = 'SELECT * FROM rfq WHERE fullfillment = 1 AND (invoice IS NULL OR invoice = 0)';
-        $sentence = $connection-> prepare($sql);
-        $sentence-> execute();
+    if (isset($connection)) {
+      try {
+        $sql = 'SELECT * FROM rfq WHERE deleted = 0 AND fullfillment = 1 AND (invoice IS NULL OR invoice = 0)';
+        $sentence = $connection->prepare($sql);
+        $sentence->execute();
         $quotes = self::array_to_object($sentence);
-      }catch(PDOException $ex){
+      } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
     return $quotes;
   }
 
-  public static function print_invoice_quotes(){
+  public static function print_invoice_quotes() {
     Conexion::abrir_conexion();
     $quotes = self::get_all_invoice_quotes(Conexion::obtener_conexion());
     Conexion::cerrar_conexion();
-    if(count($quotes)){
-      ?>
+    if (count($quotes)) {
+    ?>
       <table class="invoice_table table table-bordered">
         <thead>
           <tr>
@@ -1521,51 +1408,51 @@ class RepositorioRfq {
           ?>
         </tbody>
       </table>
-      <?php
+    <?php
     }
   }
 
-  public static function print_invoice_quote($quote){
-    if(!isset($quote)){
+  public static function print_invoice_quote($quote) {
+    if (!isset($quote)) {
       return;
     }
-    $invoice_date = RepositorioComment::mysql_datetime_to_english_format($quote-> obtener_invoice_date());
+    $invoice_date = RepositorioComment::mysql_datetime_to_english_format($quote->obtener_invoice_date());
     ?>
     <tr>
       <td>
-        <a href="<?php echo EDITAR_COTIZACION . '/' . $quote-> obtener_id(); ?>" class="btn-block">
-          <?php echo $quote-> obtener_id(); ?>
+        <a href="<?php echo EDITAR_COTIZACION . '/' . $quote->obtener_id(); ?>" class="btn-block">
+          <?php echo $quote->obtener_id(); ?>
         </a>
       </td>
-      <td><?php echo $quote-> obtener_email_code(); ?></td>
-      <td><?php echo $quote-> print_channel(); ?></td>
+      <td><?php echo $quote->obtener_email_code(); ?></td>
+      <td><?php echo $quote->print_channel(); ?></td>
       <td><?php echo $invoice_date; ?></td>
-      <td><?php echo $quote-> obtener_type_of_contract(); ?></td>
+      <td><?php echo $quote->obtener_type_of_contract(); ?></td>
     </tr>
     <?php
   }
 
-  public static function get_all_invoice_quotes($connection){
+  public static function get_all_invoice_quotes($connection) {
     $quotes = [];
-    if(isset($connection)){
-      try{
-        $sql = 'SELECT * FROM rfq WHERE invoice = 1 AND (submitted_invoice IS NULL OR submitted_invoice = 0)';
-        $sentence = $connection-> prepare($sql);
-        $sentence-> execute();
+    if (isset($connection)) {
+      try {
+        $sql = 'SELECT * FROM rfq WHERE deleted = 0 AND invoice = 1 AND (submitted_invoice IS NULL OR submitted_invoice = 0)';
+        $sentence = $connection->prepare($sql);
+        $sentence->execute();
         $quotes = self::array_to_object($sentence);
-      }catch(PDOException $ex){
+      } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
     return $quotes;
   }
 
-  public static function print_submitted_invoice_quotes(){
+  public static function print_submitted_invoice_quotes() {
     Conexion::abrir_conexion();
     $quotes = self::get_all_submitted_invoice_quotes(Conexion::obtener_conexion());
     Conexion::cerrar_conexion();
-    if(count($quotes)){
-      ?>
+    if (count($quotes)) {
+    ?>
       <table class="invoice_table table table-bordered">
         <thead>
           <tr>
@@ -1584,111 +1471,111 @@ class RepositorioRfq {
           ?>
         </tbody>
       </table>
-      <?php
+    <?php
     }
   }
 
-  public static function print_submitted_invoice_quote($quote){
-    if(!isset($quote)){
+  public static function print_submitted_invoice_quote($quote) {
+    if (!isset($quote)) {
       return;
     }
-    $submitted_invoice_date = RepositorioComment::mysql_datetime_to_english_format($quote-> obtener_submitted_invoice_date());
+    $submitted_invoice_date = RepositorioComment::mysql_datetime_to_english_format($quote->obtener_submitted_invoice_date());
     ?>
     <tr>
       <td>
-        <a href="<?php echo EDITAR_COTIZACION . '/' . $quote-> obtener_id(); ?>" class="btn-block">
-          <?php echo $quote-> obtener_id(); ?>
+        <a href="<?php echo EDITAR_COTIZACION . '/' . $quote->obtener_id(); ?>" class="btn-block">
+          <?php echo $quote->obtener_id(); ?>
         </a>
       </td>
-      <td><?php echo $quote-> obtener_email_code(); ?></td>
-      <td><?php echo $quote-> print_channel(); ?></td>
+      <td><?php echo $quote->obtener_email_code(); ?></td>
+      <td><?php echo $quote->print_channel(); ?></td>
       <td><?php echo $submitted_invoice_date; ?></td>
-      <td><?php echo $quote-> obtener_type_of_contract(); ?></td>
+      <td><?php echo $quote->obtener_type_of_contract(); ?></td>
     </tr>
-    <?php
+<?php
   }
 
-  public static function get_all_submitted_invoice_quotes($connection){
+  public static function get_all_submitted_invoice_quotes($connection) {
     $quotes = [];
-    if(isset($connection)){
-      try{
-        $sql = 'SELECT * FROM rfq WHERE submitted_invoice = 1';
-        $sentence = $connection-> prepare($sql);
-        $sentence-> execute();
+    if (isset($connection)) {
+      try {
+        $sql = 'SELECT * FROM rfq WHERE deleted = 0 AND submitted_invoice = 1';
+        $sentence = $connection->prepare($sql);
+        $sentence->execute();
         $quotes = self::array_to_object($sentence);
-      }catch(PDOException $ex){
+      } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
     return $quotes;
   }
 
-  public static function remove_award($conexion, $id_rfq){
-    if(isset($conexion)){
-      try{
+  public static function remove_award($conexion, $id_rfq) {
+    if (isset($conexion)) {
+      try {
         $sql = 'UPDATE rfq SET award = 0 WHERE id = :id_rfq';
-        $sentencia = $conexion-> prepare($sql);
-        $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-        $sentencia-> execute();
-      }catch(PDOException $ex){
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia->execute();
+      } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
   }
 
-  public static function remove_fulfillment($conexion, $id_rfq){
-    if(isset($conexion)){
-      try{
+  public static function remove_fulfillment($conexion, $id_rfq) {
+    if (isset($conexion)) {
+      try {
         $sql = 'UPDATE rfq SET fullfillment = 0 WHERE id = :id_rfq';
-        $sentencia = $conexion-> prepare($sql);
-        $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-        $sentencia-> execute();
-      }catch(PDOException $ex){
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia->execute();
+      } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
   }
 
-  public static function remove_invoice($conexion, $id_rfq){
-    if(isset($conexion)){
-      try{
+  public static function remove_invoice($conexion, $id_rfq) {
+    if (isset($conexion)) {
+      try {
         $sql = 'UPDATE rfq SET invoice = 0 WHERE id = :id_rfq';
-        $sentencia = $conexion-> prepare($sql);
-        $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-        $sentencia-> execute();
-      }catch(PDOException $ex){
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia->execute();
+      } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
   }
 
-  public static function remove_submitted_invoice($conexion, $id_rfq){
-    if(isset($conexion)){
-      try{
+  public static function remove_submitted_invoice($conexion, $id_rfq) {
+    if (isset($conexion)) {
+      try {
         $sql = 'UPDATE rfq SET submitted_invoice = 0 WHERE id = :id_rfq';
-        $sentencia = $conexion-> prepare($sql);
-        $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-        $sentencia-> execute();
-      }catch(PDOException $ex){
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia->execute();
+      } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
   }
 
-  public static function remove_relation($conexion, $id_rfq){
-    if(isset($conexion)){
-      try{
+  public static function remove_relation($conexion, $id_rfq) {
+    if (isset($conexion)) {
+      try {
         $sql = 'UPDATE rfq SET multi_year_project = null WHERE id = :id_rfq';
-        $sentencia = $conexion-> prepare($sql);
-        $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-        $sentencia-> execute();
-      }catch(PDOException $ex){
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia->execute();
+      } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
   }
 
-  public static function mark_unmark_as_pending($conexion, $id_rfq, $value){
+  public static function mark_unmark_as_pending($conexion, $id_rfq, $value) {
     if (isset($conexion)) {
       try {
         $sql = 'UPDATE rfq SET fulfillment_pending = :value WHERE id = :id_rfq';
@@ -1702,7 +1589,7 @@ class RepositorioRfq {
     }
   }
 
-  public static function save_net_30($conexion, $id_rfq, $value){
+  public static function save_net_30($conexion, $id_rfq, $value) {
     if (isset($conexion)) {
       try {
         $sql = 'UPDATE rfq SET net30_fulfillment = :net30_fulfillment WHERE id = :id_rfq';
@@ -1716,19 +1603,19 @@ class RepositorioRfq {
     }
   }
 
-  public static function get_all_providers_name($connection, $id_rfq){
+  public static function get_all_providers_name($connection, $id_rfq) {
     $providers_name = [];
     $items = RepositorioItem::obtener_items_por_id_rfq($connection, $id_rfq);
     foreach ($items as $i => $item) {
-      $providers = RepositorioProvider::obtener_providers_por_id_item($connection, $item-> obtener_id());
+      $providers = RepositorioProvider::obtener_providers_por_id_item($connection, $item->obtener_id());
       foreach ($providers as $j => $provider) {
-        array_push($providers_name, $provider-> obtener_provider());
+        array_push($providers_name, $provider->obtener_provider());
       }
-      $subitems = RepositorioSubitem::obtener_subitems_por_id_item($connection, $item-> obtener_id());
+      $subitems = RepositorioSubitem::obtener_subitems_por_id_item($connection, $item->obtener_id());
       foreach ($subitems as $k => $subitem) {
-        $providers_subitem = RepositorioProviderSubitem::obtener_providers_subitem_por_id_subitem($connection, $subitem-> obtener_id());
+        $providers_subitem = RepositorioProviderSubitem::obtener_providers_subitem_por_id_subitem($connection, $subitem->obtener_id());
         foreach ($providers_subitem as $l => $provider_subitem) {
-          array_push($providers_name, $provider_subitem-> obtener_provider());
+          array_push($providers_name, $provider_subitem->obtener_provider());
         }
       }
     }

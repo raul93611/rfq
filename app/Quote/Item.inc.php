@@ -99,7 +99,7 @@ class Item{
   }
 
   public function obtener_additional(){
-    return $this-> additional;
+    return (float) $this-> additional;
   }
 
   public function obtener_fulfillment_profit(){

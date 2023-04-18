@@ -25,17 +25,17 @@ if (isset($_POST['registrar_cotizacion'])) {
       null,
       null,
       null,
-      '',
+      'Net 30',
       '',
       '',
       null,
-      '',
-      0,
-      0,
-      0,
       '',
       0,
       0,
+      0,
+      '',
+      0,
+      0,
       null,
       '',
       null,
@@ -54,7 +54,20 @@ if (isset($_POST['registrar_cotizacion'])) {
       null,
       null,
       null,
-      'Net 30'
+      'Net 30',
+      $_POST['city'],
+      $_POST['zip_code'],
+      $_POST['state'],
+      $_POST['client'],
+      0,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
     );
     list($cotizacion_insertada, $id_rfq) = RepositorioRfq::insertar_cotizacion(Conexion::obtener_conexion(), $cotizacion);
     AuditTrailRepository::quote_status_audit_trail(Conexion::obtener_conexion(), 'Created', $id_rfq);
@@ -69,7 +82,7 @@ if (isset($_POST['registrar_cotizacion'])) {
       $directorio = $_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $id_rfq;
       $documentos = $_FILES['documentos'];
       Input::save_files($directorio, $documentos, $id_rfq);
-      Redireccion::redirigir1(COTIZACIONES . $cotizacion-> obtener_canal());
+      Redireccion::redirigir1(CHANNEL . $cotizacion-> obtener_canal());
     }
   }
 }

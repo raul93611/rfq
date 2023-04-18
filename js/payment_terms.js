@@ -1,6 +1,6 @@
 $(document).ready(function () {
   let payment_terms_table = $('#payment_terms_table').DataTable({
-    ajax: '/rfq/load_payment_terms_table/',
+    ajax: '/rfq/payment_term/load_payment_terms_table/',
     "columnDefs": [
       { className: "text-center", "targets": [1] }
     ]
@@ -11,7 +11,7 @@ $(document).ready(function () {
   });
 
   $('#add_payment_term_form').submit(function(){
-    $.post('/rfq/save_payment_term', $(this).serialize(), function(res){
+    $.post('/rfq/payment_term/save_payment_term', $(this).serialize(), function(res){
       if(res.result === false){
         $('.error_message').show();
       }else{
@@ -26,14 +26,14 @@ $(document).ready(function () {
   });
 
   $('#payment_terms_table').on('click', '.edit_button', function(){
-    $('#edit_payment_term_modal form').load('/rfq/load_payment_term/' + $(this).attr('data'), function(){
+    $('#edit_payment_term_modal form').load('/rfq/payment_term/load_payment_term/' + $(this).attr('data'), function(){
       $('#edit_payment_term_modal').modal();
     });
     return false;
   });
 
   $('#edit_payment_term_form').submit(function(){
-    $.post('/rfq/update_payment_term', $(this).serialize(), function(res){
+    $.post('/rfq/payment_term/update_payment_term', $(this).serialize(), function(res){
       if(res.result === false){
         $('.error_message').show();
       }else{
@@ -53,7 +53,7 @@ $(document).ready(function () {
 
   $('#continue_button').click(function(){
     $.ajax({
-      url: '/rfq/delete_payment_term/',
+      url: '/rfq/payment_term/delete_payment_term/',
       data: {
         id_payment_term: $(this).attr('data')
       },

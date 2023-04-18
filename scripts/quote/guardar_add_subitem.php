@@ -1,5 +1,4 @@
 <?php
-session_start();
 if(isset($_POST['guardar_subitem'])){
   Conexion::abrir_conexion();
   $subitem = new Subitem('', $_POST['id_item'], 0, $_POST['brand'], $_POST['brand_project'], $_POST['part_number'], $_POST['part_number_project'], htmlspecialchars($_POST['description']), htmlspecialchars($_POST['description_project']), $_POST['quantity'], 0, 0, $_POST['comments'], $_POST['website'], '', null);

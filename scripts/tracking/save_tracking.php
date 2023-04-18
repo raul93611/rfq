@@ -1,5 +1,4 @@
 <?php
-session_start();
 if(isset($_POST['save_tracking'])){
   Conexion::abrir_conexion();
   $item = RepositorioItem::obtener_item_por_id(Conexion::obtener_conexion(), $_POST['id_item']);

@@ -1,6 +1,6 @@
 $(document).ready(function () {
   let providers_table = $('#providers_table').DataTable({
-    ajax: '/rfq/load_providers_table/',
+    ajax: '/rfq/provider/load_providers_table/',
     "columnDefs": [
       { className: "text-center", "targets": [1] }
     ]
@@ -11,7 +11,7 @@ $(document).ready(function () {
   });
 
   $('#add_provider_form').submit(function(){
-    $.post('/rfq/save_provider', $(this).serialize(), function(res){
+    $.post('/rfq/provider/save_provider', $(this).serialize(), function(res){
       if(res.result === false){
         $('.error_message').show();
       }else{
@@ -26,14 +26,14 @@ $(document).ready(function () {
   });
 
   $('#providers_table').on('click', '.edit_button', function(){
-    $('#edit_provider_modal form').load('/rfq/load_provider/' + $(this).attr('data'), function(){
+    $('#edit_provider_modal form').load('/rfq/provider/load_provider/' + $(this).attr('data'), function(){
       $('#edit_provider_modal').modal();
     });
     return false;
   });
 
   $('#edit_provider_form').submit(function(){
-    $.post('/rfq/update_provider', $(this).serialize(), function(res){
+    $.post('/rfq/provider/update_provider', $(this).serialize(), function(res){
       if(res.result === false){
         $('.error_message').show();
       }else{
@@ -53,7 +53,7 @@ $(document).ready(function () {
 
   $('#continue_button').click(function(){
     $.ajax({
-      url: '/rfq/delete_provider/',
+      url: '/rfq/provider/delete_provider/',
       data: {
         id_provider: $(this).attr('data')
       },

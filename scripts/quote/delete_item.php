@@ -1,5 +1,4 @@
 <?php
-session_start();
 Conexion::abrir_conexion();
 $item = RepositorioItem::obtener_item_por_id(Conexion::obtener_conexion(), $id_item);
 $id_rfq = $item-> obtener_id_rfq();
