@@ -33,7 +33,7 @@
               </div>
               <div class="form-group">
                 <label for="other_cost">Other Cost:</label>
-                <input type="number" step=".01" id="other_cost" class="form-control form-control-sm" name="other_cost" value="">
+                <input type="number" step=".01" id="other_cost" class="form-control form-control-sm" name="other_cost" value="0">
               </div>
               <div class="form-group">
                 <label for="payment_term">Payment Term:</label>

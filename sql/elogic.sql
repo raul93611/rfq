@@ -162,7 +162,7 @@ CREATE TABLE re_quotes(
   payment_terms VARCHAR(255) NOT NULL,
   taxes DECIMAL(20, 2) NOT NULL,
   profit DECIMAL(20, 2) NOT NULL,
-  additional DECIMAL(20, 2) NOT NULL,
+  additional VARCHAR(255),
   shipping_cost DECIMAL (20, 2) NOT NULL,
   shipping VARCHAR(255) NOT NULL,
   services_payment_term VARCHAR(255) DEFAULT 'Net 30',
@@ -183,7 +183,7 @@ CREATE TABLE re_quote_items(
   total_price DECIMAL(20, 2) NOT NULL,
   comments TEXT CHARACTER SET utf8 NOT NULL,
   website VARCHAR(255) NOT NULL,
-  additional DECIMAL(20, 2) NOT NULL,
+  additional VARCHAR(255),
   PRIMARY KEY(id),
   FOREIGN KEY(id_re_quote) REFERENCES re_quotes(id) ON UPDATE CASCADE ON DELETE RESTRICT
 );
@@ -227,7 +227,7 @@ CREATE TABLE re_quote_subitems(
   total_price DECIMAL(20, 2) NOT NULL,
   comments TEXT CHARACTER SET utf8 NOT NULL,
   website VARCHAR(255) NOT NULL,
-  additional DECIMAL(20, 2) NOT NULL,
+  additional VARCHAR(255),
   PRIMARY KEY(id),
   FOREIGN KEY(id_re_quote_item) REFERENCES re_quote_items(id) ON UPDATE CASCADE ON DELETE RESTRICT
 );
