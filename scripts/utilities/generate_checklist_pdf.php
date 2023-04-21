@@ -124,15 +124,15 @@ try {
     '<b>Contract Amount:</b> $' . $quote->obtener_quote_total_price() . '<br>' .
     '<b>RFQ Amount:</b> $' . $quote->obtener_total_price() . '<br>' .
     '<b>RFP Amount:</b> $' . $quote->getTotalQuoteServices() . '<br>' .
-    '<b>Estimated Delivery Date:</b> $' . $quote->getEstimatedDeliveryDate() . '<br>' .
-    '<b>Payment Terms:</b> $' . $quote->obtener_payment_terms() . '<br>' .
-    '<b>Estimated Profit:</b> $' . $quote->obtener_re_quote_profit() . ' / ' . number_format($quote->obtener_re_quote_profit_percentage(), 2) . ' %' . '<br>' .
-    '<b>Shipping Address:</b> $' . $quote->getShippingAddress() . '<br>' .
-    '<b>City:</b> $' . $quote->obtener_city() . '<br>' .
-    '<b>Zip Code:</b> $' . $quote->obtener_zip_code() . '<br>' .
-    '<b>State:</b> $' . $quote->obtener_state() . '<br>' .
-    '<b>Ship to:</b> $' . $quote->obtener_ship_to() . '<br>' .
-    '<b>Special Requirements/Risk/Extra Comments:</b> $' . $quote->getSpecialRequirements() . '<br>' .
+    '<b>Estimated Delivery Date:</b> ' . $quote->getEstimatedDeliveryDate() . '<br>' .
+    '<b>Payment Terms:</b> ' . $quote->obtener_payment_terms() . '<br>' .
+    '<b>Estimated Profit:</b> ' . $quote->obtener_re_quote_profit() . ' / ' . number_format($quote->obtener_re_quote_profit_percentage(), 2) . ' %' . '<br>' .
+    '<b>Shipping Address:</b> ' . SHIPPING_ADDRESS[$quote->getShippingAddress()] . '<br>' .
+    '<b>City:</b> ' . $quote->obtener_city() . '<br>' .
+    '<b>Zip Code:</b> ' . $quote->obtener_zip_code() . '<br>' .
+    '<b>State:</b> ' . $quote->obtener_state() . '<br>' .
+    '<b>Ship to:</b> ' . $quote->obtener_ship_to() . '<br>' .
+    '<b>Special Requirements/Risk/Extra Comments:</b> ' . $quote->getSpecialRequirements() . '<br>' .
 
     '</td>
     </tr>
