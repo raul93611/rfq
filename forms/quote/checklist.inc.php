@@ -47,7 +47,7 @@
         <label for="canal">Channel:</label>
         <select class="form-control form-control-sm" name="canal" id="canal">
           <option <?php echo $quote->obtener_canal() == 'GSA-Buy' ? 'selected' : ''; ?>>GSA-Buy</option>
-          <option value="Fedbid" <?php echo $quote->obtener_canal() == 'FedBid' ? 'selected' : ''; ?>>Unison</option>
+          <option value="FedBid" <?php echo $quote->obtener_canal() == 'FedBid' ? 'selected' : ''; ?>>Unison</option>
           <option <?php echo $quote->obtener_canal() == 'E-mails' ? 'selected' : ''; ?>>E-mails</option>
           <option <?php echo $quote->obtener_canal() == 'Embassies' ? 'selected' : ''; ?>>Embassies</option>
           <option value="FBO" <?php echo $quote->obtener_canal() == 'FBO' ? 'selected' : ''; ?>>SAM</option>
@@ -56,6 +56,18 @@
           <option <?php echo $quote->obtener_canal() == 'Stars III' ? 'selected' : ''; ?>>Stars III</option>
         </select>
         <input type="hidden" name="canal_original" value="<?php echo $quote->obtener_canal(); ?>">
+      </div>
+      <div class="form-group">
+        <label for="gsa">GSA:</label>
+        <select id="gsa" class="form-control form-control-sm" name="gsa">
+          <?php
+          foreach (GSA as $key => $gsa) {
+          ?>
+            <option value="<?php echo $gsa; ?>" <?php echo $quote->getGsa() == $gsa ? 'selected' : ''; ?>><?php echo $gsa; ?></option>
+          <?php
+          }
+          ?>
+        </select>
       </div>
       <div class="form-group">
         <label for="contract_number">Contract number:</label>
@@ -70,22 +82,6 @@
         <label for="email_code">Code:</label>
         <input type="text" class="form-control form-control-sm" id="email_code" name="email_code" value="<?php echo $quote->obtener_email_code(); ?>">
         <input type="hidden" name="email_code_original" value="<?php echo $quote->obtener_email_code(); ?>">
-      </div>
-      <div class="form-group">
-        <label for="type_of_bid">Type of bid:</label>
-        <select class="form-control form-control-sm" name="type_of_bid" id="type_of_bid">
-          <?php
-          Conexion::abrir_conexion();
-          $type_of_bids = TypeOfBidRepository::get_all(Conexion::obtener_conexion());
-          Conexion::cerrar_conexion();
-          foreach ($type_of_bids as $key => $type_of_bid) {
-          ?>
-            <option <?php echo $quote->obtener_type_of_bid() == $type_of_bid->get_type_of_bid() ? 'selected' : ''; ?>><?php echo $type_of_bid->get_type_of_bid(); ?></option>
-          <?php
-          }
-          ?>
-        </select>
-        <input type="hidden" name="type_of_bid_original" value="<?php echo $quote->obtener_type_of_bid(); ?>">
       </div>
       <div class="form-group">
         <label>Award Date:</label>
@@ -116,32 +112,16 @@
         <input type="text" class="form-control form-control-sm" value="<?php echo $quote->getTotalQuoteServices(); ?>" disabled>
       </div>
       <div class="form-group">
-        <label for="issue_date">Issue date:</label>
-        <input type="text" class="date form-control form-control-sm" id="issue_date" name="issue_date" value="<?php echo $quote->obtener_issue_date(); ?>">
-        <input type="hidden" name="issue_date_original" value="<?php echo $quote->obtener_issue_date(); ?>">
-      </div>
-      <div class="form-group">
-        <label for="end_date">End date:</label>
-        <input type="text" class="form-control form-control-sm" id="end_date" name="end_date" value="<?php echo $quote->obtener_end_date(); ?>">
-        <input type="hidden" name="end_date_original" value="<?php echo $quote->obtener_end_date(); ?>">
-      </div>
-      <div class="form-group">
-        <label for="completed_date">Completed date:</label>
-        <input type="text" class="date form-control form-control-sm" id="completed_date" name="completed_date" value="<?php echo $quote->obtener_fecha_completado() ? RepositorioComment::mysql_date_to_english_format($quote->obtener_fecha_completado()) : ''; ?>">
-        <input type="hidden" name="completed_date_original" value="<?php echo $quote->obtener_fecha_completado() ? RepositorioComment::mysql_date_to_english_format($quote->obtener_fecha_completado()) : ''; ?>">
-      </div>
-      <div class="form-group">
-        <label for="expiration_date">Expiration date:</label>
-        <input type="text" class="date form-control form-control-sm" id="expiration_date" name="expiration_date" value="<?php echo $quote->obtener_expiration_date() ? RepositorioComment::mysql_date_to_english_format($quote->obtener_expiration_date()) : ''; ?>">
-        <input type="hidden" name="expiration_date_original" value="<?php echo $quote->obtener_expiration_date() ? RepositorioComment::mysql_date_to_english_format($quote->obtener_expiration_date()) : ''; ?>">
-      </div>
-      <div class="form-group">
         <label for="estimated_delivery_date">Estimated Delivery Date:</label>
         <input type="text" class="date form-control form-control-sm" id="estimated_delivery_date" name="estimated_delivery_date" value="<?php echo !empty($quote->getEstimatedDeliveryDate()) ? RepositorioComment::mysql_date_to_english_format($quote->getEstimatedDeliveryDate()) : ''; ?>">
       </div>
       <div class="form-group">
         <label>Payment Terms:</label>
         <input type="text" class="form-control form-control-sm" value="<?php echo $quote->obtener_payment_terms(); ?>" disabled>
+      </div>
+      <div class="form-group">
+        <label>Estimated Profit:</label>
+        <input type="text" class="form-control form-control-sm" value="<?php echo '$ ' . $quote->obtener_re_quote_profit() . ' / ' . number_format($quote->obtener_re_quote_profit_percentage(), 2) . ' %'; ?>" disabled>
       </div>
       <div class="form-group">
         <label for="shipping_address">Shipping Address:</label>
@@ -190,19 +170,6 @@
           <option <?php echo $quote->obtener_comments() == 'Working on it' ? 'selected' : ''; ?>>Working on it</option>
         </select>
         <input type="hidden" name="comments_original" value="<?php echo $quote->obtener_comments(); ?>">
-      </div>
-      <div class="form-group">
-        <label for="address">Address:</label>
-        <textarea class="form-control form-control-sm" rows="5" placeholder="Enter address ..." id="address" name="address"><?php echo $quote->obtener_address(); ?></textarea>
-        <input type="hidden" name="address_original" value="<?php echo $quote->obtener_address(); ?>">
-      </div>
-      <div class="form-group">
-        <label for="ship_via">Ship via:</label>
-        <select id="ship_via" class="form-control form-control-sm" name="ship_via">
-          <option <?php echo $quote->obtener_ship_via() == 'GROUND' ? 'selected' : ''; ?>>GROUND</option>
-          <option <?php echo $quote->obtener_ship_via() == 'BEST WAY' ? 'selected' : ''; ?>>BEST WAY</option>
-        </select>
-        <input type="hidden" name="ship_via_original" value="<?php echo $quote->obtener_ship_via(); ?>">
       </div>
       <div class="form-group">
         <label for="ship_to">Ship to:</label>

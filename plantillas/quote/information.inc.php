@@ -8,10 +8,10 @@ Conexion::cerrar_conexion();
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-md-6">
-          <h1>Checklist</h1>
+          <h1>Information</h1>
         </div>
         <div class="col-md-6">
-          <a target="_blank" href="<?php echo GENERATE_CHECKLIST_PDF . $id_rfq ?>" class="float-right btn btn-primary"><i class="fas fa-file"></i> PDF</a>
+
         </div>
       </div>
     </div>
@@ -24,9 +24,9 @@ Conexion::cerrar_conexion();
             <div class="card-header">
               <h3 class="card-title"><i class="fas fa-highlighter"></i> Enter the data</h3>
             </div>
-            <form role="form" id="checklist_form" method="post" action="<?php echo SAVE_CHECKLIST . $id_rfq; ?>">
+            <form role="form" id="information_form" method="post" action="<?php echo SAVE_INFORMATION . $id_rfq; ?>">
               <?php
-              include_once 'forms/quote/checklist.inc.php';
+              include_once 'forms/quote/information.inc.php';
               ?>
             </form>
           </div>

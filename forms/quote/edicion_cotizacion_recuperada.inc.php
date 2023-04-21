@@ -1,39 +1,11 @@
 <input type="hidden" name="id_rfq" value="<?php echo $cotizacion_recuperada->obtener_id(); ?>">
 <div class="card-body">
-  <!-- <div class="row">
-    <div class="col-md-4">
-      <h6><b>Contract Number:</b> <small><?php echo $cotizacion_recuperada->obtener_contract_number(); ?></small></h6>
-      <h6><b>Code:</b> <small><?php echo $cotizacion_recuperada->obtener_email_code(); ?></small></h6>
-      <h6><b>Type of Bid:</b> <small><?php echo $cotizacion_recuperada->obtener_type_of_bid(); ?></small></h6>
-      <h6><b>Issue Date:</b> <small><?php echo $cotizacion_recuperada->obtener_issue_date(); ?></small></h6>
-      <h6><b>End Date:</b> <small><?php echo $cotizacion_recuperada->obtener_end_date(); ?></small></h6>
-      <h6><b>Channel:</b> <small><?php echo $cotizacion_recuperada->print_channel() ?></small></h6>
-      <h6><b>Designated User:</b> <small><?php echo Input::get_designated_user($cotizacion_recuperada); ?></small></h6>
-      <h6><b>Completed Date:</b> <small><?php echo $cotizacion_recuperada->obtener_fecha_completado() != '0000-00-00' ? RepositorioComment::mysql_date_to_english_format($cotizacion_recuperada->obtener_fecha_completado()) : ''; ?></small></h6>
-      <h6><b>Expiration Date:</b> <small><?php echo $cotizacion_recuperada->obtener_expiration_date() != '0000-00-00' ? RepositorioComment::mysql_date_to_english_format($cotizacion_recuperada->obtener_expiration_date()) : ''; ?></small></h6>
-      <h6><b>Comments:</b> <small><?php echo $cotizacion_recuperada->obtener_comments(); ?></small></h6>
-      <h6><b>Ship Via:</b> <small><?php echo $cotizacion_recuperada->obtener_ship_via(); ?></small></h6>
-    </div>
-    <div class="col-md-4">
-      <h6><b>Address:</b></h6>
-      <p><?php echo nl2br($cotizacion_recuperada->obtener_address()); ?></p>
-      <h6><b>City:</b> <small><?php echo $cotizacion_recuperada->obtener_city(); ?></small></h6>
-      <h6><b>Zip Code:</b> <small><?php echo $cotizacion_recuperada->obtener_zip_code(); ?></small></h6>
-      <h6><b>Set Aside:</b> <small><?php echo $cotizacion_recuperada->getSetSide(); ?></small></h6>
-      <h6><b>CO:</b> <small><?php echo $cotizacion_recuperada->getCo(); ?></small></h6>
-    </div>
-    <div class="col-md-4">
-      <h6><b>Ship To:</b></h6>
-      <p><?php echo nl2br($cotizacion_recuperada->obtener_ship_to()); ?></p>
-      <h6><b>State:</b> <small><?php echo $cotizacion_recuperada->obtener_state(); ?></small></h6>
-      <h6><b>Client:</b> <small><?php echo $cotizacion_recuperada->obtener_client(); ?></small></h6>
-      <h6><b>POC:</b> <small><?php echo $cotizacion_recuperada->getPoc(); ?></small></h6>
-      <h6><b>Estimated Delivery Date:</b> <small><?php echo !is_null($cotizacion_recuperada->getEstimatedDeliveryDate()) ? RepositorioComment::mysql_date_to_english_format($cotizacion_recuperada->getEstimatedDeliveryDate()) : ''; ?></small></h6>
-    </div>
-  </div> -->
   <div class="row">
     <div class="col-md-12">
       <a href="<?php echo CHECKLIST . $cotizacion_recuperada->obtener_id(); ?>" id="" class="btn btn-primary"><i class="fas fa-clipboard-list"></i> Checklist</a>
+    </div>
+    <div class="col-md-12 mt-2">
+      <a href="<?php echo INFORMATION . $cotizacion_recuperada->obtener_id(); ?>" id="" class="btn btn-primary"><i class="fas fa-clipboard-list"></i> Information</a>
     </div>
   </div>
   <br>

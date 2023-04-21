@@ -160,6 +160,9 @@ switch ($partes_ruta[1]) {
       case 'save_checklist':
         $ruta_elegida = 'scripts/quote/save_checklist.php';
         break;
+      case 'save_information':
+        $ruta_elegida = 'scripts/quote/save_information.php';
+        break;
       case 'service':
         switch ($partes_ruta[3]) {
           case 'add_service':
@@ -242,6 +245,10 @@ switch ($partes_ruta[1]) {
         $id_rfq = $partes_ruta[3];
         $encabezado = 1;
         $ruta_elegida = 'scripts/utilities/proposal.php';
+        break;
+      case 'generate_checklist_pdf':
+        $id_rfq = $partes_ruta[3];
+        $ruta_elegida = 'scripts/utilities/generate_checklist_pdf.php';
         break;
       case 'get_quote_files':
         $id_rfq = $partes_ruta[3];

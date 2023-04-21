@@ -30,22 +30,6 @@
         }
         ?>
       </div>
-      <div class="form-group">
-        <label for="city">City:</label>
-        <input type="text" class="form-control form-control-sm" id="city" name="city" placeholder="City ...">
-      </div>
-      <div class="form-group">
-        <label for="state">State:</label>
-        <select id="state" class="form-control form-control-sm" name="state">
-          <?php
-          foreach (STATES as $key => $state) {
-          ?>
-            <option value="<?php echo $key; ?>"><?php echo $state; ?></option>
-          <?php
-          }
-          ?>
-        </select>
-      </div>
     </div>
     <div class="col-md-6">
       <div class="form-group">
@@ -79,14 +63,6 @@
           <option>Seaport</option>
           <option>Stars III</option>
         </select>
-      </div>
-      <div class="form-group">
-        <label for="zip_code">Zip Code:</label>
-        <input type="text" class="form-control form-control-sm" id="zip_code" name="zip_code" placeholder="Zip Code ...">
-      </div>
-      <div class="form-group">
-        <label for="client">Client:</label>
-        <input type="text" class="form-control form-control-sm" id="client" name="client" placeholder="Client name ...">
       </div>
     </div>
   </div>

@@ -3,7 +3,15 @@ if (isset($_POST['registrar_cotizacion'])) {
   Conexion::abrir_conexion();
   $usuario = RepositorioUsuario::obtener_usuario_por_nombre_usuario(Conexion::obtener_conexion(), $_POST['usuario_designado']);
   $usuario_designado = $usuario->obtener_id();
-  $validador = new ValidadorCotizacionRegistro(Conexion::obtener_conexion(), $_POST['email_code'], $_POST['issue_date'], $_POST['end_date'], $_POST['type_of_bid'], $_POST['usuario_designado'], $_POST['canal']);
+  $validador = new ValidadorCotizacionRegistro(
+    Conexion::obtener_conexion(), 
+    $_POST['email_code'], 
+    $_POST['issue_date'], 
+    $_POST['end_date'], 
+    $_POST['type_of_bid'], 
+    $_POST['usuario_designado'], 
+    $_POST['canal']
+  );
   Conexion::cerrar_conexion();
   if ($validador->registro_cotizacion_valida()) {
     Conexion::abrir_conexion();
@@ -55,10 +63,10 @@ if (isset($_POST['registrar_cotizacion'])) {
       null,
       null,
       'Net 30',
-      $_POST['city'],
-      $_POST['zip_code'],
-      $_POST['state'],
-      $_POST['client'],
+      null,
+      null,
+      null,
+      null,
       0,
       null,
       null,
@@ -68,6 +76,7 @@ if (isset($_POST['registrar_cotizacion'])) {
       null,
       null,
       null,
+      null
     );
     list($cotizacion_insertada, $id_rfq) = RepositorioRfq::insertar_cotizacion(Conexion::obtener_conexion(), $cotizacion);
     AuditTrailRepository::quote_status_audit_trail(Conexion::obtener_conexion(), 'Created', $id_rfq);
@@ -86,4 +95,3 @@ if (isset($_POST['registrar_cotizacion'])) {
     }
   }
 }
-?>

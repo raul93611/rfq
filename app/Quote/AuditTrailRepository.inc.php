@@ -87,13 +87,28 @@ class AuditTrailRepository{
     <?php
   }
 
-  public static function quote_info_events($connection, $contract_number, $contract_number_original, $code, $code_original, $type_of_bid, $type_of_bid_original, $issue_date, $issue_date_original, $end_date, $end_date_original, $canal, $canal_original, $designated_user, $designated_user_original, $completed_date, $completed_date_original, $expiration_date, $expiration_date_original, $comments, $comments_original, $ship_via, $ship_via_original, $address, $address_original, $ship_to, $ship_to_original, $id_rfq){
+  public static function checklist_events($connection, $contract_number, $contract_number_original, $code, $code_original, $canal, $canal_original, $designated_user, $designated_user_original, $comments, $comments_original, $ship_to, $ship_to_original, $id_rfq){
     if($contract_number != $contract_number_original){
       self::create_audit_trail_modified($connection, 'Contract Number', $contract_number, $contract_number_original, $id_rfq);
     }
     if($code != $code_original){
       self::create_audit_trail_modified($connection, 'Code', $code, $code_original, $id_rfq);
     }
+    if($canal != $canal_original){
+      self::create_audit_trail_modified($connection, 'Channel', $canal, $canal_original, $id_rfq);
+    }
+    if($designated_user != $designated_user_original){
+      self::create_audit_trail_modified($connection, 'Designated User', $designated_user, $designated_user_original, $id_rfq);
+    }
+    if($comments != $comments_original){
+      self::create_audit_trail_modified($connection, 'Comments', $comments, $comments_original, $id_rfq);
+    }
+    if($ship_to != $ship_to_original){
+      self::create_audit_trail_modified($connection, 'Ship To', $ship_to, $ship_to_original, $id_rfq);
+    }
+  }
+
+  public static function information_events($connection, $type_of_bid, $type_of_bid_original, $issue_date, $issue_date_original, $end_date, $end_date_original, $completed_date, $completed_date_original, $expiration_date, $expiration_date_original, $ship_via, $ship_via_original, $id_rfq){
     if($type_of_bid != $type_of_bid_original){
       self::create_audit_trail_modified($connection, 'Type of Bid', $type_of_bid, $type_of_bid_original, $id_rfq);
     }
@@ -103,29 +118,14 @@ class AuditTrailRepository{
     if($end_date != $end_date_original){
       self::create_audit_trail_modified($connection, 'End Date', $end_date, $end_date_original, $id_rfq);
     }
-    if($canal != $canal_original){
-      self::create_audit_trail_modified($connection, 'Channel', $canal, $canal_original, $id_rfq);
-    }
-    if($designated_user != $designated_user_original){
-      self::create_audit_trail_modified($connection, 'Designated User', $designated_user, $designated_user_original, $id_rfq);
-    }
     if($completed_date != $completed_date_original){
       self::create_audit_trail_modified($connection, 'Completed Date', $completed_date, $completed_date_original, $id_rfq);
     }
     if($expiration_date != $expiration_date_original){
       self::create_audit_trail_modified($connection, 'Expiration Date', $expiration_date, $expiration_date_original, $id_rfq);
     }
-    if($comments != $comments_original){
-      self::create_audit_trail_modified($connection, 'Comments', $comments, $comments_original, $id_rfq);
-    }
     if($ship_via != $ship_via_original){
       self::create_audit_trail_modified($connection, 'Ship Via', $ship_via, $ship_via_original, $id_rfq);
-    }
-    if($address != $address_original){
-      self::create_audit_trail_modified($connection, 'Address', $address, $address_original, $id_rfq);
-    }
-    if($ship_to != $ship_to_original){
-      self::create_audit_trail_modified($connection, 'Ship To', $ship_to, $ship_to_original, $id_rfq);
     }
   }
 

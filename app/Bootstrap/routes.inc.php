@@ -21,6 +21,8 @@ define('REMOVE_FULFILLMENT', QUOTE_SC . 'remove_fulfillment/');
 define('REMOVE_INVOICE', QUOTE_SC . 'remove_invoice/');
 define('REMOVE_SUBMITTED_INVOICE', QUOTE_SC . 'remove_submitted_invoice/');
 define('SAVE_CHECKLIST', QUOTE_SC . 'save_checklist/');
+define('SAVE_INFORMATION', QUOTE_SC . 'save_information/');
+define('GENERATE_CHECKLIST_PDF', QUOTE_SC . 'generate_checklist_pdf/');
 /********************************SERVICE SCRIPTS*****************************************/
 define('SERVICE_SC', QUOTE_SC . 'service/');
 define('ADD_SERVICE', SERVICE_SC . 'add_service');
@@ -92,6 +94,7 @@ define('CANCELLED', QUOTE . 'cancelled');
 define('NUEVA_COTIZACION', QUOTE . 'nuevo');
 define('EDITAR_COTIZACION', QUOTE . 'editar_cotizacion');
 define('CHECKLIST', QUOTE . 'checklist/');
+define('INFORMATION', QUOTE . 'information/');
 /********************************CHANNELS VIEWS*****************************************/
 define('CHANNEL', QUOTE . 'channel/');
 define('GSA_BUY', CHANNEL . 'GSA-Buy');
@@ -278,5 +281,10 @@ define('SHIPPING_ADDRESS', [
   'pouch' => 'POUCH',
   'client_location' => 'CLIENT LOCATION',
   'f_forward' => 'F FORWARD',
+]);
+define('GSA', [
+  'na' => 'N/A',
+  'open_market' => 'Open Market',
+  'gsa_price' => 'GSA Price'
 ]);
 ?>

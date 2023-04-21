@@ -52,6 +52,10 @@ switch ($partes_ruta[2]) {
         $id_rfq = $partes_ruta[4];
         include_once 'plantillas/quote/checklist.inc.php';
         break;
+      case 'information':
+        $id_rfq = $partes_ruta[4];
+        include_once 'plantillas/quote/information.inc.php';
+        break;
       case 'equipment':
         switch ($partes_ruta[4]) {
           case 'add_item':

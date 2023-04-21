@@ -17,7 +17,7 @@ CREATE TABLE rfq(
   id_usuario INT NOT NULL,
   usuario_designado INT NOT NULL,
   canal VARCHAR(100) NOT NULL,
-  email_code VARCHAR(100) NOT NULL,
+  email_code VARCHAR(255) NOT NULL,
   type_of_bid VARCHAR(100) NOT NULL,
   issue_date VARCHAR(100) NOT NULL,
   end_date VARCHAR(100) NOT NULL,
@@ -73,6 +73,7 @@ CREATE TABLE rfq(
   special_requirements TEXT CHARACTER SET utf8,
   file_document VARCHAR(255),
   accounting VARCHAR(255),
+  gsa VARCHAR(255),
   PRIMARY KEY(id),
   FOREIGN KEY(id_usuario) REFERENCES usuarios(id) ON UPDATE CASCADE ON DELETE RESTRICT
 );

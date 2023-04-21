@@ -60,6 +60,7 @@ class Rfq {
   private $special_requirements;
   private $file_document;
   private $accounting;
+  private $gsa;
 
   public function __construct(
     $id,
@@ -122,6 +123,7 @@ class Rfq {
     $special_requirements,
     $file_document,
     $accounting,
+    $gsa
   ) {
     $this->id = $id;
     $this->id_usuario = $id_usuario;
@@ -183,6 +185,7 @@ class Rfq {
     $this->special_requirements = $special_requirements;
     $this->file_document = $file_document;
     $this->accounting = $accounting;
+    $this->gsa = $gsa;
   }
 
   public function obtener_id() {
@@ -374,7 +377,7 @@ class Rfq {
     return $this->total_cost + $total_services;
   }
 
-  public function getTotalQuoteServices(){
+  public function getTotalQuoteServices() {
     Conexion::abrir_conexion();
     $total_services = ServiceRepository::get_total(Conexion::obtener_conexion(), $this->id);
     Conexion::cerrar_conexion();
@@ -515,35 +518,39 @@ class Rfq {
     return $this->deleted;
   }
 
-  public function getSetSide(){
+  public function getSetSide() {
     return $this->set_side;
   }
 
-  public function getPoc(){
+  public function getPoc() {
     return $this->poc;
   }
 
-  public function getCo(){
+  public function getCo() {
     return $this->co;
   }
 
-  public function getEstimatedDeliveryDate(){
+  public function getEstimatedDeliveryDate() {
     return $this->estimated_delivery_date;
   }
 
-  public function getShippingAddress(){
+  public function getShippingAddress() {
     return $this->shipping_address;
   }
 
-  public function getSpecialRequirements(){
+  public function getSpecialRequirements() {
     return $this->special_requirements;
   }
 
-  public function getFileDocument(){
-    return explode('|' ,$this->file_document);
+  public function getFileDocument() {
+    return explode('|', $this->file_document);
   }
 
-  public function getAccounting(){
+  public function getAccounting() {
     return explode('|', $this->accounting);
+  }
+
+  public function getGsa() {
+    return $this->gsa;
   }
 }
