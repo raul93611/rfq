@@ -107,10 +107,14 @@ try {
   foreach (FILE_DOCUMENT as $key => $file_document) {
     $html .= $checkbox . ' ' . $file_document . '<br>';
   }
+  $html .= $checkbox . '________________<br>';
+  $html .= $checkbox . '________________<br>';
   $html .= '<br><h3>ACCOUNTING</h3><br>';
   foreach (ACCOUNTING_CHECKBOX as $key => $accounting) {
     $html .= $checkbox . ' ' . $accounting . '<br>';
   }
+  $html .= $checkbox . '________________<br>';
+  $html .= $checkbox . '________________<br>';
   $html .= '</td>
       <td style="width:70%;padding: 0;margin: 0;vertical-align:top;">
       <table border=0 width="100%">

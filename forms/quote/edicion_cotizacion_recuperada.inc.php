@@ -31,7 +31,7 @@
       <b>Ship To:</b>
     </div>
     <div class="col-md-8">
-      <?php echo $cotizacion_recuperada->obtener_ship_to(); ?>
+      <?php echo nl2br($cotizacion_recuperada->obtener_ship_to()); ?>
     </div>
   </div>
   <div class="row">
@@ -39,7 +39,7 @@
       <b>Address:</b>
     </div>
     <div class="col-md-8">
-      <?php echo $cotizacion_recuperada->obtener_address();; ?>
+      <?php echo nl2br($cotizacion_recuperada->obtener_address()); ?>
     </div>
   </div>
   <div class="row">

@@ -5,7 +5,6 @@ if (isset($_POST['save_checklist'])) {
   $estimated_delivery_date = !empty($_POST['estimated_delivery_date']) ? RepositorioComment::english_format_to_mysql_date($_POST['estimated_delivery_date']) : null;
   Conexion::abrir_conexion();
   $cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $_POST['id_rfq']);
-  $usuario_antiguo = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), $cotizacion_recuperada->obtener_usuario_designado());
   $usuario = RepositorioUsuario::obtener_usuario_por_nombre_usuario(Conexion::obtener_conexion(), $_POST['usuario_designado']);
   $usuario_designado = $usuario->obtener_id();
   RepositorioRfq::save_checklist(

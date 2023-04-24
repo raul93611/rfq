@@ -433,6 +433,10 @@ class RepositorioRfq {
     $type_of_bid,
     $issue_date,
     $end_date,
+    $designated_user,
+    $email_code,
+    $channel,
+    $ship_to,
     $id_rfq
   ) {
     $cotizacion_editada = false;
@@ -445,7 +449,11 @@ class RepositorioRfq {
         ship_via = :ship_via, 
         type_of_bid = :type_of_bid, 
         issue_date = :issue_date, 
-        end_date = :end_date
+        end_date = :end_date,
+        usuario_designado = :usuario_designado, 
+        email_code = :email_code, 
+        canal = :canal, 
+        ship_to = :ship_to 
         WHERE id = :id_rfq
         ";
         $sentencia = $conexion->prepare($sql);
@@ -456,6 +464,10 @@ class RepositorioRfq {
         $sentencia->bindParam(':type_of_bid', $type_of_bid, PDO::PARAM_STR);
         $sentencia->bindParam(':issue_date', $issue_date, PDO::PARAM_STR);
         $sentencia->bindParam(':end_date', $end_date, PDO::PARAM_STR);
+        $sentencia->bindParam(':usuario_designado', $designated_user, PDO::PARAM_STR);
+        $sentencia->bindParam(':email_code', $email_code, PDO::PARAM_STR);
+        $sentencia->bindParam(':canal', $channel, PDO::PARAM_STR);
+        $sentencia->bindParam(':ship_to', $ship_to, PDO::PARAM_STR);
         $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia->execute();
         if ($sentencia) {

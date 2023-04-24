@@ -3,6 +3,28 @@
   <div class="row">
     <div class="col-md-12">
       <div class="form-group">
+        <label for="email_code">Code:</label>
+        <input type="text" class="form-control form-control-sm" id="email_code" name="email_code" value="<?php echo $quote->obtener_email_code(); ?>">
+        <input type="hidden" name="email_code_original" value="<?php echo $quote->obtener_email_code(); ?>">
+      </div>
+      <div class="form-group">
+        <label for="canal">Channel:</label>
+        <select class="form-control form-control-sm" name="canal" id="canal">
+          <option <?php echo $quote->obtener_canal() == 'GSA-Buy' ? 'selected' : ''; ?>>GSA-Buy</option>
+          <option value="FedBid" <?php echo $quote->obtener_canal() == 'FedBid' ? 'selected' : ''; ?>>Unison</option>
+          <option <?php echo $quote->obtener_canal() == 'E-mails' ? 'selected' : ''; ?>>E-mails</option>
+          <option <?php echo $quote->obtener_canal() == 'Embassies' ? 'selected' : ''; ?>>Embassies</option>
+          <option value="FBO" <?php echo $quote->obtener_canal() == 'FBO' ? 'selected' : ''; ?>>SAM</option>
+          <option <?php echo $quote->obtener_canal() == 'Seaport' ? 'selected' : ''; ?>>Seaport</option>
+          <option <?php echo $quote->obtener_canal() == 'Ebay & Amazon' ? 'selected' : ''; ?>>Ebay & Amazon</option>
+          <option <?php echo $quote->obtener_canal() == 'Stars III' ? 'selected' : ''; ?>>Stars III</option>
+        </select>
+        <input type="hidden" name="canal_original" value="<?php echo $quote->obtener_canal(); ?>">
+      </div>
+      <?php
+      Input::print_designated_user($quote);
+      ?>
+      <div class="form-group">
         <label for="type_of_bid">Type of bid:</label>
         <select class="form-control form-control-sm" name="type_of_bid" id="type_of_bid">
           <?php
@@ -42,6 +64,11 @@
         <label for="address">Address:</label>
         <textarea class="form-control form-control-sm" rows="5" placeholder="Enter address ..." id="address" name="address"><?php echo $quote->obtener_address(); ?></textarea>
         <input type="hidden" name="address_original" value="<?php echo $quote->obtener_address(); ?>">
+      </div>
+      <div class="form-group">
+        <label for="ship_to">Ship to:</label>
+        <textarea class="form-control form-control-sm" rows="5" placeholder="Enter ship to ..." id="ship_to" name="ship_to"><?php echo $quote->obtener_ship_to(); ?></textarea>
+        <input type="hidden" name="ship_to_original" value="<?php echo $quote->obtener_ship_to(); ?>">
       </div>
       <div class="form-group">
         <label for="ship_via">Ship via:</label>
