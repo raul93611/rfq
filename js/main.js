@@ -195,9 +195,30 @@ $(document).ready(function () {
     'order': [[3, "desc"]]
   });
 
+  // $('#tabla_quotes').DataTable({
+  //   'pageLength': 50,
+  //   'order': [[4, "desc"]]
+  // });
   $('#tabla_quotes').DataTable({
-    'pageLength': 50,
-    'order': [[4, "desc"]]
+    "processing": true,
+    "serverSide": true,
+    "ajax": {
+      "url": '/rfq/quote/created_table',
+      "type": "POST",
+      "data": {
+        "channel": $('#tabla_quotes').data('channel'),
+      }
+    },
+    "columns": [
+      { "data": "id" },
+      { "data": "designated_user" },
+      { "data": "type_of_bid" },
+      { "data": "issue_date" },
+      { "data": "end_date" },
+      { "data": "code" },
+      { "data": "rfp" },
+      { "data": "options" },
+    ]
   });
 
   $('#tabla_usuarios').DataTable({

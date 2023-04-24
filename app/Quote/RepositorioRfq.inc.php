@@ -136,45 +136,11 @@ class RepositorioRfq {
     return $quotes;
   }
 
-  public static function get_all_submitted_quotes_between_dates($conexion, $date_from, $date_to) {
-    $quotes = [];
-    if (isset($conexion)) {
-      try {
-        $sql = 'SELECT * FROM rfq WHERE deleted = 0 AND status = 1 AND completado = 1 AND fecha_submitted BETWEEN :date_from AND :date_to';
-        $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':date_from', $date_from, PDO::PARAM_STR);
-        $sentencia->bindParam(':date_to', $date_to, PDO::PARAM_STR);
-        $sentencia->execute();
-        $quotes = self::array_to_object($sentencia);
-      } catch (PDOException $ex) {
-        print 'ERROR:' . $ex->getMessage() . '<br>';
-      }
-    }
-    return $quotes;
-  }
-
-  public static function get_all_award_quotes_between_dates($conexion, $date_from, $date_to) {
-    $quotes = [];
-    if (isset($conexion)) {
-      try {
-        $sql = 'SELECT * FROM rfq WHERE deleted = 0 AND award =1 AND status = 1 AND completado = 1 AND fecha_award BETWEEN :date_from AND :date_to';
-        $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':date_from', $date_from, PDO::PARAM_STR);
-        $sentencia->bindParam(':date_to', $date_to, PDO::PARAM_STR);
-        $sentencia->execute();
-        $quotes = self::array_to_object($sentencia);
-      } catch (PDOException $ex) {
-        print 'ERROR:' . $ex->getMessage() . '<br>';
-      }
-    }
-    return $quotes;
-  }
-
-  public static function obtener_cotizaciones_por_canal_usuario_cargo($conexion, $canal) {
+  public static function obtener_cotizaciones_por_canal($conexion, $canal) {
     $cotizaciones = [];
     if (isset($conexion)) {
       try {
-        $sql = "SELECT * FROM rfq WHERE deleted = 0 AND canal = :canal AND completado = 0 AND status = 0 AND award = 0 AND (comments = 'Working on it' OR comments = 'No comments' OR comments = '') ORDER BY id DESC";
+        $sql = "SELECT id,  FROM rfq WHERE deleted = 0 AND canal = :canal AND completado = 0 AND status = 0 AND award = 0 AND (comments = 'Working on it' OR comments = 'No comments' OR comments = '') ORDER BY id DESC";
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
         $sentencia->execute();
@@ -225,11 +191,11 @@ class RepositorioRfq {
 
   public static function escribir_cotizaciones_por_canal_usuario_cargo($canal) {
     Conexion::abrir_conexion();
-    $cotizaciones = self::obtener_cotizaciones_por_canal_usuario_cargo(Conexion::obtener_conexion(), $canal);
+    $cotizaciones = self::obtener_cotizaciones_por_canal_(Conexion::obtener_conexion(), $canal);
     Conexion::cerrar_conexion();
     if (count($cotizaciones)) {
     ?>
-      <table id="tabla_quotes" class="table table-bordered table-hover">
+      <table id="tabla_quotes" data-channel="<?php echo $canal; ?>" class="table table-bordered table-hover">
         <thead>
           <tr>
             <th>PROPOSAL</th>
@@ -243,11 +209,11 @@ class RepositorioRfq {
           </tr>
         </thead>
         <tbody>
-          <?php
+          <!-- <?php
           foreach ($cotizaciones as $cotizacion) {
             self::escribir_cotizacion($cotizacion);
           }
-          ?>
+          ?> -->
         </tbody>
       </table>
     <?php
