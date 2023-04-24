@@ -287,4 +287,8 @@ define('GSA', [
   'open_market' => 'Open Market',
   'gsa_price' => 'GSA Price'
 ]);
+define('CLIENT_PAYMENT_TERMS', [
+  'net_30' => 'Net 30',
+  'cc' => 'CC'
+]);
 ?>

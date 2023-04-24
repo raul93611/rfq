@@ -1,7 +1,6 @@
 <?php
 include_once 'vendor/autoload.php';
-$check = '<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 20 20"><path fill="#00b300" d="M7.87 15.116l-4.914-4.914 1.767-1.767 3.147 3.146 7.779-7.779 1.767 1.768z"/></svg>';
-$times = '<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 20 20"><path fill="#ff0000" d="M15.9 2.6l1.5 1.5L11.5 10l5.9 5.9-1.5 1.5L10 11.5l-5.9 5.9-1.5-1.5L8.5 10 2.6 4.1l1.5-1.5L10 8.5l5.9-5.9z"/></svg>';
+$checkbox = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><rect width="20" height="20" fill="none" stroke="#000000" stroke-width="2"/></svg>';
 Conexion::abrir_conexion();
 $quote = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
 $usuario_designado = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), $quote->obtener_usuario_designado());
@@ -36,6 +35,9 @@ try {
   th{
     color: #004A97;
     background-color: #DEE8F2;
+  }
+  .blue{
+    color: #004A97;
   }
   #tabla th,#tabla td {
     border: 1px solid #DEE8F2;
@@ -99,44 +101,119 @@ try {
   <br>
   <table id="tabla" style="width:100%">
     <tr>
-      <td>
+      <td style="vertical-align:top;">
         <h3>FILE DOCUMENT</h3><br>
         ';
   foreach (FILE_DOCUMENT as $key => $file_document) {
-    $html .= (in_array($key, $quote->getFileDocument()) ? $check :  $times) . ' ' . $file_document . '<br>';
+    $html .= $checkbox . ' ' . $file_document . '<br>';
   }
   $html .= '<br><h3>ACCOUNTING</h3><br>';
   foreach (ACCOUNTING_CHECKBOX as $key => $accounting) {
-    $html .= (in_array($key, $quote->getAccounting()) ? $check :  $times) . ' ' . $accounting . '<br>';
+    $html .= $checkbox . ' ' . $accounting . '<br>';
   }
   $html .= '</td>
-      <td style="width:60%">
-      <b>Set Aside:</b> ' . $quote->getSetSide() . '<br>' .
-    '<b>Channel:</b> ' . $quote->obtener_canal() . '<br>' .
-    '<b>GSA:</b> ' . $quote->getGsa() . '<br>' .
-    '<b>Contract number:</b> ' . $quote->obtener_contract_number() . '<br>' .
-    '<b>Sales Rep:</b> ' . $usuario_designado->obtener_nombres() . ' ' . $usuario_designado->obtener_apellidos() . '<br>' .
-    '<b>RFQ/RFP Number:</b> ' . $quote->obtener_email_code() . '<br>' .
-    '<b>Award Date:</b> ' . $quote->obtener_fecha_award() . '<br>' .
-    '<b>POC:</b> ' . $quote->getPoc() . '<br>' .
-    '<b>CO:</b> ' . $quote->getCo() . '<br>' .
-    '<b>Client:</b> ' . $quote->obtener_client() . '<br>' .
-    '<b>Contract Amount:</b> $' . $quote->obtener_quote_total_price() . '<br>' .
-    '<b>RFQ Amount:</b> $' . $quote->obtener_total_price() . '<br>' .
-    '<b>RFP Amount:</b> $' . $quote->getTotalQuoteServices() . '<br>' .
-    '<b>Estimated Delivery Date:</b> ' . $quote->getEstimatedDeliveryDate() . '<br>' .
-    '<b>Payment Terms:</b> ' . $quote->obtener_payment_terms() . '<br>' .
-    '<b>Estimated Profit:</b> ' . $quote->obtener_re_quote_profit() . ' / ' . number_format($quote->obtener_re_quote_profit_percentage(), 2) . ' %' . '<br>' .
-    '<b>Shipping Address:</b> ' . SHIPPING_ADDRESS[$quote->getShippingAddress()] . '<br>' .
-    '<b>City:</b> ' . $quote->obtener_city() . '<br>' .
-    '<b>Zip Code:</b> ' . $quote->obtener_zip_code() . '<br>' .
-    '<b>State:</b> ' . $quote->obtener_state() . '<br>' .
-    '<b>Ship to:</b> ' . $quote->obtener_ship_to() . '<br>' .
-    '<b>Special Requirements/Risk/Extra Comments:</b> ' . $quote->getSpecialRequirements() . '<br>' .
-
-    '</td>
+      <td style="width:70%;padding: 0;margin: 0;vertical-align:top;">
+      <table border=0 width="100%">
+        <tr>
+          <td><b>Set Aside:</b></td>
+          <td>' . $quote->getSetSide() . '</td>
+        </tr>
+        <tr>
+          <td><b>Channel:</b></td>
+          <td>' . $quote->obtener_canal() . '</td>
+        </tr>
+        <tr>
+          <td><b>GSA:</b></td>
+          <td>' . GSA[$quote->getGsa()] . '</td>
+        </tr>
+        <tr>
+          <td><b>Contract number:</b></td>
+          <td>' . $quote->obtener_contract_number() . '</td>
+        </tr>
+        <tr>
+          <td><b>Sales Rep:</b></td>
+          <td>' . $usuario_designado->obtener_nombres() . ' ' . $usuario_designado->obtener_apellidos() . '</td>
+        </tr>
+        <tr>
+          <td><b>RFQ/RFP Number:</b></td>
+          <td>' . $quote->obtener_email_code() . '</td>
+        </tr>
+        <tr>
+          <td><b>Award Date:</b></td>
+          <td>' . $quote->obtener_fecha_award() . '</td>
+        </tr>
+        <tr>
+          <td><b>POC:</b></td>
+          <td>' . $quote->getPoc() . '</td>
+        </tr>
+        <tr>
+          <td><b>CO:</b></td>
+          <td>' . $quote->getCo() . '</td>
+        </tr>
+        <tr>
+          <td><b>Client:</b></td>
+          <td>' . $quote->obtener_client() . '</td>
+        </tr>
+        <tr>
+          <td><b>Contract Amount:</b></td>
+          <td>$ ' . $quote->obtener_quote_total_price() . '</td>
+        </tr>
+        <tr>
+          <td><b>RFQ Amount:</b></td>
+          <td>$ ' . $quote->obtener_total_price() . '</td>
+        </tr>
+        <tr>
+          <td><b>RFP Amount:</b></td>
+          <td>$ ' . $quote->getTotalQuoteServices() . '</td>
+        </tr>
+        <tr>
+          <td><b>RFP Amount:</b></td>
+          <td>$ ' . $quote->getTotalQuoteServices() . '</td>
+        </tr>
+        <tr>
+          <td><b>Estimated Delivery Date:</b></td>
+          <td>' . (!empty($quote->getEstimatedDeliveryDate()) ? RepositorioComment::mysql_date_to_english_format($quote->getEstimatedDeliveryDate()) : '') . '</td>
+        </tr>
+        <tr>
+          <td><b>Client Payment Terms:</b></td>
+          <td>' . CLIENT_PAYMENT_TERMS[$quote->getClientPaymentTerms()] . '</td>
+        </tr>
+        <tr>
+          <td><b>Estimated Profit:</b></td>
+          <td>$' . $quote->obtener_re_quote_profit() . ' / ' . number_format($quote->obtener_re_quote_profit_percentage(), 2) . ' %' . '</td>
+        </tr>
+        <tr>
+          <td><b>Shipping Address:</b></td>
+          <td>' . SHIPPING_ADDRESS[$quote->getShippingAddress()] . '</td>
+        </tr>
+        <tr>
+          <td><b>City:</b></td>
+          <td>' . $quote->obtener_city() . '</td>
+        </tr>
+        <tr>
+          <td><b>Zip Code:</b></td>
+          <td>' . $quote->obtener_zip_code() . '</td>
+        </tr>
+        <tr>
+          <td><b>State:</b></td>
+          <td>' . $quote->obtener_state() . '</td>
+        </tr>
+        <tr>
+          <td><b>Ship to:</b></td>
+          <td>' . $quote->obtener_ship_to() . '</td>
+        </tr>
+        <tr>
+          <td><b>Special Requirements/Risk/Extra Comments:</b></td>
+          <td>' . $quote->getSpecialRequirements() . '</td>
+        </tr>
+      </table>
+      </td>
     </tr>
   </table>';
+  $html .= '<br><br>';
+  $html .= '<b class="blue">ACCEPTED BY:</b>';
+  $html .= '<br><br>';
+  $html .= '<b class="blue">DATE-SIGNATURE:</b>';
   $html .= '</body></html>';
   $mpdf->WriteHTML($html);
   $mpdf->Output($_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $quote->obtener_id() . '/' . preg_replace('/[^a-z0-9-_\-\.]/i', '_', $quote->obtener_email_code()) . '(checklist)' . '.pdf', 'F');

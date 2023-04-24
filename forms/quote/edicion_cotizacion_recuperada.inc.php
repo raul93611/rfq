@@ -1,7 +1,49 @@
 <input type="hidden" name="id_rfq" value="<?php echo $cotizacion_recuperada->obtener_id(); ?>">
 <div class="card-body">
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-4">
+      <b>Contract Number:</b>
+    </div>
+    <div class="col-md-8">
+      <?php echo $cotizacion_recuperada->obtener_contract_number(); ?>
+    </div>
+    <div class="col-md-4">
+      <b>Code:</b>
+    </div>
+    <div class="col-md-8">
+      <?php echo $cotizacion_recuperada->obtener_email_code(); ?>
+    </div>
+    <div class="col-md-4">
+      <b>Channel:</b>
+    </div>
+    <div class="col-md-8">
+      <?php echo $cotizacion_recuperada->obtener_canal(); ?>
+    </div>
+    <div class="col-md-4">
+      <b>Designated User:</b>
+    </div>
+    <div class="col-md-8">
+      <?php echo $usuario_designado->obtener_nombres() . ' ' . $usuario_designado->obtener_apellidos(); ?>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <b>Ship To:</b>
+    </div>
+    <div class="col-md-8">
+      <?php echo $cotizacion_recuperada->obtener_ship_to(); ?>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <b>Address:</b>
+    </div>
+    <div class="col-md-8">
+      <?php echo $cotizacion_recuperada->obtener_address();; ?>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12 mt-2">
       <a href="<?php echo CHECKLIST . $cotizacion_recuperada->obtener_id(); ?>" id="" class="btn btn-primary"><i class="fas fa-clipboard-list"></i> Checklist</a>
     </div>
     <div class="col-md-12 mt-2">

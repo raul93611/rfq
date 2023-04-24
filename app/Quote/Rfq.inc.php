@@ -61,6 +61,7 @@ class Rfq {
   private $file_document;
   private $accounting;
   private $gsa;
+  private $client_payment_terms;
 
   public function __construct(
     $id,
@@ -123,7 +124,8 @@ class Rfq {
     $special_requirements,
     $file_document,
     $accounting,
-    $gsa
+    $gsa,
+    $client_payment_terms
   ) {
     $this->id = $id;
     $this->id_usuario = $id_usuario;
@@ -186,6 +188,7 @@ class Rfq {
     $this->file_document = $file_document;
     $this->accounting = $accounting;
     $this->gsa = $gsa;
+    $this->client_payment_terms = $client_payment_terms;
   }
 
   public function obtener_id() {
@@ -552,5 +555,9 @@ class Rfq {
 
   public function getGsa() {
     return $this->gsa;
+  }
+
+  public function getClientPaymentTerms() {
+    return $this->client_payment_terms;
   }
 }

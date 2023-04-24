@@ -63,7 +63,7 @@
           <?php
           foreach (GSA as $key => $gsa) {
           ?>
-            <option value="<?php echo $gsa; ?>" <?php echo $quote->getGsa() == $gsa ? 'selected' : ''; ?>><?php echo $gsa; ?></option>
+            <option value="<?php echo $key; ?>" <?php echo $quote->getGsa() == $key ? 'selected' : ''; ?>><?php echo $gsa; ?></option>
           <?php
           }
           ?>
@@ -116,8 +116,16 @@
         <input type="text" class="date form-control form-control-sm" id="estimated_delivery_date" name="estimated_delivery_date" value="<?php echo !empty($quote->getEstimatedDeliveryDate()) ? RepositorioComment::mysql_date_to_english_format($quote->getEstimatedDeliveryDate()) : ''; ?>">
       </div>
       <div class="form-group">
-        <label>Payment Terms:</label>
-        <input type="text" class="form-control form-control-sm" value="<?php echo $quote->obtener_payment_terms(); ?>" disabled>
+        <label for="client_payment_terms">Client Payment Terms:</label>
+        <select id="client_payment_terms" class="form-control form-control-sm" name="client_payment_terms">
+          <?php
+          foreach (CLIENT_PAYMENT_TERMS as $key => $client_payment_terms) {
+          ?>
+            <option value="<?php echo $key; ?>" <?php echo $quote->getClientPaymentTerms() == $key ? 'selected' : ''; ?>><?php echo $client_payment_terms; ?></option>
+          <?php
+          }
+          ?>
+        </select>
       </div>
       <div class="form-group">
         <label>Estimated Profit:</label>

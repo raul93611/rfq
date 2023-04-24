@@ -74,6 +74,7 @@ CREATE TABLE rfq(
   file_document VARCHAR(255),
   accounting VARCHAR(255),
   gsa VARCHAR(255),
+  client_payment_terms VARCHAR(255),
   PRIMARY KEY(id),
   FOREIGN KEY(id_usuario) REFERENCES usuarios(id) ON UPDATE CASCADE ON DELETE RESTRICT
 );

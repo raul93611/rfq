@@ -6,6 +6,7 @@ Conexion::abrir_conexion();
 $cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
 $re_quote = ReQuoteRepository::get_re_quote_by_id_rfq(Conexion::obtener_conexion(), $id_rfq);
 $total_services = ServiceRepository::get_total(Conexion::obtener_conexion(), $id_rfq);
+$usuario_designado = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), $cotizacion_recuperada->obtener_usuario_designado());
 Conexion::cerrar_conexion();
 if(is_null($cotizacion_recuperada)){
   Redireccion::redirigir1(ERROR);
