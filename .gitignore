@@ -1,5 +1,6 @@
 temp/
 documentos/
+employee_docs/
 config.inc.php
 LICENSE
 vendor/
