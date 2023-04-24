@@ -2,45 +2,59 @@
 <div class="card-body">
   <div class="row">
     <div class="col-md-4">
-      <b>Contract Number:</b>
+      <div class="row">
+        <div class="col-md-6">
+          <b>Contract Number:</b>
+        </div>
+        <div class="col-md-6">
+          <?php echo $cotizacion_recuperada->obtener_contract_number(); ?>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <b>Code:</b>
+        </div>
+        <div class="col-md-6">
+          <?php echo $cotizacion_recuperada->obtener_email_code(); ?>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <b>Channel:</b>
+        </div>
+        <div class="col-md-6">
+          <?php echo $cotizacion_recuperada->obtener_canal(); ?>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <b>Designated User:</b>
+        </div>
+        <div class="col-md-6">
+          <?php echo $usuario_designado->obtener_nombres() . ' ' . $usuario_designado->obtener_apellidos(); ?>
+        </div>
+      </div>
     </div>
     <div class="col-md-8">
-      <?php echo $cotizacion_recuperada->obtener_contract_number(); ?>
-    </div>
-    <div class="col-md-4">
-      <b>Code:</b>
-    </div>
-    <div class="col-md-8">
-      <?php echo $cotizacion_recuperada->obtener_email_code(); ?>
-    </div>
-    <div class="col-md-4">
-      <b>Channel:</b>
-    </div>
-    <div class="col-md-8">
-      <?php echo $cotizacion_recuperada->obtener_canal(); ?>
-    </div>
-    <div class="col-md-4">
-      <b>Designated User:</b>
-    </div>
-    <div class="col-md-8">
-      <?php echo $usuario_designado->obtener_nombres() . ' ' . $usuario_designado->obtener_apellidos(); ?>
+      <div class="row">
+        <div class="col-md-4">
+          <b>Ship To:</b>
+        </div>
+        <div class="col-md-8">
+          <?php echo nl2br($cotizacion_recuperada->obtener_ship_to()); ?>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <b>Address:</b>
+        </div>
+        <div class="col-md-8">
+          <?php echo nl2br($cotizacion_recuperada->obtener_address()); ?>
+        </div>
+      </div>
     </div>
   </div>
   <div class="row">
-    <div class="col-md-4">
-      <b>Ship To:</b>
-    </div>
-    <div class="col-md-8">
-      <?php echo nl2br($cotizacion_recuperada->obtener_ship_to()); ?>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-4">
-      <b>Address:</b>
-    </div>
-    <div class="col-md-8">
-      <?php echo nl2br($cotizacion_recuperada->obtener_address()); ?>
-    </div>
   </div>
   <div class="row">
     <div class="col-md-12 mt-2">

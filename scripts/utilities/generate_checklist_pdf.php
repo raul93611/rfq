@@ -171,10 +171,6 @@ try {
           <td>$ ' . $quote->getTotalQuoteServices() . '</td>
         </tr>
         <tr>
-          <td><b>RFP Amount:</b></td>
-          <td>$ ' . $quote->getTotalQuoteServices() . '</td>
-        </tr>
-        <tr>
           <td><b>Estimated Delivery Date:</b></td>
           <td>' . (!empty($quote->getEstimatedDeliveryDate()) ? RepositorioComment::mysql_date_to_english_format($quote->getEstimatedDeliveryDate()) : '') . '</td>
         </tr>
