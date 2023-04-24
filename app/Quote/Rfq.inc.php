@@ -412,6 +412,13 @@ class Rfq {
     return $re_quote->get_total_cost() + $total_services;
   }
 
+  public function obtener_re_quote_total_cost_rfq() {
+    Conexion::abrir_conexion();
+    $re_quote = ReQuoteRepository::get_re_quote_by_id_rfq(Conexion::obtener_conexion(), $this->id);
+    Conexion::cerrar_conexion();
+    return $re_quote->get_total_cost();
+  }
+
   public function obtener_re_quote_profit() {
     return $this->obtener_quote_total_price() - $this->obtener_re_quote_total_cost();
   }
@@ -419,6 +426,18 @@ class Rfq {
   public function obtener_re_quote_profit_percentage() {
     if ($this->obtener_quote_total_price()) {
       return 100 * ($this->obtener_re_quote_profit() / $this->obtener_quote_total_price());
+    } else {
+      return 0;
+    }
+  }
+
+  public function obtener_re_quote_rfq_profit() {
+    return $this->obtener_total_price() - $this->obtener_re_quote_profit();
+  }
+
+  public function obtener_re_quote_rfq_profit_percentage() {
+    if ($this->obtener_total_price()) {
+      return 100 * ($this->obtener_re_quote_rfq_profit() / $this->obtener_total_price());
     } else {
       return 0;
     }

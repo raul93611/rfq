@@ -128,8 +128,8 @@
         </select>
       </div>
       <div class="form-group">
-        <label>Estimated Profit:</label>
-        <input type="text" class="form-control form-control-sm" value="<?php echo '$ ' . $quote->obtener_re_quote_profit() . ' / ' . number_format($quote->obtener_re_quote_profit_percentage(), 2) . ' %'; ?>" disabled>
+        <label>Estimated Profit (RFQ):</label>
+        <input type="text" class="form-control form-control-sm" value="<?php echo '$ ' . $quote->obtener_re_quote_rfq_profit() . ' / ' . number_format($quote->obtener_re_quote_rfq_profit_percentage(), 2) . ' %'; ?>" disabled>
       </div>
       <div class="form-group">
         <label for="shipping_address">Shipping Address:</label>

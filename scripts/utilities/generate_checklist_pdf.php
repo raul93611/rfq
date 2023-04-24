@@ -183,8 +183,8 @@ try {
           <td>' . CLIENT_PAYMENT_TERMS[$quote->getClientPaymentTerms()] . '</td>
         </tr>
         <tr>
-          <td><b>Estimated Profit:</b></td>
-          <td>$' . $quote->obtener_re_quote_profit() . ' / ' . number_format($quote->obtener_re_quote_profit_percentage(), 2) . ' %' . '</td>
+          <td><b>Estimated Profit (RFQ):</b></td>
+          <td>$' . $quote->obtener_re_quote_rfq_profit() . ' / ' . number_format($quote->obtener_re_quote_rfq_profit_percentage(), 2) . ' %' . '</td>
         </tr>
         <tr>
           <td><b>Shipping Address:</b></td>
