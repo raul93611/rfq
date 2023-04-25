@@ -1,54 +1,54 @@
 <input type="hidden" name="id_rfq" value="<?php echo $cotizacion_recuperada->obtener_id(); ?>">
 <div class="card-body">
   <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
       <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-4">
           <b>Contract Number:</b>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-8">
           <?php echo $cotizacion_recuperada->obtener_contract_number(); ?>
         </div>
       </div>
       <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-4">
           <b>Code:</b>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-8">
           <?php echo $cotizacion_recuperada->obtener_email_code(); ?>
         </div>
       </div>
       <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-4">
           <b>Channel:</b>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-8">
           <?php echo $cotizacion_recuperada->obtener_canal(); ?>
         </div>
       </div>
       <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-4">
           <b>Designated User:</b>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-8">
           <?php echo $usuario_designado->obtener_nombres() . ' ' . $usuario_designado->obtener_apellidos(); ?>
         </div>
       </div>
     </div>
-    <div class="col-md-8">
+    <div class="col-md-6">
       <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-3">
           <b>Ship To:</b>
         </div>
-        <div class="col-md-8">
+        <div class="col-md-9">
           <?php echo nl2br($cotizacion_recuperada->obtener_ship_to()); ?>
         </div>
       </div>
       <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-3">
           <b>Address:</b>
         </div>
-        <div class="col-md-8">
+        <div class="col-md-9">
           <?php echo nl2br($cotizacion_recuperada->obtener_address()); ?>
         </div>
       </div>
