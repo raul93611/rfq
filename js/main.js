@@ -211,13 +211,11 @@ $(document).ready(function () {
     },
     "columns": [
       { "data": "id" },
-      { "data": "designated_user" },
+      { "data": "usuario_designado" },
       { "data": "type_of_bid" },
       { "data": "issue_date" },
       { "data": "end_date" },
-      { "data": "code" },
-      { "data": "rfp" },
-      { "data": "options" },
+      { "data": "email_code" }
     ]
   });
 

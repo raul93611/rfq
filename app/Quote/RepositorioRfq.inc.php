@@ -136,20 +136,60 @@ class RepositorioRfq {
     return $quotes;
   }
 
-  public static function obtener_cotizaciones_por_canal($conexion, $canal) {
-    $cotizaciones = [];
+  public static function obtener_cotizaciones_por_canal($conexion, $start, $length, $search, $sort_column_index, $sort_direction, $canal) {
+    $data = [];
+    $search = '%' . $search . '%';
+    $sort_column = $sort_column_index == 0 ? 'id' : ($sort_column_index == 1 ? 'usuario_designado' : ($sort_column_index == 2 ? 'type_of_bid' : ($sort_column_index == 3 ? 'issue_date' : ($sort_column_index == 4 ? 'end_date' : 'code'))));
     if (isset($conexion)) {
       try {
-        $sql = "SELECT id,  FROM rfq WHERE deleted = 0 AND canal = :canal AND completado = 0 AND status = 0 AND award = 0 AND (comments = 'Working on it' OR comments = 'No comments' OR comments = '') ORDER BY id DESC";
+        $sql = 'SELECT id, 
+        usuario_designado, 
+        type_of_bid, 
+        issue_date, 
+        end_date, 
+        email_code 
+        FROM rfq 
+        WHERE deleted = 0 AND 
+        canal = :canal AND 
+        completado = 0 AND 
+        status = 0 AND 
+        award = 0 
+        AND (comments = "Working on it" OR comments = "No comments" OR comments = "") AND 
+        (id LIKE :search OR type_of_bid LIKE :search) 
+        ORDER BY ' . $sort_column . ' ' . $sort_direction . ' LIMIT ' . $start . ', ' . $length;
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
+        $sentencia->bindParam(':search', $search, PDO::PARAM_STR);
         $sentencia->execute();
-        $cotizaciones = self::array_to_object($sentencia);
+        while ($row = $sentencia->fetch(PDO::FETCH_ASSOC)) {
+          $data[] = $row;
+        }
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
-    return $cotizaciones;
+    return $data;
+  }
+
+  public static function getTotalQuotesByChannelCount($conexion, $canal) {
+    if (isset($conexion)) {
+      try {
+        $sql = 'SELECT COUNT(*)
+        FROM rfq 
+        WHERE deleted = 0 AND 
+        canal = :canal AND 
+        completado = 0 AND 
+        status = 0 AND 
+        award = 0 
+        AND (comments = "Working on it" OR comments = "No comments" OR comments = "")';
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
+        $sentencia->execute();
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $sentencia->fetchColumn();
   }
 
   public static function escribir_cotizacion($cotizacion) {
@@ -186,38 +226,34 @@ class RepositorioRfq {
         <a href="<?php echo DELETE_QUOTE . '/' . $cotizacion->obtener_id(); ?>" class="delete_quote_button text-danger"><i class="fa fa-times"></i> Delete</a>
       </td>
     </tr>
-    <?php
+  <?php
   }
 
-  public static function escribir_cotizaciones_por_canal_usuario_cargo($canal) {
-    Conexion::abrir_conexion();
-    $cotizaciones = self::obtener_cotizaciones_por_canal_(Conexion::obtener_conexion(), $canal);
-    Conexion::cerrar_conexion();
-    if (count($cotizaciones)) {
-    ?>
-      <table id="tabla_quotes" data-channel="<?php echo $canal; ?>" class="table table-bordered table-hover">
-        <thead>
-          <tr>
-            <th>PROPOSAL</th>
-            <th>DESIGNATED USER</th>
-            <th>TYPE OF BID</th>
-            <th>ISSUE DATE</th>
-            <th>END DATE</th>
-            <th>CODE</th>
-            <th>RFP</th>
-            <th>OPTIONS</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- <?php
-          foreach ($cotizaciones as $cotizacion) {
-            self::escribir_cotizacion($cotizacion);
-          }
-          ?> -->
-        </tbody>
-      </table>
-    <?php
-    }
+  public static function escribir_cotizaciones_por_canal($canal) {
+    // Conexion::abrir_conexion();
+    // $cotizaciones = self::obtener_cotizaciones_por_canal(Conexion::obtener_conexion(), $canal);
+    // Conexion::cerrar_conexion();
+    // if (count($cotizaciones)) {
+  ?>
+    <table id="tabla_quotes" data-channel="<?php echo $canal; ?>" class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>PROPOSAL</th>
+          <th>DESIGNATED USER</th>
+          <th>TYPE OF BID</th>
+          <th>ISSUE DATE</th>
+          <th>END DATE</th>
+          <th>CODE</th>
+          <!-- <th>RFP</th>
+            <th>OPTIONS</th> -->
+        </tr>
+      </thead>
+      <tbody>
+
+      </tbody>
+    </table>
+  <?php
+    // }
   }
 
   public static function obtener_cotizacion_por_id($conexion, $id_rfq) {
@@ -560,7 +596,7 @@ class RepositorioRfq {
     }
     $partes_fecha_completado = explode('-', $cotizacion->obtener_fecha_completado());
     $fecha_completado = $partes_fecha_completado[1] . '/' . $partes_fecha_completado[2] . '/' . $partes_fecha_completado[0];
-    ?>
+  ?>
     <tr <?php if ($cotizacion->obtener_comments() == 'Working on it') {
           echo 'class="waiting_for"';
         } ?>>

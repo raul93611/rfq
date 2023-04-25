@@ -24,7 +24,7 @@ $printable_channel = Input::printable_channel($channel);
             </div>
             <div class="card-body table-responsive">
               <?php
-              RepositorioRfq::escribir_cotizaciones_por_canal_usuario_cargo($channel);
+              RepositorioRfq::escribir_cotizaciones_por_canal($channel);
               ?>
             </div>
           </div>
