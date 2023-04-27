@@ -344,7 +344,6 @@ class RepositorioRfq {
   public static function save_checklist(
     $conexion,
     $ship_to,
-    $comments,
     $designated_user,
     $email_code,
     $canal,
@@ -370,7 +369,6 @@ class RepositorioRfq {
       try {
         $sql = "UPDATE rfq SET 
         ship_to = :ship_to, 
-        comments = :comments, 
         usuario_designado = :usuario_designado, 
         email_code = :email_code, 
         canal = :canal, 
@@ -393,7 +391,6 @@ class RepositorioRfq {
         ";
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindParam(':usuario_designado', $designated_user, PDO::PARAM_STR);
-        $sentencia->bindParam(':comments', $comments, PDO::PARAM_STR);
         $sentencia->bindParam(':ship_to', $ship_to, PDO::PARAM_STR);
         $sentencia->bindParam(':email_code', $email_code, PDO::PARAM_STR);
         $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
@@ -437,6 +434,7 @@ class RepositorioRfq {
     $email_code,
     $channel,
     $ship_to,
+    $comments,
     $id_rfq
   ) {
     $cotizacion_editada = false;
@@ -453,7 +451,8 @@ class RepositorioRfq {
         usuario_designado = :usuario_designado, 
         email_code = :email_code, 
         canal = :canal, 
-        ship_to = :ship_to 
+        ship_to = :ship_to, 
+        comments = :comments 
         WHERE id = :id_rfq
         ";
         $sentencia = $conexion->prepare($sql);
@@ -468,6 +467,7 @@ class RepositorioRfq {
         $sentencia->bindParam(':email_code', $email_code, PDO::PARAM_STR);
         $sentencia->bindParam(':canal', $channel, PDO::PARAM_STR);
         $sentencia->bindParam(':ship_to', $ship_to, PDO::PARAM_STR);
+        $sentencia->bindParam(':comments', $comments, PDO::PARAM_STR);
         $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia->execute();
         if ($sentencia) {

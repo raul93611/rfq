@@ -18,6 +18,7 @@ if (isset($_POST['save_information'])) {
     $_POST['email_code'],
     $_POST['canal'],
     htmlspecialchars($_POST['ship_to']),
+    $_POST['comments'],
     $_POST['id_rfq']
   );
   AuditTrailRepository::information_events(
@@ -42,6 +43,8 @@ if (isset($_POST['save_information'])) {
     $_POST['canal_original'],
     $_POST['ship_to'],
     $_POST['ship_to_original'],
+    $_POST['comments'],
+    $_POST['comments_original'],
     $_POST['id_rfq']
   );
   Conexion::cerrar_conexion();

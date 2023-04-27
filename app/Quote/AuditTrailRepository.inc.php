@@ -98,8 +98,6 @@ class AuditTrailRepository {
     $canal_original,
     $designated_user,
     $designated_user_original,
-    $comments,
-    $comments_original,
     $ship_to,
     $ship_to_original,
     $id_rfq
@@ -115,9 +113,6 @@ class AuditTrailRepository {
     }
     if ($designated_user != $designated_user_original) {
       self::create_audit_trail_modified($connection, 'Designated User', $designated_user, $designated_user_original, $id_rfq);
-    }
-    if ($comments != $comments_original) {
-      self::create_audit_trail_modified($connection, 'Comments', $comments, $comments_original, $id_rfq);
     }
     if ($ship_to != $ship_to_original) {
       self::create_audit_trail_modified($connection, 'Ship To', $ship_to, $ship_to_original, $id_rfq);
@@ -146,6 +141,8 @@ class AuditTrailRepository {
     $canal_original,
     $ship_to,
     $ship_to_original,
+    $comments,
+    $comments_original,
     $id_rfq
   ) {
     if ($type_of_bid != $type_of_bid_original) {
@@ -177,6 +174,9 @@ class AuditTrailRepository {
     }
     if ($ship_to != $ship_to_original) {
       self::create_audit_trail_modified($connection, 'Ship To', $ship_to, $ship_to_original, $id_rfq);
+    }
+    if ($comments != $comments_original) {
+      self::create_audit_trail_modified($connection, 'Comments', $comments, $comments_original, $id_rfq);
     }
   }
 

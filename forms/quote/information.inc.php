@@ -61,6 +61,22 @@
         <input type="hidden" name="expiration_date_original" value="<?php echo $quote->obtener_expiration_date() ? RepositorioComment::mysql_date_to_english_format($quote->obtener_expiration_date()) : ''; ?>">
       </div>
       <div class="form-group">
+        <label for="comments">Comments:</label>
+        <select id="comments" class="form-control form-control-sm" name="comments">
+          <option <?php echo $quote->obtener_comments() == 'No comments' ? 'selected' : ''; ?>>No comments</option>
+          <option <?php echo $quote->obtener_comments() == 'QuickBooks' ? 'selected' : ''; ?>>QuickBooks</option>
+          <option <?php echo $quote->obtener_comments() == 'No Bid' ? 'selected' : ''; ?>>No Bid</option>
+          <option <?php echo $quote->obtener_comments() == 'Manufacturer in the Bid' ? 'selected' : ''; ?>>Manufacturer in the Bid</option>
+          <option <?php echo $quote->obtener_comments() == 'Expired due date' ? 'selected' : ''; ?>>Expired due date</option>
+          <option <?php echo $quote->obtener_comments() == 'Supplier did not provide a quote' ? 'selected' : ''; ?>>Supplier did not provide a quote</option>
+          <option <?php echo $quote->obtener_comments() == 'Others' ? 'selected' : ''; ?>>Others</option>
+          <option <?php echo $quote->obtener_comments() == 'Not submitted' ? 'selected' : ''; ?>>Not submitted</option>
+          <option <?php echo $quote->obtener_comments() == 'Cancelled' ? 'selected' : ''; ?>>Cancelled</option>
+          <option <?php echo $quote->obtener_comments() == 'Working on it' ? 'selected' : ''; ?>>Working on it</option>
+        </select>
+        <input type="hidden" name="comments_original" value="<?php echo $quote->obtener_comments(); ?>">
+      </div>
+      <div class="form-group">
         <label for="address">Address:</label>
         <textarea class="form-control form-control-sm" rows="5" placeholder="Enter address ..." id="address" name="address"><?php echo $quote->obtener_address(); ?></textarea>
         <input type="hidden" name="address_original" value="<?php echo $quote->obtener_address(); ?>">

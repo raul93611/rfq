@@ -10,7 +10,6 @@ if (isset($_POST['save_checklist'])) {
   RepositorioRfq::save_checklist(
     Conexion::obtener_conexion(),
     htmlspecialchars($_POST['ship_to']),
-    $_POST['comments'],
     $usuario_designado,
     $_POST['email_code'],
     $_POST['canal'],
@@ -41,8 +40,6 @@ if (isset($_POST['save_checklist'])) {
     $_POST['canal_original'],
     $_POST['usuario_designado'],
     $_POST['designated_user_original'],
-    $_POST['comments'],
-    $_POST['comments_original'],
     $_POST['ship_to'],
     $_POST['ship_to_original'],
     $_POST['id_rfq']
