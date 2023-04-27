@@ -200,7 +200,7 @@ try {
         </tr>
         <tr>
           <td><b>Ship to:</b></td>
-          <td>' . $quote->obtener_ship_to() . '</td>
+          <td>' . nl2br($quote->obtener_ship_to()) . '</td>
         </tr>
         <tr>
           <td><b>Special Requirements/Risk/Extra Comments:</b></td>
