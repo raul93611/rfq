@@ -38,18 +38,19 @@
     <div class="col-md-6">
       <div class="row">
         <div class="col-md-3">
-          <b>Ship To:</b>
-        </div>
-        <div class="col-md-9">
-          <?php echo nl2br($cotizacion_recuperada->obtener_ship_to()); ?>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-3">
           <b>Address:</b>
         </div>
         <div class="col-md-9">
           <?php echo nl2br($cotizacion_recuperada->obtener_address()); ?>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-md-3">
+          <b>Ship To:</b>
+        </div>
+        <div class="col-md-9">
+          <?php echo nl2br($cotizacion_recuperada->obtener_ship_to()); ?>
         </div>
       </div>
     </div>
