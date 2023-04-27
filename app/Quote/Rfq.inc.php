@@ -506,7 +506,8 @@ class Rfq {
     Conexion::abrir_conexion();
     $re_quote_exists = ReQuoteRepository::re_quote_exists(Conexion::obtener_conexion(), $this->id);
     Conexion::cerrar_conexion();
-    return !$this->obtener_fullfillment() &&
+    return !$this->fullfillment &&
+      $this->award &&
       $re_quote_exists &&
       strlen($this->city) &&
       strlen($this->zip_code) &&
