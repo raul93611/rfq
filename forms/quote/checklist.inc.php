@@ -70,7 +70,7 @@
         </select>
       </div>
       <div class="form-group">
-        <label for="contract_number">Contract number:</label>
+        <label for="contract_number">Contract Number:</label>
         <input type="text" class="form-control form-control-sm" name="contract_number" value="<?php echo $quote->obtener_contract_number(); ?>">
         <input type="hidden" name="contract_number_original" value="<?php echo $quote->obtener_contract_number(); ?>">
       </div>

@@ -38,6 +38,7 @@ try {
   }
   .blue{
     color: #004A97;
+    background-color: #DEE8F2;
   }
   #tabla th,#tabla td {
     border: 1px solid #DEE8F2;
@@ -131,7 +132,7 @@ try {
           <td>' . GSA[$quote->getGsa()] . '</td>
         </tr>
         <tr>
-          <td><b>Contract number:</b></td>
+          <td class="blue"><b>Contract Number:</b></td>
           <td>' . $quote->obtener_contract_number() . '</td>
         </tr>
         <tr>
@@ -159,15 +160,15 @@ try {
           <td>' . $quote->obtener_client() . '</td>
         </tr>
         <tr>
-          <td><b>Contract Amount:</b></td>
+          <td class="blue"><b>Contract Amount:</b></td>
           <td>$ ' . $quote->obtener_quote_total_price() . '</td>
         </tr>
         <tr>
-          <td><b>RFQ Amount:</b></td>
+          <td class="blue"><b>RFQ Amount:</b></td>
           <td>$ ' . $quote->obtener_total_price() . '</td>
         </tr>
         <tr>
-          <td><b>RFP Amount:</b></td>
+          <td class="blue"><b>RFP Amount:</b></td>
           <td>$ ' . $quote->getTotalQuoteServices() . '</td>
         </tr>
         <tr>
@@ -179,7 +180,7 @@ try {
           <td>' . CLIENT_PAYMENT_TERMS[$quote->getClientPaymentTerms()] . '</td>
         </tr>
         <tr>
-          <td><b>Estimated Profit (RFQ):</b></td>
+          <td class="blue"><b>Estimated Profit (RFQ):</b></td>
           <td>$' . $quote->obtener_re_quote_rfq_profit() . ' / ' . number_format($quote->obtener_re_quote_rfq_profit_percentage(), 2) . ' %' . '</td>
         </tr>
         <tr>
