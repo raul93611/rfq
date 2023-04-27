@@ -514,7 +514,8 @@ class Rfq {
       strlen($this->set_side) &&
       strlen($this->poc) &&
       strlen($this->co) &&
-      strlen($this->estimated_delivery_date);
+      strlen($this->estimated_delivery_date) &&
+      strlen($this->file_document);
   }
 
   public function obtener_services_payment_term() {
