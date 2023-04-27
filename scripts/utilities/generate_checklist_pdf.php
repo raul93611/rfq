@@ -113,7 +113,7 @@ try {
   $html .= $checkbox . '________________<br>';
   $html .= '<br><h3>ACCOUNTING</h3><br>';
   foreach (ACCOUNTING_CHECKBOX as $key => $accounting) {
-    $html .= $checkbox . ' ' . $accounting . '<br>';
+    $html .= (in_array($key, $quote->getAccounting()) ? $check : $checkbox) . ' ' . $accounting . '<br>';
   }
   $html .= $checkbox . '________________<br>';
   $html .= $checkbox . '________________<br>';
