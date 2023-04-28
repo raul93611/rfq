@@ -275,6 +275,8 @@ define('ACCOUNTING_CHECKBOX', [
   'wawf' => 'WAWF',
   'ipp' => 'IPP',
   'dc_portal' => 'DC Portal',
+  'syncada' => 'Syncada',
+  'email' => 'E-mail',
 ]);
 define('SHIPPING_ADDRESS', [
   'apo' => 'APO',
