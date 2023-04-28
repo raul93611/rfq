@@ -187,9 +187,6 @@ $(document).ready(function () {
     autoApply: true
   });
   /************************************DATETABLES JQUERY PARA TABLAS**************************/
-  $.fn.dataTable.moment('MM/DD/YYYY');
-  $.fn.dataTable.moment('MM/DD/YYYY HH:mm');
-
   $('#tabla').DataTable({
     'pageLength': 50,
     'order': [[3, "desc"]]
@@ -210,8 +207,17 @@ $(document).ready(function () {
       }
     },
     "columns": [
-      { "data": "id" },
-      { "data": "usuario_designado" },
+      {
+        "data": "id",
+        "render": function (data, type, row, meta) {
+          if (type === 'display') {
+            return '<a href="/rfq/perfil/quote/editar_cotizacion/'+data+'">' + data + '</a>';
+          } else {
+            return data;
+          }
+        }
+      },
+      { "data": "nombre_usuario" },
       { "data": "type_of_bid" },
       { "data": "issue_date" },
       { "data": "end_date" },

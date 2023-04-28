@@ -139,23 +139,26 @@ class RepositorioRfq {
   public static function obtener_cotizaciones_por_canal($conexion, $start, $length, $search, $sort_column_index, $sort_direction, $canal) {
     $data = [];
     $search = '%' . $search . '%';
-    $sort_column = $sort_column_index == 0 ? 'id' : ($sort_column_index == 1 ? 'usuario_designado' : ($sort_column_index == 2 ? 'type_of_bid' : ($sort_column_index == 3 ? 'issue_date' : ($sort_column_index == 4 ? 'end_date' : 'code'))));
+    $sort_column = $sort_column_index == 0 ? 'rfq.id' : ($sort_column_index == 1 ? 'nombre_usuario' : ($sort_column_index == 2 ? 'rfq.type_of_bid' : ($sort_column_index == 3 ? 'rfq.issue_date' : ($sort_column_index == 4 ? 'rfq.end_date' : 'rfq.email_code'))));
+    $sort_column = $sort_column == 'rfq.issue_date' ? 'STR_TO_DATE(rfq.issue_date, "%m/%d/%Y")' : $sort_column;
+    $sort_column = $sort_column == 'rfq.end_date' ? 'STR_TO_DATE(rfq.end_date, "%m/%d/%Y %H:%i")' : $sort_column;
     if (isset($conexion)) {
       try {
-        $sql = 'SELECT id, 
-        usuario_designado, 
-        type_of_bid, 
-        issue_date, 
-        end_date, 
-        email_code 
+        $sql = 'SELECT rfq.id, 
+        usuarios.nombre_usuario, 
+        rfq.type_of_bid, 
+        rfq.issue_date, 
+        rfq.end_date, 
+        rfq.email_code 
         FROM rfq 
-        WHERE deleted = 0 AND 
-        canal = :canal AND 
-        completado = 0 AND 
-        status = 0 AND 
-        award = 0 
-        AND (comments = "Working on it" OR comments = "No comments" OR comments = "") AND 
-        (id LIKE :search OR type_of_bid LIKE :search) 
+        LEFT JOIN usuarios ON rfq.usuario_designado = usuarios.id
+        WHERE rfq.deleted = 0 AND 
+        rfq.canal = :canal AND 
+        rfq.completado = 0 AND 
+        rfq.status = 0 AND 
+        rfq.award = 0 
+        AND (rfq.comments = "Working on it" OR rfq.comments = "No comments" OR rfq.comments = "") AND 
+        (rfq.id LIKE :search OR nombre_usuario LIKE :search OR rfq.type_of_bid LIKE :search OR rfq.email_code LIKE :search) 
         ORDER BY ' . $sort_column . ' ' . $sort_direction . ' LIMIT ' . $start . ', ' . $length;
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
@@ -184,6 +187,31 @@ class RepositorioRfq {
         AND (comments = "Working on it" OR comments = "No comments" OR comments = "")';
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
+        $sentencia->execute();
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $sentencia->fetchColumn();
+  }
+
+  public static function getTotalFilteredQuotesByChannelCount($conexion, $canal, $search) {
+    $search = '%' . $search . '%';
+    if (isset($conexion)) {
+      try {
+        $sql = 'SELECT COUNT(*)
+        FROM rfq 
+        LEFT JOIN usuarios ON rfq.usuario_designado = usuarios.id 
+        WHERE deleted = 0 AND 
+        canal = :canal AND 
+        completado = 0 AND 
+        rfq.status = 0 AND 
+        award = 0 
+        AND (comments = "Working on it" OR comments = "No comments" OR comments = "") AND 
+        (rfq.id LIKE :search OR nombre_usuario LIKE :search OR rfq.type_of_bid LIKE :search OR rfq.email_code LIKE :search)';
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
+        $sentencia->bindParam(':search', $search, PDO::PARAM_STR);
         $sentencia->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
