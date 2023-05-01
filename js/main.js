@@ -154,7 +154,7 @@ $(document).ready(function () {
     return false;
   });
   /****************************ALERT EN BOTONES PARA BORRAR QUOTES**************************/
-  $('.delete_quote_button').click(function () {
+  $('#tabla_quotes').on('click', '.delete_quote_button', function () {
     habilitar_continue_button($(this));
     return false;
   });
@@ -187,17 +187,66 @@ $(document).ready(function () {
     autoApply: true
   });
   /************************************DATETABLES JQUERY PARA TABLAS**************************/
-  $.fn.dataTable.moment('MM/DD/YYYY');
-  $.fn.dataTable.moment('MM/DD/YYYY HH:mm');
-
   $('#tabla').DataTable({
     'pageLength': 50,
     'order': [[3, "desc"]]
   });
 
+  // $('#tabla_quotes').DataTable({
+  //   'pageLength': 50,
+  //   'order': [[4, "desc"]]
+  // });
   $('#tabla_quotes').DataTable({
-    'pageLength': 50,
-    'order': [[4, "desc"]]
+    "processing": true,
+    "serverSide": true,
+    "pageLength": 50,
+    "order": [[4, "desc"]],
+    "ajax": {
+      "url": '/rfq/quote/created_table',
+      "type": "POST",
+      "data": {
+        "channel": $('#tabla_quotes').data('channel'),
+      }
+    },
+    "columns": [
+      {
+        "data": "id",
+        "render": function (data, type, row, meta) {
+          if (type === 'display') {
+            return '<a href="/rfq/perfil/quote/editar_cotizacion/'+data+'">' + data + '</a>';
+          } else {
+            return data;
+          }
+        }
+      },
+      { "data": "nombre_usuario" },
+      { "data": "type_of_bid" },
+      { "data": "issue_date" },
+      { "data": "end_date" },
+      { "data": "email_code" },
+      { 
+        "data": "rfp",
+        "orderable": false,
+        "render": function (data, type, row, meta) {
+          if (type === 'display') {
+            return data ? '<i class="text-success fas fa-check"></i>' : '<i class="text-danger fas fa-times"></i>';
+          } else {
+            return data;
+          }
+        }
+      },
+      { 
+        "data": "options",
+        "orderable": false,
+        "render": function (data, type, row, meta) {
+          if (type === 'display') {
+            return '<a href="/rfq/quote/delete_quote/'+row.id+'" class="delete_quote_button text-danger"><i class="fa fa-times"></i> Delete</a>';
+          } else {
+            return data;
+          }
+        }
+      },
+    ]
   });
 
   $('#tabla_usuarios').DataTable({

@@ -163,6 +163,9 @@ switch ($partes_ruta[1]) {
       case 'save_information':
         $ruta_elegida = 'scripts/quote/save_information.php';
         break;
+      case 'created_table':
+        $ruta_elegida = 'scripts/quote/created_table.php';
+        break;
       case 'service':
         switch ($partes_ruta[3]) {
           case 'add_service':
