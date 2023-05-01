@@ -154,7 +154,7 @@ $(document).ready(function () {
     return false;
   });
   /****************************ALERT EN BOTONES PARA BORRAR QUOTES**************************/
-  $('.delete_quote_button').click(function () {
+  $('#tabla_quotes').on('click', '.delete_quote_button', function () {
     habilitar_continue_button($(this));
     return false;
   });
@@ -199,6 +199,8 @@ $(document).ready(function () {
   $('#tabla_quotes').DataTable({
     "processing": true,
     "serverSide": true,
+    "pageLength": 50,
+    "order": [[4, "desc"]],
     "ajax": {
       "url": '/rfq/quote/created_table',
       "type": "POST",
@@ -221,7 +223,29 @@ $(document).ready(function () {
       { "data": "type_of_bid" },
       { "data": "issue_date" },
       { "data": "end_date" },
-      { "data": "email_code" }
+      { "data": "email_code" },
+      { 
+        "data": "rfp",
+        "orderable": false,
+        "render": function (data, type, row, meta) {
+          if (type === 'display') {
+            return data ? '<i class="text-success fas fa-check"></i>' : '<i class="text-danger fas fa-times"></i>';
+          } else {
+            return data;
+          }
+        }
+      },
+      { 
+        "data": "options",
+        "orderable": false,
+        "render": function (data, type, row, meta) {
+          if (type === 'display') {
+            return '<a href="/rfq/quote/delete_quote/'+row.id+'" class="delete_quote_button text-danger"><i class="fa fa-times"></i> Delete</a>';
+          } else {
+            return data;
+          }
+        }
+      },
     ]
   });
 

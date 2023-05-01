@@ -136,7 +136,7 @@ class RepositorioRfq {
     return $quotes;
   }
 
-  public static function obtener_cotizaciones_por_canal($conexion, $start, $length, $search, $sort_column_index, $sort_direction, $canal) {
+  public static function getCreatedQuotesByChannel($conexion, $start, $length, $search, $sort_column_index, $sort_direction, $canal) {
     $data = [];
     $search = '%' . $search . '%';
     $sort_column = $sort_column_index == 0 ? 'rfq.id' : ($sort_column_index == 1 ? 'nombre_usuario' : ($sort_column_index == 2 ? 'rfq.type_of_bid' : ($sort_column_index == 3 ? 'rfq.issue_date' : ($sort_column_index == 4 ? 'rfq.end_date' : 'rfq.email_code'))));
@@ -149,7 +149,14 @@ class RepositorioRfq {
         rfq.type_of_bid, 
         rfq.issue_date, 
         rfq.end_date, 
-        rfq.email_code 
+        rfq.email_code, 
+        CASE
+          WHEN type_of_bid = "Services" THEN "true"
+          WHEN type_of_bid = "Audio Visual" THEN "true"
+          WHEN type_of_bid = "Computers" THEN "true"
+          ELSE "false"
+        END AS rfp,
+        NULL AS options 
         FROM rfq 
         LEFT JOIN usuarios ON rfq.usuario_designado = usuarios.id
         WHERE rfq.deleted = 0 AND 
@@ -174,7 +181,7 @@ class RepositorioRfq {
     return $data;
   }
 
-  public static function getTotalQuotesByChannelCount($conexion, $canal) {
+  public static function getTotalCreatedQuotesByChannelCount($conexion, $canal) {
     if (isset($conexion)) {
       try {
         $sql = 'SELECT COUNT(*)
@@ -195,7 +202,7 @@ class RepositorioRfq {
     return $sentencia->fetchColumn();
   }
 
-  public static function getTotalFilteredQuotesByChannelCount($conexion, $canal, $search) {
+  public static function getTotalFilteredCreatedQuotesByChannelCount($conexion, $canal, $search) {
     $search = '%' . $search . '%';
     if (isset($conexion)) {
       try {
@@ -218,70 +225,6 @@ class RepositorioRfq {
       }
     }
     return $sentencia->fetchColumn();
-  }
-
-  public static function escribir_cotizacion($cotizacion) {
-    if (!isset($cotizacion)) {
-      return;
-    }
-?>
-    <tr <?php if ($cotizacion->obtener_comments() == 'Working on it') {
-          echo 'class="waiting_for"';
-        } ?>>
-      <td>
-        <a href="<?php echo EDITAR_COTIZACION . '/' . $cotizacion->obtener_id(); ?>" class="btn-block">
-          <?php echo $cotizacion->obtener_id(); ?>
-        </a>
-      </td>
-      <td>
-        <?php
-        Conexion::abrir_conexion();
-        $usuario = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), $cotizacion->obtener_usuario_designado());
-        Conexion::cerrar_conexion();
-        echo $usuario->obtener_nombre_usuario();
-        ?>
-      </td>
-      <td><?php echo $cotizacion->obtener_type_of_bid(); ?></td>
-      <td><?php echo $cotizacion->obtener_issue_date(); ?></td>
-      <td><?php echo $cotizacion->obtener_end_date(); ?></td>
-      <td><?php echo $cotizacion->obtener_email_code(); ?></td>
-      <td class="text-center"><?php if ($cotizacion->obtener_type_of_bid()) {
-                                echo '<i class="text-success fas fa-check"></i>';
-                              } else {
-                                echo '<i class="text-danger fas fa-times"></i>';
-                              } ?></td>
-      <td class="text-center">
-        <a href="<?php echo DELETE_QUOTE . '/' . $cotizacion->obtener_id(); ?>" class="delete_quote_button text-danger"><i class="fa fa-times"></i> Delete</a>
-      </td>
-    </tr>
-  <?php
-  }
-
-  public static function escribir_cotizaciones_por_canal($canal) {
-    // Conexion::abrir_conexion();
-    // $cotizaciones = self::obtener_cotizaciones_por_canal(Conexion::obtener_conexion(), $canal);
-    // Conexion::cerrar_conexion();
-    // if (count($cotizaciones)) {
-  ?>
-    <table id="tabla_quotes" data-channel="<?php echo $canal; ?>" class="table table-bordered table-hover">
-      <thead>
-        <tr>
-          <th>PROPOSAL</th>
-          <th>DESIGNATED USER</th>
-          <th>TYPE OF BID</th>
-          <th>ISSUE DATE</th>
-          <th>END DATE</th>
-          <th>CODE</th>
-          <!-- <th>RFP</th>
-            <th>OPTIONS</th> -->
-        </tr>
-      </thead>
-      <tbody>
-
-      </tbody>
-    </table>
-  <?php
-    // }
   }
 
   public static function obtener_cotizacion_por_id($conexion, $id_rfq) {
