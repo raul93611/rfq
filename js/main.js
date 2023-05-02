@@ -154,7 +154,7 @@ $(document).ready(function () {
     return false;
   });
   /****************************ALERT EN BOTONES PARA BORRAR QUOTES**************************/
-  $('#tabla_quotes').on('click', '.delete_quote_button', function () {
+  $('#tabla_quotes, #no_bid_table').on('click', '.delete_quote_button', function () {
     habilitar_continue_button($(this));
     return false;
   });
@@ -192,10 +192,6 @@ $(document).ready(function () {
     'order': [[3, "desc"]]
   });
 
-  // $('#tabla_quotes').DataTable({
-  //   'pageLength': 50,
-  //   'order': [[4, "desc"]]
-  // });
   $('#tabla_quotes').DataTable({
     "processing": true,
     "serverSide": true,
@@ -235,6 +231,43 @@ $(document).ready(function () {
           }
         }
       },
+      { 
+        "data": "options",
+        "orderable": false,
+        "render": function (data, type, row, meta) {
+          if (type === 'display') {
+            return '<a href="/rfq/quote/delete_quote/'+row.id+'" class="delete_quote_button text-danger"><i class="fa fa-times"></i> Delete</a>';
+          } else {
+            return data;
+          }
+        }
+      },
+    ]
+  });
+
+  $('#no_bid_table').DataTable({
+    "processing": true,
+    "serverSide": true,
+    "pageLength": 50,
+    "ajax": {
+      "url": '/rfq/quote/no_bid_table',
+      "type": "POST"
+    },
+    "columns": [
+      {
+        "data": "id",
+        "render": function (data, type, row, meta) {
+          if (type === 'display') {
+            return '<a href="/rfq/perfil/quote/editar_cotizacion/'+data+'">' + data + '</a>';
+          } else {
+            return data;
+          }
+        }
+      },
+      { "data": "nombre_usuario" },
+      { "data": "email_code" },
+      { "data": "type_of_bid" },
+      { "data": "comments" },
       { 
         "data": "options",
         "orderable": false,
