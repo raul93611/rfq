@@ -579,7 +579,7 @@ class RepositorioRfq {
     }
     $partes_fecha_completado = explode('-', $cotizacion->obtener_fecha_completado());
     $fecha_completado = $partes_fecha_completado[1] . '/' . $partes_fecha_completado[2] . '/' . $partes_fecha_completado[0];
-  ?>
+?>
     <tr <?php if ($cotizacion->obtener_comments() == 'Working on it') {
           echo 'class="waiting_for"';
         } ?>>
@@ -849,19 +849,71 @@ class RepositorioRfq {
     }
   }
 
-  public static function obtener_cotizaciones_no_bid($conexion) {
-    $cotizaciones = [];
+  public static function getNoBidQuotes($conexion, $start, $length, $search, $sort_column_index, $sort_direction) {
+    $data = [];
+    $search = '%' . $search . '%';
+    $sort_column = $sort_column_index == 0 ? 'rfq.id' : ($sort_column_index == 1 ? 'nombre_usuario' : ($sort_column_index == 2 ? 'email_code' : ($sort_column_index == 3 ? 'type_of_bid' : 'comments')));
     if (isset($conexion)) {
       try {
-        $sql = "SELECT * FROM rfq WHERE deleted = 0 AND comments = 'No Bid' OR comments = 'Manufacturer in the Bid' OR comments = 'Expired due date' OR comments = 'Supplier did not provide a quote' OR comments = 'Others' ORDER BY id DESC";
+        $sql = 'SELECT rfq.id, 
+        usuarios.nombre_usuario, 
+        email_code, 
+        type_of_bid,
+        comments,
+        NULL AS options 
+        FROM rfq 
+        LEFT JOIN usuarios ON rfq.usuario_designado = usuarios.id
+        WHERE rfq.deleted = 0 
+        AND (comments = "No Bid" OR comments = "Manufacturer in the Bid" OR comments = "Expired due date" OR comments = "Supplier did not provide a quote" OR comments = "Others") AND 
+        (rfq.id LIKE :search OR nombre_usuario LIKE :search OR type_of_bid LIKE :search OR email_code LIKE :search OR comments LIKE :search) 
+        ORDER BY ' . $sort_column . ' ' . $sort_direction . ' LIMIT ' . $start . ', ' . $length;
         $sentencia = $conexion->prepare($sql);
+        $sentencia->bindParam(':search', $search, PDO::PARAM_STR);
         $sentencia->execute();
-        $cotizaciones = self::array_to_object($sentencia);
+        while ($row = $sentencia->fetch(PDO::FETCH_ASSOC)) {
+          $data[] = $row;
+        }
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
-    return $cotizaciones;
+    return $data;
+  }
+
+  public static function getTotalNoBidQuotesCount($conexion) {
+    if (isset($conexion)) {
+      try {
+        $sql = 'SELECT COUNT(*)
+        FROM rfq 
+        WHERE deleted = 0 
+        AND (comments = "No Bid" OR comments = "Manufacturer in the Bid" OR comments = "Expired due date" OR comments = "Supplier did not provide a quote" OR comments = "Others")';
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->execute();
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $sentencia->fetchColumn();
+  }
+
+  public static function getTotalFilteredNoBidQuotesCount($conexion, $search) {
+    $search = '%' . $search . '%';
+    if (isset($conexion)) {
+      try {
+        $sql = 'SELECT COUNT(*)
+        FROM rfq 
+        LEFT JOIN usuarios ON rfq.usuario_designado = usuarios.id 
+        WHERE deleted = 0 
+        AND (comments = "No Bid" OR comments = "Manufacturer in the Bid" OR comments = "Expired due date" OR comments = "Supplier did not provide a quote" OR comments = "Others") AND 
+        (rfq.id LIKE :search OR nombre_usuario LIKE :search OR type_of_bid LIKE :search OR email_code LIKE :search OR comments LIKE :search)';
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindParam(':search', $search, PDO::PARAM_STR);
+        $sentencia->execute();
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $sentencia->fetchColumn();
   }
 
   public static function escribir_cotizacion_no_bid($cotizacion) {
@@ -890,36 +942,6 @@ class RepositorioRfq {
       <td><?php echo $cotizacion->obtener_comments(); ?></td>
     </tr>
     <?php
-  }
-
-  public static function escribir_cotizaciones_no_bid() {
-    Conexion::abrir_conexion();
-    $cotizaciones = self::obtener_cotizaciones_no_bid(Conexion::obtener_conexion());
-    Conexion::cerrar_conexion();
-    if (count($cotizaciones)) {
-    ?>
-      <table id="tabla" class="table table-bordered table-responsive-md">
-        <thead>
-          <tr>
-            <th>CODE</th>
-            <th>DEDIGNATED USER</th>
-            <th>TYPE OF BID</th>
-            <th>ISSUE DATE</th>
-            <th>END DATE</th>
-            <th>PROPOSAL</th>
-            <th>COMMENTS</th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php
-          foreach ($cotizaciones as $cotizacion) {
-            self::escribir_cotizacion_no_bid($cotizacion);
-          }
-          ?>
-        </tbody>
-      </table>
-    <?php
-    }
   }
 
   public static function obtener_cotizaciones_cancelled($conexion) {

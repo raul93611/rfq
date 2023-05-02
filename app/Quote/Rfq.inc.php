@@ -490,7 +490,15 @@ class Rfq {
 
   public function isServices() {
     $services = ['Services', 'Audio Visual', 'Computers'];
-    if (in_array($this->obtener_type_of_bid(), $services)) {
+    if (in_array($this->type_of_bid, $services)) {
+      return true;
+    }
+    return false;
+  }
+
+  public function isNobid() {
+    $no_bid = ['No Bid', 'Manufacturer in the Bid', 'Expired due date', 'Supplier did not provide a quote', 'Others'];
+    if (in_array($this->comments, $no_bid)) {
       return true;
     }
     return false;
