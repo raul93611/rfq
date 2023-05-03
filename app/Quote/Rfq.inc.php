@@ -504,6 +504,22 @@ class Rfq {
     return false;
   }
 
+  public function isNotSubmitted() {
+    $not_submitted = ['Not submitted'];
+    if (in_array($this->comments, $not_submitted)) {
+      return true;
+    }
+    return false;
+  }
+
+  public function isCancelled() {
+    $cancelled = ['Cancelled'];
+    if (in_array($this->comments, $cancelled)) {
+      return true;
+    }
+    return false;
+  }
+
   public function isEnabledToInvoice() {
     return $this->obtener_fullfillment() &&
       !is_null($this->obtener_fulfillment_profit()) ||

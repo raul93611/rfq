@@ -19,9 +19,19 @@
               <h3 class="card-title">No submitted</h3>
             </div>
             <div class="card-body">
-              <?php
-              RepositorioRfq::escribir_tabla_cotizaciones_no_submitted();
-              ?>
+              <table id="not_submitted_table" class="table table-bordered table-responsive-md">
+                <thead>
+                  <tr>
+                    <th>PROPOSAL</th>
+                    <th>DEDIGNATED USER</th>
+                    <th>CODE</th>
+                    <th>TYPE OF BID</th>
+                    <th>OPTIONS</th>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
             </div>
           </div>
         </section>
