@@ -169,6 +169,12 @@ switch ($partes_ruta[1]) {
       case 'no_bid_table':
         $ruta_elegida = 'scripts/quote/no_bid_table.php';
         break;
+      case 'not_submitted_table':
+        $ruta_elegida = 'scripts/quote/not_submitted_table.php';
+        break;
+      case 'cancelled_table':
+        $ruta_elegida = 'scripts/quote/cancelled_table.php';
+        break;
       case 'service':
         switch ($partes_ruta[3]) {
           case 'add_service':

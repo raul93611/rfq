@@ -6,4 +6,10 @@ Conexion::cerrar_conexion();
 if ($quote->isNobid()) {
   Redireccion::redirigir(NO_BID);
 }
+if ($quote->isNotSubmitted()) {
+  Redireccion::redirigir(NO_SUBMITTED);
+}
+if ($quote->isCancelled()) {
+  Redireccion::redirigir(CANCELLED);
+}
 Redireccion::redirigir(CHANNEL . $quote->obtener_canal());
