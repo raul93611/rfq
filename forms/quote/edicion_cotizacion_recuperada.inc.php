@@ -23,7 +23,7 @@
           <b>Channel:</b>
         </div>
         <div class="col-md-8">
-          <?php echo $cotizacion_recuperada->obtener_canal(); ?>
+          <?php echo $cotizacion_recuperada->print_channel(); ?>
         </div>
       </div>
       <div class="row">
