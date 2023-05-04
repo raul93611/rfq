@@ -20,11 +20,14 @@
               <table id="tasks_done_table" class="table table-bordered table-hover">
                 <thead>
                   <tr>
+                    <th>ID</th>
                     <th>TITLE</th>
                     <th>CREATED BY</th>
                     <th>ASSIGNED TO</th>
                   </tr>
                 </thead>
+                <tbody>
+                </tbody>
               </table>
             </div>
           </div>
