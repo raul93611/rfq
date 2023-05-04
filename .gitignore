@@ -1,6 +1,7 @@
-/temp
-/documentos
-/app/Bootstrap/config.inc.php
+temp/
+documentos/
+employee_docs/
+config.inc.php
 LICENSE
-/vendor
-/vendor_excel
+vendor/
+vendor_excel/

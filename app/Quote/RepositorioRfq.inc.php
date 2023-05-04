@@ -107,7 +107,7 @@ class RepositorioRfq {
   public static function array_to_object($sentence) {
     $objects = [];
     while ($result = $sentence->fetch(PDO::FETCH_ASSOC)) {
-      $objects[] = new Rfq($result['id'], $result['id_usuario'], $result['usuario_designado'], $result['canal'], $result['email_code'], $result['type_of_bid'], $result['issue_date'], $result['end_date'], $result['status'], $result['completado'], $result['total_cost'], $result['total_price'], $result['comments'], $result['award'], $result['fecha_completado'], $result['fecha_submitted'], $result['fecha_award'], $result['payment_terms'], $result['address'], $result['ship_to'], $result['expiration_date'], $result['ship_via'], $result['taxes'], $result['profit'], $result['additional'], $result['shipping'], $result['shipping_cost'], $result['fullfillment'], $result['fulfillment_date'], $result['contract_number'], $result['fulfillment_profit'], $result['services_fulfillment_profit'], $result['total_fulfillment'], $result['total_services_fulfillment'], $result['invoice'], $result['invoice_date'], $result['multi_year_project'], $result['submitted_invoice'], $result['submitted_invoice_date'], $result['fulfillment_pending'], $result['fulfillment_shipping_cost'], $result['fulfillment_shipping'], $result['type_of_contract'], $result['net30_fulfillment'], $result['net30_shipping'], $result['sales_commission'], $result['sales_commission_comment'], $result['services_payment_term'], $result['city'], $result['zip_code'], $result['state'], $result['client'], $result['deleted'], $result['set_side'], $result['poc'], $result['co'], $result['estimated_delivery_date'], $result['shipping_address'], $result['special_requirements'], $result['file_document'], $result['accounting']);
+      $objects[] = new Rfq($result['id'], $result['id_usuario'], $result['usuario_designado'], $result['canal'], $result['email_code'], $result['type_of_bid'], $result['issue_date'], $result['end_date'], $result['status'], $result['completado'], $result['total_cost'], $result['total_price'], $result['comments'], $result['award'], $result['fecha_completado'], $result['fecha_submitted'], $result['fecha_award'], $result['payment_terms'], $result['address'], $result['ship_to'], $result['expiration_date'], $result['ship_via'], $result['taxes'], $result['profit'], $result['additional'], $result['shipping'], $result['shipping_cost'], $result['fullfillment'], $result['fulfillment_date'], $result['contract_number'], $result['fulfillment_profit'], $result['services_fulfillment_profit'], $result['total_fulfillment'], $result['total_services_fulfillment'], $result['invoice'], $result['invoice_date'], $result['multi_year_project'], $result['submitted_invoice'], $result['submitted_invoice_date'], $result['fulfillment_pending'], $result['fulfillment_shipping_cost'], $result['fulfillment_shipping'], $result['type_of_contract'], $result['net30_fulfillment'], $result['net30_shipping'], $result['sales_commission'], $result['sales_commission_comment'], $result['services_payment_term'], $result['city'], $result['zip_code'], $result['state'], $result['client'], $result['deleted'], $result['set_side'], $result['poc'], $result['co'], $result['estimated_delivery_date'], $result['shipping_address'], $result['special_requirements'], $result['file_document'], $result['accounting'], $result['gsa'], $result['client_payment_terms']);
     }
 
     return $objects;
@@ -115,7 +115,7 @@ class RepositorioRfq {
 
   public static function single_result_to_object($sentence) {
     $result = $sentence->fetch(PDO::FETCH_ASSOC);
-    $object = new Rfq($result['id'], $result['id_usuario'], $result['usuario_designado'], $result['canal'], $result['email_code'], $result['type_of_bid'], $result['issue_date'], $result['end_date'], $result['status'], $result['completado'], $result['total_cost'], $result['total_price'], $result['comments'], $result['award'], $result['fecha_completado'], $result['fecha_submitted'], $result['fecha_award'], $result['payment_terms'], $result['address'], $result['ship_to'], $result['expiration_date'], $result['ship_via'], $result['taxes'], $result['profit'], $result['additional'], $result['shipping'], $result['shipping_cost'], $result['fullfillment'], $result['fulfillment_date'], $result['contract_number'], $result['fulfillment_profit'], $result['services_fulfillment_profit'], $result['total_fulfillment'], $result['total_services_fulfillment'], $result['invoice'], $result['invoice_date'], $result['multi_year_project'], $result['submitted_invoice'], $result['submitted_invoice_date'], $result['fulfillment_pending'], $result['fulfillment_shipping_cost'], $result['fulfillment_shipping'], $result['type_of_contract'], $result['net30_fulfillment'], $result['sales_commission'], $result['sales_commission_comment'], $result['services_payment_term'], $result['city'], $result['zip_code'], $result['state'], $result['client'], $result['deleted'], $result['set_side'], $result['poc'], $result['co'], $result['estimated_delivery_date'], $result['shipping_address'], $result['special_requirements'], $result['file_document'], $result['accounting']);
+    $object = new Rfq($result['id'], $result['id_usuario'], $result['usuario_designado'], $result['canal'], $result['email_code'], $result['type_of_bid'], $result['issue_date'], $result['end_date'], $result['status'], $result['completado'], $result['total_cost'], $result['total_price'], $result['comments'], $result['award'], $result['fecha_completado'], $result['fecha_submitted'], $result['fecha_award'], $result['payment_terms'], $result['address'], $result['ship_to'], $result['expiration_date'], $result['ship_via'], $result['taxes'], $result['profit'], $result['additional'], $result['shipping'], $result['shipping_cost'], $result['fullfillment'], $result['fulfillment_date'], $result['contract_number'], $result['fulfillment_profit'], $result['services_fulfillment_profit'], $result['total_fulfillment'], $result['total_services_fulfillment'], $result['invoice'], $result['invoice_date'], $result['multi_year_project'], $result['submitted_invoice'], $result['submitted_invoice_date'], $result['fulfillment_pending'], $result['fulfillment_shipping_cost'], $result['fulfillment_shipping'], $result['type_of_contract'], $result['net30_fulfillment'], $result['sales_commission'], $result['sales_commission_comment'], $result['services_payment_term'], $result['city'], $result['zip_code'], $result['state'], $result['client'], $result['deleted'], $result['set_side'], $result['poc'], $result['co'], $result['estimated_delivery_date'], $result['shipping_address'], $result['special_requirements'], $result['file_document'], $result['accounting'], $result['gsa'], $result['client_payment_terms']);
 
     return $object;
   }
@@ -136,122 +136,95 @@ class RepositorioRfq {
     return $quotes;
   }
 
-  public static function get_all_submitted_quotes_between_dates($conexion, $date_from, $date_to) {
-    $quotes = [];
+  public static function getCreatedQuotesByChannel($conexion, $start, $length, $search, $sort_column_index, $sort_direction, $canal) {
+    $data = [];
+    $search = '%' . $search . '%';
+    $sort_column = $sort_column_index == 0 ? 'rfq.id' : ($sort_column_index == 1 ? 'nombre_usuario' : ($sort_column_index == 2 ? 'rfq.type_of_bid' : ($sort_column_index == 3 ? 'rfq.issue_date' : ($sort_column_index == 4 ? 'rfq.end_date' : 'rfq.email_code'))));
+    $sort_column = $sort_column == 'rfq.issue_date' ? 'STR_TO_DATE(rfq.issue_date, "%m/%d/%Y")' : $sort_column;
+    $sort_column = $sort_column == 'rfq.end_date' ? 'STR_TO_DATE(rfq.end_date, "%m/%d/%Y %H:%i")' : $sort_column;
     if (isset($conexion)) {
       try {
-        $sql = 'SELECT * FROM rfq WHERE deleted = 0 AND status = 1 AND completado = 1 AND fecha_submitted BETWEEN :date_from AND :date_to';
+        $sql = 'SELECT rfq.id, 
+        usuarios.nombre_usuario, 
+        rfq.type_of_bid, 
+        rfq.issue_date, 
+        rfq.end_date, 
+        rfq.email_code, 
+        CASE
+          WHEN type_of_bid = "Services" THEN "true"
+          WHEN type_of_bid = "Audio Visual" THEN "true"
+          WHEN type_of_bid = "Computers" THEN "true"
+          ELSE "false"
+        END AS rfp,
+        NULL AS options 
+        FROM rfq 
+        LEFT JOIN usuarios ON rfq.usuario_designado = usuarios.id
+        WHERE rfq.deleted = 0 AND 
+        rfq.canal = :canal AND 
+        rfq.completado = 0 AND 
+        rfq.status = 0 AND 
+        rfq.award = 0 
+        AND (rfq.comments = "Working on it" OR rfq.comments = "No comments" OR rfq.comments = "") AND 
+        (rfq.id LIKE :search OR nombre_usuario LIKE :search OR rfq.type_of_bid LIKE :search OR rfq.email_code LIKE :search) 
+        ORDER BY ' . $sort_column . ' ' . $sort_direction . ' LIMIT ' . $start . ', ' . $length;
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':date_from', $date_from, PDO::PARAM_STR);
-        $sentencia->bindParam(':date_to', $date_to, PDO::PARAM_STR);
+        $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
+        $sentencia->bindParam(':search', $search, PDO::PARAM_STR);
         $sentencia->execute();
-        $quotes = self::array_to_object($sentencia);
+        while ($row = $sentencia->fetch(PDO::FETCH_ASSOC)) {
+          $data[] = $row;
+        }
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
-    return $quotes;
+    return $data;
   }
 
-  public static function get_all_award_quotes_between_dates($conexion, $date_from, $date_to) {
-    $quotes = [];
+  public static function getTotalCreatedQuotesByChannelCount($conexion, $canal) {
     if (isset($conexion)) {
       try {
-        $sql = 'SELECT * FROM rfq WHERE deleted = 0 AND award =1 AND status = 1 AND completado = 1 AND fecha_award BETWEEN :date_from AND :date_to';
-        $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':date_from', $date_from, PDO::PARAM_STR);
-        $sentencia->bindParam(':date_to', $date_to, PDO::PARAM_STR);
-        $sentencia->execute();
-        $quotes = self::array_to_object($sentencia);
-      } catch (PDOException $ex) {
-        print 'ERROR:' . $ex->getMessage() . '<br>';
-      }
-    }
-    return $quotes;
-  }
-
-  public static function obtener_cotizaciones_por_canal_usuario_cargo($conexion, $canal) {
-    $cotizaciones = [];
-    if (isset($conexion)) {
-      try {
-        $sql = "SELECT * FROM rfq WHERE deleted = 0 AND canal = :canal AND completado = 0 AND status = 0 AND award = 0 AND (comments = 'Working on it' OR comments = 'No comments' OR comments = '') ORDER BY id DESC";
+        $sql = 'SELECT COUNT(*)
+        FROM rfq 
+        WHERE deleted = 0 AND 
+        canal = :canal AND 
+        completado = 0 AND 
+        status = 0 AND 
+        award = 0 
+        AND (comments = "Working on it" OR comments = "No comments" OR comments = "")';
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
         $sentencia->execute();
-        $cotizaciones = self::array_to_object($sentencia);
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
-    return $cotizaciones;
+    return $sentencia->fetchColumn();
   }
 
-  public static function escribir_cotizacion($cotizacion) {
-    if (!isset($cotizacion)) {
-      return;
+  public static function getTotalFilteredCreatedQuotesByChannelCount($conexion, $canal, $search) {
+    $search = '%' . $search . '%';
+    if (isset($conexion)) {
+      try {
+        $sql = 'SELECT COUNT(*)
+        FROM rfq 
+        LEFT JOIN usuarios ON rfq.usuario_designado = usuarios.id 
+        WHERE deleted = 0 AND 
+        canal = :canal AND 
+        completado = 0 AND 
+        rfq.status = 0 AND 
+        award = 0 
+        AND (comments = "Working on it" OR comments = "No comments" OR comments = "") AND 
+        (rfq.id LIKE :search OR nombre_usuario LIKE :search OR rfq.type_of_bid LIKE :search OR rfq.email_code LIKE :search)';
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
+        $sentencia->bindParam(':search', $search, PDO::PARAM_STR);
+        $sentencia->execute();
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
     }
-?>
-    <tr <?php if ($cotizacion->obtener_comments() == 'Working on it') {
-          echo 'class="waiting_for"';
-        } ?>>
-      <td>
-        <a href="<?php echo EDITAR_COTIZACION . '/' . $cotizacion->obtener_id(); ?>" class="btn-block">
-          <?php echo $cotizacion->obtener_id(); ?>
-        </a>
-      </td>
-      <td>
-        <?php
-        Conexion::abrir_conexion();
-        $usuario = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), $cotizacion->obtener_usuario_designado());
-        Conexion::cerrar_conexion();
-        echo $usuario->obtener_nombre_usuario();
-        ?>
-      </td>
-      <td><?php echo $cotizacion->obtener_type_of_bid(); ?></td>
-      <td><?php echo $cotizacion->obtener_issue_date(); ?></td>
-      <td><?php echo $cotizacion->obtener_end_date(); ?></td>
-      <td><?php echo $cotizacion->obtener_email_code(); ?></td>
-      <td class="text-center"><?php if ($cotizacion->obtener_type_of_bid()) {
-                                echo '<i class="text-success fas fa-check"></i>';
-                              } else {
-                                echo '<i class="text-danger fas fa-times"></i>';
-                              } ?></td>
-      <td class="text-center">
-        <a href="<?php echo DELETE_QUOTE . '/' . $cotizacion->obtener_id(); ?>" class="delete_quote_button text-danger"><i class="fa fa-times"></i> Delete</a>
-      </td>
-    </tr>
-    <?php
-  }
-
-  public static function escribir_cotizaciones_por_canal_usuario_cargo($canal) {
-    Conexion::abrir_conexion();
-    $cotizaciones = self::obtener_cotizaciones_por_canal_usuario_cargo(Conexion::obtener_conexion(), $canal);
-    Conexion::cerrar_conexion();
-    if (count($cotizaciones)) {
-    ?>
-      <table id="tabla_quotes" class="table table-bordered table-hover">
-        <thead>
-          <tr>
-            <th>PROPOSAL</th>
-            <th>DESIGNATED USER</th>
-            <th>TYPE OF BID</th>
-            <th>ISSUE DATE</th>
-            <th>END DATE</th>
-            <th>CODE</th>
-            <th>RFP</th>
-            <th>OPTIONS</th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php
-          foreach ($cotizaciones as $cotizacion) {
-            self::escribir_cotizacion($cotizacion);
-          }
-          ?>
-        </tbody>
-      </table>
-    <?php
-    }
+    return $sentencia->fetchColumn();
   }
 
   public static function obtener_cotizacion_por_id($conexion, $id_rfq) {
@@ -341,19 +314,11 @@ class RepositorioRfq {
     }
   }
 
-  public static function actualizar_rfq_inicio(
+  public static function save_checklist(
     $conexion,
-    $expiration_date,
-    $fecha_completado,
     $ship_to,
-    $address,
-    $ship_via,
-    $comments,
     $designated_user,
     $email_code,
-    $type_of_bid,
-    $issue_date,
-    $end_date,
     $canal,
     $contract_number,
     $city,
@@ -368,23 +333,17 @@ class RepositorioRfq {
     $accounting,
     $shipping_address,
     $special_requirements,
+    $gsa,
+    $client_payment_terms,
     $id_rfq
   ) {
     $cotizacion_editada = false;
     if (isset($conexion)) {
       try {
         $sql = "UPDATE rfq SET 
-        expiration_date = :expiration_date, 
-        fecha_completado = :fecha_completado, 
         ship_to = :ship_to, 
-        address = :address, 
-        ship_via = :ship_via, 
-        comments = :comments, 
         usuario_designado = :usuario_designado, 
         email_code = :email_code, 
-        type_of_bid = :type_of_bid, 
-        issue_date = :issue_date, 
-        end_date = :end_date, 
         canal = :canal, 
         contract_number = :contract_number, 
         city = :city, 
@@ -398,21 +357,15 @@ class RepositorioRfq {
         file_document = :file_document,
         accounting = :accounting,
         shipping_address = :shipping_address,
-        special_requirements = :special_requirements
+        special_requirements = :special_requirements,
+        gsa = :gsa,
+        client_payment_terms = :client_payment_terms
         WHERE id = :id_rfq
         ";
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindParam(':usuario_designado', $designated_user, PDO::PARAM_STR);
-        $sentencia->bindParam(':comments', $comments, PDO::PARAM_STR);
-        $sentencia->bindParam(':ship_via', $ship_via, PDO::PARAM_STR);
-        $sentencia->bindParam(':address', $address, PDO::PARAM_STR);
         $sentencia->bindParam(':ship_to', $ship_to, PDO::PARAM_STR);
-        $sentencia->bindParam(':fecha_completado', $fecha_completado, PDO::PARAM_STR);
-        $sentencia->bindParam(':expiration_date', $expiration_date, PDO::PARAM_STR);
         $sentencia->bindParam(':email_code', $email_code, PDO::PARAM_STR);
-        $sentencia->bindParam(':type_of_bid', $type_of_bid, PDO::PARAM_STR);
-        $sentencia->bindParam(':issue_date', $issue_date, PDO::PARAM_STR);
-        $sentencia->bindParam(':end_date', $end_date, PDO::PARAM_STR);
         $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
         $sentencia->bindParam(':contract_number', $contract_number, PDO::PARAM_STR);
         $sentencia->bindParam(':city', $city, PDO::PARAM_STR);
@@ -427,6 +380,67 @@ class RepositorioRfq {
         $sentencia->bindParam(':accounting', $accounting, PDO::PARAM_STR);
         $sentencia->bindParam(':shipping_address', $shipping_address, PDO::PARAM_STR);
         $sentencia->bindParam(':special_requirements', $special_requirements, PDO::PARAM_STR);
+        $sentencia->bindParam(':gsa', $gsa, PDO::PARAM_STR);
+        $sentencia->bindParam(':client_payment_terms', $client_payment_terms, PDO::PARAM_STR);
+        $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia->execute();
+        if ($sentencia) {
+          $cotizacion_editada = true;
+        }
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $cotizacion_editada;
+  }
+
+  public static function save_information(
+    $conexion,
+    $expiration_date,
+    $fecha_completado,
+    $address,
+    $ship_via,
+    $type_of_bid,
+    $issue_date,
+    $end_date,
+    $designated_user,
+    $email_code,
+    $channel,
+    $ship_to,
+    $comments,
+    $id_rfq
+  ) {
+    $cotizacion_editada = false;
+    if (isset($conexion)) {
+      try {
+        $sql = "UPDATE rfq SET 
+        expiration_date = :expiration_date, 
+        fecha_completado = :fecha_completado, 
+        address = :address, 
+        ship_via = :ship_via, 
+        type_of_bid = :type_of_bid, 
+        issue_date = :issue_date, 
+        end_date = :end_date,
+        usuario_designado = :usuario_designado, 
+        email_code = :email_code, 
+        canal = :canal, 
+        ship_to = :ship_to, 
+        comments = :comments 
+        WHERE id = :id_rfq
+        ";
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindParam(':ship_via', $ship_via, PDO::PARAM_STR);
+        $sentencia->bindParam(':address', $address, PDO::PARAM_STR);
+        $sentencia->bindParam(':fecha_completado', $fecha_completado, PDO::PARAM_STR);
+        $sentencia->bindParam(':expiration_date', $expiration_date, PDO::PARAM_STR);
+        $sentencia->bindParam(':type_of_bid', $type_of_bid, PDO::PARAM_STR);
+        $sentencia->bindParam(':issue_date', $issue_date, PDO::PARAM_STR);
+        $sentencia->bindParam(':end_date', $end_date, PDO::PARAM_STR);
+        $sentencia->bindParam(':usuario_designado', $designated_user, PDO::PARAM_STR);
+        $sentencia->bindParam(':email_code', $email_code, PDO::PARAM_STR);
+        $sentencia->bindParam(':canal', $channel, PDO::PARAM_STR);
+        $sentencia->bindParam(':ship_to', $ship_to, PDO::PARAM_STR);
+        $sentencia->bindParam(':comments', $comments, PDO::PARAM_STR);
         $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia->execute();
         if ($sentencia) {
@@ -565,7 +579,7 @@ class RepositorioRfq {
     }
     $partes_fecha_completado = explode('-', $cotizacion->obtener_fecha_completado());
     $fecha_completado = $partes_fecha_completado[1] . '/' . $partes_fecha_completado[2] . '/' . $partes_fecha_completado[0];
-    ?>
+?>
     <tr <?php if ($cotizacion->obtener_comments() == 'Working on it') {
           echo 'class="waiting_for"';
         } ?>>
@@ -835,167 +849,203 @@ class RepositorioRfq {
     }
   }
 
-  public static function obtener_cotizaciones_no_bid($conexion) {
-    $cotizaciones = [];
+  public static function getNoBidQuotes($conexion, $start, $length, $search, $sort_column_index, $sort_direction) {
+    $data = [];
+    $search = '%' . $search . '%';
+    $sort_column = $sort_column_index == 0 ? 'rfq.id' : ($sort_column_index == 1 ? 'nombre_usuario' : ($sort_column_index == 2 ? 'email_code' : ($sort_column_index == 3 ? 'type_of_bid' : 'comments')));
     if (isset($conexion)) {
       try {
-        $sql = "SELECT * FROM rfq WHERE deleted = 0 AND comments = 'No Bid' OR comments = 'Manufacturer in the Bid' OR comments = 'Expired due date' OR comments = 'Supplier did not provide a quote' OR comments = 'Others' ORDER BY id DESC";
+        $sql = 'SELECT rfq.id, 
+        usuarios.nombre_usuario, 
+        email_code, 
+        type_of_bid,
+        comments,
+        NULL AS options 
+        FROM rfq 
+        LEFT JOIN usuarios ON rfq.usuario_designado = usuarios.id
+        WHERE rfq.deleted = 0 
+        AND (comments = "No Bid" OR comments = "Manufacturer in the Bid" OR comments = "Expired due date" OR comments = "Supplier did not provide a quote" OR comments = "Others") AND 
+        (rfq.id LIKE :search OR nombre_usuario LIKE :search OR type_of_bid LIKE :search OR email_code LIKE :search OR comments LIKE :search) 
+        ORDER BY ' . $sort_column . ' ' . $sort_direction . ' LIMIT ' . $start . ', ' . $length;
         $sentencia = $conexion->prepare($sql);
+        $sentencia->bindParam(':search', $search, PDO::PARAM_STR);
         $sentencia->execute();
-        $cotizaciones = self::array_to_object($sentencia);
+        while ($row = $sentencia->fetch(PDO::FETCH_ASSOC)) {
+          $data[] = $row;
+        }
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
-    return $cotizaciones;
+    return $data;
   }
 
-  public static function escribir_cotizacion_no_bid($cotizacion) {
-    if (!isset($cotizacion)) {
-      return;
-    }
-    ?>
-    <tr>
-      <td>
-        <a href="<?php echo EDITAR_COTIZACION . '/' . $cotizacion->obtener_id(); ?>" class="btn-block">
-          <?php echo $cotizacion->obtener_email_code(); ?>
-        </a>
-      </td>
-      <td>
-        <?php
-        Conexion::abrir_conexion();
-        $usuario = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), $cotizacion->obtener_usuario_designado());
-        Conexion::cerrar_conexion();
-        echo $usuario->obtener_nombre_usuario();
-        ?>
-      </td>
-      <td><?php echo $cotizacion->obtener_type_of_bid(); ?></td>
-      <td><?php echo $cotizacion->obtener_issue_date(); ?></td>
-      <td><?php echo $cotizacion->obtener_end_date(); ?></td>
-      <td><?php echo $cotizacion->obtener_id(); ?></td>
-      <td><?php echo $cotizacion->obtener_comments(); ?></td>
-    </tr>
-    <?php
-  }
-
-  public static function escribir_cotizaciones_no_bid() {
-    Conexion::abrir_conexion();
-    $cotizaciones = self::obtener_cotizaciones_no_bid(Conexion::obtener_conexion());
-    Conexion::cerrar_conexion();
-    if (count($cotizaciones)) {
-    ?>
-      <table id="tabla" class="table table-bordered table-responsive-md">
-        <thead>
-          <tr>
-            <th>CODE</th>
-            <th>DEDIGNATED USER</th>
-            <th>TYPE OF BID</th>
-            <th>ISSUE DATE</th>
-            <th>END DATE</th>
-            <th>PROPOSAL</th>
-            <th>COMMENTS</th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php
-          foreach ($cotizaciones as $cotizacion) {
-            self::escribir_cotizacion_no_bid($cotizacion);
-          }
-          ?>
-        </tbody>
-      </table>
-    <?php
-    }
-  }
-
-  public static function obtener_cotizaciones_cancelled($conexion) {
-    $cotizaciones = [];
+  public static function getTotalNoBidQuotesCount($conexion) {
     if (isset($conexion)) {
       try {
-        $sql = "SELECT * FROM rfq WHERE deleted = 0 AND comments = 'Cancelled' ORDER BY id DESC";
+        $sql = 'SELECT COUNT(*)
+        FROM rfq 
+        WHERE deleted = 0 
+        AND (comments = "No Bid" OR comments = "Manufacturer in the Bid" OR comments = "Expired due date" OR comments = "Supplier did not provide a quote" OR comments = "Others")';
         $sentencia = $conexion->prepare($sql);
         $sentencia->execute();
-        $cotizaciones = self::array_to_object($sentencia);
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
-    return $cotizaciones;
+    return $sentencia->fetchColumn();
   }
 
-  public static function escribir_cotizaciones_cancelled() {
-    Conexion::abrir_conexion();
-    $cotizaciones = self::obtener_cotizaciones_cancelled(Conexion::obtener_conexion());
-    Conexion::cerrar_conexion();
-    if (count($cotizaciones)) {
-    ?>
-      <table id="tabla" class="table table-bordered table-responsive-md">
-        <thead>
-          <tr>
-            <th>CODE</th>
-            <th>DEDIGNATED USER</th>
-            <th>TYPE OF BID</th>
-            <th>ISSUE DATE</th>
-            <th>END DATE</th>
-            <th>PROPOSAL</th>
-            <th>COMMENTS</th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php
-          foreach ($cotizaciones as $cotizacion) {
-            self::escribir_cotizacion_no_bid($cotizacion);
-          }
-          ?>
-        </tbody>
-      </table>
-    <?php
-    }
-  }
-
-  public static function obtener_cotizaciones_no_submitted($conexion) {
-    $cotizaciones = [];
+  public static function getTotalFilteredNoBidQuotesCount($conexion, $search) {
+    $search = '%' . $search . '%';
     if (isset($conexion)) {
       try {
-        $sql = "SELECT * FROM rfq WHERE deleted = 0 AND comments = 'Not submitted' ORDER BY id DESC";
+        $sql = 'SELECT COUNT(*)
+        FROM rfq 
+        LEFT JOIN usuarios ON rfq.usuario_designado = usuarios.id 
+        WHERE deleted = 0 
+        AND (comments = "No Bid" OR comments = "Manufacturer in the Bid" OR comments = "Expired due date" OR comments = "Supplier did not provide a quote" OR comments = "Others") AND 
+        (rfq.id LIKE :search OR nombre_usuario LIKE :search OR type_of_bid LIKE :search OR email_code LIKE :search OR comments LIKE :search)';
         $sentencia = $conexion->prepare($sql);
+        $sentencia->bindParam(':search', $search, PDO::PARAM_STR);
         $sentencia->execute();
-        $cotizaciones = self::array_to_object($sentencia);
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
-    return $cotizaciones;
+    return $sentencia->fetchColumn();
   }
 
-  public static function escribir_tabla_cotizaciones_no_submitted() {
-    Conexion::abrir_conexion();
-    $cotizaciones = self::obtener_cotizaciones_no_submitted(Conexion::obtener_conexion());
-    Conexion::cerrar_conexion();
-    if (count($cotizaciones)) {
-    ?>
-      <table id="tabla" class="table table-bordered table-responsive-md">
-        <thead>
-          <tr>
-            <th>CODE</th>
-            <th>DEDIGNATED USER</th>
-            <th>TYPE OF BID</th>
-            <th>ISSUE DATE</th>
-            <th>END DATE</th>
-            <th>PROPOSAL</th>
-            <th>COMMENTS</th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php
-          foreach ($cotizaciones as $cotizacion) {
-            self::escribir_cotizacion_no_bid($cotizacion);
-          }
-          ?>
-        </tbody>
-      </table>
-    <?php
+  public static function getCancelledQuotes($conexion, $start, $length, $search, $sort_column_index, $sort_direction) {
+    $data = [];
+    $search = '%' . $search . '%';
+    $sort_column = $sort_column_index == 0 ? 'rfq.id' : ($sort_column_index == 1 ? 'nombre_usuario' : ($sort_column_index == 2 ? 'email_code' : 'type_of_bid'));
+    if (isset($conexion)) {
+      try {
+        $sql = 'SELECT rfq.id, 
+        usuarios.nombre_usuario, 
+        email_code, 
+        type_of_bid,
+        NULL AS options 
+        FROM rfq 
+        LEFT JOIN usuarios ON rfq.usuario_designado = usuarios.id
+        WHERE rfq.deleted = 0 
+        AND comments = "Cancelled" AND 
+        (rfq.id LIKE :search OR nombre_usuario LIKE :search OR type_of_bid LIKE :search OR email_code LIKE :search) 
+        ORDER BY ' . $sort_column . ' ' . $sort_direction . ' LIMIT ' . $start . ', ' . $length;
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindParam(':search', $search, PDO::PARAM_STR);
+        $sentencia->execute();
+        while ($row = $sentencia->fetch(PDO::FETCH_ASSOC)) {
+          $data[] = $row;
+        }
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
     }
+    return $data;
+  }
+
+  public static function getTotalCancelledQuotesCount($conexion) {
+    if (isset($conexion)) {
+      try {
+        $sql = 'SELECT COUNT(*)
+        FROM rfq 
+        WHERE deleted = 0 
+        AND comments = "Cancelled"';
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->execute();
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $sentencia->fetchColumn();
+  }
+
+  public static function getTotalFilteredCancelledQuotesCount($conexion, $search) {
+    $search = '%' . $search . '%';
+    if (isset($conexion)) {
+      try {
+        $sql = 'SELECT COUNT(*)
+        FROM rfq 
+        LEFT JOIN usuarios ON rfq.usuario_designado = usuarios.id 
+        WHERE deleted = 0 
+        AND comments = "Cancelled" AND 
+        (rfq.id LIKE :search OR nombre_usuario LIKE :search OR type_of_bid LIKE :search OR email_code LIKE :search)';
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindParam(':search', $search, PDO::PARAM_STR);
+        $sentencia->execute();
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $sentencia->fetchColumn();
+  }
+
+  public static function getNotSubmittedQuotes($conexion, $start, $length, $search, $sort_column_index, $sort_direction) {
+    $data = [];
+    $search = '%' . $search . '%';
+    $sort_column = $sort_column_index == 0 ? 'rfq.id' : ($sort_column_index == 1 ? 'nombre_usuario' : ($sort_column_index == 2 ? 'email_code' : 'type_of_bid'));
+    if (isset($conexion)) {
+      try {
+        $sql = 'SELECT rfq.id, 
+        usuarios.nombre_usuario, 
+        email_code, 
+        type_of_bid,
+        NULL AS options 
+        FROM rfq 
+        LEFT JOIN usuarios ON rfq.usuario_designado = usuarios.id
+        WHERE rfq.deleted = 0 
+        AND comments = "Not submitted" AND 
+        (rfq.id LIKE :search OR nombre_usuario LIKE :search OR type_of_bid LIKE :search OR email_code LIKE :search) 
+        ORDER BY ' . $sort_column . ' ' . $sort_direction . ' LIMIT ' . $start . ', ' . $length;
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindParam(':search', $search, PDO::PARAM_STR);
+        $sentencia->execute();
+        while ($row = $sentencia->fetch(PDO::FETCH_ASSOC)) {
+          $data[] = $row;
+        }
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $data;
+  }
+
+  public static function getTotalNotSubmittedQuotesCount($conexion) {
+    if (isset($conexion)) {
+      try {
+        $sql = 'SELECT COUNT(*)
+        FROM rfq 
+        WHERE deleted = 0 
+        AND comments = "Not submitted"';
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->execute();
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $sentencia->fetchColumn();
+  }
+
+  public static function getTotalFilteredNotSubmittedQuotesCount($conexion, $search) {
+    $search = '%' . $search . '%';
+    if (isset($conexion)) {
+      try {
+        $sql = 'SELECT COUNT(*)
+        FROM rfq 
+        LEFT JOIN usuarios ON rfq.usuario_designado = usuarios.id 
+        WHERE deleted = 0 
+        AND comments = "Not submitted" AND 
+        (rfq.id LIKE :search OR nombre_usuario LIKE :search OR type_of_bid LIKE :search OR email_code LIKE :search)';
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindParam(':search', $search, PDO::PARAM_STR);
+        $sentencia->execute();
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $sentencia->fetchColumn();
   }
 
   public static function escribir_cotizacion_resultado_busqueda($cotizacion) {

@@ -12,10 +12,10 @@ Conexion::cerrar_conexion();
   <section class="content-header">
     <div class="container-fluid">
       <div class="row mb-2">
-        <div class="col-sm-4">
+        <div class="col-sm-3">
           <h1>Fulfillment table</h1>
         </div>
-        <div class="col-sm-4 text-center">
+        <div class="col-sm-5 text-center">
           <?php
           include_once 'plantillas/fulfillment/templates/comments_button.inc.php';
           include_once 'plantillas/fulfillment/templates/pending_button.inc.php';

@@ -19,9 +19,19 @@
               <h3 class="card-title">Cancelled</h3>
             </div>
             <div class="card-body">
-              <?php
-              RepositorioRfq::escribir_cotizaciones_cancelled();
-              ?>
+              <table id="cancelled_table" class="table table-bordered table-responsive-md">
+                <thead>
+                  <tr>
+                    <th>PROPOSAL</th>
+                    <th>DEDIGNATED USER</th>
+                    <th>CODE</th>
+                    <th>TYPE OF BID</th>
+                    <th>OPTIONS</th>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
             </div>
           </div>
         </section>

@@ -60,6 +60,8 @@ class Rfq {
   private $special_requirements;
   private $file_document;
   private $accounting;
+  private $gsa;
+  private $client_payment_terms;
 
   public function __construct(
     $id,
@@ -122,6 +124,8 @@ class Rfq {
     $special_requirements,
     $file_document,
     $accounting,
+    $gsa,
+    $client_payment_terms
   ) {
     $this->id = $id;
     $this->id_usuario = $id_usuario;
@@ -183,6 +187,8 @@ class Rfq {
     $this->special_requirements = $special_requirements;
     $this->file_document = $file_document;
     $this->accounting = $accounting;
+    $this->gsa = $gsa;
+    $this->client_payment_terms = $client_payment_terms;
   }
 
   public function obtener_id() {
@@ -374,7 +380,7 @@ class Rfq {
     return $this->total_cost + $total_services;
   }
 
-  public function getTotalQuoteServices(){
+  public function getTotalQuoteServices() {
     Conexion::abrir_conexion();
     $total_services = ServiceRepository::get_total(Conexion::obtener_conexion(), $this->id);
     Conexion::cerrar_conexion();
@@ -413,6 +419,26 @@ class Rfq {
   public function obtener_re_quote_profit_percentage() {
     if ($this->obtener_quote_total_price()) {
       return 100 * ($this->obtener_re_quote_profit() / $this->obtener_quote_total_price());
+    } else {
+      return 0;
+    }
+  }
+
+  //reQuote amounts (only RFQ)
+  public function obtener_re_quote_total_cost_rfq() {
+    Conexion::abrir_conexion();
+    $re_quote = ReQuoteRepository::get_re_quote_by_id_rfq(Conexion::obtener_conexion(), $this->id);
+    Conexion::cerrar_conexion();
+    return $re_quote->get_total_cost();
+  }
+
+  public function obtener_re_quote_rfq_profit() {
+    return $this->obtener_total_price() - $this->obtener_re_quote_total_cost_rfq();
+  }
+
+  public function obtener_re_quote_rfq_profit_percentage() {
+    if ($this->obtener_total_price()) {
+      return 100 * ($this->obtener_re_quote_rfq_profit() / $this->obtener_total_price());
     } else {
       return 0;
     }
@@ -463,8 +489,32 @@ class Rfq {
   }
 
   public function isServices() {
-    $services = ['Services', 'Audio Visual', 'Computers', 'Audio Visual'];
-    if (in_array($this->obtener_type_of_bid(), $services)) {
+    $services = ['Services', 'Audio Visual', 'Computers'];
+    if (in_array($this->type_of_bid, $services)) {
+      return true;
+    }
+    return false;
+  }
+
+  public function isNobid() {
+    $no_bid = ['No Bid', 'Manufacturer in the Bid', 'Expired due date', 'Supplier did not provide a quote', 'Others'];
+    if (in_array($this->comments, $no_bid)) {
+      return true;
+    }
+    return false;
+  }
+
+  public function isNotSubmitted() {
+    $not_submitted = ['Not submitted'];
+    if (in_array($this->comments, $not_submitted)) {
+      return true;
+    }
+    return false;
+  }
+
+  public function isCancelled() {
+    $cancelled = ['Cancelled'];
+    if (in_array($this->comments, $cancelled)) {
       return true;
     }
     return false;
@@ -480,7 +530,8 @@ class Rfq {
     Conexion::abrir_conexion();
     $re_quote_exists = ReQuoteRepository::re_quote_exists(Conexion::obtener_conexion(), $this->id);
     Conexion::cerrar_conexion();
-    return !$this->obtener_fullfillment() &&
+    return !$this->fullfillment &&
+      $this->award &&
       $re_quote_exists &&
       strlen($this->city) &&
       strlen($this->zip_code) &&
@@ -488,7 +539,8 @@ class Rfq {
       strlen($this->set_side) &&
       strlen($this->poc) &&
       strlen($this->co) &&
-      strlen($this->estimated_delivery_date);
+      strlen($this->estimated_delivery_date) &&
+      strlen($this->file_document);
   }
 
   public function obtener_services_payment_term() {
@@ -515,35 +567,43 @@ class Rfq {
     return $this->deleted;
   }
 
-  public function getSetSide(){
+  public function getSetSide() {
     return $this->set_side;
   }
 
-  public function getPoc(){
+  public function getPoc() {
     return $this->poc;
   }
 
-  public function getCo(){
+  public function getCo() {
     return $this->co;
   }
 
-  public function getEstimatedDeliveryDate(){
+  public function getEstimatedDeliveryDate() {
     return $this->estimated_delivery_date;
   }
 
-  public function getShippingAddress(){
+  public function getShippingAddress() {
     return $this->shipping_address;
   }
 
-  public function getSpecialRequirements(){
+  public function getSpecialRequirements() {
     return $this->special_requirements;
   }
 
-  public function getFileDocument(){
-    return explode('|' ,$this->file_document);
+  public function getFileDocument() {
+    return explode('|', $this->file_document);
   }
 
-  public function getAccounting(){
+  public function getAccounting() {
     return explode('|', $this->accounting);
+  }
+
+  public function getGsa() {
+    return $this->gsa;
+  }
+
+  public function getClientPaymentTerms() {
+    return $this->client_payment_terms;
   }
 }

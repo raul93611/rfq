@@ -23,9 +23,22 @@ $printable_channel = Input::printable_channel($channel);
               <h3 class="card-title">Quotes</h3>
             </div>
             <div class="card-body table-responsive">
-              <?php
-              RepositorioRfq::escribir_cotizaciones_por_canal_usuario_cargo($channel);
-              ?>
+              <table id="tabla_quotes" data-channel="<?php echo $channel; ?>" class="table table-bordered table-hover">
+                <thead>
+                  <tr>
+                    <th>PROPOSAL</th>
+                    <th>DESIGNATED USER</th>
+                    <th>TYPE OF BID</th>
+                    <th>ISSUE DATE</th>
+                    <th>END DATE</th>
+                    <th>CODE</th>
+                    <th>RFP</th>
+                    <th>OPTIONS</th>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
             </div>
           </div>
         </section>

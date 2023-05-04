@@ -61,7 +61,9 @@ $cotizacion_copia = new Rfq(
   $cotizacion->getShippingAddress(),
   $cotizacion->getSpecialRequirements(),
   $cotizacion->getFileDocument(),
-  $cotizacion->getAccounting()
+  $cotizacion->getAccounting(),
+  $cotizacion->getGsa(),
+  $cotizacion->getClientPaymentTerms()
 );
 list($cotizacion_insertada, $id_rfq_copia) = RepositorioRfq::insertar_cotizacion(Conexion::obtener_conexion(), $cotizacion_copia);
 AuditTrailRepository::quote_status_audit_trail(Conexion::obtener_conexion(), 'Copied', $id_rfq_copia);
