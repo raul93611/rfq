@@ -477,27 +477,33 @@ class RepositorioUsuario {
     return array($cotizaciones, $cotizaciones_pasadas);
   }
 
-  public static function obtener_array_nombres_usuario_cotizaciones_completadas_ganadas_sometidas() {
-    $nombres_usuario = array();
-    $cotizaciones_completadas = array();
-    $cotizaciones_completadas_pasadas = array();
-    $cotizaciones_ganadas = array();
-    $cotizaciones_ganadas_pasadas = array();
-    Conexion::abrir_conexion();
-    $usuarios = self::obtener_usuarios_rfq(Conexion::obtener_conexion());
-    Conexion::cerrar_conexion();
-
-    if (count($usuarios)) {
-      for ($i = 0; $i < count($usuarios); $i++) {
-        $usuario = $usuarios[$i];
-        $nombres_usuario[$i] = $usuario->obtener_nombre_usuario();
-        Conexion::abrir_conexion();
-        list($cotizaciones_completadas[$i], $cotizaciones_completadas_pasadas[$i]) = self::obtener_cotizaciones_por_usuario(Conexion::obtener_conexion(), $usuario->obtener_id(), 'completado');
-        list($cotizaciones_ganadas[$i], $cotizaciones_ganadas_pasadas[$i]) = self::obtener_cotizaciones_por_usuario(Conexion::obtener_conexion(), $usuario->obtener_id(), 'award');
-        Conexion::cerrar_conexion();
+  public static function getCompletedQuotesByUserAndLastCurrentMonth($connection) {
+    $data = [];
+    if (isset($connection)) {
+      try {
+        $sql = "
+        SELECT 
+          u.nombre_usuario AS user_name, 
+          COUNT(r.id) AS total_quotes,
+          COUNT(r2.id) AS total_quotes_past_month
+        FROM 
+          usuarios u 
+          LEFT JOIN rfq r ON r.id_usuario = u.id AND MONTH(r.fecha_completado) = MONTH(CURDATE()) AND YEAR(r.fecha_completado) = YEAR(CURDATE()) AND r.completado = 1
+          LEFT JOIN rfq r2 ON r2.id_usuario = u.id AND MONTH(r2.fecha_completado) = MONTH(CURDATE() - INTERVAL 1 MONTH) AND YEAR(r2.fecha_completado) = YEAR(CURDATE() - INTERVAL 1 MONTH) AND r2.completado = 1
+          WHERE u.cargo LIKE '%3%' AND u.status = 1
+        GROUP BY 
+          u.id
+        ";
+        $sentence = $connection->prepare($sql);
+        $sentence->execute();
+        while ($row = $sentence->fetch(PDO::FETCH_ASSOC)) {
+          $data[] = $row;
+        }
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
-    return array($nombres_usuario, $cotizaciones_completadas, $cotizaciones_completadas_pasadas, $cotizaciones_ganadas, $cotizaciones_ganadas_pasadas);
+    return $data;
   }
 
   public static function edit_user($conexion, $password, $username, $nombres, $apellidos, $cargo, $email, $id_user) {
@@ -534,76 +540,6 @@ class RepositorioUsuario {
       }
     }
     return $edited_user;
-  }
-
-  public static function obtener_cotizaciones_completadas_por_usuario_y_mes($conexion){
-    $usuarios = self::obtener_usuarios_rfq($conexion);
-    $cotizaciones_completadas_anual_usuarios = [];
-    if(isset($conexion)){
-      try{
-        foreach ($usuarios as $usuario) {
-          $cotizaciones_completadas_anual_por_usuario = [];
-          $id_usuario = $usuario-> obtener_id();
-          for($i = 1; $i <= 12; $i++){
-            $sql = 'SELECT COUNT(*) as cotizaciones_completadas_usuario_mes FROM rfq WHERE usuario_designado = :id_usuario  AND completado = 1 AND MONTH(fecha_completado) = ' . $i . ' AND YEAR(fecha_completado) = YEAR(NOW())';
-            $sentencia = $conexion-> prepare($sql);
-            $sentencia-> bindParam(':id_usuario', $id_usuario, PDO::PARAM_STR);
-            $sentencia-> execute();
-            $resultado = $sentencia-> fetch(PDO::FETCH_ASSOC);
-            if (!empty($resultado)) {
-              $cotizaciones_completadas_anual_por_usuario[$i - 1] = $resultado['cotizaciones_completadas_usuario_mes'];
-            } else {
-              $cotizaciones_completadas_anual_por_usuario[$i - 1] = 0;
-            }
-          }
-          $cotizaciones_completadas_anual_usuarios[] = $cotizaciones_completadas_anual_por_usuario;
-        }
-      }catch(PDOException $ex){
-        print 'ERROR:' . $ex->getMessage() . '<br>';
-      }
-    }
-    return $cotizaciones_completadas_anual_usuarios;
-  }
-
-  public static function obtener_cotizaciones_ganadas_por_usuario_y_mes($conexion){
-    $usuarios = self::obtener_usuarios_rfq($conexion);
-    $cotizaciones_ganadas_anual_usuarios = [];
-    $cotizaciones_ganadas_anual_usuarios_monto = [];
-    if(isset($conexion)){
-      try{
-        foreach ($usuarios as $usuario) {
-          $cotizaciones_ganadas_anual_por_usuario = [];
-          $cotizaciones_ganadas_anual_por_usuario_monto = [];
-          $id_usuario = $usuario-> obtener_id();
-          for($i = 1; $i <= 12; $i++){
-            $sql = 'SELECT COUNT(*) as cotizaciones_ganadas_usuario_mes FROM rfq WHERE usuario_designado = :id_usuario  AND award = 1 AND MONTH(fecha_award) = ' . $i . ' AND YEAR(fecha_award) = YEAR(NOW())';
-            $sql1 = 'SELECT * FROM rfq WHERE deleted = 0 AND usuario_designado = :id_usuario AND award = 1 AND MONTH(fecha_award) = ' . $i . ' AND YEAR(fecha_award) = YEAR(NOW())';
-            $sentencia = $conexion-> prepare($sql);
-            $sentencia1 = $conexion-> prepare($sql1);
-            $sentencia-> bindParam(':id_usuario', $id_usuario, PDO::PARAM_STR);
-            $sentencia1-> bindParam(':id_usuario', $id_usuario, PDO::PARAM_STR);
-            $sentencia-> execute();
-            $sentencia1-> execute();
-            $resultado = $sentencia-> fetch(PDO::FETCH_ASSOC);
-            $quotes = RepositorioRfq::array_to_object($sentencia1);
-            if (!empty($resultado)) {
-              $cotizaciones_ganadas_anual_por_usuario[$i - 1] = $resultado['cotizaciones_ganadas_usuario_mes'];
-            } else {
-              $cotizaciones_ganadas_anual_por_usuario[$i - 1] = 0;
-            }
-            $cotizaciones_ganadas_anual_por_usuario_monto[$i - 1] = 0;
-            foreach ($quotes as $key => $quote) {
-              $cotizaciones_ganadas_anual_por_usuario_monto[$i - 1] += $quote-> obtener_quote_total_price();
-            }
-          }
-          $cotizaciones_ganadas_anual_usuarios[] = $cotizaciones_ganadas_anual_por_usuario;
-          $cotizaciones_ganadas_anual_usuarios_monto[] = $cotizaciones_ganadas_anual_por_usuario_monto;
-        }
-      }catch(PDOException $ex){
-        print 'ERROR:' . $ex->getMessage() . '<br>';
-      }
-    }
-    return array($cotizaciones_ganadas_anual_usuarios, $cotizaciones_ganadas_anual_usuarios_monto);
   }
 }
 ?>

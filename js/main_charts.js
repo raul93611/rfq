@@ -10,8 +10,12 @@ $(document).ready(function () {
         $('#annual_awards_amounts .past').html('$ ' + data.past_total_annual_awards_amounts);
         $('#annual_awards .current').html(data.total_annual_awards);
         $('#annual_awards .past').html(data.past_total_annual_awards);
+        const usernames = data.completed_quotes_by_user_and_last_current_month.map(obj => obj.user_name);
+        const totalCompletedQuotes = data.completed_quotes_by_user_and_last_current_month.map(obj => obj.total_quotes);
+        const totalCompletedQuotesLastMonth = data.completed_quotes_by_user_and_last_current_month.map(obj => obj.total_quotes_past_month);
+        const annualAwardsAmountByMonth = data.annual_awards_amount_by_month.map(obj => obj.total_price);
+        const pastAnnualAwardsAmountByMonth = data.past_annual_awards_amount_by_month.map(obj => obj.total_price);
 
-        var usernames = data.usernames;
         var chartdata = {
           labels: usernames,
           datasets: [
@@ -19,13 +23,13 @@ $(document).ready(function () {
               label: 'Current month',
               backgroundColor: '#13A8F0',
               borderColor: '#13A8F0',
-              data: data.completed_quotes
+              data: totalCompletedQuotes
             },
             {
               label: 'Last month',
               backgroundColor: '#39485A',
               borderColor: '#39485A',
-              data: data.past_completed_quotes
+              data: totalCompletedQuotesLastMonth
             }
           ]
         };
@@ -50,13 +54,13 @@ $(document).ready(function () {
               label: 'Annual awards(by amount) ',
               backgroundColor: '#13A8F0',
               borderColor: '#13A8F0',
-              data: data.monthly_price_awards
+              data: annualAwardsAmountByMonth
             },
             {
               label: 'Past annual awards(by amount)',
               backgroundColor: '#39485A',
               borderColor: '#39485A',
-              data: data.past_monthly_price_awards
+              data: pastAnnualAwardsAmountByMonth
             }
           ]
         };
@@ -135,99 +139,6 @@ $(document).ready(function () {
         var box = $("#ganados_anuales_chart");
         var grafico = new Chart(box, {
           type: 'bar',
-          data: chartdata,
-          options: {
-            maintainAspectRatio: false,
-            scales: {
-              y: {
-                beginAtZero: true
-              }
-            }
-          },
-        });
-
-        var dataSets = [];
-        usernames.forEach((username, i) => {
-          var color = '#'+Math.floor(Math.random()*16777215).toString(16);
-          dataSets.push(
-            {
-              label: username,
-              data: data.monthly_completed_quotes_by_user[i],
-              backgroundColor: color,
-              borderColor: color,
-            }
-          );
-        });
-
-        var chartdata = {
-          labels: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
-          datasets: dataSets
-        };
-        var box = $("#user_by_month_completed");
-        var grafico = new Chart(box, {
-          type: 'line',
-          data: chartdata,
-          options: {
-            maintainAspectRatio: false,
-            scales: {
-              y: {
-                beginAtZero: true
-              }
-            }
-          },
-        });
-
-        var dataSets = [];
-        usernames.forEach((username, i) => {
-          var color = '#'+Math.floor(Math.random()*16777215).toString(16);
-          dataSets.push(
-            {
-              label: username,
-              data: data.monthly_awards_quotes_by_user[i],
-              backgroundColor: color,
-              borderColor: color,
-            }
-          );
-        });
-
-        var chartdata = {
-          labels: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
-          datasets: dataSets
-        };
-        var box = $("#user_by_month_award");
-        var grafico = new Chart(box, {
-          type: 'line',
-          data: chartdata,
-          options: {
-            maintainAspectRatio: false,
-            scales: {
-              y: {
-                beginAtZero: true
-              }
-            }
-          },
-        });
-
-        var dataSets = [];
-        usernames.forEach((username, i) => {
-          var color = '#'+Math.floor(Math.random()*16777215).toString(16);
-          dataSets.push(
-            {
-              label: username,
-              data: data.monthly_price_awards_quotes_by_user[i],
-              backgroundColor: color,
-              borderColor: color,
-            }
-          );
-        });
-
-        var chartdata = {
-          labels: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
-          datasets: dataSets
-        };
-        var box = $("#user_by_month_award_amount");
-        var grafico = new Chart(box, {
-          type: 'line',
           data: chartdata,
           options: {
             maintainAspectRatio: false,
