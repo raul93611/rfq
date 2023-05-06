@@ -11,9 +11,9 @@ $(document).ready(function () {
         $('#annual_awards .current').html(data.annual_awards);
         $('#annual_awards .past').html(data.past_annual_awards);
         
-        const usernames = data.completed_quotes_by_user_and_last_current_month.map(obj => obj.user_name);
-        const totalCompletedQuotes = data.completed_quotes_by_user_and_last_current_month.map(obj => obj.total_quotes);
-        const totalCompletedQuotesLastMonth = data.completed_quotes_by_user_and_last_current_month.map(obj => obj.total_quotes_past_month);
+        const usernames = data.completed_quotes_by_user_past_month.map(obj => obj.user_name);
+        const totalCompletedQuotes = data.completed_quotes_by_user_current_month.map(obj => obj.total_quotes);
+        const totalCompletedQuotesLastMonth = data.completed_quotes_by_user_past_month.map(obj => obj.total_quotes);
         var chartdata = {
           labels: usernames,
           datasets: [
@@ -88,8 +88,8 @@ $(document).ready(function () {
           },
         });
 
-        const totalAwardQuotes = data.award_quotes_by_user_and_last_current_month.map(obj => obj.total_quotes);
-        const totalAwardQuotesLastMonth = data.award_quotes_by_user_and_last_current_month.map(obj => obj.total_quotes_past_month);
+        const totalAwardQuotes = data.award_quotes_by_user_current_month.map(obj => obj.total_quotes);
+        const totalAwardQuotesLastMonth = data.award_quotes_by_user_past_month.map(obj => obj.total_quotes);
         var chartdata = {
           labels: usernames,
           datasets: [

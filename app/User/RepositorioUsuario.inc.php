@@ -434,7 +434,7 @@ class RepositorioUsuario {
     return $usuarios;
   }
 
-  public static function getQuotesByUserAndLastCurrentMonth($connection, $type) {
+  public static function getQuotesByUserAndMonth($connection, $type, $month) {
     $data = [];
     switch ($type) {
       case 'completed':
@@ -454,16 +454,16 @@ class RepositorioUsuario {
       try {
         $sql = "
         SELECT 
-          u.nombre_usuario AS user_name, 
-          COUNT(r.id) AS total_quotes,
-          COUNT(r2.id) AS total_quotes_past_month
+          u.nombre_usuario AS user_name,
+          COUNT(r.id) AS total_quotes
         FROM 
           usuarios u 
-          LEFT JOIN rfq r ON r.usuario_designado = u.id AND MONTH(r." . $date . ") = MONTH(CURDATE()) AND YEAR(r." . $date . ") = YEAR(CURDATE()) AND r." . $status . " = 1
-          LEFT JOIN rfq r2 ON r2.usuario_designado = u.id AND MONTH(r2." . $date . ") = MONTH(CURDATE() - INTERVAL 1 MONTH) AND YEAR(r2." . $date . ") = YEAR(CURDATE() - INTERVAL 1 MONTH) AND r2." . $status . " = 1
+          LEFT JOIN rfq r ON r.usuario_designado = u.id 
+          AND DATE_FORMAT(r." . $date . ", '%Y-%m') = '" . $month . "'
+          AND r." . $status . " = 1
           WHERE u.cargo LIKE '%3%' AND u.status = 1
         GROUP BY 
-          u.id
+          u.id;
         ";
         $sentence = $connection->prepare($sql);
         $sentence->execute();
