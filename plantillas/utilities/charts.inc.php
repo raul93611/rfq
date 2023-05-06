@@ -67,59 +67,6 @@
             </div>
           </div>
         </section>
-        <div class="col-md-12">
-          <div class="card">
-            <div class="card-header no-border">
-              <div class="d-flex justify-content-between">
-                <h3 class="card-title">Completed</h3>
-              </div>
-            </div>
-            <div class="card-body">
-              <div class="position-relative mb-4">
-                <canvas id="user_by_month_completed" style="height:400px;"></canvas>
-              </div>
-              <div class="d-flex flex-row justify-content-end">
-                <span class="mr-2">
-                  Current year
-                </span>
-              </div>
-            </div>
-          </div>
-          <div class="card">
-            <div class="card-header no-border">
-              <div class="d-flex justify-content-between">
-                <h3 class="card-title">Award</h3>
-              </div>
-            </div>
-            <div class="card-body">
-              <div class="position-relative mb-4">
-                <canvas id="user_by_month_award" style="height:400px;"></canvas>
-              </div>
-              <div class="d-flex flex-row justify-content-end">
-                <span class="mr-2">
-                  Current year
-                </span>
-              </div>
-            </div>
-          </div>
-          <div class="card">
-            <div class="card-header no-border">
-              <div class="d-flex justify-content-between">
-                <h3 class="card-title">Award(by amount)</h3>
-              </div>
-            </div>
-            <div class="card-body">
-              <div class="position-relative mb-4">
-                <canvas id="user_by_month_award_amount" style="height:400px;"></canvas>
-              </div>
-              <div class="d-flex flex-row justify-content-end">
-                <span class="mr-2">
-                  Current year
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   </section>

@@ -1134,83 +1134,123 @@ class RepositorioRfq {
     <?php
   }
 
-  public static function obtener_monto_cotizaciones_ganadas_por_mes($conexion) {
-    $amount = array();
-    $past_amount = array();
-    if (isset($conexion)) {
+  public static function getAnnualAwardsAmountByMonth($connection, $year) {
+    $data = [];
+    if (isset($connection)) {
       try {
-        for ($i = 1; $i <= 12; $i++) {
-          // $sql1 = 'SELECT SUM(total_price) as amount, COUNT(*) as awards FROM rfq WHERE award = 1 AND MONTH(fecha_award) =' . $i . ' AND YEAR(fecha_award) = YEAR(CURDATE())';
-          $sql1 = 'SELECT (SUM(rfq.total_price) + (SELECT IFNULL(SUM(services.total_price), 0) FROM rfq RIGHT JOIN services ON rfq.id = services.id_rfq WHERE rfq.award = 1 AND MONTH(rfq.fecha_award) =' . $i . ' AND YEAR(rfq.fecha_award) = YEAR(CURDATE()))) as amount, COUNT(*) as awards FROM rfq WHERE rfq.award = 1 AND MONTH(rfq.fecha_award) =' . $i . ' AND YEAR(rfq.fecha_award) = YEAR(CURDATE())';
-          // $sql2 = 'SELECT SUM(total_price) as past_amount, COUNT(*) as past_awards FROM rfq WHERE award = 1 AND MONTH(fecha_award) =' . $i . ' AND YEAR(fecha_award) = YEAR(DATE_SUB(NOW(),INTERVAL 1 YEAR))';
-          $sql2 = 'SELECT (SUM(rfq.total_price) + (SELECT IFNULL(SUM(services.total_price), 0) FROM rfq RIGHT JOIN services ON rfq.id = services.id_rfq WHERE rfq.award = 1 AND MONTH(rfq.fecha_award) =' . $i . ' AND YEAR(rfq.fecha_award) = YEAR(DATE_SUB(NOW(),INTERVAL 1 YEAR)))) as past_amount, COUNT(*) as past_awards FROM rfq WHERE rfq.award = 1 AND MONTH(rfq.fecha_award) =' . $i . ' AND YEAR(rfq.fecha_award) = YEAR(DATE_SUB(NOW(),INTERVAL 1 YEAR))';
-          $sentencia1 = $conexion->prepare($sql1);
-          $sentencia2 = $conexion->prepare($sql2);
-          $sentencia1->execute();
-          $sentencia2->execute();
-          $resultado1 = $sentencia1->fetch(PDO::FETCH_ASSOC);
-          $resultado2 = $sentencia2->fetch(PDO::FETCH_ASSOC);
-
-          $amount[$i - 1] = is_null($resultado1['amount']) ? 0 : $resultado1['amount'];
-          $awards[$i - 1] = is_null($resultado1['awards']) ? 0 : $resultado1['awards'];
-          $past_amount[$i - 1] = is_null($resultado2['past_amount']) ? 0 : $resultado2['past_amount'];
-          $past_awards[$i - 1] = is_null($resultado2['past_awards']) ? 0 : $resultado2['past_awards'];
+        $sql = "
+        SELECT 
+          months.month,
+          COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) AS total_price
+        FROM 
+          (SELECT 1 AS month 
+          UNION SELECT 2 AS month 
+          UNION SELECT 3 AS month 
+          UNION SELECT 4 AS month 
+          UNION SELECT 5 AS month 
+          UNION SELECT 6 AS month 
+          UNION SELECT 7 AS month 
+          UNION SELECT 8 AS month 
+          UNION SELECT 9 AS month 
+          UNION SELECT 10 AS month 
+          UNION SELECT 11 AS month 
+          UNION SELECT 12 AS month) AS months
+          LEFT JOIN rfq r ON 
+          MONTH(r.fecha_award) = months.month AND 
+          r.award = 1 AND
+          YEAR(r.fecha_award) = " . $year . " 
+          LEFT JOIN services s ON 
+          r.id = s.id_rfq AND 
+          MONTH(r.fecha_award) = months.month AND 
+          YEAR(r.fecha_award) = " . $year . "
+        GROUP BY months.month
+        ";
+        $sentence = $connection->prepare($sql);
+        $sentence->execute();
+        while ($row = $sentence->fetch(PDO::FETCH_ASSOC)) {
+          $data[] = $row;
         }
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
-    return array($amount, $past_amount, $awards, $past_awards);
+    return $data;
   }
 
-  public static function obtener_comments($conexion) {
-    $no_bid = 0;
-    $manufacturer_in_the_bid = 0;
-    $expired_due_date = 0;
-    $supplier_did_not_provide_a_quote = 0;
-    $others = 0;
-    if (isset($conexion)) {
+  public static function getAnnualAwardsByMonth($connection, $year) {
+    $data = [];
+    if (isset($connection)) {
       try {
-        $sql = 'SELECT COUNT(*) as no_bid FROM rfq WHERE comments = "No Bid" AND YEAR(fecha_completado) = YEAR(CURDATE())';
-        $sql1 = 'SELECT COUNT(*) as manufacturer_in_bid FROM rfq WHERE comments = "Manufacturer in the Bid" AND YEAR(fecha_completado) = YEAR(CURDATE())'; // AND YEAR(fecha_completado) = YEAR(CURDATE())
-        $sql2 = 'SELECT COUNT(*) as expired_due_date FROM rfq WHERE comments = "Expired due date" AND YEAR(fecha_completado) = YEAR(CURDATE())';
-        $sql3 = 'SELECT COUNT(*) as supplier_did_not_provide_a_quote FROM rfq WHERE comments = "Supplier did not provide a quote" AND YEAR(fecha_completado) = YEAR(CURDATE())';
-        $sql4 = 'SELECT COUNT(*) as others FROM rfq WHERE comments = "Others" AND YEAR(fecha_completado) = YEAR(CURDATE())';
-        $sentencia = $conexion->prepare($sql);
-        $sentencia1 = $conexion->prepare($sql1);
-        $sentencia2 = $conexion->prepare($sql2);
-        $sentencia3 = $conexion->prepare($sql3);
-        $sentencia4 = $conexion->prepare($sql4);
-        $sentencia->execute();
-        $sentencia1->execute();
-        $sentencia2->execute();
-        $sentencia3->execute();
-        $sentencia4->execute();
-        $resultado = $sentencia->fetch();
-        $resultado1 = $sentencia1->fetch();
-        $resultado2 = $sentencia2->fetch();
-        $resultado3 = $sentencia3->fetch();
-        $resultado4 = $sentencia4->fetch();
-        if (!empty($resultado)) {
-          $no_bid = $resultado['no_bid'];
-        }
-        if (!empty($resultado1)) {
-          $manufacturer_in_the_bid = $resultado1['manufacturer_in_bid'];
-        }
-        if (!empty($resultado2)) {
-          $expired_due_date = $resultado2['expired_due_date'];
-        }
-        if (!empty($resultado3)) {
-          $supplier_did_not_provide_a_quote = $resultado3['supplier_did_not_provide_a_quote'];
-        }
-        if (!empty($resultado4)) {
-          $others = $resultado4['others'];
+        $sql = "
+        SELECT 
+          months.month,
+          COUNT(r.id) AS total_quotes
+        FROM 
+          (SELECT 1 AS month 
+          UNION SELECT 2 AS month 
+          UNION SELECT 3 AS month 
+          UNION SELECT 4 AS month 
+          UNION SELECT 5 AS month 
+          UNION SELECT 6 AS month 
+          UNION SELECT 7 AS month 
+          UNION SELECT 8 AS month 
+          UNION SELECT 9 AS month 
+          UNION SELECT 10 AS month 
+          UNION SELECT 11 AS month 
+          UNION SELECT 12 AS month) AS months
+          LEFT JOIN rfq r ON 
+          MONTH(r.fecha_award) = months.month AND 
+          r.award = 1 AND
+          YEAR(r.fecha_award) = " . $year . " 
+        GROUP BY months.month
+        ";
+        $sentence = $connection->prepare($sql);
+        $sentence->execute();
+        while ($row = $sentence->fetch(PDO::FETCH_ASSOC)) {
+          $data[] = $row;
         }
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
-    return array($no_bid, $manufacturer_in_the_bid, $expired_due_date, $supplier_did_not_provide_a_quote, $others);
+    return $data;
+  }
+
+  public static function getTotalAnnualAwardsAmount($connection, $year) {
+    $data = [];
+    if (isset($connection)) {
+      try {
+        $sql = "
+        SELECT SUM(COALESCE(s.total_price, 0)) + COALESCE(r.total_price, 0) AS total_amount
+        FROM rfq r
+        LEFT JOIN services s ON r.id = s.id_rfq
+        WHERE r.award = 1 AND YEAR(r.fecha_award) = " . $year . "
+        ";
+        $sentence = $connection->prepare($sql);
+        $sentence->execute();
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $sentence->fetchColumn();
+  }
+
+  public static function getTotalAnnualAwards($connection, $year) {
+    $data = [];
+    if (isset($connection)) {
+      try {
+        $sql = "
+        SELECT COUNT(r.id) AS total_quotes
+        FROM rfq r
+        WHERE r.award = 1 AND YEAR(r.fecha_award) = " . $year . "
+        ";
+        $sentence = $connection->prepare($sql);
+        $sentence->execute();
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $sentence->fetchColumn();
   }
 
   public static function actualizar_fecha_y_submitted($conexion, $id_rfq) {
