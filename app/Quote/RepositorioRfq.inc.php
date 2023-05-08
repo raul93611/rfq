@@ -1158,6 +1158,7 @@ class RepositorioRfq {
           LEFT JOIN rfq r ON 
           MONTH(r.fecha_award) = months.month AND 
           r.award = 1 AND
+          r.deleted = 0 AND
           YEAR(r.fecha_award) = " . $year . " 
           LEFT JOIN services s ON 
           r.id = s.id_rfq AND 
@@ -1201,6 +1202,7 @@ class RepositorioRfq {
           LEFT JOIN rfq r ON 
           MONTH(r.fecha_award) = months.month AND 
           r.award = 1 AND
+          r.deleted = 0 AND
           YEAR(r.fecha_award) = " . $year . " 
         GROUP BY months.month
         ";
@@ -1224,7 +1226,9 @@ class RepositorioRfq {
         SELECT SUM(COALESCE(s.total_price, 0)) + COALESCE(r.total_price, 0) AS total_amount
         FROM rfq r
         LEFT JOIN services s ON r.id = s.id_rfq
-        WHERE r.award = 1 AND YEAR(r.fecha_award) = " . $year . "
+        WHERE r.award = 1 AND 
+        r.deleted = 0 AND
+        YEAR(r.fecha_award) = " . $year . "
         ";
         $sentence = $connection->prepare($sql);
         $sentence->execute();
@@ -1242,7 +1246,9 @@ class RepositorioRfq {
         $sql = "
         SELECT COUNT(r.id) AS total_quotes
         FROM rfq r
-        WHERE r.award = 1 AND YEAR(r.fecha_award) = " . $year . "
+        WHERE r.award = 1 AND 
+        r.deleted = 0 AND
+        YEAR(r.fecha_award) = " . $year . "
         ";
         $sentence = $connection->prepare($sql);
         $sentence->execute();
