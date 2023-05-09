@@ -96,19 +96,68 @@ class TaskRepository{
     return $tasks;
   }
 
-  public static function get_all_done($connection){
-    $tasks = [];
-    if(isset($connection)){
-      try{
-        $sql = 'SELECT * FROM tasks WHERE status = "done" ORDER BY id DESC';
-        $sentence = $connection-> prepare($sql);
-        $sentence-> execute();
-        $tasks = self::array_to_object($sentence);
-      }catch(PDOException $ex){
+  public static function getDoneTasks($connection, $start, $length, $search, $sort_column_index, $sort_direction){
+    $data = [];
+    $search = '%' . $search . '%';
+    $sort_column = $sort_column_index == 0 ? 'tasks.id' : ($sort_column_index == 1 ? 'title' : ($sort_column_index == 2 ? 'created_by' : 'assigned_to'));
+    if (isset($connection)) {
+      try {
+        $sql = 'SELECT tasks.id, 
+        title, 
+        a.nombre_usuario as created_by, 
+        b.nombre_usuario as assigned_to
+        FROM tasks 
+        LEFT JOIN usuarios as a ON tasks.id_user = a.id
+        LEFT JOIN usuarios as b ON tasks.assigned_user = b.id
+        WHERE tasks.status = "done" AND
+        (title LIKE :search OR a.nombre_usuario LIKE :search OR b.nombre_usuario LIKE :search OR assigned_user LIKE :search) 
+        ORDER BY ' . $sort_column . ' ' . $sort_direction . ' LIMIT ' . $start . ', ' . $length;
+        $sentencia = $connection->prepare($sql);
+        $sentencia->bindParam(':search', $search, PDO::PARAM_STR);
+        $sentencia->execute();
+        while ($row = $sentencia->fetch(PDO::FETCH_ASSOC)) {
+          $data[] = $row;
+        }
+      } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
-    return $tasks;
+    return $data;
+  }
+
+  public static function getTotalDoneTasksCount($connection) {
+    if (isset($connection)) {
+      try {
+        $sql = 'SELECT COUNT(*)
+        FROM tasks 
+        WHERE status = "done"';
+        $sentencia = $connection->prepare($sql);
+        $sentencia->execute();
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $sentencia->fetchColumn();
+  }
+
+  public static function getTotalFilteredDoneTasksCount($connection, $search) {
+    $search = '%' . $search . '%';
+    if (isset($connection)) {
+      try {
+        $sql = 'SELECT COUNT(*)
+        FROM tasks 
+        LEFT JOIN usuarios as a ON tasks.id_user = a.id
+        LEFT JOIN usuarios as b ON tasks.assigned_user = b.id
+        WHERE tasks.status = "done" AND
+        (title LIKE :search OR a.nombre_usuario LIKE :search OR b.nombre_usuario LIKE :search OR assigned_user LIKE :search)';
+        $sentencia = $connection->prepare($sql);
+        $sentencia->bindParam(':search', $search, PDO::PARAM_STR);
+        $sentencia->execute();
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $sentencia->fetchColumn();
   }
 
   public static function get_my_todo($connection){

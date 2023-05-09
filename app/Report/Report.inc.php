@@ -1,52 +1,193 @@
 <?php
 class Report {
-  public static function profit_chart($connection, $type, $quarter, $month, $year) {
-    $array_total_cost_quote = array();
-    $array_total_price_quote = array();
-    $array_total_profit_quote = array();
-    $array_total_cost_requote = array();
-    $array_total_price_requote = array();
-    $array_total_profit_requote = array();
-    $array_total_cost_fulfillment = array();
-    $array_total_price_fulfillment = array();
-    $array_total_profit_fulfillment = array();
-    for ($i = 1; $i <= 12; $i++) {
-      $quotes = self::get_profit_report($connection, 'monthly', $quarter, $i, $year);
-      $total_cost_quote = 0;
-      $total_price_quote = 0;
-      $total_cost_requote = 0;
-      $total_cost_fulfillment = 0;
-      foreach ($quotes as $key => $quote) {
-        $re_quote = ReQuoteRepository::get_re_quote_by_id_rfq($connection, $quote->obtener_id());
-        $total_cost_quote += $quote->obtener_total_cost();
-        $total_price_quote += $quote->obtener_quote_total_price();
-        $total_cost_requote += $re_quote->get_total_cost();
-        $total_cost_fulfillment += $quote->obtener_fulfillment_total_cost();
-      }
-      $array_total_cost_quote[] = $total_cost_quote;
-      $array_total_price_quote[] = $total_price_quote;
-      $array_total_profit_quote[] = $total_price_quote - $total_cost_quote;
+  public static function getAnnualQuotesAmountsByMonth($connection, $year, $type) {
+    $data = [];
+    switch ($type) {
+      case 'completed':
+        $date = 'fecha_completado';
+        $status = 'completado';
+        break;
+      case 'award':
+        $date = 'fecha_award';
+        $status = 'award';
+        break;
+      case 'invoice':
+        $date = 'invoice_date';
+        $status = 'invoice';
+        break;
 
-      $array_total_cost_requote[] = $total_cost_requote;
-      $array_total_price_requote[] = $total_price_quote;
-      $array_total_profit_requote[] = $total_price_quote - $total_cost_requote;
-
-      $array_total_cost_fulfillment[] = $total_cost_fulfillment;
-      $array_total_price_fulfillment[] = $total_price_quote;
-      $array_total_profit_fulfillment[] = $total_price_quote - $total_cost_fulfillment;
+      default:
+        $date = 'fecha_completado';
+        $status = 'completado';
+        break;
     }
+    $data = [];
+    if (isset($connection)) {
+      try {
+        $sql = "
+        SELECT 
+          months.month,
+          COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) AS total_cost,
+          COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) AS total_price,
+          COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) - COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) as profit
+        FROM 
+          (SELECT 1 AS month 
+          UNION SELECT 2 AS month 
+          UNION SELECT 3 AS month 
+          UNION SELECT 4 AS month 
+          UNION SELECT 5 AS month 
+          UNION SELECT 6 AS month 
+          UNION SELECT 7 AS month 
+          UNION SELECT 8 AS month 
+          UNION SELECT 9 AS month 
+          UNION SELECT 10 AS month 
+          UNION SELECT 11 AS month 
+          UNION SELECT 12 AS month) AS months
+          LEFT JOIN rfq r ON 
+          MONTH(r." . $date . ") = months.month AND 
+          r." . $status . " = 1 AND
+          r.deleted = 0 AND
+          YEAR(r." . $date . ") = " . $year . " 
+          LEFT JOIN services s ON 
+          r.id = s.id_rfq AND 
+          MONTH(r." . $date . ") = months.month AND 
+          YEAR(r." . $date . ") = " . $year . "
+        GROUP BY months.month
+        ";
+        $sentence = $connection->prepare($sql);
+        $sentence->execute();
+        while ($row = $sentence->fetch(PDO::FETCH_ASSOC)) {
+          $data[] = $row;
+        }
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $data;
+  }
 
-    return array(
-      $array_total_cost_quote,
-      $array_total_price_quote,
-      $array_total_profit_quote,
-      $array_total_cost_requote,
-      $array_total_price_requote,
-      $array_total_profit_requote,
-      $array_total_cost_fulfillment,
-      $array_total_price_fulfillment,
-      $array_total_profit_fulfillment,
-    );
+  public static function getAnnualReQuotesAmountsByMonth($connection, $year, $type) {
+    $data = [];
+    switch ($type) {
+      case 'invoice':
+        $date = 'invoice_date';
+        $status = 'invoice';
+        break;
+
+      default:
+        $date = 'invoice_date';
+        $status = 'invoice';
+        break;
+    }
+    $data = [];
+    if (isset($connection)) {
+      try {
+        $sql = "
+        SELECT 
+          months.month,
+          COALESCE(SUM(COALESCE(rqs.total_price, 0) + COALESCE(rq.total_cost, 0)), 0) AS total_cost,
+          COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) AS total_price,
+          COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) - COALESCE(SUM(COALESCE(rqs.total_price, 0) + COALESCE(rq.total_cost, 0)), 0) as profit
+        FROM 
+          (SELECT 1 AS month 
+          UNION SELECT 2 AS month 
+          UNION SELECT 3 AS month 
+          UNION SELECT 4 AS month 
+          UNION SELECT 5 AS month 
+          UNION SELECT 6 AS month 
+          UNION SELECT 7 AS month 
+          UNION SELECT 8 AS month 
+          UNION SELECT 9 AS month 
+          UNION SELECT 10 AS month 
+          UNION SELECT 11 AS month 
+          UNION SELECT 12 AS month) AS months
+          LEFT JOIN rfq r ON 
+          MONTH(r." . $date . ") = months.month AND 
+          r." . $status . " = 1 AND
+          r.deleted = 0 AND
+          YEAR(r." . $date . ") = " . $year . " 
+          LEFT JOIN services s ON 
+          r.id = s.id_rfq AND 
+          MONTH(r." . $date . ") = months.month AND 
+          YEAR(r." . $date . ") = " . $year . "
+          LEFT JOIN re_quotes rq ON 
+          r.id = rq.id_rfq AND 
+          MONTH(r." . $date . ") = months.month AND 
+          YEAR(r." . $date . ") = " . $year . "
+          LEFT JOIN re_quote_services rqs ON 
+          rq.id = rqs.id_re_quote AND 
+          MONTH(r." . $date . ") = months.month AND 
+          YEAR(r." . $date . ") = " . $year . "
+        GROUP BY months.month
+        ";
+        $sentence = $connection->prepare($sql);
+        $sentence->execute();
+        while ($row = $sentence->fetch(PDO::FETCH_ASSOC)) {
+          $data[] = $row;
+        }
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $data;
+  }
+
+  public static function getAnnualFulfillmentAmountsByMonth($connection, $year, $type) {
+    $data = [];
+    switch ($type) {
+      case 'invoice':
+        $date = 'invoice_date';
+        $status = 'invoice';
+        break;
+
+      default:
+        $date = 'invoice_date';
+        $status = 'invoice';
+        break;
+    }
+    $data = [];
+    if (isset($connection)) {
+      try {
+        $sql = "
+        SELECT 
+          months.month,
+          COALESCE(SUM(COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0)), 0) AS total_cost,
+          COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) AS total_price,
+          COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) - COALESCE(SUM(COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0)), 0) as profit
+        FROM 
+          (SELECT 1 AS month 
+          UNION SELECT 2 AS month 
+          UNION SELECT 3 AS month 
+          UNION SELECT 4 AS month 
+          UNION SELECT 5 AS month 
+          UNION SELECT 6 AS month 
+          UNION SELECT 7 AS month 
+          UNION SELECT 8 AS month 
+          UNION SELECT 9 AS month 
+          UNION SELECT 10 AS month 
+          UNION SELECT 11 AS month 
+          UNION SELECT 12 AS month) AS months
+          LEFT JOIN rfq r ON 
+          MONTH(r." . $date . ") = months.month AND 
+          r." . $status . " = 1 AND
+          r.deleted = 0 AND
+          YEAR(r." . $date . ") = " . $year . " 
+          LEFT JOIN services s ON 
+          r.id = s.id_rfq AND 
+          MONTH(r." . $date . ") = months.month AND 
+          YEAR(r." . $date . ") = " . $year . "
+        GROUP BY months.month
+        ";
+        $sentence = $connection->prepare($sql);
+        $sentence->execute();
+        while ($row = $sentence->fetch(PDO::FETCH_ASSOC)) {
+          $data[] = $row;
+        }
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $data;
   }
 
   public static function profit_report($connection, $type, $quarter, $month, $year) {

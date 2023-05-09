@@ -373,18 +373,15 @@ class Rfq {
   }
 
   //quote amounts
-  public function obtener_quote_total_cost() {
-    Conexion::abrir_conexion();
-    $total_services = ServiceRepository::get_total(Conexion::obtener_conexion(), $this->id);
-    Conexion::cerrar_conexion();
-    return $this->total_cost + $total_services;
-  }
-
   public function getTotalQuoteServices() {
     Conexion::abrir_conexion();
     $total_services = ServiceRepository::get_total(Conexion::obtener_conexion(), $this->id);
     Conexion::cerrar_conexion();
     return $total_services;
+  }
+
+  public function obtener_quote_total_cost() {
+    return $this->total_cost + $this->getTotalQuoteServices();
   }
 
   public function obtener_quote_total_price() {

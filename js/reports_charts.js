@@ -5,14 +5,17 @@ $(document).ready(function () {
   $('#reports_charts_form').submit(function () {
     $.post('/rfq/reports_charts/', $(this).serialize(), function (data) {
 
-      chartQuote = generateProfitChart('quote', chartQuote, data.array_total_cost_quote, data.array_total_price_quote, data.array_total_profit_quote);
-      chartRequote = generateProfitChart('requote', chartRequote, data.array_total_cost_requote, data.array_total_price_requote, data.array_total_profit_requote);
-      chartFulfillment = generateProfitChart('fulfillment', chartFulfillment, data.array_total_cost_fulfillment, data.array_total_price_fulfillment, data.array_total_profit_fulfillment);
+      chartQuote = generateProfitChart('quote', chartQuote, data.quote_amounts);
+      chartRequote = generateProfitChart('requote', chartRequote, data.re_quotes_amounts);
+      chartFulfillment = generateProfitChart('fulfillment', chartFulfillment, data.fulfillment_amounts);
     });
     return false;
   });
 
-  const generateProfitChart = (id, chartType, totalCost, totalPrice, profit) => {
+  const generateProfitChart = (id, chartType, amounts) => {
+    const totalCost = amounts.map(obj => obj.total_cost);
+    const totalPrice = amounts.map(obj => obj.total_price);
+    const profit = amounts.map(obj => obj.profit);
     let chartQuoteData = {
       labels: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
       datasets: [
