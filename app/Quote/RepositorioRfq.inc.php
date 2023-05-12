@@ -231,7 +231,7 @@ class RepositorioRfq {
     $cotizacion_recuperada = null;
     if (isset($conexion)) {
       try {
-        $sql = "SELECT * FROM rfq WHERE deleted = 0 AND id = :id_rfq";
+        $sql = "SELECT * FROM rfq WHERE id = :id_rfq";
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia->execute();
