@@ -394,6 +394,26 @@ class RepositorioUsuario {
     return $usuarios;
   }
 
+  public static function getAllRfqUsers($conexion) {
+    $usuarios = [];
+    if (isset($conexion)) {
+      try {
+        $sql = "SELECT * FROM usuarios WHERE cargo LIKE '%3%'";
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(PDO::FETCH_ASSOC);
+        if (count($resultado)) {
+          foreach ($resultado as $fila) {
+            $usuarios[] = new Usuario($fila['id'], $fila['nombre_usuario'], $fila['password'], $fila['nombres'], $fila['apellidos'], $fila['cargo'], $fila['email'], $fila['status'], $fila['hash_recover_email']);
+          }
+        }
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $usuarios;
+  }
+
   public static function get_fulfillment_users($conexion) {
     $usuarios = [];
     if (isset($conexion)) {
