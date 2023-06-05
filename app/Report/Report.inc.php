@@ -452,9 +452,9 @@ class Report {
             $sentence->bindParam(':year', $year, PDO::PARAM_STR);
             break;
           case 'yearly':
-            $sql = 'SELECT * FROM rfq WHERE deleted = 0 AND award = 1 AND YEAR(fecha_award) = :year';
+            $sql = 'SELECT * FROM rfq WHERE deleted = 0 AND award = 1 AND YEAR(fecha_award) = ' . $year;
             $sentence = $connection->prepare($sql);
-            $sentence->bindParam(':year', $year, PDO::PARAM_STR);
+            // $sentence->bindParam(':year', $year, PDO::PARAM_STR);
             break;
         }
         $sentence->execute();
