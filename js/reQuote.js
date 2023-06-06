@@ -1,6 +1,6 @@
 $(document).ready(function () {
   /***************************************************************************************************/
-    if($('#re_quote_form').length != 0){
+    if($('#requote_table').length != 0){
       var time2 = setInterval(function(){
         var payment_terms = 1;
         var total_ganado = parseFloat($('#total_ganado').html().split(' ')[1]);

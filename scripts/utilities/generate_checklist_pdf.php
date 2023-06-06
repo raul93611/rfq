@@ -206,7 +206,7 @@ try {
         </tr>
         <tr>
           <td><b>Special Requirements/Risk/Extra Comments:</b></td>
-          <td>' . $quote->getSpecialRequirements() . '</td>
+          <td>' . nl2br($quote->getSpecialRequirements()) . '</td>
         </tr>
       </table>
       </td>

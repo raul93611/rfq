@@ -231,7 +231,7 @@ class RepositorioRfq {
     $cotizacion_recuperada = null;
     if (isset($conexion)) {
       try {
-        $sql = "SELECT * FROM rfq WHERE deleted = 0 AND id = :id_rfq";
+        $sql = "SELECT * FROM rfq WHERE id = :id_rfq";
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia->execute();
@@ -1139,32 +1139,43 @@ class RepositorioRfq {
     if (isset($connection)) {
       try {
         $sql = "
-        SELECT 
-          months.month,
-          COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) AS total_price
-        FROM 
-          (SELECT 1 AS month 
-          UNION SELECT 2 AS month 
-          UNION SELECT 3 AS month 
-          UNION SELECT 4 AS month 
-          UNION SELECT 5 AS month 
-          UNION SELECT 6 AS month 
-          UNION SELECT 7 AS month 
-          UNION SELECT 8 AS month 
-          UNION SELECT 9 AS month 
-          UNION SELECT 10 AS month 
-          UNION SELECT 11 AS month 
-          UNION SELECT 12 AS month) AS months
-          LEFT JOIN rfq r ON 
-          MONTH(r.fecha_award) = months.month AND 
-          r.award = 1 AND
-          r.deleted = 0 AND
-          YEAR(r.fecha_award) = " . $year . " 
-          LEFT JOIN services s ON 
-          r.id = s.id_rfq AND 
-          MONTH(r.fecha_award) = months.month AND 
-          YEAR(r.fecha_award) = " . $year . "
-        GROUP BY months.month
+        SELECT SUM(COALESCE(quotes.total_amount, 0)) as total_price
+        FROM (
+            SELECT 1 AS month
+            UNION
+            SELECT 2 AS month
+            UNION
+            SELECT 3 AS month
+            UNION
+            SELECT 4 AS month
+            UNION
+            SELECT 5 AS month
+            UNION
+            SELECT 6 AS month
+            UNION
+            SELECT 7 AS month
+            UNION
+            SELECT 8 AS month
+            UNION
+            SELECT 9 AS month
+            UNION
+            SELECT 10 AS month
+            UNION
+            SELECT 11 AS month
+            UNION
+            SELECT 12 AS month
+          ) AS months
+          LEFT JOIN (
+            SELECT SUM(COALESCE(s.total_price, 0)) + COALESCE(r.total_price, 0) AS total_amount,
+              MONTH(r.fecha_award) AS month_award_date
+            FROM rfq r
+              LEFT JOIN services s ON r.id = s.id_rfq
+            WHERE r.award = 1
+              AND r.deleted = 0
+              AND YEAR(r.fecha_award) = {$year}
+            GROUP BY r.id
+          ) as quotes ON quotes.month_award_date = months.month
+        GROUP BY months.month;
         ";
         $sentence = $connection->prepare($sql);
         $sentence->execute();
@@ -1223,12 +1234,16 @@ class RepositorioRfq {
     if (isset($connection)) {
       try {
         $sql = "
-        SELECT SUM(COALESCE(s.total_price, 0)) + COALESCE(r.total_price, 0) AS total_amount
-        FROM rfq r
-        LEFT JOIN services s ON r.id = s.id_rfq
-        WHERE r.award = 1 AND 
-        r.deleted = 0 AND
-        YEAR(r.fecha_award) = " . $year . "
+        SELECT SUM(COALESCE(quotes.total_amount,0)) as total_amount
+        FROM (
+          SELECT SUM(COALESCE(s.total_price, 0)) + COALESCE(r.total_price, 0) AS total_amount
+          FROM rfq r
+            LEFT JOIN services s ON r.id = s.id_rfq
+            WHERE r.award = 1 AND 
+            r.deleted = 0 AND
+            YEAR(r.fecha_award) =  {$year}
+            GROUP BY r.id
+        ) as quotes;
         ";
         $sentence = $connection->prepare($sql);
         $sentence->execute();
@@ -1248,7 +1263,7 @@ class RepositorioRfq {
         FROM rfq r
         WHERE r.award = 1 AND 
         r.deleted = 0 AND
-        YEAR(r.fecha_award) = " . $year . "
+        YEAR(r.fecha_award) = {$year}
         ";
         $sentence = $connection->prepare($sql);
         $sentence->execute();

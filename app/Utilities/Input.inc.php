@@ -47,7 +47,7 @@ class Input{
 
   public static function get_designated_user($quote){
     Conexion::abrir_conexion();
-    $usuarios = RepositorioUsuario::obtener_usuarios_rfq(Conexion::obtener_conexion());
+    $usuarios = RepositorioUsuario::getAllRfqUsers(Conexion::obtener_conexion());
     Conexion::cerrar_conexion();
     foreach ($usuarios as $usuario) {
       if ($usuario->obtener_id() == $quote->obtener_usuario_designado()) {

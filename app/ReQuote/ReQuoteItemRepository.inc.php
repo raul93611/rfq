@@ -51,7 +51,7 @@ class ReQuoteItemRepository{
         <input type="hidden" name="payment_terms_original" value="<?php echo $re_quote-> get_payment_terms(); ?>">
       </div>
       <div class="table-responsive">
-        <table class="table table-bordered table-hover">
+        <table id="requote_table" class="table table-bordered table-hover">
           <thead>
             <tr>
               <th class="options">Options</th>

@@ -6,8 +6,8 @@ Conexion::cerrar_conexion();
 if ($isReQuoteCreated) {
   $sales_commissions_amounts = [
     '$0',
-    '$' . number_format($cotizacion_recuperada->obtener_quote_total_price() - $re_quote->get_total_cost(), 2) . '/' .
-      number_format(100 * (($cotizacion_recuperada->obtener_quote_total_price() - $re_quote->get_total_cost()) / $cotizacion_recuperada->obtener_quote_total_price()), 2) . '%',
+    '$' . number_format($cotizacion_recuperada->obtener_re_quote_profit(), 2) . '/' .
+      number_format($cotizacion_recuperada->obtener_re_quote_profit_percentage(), 2) . '%',
     '$' . number_format($cotizacion_recuperada->obtener_real_fulfillment_profit(), 2) . '/' . number_format($cotizacion_recuperada->obtener_real_fulfillment_profit_percentage(), 2) . '%'
   ];
 ?>
