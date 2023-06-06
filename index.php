@@ -175,8 +175,8 @@ switch ($partes_ruta[1]) {
       case 'cancelled_table':
         $ruta_elegida = 'scripts/quote/cancelled_table.php';
         break;
-      case 'awards_report':
-        $ruta_elegida = 'scripts/quote/awards_report.php';
+      case 'reports':
+        $ruta_elegida = 'scripts/quote/reports.php';
         break;
       case 'service':
         switch ($partes_ruta[3]) {

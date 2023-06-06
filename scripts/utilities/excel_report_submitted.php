@@ -30,7 +30,7 @@ $spreadsheet->setActiveSheetIndex(0)->setCellValue('J1', 'PROFIT (%)');
 $spreadsheet->setActiveSheetIndex(0)->setCellValue('K1', 'TYPE');
 
 Conexion::abrir_conexion();
-ExcelRepository::submitted_report(Conexion::obtener_conexion(), $_POST['type'], $_POST['quarter'], $_POST['month'], $_POST['year'], $spreadsheet);
+ExcelRepository::submittedReport(Conexion::obtener_conexion(), $_POST['type'], $_POST['quarter'], $_POST['month'], $_POST['year'], $spreadsheet);
 Conexion::cerrar_conexion();
 
 $spreadsheet->setActiveSheetIndex(0);

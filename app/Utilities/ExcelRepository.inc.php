@@ -192,29 +192,121 @@ class ExcelRepository{
     $spreadsheet->getActiveSheet()->getStyle($x.$y)->getAlignment()->setWrapText(true);$x++;
   }
 
-  public static function award_report($connection, $type, $quarter, $month, $year, $spreadsheet){
-    $quotes = Report::get_award_report($connection, $type, $quarter, $month, $year);
+  public static function getAwardReport(
+    $connection,
+    $type,
+    $quarter,
+    $month,
+    $year
+  ) {
+    $data = [];
+    if (isset($connection)) {
+      try {
+        switch ($type) {
+          case 'monthly':
+            $sql = "
+            SELECT r.id, 
+            DATE_FORMAT(fecha_award, '%m/%d/%Y') as fecha_award, 
+            contract_number, 
+            email_code, 
+            u.nombre_usuario,
+            canal, 
+            type_of_bid, 
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) AS total_cost,
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) AS total_price,
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) - COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) as profit, 
+            ((COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) - COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0)) / NULLIF(COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0), 0)) * 100 AS profit_percentage,
+            type_of_contract 
+            FROM rfq r
+            LEFT JOIN services s ON r.id = s.id_rfq
+            JOIN usuarios u ON r.usuario_designado = u.id
+            WHERE deleted = 0 AND
+            award = 1 AND
+            MONTH(fecha_award) = {$month} AND 
+            YEAR(fecha_award) = {$year} 
+            GROUP BY r.id";
+            break;
+          case 'quarterly':
+            $sql = "
+            SELECT r.id, 
+            DATE_FORMAT(fecha_award, '%m/%d/%Y') as fecha_award,  
+            contract_number, 
+            email_code, 
+            u.nombre_usuario,
+            canal, 
+            type_of_bid, 
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) AS total_cost,
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) AS total_price,
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) - COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) as profit,  
+            ((COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) - COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0)) / NULLIF(COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0), 0)) * 100 AS profit_percentage,
+            type_of_contract 
+            FROM rfq r
+            LEFT JOIN services s ON r.id = s.id_rfq
+            JOIN usuarios u ON r.usuario_designado = u.id
+            WHERE deleted = 0 AND
+            award = 1 AND
+            QUARTER(fecha_award) = {$quarter} AND
+            YEAR(fecha_award) = {$year} 
+            GROUP BY r.id";
+            break;
+          case 'yearly':
+            $sql = "
+            SELECT r.id, 
+            DATE_FORMAT(fecha_award, '%m/%d/%Y') as fecha_award,  
+            contract_number, 
+            email_code, 
+            u.nombre_usuario,
+            canal, 
+            type_of_bid, 
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) AS total_cost,
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) AS total_price,
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) - COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) as profit,  
+            ((COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) - COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0)) / NULLIF(COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0), 0)) * 100 AS profit_percentage,
+            type_of_contract 
+            FROM rfq r
+            LEFT JOIN services s ON r.id = s.id_rfq
+            JOIN usuarios u ON r.usuario_designado = u.id
+            WHERE deleted = 0 AND
+            award = 1 AND
+            YEAR(fecha_award) = {$year} 
+            GROUP BY r.id";
+            break;
+        }
+        $sentence = $connection->prepare($sql);
+        $sentence->execute();
+        while ($row = $sentence->fetch(PDO::FETCH_ASSOC)) {
+          $data[] = $row;
+        }
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $data;
+  }
+
+  public static function awardReport($connection, $type, $quarter, $month, $year, $spreadsheet){
+    $quotes = self::getAwardReport($connection, $type, $quarter, $month, $year);
     $total['total_cost']= 0;
     $total['total_price']= 0;
 
     $y = 2;
     foreach ($quotes as $key => $quote) {
       $x = 'A';
-      $total['total_cost'] += $quote-> obtener_total_cost();
-      $total['total_price'] += $quote-> obtener_quote_total_price();
+      $total['total_cost'] += $quote['total_cost'];
+      $total['total_price'] += $quote['total_price'];
 
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, RepositorioComment::mysql_date_to_english_format($quote-> obtener_fecha_award()));$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_id());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_contract_number());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_email_code());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_designated_username());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> print_channel());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_type_of_bid());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_total_cost());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_quote_total_price());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_quote_profit());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($quote-> obtener_quote_profit_percentage(), 2) . '%');$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_type_of_contract());
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['id']);$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['fecha_award']);$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['contract_number']);$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['email_code']);$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['nombre_usuario']);$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['canal']);$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['type_of_bid']);$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['total_cost']);$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['total_price']);$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['profit']);$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($quote['profit_percentage'], 2) . '%');$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['type_of_contract']);
       $y++;
     }
     $x = 'H';
@@ -224,28 +316,117 @@ class ExcelRepository{
     $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format(100*($total_profit/$total['total_price']), 2) . '%');$x++;
   }
 
-  public static function submitted_report($connection, $type, $quarter, $month, $year, $spreadsheet){
-    $quotes = Report::get_submitted_report($connection, $type, $quarter, $month, $year);
+  public static function getSubmittedReport(
+    $connection,
+    $type,
+    $quarter,
+    $month,
+    $year
+  ) {
+    $data = [];
+    if (isset($connection)) {
+      try {
+        switch ($type) {
+          case 'monthly':
+            $sql = "
+            SELECT r.id, 
+            DATE_FORMAT(fecha_submitted, '%m/%d/%Y') as fecha_submitted, 
+            email_code, 
+            u.nombre_usuario,
+            canal, 
+            type_of_bid, 
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) AS total_cost,
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) AS total_price,
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) - COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) as profit,  
+            ((COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) - COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0)) / NULLIF(COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0), 0)) * 100 AS profit_percentage,
+            type_of_contract 
+            FROM rfq r
+            LEFT JOIN services s ON r.id = s.id_rfq
+            JOIN usuarios u ON r.usuario_designado = u.id
+            WHERE deleted = 0 AND
+            r.status = 1 AND
+            MONTH(fecha_submitted) = {$month} AND 
+            YEAR(fecha_submitted) = {$year}  
+            GROUP BY r.id";
+            break;
+          case 'quarterly':
+            $sql = "
+            SELECT r.id, 
+            DATE_FORMAT(fecha_submitted, '%m/%d/%Y') as fecha_submitted,  
+            email_code, 
+            u.nombre_usuario,
+            canal, 
+            type_of_bid, 
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) AS total_cost,
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) AS total_price,
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) - COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) as profit,  
+            ((COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) - COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0)) / NULLIF(COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0), 0)) * 100 AS profit_percentage,
+            type_of_contract 
+            FROM rfq r
+            LEFT JOIN services s ON r.id = s.id_rfq
+            JOIN usuarios u ON r.usuario_designado = u.id
+            WHERE deleted = 0 AND
+            r.status = 1 AND
+            QUARTER(fecha_submitted) = {$quarter} AND
+            YEAR(fecha_submitted) = {$year}
+            GROUP BY r.id";
+            break;
+          case 'yearly':
+            $sql = "
+            SELECT r.id, 
+            DATE_FORMAT(fecha_submitted, '%m/%d/%Y') as fecha_submitted,  
+            email_code, 
+            u.nombre_usuario,
+            canal, 
+            type_of_bid, 
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) AS total_cost,
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) AS total_price,
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) - COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) as profit,  
+            ((COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) - COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0)) / NULLIF(COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0), 0)) * 100 AS profit_percentage,
+            type_of_contract 
+            FROM rfq r
+            LEFT JOIN services s ON r.id = s.id_rfq
+            JOIN usuarios u ON r.usuario_designado = u.id
+            WHERE deleted = 0 AND
+            r.status = 1 AND
+            YEAR(fecha_submitted) = {$year} 
+            GROUP BY r.id";
+            break;
+        }
+        $sentence = $connection->prepare($sql);
+        $sentence->execute();
+        while ($row = $sentence->fetch(PDO::FETCH_ASSOC)) {
+          $data[] = $row;
+        }
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $data;
+  }
+
+  public static function submittedReport($connection, $type, $quarter, $month, $year, $spreadsheet){
+    $quotes = self::getSubmittedReport($connection, $type, $quarter, $month, $year);
     $total['total_cost']= 0;
     $total['total_price']= 0;
 
     $y = 2;
     foreach ($quotes as $key => $quote) {
       $x = 'A';
-      $total['total_cost'] += $quote-> obtener_total_cost();
-      $total['total_price'] += $quote-> obtener_quote_total_price();
+      $total['total_cost'] += $quote['total_cost'];
+      $total['total_price'] += $quote['total_price'];
 
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, RepositorioComment::mysql_date_to_english_format($quote-> obtener_fecha_submitted()));$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_id());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_email_code());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_designated_username());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> print_channel());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_type_of_bid());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_total_cost());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_quote_total_price());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_quote_profit());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($quote-> obtener_quote_profit_percentage(), 2) . '%');$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_type_of_contract());
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['fecha_submitted']);$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['id']);$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['email_code']);$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['nombre_usuario']);$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['canal']);$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['type_of_bid']);$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['total_cost']);$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['total_price']);$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['profit']);$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($quote['profit_percentage'], 2) . '%');$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['type_of_contract']);
       $y++;
     }
     $x = 'G';
@@ -255,8 +436,118 @@ class ExcelRepository{
     $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format(100*($total_profit/$total['total_price']), 2) . '%');$x++;
   }
 
-  public static function re_quote_report($connection, $type, $quarter, $month, $year, $spreadsheet){
-    $quotes = Report::get_re_quote_report($connection, $type, $quarter, $month, $year);
+  public static function getFulfillmentReport(
+    $connection,
+    $type,
+    $quarter,
+    $month,
+    $year
+  ) {
+    $data = [];
+    if (isset($connection)) {
+      try {
+        switch ($type) {
+          case 'monthly':
+            $sql = "
+            SELECT r.id, 
+            DATE_FORMAT(fulfillment_date, '%m/%d/%Y') as fulfillment_date, 
+            contract_number, 
+            email_code, 
+            u.nombre_usuario,
+            canal, 
+            type_of_bid, 
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) AS total_cost,
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) AS total_price,
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) - COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) as profit, 
+            ((COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) - COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0)) / NULLIF(COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0), 0)) * 100 AS profit_percentage,
+            COALESCE(SUM(COALESCE(rqs.total_price, 0) + COALESCE(rq.total_cost, 0)), 0) AS total_cost_requote,
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) AS total_price_requote,
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) - COALESCE(SUM(COALESCE(rqs.total_price, 0) + COALESCE(rq.total_cost, 0)), 0) as profit_requote,
+            ((COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) - COALESCE(SUM(COALESCE(rqs.total_price, 0) + COALESCE(rq.total_cost, 0)), 0)) / NULLIF(COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0), 0)) * 100 AS profit_percentage_requote,
+            type_of_contract 
+            FROM rfq r
+            LEFT JOIN services s ON r.id = s.id_rfq
+            LEFT JOIN usuarios u ON r.usuario_designado = u.id
+            LEFT JOIN re_quotes rq ON r.id = rq.id_rfq
+            LEFT JOIN re_quote_services rqs ON rq.id = rqs.id_re_quote
+            WHERE deleted = 0 AND
+            fullfillment = 1 AND
+            MONTH(fulfillment_date) = {$month} AND 
+            YEAR(fulfillment_date) = {$year} 
+            GROUP BY r.id";
+            break;
+          case 'quarterly':
+            $sql = "
+            SELECT r.id, 
+            DATE_FORMAT(fulfillment_date, '%m/%d/%Y') as fulfillment_date,  
+            contract_number, 
+            email_code, 
+            u.nombre_usuario,
+            canal, 
+            type_of_bid, 
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) AS total_cost,
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) AS total_price,
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) - COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) as profit, 
+            ((COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) - COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0)) / NULLIF(COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0), 0)) * 100 AS profit_percentage,
+            COALESCE(SUM(COALESCE(rqs.total_price, 0) + COALESCE(rq.total_cost, 0)), 0) AS total_cost_requote,
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) AS total_price_requote,
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) - COALESCE(SUM(COALESCE(rqs.total_price, 0) + COALESCE(rq.total_cost, 0)), 0) as profit_requote,
+            ((COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) - COALESCE(SUM(COALESCE(rqs.total_price, 0) + COALESCE(rq.total_cost, 0)), 0)) / NULLIF(COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0), 0)) * 100 AS profit_percentage_requote, 
+            type_of_contract 
+            FROM rfq r
+            LEFT JOIN services s ON r.id = s.id_rfq
+            LEFT JOIN usuarios u ON r.usuario_designado = u.id
+            LEFT JOIN re_quotes rq ON r.id = rq.id_rfq
+            LEFT JOIN re_quote_services rqs ON rq.id = rqs.id_re_quote
+            WHERE deleted = 0 AND
+            fullfillment = 1 AND
+            QUARTER(fulfillment_date) = {$quarter} AND
+            YEAR(fulfillment_date) = {$year} 
+            GROUP BY r.id";
+            break;
+          case 'yearly':
+            $sql = "
+            SELECT r.id, 
+            DATE_FORMAT(fulfillment_date, '%m/%d/%Y') as fulfillment_date,  
+            contract_number, 
+            email_code, 
+            u.nombre_usuario,
+            canal, 
+            type_of_bid, 
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) AS total_cost,
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) AS total_price,
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) - COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) as profit, 
+            ((COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) - COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0)) / NULLIF(COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0), 0)) * 100 AS profit_percentage,
+            COALESCE(SUM(COALESCE(rqs.total_price, 0) + COALESCE(rq.total_cost, 0)), 0) AS total_cost_requote,
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) AS total_price_requote,
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) - COALESCE(SUM(COALESCE(rqs.total_price, 0) + COALESCE(rq.total_cost, 0)), 0) as profit_requote,
+            ((COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) - COALESCE(SUM(COALESCE(rqs.total_price, 0) + COALESCE(rq.total_cost, 0)), 0)) / NULLIF(COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0), 0)) * 100 AS profit_percentage_requote, 
+            type_of_contract 
+            FROM rfq r
+            LEFT JOIN services s ON r.id = s.id_rfq
+            LEFT JOIN usuarios u ON r.usuario_designado = u.id
+            LEFT JOIN re_quotes rq ON r.id = rq.id_rfq
+            LEFT JOIN re_quote_services rqs ON rq.id = rqs.id_re_quote
+            WHERE deleted = 0 AND
+            fullfillment = 1 AND
+            YEAR(fulfillment_date) = {$year} 
+            GROUP BY r.id";
+            break;
+        }
+        $sentence = $connection->prepare($sql);
+        $sentence->execute();
+        while ($row = $sentence->fetch(PDO::FETCH_ASSOC)) {
+          $data[] = $row;
+        }
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $data;
+  }
+
+  public static function fulfillmentReport($connection, $type, $quarter, $month, $year, $spreadsheet){
+    $quotes = self::getFulfillmentReport($connection, $type, $quarter, $month, $year);
     $total['total_cost']= 0;
     $total['total_price']= 0;
     $total['re_quote_total_cost']= 0;
@@ -264,31 +555,29 @@ class ExcelRepository{
     $y = 3;
     foreach ($quotes as $key => $quote) {
       $x = 'A';
-      $re_quote = ReQuoteRepository::get_re_quote_by_id_rfq($connection, $quote-> obtener_id());
-      $total['total_cost'] += $quote-> obtener_total_cost();
-      $total['total_price'] += $quote-> obtener_quote_total_price();
-      $total['re_quote_total_cost'] += $re_quote-> get_total_cost();
+      $total['total_cost'] += $quote['total_cost'];
+      $total['total_price'] += $quote['total_price'];
+      $total['re_quote_total_cost'] += $quote['total_cost_requote'];
 
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, RepositorioComment::mysql_date_to_english_format($quote-> obtener_fulfillment_date()));$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_id());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_designated_username());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> print_channel());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_email_code());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_type_of_bid());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, RepositorioComment::mysql_date_to_english_format($quote-> obtener_fecha_award()));$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_contract_number());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_total_cost());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_quote_total_price());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_quote_profit());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($quote-> obtener_quote_profit_percentage(), 2) . '%');$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $re_quote-> get_total_cost());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_quote_total_price());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_quote_total_price() - $re_quote-> get_total_cost());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format(100*(($quote-> obtener_quote_total_price() - $re_quote-> get_total_cost())/$quote-> obtener_quote_total_price()), 2) . '%');$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_type_of_contract());
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['fulfillment_date']);$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['id']);$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['nombre_usuario']);$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['canal']);$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['email_code']);$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['type_of_bid']);$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['contract_number']);$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['total_cost']);$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['total_cost']);$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['profit']);$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($quote['profit_percentage'], 2) . '%');$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['total_cost_requote']);$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['total_price']);$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['profit_requote']);$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($quote['profit_requote_percentage'], 2) . '%');$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['type_of_contract']);
       $y++;
     }
-    $x = 'I';
+    $x = 'H';
     $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($total['total_cost'], 2));$x++;
     $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($total['total_price'], 2));$x++;
     $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($total_profit = $total['total_price'] - $total['total_cost'], 2));$x++;

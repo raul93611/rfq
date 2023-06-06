@@ -38,11 +38,11 @@
                   <div class="col-md-12">
                     <?php $report = $_POST['report'] ?? ''; ?>
                     <select id="report_select" class="form-control form-control-sm" name="report">
-                      <option value="profit" <?php echo $report == 'profit' ? 'selected' : ''; ?>>Profit</option>
-                      <option value="award" <?php echo $report == 'award' ? 'selected' : ''; ?>>Award</option>
+                      <!-- <option value="profit" <?php echo $report == 'profit' ? 'selected' : ''; ?>>Profit</option> -->
                       <option value="submitted" <?php echo $report == 'submitted' ? 'selected' : ''; ?>>Submitted</option>
-                      <option value="re_quote" <?php echo $report == 're_quote' ? 'selected' : ''; ?>>Re-Quote</option>
-                      <option value="fulfillment_pending" <?php echo $report == 'fulfillment_pending' ? 'selected' : ''; ?>>Fulfillment Partial Invoices</option>
+                      <option value="award" <?php echo $report == 'award' ? 'selected' : ''; ?>>Award</option>
+                      <option value="fulfillment" <?php echo $report == 'fulfillment' ? 'selected' : ''; ?>>Fulfillment</option>
+                      <!-- <option value="fulfillment_pending" <?php echo $report == 'fulfillment_pending' ? 'selected' : ''; ?>>Fulfillment Partial Invoices</option> -->
                     </select>
                   </div>
                 </div>
@@ -105,7 +105,7 @@
             <div class="card-header">
               <h3 class="card-title"><i class="fas fa-hand-point-right"></i> Report</h3>
             </div>
-            <div class="card-body table-responsive" id="report_results_container">
+            <div class="card-body" id="report_results_container">
             </div>
           </div>
         </div>
