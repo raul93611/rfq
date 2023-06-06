@@ -20,7 +20,7 @@
               <h3 class="card-title"><i class="fas fa-hand-point-right"></i> Choose</h3>
             </div>
             <div class="card-body">
-              <?php $type = $_POST['type'] ?? 'monthly';?>
+              <?php $type = $_POST['type'] ?? 'monthly'; ?>
               <div class="btn-group btn-block btn-group-toggle mb-4" data-toggle="buttons">
                 <label id="monthly" class="btn bg-olive <?php echo $type == 'monthly' ? 'active' : ''; ?>">
                   <input type="radio" autocomplete="off" value="monthly" <?php echo $type == 'monthly' ? 'checked' : ''; ?>> Monthly
@@ -29,20 +29,20 @@
                   <input type="radio" autocomplete="off" value="quarterly" <?php echo $type == 'quarterly' ? 'checked' : ''; ?>> Quarterly
                 </label>
                 <label id="yearly" class="btn bg-olive <?php echo $type == 'yearly' ? 'active' : ''; ?>">
-                  <input type="radio"  autocomplete="off" value="yearly" <?php echo $type == 'yearly' ? 'checked' : ''; ?>> Yearly
+                  <input type="radio" autocomplete="off" value="yearly" <?php echo $type == 'yearly' ? 'checked' : ''; ?>> Yearly
                 </label>
               </div>
-              <form action="<?php echo REPORTS_TABLES; ?>" method="post">
+              <form id="reports_form" action="<?php echo REPORTS_TABLES; ?>" method="post">
                 <input type="hidden" name="type" value="<?php echo $type; ?>">
                 <div class="row">
                   <div class="col-md-12">
                     <?php $report = $_POST['report'] ?? ''; ?>
                     <select id="report_select" class="form-control form-control-sm" name="report">
-                      <option value="profit" <?php echo $report == 'profit' ? 'selected' : ''; ?>>Profit</option>
-                      <option value="award" <?php echo $report == 'award' ? 'selected' : ''; ?>>Award</option>
+                      <!-- <option value="profit" <?php echo $report == 'profit' ? 'selected' : ''; ?>>Profit</option> -->
                       <option value="submitted" <?php echo $report == 'submitted' ? 'selected' : ''; ?>>Submitted</option>
-                      <option value="re_quote" <?php echo $report == 're_quote' ? 'selected' : ''; ?>>Re-Quote</option>
-                      <option value="fulfillment_pending" <?php echo $report == 'fulfillment_pending' ? 'selected' : ''; ?>>Fulfillment Partial Invoices</option>
+                      <option value="award" <?php echo $report == 'award' ? 'selected' : ''; ?>>Award</option>
+                      <option value="fulfillment" <?php echo $report == 'fulfillment' ? 'selected' : ''; ?>>Fulfillment</option>
+                      <!-- <option value="fulfillment_pending" <?php echo $report == 'fulfillment_pending' ? 'selected' : ''; ?>>Fulfillment Partial Invoices</option> -->
                     </select>
                   </div>
                 </div>
@@ -91,7 +91,7 @@
                 <div class="row mt-4">
                   <div class="col-md-12">
                     <button type="submit" class="btn btn-primary" name="generate_excel_report"><i class="fas fa-file-excel"></i> Excel</button>
-                    <button type="submit" class="btn btn-primary" name="generate_report"><i class="fas fa-play"></i> Generate</button>
+                    <span class="btn btn-primary" data="generate_report"><i class="fas fa-play"></i> Generate</span>
                   </div>
                 </div>
               </form>
@@ -99,26 +99,17 @@
           </div>
         </div>
       </div>
-      <?php
-      if(isset($_POST['generate_report'])){
-        ?>
-        <div class="row">
-          <div class="col-md-12">
-            <div class="card card-primary">
-              <div class="card-header">
-                <h3 class="card-title"><i class="fas fa-hand-point-right"></i> Report</h3>
-              </div>
-              <div class="card-body">
-                <?php
-                include_once 'plantillas/utilities/report_' . $_POST['report'] . '.inc.php';
-                ?>
-              </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card card-primary">
+            <div class="card-header">
+              <h3 class="card-title"><i class="fas fa-hand-point-right"></i> Report</h3>
+            </div>
+            <div class="card-body" id="report_results_container">
             </div>
           </div>
         </div>
-        <?php
-      }
-      ?>
+      </div>
     </div>
   </section>
 </div>
