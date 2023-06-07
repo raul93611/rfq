@@ -23,6 +23,7 @@ define('REMOVE_SUBMITTED_INVOICE', QUOTE_SC . 'remove_submitted_invoice/');
 define('SAVE_CHECKLIST', QUOTE_SC . 'save_checklist/');
 define('SAVE_INFORMATION', QUOTE_SC . 'save_information/');
 define('GENERATE_CHECKLIST_PDF', QUOTE_SC . 'generate_checklist_pdf/');
+define('LINK_QUOTE', QUOTE_SC . 'link_quote/');
 /********************************SERVICE SCRIPTS*****************************************/
 define('SERVICE_SC', QUOTE_SC . 'service/');
 define('ADD_SERVICE', SERVICE_SC . 'add_service');

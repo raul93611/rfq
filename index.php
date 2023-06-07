@@ -178,6 +178,12 @@ switch ($partes_ruta[1]) {
       case 'reports':
         $ruta_elegida = 'scripts/quote/reports.php';
         break;
+      case 'ids':
+        $ruta_elegida = 'scripts/quote/ids.php';
+        break;
+      case 'link_quote':
+        $ruta_elegida = 'scripts/quote/link_quote.php';
+        break;
       case 'service':
         switch ($partes_ruta[3]) {
           case 'add_service':

@@ -19,6 +19,7 @@ if(is_null($cotizacion_recuperada)){
         <div class="col-md-3">
           <h1>Proposal # <?php echo $cotizacion_recuperada-> obtener_id(); ?>
             <?php include_once 'templates/multi_year_project_dropdown.inc.php'; ?>
+            <?php include_once 'templates/link_quote.inc.php'; ?>
           </h1>
         </div>
         <div class="col-md-7 text-center">
@@ -75,7 +76,6 @@ if(is_null($cotizacion_recuperada)){
   </section>
 </div>
 <?php
-include_once 'plantillas/quote/modals/save_quote_info_modal.inc.php';
 include_once 'plantillas/quote/modals/new_comment_modal.inc.php';
 include_once 'plantillas/quote/modals/comments_modal.inc.php';
 include_once 'plantillas/quote/modals/audit_trails_modal.inc.php';
@@ -83,6 +83,7 @@ include_once 'plantillas/services/modals/add_service_modal.inc.php';
 include_once 'plantillas/services/modals/edit_service_modal.inc.php';
 include_once 'modals/type_of_contract_modal.inc.php';
 include_once 'modals/sales_commission_modal.inc.php';
+include_once 'modals/link_quote_modal.inc.php';
 ?>
 <script src="<?php echo RUTA_JS; ?>services.js"></script>
 <script src="<?php echo RUTA_JS; ?>quote.js"></script>
