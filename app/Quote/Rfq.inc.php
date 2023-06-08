@@ -449,9 +449,9 @@ class Rfq {
     return $this->submitted_invoice_date;
   }
 
-  public function obtener_child_quotes() {
+  public function getSlavesQuotes() {
     Conexion::abrir_conexion();
-    $child_quotes = RepositorioRfq::get_child_quotes(Conexion::obtener_conexion(), $this->id);
+    $child_quotes = RepositorioRfq::getSlavesQuotes(Conexion::obtener_conexion(), $this->id);
     Conexion::cerrar_conexion();
 
     return $child_quotes;

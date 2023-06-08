@@ -8,7 +8,7 @@ $re_quote = ReQuoteRepository::get_re_quote_by_id_rfq(Conexion::obtener_conexion
 $total_services = ServiceRepository::get_total(Conexion::obtener_conexion(), $id_rfq);
 $usuario_designado = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), $cotizacion_recuperada->obtener_usuario_designado());
 Conexion::cerrar_conexion();
-if(is_null($cotizacion_recuperada)){
+if (is_null($cotizacion_recuperada)) {
   Redireccion::redirigir1(ERROR);
 }
 ?>
@@ -17,9 +17,9 @@ if(is_null($cotizacion_recuperada)){
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-md-3">
-          <h1>Proposal # <?php echo $cotizacion_recuperada-> obtener_id(); ?>
-            <?php include_once 'templates/multi_year_project_dropdown.inc.php'; ?>
+          <h1>Proposal # <?php echo $cotizacion_recuperada->obtener_id(); ?>
             <?php include_once 'templates/link_quote.inc.php'; ?>
+            <?php include_once 'templates/multi_year_project_dropdown.inc.php'; ?>
           </h1>
         </div>
         <div class="col-md-7 text-center">
@@ -59,13 +59,13 @@ if(is_null($cotizacion_recuperada)){
             <div class="card-body">
               <div class="row">
                 <div class="col-md-4">
-                  <h3 class="text-info text-center">Total Price: $ <?php echo number_format($cotizacion_recuperada-> obtener_quote_total_price(), 2); ?></h3>
+                  <h3 class="text-info text-center">Total Price: $ <?php echo number_format($cotizacion_recuperada->obtener_quote_total_price(), 2); ?></h3>
                 </div>
                 <div class="col-md-4">
-                  <h3 class="text-info text-center">Total profit: $ <?php echo number_format($cotizacion_recuperada-> obtener_quote_profit(), 2); ?></h3>
+                  <h3 class="text-info text-center">Total profit: $ <?php echo number_format($cotizacion_recuperada->obtener_quote_profit(), 2); ?></h3>
                 </div>
                 <div class="col-md-4">
-                  <h3 class="text-info text-center">Total profit(%): <?php echo number_format($cotizacion_recuperada-> obtener_quote_profit_percentage(), 2); ?></h3>
+                  <h3 class="text-info text-center">Total profit(%): <?php echo number_format($cotizacion_recuperada->obtener_quote_profit_percentage(), 2); ?></h3>
                 </div>
               </div>
             </div>
