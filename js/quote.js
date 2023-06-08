@@ -154,4 +154,39 @@ $(document).ready(function () {
 
   const servicesPaymentTerms = setInterval(calcServices, 100);
   $('#form_edited_quote').submit(calcServices);
+
+  /*************************LINK QUOTE**************/
+  const linkQuoteModal = $('#link_quote_modal');
+  const linkQuoteButton = $('#link_quote_button');
+  const idSlave = $('#link_quote_form input[name="id_rfq"]').val();
+
+  $('#quote_ids').select2({
+    theme: 'bootstrap4',
+    ajax: {
+      type: 'POST',
+      url: '/rfq/quote/ids',
+      dataType: 'json',
+      delay: 250,
+      data: function(params) {
+        return {
+          term: params.term,
+          id_rfq: idSlave
+        };
+      },
+      processResults: function(data) {
+        return {
+          results: data
+        };
+      },
+      cache: true
+    },
+    minimumInputLength: 4
+  });
+
+  linkQuoteButton.click(function (e) {
+    e.preventDefault();
+    linkQuoteModal.modal();
+  });
+
+
 });

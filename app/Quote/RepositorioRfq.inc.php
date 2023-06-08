@@ -243,6 +243,30 @@ class RepositorioRfq {
     return $cotizacion_recuperada;
   }
 
+  public static function getIds($conexion, $searchTerm, $id_rfq) {
+    $data = [];
+    $searchTerm = '%' . $searchTerm . '%';
+    if (isset($conexion)) {
+      try {
+        $sql = "
+        SELECT id
+        FROM rfq 
+        WHERE deleted = 0 AND 
+        id != {$id_rfq} AND 
+        id LIKE :searchTerm";
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindParam(':searchTerm', $searchTerm, PDO::PARAM_STR);
+        $sentencia->execute();
+        while ($row = $sentencia->fetch(PDO::FETCH_ASSOC)) {
+          $data[] = $row;
+        }
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $data;
+  }
+
   public static function check_fullfillment($conexion, $id_rfq) {
     if (isset($conexion)) {
       try {
@@ -1679,6 +1703,18 @@ class RepositorioRfq {
         $sql = 'UPDATE rfq SET multi_year_project = null WHERE id = :id_rfq';
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia->execute();
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+  }
+
+  public static function linkQuote($conexion, $master, $slave) {
+    if (isset($conexion)) {
+      try {
+        $sql = "UPDATE rfq SET multi_year_project = {$master} WHERE id = {$slave}";
+        $sentencia = $conexion->prepare($sql);
         $sentencia->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';

@@ -108,10 +108,6 @@ $(document).ready(function () {
   $('#audit_trails_button').click(function () {
     $('#audit_trails_modal').modal();
   });
-  /***********************QUOTE INFO MODAL****************************************/
-  $('#quote_info_button').click(function () {
-    $('#quote_info_modal').modal();
-  });
   /**************************************BOTON MOSTRAR COMENTARIOS************************/
   $('#mostrar_comentarios').click(function () {
     $('#todos_commentarios_quote').modal();
