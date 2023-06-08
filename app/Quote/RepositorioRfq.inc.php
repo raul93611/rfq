@@ -120,20 +120,22 @@ class RepositorioRfq {
     return $object;
   }
 
-  public static function get_child_quotes($conexion, $id_parent) {
-    $quotes = [];
+  public static function getSlavesQuotes($conexion, $id_parent) {
+    $data = [];
     if (isset($conexion)) {
       try {
-        $sql = 'SELECT * FROM rfq WHERE deleted = 0 AND multi_year_project = :multi_year_project';
+        $sql = 'SELECT id FROM rfq WHERE deleted = 0 AND multi_year_project = :multi_year_project';
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindParam(':multi_year_project', $id_parent, PDO::PARAM_STR);
         $sentencia->execute();
-        $quotes = self::array_to_object($sentencia);
+        while ($row = $sentencia->fetch(PDO::FETCH_ASSOC)) {
+          $data[] = $row;
+        }
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
-    return $quotes;
+    return $data;
   }
 
   public static function getCreatedQuotesByChannel($conexion, $start, $length, $search, $sort_column_index, $sort_direction, $canal) {
