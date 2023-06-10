@@ -201,8 +201,6 @@ $(document).ready(function () {
       }
     },
     "rowCallback": function (row, data) {
-      // Add your logic to determine when to add the class
-      console.log(data.comments);
       if (data.comments == 'Working on it') {
         $(row).addClass('waiting_for');
       }
