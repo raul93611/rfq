@@ -49,4 +49,16 @@
       </div>
     </div>
   </div>
+  <div class="card card-primary">
+    <div class="card-header">
+      <h3 class="card-title"><i class="fas fa-dollar-sign"></i> Total Profit - Real Sales Commission</h3>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-12">
+          <h3 class="text-info text-center">Total Price: $ <?php echo number_format($quote-> obtener_real_fulfillment_profit() - (float)$sales_commission[1], 2); ?></h3>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
