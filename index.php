@@ -166,6 +166,9 @@ switch ($partes_ruta[1]) {
       case 'created_table':
         $ruta_elegida = 'scripts/quote/created_table.php';
         break;
+      case 'completed_table':
+        $ruta_elegida = 'scripts/quote/completed_table.php';
+        break;
       case 'no_bid_table':
         $ruta_elegida = 'scripts/quote/no_bid_table.php';
         break;

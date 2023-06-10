@@ -246,6 +246,65 @@ $(document).ready(function () {
     ]
   });
 
+  $('#completed_table').DataTable({
+    "processing": true,
+    "serverSide": true,
+    "pageLength": 50,
+    "order": [[4, "desc"]],
+    "ajax": {
+      "url": '/rfq/quote/completed_table',
+      "type": "POST",
+      "data": {
+        "channel": $('#completed_table').data('channel'),
+      }
+    },
+    "columns": [
+      {
+        "data": "id",
+        "render": function (data, type, row, meta) {
+          if (type === 'display') {
+            return '<a href="/rfq/perfil/quote/editar_cotizacion/' + data + '">' + data + '</a>';
+          } else {
+            return data;
+          }
+        }
+      },
+      { "data": "nombre_usuario" },
+      { "data": "type_of_bid" },
+      { "data": "fecha_completado" },
+      { "data": "email_code" },
+      {
+        "data": "rfp",
+        "orderable": false,
+        "render": function (data, type, row, meta) {
+          if (type === 'display') {
+            return data ? '<i class="text-success fas fa-check"></i>' : '<i class="text-danger fas fa-times"></i>';
+          } else {
+            return data;
+          }
+        }
+      },
+      {
+        "data": "options",
+        "orderable": false,
+        "render": function (data, type, row, meta) {
+          if (type === 'display') {
+            return `
+              <a class="btn btn-sm calculate" href="/rfq/quote/proposal/${row.id}" target="_blank">
+                <i class="fa fa-copy"></i>
+              </a>
+              <a class="btn btn-primary btn-sm" href="/rfq/quote/proposal_gsa/${row.id}" target="_blank">
+                <i class="fa fa-copy"></i>
+              </a>
+            `;
+          } else {
+            return data;
+          }
+        }
+      },
+    ]
+  });
+
   $('#no_bid_table').DataTable({
     "processing": true,
     "serverSide": true,
