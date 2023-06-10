@@ -158,7 +158,8 @@ class RepositorioRfq {
           WHEN type_of_bid = "Computers" THEN "true"
           ELSE "false"
         END AS rfp,
-        NULL AS options 
+        NULL AS options,
+        comments
         FROM rfq 
         LEFT JOIN usuarios ON rfq.usuario_designado = usuarios.id
         WHERE rfq.deleted = 0 AND 

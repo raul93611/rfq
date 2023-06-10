@@ -13,19 +13,6 @@ $total_records = RepositorioRfq::getTotalCreatedQuotesByChannelCount(Conexion::o
 $total_filtered_records = RepositorioRfq::getTotalFilteredCreatedQuotesByChannelCount(Conexion::obtener_conexion(), $_POST['channel'], $search);
 Conexion::cerrar_conexion();
 
-
-
-$columns = array(
-  0 => 'id',
-  1 => 'nombre_usuario',
-  2 => 'type_of_bid',
-  3 => 'issue_date',
-  4 => 'end_date',
-  5 => 'email_code',
-  6 => 'rfp',
-  7 => 'options'
-);
-
 $response = array(
   "draw" => $_POST['draw'],
   "recordsTotal" => $total_records,

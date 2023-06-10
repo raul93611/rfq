@@ -200,12 +200,17 @@ $(document).ready(function () {
         "channel": $('#tabla_quotes').data('channel'),
       }
     },
+    "rowCallback": function (row, data) {
+      if (data.comments == 'Working on it') {
+        $(row).addClass('waiting_for');
+      }
+    },
     "columns": [
       {
         "data": "id",
         "render": function (data, type, row, meta) {
           if (type === 'display') {
-            return '<a href="/rfq/perfil/quote/editar_cotizacion/'+data+'">' + data + '</a>';
+            return '<a href="/rfq/perfil/quote/editar_cotizacion/' + data + '">' + data + '</a>';
           } else {
             return data;
           }
@@ -216,7 +221,7 @@ $(document).ready(function () {
       { "data": "issue_date" },
       { "data": "end_date" },
       { "data": "email_code" },
-      { 
+      {
         "data": "rfp",
         "orderable": false,
         "render": function (data, type, row, meta) {
@@ -227,12 +232,12 @@ $(document).ready(function () {
           }
         }
       },
-      { 
+      {
         "data": "options",
         "orderable": false,
         "render": function (data, type, row, meta) {
           if (type === 'display') {
-            return '<a href="/rfq/quote/delete_quote/'+row.id+'" class="delete_quote_button text-danger"><i class="fa fa-times"></i> Delete</a>';
+            return '<a href="/rfq/quote/delete_quote/' + row.id + '" class="delete_quote_button text-danger"><i class="fa fa-times"></i> Delete</a>';
           } else {
             return data;
           }
@@ -254,7 +259,7 @@ $(document).ready(function () {
         "data": "id",
         "render": function (data, type, row, meta) {
           if (type === 'display') {
-            return '<a href="/rfq/perfil/quote/editar_cotizacion/'+data+'">' + data + '</a>';
+            return '<a href="/rfq/perfil/quote/editar_cotizacion/' + data + '">' + data + '</a>';
           } else {
             return data;
           }
@@ -264,12 +269,12 @@ $(document).ready(function () {
       { "data": "email_code" },
       { "data": "type_of_bid" },
       { "data": "comments" },
-      { 
+      {
         "data": "options",
         "orderable": false,
         "render": function (data, type, row, meta) {
           if (type === 'display') {
-            return '<a href="/rfq/quote/delete_quote/'+row.id+'" class="delete_quote_button text-danger"><i class="fa fa-times"></i> Delete</a>';
+            return '<a href="/rfq/quote/delete_quote/' + row.id + '" class="delete_quote_button text-danger"><i class="fa fa-times"></i> Delete</a>';
           } else {
             return data;
           }
@@ -291,7 +296,7 @@ $(document).ready(function () {
         "data": "id",
         "render": function (data, type, row, meta) {
           if (type === 'display') {
-            return '<a href="/rfq/perfil/quote/editar_cotizacion/'+data+'">' + data + '</a>';
+            return '<a href="/rfq/perfil/quote/editar_cotizacion/' + data + '">' + data + '</a>';
           } else {
             return data;
           }
@@ -300,12 +305,12 @@ $(document).ready(function () {
       { "data": "nombre_usuario" },
       { "data": "email_code" },
       { "data": "type_of_bid" },
-      { 
+      {
         "data": "options",
         "orderable": false,
         "render": function (data, type, row, meta) {
           if (type === 'display') {
-            return '<a href="/rfq/quote/delete_quote/'+row.id+'" class="delete_quote_button text-danger"><i class="fa fa-times"></i> Delete</a>';
+            return '<a href="/rfq/quote/delete_quote/' + row.id + '" class="delete_quote_button text-danger"><i class="fa fa-times"></i> Delete</a>';
           } else {
             return data;
           }
@@ -327,7 +332,7 @@ $(document).ready(function () {
         "data": "id",
         "render": function (data, type, row, meta) {
           if (type === 'display') {
-            return '<a href="/rfq/perfil/quote/editar_cotizacion/'+data+'">' + data + '</a>';
+            return '<a href="/rfq/perfil/quote/editar_cotizacion/' + data + '">' + data + '</a>';
           } else {
             return data;
           }
@@ -336,12 +341,12 @@ $(document).ready(function () {
       { "data": "nombre_usuario" },
       { "data": "email_code" },
       { "data": "type_of_bid" },
-      { 
+      {
         "data": "options",
         "orderable": false,
         "render": function (data, type, row, meta) {
           if (type === 'display') {
-            return '<a href="/rfq/quote/delete_quote/'+row.id+'" class="delete_quote_button text-danger"><i class="fa fa-times"></i> Delete</a>';
+            return '<a href="/rfq/quote/delete_quote/' + row.id + '" class="delete_quote_button text-danger"><i class="fa fa-times"></i> Delete</a>';
           } else {
             return data;
           }
