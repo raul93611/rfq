@@ -34,80 +34,57 @@
 
 // echo $accessToken;
 
-// Replace with your own values
+$payload = [
+  "type" => "message",
+  "attachments" => [
+    [
+      "contentType" => "application/vnd.microsoft.card.adaptive",
+      "content" => [
+        "type" => "AdaptiveCard",
+        "body" => [
+          [
+            "type" => "TextBlock",
+            "size" => "Medium",
+            "weight" => "Bolder",
+            "text" => "Sample Adaptive Card with User Mention"
+          ],
+          [
+            "type" => "TextBlock",
+            "text" => "Hi <at>Raul Velasco</at>, <at>Adele Azure AD</at>"
+          ]
+        ],
+        "$schema" => "http://adaptivecards.io/schemas/adaptive-card.json",
+        "version" => "1.0",
+        "msteams" => [
+          "entities" => [
+            [
+              "type" => "mention",
+              "text" => "<at>Raul Velasco</at>",
+              "mentioned" => [
+                "id" => "raul93611_gmail.com@Elogic1.onmicrosoft.com",
+                "name" => "Raul Velasco"
+              ]
+            ],
+            [
+              "type" => "mention",
+              "text" => "<at>Adele Azure AD</at>",
+              "mentioned" => [
+                "id" => "87d349ed-44d7-43e1-9a83-5f2406dee5bd",
+                "name" => "Adele Vance"
+              ]
+            ]
+          ]
+        ]
+      ]
+    ]
+  ]
+];
+
+
 $teamsWebhookUrl = "https://elogic1.webhook.office.com/webhookb2/5cbf724b-aeca-4765-96c7-bd13aa783588@0506708f-afde-4517-9f3e-3ec000518b07/IncomingWebhook/1cde5420666242c2b5bf074b25d3cf44/65d78568-e892-41ba-8d63-f02ac5914e70";
-$mentionedUserId = "8:orgid:ab93466f-e2df-4157-b5ca-bb5a1a4170ad";
-
-// Message payload
-// $messagePayload = array(
-//   "text" => "Hello, <at>{$mentionedUserId}</at> this is a message from PHP121233333333312!",
-//   // "to" => array("raul93611_gmail.com@Elogic1.onmicrosoft.com", "user2@contoso.com"),
-//   // Additional options can be added here
-// );
-
-$messagePayload = array(
-  "@type" => "MessageCard",
-  "title" => "New Task Created",
-  "text" => "A new task has been created.",
-  "sections" => array(
-      array(
-          "title" => "Task Details",
-          "facts" => array(
-              array("Name", "John Doe"),
-              array("Due Date", "2023-05-01"),
-              array("Status", "In Progress"),
-          ),
-      ),
-  ),
-);
-
-// Send message using the Microsoft Teams API
 $curl = curl_init($teamsWebhookUrl);
 curl_setopt($curl, CURLOPT_POST, true);
-curl_setopt($curl, CURLOPT_POSTFIELDS, '{
-  "type": "message",
-  "attachments": [
-      {
-      "contentType": "application/vnd.microsoft.card.adaptive",
-      "content": {
-          "type": "AdaptiveCard",
-          "body": [
-              {
-                  "type": "TextBlock",
-                  "size": "Medium",
-                  "weight": "Bolder",
-                  "text": "Sample Adaptive Card with User Mention"
-              },
-              {
-                  "type": "TextBlock",
-                  "text": "Hi <at>Raul Velasco</at>, <at>Adele Azure AD</at>"
-              }
-          ],
-          "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
-          "version": "1.0",
-          "msteams": {
-              "entities": [
-                  {
-                      "type": "mention",
-                      "text": "<at>Raul Velasco</at>",
-                      "mentioned": {
-                        "id": "raul93611_gmail.com@Elogic1.onmicrosoft.com",
-                        "name": "Raul Velasco"
-                      }
-                    },
-                    {
-                      "type": "mention",
-                      "text": "<at>Adele Azure AD</at>",
-                      "mentioned": {
-                        "id": "87d349ed-44d7-43e1-9a83-5f2406dee5bd",
-                        "name": "Adele Vance"
-                      }
-                    }
-              ]
-          }
-      }
-  }]
-}');
+curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($payload));
 curl_setopt($curl, CURLOPT_HTTPHEADER, array(
   // "Authorization: Bearer ".$accessToken,
   "Content-Type: application/json",
@@ -122,5 +99,3 @@ if ($response === false) {
   echo "Message sent successfully!";
 }
 
-// Use the access token to send messages or perform other actions in Microsoft Teams
-// ...
