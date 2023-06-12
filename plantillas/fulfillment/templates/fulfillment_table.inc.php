@@ -56,7 +56,7 @@
     <div class="card-body">
       <div class="row">
         <div class="col-md-12">
-          <h3 class="text-info text-center">Total Price: $ <?php echo number_format($quote-> obtener_real_fulfillment_profit() - (float)$sales_commission[1], 2); ?></h3>
+          <h3 class="text-info text-center">Total Profit - Real Sales Commission: $ <?php echo number_format($quote-> obtener_real_fulfillment_profit() - (float)$sales_commission[1], 2); ?></h3>
         </div>
       </div>
     </div>
