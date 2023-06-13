@@ -256,7 +256,7 @@ class RepositorioRfq {
         rfq.completado = 1 AND 
         rfq.status = 0 AND 
         rfq.award = 0 
-        AND (rfq.comments = 'Working on it' OR rfq.comments = 'No comments' OR rfq.comments = '') AND 
+        AND (rfq.comments = 'Working on it' OR rfq.comments = 'No comments') AND 
         (rfq.id LIKE :search OR nombre_usuario LIKE :search OR rfq.type_of_bid LIKE :search OR rfq.email_code LIKE :search) 
         ORDER BY $sort_column $sort_direction LIMIT $start, $length";
         $sentencia = $conexion->prepare($sql);
@@ -283,7 +283,7 @@ class RepositorioRfq {
         completado = 1 AND 
         status = 0 AND 
         award = 0 
-        AND (comments = "Working on it" OR comments = "No comments" OR comments = "")';
+        AND (comments = "Working on it" OR comments = "No comments")';
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
         $sentencia->execute();
@@ -306,7 +306,7 @@ class RepositorioRfq {
         completado = 1 AND 
         rfq.status = 0 AND 
         award = 0 
-        AND (comments = "Working on it" OR comments = "No comments" OR comments = "") AND 
+        AND (comments = "Working on it" OR comments = "No comments") AND 
         (rfq.id LIKE :search OR nombre_usuario LIKE :search OR rfq.type_of_bid LIKE :search OR rfq.email_code LIKE :search)';
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
