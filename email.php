@@ -34,68 +34,72 @@
 
 // echo $accessToken;
 
-$payload = [
-  "type" => "message",
-  "attachments" => [
-    [
-      "contentType" => "application/vnd.microsoft.card.adaptive",
-      "content" => [
-        "type" => "AdaptiveCard",
-        "body" => [
-          [
-            "type" => "TextBlock",
-            "size" => "Medium",
-            "weight" => "Bolder",
-            "text" => "Sample Adaptive Card with User Mention"
-          ],
-          [
-            "type" => "TextBlock",
-            "text" => "Hi <at>Raul Velasco</at>, <at>Adele Azure AD</at>"
-          ]
-        ],
-        "$schema" => "http://adaptivecards.io/schemas/adaptive-card.json",
-        "version" => "1.0",
-        "msteams" => [
-          "entities" => [
-            [
-              "type" => "mention",
-              "text" => "<at>Raul Velasco</at>",
-              "mentioned" => [
-                "id" => "raul93611_gmail.com@Elogic1.onmicrosoft.com",
-                "name" => "Raul Velasco"
-              ]
-            ],
-            [
-              "type" => "mention",
-              "text" => "<at>Adele Azure AD</at>",
-              "mentioned" => [
-                "id" => "87d349ed-44d7-43e1-9a83-5f2406dee5bd",
-                "name" => "Adele Vance"
-              ]
-            ]
-          ]
-        ]
-      ]
-    ]
-  ]
-];
+// $payload = [
+//   "type" => "message",
+//   "attachments" => [
+//     [
+//       "contentType" => "application/vnd.microsoft.card.adaptive",
+//       "content" => [
+//         "type" => "AdaptiveCard",
+//         "body" => [
+//           [
+//             "type" => "TextBlock",
+//             "size" => "Medium",
+//             "weight" => "Bolder",
+//             "text" => "Sample Adaptive Card with User Mention"
+//           ],
+//           [
+//             "type" => "TextBlock",
+//             "text" => "Hi <at>Raul Velasco</at>, <at>Adele Azure AD</at>"
+//           ]
+//         ],
+//         "$schema" => "http://adaptivecards.io/schemas/adaptive-card.json",
+//         "version" => "1.0",
+//         "msteams" => [
+//           "entities" => [
+//             [
+//               "type" => "mention",
+//               "text" => "<at>Raul Velasco</at>",
+//               "mentioned" => [
+//                 "id" => "raul93611_gmail.com@Elogic1.onmicrosoft.com",
+//                 "name" => "Raul Velasco"
+//               ]
+//             ],
+//             [
+//               "type" => "mention",
+//               "text" => "<at>Adele Azure AD</at>",
+//               "mentioned" => [
+//                 "id" => "87d349ed-44d7-43e1-9a83-5f2406dee5bd",
+//                 "name" => "Adele Vance"
+//               ]
+//             ]
+//           ]
+//         ]
+//       ]
+//     ]
+//   ]
+// ];
 
 
-$teamsWebhookUrl = "https://elogic1.webhook.office.com/webhookb2/5cbf724b-aeca-4765-96c7-bd13aa783588@0506708f-afde-4517-9f3e-3ec000518b07/IncomingWebhook/1cde5420666242c2b5bf074b25d3cf44/65d78568-e892-41ba-8d63-f02ac5914e70";
-$curl = curl_init($teamsWebhookUrl);
-curl_setopt($curl, CURLOPT_POST, true);
-curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($payload));
-curl_setopt($curl, CURLOPT_HTTPHEADER, array(
-  // "Authorization: Bearer ".$accessToken,
-  "Content-Type: application/json",
-));
-$response = curl_exec($curl);
-curl_close($curl);
+// $teamsWebhookUrl = "https://elogic1.webhook.office.com/webhookb2/5cbf724b-aeca-4765-96c7-bd13aa783588@0506708f-afde-4517-9f3e-3ec000518b07/IncomingWebhook/1cde5420666242c2b5bf074b25d3cf44/65d78568-e892-41ba-8d63-f02ac5914e70";
+// $curl = curl_init($teamsWebhookUrl);
+// curl_setopt($curl, CURLOPT_POST, true);
+// curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($payload));
+// curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+//   // "Authorization: Bearer ".$accessToken,
+//   "Content-Type: application/json",
+// ));
+// $response = curl_exec($curl);
+// curl_close($curl);
 
-// Check response for errors
-if ($response === false) {
-  echo "Error sending message: " . curl_error($curl);
-} else {
-  echo "Message sent successfully!";
-}
+// // Check response for errors
+// if ($response === false) {
+//   echo "Error sending message: " . curl_error($curl);
+// } else {
+//   echo "Message sent successfully!";
+// }
+Conexion::abrir_conexion();
+$user = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), 1);
+Conexion::cerrar_conexion();
+TeamsIntegration::notifyQuoteAward(60000, $user);
 
