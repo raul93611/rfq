@@ -354,3 +354,8 @@ table{
 .success-opacity{
   background-color: #d0fac7;
 }
+
+.dropdown-menu {
+  max-height: 200px;
+  overflow-y: auto;
+}

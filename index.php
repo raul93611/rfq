@@ -114,6 +114,8 @@ include_once 'app/Invoice/InvoiceRepository.inc.php';
 include_once 'app/ReQuote/ReQuoteService.inc.php';
 include_once 'app/ReQuote/ReQuoteServiceRepository.inc.php';
 
+include_once 'app/Utilities/TeamsIntegration.inc.php';
+
 session_start();
 
 $componentes_url = parse_url($_SERVER['REQUEST_URI']);
@@ -166,6 +168,9 @@ switch ($partes_ruta[1]) {
       case 'created_table':
         $ruta_elegida = 'scripts/quote/created_table.php';
         break;
+      case 'completed_table':
+        $ruta_elegida = 'scripts/quote/completed_table.php';
+        break;
       case 'no_bid_table':
         $ruta_elegida = 'scripts/quote/no_bid_table.php';
         break;
@@ -177,6 +182,12 @@ switch ($partes_ruta[1]) {
         break;
       case 'reports':
         $ruta_elegida = 'scripts/quote/reports.php';
+        break;
+      case 'ids':
+        $ruta_elegida = 'scripts/quote/ids.php';
+        break;
+      case 'link_quote':
+        $ruta_elegida = 'scripts/quote/link_quote.php';
         break;
       case 'service':
         switch ($partes_ruta[3]) {

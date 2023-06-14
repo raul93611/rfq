@@ -23,9 +23,21 @@ $printable_channel = Input::printable_channel($channel);
               <h3 class="card-title"><?php echo $printable_channel; ?></h3>
             </div>
             <div class="card-body">
-              <?php
-              RepositorioRfq::escribir_cotizaciones_completadas_por_canal($channel);
-              ?>
+              <table id="completed_table" data-channel="<?php echo $channel; ?>" class="table table-bordered table-hover">
+                <thead>
+                  <tr>
+                    <th>PROPOSAL</th>
+                    <th>DESIGNATED USER</th>
+                    <th>TYPE OF BID</th>
+                    <th>COMPLETED DATE</th>
+                    <th>CODE</th>
+                    <th>RFP</th>
+                    <th>OPTIONS</th>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
             </div>
           </div>
         </section>

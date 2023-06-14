@@ -42,7 +42,7 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
         Conexion::abrir_conexion();
         RepositorioRfq::actualizar_fecha_y_award(Conexion::obtener_conexion(), $_POST['id_rfq']);
         $usuario = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), $cotizacion_recuperada-> obtener_usuario_designado());
-        Email::send_email_quote_awarded($usuario-> obtener_email(), $cotizacion_recuperada-> obtener_id(), nl2br($_POST['address']));
+        TeamsIntegration::notifyQuoteAward($cotizacion_recuperada-> obtener_id(), $usuario);        
         AuditTrailRepository::quote_status_audit_trail(Conexion::obtener_conexion(), 'Awarded', $_POST['id_rfq']);
         Conexion::cerrar_conexion();
         Redireccion::redirigir(AWARD . $cotizacion_recuperada->obtener_canal());
@@ -53,7 +53,7 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
         RepositorioRfq::check_fulfillment_and_date(Conexion::obtener_conexion(), $_POST['id_rfq']);
         RepositorioRfq::set_type_of_contract(Conexion::obtener_conexion(), $_POST['type_of_contract'], $_POST['id_rfq']);
         $fulfillment_users = RepositorioUsuario::get_fulfillment_users(Conexion::obtener_conexion());
-        Email::send_email_fulfillment_quote($fulfillment_users, $cotizacion_recuperada);
+        TeamsIntegration::notifyQuoteFulfillment($_POST['id_rfq'], $fulfillment_users);
         AuditTrailRepository::quote_status_audit_trail(Conexion::obtener_conexion(), 'Fulfillment', $_POST['id_rfq']);
         Conexion::cerrar_conexion();
         Redireccion::redirigir(FULFILLMENT_QUOTES);

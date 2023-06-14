@@ -108,10 +108,6 @@ $(document).ready(function () {
   $('#audit_trails_button').click(function () {
     $('#audit_trails_modal').modal();
   });
-  /***********************QUOTE INFO MODAL****************************************/
-  $('#quote_info_button').click(function () {
-    $('#quote_info_modal').modal();
-  });
   /**************************************BOTON MOSTRAR COMENTARIOS************************/
   $('#mostrar_comentarios').click(function () {
     $('#todos_commentarios_quote').modal();
@@ -204,12 +200,17 @@ $(document).ready(function () {
         "channel": $('#tabla_quotes').data('channel'),
       }
     },
+    "rowCallback": function (row, data) {
+      if (data.comments == 'Working on it') {
+        $(row).addClass('waiting_for');
+      }
+    },
     "columns": [
       {
         "data": "id",
         "render": function (data, type, row, meta) {
           if (type === 'display') {
-            return '<a href="/rfq/perfil/quote/editar_cotizacion/'+data+'">' + data + '</a>';
+            return '<a href="/rfq/perfil/quote/editar_cotizacion/' + data + '">' + data + '</a>';
           } else {
             return data;
           }
@@ -220,7 +221,7 @@ $(document).ready(function () {
       { "data": "issue_date" },
       { "data": "end_date" },
       { "data": "email_code" },
-      { 
+      {
         "data": "rfp",
         "orderable": false,
         "render": function (data, type, row, meta) {
@@ -231,12 +232,71 @@ $(document).ready(function () {
           }
         }
       },
-      { 
+      {
         "data": "options",
         "orderable": false,
         "render": function (data, type, row, meta) {
           if (type === 'display') {
-            return '<a href="/rfq/quote/delete_quote/'+row.id+'" class="delete_quote_button text-danger"><i class="fa fa-times"></i> Delete</a>';
+            return '<a href="/rfq/quote/delete_quote/' + row.id + '" class="delete_quote_button text-danger"><i class="fa fa-times"></i> Delete</a>';
+          } else {
+            return data;
+          }
+        }
+      },
+    ]
+  });
+
+  $('#completed_table').DataTable({
+    "processing": true,
+    "serverSide": true,
+    "pageLength": 50,
+    "order": [[4, "desc"]],
+    "ajax": {
+      "url": '/rfq/quote/completed_table',
+      "type": "POST",
+      "data": {
+        "channel": $('#completed_table').data('channel'),
+      }
+    },
+    "columns": [
+      {
+        "data": "id",
+        "render": function (data, type, row, meta) {
+          if (type === 'display') {
+            return '<a href="/rfq/perfil/quote/editar_cotizacion/' + data + '">' + data + '</a>';
+          } else {
+            return data;
+          }
+        }
+      },
+      { "data": "nombre_usuario" },
+      { "data": "type_of_bid" },
+      { "data": "fecha_completado" },
+      { "data": "email_code" },
+      {
+        "data": "rfp",
+        "orderable": false,
+        "render": function (data, type, row, meta) {
+          if (type === 'display') {
+            return data ? '<i class="text-success fas fa-check"></i>' : '<i class="text-danger fas fa-times"></i>';
+          } else {
+            return data;
+          }
+        }
+      },
+      {
+        "data": "options",
+        "orderable": false,
+        "render": function (data, type, row, meta) {
+          if (type === 'display') {
+            return `
+              <a class="btn btn-sm calculate" href="/rfq/quote/proposal/${row.id}" target="_blank">
+                <i class="fa fa-copy"></i>
+              </a>
+              <a class="btn btn-primary btn-sm" href="/rfq/quote/proposal_gsa/${row.id}" target="_blank">
+                <i class="fa fa-copy"></i>
+              </a>
+            `;
           } else {
             return data;
           }
@@ -258,7 +318,7 @@ $(document).ready(function () {
         "data": "id",
         "render": function (data, type, row, meta) {
           if (type === 'display') {
-            return '<a href="/rfq/perfil/quote/editar_cotizacion/'+data+'">' + data + '</a>';
+            return '<a href="/rfq/perfil/quote/editar_cotizacion/' + data + '">' + data + '</a>';
           } else {
             return data;
           }
@@ -268,12 +328,12 @@ $(document).ready(function () {
       { "data": "email_code" },
       { "data": "type_of_bid" },
       { "data": "comments" },
-      { 
+      {
         "data": "options",
         "orderable": false,
         "render": function (data, type, row, meta) {
           if (type === 'display') {
-            return '<a href="/rfq/quote/delete_quote/'+row.id+'" class="delete_quote_button text-danger"><i class="fa fa-times"></i> Delete</a>';
+            return '<a href="/rfq/quote/delete_quote/' + row.id + '" class="delete_quote_button text-danger"><i class="fa fa-times"></i> Delete</a>';
           } else {
             return data;
           }
@@ -295,7 +355,7 @@ $(document).ready(function () {
         "data": "id",
         "render": function (data, type, row, meta) {
           if (type === 'display') {
-            return '<a href="/rfq/perfil/quote/editar_cotizacion/'+data+'">' + data + '</a>';
+            return '<a href="/rfq/perfil/quote/editar_cotizacion/' + data + '">' + data + '</a>';
           } else {
             return data;
           }
@@ -304,12 +364,12 @@ $(document).ready(function () {
       { "data": "nombre_usuario" },
       { "data": "email_code" },
       { "data": "type_of_bid" },
-      { 
+      {
         "data": "options",
         "orderable": false,
         "render": function (data, type, row, meta) {
           if (type === 'display') {
-            return '<a href="/rfq/quote/delete_quote/'+row.id+'" class="delete_quote_button text-danger"><i class="fa fa-times"></i> Delete</a>';
+            return '<a href="/rfq/quote/delete_quote/' + row.id + '" class="delete_quote_button text-danger"><i class="fa fa-times"></i> Delete</a>';
           } else {
             return data;
           }
@@ -331,7 +391,7 @@ $(document).ready(function () {
         "data": "id",
         "render": function (data, type, row, meta) {
           if (type === 'display') {
-            return '<a href="/rfq/perfil/quote/editar_cotizacion/'+data+'">' + data + '</a>';
+            return '<a href="/rfq/perfil/quote/editar_cotizacion/' + data + '">' + data + '</a>';
           } else {
             return data;
           }
@@ -340,12 +400,12 @@ $(document).ready(function () {
       { "data": "nombre_usuario" },
       { "data": "email_code" },
       { "data": "type_of_bid" },
-      { 
+      {
         "data": "options",
         "orderable": false,
         "render": function (data, type, row, meta) {
           if (type === 'display') {
-            return '<a href="/rfq/quote/delete_quote/'+row.id+'" class="delete_quote_button text-danger"><i class="fa fa-times"></i> Delete</a>';
+            return '<a href="/rfq/quote/delete_quote/' + row.id + '" class="delete_quote_button text-danger"><i class="fa fa-times"></i> Delete</a>';
           } else {
             return data;
           }
