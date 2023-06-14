@@ -1,7 +1,7 @@
 temp/
 documentos/
 employee_docs/
-config.inc.php
+app/Bootstrap/config.inc.php
 LICENSE
 vendor/
 vendor_excel/

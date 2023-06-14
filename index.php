@@ -114,6 +114,8 @@ include_once 'app/Invoice/InvoiceRepository.inc.php';
 include_once 'app/ReQuote/ReQuoteService.inc.php';
 include_once 'app/ReQuote/ReQuoteServiceRepository.inc.php';
 
+include_once 'app/Utilities/TeamsIntegration.inc.php';
+
 session_start();
 
 $componentes_url = parse_url($_SERVER['REQUEST_URI']);
