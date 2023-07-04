@@ -227,6 +227,31 @@ $(document).ready(function () {
           { "data": "type_of_contract" }
         ];
         break;
+      case 'accounts-payable-fulfillment':
+        $table = $('<table>').attr('id', 'reportsTable').attr('class', 'table table-bordered table-hover');
+        $('#report_results_container').append($table);
+        headerRow = $('<tr>').appendTo($('<thead>').appendTo($table));
+        $('<th>').text('PROPOSAL').appendTo(headerRow);
+        $('<th>').text('PROVIDER').appendTo(headerRow);
+        $('<th>').text('REAL COST').appendTo(headerRow);
+        $('<th>').text('PAYMENT TERMS').appendTo(headerRow);
+
+        columns = [
+          {
+            "data": "id",
+            "render": function (data, type, row, meta) {
+              if (type === 'display') {
+                return '<a href="/rfq/perfil/quote/editar_cotizacion/' + data + '">' + data + '</a>';
+              } else {
+                return data;
+              }
+            }
+          },
+          { "data": "provider" },
+          { "data": "real_cost" },
+          { "data": "payment_term" }
+        ];
+        break;
       default:
         break;
     }
