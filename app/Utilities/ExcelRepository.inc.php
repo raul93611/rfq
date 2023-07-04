@@ -588,6 +588,149 @@ class ExcelRepository{
     $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format(100*($re_quote_total_profit/$total['total_price']), 2) . '%');
   }
 
+  public static function getAccountsPayableFulfillmentReport(
+    $connection,
+    $type,
+    $quarter,
+    $month,
+    $year
+  ) {
+    $data = [];
+    if (isset($connection)) {
+      try {
+        switch ($type) {
+          case 'monthly':
+            $sql = "
+            SELECT id, provider, real_cost, payment_term 
+            FROM (
+            SELECT r.id, fi.provider, fi.real_cost, fi.payment_term FROM `fulfillment_items` fi
+            LEFT JOIN item i ON fi.id_item = i.id
+            LEFT JOIN rfq r ON i.id_rfq = r.id
+            WHERE r.fullfillment = 1
+            AND r.deleted = 0
+            AND MONTH(fulfillment_date) = {$month}
+            AND YEAR(fulfillment_date) = {$year}
+
+            UNION ALL
+
+            SELECT r.id, fsi.provider, fsi.real_cost, fsi.payment_term FROM `fulfillment_subitems` fsi
+            LEFT JOIN subitems si ON fsi.id_subitem = si.id
+            LEFT JOIN item i ON si.id_item = i.id
+            LEFT JOIN rfq r ON i.id_rfq = r.id
+            WHERE r.fullfillment = 1
+            AND r.deleted = 0
+            AND MONTH(fulfillment_date) = {$month}
+            AND YEAR(fulfillment_date) = {$year}
+
+            UNION ALL
+
+            SELECT r.id, fs.provider, fs.real_cost, fs.payment_term FROM `fulfillment_services` fs
+            LEFT JOIN services s ON fs.id_service = s.id
+            LEFT JOIN rfq r ON s.id_rfq = r.id
+            WHERE r.fullfillment = 1
+            AND r.deleted = 0
+            AND MONTH(fulfillment_date) = {$month}
+            AND YEAR(fulfillment_date) = {$year}
+            ) as accounts_payable_fulfillment 
+            ORDER BY id;
+            ";
+            break;
+          case 'quarterly':
+            $sql = "
+            SELECT id, provider, real_cost, payment_term 
+            FROM (
+            SELECT r.id, fi.provider, fi.real_cost, fi.payment_term FROM `fulfillment_items` fi
+            LEFT JOIN item i ON fi.id_item = i.id
+            LEFT JOIN rfq r ON i.id_rfq = r.id
+            WHERE r.fullfillment = 1
+            AND r.deleted = 0
+            AND QUARTER(fulfillment_date) = {$quarter}
+            AND YEAR(fulfillment_date) = {$year}
+
+            UNION ALL
+
+            SELECT r.id, fsi.provider, fsi.real_cost, fsi.payment_term FROM `fulfillment_subitems` fsi
+            LEFT JOIN subitems si ON fsi.id_subitem = si.id
+            LEFT JOIN item i ON si.id_item = i.id
+            LEFT JOIN rfq r ON i.id_rfq = r.id
+            WHERE r.fullfillment = 1
+            AND r.deleted = 0
+            AND QUARTER(fulfillment_date) = {$quarter}
+            AND YEAR(fulfillment_date) = {$year}
+
+            UNION ALL
+
+            SELECT r.id, fs.provider, fs.real_cost, fs.payment_term FROM `fulfillment_services` fs
+            LEFT JOIN services s ON fs.id_service = s.id
+            LEFT JOIN rfq r ON s.id_rfq = r.id
+            WHERE r.fullfillment = 1
+            AND r.deleted = 0
+            AND QUARTER(fulfillment_date) = {$quarter}
+            AND YEAR(fulfillment_date) = {$year}
+            ) as accounts_payable_fulfillment 
+            ORDER BY id;
+            ";
+            break;
+          case 'yearly':
+            $sql = "
+            SELECT id, provider, real_cost, payment_term 
+            FROM (
+            SELECT r.id, fi.provider, fi.real_cost, fi.payment_term FROM `fulfillment_items` fi
+            LEFT JOIN item i ON fi.id_item = i.id
+            LEFT JOIN rfq r ON i.id_rfq = r.id
+            WHERE r.fullfillment = 1
+            AND r.deleted = 0
+            AND YEAR(fulfillment_date) = {$year}
+
+            UNION ALL
+
+            SELECT r.id, fsi.provider, fsi.real_cost, fsi.payment_term FROM `fulfillment_subitems` fsi
+            LEFT JOIN subitems si ON fsi.id_subitem = si.id
+            LEFT JOIN item i ON si.id_item = i.id
+            LEFT JOIN rfq r ON i.id_rfq = r.id
+            WHERE r.fullfillment = 1
+            AND r.deleted = 0
+            AND YEAR(fulfillment_date) = {$year}
+
+            UNION ALL
+
+            SELECT r.id, fs.provider, fs.real_cost, fs.payment_term FROM `fulfillment_services` fs
+            LEFT JOIN services s ON fs.id_service = s.id
+            LEFT JOIN rfq r ON s.id_rfq = r.id
+            WHERE r.fullfillment = 1
+            AND r.deleted = 0
+            AND YEAR(fulfillment_date) = {$year}
+            ) as accounts_payable_fulfillment 
+            ORDER BY id;
+            ";
+            break;
+        }
+        $sentence = $connection->prepare($sql);
+        $sentence->execute();
+        while ($row = $sentence->fetch(PDO::FETCH_ASSOC)) {
+          $data[] = $row;
+        }
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $data;
+  }
+
+  public static function accountsPayableFulfillmentReport($connection, $type, $quarter, $month, $year, $spreadsheet){
+    $quotes = self::getAccountsPayableFulfillmentReport($connection, $type, $quarter, $month, $year);
+
+    $y = 2;
+    foreach ($quotes as $key => $quote) {
+      $x = 'A';
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['id']);$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['provider']);$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['real_cost']);$x++;
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['payment_term']);$x++;
+      $y++;
+    }
+  }
+
   public static function fulfillment_pending_report($connection, $spreadsheet){
     $quotes = Report::get_fulfillment_pending_report($connection);
     $total['total_cost']= 0;
