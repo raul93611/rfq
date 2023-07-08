@@ -5,9 +5,9 @@ class FulfillmentAuditTrailRepository{
       try{
         $sql = 'INSERT INTO fulfillment_audit_trails(id_rfq, username, audit_trail, created_date) VALUES(:id_rfq, :username, :audit_trail, NOW())';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_rfq', $audit_trail-> get_id_rfq(), PDO::PARAM_STR);
-        $sentence-> bindParam(':username', $audit_trail-> get_username(), PDO::PARAM_STR);
-        $sentence-> bindParam(':audit_trail', $audit_trail-> get_audit_trail(), PDO::PARAM_STR);
+        $sentence-> bindValue(':id_rfq', $audit_trail-> get_id_rfq(), PDO::PARAM_STR);
+        $sentence-> bindValue(':username', $audit_trail-> get_username(), PDO::PARAM_STR);
+        $sentence-> bindValue(':audit_trail', $audit_trail-> get_audit_trail(), PDO::PARAM_STR);
         $sentence-> execute();
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -22,7 +22,7 @@ class FulfillmentAuditTrailRepository{
       $connection = Conexion::obtener_conexion();
       $sql = 'SELECT * FROM fulfillment_audit_trails WHERE id_rfq = :id_rfq ORDER BY created_date DESC';
       $sentence = $connection-> prepare($sql);
-      $sentence-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+      $sentence-> bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
       $sentence-> execute();
       $result = $sentence-> fetchAll(PDO::FETCH_ASSOC);
       Conexion::cerrar_conexion();
@@ -42,7 +42,7 @@ class FulfillmentAuditTrailRepository{
       try{
         $sql = 'DELETE FROM fulfillment_audit_trails WHERE id_rfq = :id_rfq';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentence-> bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentence-> execute();
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';

@@ -295,8 +295,8 @@ class Report {
           case 'monthly':
             $sql = 'SELECT * FROM rfq WHERE deleted = 0 AND invoice = 1 AND MONTH(invoice_date) = :month AND YEAR(invoice_date) = :year';
             $sentence = $connection->prepare($sql);
-            $sentence->bindParam(':month', $month, PDO::PARAM_STR);
-            $sentence->bindParam(':year', $year, PDO::PARAM_STR);
+            $sentence->bindValue(':month', $month, PDO::PARAM_STR);
+            $sentence->bindValue(':year', $year, PDO::PARAM_STR);
             break;
           case 'quarterly':
             switch ($quarter) {
@@ -315,12 +315,12 @@ class Report {
             }
             $sql = 'SELECT * FROM rfq WHERE deleted = 0 AND invoice = 1 AND MONTH(invoice_date) ' . $period . ' AND YEAR(invoice_date) = :year';
             $sentence = $connection->prepare($sql);
-            $sentence->bindParam(':year', $year, PDO::PARAM_STR);
+            $sentence->bindValue(':year', $year, PDO::PARAM_STR);
             break;
           case 'yearly':
             $sql = 'SELECT * FROM rfq WHERE deleted = 0 AND invoice = 1 AND YEAR(invoice_date) = :year';
             $sentence = $connection->prepare($sql);
-            $sentence->bindParam(':year', $year, PDO::PARAM_STR);
+            $sentence->bindValue(':year', $year, PDO::PARAM_STR);
             break;
         }
         $sentence->execute();
@@ -481,7 +481,7 @@ class Report {
             break;
         }
         $sentence = $connection->prepare($sql);
-        $sentence->bindParam(':search', $search, PDO::PARAM_STR);
+        $sentence->bindValue(':search', $search, PDO::PARAM_STR);
         $sentence->execute();
         while ($row = $sentence->fetch(PDO::FETCH_ASSOC)) {
           $data[] = $row;
@@ -605,7 +605,7 @@ class Report {
             break;
         }
         $sentence = $connection->prepare($sql);
-        $sentence->bindParam(':search', $search, PDO::PARAM_STR);
+        $sentence->bindValue(':search', $search, PDO::PARAM_STR);
         $sentence->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -754,7 +754,7 @@ class Report {
             break;
         }
         $sentence = $connection->prepare($sql);
-        $sentence->bindParam(':search', $search, PDO::PARAM_STR);
+        $sentence->bindValue(':search', $search, PDO::PARAM_STR);
         $sentence->execute();
         while ($row = $sentence->fetch(PDO::FETCH_ASSOC)) {
           $data[] = $row;
@@ -875,7 +875,7 @@ class Report {
             break;
         }
         $sentence = $connection->prepare($sql);
-        $sentence->bindParam(':search', $search, PDO::PARAM_STR);
+        $sentence->bindValue(':search', $search, PDO::PARAM_STR);
         $sentence->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -1057,7 +1057,7 @@ class Report {
             break;
         }
         $sentence = $connection->prepare($sql);
-        $sentence->bindParam(':search', $search, PDO::PARAM_STR);
+        $sentence->bindValue(':search', $search, PDO::PARAM_STR);
         $sentence->execute();
         while ($row = $sentence->fetch(PDO::FETCH_ASSOC)) {
           $data[] = $row;
@@ -1178,7 +1178,7 @@ class Report {
             break;
         }
         $sentence = $connection->prepare($sql);
-        $sentence->bindParam(':search', $search, PDO::PARAM_STR);
+        $sentence->bindValue(':search', $search, PDO::PARAM_STR);
         $sentence->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -1340,7 +1340,7 @@ class Report {
             break;
         }
         $sentence = $connection->prepare($sql);
-        $sentence->bindParam(':search', $search, PDO::PARAM_STR);
+        $sentence->bindValue(':search', $search, PDO::PARAM_STR);
         $sentence->execute();
         while ($row = $sentence->fetch(PDO::FETCH_ASSOC)) {
           $data[] = $row;
@@ -1591,7 +1591,7 @@ class Report {
             break;
         }
         $sentence = $connection->prepare($sql);
-        $sentence->bindParam(':search', $search, PDO::PARAM_STR);
+        $sentence->bindValue(':search', $search, PDO::PARAM_STR);
         $sentence->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';

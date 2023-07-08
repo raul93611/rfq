@@ -1,10 +1,10 @@
 <li class="nav-item 
 <?php
-echo $partes_ruta[2] == 'fulfillment' ? 'menu-open' : '';
+echo ($partes_ruta[2] ?? null) == 'fulfillment' ? 'menu-open' : '';
 ?>">
   <a href="#" class="nav-link 
   <?php 
-  echo $partes_ruta[2] == 'fulfillment' ? 'active' : ''; 
+  echo ($partes_ruta[2] ?? null) == 'fulfillment' ? 'active' : ''; 
   ?>">
     <i class="nav-icon fas fa-tag"></i>
     <p>

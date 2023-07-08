@@ -22,7 +22,7 @@ class ReQuoteRepository {
       try {
         $sql = 'SELECT * FROM re_quotes WHERE id_rfq = :id_rfq';
         $sentence = $connection->prepare($sql);
-        $sentence->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentence->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentence->execute();
         $result = $sentence->fetchAll(PDO::FETCH_ASSOC);
         if (count($result)) {
@@ -110,7 +110,7 @@ class ReQuoteRepository {
       try {
         $sql = 'DELETE FROM re_quotes WHERE id = :id_requote';
         $sentence = $connection->prepare($sql);
-        $sentence->bindParam(':id_requote', $id_requote, PDO::PARAM_STR);
+        $sentence->bindValue(':id_requote', $id_requote, PDO::PARAM_STR);
         $sentence->execute();
       } catch (PDOException $ex) {
         print "ERROR:" . $ex->getMessage() . "<br>";
@@ -123,16 +123,16 @@ class ReQuoteRepository {
       try {
         $sql = 'INSERT INTO re_quotes(id_rfq, total_cost, total_price, payment_terms, taxes, profit, additional, shipping_cost, shipping, services_payment_term) VALUES(:id_rfq, :total_cost, :total_price, :payment_terms, :taxes, :profit, :additional, :shipping_cost, :shipping, :services_payment_term)';
         $sentence = $connection->prepare($sql);
-        $sentence->bindParam(':id_rfq', $re_quote->get_id_rfq(), PDO::PARAM_STR);
-        $sentence->bindParam(':total_cost', $re_quote->get_total_cost(), PDO::PARAM_STR);
-        $sentence->bindParam(':total_price', $re_quote->get_total_price(), PDO::PARAM_STR);
-        $sentence->bindParam(':payment_terms', $re_quote->get_payment_terms(), PDO::PARAM_STR);
-        $sentence->bindParam(':taxes', $re_quote->get_taxes(), PDO::PARAM_STR);
-        $sentence->bindParam(':profit', $re_quote->get_profit(), PDO::PARAM_STR);
-        $sentence->bindParam(':additional', $re_quote->get_additional(), PDO::PARAM_STR);
-        $sentence->bindParam(':shipping_cost', $re_quote->get_shipping_cost(), PDO::PARAM_STR);
-        $sentence->bindParam(':shipping', $re_quote->get_shipping(), PDO::PARAM_STR);
-        $sentence->bindParam(':services_payment_term', $re_quote->get_services_payment_term(), PDO::PARAM_STR);
+        $sentence->bindValue(':id_rfq', $re_quote->get_id_rfq(), PDO::PARAM_STR);
+        $sentence->bindValue(':total_cost', $re_quote->get_total_cost(), PDO::PARAM_STR);
+        $sentence->bindValue(':total_price', $re_quote->get_total_price(), PDO::PARAM_STR);
+        $sentence->bindValue(':payment_terms', $re_quote->get_payment_terms(), PDO::PARAM_STR);
+        $sentence->bindValue(':taxes', $re_quote->get_taxes(), PDO::PARAM_STR);
+        $sentence->bindValue(':profit', $re_quote->get_profit(), PDO::PARAM_STR);
+        $sentence->bindValue(':additional', $re_quote->get_additional(), PDO::PARAM_STR);
+        $sentence->bindValue(':shipping_cost', $re_quote->get_shipping_cost(), PDO::PARAM_STR);
+        $sentence->bindValue(':shipping', $re_quote->get_shipping(), PDO::PARAM_STR);
+        $sentence->bindValue(':services_payment_term', $re_quote->get_services_payment_term(), PDO::PARAM_STR);
         $sentence->execute();
         $id = $connection->lastInsertId();
       } catch (PDOException $ex) {
@@ -148,7 +148,7 @@ class ReQuoteRepository {
       try {
         $sql = 'SELECT * FROM re_quotes WHERE id_rfq = :id_rfq';
         $sentence = $connection->prepare($sql);
-        $sentence->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentence->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentence->execute();
         $re_quote = self::single_result_to_object($sentence);
       } catch (PDOException $ex) {
@@ -164,7 +164,7 @@ class ReQuoteRepository {
       try {
         $sql = 'SELECT * FROM re_quotes WHERE id = :id_re_quote';
         $sentence = $connection->prepare($sql);
-        $sentence->bindParam(':id_re_quote', $id_re_quote, PDO::PARAM_STR);
+        $sentence->bindValue(':id_re_quote', $id_re_quote, PDO::PARAM_STR);
         $sentence->execute();
         $re_quote = self::single_result_to_object($sentence);
       } catch (PDOException $ex) {
@@ -179,12 +179,12 @@ class ReQuoteRepository {
       try {
         $sql = 'UPDATE re_quotes SET payment_terms = :payment_terms, total_cost = :total_cost, shipping = :shipping, shipping_cost = :shipping_cost, services_payment_term = :services_payment_term WHERE id = :id_re_quote';
         $sentence = $connection->prepare($sql);
-        $sentence->bindParam(':payment_terms', $payment_terms, PDO::PARAM_STR);
-        $sentence->bindParam(':total_cost', $total_cost, PDO::PARAM_STR);
-        $sentence->bindParam(':shipping', $shipping, PDO::PARAM_STR);
-        $sentence->bindParam(':shipping_cost', $shipping_cost, PDO::PARAM_STR);
-        $sentence->bindParam(':services_payment_term', $services_payment_term, PDO::PARAM_STR);
-        $sentence->bindParam(':id_re_quote', $id_re_quote, PDO::PARAM_STR);
+        $sentence->bindValue(':payment_terms', $payment_terms, PDO::PARAM_STR);
+        $sentence->bindValue(':total_cost', $total_cost, PDO::PARAM_STR);
+        $sentence->bindValue(':shipping', $shipping, PDO::PARAM_STR);
+        $sentence->bindValue(':shipping_cost', $shipping_cost, PDO::PARAM_STR);
+        $sentence->bindValue(':services_payment_term', $services_payment_term, PDO::PARAM_STR);
+        $sentence->bindValue(':id_re_quote', $id_re_quote, PDO::PARAM_STR);
         $sentence->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';

@@ -21,7 +21,7 @@ class ProviderListRepository{
       try{
         $sql = 'INSERT INTO providers_list(company_name) VALUES(:company_name)';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':company_name', $provider-> get_company_name(), PDO::PARAM_STR);
+        $sentence-> bindValue(':company_name', $provider-> get_company_name(), PDO::PARAM_STR);
         $sentence-> execute();
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -34,8 +34,8 @@ class ProviderListRepository{
       try{
         $sql = 'UPDATE providers_list SET company_name = :company_name WHERE id = :id_provider';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':company_name', $provider-> get_company_name(), PDO::PARAM_STR);
-        $sentence-> bindParam(':id_provider', $id_provider, PDO::PARAM_STR);
+        $sentence-> bindValue(':company_name', $provider-> get_company_name(), PDO::PARAM_STR);
+        $sentence-> bindValue(':id_provider', $id_provider, PDO::PARAM_STR);
         $sentence-> execute();
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -48,7 +48,7 @@ class ProviderListRepository{
       try{
         $sql = 'DELETE FROM providers_list WHERE id = :id_provider';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_provider', $id_provider, PDO::PARAM_STR);
+        $sentence-> bindValue(':id_provider', $id_provider, PDO::PARAM_STR);
         $sentence-> execute();
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -77,7 +77,7 @@ class ProviderListRepository{
       try{
         $sql = 'SELECT * FROM providers_list WHERE id = :id_provider';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_provider', $id_provider, PDO::PARAM_STR);
+        $sentence-> bindValue(':id_provider', $id_provider, PDO::PARAM_STR);
         $sentence-> execute();
         $item = self::single_result_to_object($sentence);
       }catch(PDOException $ex){
@@ -103,7 +103,7 @@ class ProviderListRepository{
       try {
         $sql = 'SELECT * FROM providers_list WHERE company_name = :company_name';
         $sentence = $connection->prepare($sql);
-        $sentence-> bindParam(':company_name', $company_name, PDO::PARAM_STR);
+        $sentence-> bindValue(':company_name', $company_name, PDO::PARAM_STR);
         $sentence-> execute();
         $result = $sentence-> fetchAll(PDO::FETCH_ASSOC);
         $unique = count($result) ? false : true;

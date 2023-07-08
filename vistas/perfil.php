@@ -6,12 +6,12 @@ $titulo = 'Profile';
 include_once 'plantillas/utilities/documento_declaracion.inc.php';
 include_once 'plantillas/utilities/navbar.inc.php';
 include_once 'plantillas/utilities/barra_lateral.inc.php';
-switch ($partes_ruta[2]) {
+switch ($partes_ruta[2] ?? null) {
   case '':
     include_once 'plantillas/utilities/muro.inc.php';
     break;
   case 'user':
-    switch ($partes_ruta[3]) {
+    switch ($partes_ruta[3] ?? null) {
       case 'registro':
         if ($_SESSION['user']->is_admin()) {
           include_once 'plantillas/user/registro.inc.php';
@@ -31,7 +31,7 @@ switch ($partes_ruta[2]) {
     }
     break;
   case 'quote':
-    switch ($partes_ruta[3]) {
+    switch ($partes_ruta[3] ?? null) {
       case 'no_bid':
         include_once 'plantillas/no_bid/no_bid.inc.php';
         break;
