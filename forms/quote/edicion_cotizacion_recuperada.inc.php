@@ -34,6 +34,14 @@
           <?php echo $usuario_designado->obtener_nombres() . ' ' . $usuario_designado->obtener_apellidos(); ?>
         </div>
       </div>
+      <div class="row">
+        <div class="col-md-4">
+          <b>Client:</b>
+        </div>
+        <div class="col-md-8">
+          <?= $cotizacion_recuperada->obtener_client(); ?>
+        </div>
+      </div>
     </div>
     <div class="col-md-6">
       <div class="row">
