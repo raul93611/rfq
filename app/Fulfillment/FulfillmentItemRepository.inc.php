@@ -22,7 +22,7 @@ class FulfillmentItemRepository{
       try{
         $sql = 'SELECT * FROM fulfillment_items WHERE id_item = :id_item';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_item', $id_item, PDO::PARAM_STR);
+        $sentence-> bindValue(':id_item', $id_item, PDO::PARAM_STR);
         $sentence-> execute();
         $items = self::array_to_object($sentence);
       }catch(PDOException $ex){
@@ -38,9 +38,9 @@ class FulfillmentItemRepository{
       try{
         $sql = 'SELECT * FROM fulfillment_items WHERE id_item = :id_item AND created_at BETWEEN :from AND :to';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_item', $id_item, PDO::PARAM_STR);
-        $sentence-> bindParam(':from', $from, PDO::PARAM_STR);
-        $sentence-> bindParam(':to', $to, PDO::PARAM_STR);
+        $sentence-> bindValue(':id_item', $id_item, PDO::PARAM_STR);
+        $sentence-> bindValue(':from', $from, PDO::PARAM_STR);
+        $sentence-> bindValue(':to', $to, PDO::PARAM_STR);
         $sentence-> execute();
         $items = self::array_to_object($sentence);
       }catch(PDOException $ex){
@@ -55,14 +55,14 @@ class FulfillmentItemRepository{
       try{
         $sql = 'INSERT INTO fulfillment_items(id_item, provider, quantity, unit_cost, other_cost, real_cost, payment_term, comments, created_at) VALUES(:id_item, :provider, :quantity, :unit_cost, :other_cost, :real_cost, :payment_term, :comments, NOW())';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_item', $fulfillment_item-> get_id_item(), PDO::PARAM_STR);
-        $sentence-> bindParam(':provider', $fulfillment_item-> get_provider(), PDO::PARAM_STR);
-        $sentence-> bindParam(':quantity', $fulfillment_item-> get_quantity(), PDO::PARAM_STR);
-        $sentence-> bindParam(':unit_cost', $fulfillment_item-> get_unit_cost(), PDO::PARAM_STR);
-        $sentence-> bindParam(':other_cost', $fulfillment_item-> get_other_cost(), PDO::PARAM_STR);
-        $sentence-> bindParam(':real_cost', $fulfillment_item-> get_real_cost(), PDO::PARAM_STR);
-        $sentence-> bindParam(':payment_term', $fulfillment_item-> get_payment_term(), PDO::PARAM_STR);
-        $sentence-> bindParam(':comments', $fulfillment_item-> get_comments(), PDO::PARAM_STR);
+        $sentence-> bindValue(':id_item', $fulfillment_item-> get_id_item(), PDO::PARAM_STR);
+        $sentence-> bindValue(':provider', $fulfillment_item-> get_provider(), PDO::PARAM_STR);
+        $sentence-> bindValue(':quantity', $fulfillment_item-> get_quantity(), PDO::PARAM_STR);
+        $sentence-> bindValue(':unit_cost', $fulfillment_item-> get_unit_cost(), PDO::PARAM_STR);
+        $sentence-> bindValue(':other_cost', $fulfillment_item-> get_other_cost(), PDO::PARAM_STR);
+        $sentence-> bindValue(':real_cost', $fulfillment_item-> get_real_cost(), PDO::PARAM_STR);
+        $sentence-> bindValue(':payment_term', $fulfillment_item-> get_payment_term(), PDO::PARAM_STR);
+        $sentence-> bindValue(':comments', $fulfillment_item-> get_comments(), PDO::PARAM_STR);
         $sentence-> execute();
         $id = $connection-> lastInsertId();
       }catch(PDOException $ex){
@@ -77,14 +77,14 @@ class FulfillmentItemRepository{
       try{
         $sql = 'UPDATE fulfillment_items SET provider = :provider, quantity = :quantity, unit_cost = :unit_cost, other_cost = :other_cost, real_cost = :real_cost, payment_term = :payment_term, comments = :comments WHERE id = :id_fulfillment_item';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':provider', $provider, PDO::PARAM_STR);
-        $sentence-> bindParam(':quantity', $quantity, PDO::PARAM_STR);
-        $sentence-> bindParam(':unit_cost', $unit_cost, PDO::PARAM_STR);
-        $sentence-> bindParam(':other_cost', $other_cost, PDO::PARAM_STR);
-        $sentence-> bindParam(':real_cost', $real_cost, PDO::PARAM_STR);
-        $sentence-> bindParam(':payment_term', $payment_term, PDO::PARAM_STR);
-        $sentence-> bindParam(':comments', $comment, PDO::PARAM_STR);
-        $sentence-> bindParam(':id_fulfillment_item', $id_fulfillment_item, PDO::PARAM_STR);
+        $sentence-> bindValue(':provider', $provider, PDO::PARAM_STR);
+        $sentence-> bindValue(':quantity', $quantity, PDO::PARAM_STR);
+        $sentence-> bindValue(':unit_cost', $unit_cost, PDO::PARAM_STR);
+        $sentence-> bindValue(':other_cost', $other_cost, PDO::PARAM_STR);
+        $sentence-> bindValue(':real_cost', $real_cost, PDO::PARAM_STR);
+        $sentence-> bindValue(':payment_term', $payment_term, PDO::PARAM_STR);
+        $sentence-> bindValue(':comments', $comment, PDO::PARAM_STR);
+        $sentence-> bindValue(':id_fulfillment_item', $id_fulfillment_item, PDO::PARAM_STR);
         $sentence-> execute();
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -97,7 +97,7 @@ class FulfillmentItemRepository{
       try{
         $sql = 'UPDATE fulfillment_items SET reviewed = 1 - reviewed WHERE id = :id_fulfillment_item';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_fulfillment_item', $id_fulfillment_item, PDO::PARAM_STR);
+        $sentence-> bindValue(':id_fulfillment_item', $id_fulfillment_item, PDO::PARAM_STR);
         $sentence-> execute();
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -110,7 +110,7 @@ class FulfillmentItemRepository{
       try{
         $sql = 'DELETE FROM fulfillment_items WHERE id = :id_fulfillment_item';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_fulfillment_item', $id_fulfillment_item, PDO::PARAM_STR);
+        $sentence-> bindValue(':id_fulfillment_item', $id_fulfillment_item, PDO::PARAM_STR);
         $sentence-> execute();
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -124,7 +124,7 @@ class FulfillmentItemRepository{
       try{
         $sql = 'SELECT SUM(real_cost) as total_cost FROM fulfillment_items WHERE id_item = :id_item';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_item', $id_item, PDO::PARAM_STR);
+        $sentence-> bindValue(':id_item', $id_item, PDO::PARAM_STR);
         $sentence-> execute();
         $result = $sentence-> fetch(PDO::FETCH_ASSOC);
         if(!empty($result)){
@@ -143,9 +143,9 @@ class FulfillmentItemRepository{
       try{
         $sql = 'SELECT SUM(real_cost) as total_cost FROM fulfillment_items WHERE id_item = :id_item AND created_at BETWEEN :from AND :to';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_item', $id_item, PDO::PARAM_STR);
-        $sentence-> bindParam(':from', $from, PDO::PARAM_STR);
-        $sentence-> bindParam(':to', $to, PDO::PARAM_STR);
+        $sentence-> bindValue(':id_item', $id_item, PDO::PARAM_STR);
+        $sentence-> bindValue(':from', $from, PDO::PARAM_STR);
+        $sentence-> bindValue(':to', $to, PDO::PARAM_STR);
         $sentence-> execute();
         $result = $sentence-> fetch(PDO::FETCH_ASSOC);
         if(!empty($result)){
@@ -164,7 +164,7 @@ class FulfillmentItemRepository{
       try{
         $sql = 'SELECT * FROM fulfillment_items WHERE id = :id_fulfillment_item';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_fulfillment_item', $id_fulfillment_item, PDO::PARAM_STR);
+        $sentence-> bindValue(':id_fulfillment_item', $id_fulfillment_item, PDO::PARAM_STR);
         $sentence-> execute();
         $item = self::single_result_to_object($sentence);
       }catch(PDOException $ex){

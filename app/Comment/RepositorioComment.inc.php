@@ -5,9 +5,9 @@ class RepositorioComment{
       try{
         $sql = 'INSERT INTO comments (id_rfq, id_usuario, comment, fecha_comment) VALUES(:id_rfq, :id_usuario, :comment, NOW())';
         $sentencia = $conexion-> prepare($sql);
-        $sentencia-> bindParam(':id_rfq', $comment-> obtener_id_rfq(), PDO::PARAM_STR);
-        $sentencia-> bindParam(':id_usuario', $comment-> obtener_id_usuario(), PDO::PARAM_STR);
-        $sentencia-> bindParam(':comment', $comment-> obtener_comment(), PDO::PARAM_STR);
+        $sentencia-> bindValue(':id_rfq', $comment-> obtener_id_rfq(), PDO::PARAM_STR);
+        $sentencia-> bindValue(':id_usuario', $comment-> obtener_id_usuario(), PDO::PARAM_STR);
+        $sentencia-> bindValue(':comment', $comment-> obtener_comment(), PDO::PARAM_STR);
         $sentencia-> execute();
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -21,7 +21,7 @@ class RepositorioComment{
       try{
         $sql = 'SELECT COUNT(*) as todos_comentarios_quote FROM comments WHERE id_rfq = :id_rfq';
         $sentencia = $conexion-> prepare($sql);
-        $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia-> bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia-> execute();
         $resultado = $sentencia-> fetch(PDO::FETCH_ASSOC);
         if(!empty($resultado)){
@@ -40,7 +40,7 @@ class RepositorioComment{
       try{
         $sql = 'SELECT * FROM comments WHERE id_rfq = :id_rfq ORDER BY fecha_comment DESC';
         $sentencia = $conexion-> prepare($sql);
-        $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia-> bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia-> execute();
         $resultado = $sentencia-> fetchAll(PDO::FETCH_ASSOC);
         if(count($resultado)){
@@ -109,7 +109,7 @@ class RepositorioComment{
       try{
         $sql = 'DELETE FROM comments WHERE id_rfq = :id_rfq';
         $sentencia = $conexion-> prepare($sql);
-        $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia-> bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia-> execute();
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';

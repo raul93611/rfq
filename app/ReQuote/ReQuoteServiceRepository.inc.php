@@ -100,7 +100,7 @@ class ReQuoteServiceRepository
       try {
         $sql = 'SELECT * FROM re_quote_services WHERE id_re_quote = :id_re_quote';
         $sentence = $connection->prepare($sql);
-        $sentence->bindParam(':id_re_quote', $id_re_quote, PDO::PARAM_STR);
+        $sentence->bindValue(':id_re_quote', $id_re_quote, PDO::PARAM_STR);
         $sentence->execute();
         $services = self::array_to_object($sentence);
       } catch (PDOException $ex) {
@@ -117,7 +117,7 @@ class ReQuoteServiceRepository
       try {
         $sql = 'SELECT SUM(total_price) AS total_service FROM re_quote_services WHERE id_re_quote = :id_re_quote';
         $sentence = $connection->prepare($sql);
-        $sentence->bindParam(':id_re_quote', $id_re_quote, PDO::PARAM_STR);
+        $sentence->bindValue(':id_re_quote', $id_re_quote, PDO::PARAM_STR);
         $sentence->execute();
         $result = $sentence->fetch(PDO::FETCH_ASSOC);
         if (!empty($result)) {
@@ -135,11 +135,11 @@ class ReQuoteServiceRepository
       try{
         $sql = 'INSERT INTO re_quote_services(id_re_quote, description, quantity, unit_price, total_price) VALUES(:id_re_quote, :description, :quantity, :unit_price, :total_price)';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_re_quote', $re_quote_service-> get_id_re_quote(), PDO::PARAM_STR);
-        $sentence-> bindParam(':description', $re_quote_service-> get_description(), PDO::PARAM_STR);
-        $sentence-> bindParam(':quantity', $re_quote_service-> get_quantity(), PDO::PARAM_STR);
-        $sentence-> bindParam(':unit_price', $re_quote_service-> get_unit_price(), PDO::PARAM_STR);
-        $sentence-> bindParam(':total_price', $re_quote_service-> get_total_price(), PDO::PARAM_STR);
+        $sentence-> bindValue(':id_re_quote', $re_quote_service-> get_id_re_quote(), PDO::PARAM_STR);
+        $sentence-> bindValue(':description', $re_quote_service-> get_description(), PDO::PARAM_STR);
+        $sentence-> bindValue(':quantity', $re_quote_service-> get_quantity(), PDO::PARAM_STR);
+        $sentence-> bindValue(':unit_price', $re_quote_service-> get_unit_price(), PDO::PARAM_STR);
+        $sentence-> bindValue(':total_price', $re_quote_service-> get_total_price(), PDO::PARAM_STR);
         $sentence-> execute();
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -152,7 +152,7 @@ class ReQuoteServiceRepository
       try{
         $sql = 'DELETE FROM re_quote_services WHERE id_re_quote = :id_re_quote';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_re_quote', $id_re_quote, PDO::PARAM_STR);
+        $sentence-> bindValue(':id_re_quote', $id_re_quote, PDO::PARAM_STR);
         $sentence-> execute();
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -167,7 +167,7 @@ class ReQuoteServiceRepository
       try {
         $sql = 'SELECT * FROM re_quote_services WHERE id = :id_service';
         $sentence = $connection->prepare($sql);
-        $sentence->bindParam(':id_service', $id_service, PDO::PARAM_STR);
+        $sentence->bindValue(':id_service', $id_service, PDO::PARAM_STR);
         $sentence->execute();
         $service = self::single_result_to_object($sentence);
       } catch (PDOException $ex) {
@@ -183,11 +183,11 @@ class ReQuoteServiceRepository
       try {
         $sql = 'UPDATE re_quote_services SET description = :description, quantity = :quantity, unit_price = :unit_price, total_price = :total_price WHERE id = :id_service';
         $sentence = $connection->prepare($sql);
-        $sentence->bindParam(':description', $description, PDO::PARAM_STR);
-        $sentence->bindParam(':quantity', $quantity, PDO::PARAM_STR);
-        $sentence->bindParam(':unit_price', $unit_price, PDO::PARAM_STR);
-        $sentence->bindParam(':total_price', $total_price, PDO::PARAM_STR);
-        $sentence->bindParam(':id_service', $id, PDO::PARAM_STR);
+        $sentence->bindValue(':description', $description, PDO::PARAM_STR);
+        $sentence->bindValue(':quantity', $quantity, PDO::PARAM_STR);
+        $sentence->bindValue(':unit_price', $unit_price, PDO::PARAM_STR);
+        $sentence->bindValue(':total_price', $total_price, PDO::PARAM_STR);
+        $sentence->bindValue(':id_service', $id, PDO::PARAM_STR);
         $sentence->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -201,8 +201,8 @@ class ReQuoteServiceRepository
       try {
         $sql = 'UPDATE re_quote_services SET total_price = quantity * (unit_price * :payment_term) WHERE id_re_quote = :id_re_quote';
         $sentence = $connection->prepare($sql);
-        $sentence->bindParam(':id_re_quote', $id_re_quote, PDO::PARAM_STR);
-        $sentence->bindParam(':payment_term', $payment_term, PDO::PARAM_STR);
+        $sentence->bindValue(':id_re_quote', $id_re_quote, PDO::PARAM_STR);
+        $sentence->bindValue(':payment_term', $payment_term, PDO::PARAM_STR);
         $sentence->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';

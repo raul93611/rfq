@@ -21,7 +21,7 @@ class PaymentTermRepository{
       try{
         $sql = 'INSERT INTO payment_terms(payment_term) VALUES(:payment_term)';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':payment_term', $payment_term-> get_payment_term(), PDO::PARAM_STR);
+        $sentence-> bindValue(':payment_term', $payment_term-> get_payment_term(), PDO::PARAM_STR);
         $sentence-> execute();
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -34,8 +34,8 @@ class PaymentTermRepository{
       try{
         $sql = 'UPDATE payment_terms SET payment_term = :payment_term WHERE id = :id_payment_term';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':payment_term', $payment_term-> get_payment_term(), PDO::PARAM_STR);
-        $sentence-> bindParam(':id_payment_term', $id_payment_term, PDO::PARAM_STR);
+        $sentence-> bindValue(':payment_term', $payment_term-> get_payment_term(), PDO::PARAM_STR);
+        $sentence-> bindValue(':id_payment_term', $id_payment_term, PDO::PARAM_STR);
         $sentence-> execute();
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -48,7 +48,7 @@ class PaymentTermRepository{
       try{
         $sql = 'DELETE FROM payment_terms WHERE id = :id_payment_term';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_payment_term', $id_payment_term, PDO::PARAM_STR);
+        $sentence-> bindValue(':id_payment_term', $id_payment_term, PDO::PARAM_STR);
         $sentence-> execute();
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -82,7 +82,7 @@ class PaymentTermRepository{
       try{
         $sql = 'SELECT * FROM payment_terms WHERE id = :id_payment_term';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_payment_term', $id_payment_term, PDO::PARAM_STR);
+        $sentence-> bindValue(':id_payment_term', $id_payment_term, PDO::PARAM_STR);
         $sentence-> execute();
         $item = self::single_result_to_object($sentence);
       }catch(PDOException $ex){
@@ -108,7 +108,7 @@ class PaymentTermRepository{
       try {
         $sql = 'SELECT * FROM payment_terms WHERE payment_term = :payment_term';
         $sentence = $connection->prepare($sql);
-        $sentence-> bindParam(':payment_term', $payment_term, PDO::PARAM_STR);
+        $sentence-> bindValue(':payment_term', $payment_term, PDO::PARAM_STR);
         $sentence-> execute();
         $result = $sentence-> fetchAll(PDO::FETCH_ASSOC);
         $unique = count($result) ? false : true;

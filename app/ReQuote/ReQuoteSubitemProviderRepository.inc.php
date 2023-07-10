@@ -5,9 +5,9 @@ class ReQuoteSubitemProviderRepository{
       try{
         $sql = 'INSERT INTO re_quote_subitem_providers(id_re_quote_subitem, provider, price) VALUES(:id_re_quote_subitem, :provider, :price)';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_re_quote_subitem', $re_quote_subitem_provider-> get_id_re_quote_subitem(), PDO::PARAM_STR);
-        $sentence-> bindParam(':provider', $re_quote_subitem_provider-> get_provider(), PDO::PARAM_STR);
-        $sentence-> bindParam(':price', $re_quote_subitem_provider-> get_price(), PDO::PARAM_STR);
+        $sentence-> bindValue(':id_re_quote_subitem', $re_quote_subitem_provider-> get_id_re_quote_subitem(), PDO::PARAM_STR);
+        $sentence-> bindValue(':provider', $re_quote_subitem_provider-> get_provider(), PDO::PARAM_STR);
+        $sentence-> bindValue(':price', $re_quote_subitem_provider-> get_price(), PDO::PARAM_STR);
         $sentence-> execute();
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -21,7 +21,7 @@ class ReQuoteSubitemProviderRepository{
       try{
         $sql = 'SELECT * FROM re_quote_subitem_providers WHERE id_re_quote_subitem = :id_re_quote_subitem';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_re_quote_subitem', $id_re_quote_subitem, PDO::PARAM_STR);
+        $sentence-> bindValue(':id_re_quote_subitem', $id_re_quote_subitem, PDO::PARAM_STR);
         $sentence-> execute();
         $result = $sentence-> fetchAll(PDO::FETCH_ASSOC);
         if(count($result)){
@@ -42,7 +42,7 @@ class ReQuoteSubitemProviderRepository{
       try{
         $sql = 'SELECT * FROM re_quote_subitem_providers WHERE id = :id_re_quote_subitem_provider';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_re_quote_subitem_provider', $id_re_quote_subitem_provider, PDO::PARAM_STR);
+        $sentence-> bindValue(':id_re_quote_subitem_provider', $id_re_quote_subitem_provider, PDO::PARAM_STR);
         $sentence-> execute();
         $result = $sentence-> fetch(PDO::FETCH_ASSOC);
         if(!empty($result)){
@@ -60,9 +60,9 @@ class ReQuoteSubitemProviderRepository{
       try{
         $sql = 'UPDATE re_quote_subitem_providers SET provider = :provider, price = :price WHERE id = :id_re_quote_subitem_provider';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':provider', $provider, PDO::PARAM_STR);
-        $sentence-> bindParam(':price', $price, PDO::PARAM_STR);
-        $sentence-> bindParam(':id_re_quote_subitem_provider', $id_re_quote_subitem_provider, PDO::PARAM_STR);
+        $sentence-> bindValue(':provider', $provider, PDO::PARAM_STR);
+        $sentence-> bindValue(':price', $price, PDO::PARAM_STR);
+        $sentence-> bindValue(':id_re_quote_subitem_provider', $id_re_quote_subitem_provider, PDO::PARAM_STR);
         $sentence-> execute();
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -75,7 +75,7 @@ class ReQuoteSubitemProviderRepository{
       try{
         $sql = 'DELETE FROM re_quote_subitem_providers WHERE id = :id_re_quote_subitem_provider';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_re_quote_subitem_provider', $id_re_quote_subitem_provider, PDO::PARAM_STR);
+        $sentence-> bindValue(':id_re_quote_subitem_provider', $id_re_quote_subitem_provider, PDO::PARAM_STR);
         $sentence-> execute();
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';

@@ -6,7 +6,7 @@ class RepositorioCuestionario{
       try{
         $sql = 'SELECT * FROM cuestionario WHERE id_rfq = :id_rfq';
         $sentencia = $conexion-> prepare($sql);
-        $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia-> bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia-> execute();
 
         $resultado = $sentencia-> fetch();
@@ -27,7 +27,7 @@ class RepositorioCuestionario{
       try{
         $sql = 'SELECT * FROM cuestionario WHERE id = :id_cuestionario';
         $sentencia = $conexion-> prepare($sql);
-        $sentencia-> bindParam(':id_cuestionario', $id_cuestionario, PDO::PARAM_STR);
+        $sentencia-> bindValue(':id_cuestionario', $id_cuestionario, PDO::PARAM_STR);
         $sentencia-> execute();
 
         $resultado = $sentencia-> fetch();
@@ -47,7 +47,7 @@ class RepositorioCuestionario{
       try{
         $sql = 'DELETE FROM cuestionario WHERE id_rfq = :id_rfq';
         $sentencia= $conexion->prepare($sql);
-        $sentencia-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia-> bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia-> execute();
       }catch(PDOException $ex){
         print "ERROR:" . $ex->getMessage() . "<br>";

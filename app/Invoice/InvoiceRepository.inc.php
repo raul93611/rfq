@@ -22,8 +22,8 @@ class InvoiceRepository{
       try{
         $sql = 'INSERT INTO invoices(id_rfq, name, created_at) VALUES(:id_rfq, :name, NOW())';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_rfq', $invoice-> get_id_rfq(), PDO::PARAM_STR);
-        $sentence-> bindParam(':name', $invoice-> get_name(), PDO::PARAM_STR);
+        $sentence-> bindValue(':id_rfq', $invoice-> get_id_rfq(), PDO::PARAM_STR);
+        $sentence-> bindValue(':name', $invoice-> get_name(), PDO::PARAM_STR);
         $sentence-> execute();
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -37,7 +37,7 @@ class InvoiceRepository{
       try{
         $sql = 'SELECT * FROM invoices WHERE id_rfq = :id_rfq ORDER BY created_at ASC';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentence-> bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentence-> execute();
         $invoices = self::array_to_object($sentence);
       }catch(PDOException $ex){
@@ -53,7 +53,7 @@ class InvoiceRepository{
       try{
         $sql = 'SELECT * FROM invoices WHERE id = :id_invoice';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_invoice', $id_invoice, PDO::PARAM_STR);
+        $sentence-> bindValue(':id_invoice', $id_invoice, PDO::PARAM_STR);
         $sentence-> execute();
         $item = self::single_result_to_object($sentence);
       }catch(PDOException $ex){
@@ -69,8 +69,8 @@ class InvoiceRepository{
       try{
         $sql = 'SELECT * FROM invoices WHERE id < :id_invoice AND id_rfq = :id_rfq ORDER BY id DESC LIMIT 1;';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_invoice', $id_invoice, PDO::PARAM_STR);
-        $sentence-> bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentence-> bindValue(':id_invoice', $id_invoice, PDO::PARAM_STR);
+        $sentence-> bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentence-> execute();
         $item = self::single_result_to_object($sentence);
       }catch(PDOException $ex){
@@ -85,7 +85,7 @@ class InvoiceRepository{
       try{
         $sql = 'DELETE FROM invoices WHERE id = :id_invoice';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_invoice', $id_invoice, PDO::PARAM_STR);
+        $sentence-> bindValue(':id_invoice', $id_invoice, PDO::PARAM_STR);
         $sentence-> execute();
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -98,8 +98,8 @@ class InvoiceRepository{
       try{
         $sql = 'UPDATE invoices SET name = :name WHERE id = :id_invoice';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':name', $name, PDO::PARAM_STR);
-        $sentence-> bindParam(':id_invoice', $id_invoice, PDO::PARAM_STR);
+        $sentence-> bindValue(':name', $name, PDO::PARAM_STR);
+        $sentence-> bindValue(':id_invoice', $id_invoice, PDO::PARAM_STR);
         $sentence-> execute();
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';

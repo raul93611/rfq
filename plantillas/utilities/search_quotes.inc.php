@@ -1,11 +1,11 @@
-<?php
-$cotizaciones = [];
-if(isset($_POST['buscar'])){
-  Conexion::abrir_conexion();
-  $cotizaciones = RepositorioRfq::obtener_resultados_busqueda(Conexion::obtener_conexion(), $_POST['termino_busqueda']);
-  Conexion::cerrar_conexion();
-}
-?>
+<!-- <?php
+      $cotizaciones = [];
+      if (isset($_POST['buscar'])) {
+        Conexion::abrir_conexion();
+        $cotizaciones = RepositorioRfq::obtener_resultados_busqueda(Conexion::obtener_conexion(), $_POST['termino_busqueda']);
+        Conexion::cerrar_conexion();
+      }
+      ?> -->
 <div class="content-wrapper">
   <section class="content-header">
     <div class="container-fluid">
@@ -33,9 +33,9 @@ if(isset($_POST['buscar'])){
 
                 </div>
                 <div class="col-md-4">
-                  <form role="form" method="post" action="<?php echo SEARCH_QUOTES; ?>">
+                  <form id="search_quotes" role="form" method="post" action="">
                     <div class="form-group">
-                      <input type="search" name="termino_busqueda" class="form-control" placeholder="Search ..." required autofocus <?php if(isset($_POST['buscar'])){echo 'value="' . $_POST['termino_busqueda'] . '"';} ?>>
+                      <input type="search" name="termino_busqueda" class="form-control" placeholder="Search ..." required autofocus>
                     </div>
                     <button type="submit" class="btn btn-primary btn-block" name="buscar">Search</button>
                   </form>
@@ -51,9 +51,19 @@ if(isset($_POST['buscar'])){
               <h3 class="card-title"><i class="fas fa-search"></i> Quotes</h3>
             </div>
             <div class="card-body">
-              <?php
-              RepositorioRfq::escribir_resultados_busqueda($cotizaciones);
-              ?>
+              <table id="tabla_busqueda" class="table table-bordered table-responsive-md">
+                <thead>
+                  <tr>
+                    <th>PROPOSAL</th>
+                    <th>CODE</th>
+                    <th>DESIGNATED USER</th>
+                    <th>TYPE OF BID</th>
+                    <th>COMMENTS</th>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
@@ -61,3 +71,4 @@ if(isset($_POST['buscar'])){
     </div>
   </section>
 </div>
+<script src="<?php echo RUTA_JS; ?>searchQuotes.js"></script>

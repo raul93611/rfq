@@ -5,21 +5,21 @@ class RepositorioItem {
       try {
         $sql = 'INSERT INTO item(id_rfq, id_usuario, provider_menor, brand, brand_project, part_number, part_number_project, description, description_project, quantity, unit_price, total_price, comments, website, additional) VALUES(:id_rfq, :id_usuario, :provider_menor, :brand, :brand_project, :part_number, :part_number_project, :description, :description_project, :quantity, :unit_price, :total_price, :comments, :website, :additional)';
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':id_rfq', $item->obtener_id_rfq(), PDO::PARAM_STR);
-        $sentencia->bindParam(':id_usuario', $item->obtener_id_usuario(), PDO::PARAM_STR);
-        $sentencia->bindParam(':provider_menor', $item->obtener_provider_menor(), PDO::PARAM_STR);
-        $sentencia->bindParam(':brand', $item->obtener_brand(), PDO::PARAM_STR);
-        $sentencia->bindParam(':brand_project', $item->obtener_brand_project(), PDO::PARAM_STR);
-        $sentencia->bindParam(':part_number', $item->obtener_part_number(), PDO::PARAM_STR);
-        $sentencia->bindParam(':part_number_project', $item->obtener_part_number_project(), PDO::PARAM_STR);
-        $sentencia->bindParam(':description', $item->obtener_description(), PDO::PARAM_STR);
-        $sentencia->bindParam(':description_project', $item->obtener_description_project(), PDO::PARAM_STR);
-        $sentencia->bindParam(':quantity', $item->obtener_quantity(), PDO::PARAM_STR);
-        $sentencia->bindParam(':unit_price', $item->obtener_unit_price(), PDO::PARAM_STR);
-        $sentencia->bindParam(':total_price', $item->obtener_total_price(), PDO::PARAM_STR);
-        $sentencia->bindParam(':comments', $item->obtener_comments(), PDO::PARAM_STR);
-        $sentencia->bindParam(':website', $item->obtener_website(), PDO::PARAM_STR);
-        $sentencia->bindParam(':additional', $item->obtener_additional(), PDO::PARAM_STR);
+        $sentencia->bindValue(':id_rfq', $item->obtener_id_rfq(), PDO::PARAM_STR);
+        $sentencia->bindValue(':id_usuario', $item->obtener_id_usuario(), PDO::PARAM_STR);
+        $sentencia->bindValue(':provider_menor', $item->obtener_provider_menor(), PDO::PARAM_STR);
+        $sentencia->bindValue(':brand', $item->obtener_brand(), PDO::PARAM_STR);
+        $sentencia->bindValue(':brand_project', $item->obtener_brand_project(), PDO::PARAM_STR);
+        $sentencia->bindValue(':part_number', $item->obtener_part_number(), PDO::PARAM_STR);
+        $sentencia->bindValue(':part_number_project', $item->obtener_part_number_project(), PDO::PARAM_STR);
+        $sentencia->bindValue(':description', $item->obtener_description(), PDO::PARAM_STR);
+        $sentencia->bindValue(':description_project', $item->obtener_description_project(), PDO::PARAM_STR);
+        $sentencia->bindValue(':quantity', $item->obtener_quantity(), PDO::PARAM_STR);
+        $sentencia->bindValue(':unit_price', $item->obtener_unit_price(), PDO::PARAM_STR);
+        $sentencia->bindValue(':total_price', $item->obtener_total_price(), PDO::PARAM_STR);
+        $sentencia->bindValue(':comments', $item->obtener_comments(), PDO::PARAM_STR);
+        $sentencia->bindValue(':website', $item->obtener_website(), PDO::PARAM_STR);
+        $sentencia->bindValue(':additional', $item->obtener_additional(), PDO::PARAM_STR);
         $resultado = $sentencia->execute();
         $id = $conexion->lastInsertId();
       } catch (PDOException $ex) {
@@ -35,8 +35,8 @@ class RepositorioItem {
       try {
         $sql = 'UPDATE item SET provider_menor = :provider_menor WHERE id = :id_item';
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':provider_menor', $provider_menor, PDO::PARAM_STR);
-        $sentencia->bindParam(':id_item', $id_item, PDO::PARAM_STR);
+        $sentencia->bindValue(':provider_menor', $provider_menor, PDO::PARAM_STR);
+        $sentencia->bindValue(':id_item', $id_item, PDO::PARAM_STR);
         $sentencia->execute();
         if ($sentencia) {
           $item_editado = true;
@@ -54,7 +54,7 @@ class RepositorioItem {
       try {
         $sql = 'SELECT * FROM item WHERE id_rfq = :id_rfq';
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia->execute();
         $resultado = $sentencia->fetchall(PDO::FETCH_ASSOC);
         if (count($resultado)) {
@@ -75,7 +75,7 @@ class RepositorioItem {
       try {
         $sql = "SELECT COUNT(*) as items FROM item WHERE id_rfq = :id_rfq";
         $sentence = $connection->prepare($sql);
-        $sentence->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentence->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentence->execute();
         $result = $sentence->fetch(PDO::FETCH_ASSOC);
         if (!empty($result)) {
@@ -335,7 +335,7 @@ class RepositorioItem {
       try {
         $sql = 'SELECT * FROM item WHERE id = :id_item';
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':id_item', $id_item, PDO::PARAM_STR);
+        $sentencia->bindValue(':id_item', $id_item, PDO::PARAM_STR);
         $sentencia->execute();
         $resultado = $sentencia->fetch();
         if (!empty($resultado)) {
@@ -354,16 +354,16 @@ class RepositorioItem {
       try {
         $sql = 'UPDATE item SET brand = :brand, brand_project = :brand_project, part_number = :part_number, part_number_project = :part_number_project, description = :description, description_project = :description_project, quantity = :quantity, comments = :comments, website = :website WHERE id = :id_item';
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':brand', $brand, PDO::PARAM_STR);
-        $sentencia->bindParam(':brand_project', $brand_project, PDO::PARAM_STR);
-        $sentencia->bindParam(':part_number', $part_number, PDO::PARAM_STR);
-        $sentencia->bindParam(':part_number_project', $part_number_project, PDO::PARAM_STR);
-        $sentencia->bindParam(':description', $description, PDO::PARAM_STR);
-        $sentencia->bindParam(':description_project', $description_project, PDO::PARAM_STR);
-        $sentencia->bindParam(':quantity', $quantity, PDO::PARAM_STR);
-        $sentencia->bindParam(':comments', $comments, PDO::PARAM_STR);
-        $sentencia->bindParam(':website', $website, PDO::PARAM_STR);
-        $sentencia->bindParam(':id_item', $id_item, PDO::PARAM_STR);
+        $sentencia->bindValue(':brand', $brand, PDO::PARAM_STR);
+        $sentencia->bindValue(':brand_project', $brand_project, PDO::PARAM_STR);
+        $sentencia->bindValue(':part_number', $part_number, PDO::PARAM_STR);
+        $sentencia->bindValue(':part_number_project', $part_number_project, PDO::PARAM_STR);
+        $sentencia->bindValue(':description', $description, PDO::PARAM_STR);
+        $sentencia->bindValue(':description_project', $description_project, PDO::PARAM_STR);
+        $sentencia->bindValue(':quantity', $quantity, PDO::PARAM_STR);
+        $sentencia->bindValue(':comments', $comments, PDO::PARAM_STR);
+        $sentencia->bindValue(':website', $website, PDO::PARAM_STR);
+        $sentencia->bindValue(':id_item', $id_item, PDO::PARAM_STR);
         $sentencia->execute();
         if ($sentencia) {
           $item_editado = true;
@@ -381,10 +381,10 @@ class RepositorioItem {
       try {
         $sql = 'UPDATE item SET unit_price = :unit_price, total_price = :total_price, additional = :additional WHERE id = :id_item';
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':unit_price', $unit_price, PDO::PARAM_STR);
-        $sentencia->bindParam(':total_price', $total_price, PDO::PARAM_STR);
-        $sentencia->bindParam(':additional', $additional, PDO::PARAM_STR);
-        $sentencia->bindParam(':id_item', $id_item, PDO::PARAM_STR);
+        $sentencia->bindValue(':unit_price', $unit_price, PDO::PARAM_STR);
+        $sentencia->bindValue(':total_price', $total_price, PDO::PARAM_STR);
+        $sentencia->bindValue(':additional', $additional, PDO::PARAM_STR);
+        $sentencia->bindValue(':id_item', $id_item, PDO::PARAM_STR);
         $sentencia->execute();
         if ($sentencia) {
           $item_editado = true;
@@ -401,8 +401,8 @@ class RepositorioItem {
       try {
         $sql = 'UPDATE item SET fulfillment_profit = :fulfillment_profit WHERE id = :id_item';
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':fulfillment_profit', $fulfillment_profit, PDO::PARAM_STR);
-        $sentencia->bindParam(':id_item', $id_item, PDO::PARAM_STR);
+        $sentencia->bindValue(':fulfillment_profit', $fulfillment_profit, PDO::PARAM_STR);
+        $sentencia->bindValue(':id_item', $id_item, PDO::PARAM_STR);
         $sentencia->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -416,11 +416,11 @@ class RepositorioItem {
         $conexion->beginTransaction();
         $sql1 = "DELETE FROM provider WHERE id_item = :id_item";
         $sentencia1 = $conexion->prepare($sql1);
-        $sentencia1->bindParam(':id_item', $id_item, PDO::PARAM_STR);
+        $sentencia1->bindValue(':id_item', $id_item, PDO::PARAM_STR);
         $sentencia1->execute();
         $sql2 = "DELETE FROM item WHERE id = :id_item";
         $sentencia2 = $conexion->prepare($sql2);
-        $sentencia2->bindParam(':id_item', $id_item, PDO::PARAM_STR);
+        $sentencia2->bindValue(':id_item', $id_item, PDO::PARAM_STR);
         $sentencia2->execute();
         $conexion->commit();
       } catch (PDOException $ex) {
