@@ -695,7 +695,7 @@ class RepositorioRfq {
     }
     $partes_fecha_submitted = explode('-', $cotizacion->obtener_fecha_submitted());
     $fecha_submitted = $partes_fecha_submitted[1] . '/' . $partes_fecha_submitted[2] . '/' . $partes_fecha_submitted[0];
-    ?>
+?>
     <tr>
       <td>
         <a href="<?php echo EDITAR_COTIZACION . '/' . $cotizacion->obtener_id(); ?>" class="btn-block">
@@ -1150,6 +1150,154 @@ class RepositorioRfq {
       </tbody>
     </table>
     <?php
+  }
+
+  public static function getSearchedQuotesByChannel($conexion, $start, $length, $search, $sort_column_index, $sort_direction, $search_term) {
+    $data = [];
+    $search_term = '%' . $search_term . '%';
+    switch ($sort_column_index) {
+      case 0:
+        $sort_column = 'r.id';
+        break;
+      case 1:
+        $sort_column = 'nombre_usuario';
+        break;
+      case 2:
+        $sort_column = 'r.type_of_bid';
+        break;
+      case 3:
+        $sort_column = 'r.comments';
+        break;
+      default:
+        $sort_column = 'r.id';
+        break;
+    }
+    if (isset($conexion)) {
+      try {
+        $sql = "
+        SELECT r.id,
+          email_code,
+          u.nombre_usuario,
+          type_of_bid,
+          comments
+        FROM rfq r
+        LEFT JOIN usuarios u ON r.usuario_designado = u.id
+        WHERE r.deleted = 0 
+          AND r.email_code LIKE :search_term
+          OR r.type_of_bid LIKE :search_term
+          OR r.comments LIKE :search_term
+          OR r.contract_number LIKE :search_term
+          OR r.city LIKE :search_term
+          OR r.zip_code LIKE :search_term
+          OR r.state LIKE :search_term
+          OR r.client LIKE :search_term
+          OR r.shipping_address LIKE :search_term
+          OR r.special_requirements LIKE :search_term
+          OR r.id LIKE :search_term
+          OR r.id IN (
+            SELECT i.id_rfq
+            FROM item i
+            WHERE i.provider_menor LIKE :search_term
+              OR i.brand LIKE :search_term
+              OR i.brand_project LIKE :search_term
+              OR i.part_number LIKE :search_term
+              OR i.part_number_project LIKE :search_term
+              OR i.description LIKE :search_term
+              OR i.description_project LIKE :search_term
+              OR i.comments LIKE :search_term
+          )
+          OR r.id IN (
+            SELECT s.id_rfq
+            FROM services s
+            WHERE s.description LIKE :search_term
+          )
+          OR r.id IN (
+            SELECT i.id_rfq
+            FROM subitems si
+              JOIN item i ON si.id_item = i.id
+            WHERE si.provider_menor LIKE :search_term
+              OR si.brand LIKE :search_term
+              OR si.brand_project LIKE :search_term
+              OR si.part_number LIKE :search_term
+              OR si.part_number_project LIKE :search_term
+              OR si.description LIKE :search_term
+              OR si.description_project LIKE :search_term
+              OR si.comments LIKE :search_term
+          )
+        ORDER BY {$sort_column} {$sort_direction} LIMIT {$start}, {$length}
+        ";
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindValue(':search_term', $search_term, PDO::PARAM_STR);
+        $sentencia->execute();
+        while ($row = $sentencia->fetch(PDO::FETCH_ASSOC)) {
+          $data[] = $row;
+        }
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $data;
+  }
+
+  public static function getTotalSearchedQuotesByChannelCount($conexion, $search_term) {
+    $search_term = '%' . $search_term . '%';
+    if (isset($conexion)) {
+      try {
+        $sql = "
+        SELECT COUNT(r.id)
+        FROM rfq r
+        LEFT JOIN usuarios u ON r.usuario_designado = u.id
+        WHERE r.deleted = 0 
+          AND r.email_code LIKE :search_term
+          OR r.type_of_bid LIKE :search_term
+          OR r.comments LIKE :search_term
+          OR r.contract_number LIKE :search_term
+          OR r.city LIKE :search_term
+          OR r.zip_code LIKE :search_term
+          OR r.state LIKE :search_term
+          OR r.client LIKE :search_term
+          OR r.shipping_address LIKE :search_term
+          OR r.special_requirements LIKE :search_term
+          OR r.id LIKE :search_term
+          OR r.id IN (
+            SELECT i.id_rfq
+            FROM item i
+            WHERE i.provider_menor LIKE :search_term
+              OR i.brand LIKE :search_term
+              OR i.brand_project LIKE :search_term
+              OR i.part_number LIKE :search_term
+              OR i.part_number_project LIKE :search_term
+              OR i.description LIKE :search_term
+              OR i.description_project LIKE :search_term
+              OR i.comments LIKE :search_term
+          )
+          OR r.id IN (
+            SELECT s.id_rfq
+            FROM services s
+            WHERE s.description LIKE :search_term
+          )
+          OR r.id IN (
+            SELECT i.id_rfq
+            FROM subitems si
+              JOIN item i ON si.id_item = i.id
+            WHERE si.provider_menor LIKE :search_term
+              OR si.brand LIKE :search_term
+              OR si.brand_project LIKE :search_term
+              OR si.part_number LIKE :search_term
+              OR si.part_number_project LIKE :search_term
+              OR si.description LIKE :search_term
+              OR si.description_project LIKE :search_term
+              OR si.comments LIKE :search_term
+          )
+        ";
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindValue(':search_term', $search_term, PDO::PARAM_STR);
+        $sentencia->execute();
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $sentencia->fetchColumn();
   }
 
   public static function getAnnualAwardsAmountByMonth($connection, $year) {

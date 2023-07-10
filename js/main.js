@@ -419,10 +419,6 @@ $(document).ready(function () {
     'order': [[4, "asc"]]
   });
 
-  $('#tabla_busqueda').DataTable({
-    'pageLength': 50
-  });
-
   $('.invoice_table').DataTable({
     'order': [[3, "desc"]],
     'pageLength': 50

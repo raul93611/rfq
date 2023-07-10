@@ -11,7 +11,7 @@ class ReQuoteRepository {
 
   public static function single_result_to_object($sentence) {
     $row = $sentence->fetch(PDO::FETCH_ASSOC);
-    $object = new ReQuote($row['id'], $row['id_rfq'], $row['total_cost'], $row['total_price'], $row['payment_terms'], $row['taxes'], $row['profit'], $row['additional'], $row['shipping_cost'], $row['shipping'], $row['services_payment_term']);
+    $object = $row ? new ReQuote($row['id'], $row['id_rfq'], $row['total_cost'], $row['total_price'], $row['payment_terms'], $row['taxes'], $row['profit'], $row['additional'], $row['shipping_cost'], $row['shipping'], $row['services_payment_term']) : null;
 
     return $object;
   }

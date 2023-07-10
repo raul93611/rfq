@@ -1,7 +1,7 @@
 <?php
 // error_reporting(E_ALL);
 // ini_set('display_errors', '1');
-spl_autoload_register(function($class){
+spl_autoload_register(function ($class) {
   $subfolder = [
     'Bootstrap' => ['Conexion', 'ControlSesion', 'Redireccion'],
     'User' => ['RepositorioUsuario', 'Usuario', 'ValidadorUsuario', 'ValidadorLogin', 'ValidadorRegistro'],
@@ -547,6 +547,15 @@ switch ($partes_ruta[1] ?? null) {
   case 'kpi':
     $id_rfq = $partes_ruta[2];
     $ruta_elegida = 'scripts/kpi/load_kpi_charts.php';
+    break;
+  case 'utilities':
+    switch ($partes_ruta[2]) {
+      case 'search_quotes':
+        $ruta_elegida = 'scripts/utilities/search_quotes.php';
+        break;
+      default:
+        break;
+    }
     break;
   default:
     break;
