@@ -31,7 +31,8 @@ $(document).ready(function () {
         { "data": "email_code" },
         { "data": "nombre_usuario" },
         { "data": "type_of_bid" },
-        { "data": "comments" }
+        { "data": "comments" },
+        { "data": "total_price" }
       ]
     });
   });

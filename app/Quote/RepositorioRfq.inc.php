@@ -1157,44 +1157,63 @@ class RepositorioRfq {
     $search_term = '%' . $search_term . '%';
     switch ($sort_column_index) {
       case 0:
-        $sort_column = 'r.id';
+        $sort_column = 'sq.id';
         break;
       case 1:
-        $sort_column = 'nombre_usuario';
+        $sort_column = 'sq.nombre_usuario';
         break;
       case 2:
-        $sort_column = 'r.type_of_bid';
+        $sort_column = 'sq.type_of_bid';
         break;
       case 3:
-        $sort_column = 'r.comments';
+        $sort_column = 'sq.comments';
         break;
       default:
-        $sort_column = 'r.id';
+        $sort_column = 'sq.id';
         break;
     }
     if (isset($conexion)) {
       try {
         $sql = "
-        SELECT r.id,
-          email_code,
-          u.nombre_usuario,
-          type_of_bid,
-          comments
-        FROM rfq r
-        LEFT JOIN usuarios u ON r.usuario_designado = u.id
-        WHERE r.deleted = 0 
-          AND r.email_code LIKE :search_term
-          OR r.type_of_bid LIKE :search_term
-          OR r.comments LIKE :search_term
-          OR r.contract_number LIKE :search_term
-          OR r.city LIKE :search_term
-          OR r.zip_code LIKE :search_term
-          OR r.state LIKE :search_term
-          OR r.client LIKE :search_term
-          OR r.shipping_address LIKE :search_term
-          OR r.special_requirements LIKE :search_term
-          OR r.id LIKE :search_term
-          OR r.id IN (
+        SELECT sq.id,
+          sq.email_code,
+          sq.nombre_usuario,
+          sq.type_of_bid,
+          sq.comments,
+          sq.total_price
+        FROM (
+            SELECT r.id,
+              r.email_code,
+              u.nombre_usuario,
+              r.type_of_bid,
+              r.comments,
+              r.contract_number,
+              r.city,
+              r.zip_code,
+              r.state,
+              r.client,
+              r.shipping_address,
+              r.special_requirements,
+              COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)),0) AS total_price
+            FROM rfq r
+              LEFT JOIN usuarios u ON r.usuario_designado = u.id
+              LEFT JOIN services s ON r.id = s.id_rfq
+            WHERE r.deleted = 0
+            GROUP BY r.id
+          ) as sq
+        WHERE sq.email_code LIKE :search_term
+          OR sq.type_of_bid LIKE :search_term
+          OR sq.comments LIKE :search_term
+          OR sq.total_price LIKE :search_term
+          OR sq.contract_number LIKE :search_term
+          OR sq.city LIKE :search_term
+          OR sq.zip_code LIKE :search_term
+          OR sq.state LIKE :search_term
+          OR sq.client LIKE :search_term
+          OR sq.shipping_address LIKE :search_term
+          OR sq.special_requirements LIKE :search_term
+          OR sq.id LIKE :search_term
+          OR sq.id IN (
             SELECT i.id_rfq
             FROM item i
             WHERE i.provider_menor LIKE :search_term
@@ -1206,12 +1225,12 @@ class RepositorioRfq {
               OR i.description_project LIKE :search_term
               OR i.comments LIKE :search_term
           )
-          OR r.id IN (
+          OR sq.id IN (
             SELECT s.id_rfq
             FROM services s
             WHERE s.description LIKE :search_term
           )
-          OR r.id IN (
+          OR sq.id IN (
             SELECT i.id_rfq
             FROM subitems si
               JOIN item i ON si.id_item = i.id

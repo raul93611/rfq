@@ -59,6 +59,7 @@
                     <th>DESIGNATED USER</th>
                     <th>TYPE OF BID</th>
                     <th>COMMENTS</th>
+                    <th>TOTAL PRICE</th>
                   </tr>
                 </thead>
                 <tbody>
