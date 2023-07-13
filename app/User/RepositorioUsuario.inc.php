@@ -245,24 +245,105 @@ class RepositorioUsuario {
     return $total_usuarios;
   }
 
-  public static function obtener_todos_usuarios($conexion) {
-    $usuarios = [];
+  public static function getUsers($conexion, $start, $length, $search, $sort_column_index, $sort_direction) {
+    $data = [];
+    $search = '%' . $search . '%';
+    switch ($sort_column_index) {
+      case 0:
+        $sort_column = 'u.id';
+        break;
+      case 1:
+        $sort_column = 'role_names';
+        break;
+      case 2:
+        $sort_column = 'nombres';
+        break;
+      case 3:
+        $sort_column = 'apellidos';
+        break;
+      case 4:
+        $sort_column = 'nombre_usuario';
+        break;
+      case 5:
+        $sort_column = 'status';
+        break;
+      default:
+        $sort_column = 'u.id';
+        break;
+    }
     if (isset($conexion)) {
       try {
-        $sql = "SELECT * FROM usuarios WHERE cargo != 1";
+        $sql = "
+        SELECT u.id, 
+        GROUP_CONCAT(r.name) AS role_names, 
+        nombres, 
+        apellidos, 
+        nombre_usuario, 
+        CASE
+          WHEN status = 1 THEN 'Enabled'
+          WHEN status = 0 THEN 'Disabled'
+        END AS status,
+        NULL AS options
+        FROM usuarios u
+        LEFT JOIN roles r ON FIND_IN_SET(r.id, u.cargo)
+        WHERE u.id LIKE :search OR 
+        cargo LIKE :search OR 
+        nombres LIKE :search OR 
+        apellidos LIKE :search OR
+        nombre_usuario LIKE :search
+        GROUP BY u.id
+        ORDER BY {$sort_column} {$sort_direction} LIMIT {$start}, {$length}
+        ";
         $sentencia = $conexion->prepare($sql);
+        $sentencia->bindValue(':search', $search, PDO::PARAM_STR);
         $sentencia->execute();
-        $resultado = $sentencia->fetchAll(PDO::FETCH_ASSOC);
-        if (count($resultado)) {
-          foreach ($resultado as $fila) {
-            $usuarios[] = new Usuario($fila['id'], $fila['nombre_usuario'], $fila['password'], $fila['nombres'], $fila['apellidos'], $fila['cargo'], $fila['email'], $fila['status'], $fila['hash_recover_email']);
-          }
+        while ($row = $sentencia->fetch(PDO::FETCH_ASSOC)) {
+          $data[] = $row;
         }
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
-    return $usuarios;
+    return $data;
+  }
+
+  public static function getTotalUsersCount($conexion) {
+    if (isset($conexion)) {
+      try {
+        $sql = "
+        SELECT COUNT(*)
+        FROM usuarios
+        ";
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->execute();
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $sentencia->fetchColumn();
+  }
+
+  public static function getTotalFilteredUsersCount($conexion, $search) {
+    $search = '%' . $search . '%';
+    if (isset($conexion)) {
+      try {
+        $sql = "
+        SELECT COUNT(*)
+        FROM usuarios 
+        WHERE id LIKE :search OR 
+        cargo LIKE :search OR 
+        nombres LIKE :search OR 
+        apellidos LIKE :search OR
+        nombre_usuario LIKE :search
+        ";
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindValue(':search', $search, PDO::PARAM_STR);
+        $sentencia->execute();
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $sentencia->fetchColumn();
   }
 
   public static function get_enable_users($conexion) {
@@ -283,31 +364,6 @@ class RepositorioUsuario {
       }
     }
     return $usuarios;
-  }
-
-  public static function escribir_usuario($usuario) {
-    if (!isset($usuario)) {
-      return;
-    }
-?>
-    <tr>
-      <td><?php echo $usuario->obtener_id(); ?></td>
-      <td><?php echo $usuario->obtener_role(); ?></td>
-      <td><?php echo $usuario->obtener_nombres(); ?></td>
-      <td><?php echo $usuario->obtener_apellidos(); ?></td>
-      <td class='text-center'>
-        <?php
-        if ($usuario->obtener_status()) {
-          echo '<a href="' . DISABLE_USER . $usuario->obtener_id() . '" class="btn btn-block btn-sm btn-danger"><i class="fa fa-ban"></i> Disable</a>';
-        } else {
-          echo '<a href="' . ENABLE_USER . $usuario->obtener_id() . '" class="btn btn-block btn-sm btn-success"><i class="fa fa-check"></i> Enable</a>';
-        }
-        ?>
-        <br>
-        <a class="btn btn-sm btn-block btn-info" href="<?php echo EDIT_USER . $usuario->obtener_id(); ?>"><i class="fas fa-highlighter"></i> Edit</a>
-      </td>
-    </tr>
-    <?php
   }
 
   public static function disable_user($conexion, $id_usuario) {
@@ -344,34 +400,6 @@ class RepositorioUsuario {
       }
     }
     return $usuario_editado;
-  }
-
-  public static function escribir_usuarios() {
-    Conexion::abrir_conexion();
-    $usuarios = self::obtener_todos_usuarios(Conexion::obtener_conexion());
-    Conexion::cerrar_conexion();
-    if (count($usuarios)) {
-    ?>
-      <table id="tabla_usuarios" class="table table-bordered table-hover">
-        <thead>
-          <tr>
-            <th id="id">Id</th>
-            <th>Role</th>
-            <th>First names</th>
-            <th>Last names</th>
-            <th id="disable_user">Options</th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php
-          foreach ($usuarios as $usuario) {
-            self::escribir_usuario($usuario);
-          }
-          ?>
-        </tbody>
-      </table>
-<?php
-    }
   }
 
   public static function obtener_usuarios_rfq($conexion) {
@@ -533,4 +561,3 @@ class RepositorioUsuario {
     return $edited_user;
   }
 }
-?>

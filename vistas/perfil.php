@@ -20,7 +20,7 @@ switch ($partes_ruta[2] ?? null) {
         }
         break;
       case 'users':
-        include_once 'plantillas/utilities/muro_admin.inc.php';
+        include_once 'plantillas/user/users.inc.php';
         break;
       case 'edit_user':
         $id_user = $partes_ruta[4];

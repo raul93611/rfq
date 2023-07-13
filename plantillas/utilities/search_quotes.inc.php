@@ -1,11 +1,3 @@
-<!-- <?php
-      $cotizaciones = [];
-      if (isset($_POST['buscar'])) {
-        Conexion::abrir_conexion();
-        $cotizaciones = RepositorioRfq::obtener_resultados_busqueda(Conexion::obtener_conexion(), $_POST['termino_busqueda']);
-        Conexion::cerrar_conexion();
-      }
-      ?> -->
 <div class="content-wrapper">
   <section class="content-header">
     <div class="container-fluid">

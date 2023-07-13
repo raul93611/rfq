@@ -249,6 +249,9 @@ switch ($partes_ruta[1] ?? null) {
     break;
   case 'user':
     switch ($partes_ruta[2]) {
+      case 'users':
+        $ruta_elegida = 'scripts/user/users.php';
+        break;
       case 'recover_password_form':
         $ruta_elegida = 'herramientas/recover_password_form.php';
         break;

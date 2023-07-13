@@ -12,6 +12,13 @@ CREATE TABLE usuarios(
   hash_recover_email VARCHAR(255) NOT NULL,
   PRIMARY KEY(id)
 );
+
+CREATE TABLE roles (
+  id INT NOT NULL AUTO_INCREMENT UNIQUE,
+  name VARCHAR(255),
+  PRIMARY KEY(id)
+);
+
 CREATE TABLE rfq(
   id INT NOT NULL AUTO_INCREMENT UNIQUE,
   id_usuario INT NOT NULL,
