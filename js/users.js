@@ -21,6 +21,26 @@ $('#tabla_usuarios').DataTable({
         }
       }
     },
-    { "data": "options" }
+    { 
+      "data": "options",
+      "orderable": false,
+      "render": function (data, type, row, meta) {
+        if (type === 'display') {
+          let column = `
+          <a class="btn btn-sm btn-info" href="/rfq/perfil/user/edit_user/${row.id}">
+            <i class="fas fa-highlighter"></i>
+          </a>
+          `;
+          column += `
+          <a href="/rfq/user/${row.status == 'Enabled'? 'disable' : 'enable'}_user/${row.id}" class="btn btn-sm btn-${row.status == 'Enabled'? 'danger' : 'success'}">
+            <i class="fa fa-${row.status == 'Enabled'? 'ban' : 'check'}"></i>
+          </a>
+          `;
+          return column;
+        } else {
+          return data;
+        }
+      }
+    }
   ]
 });
