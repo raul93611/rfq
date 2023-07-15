@@ -60,6 +60,7 @@
                     <th>TYPE OF BID</th>
                     <th>COMMENTS</th>
                     <th>TOTAL PRICE</th>
+                    <th>OPTIONS</th>
                   </tr>
                 </thead>
                 <tbody>

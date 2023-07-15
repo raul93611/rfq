@@ -1180,7 +1180,8 @@ class RepositorioRfq {
           sq.nombre_usuario,
           sq.type_of_bid,
           sq.comments,
-          sq.total_price
+          sq.total_price,
+          NULL AS options
         FROM (
             SELECT r.id,
               r.email_code,

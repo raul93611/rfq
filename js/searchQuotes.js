@@ -32,7 +32,25 @@ $(document).ready(function () {
         { "data": "nombre_usuario" },
         { "data": "type_of_bid" },
         { "data": "comments" },
-        { "data": "total_price" }
+        { "data": "total_price" },
+        {
+          "data": "options",
+          "orderable": false,
+          "render": function (data, type, row, meta) {
+            if (type === 'display') {
+              return `
+              <a class="btn btn-sm calculate" href="/rfq/quote/proposal/${row.id}" target="_blank">
+                <i class="fa fa-copy"></i>
+              </a>
+              <a class="btn btn-primary btn-sm" href="/rfq/quote/proposal_gsa/${row.id}" target="_blank">
+                <i class="fa fa-copy"></i>
+              </a>
+            `;
+            } else {
+              return data;
+            }
+          }
+        }
       ]
     });
   });
