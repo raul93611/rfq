@@ -267,6 +267,12 @@ switch ($partes_ruta[1] ?? null) {
         $url_secreta = $partes_ruta[3];
         $ruta_elegida = 'herramientas/restart_password.php';
         break;
+      case 'update':
+        $ruta_elegida = 'scripts/user/update_user.php';
+        break;
+      case 'update_password':
+        $ruta_elegida = 'scripts/user/update_password.php';
+        break;
       default:
         break;
     }

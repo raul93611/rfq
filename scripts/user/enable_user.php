@@ -1,8 +1,7 @@
 <?php
+header('Content-Type: application/json');
+
 Conexion::abrir_conexion();
-$usuario_editado = RepositorioUsuario::enable_user(Conexion::obtener_conexion(), $id_usuario);
+$usuario_editado = RepositorioUsuario::enable_user(Conexion::obtener_conexion(), $_POST['id']);
 Conexion::cerrar_conexion();
-if($usuario_editado){
-  Redireccion::redirigir(USERS);
-}
 ?>

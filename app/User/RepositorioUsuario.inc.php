@@ -170,6 +170,24 @@ class RepositorioUsuario {
     return $email_existe;
   }
 
+  public static function usernameExistMoreThan2($conexion, $username) {
+    $exists = true;
+    if (isset($conexion)) {
+      try {
+        $sql = "SELECT COUNT(nombre_usuario) FROM usuarios WHERE nombre_usuario LIKE :username";
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindValue(':username', $username, PDO::PARAM_STR);
+        $sentencia->execute();
+        if ($sentencia->fetchColumn() <= 1) {
+          $exists = false;
+        }
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $exists;
+  }
+
   public static function url_secreta_existe($conexion, $url_secreta) {
     $url_secreta_existe = true;
     if (isset($conexion)) {
@@ -225,24 +243,6 @@ class RepositorioUsuario {
       }
     }
     return $nombre_completo_existe;
-  }
-
-  public static function contar_usuarios($conexion) {
-    $total_usuarios = 0;
-    if (isset($conexion)) {
-      try {
-        $sql = "SELECT COUNT(*) as total_usuarios FROM usuarios WHERE cargo != 1";
-        $sentencia = $conexion->prepare($sql);
-        $sentencia->execute();
-        $resultado = $sentencia->fetch(PDO::FETCH_ASSOC);
-        if (!empty($resultado)) {
-          $total_usuarios = $resultado['total_usuarios'];
-        }
-      } catch (PDOException $ex) {
-        print 'ERROR:' . $ex->getMessage() . '<br>';
-      }
-    }
-    return $total_usuarios;
   }
 
   public static function getUsers($conexion, $start, $length, $search, $sort_column_index, $sort_direction) {
@@ -525,30 +525,18 @@ class RepositorioUsuario {
     return $data;
   }
 
-  public static function edit_user($conexion, $password, $username, $nombres, $apellidos, $cargo, $email, $id_user) {
+  public static function edit_user($conexion, $username, $nombres, $apellidos, $cargo, $email, $id_user) {
     $edited_user = false;
     if (isset($conexion)) {
       try {
-        if (empty($password)) {
-          $sql = "UPDATE usuarios SET nombre_usuario = :nombre_usuario, nombres = :nombres, apellidos = :apellidos, cargo = :cargo, email = :email WHERE id = :id_user";
-          $sentencia = $conexion->prepare($sql);
-          $sentencia->bindValue(':nombre_usuario', $username, PDO::PARAM_STR);
-          $sentencia->bindValue(':nombres', $nombres, PDO::PARAM_STR);
-          $sentencia->bindValue(':apellidos', $apellidos, PDO::PARAM_STR);
-          $sentencia->bindValue(':cargo', $cargo, PDO::PARAM_STR);
-          $sentencia->bindValue(':email', $email, PDO::PARAM_STR);
-          $sentencia->bindValue(':id_user', $id_user, PDO::PARAM_STR);
-        } else {
-          $sql = "UPDATE usuarios SET password = :password, nombre_usuario = :nombre_usuario, nombres = :nombres, apellidos = :apellidos, cargo = :cargo, email = :email WHERE id = :id_user";
-          $sentencia = $conexion->prepare($sql);
-          $sentencia->bindValue(':password', $password, PDO::PARAM_STR);
-          $sentencia->bindValue(':nombre_usuario', $username, PDO::PARAM_STR);
-          $sentencia->bindValue(':nombres', $nombres, PDO::PARAM_STR);
-          $sentencia->bindValue(':apellidos', $apellidos, PDO::PARAM_STR);
-          $sentencia->bindValue(':cargo', $cargo, PDO::PARAM_STR);
-          $sentencia->bindValue(':email', $email, PDO::PARAM_STR);
-          $sentencia->bindValue(':id_user', $id_user, PDO::PARAM_STR);
-        }
+        $sql = "UPDATE usuarios SET nombre_usuario = :nombre_usuario, nombres = :nombres, apellidos = :apellidos, cargo = :cargo, email = :email WHERE id = :id_user";
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindValue(':nombre_usuario', $username, PDO::PARAM_STR);
+        $sentencia->bindValue(':nombres', $nombres, PDO::PARAM_STR);
+        $sentencia->bindValue(':apellidos', $apellidos, PDO::PARAM_STR);
+        $sentencia->bindValue(':cargo', $cargo, PDO::PARAM_STR);
+        $sentencia->bindValue(':email', $email, PDO::PARAM_STR);
+        $sentencia->bindValue(':id_user', $id_user, PDO::PARAM_STR);
         $sentencia->execute();
 
         if ($sentencia) {
@@ -559,5 +547,19 @@ class RepositorioUsuario {
       }
     }
     return $edited_user;
+  }
+
+  public static function update_password($conexion, $password, $id_user) {
+    if (isset($conexion)) {
+      try {
+        $sql = "UPDATE usuarios SET password = :password WHERE id = :id_user";
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindValue(':password', $password, PDO::PARAM_STR);
+        $sentencia->bindValue(':id_user', $id_user, PDO::PARAM_STR);
+        $sentencia->execute();
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
   }
 }

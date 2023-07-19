@@ -26,6 +26,10 @@ switch ($partes_ruta[2] ?? null) {
         $id_user = $partes_ruta[4];
         include_once 'plantillas/user/edit_user.inc.php';
         break;
+      case 'update_password':
+        $id_user = $partes_ruta[4];
+        include_once 'plantillas/user/update_password.inc.php';
+        break;
       default:
         break;
     }
