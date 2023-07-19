@@ -1,5 +1,7 @@
 <?php
-include_once 'plantillas/user/validation_edit_user.inc.php';
+Conexion::abrir_conexion();
+$user = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), $id_user);
+Conexion::cerrar_conexion();
 ?>
 <div class="content-wrapper">
   <section class="content-header">
@@ -22,7 +24,7 @@ include_once 'plantillas/user/validation_edit_user.inc.php';
             <div class="card-header">
               <h3 class="card-title"><i class="fa fa-user-plus"></i> Edit user</h3>
             </div>
-            <form role="form" method="post" action="<?php echo EDIT_USER . $id_user; ?>">
+            <form id="edit-user-form" role="form" method="post" action="">
               <?php
                 include_once 'forms/user/empty_edit_user_form.inc.php';
               ?>
@@ -33,3 +35,4 @@ include_once 'plantillas/user/validation_edit_user.inc.php';
     </div>
   </section>
 </div>
+<script src="<?php echo RUTA_JS; ?>users.js"></script>

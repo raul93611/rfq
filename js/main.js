@@ -414,11 +414,6 @@ $(document).ready(function () {
     ]
   });
 
-  $('#tabla_usuarios').DataTable({
-    'pageLength': 50,
-    'order': [[4, "asc"]]
-  });
-
   $('.invoice_table').DataTable({
     'order': [[3, "desc"]],
     'pageLength': 50

@@ -20,11 +20,15 @@ switch ($partes_ruta[2] ?? null) {
         }
         break;
       case 'users':
-        include_once 'plantillas/utilities/muro_admin.inc.php';
+        include_once 'plantillas/user/users.inc.php';
         break;
       case 'edit_user':
         $id_user = $partes_ruta[4];
         include_once 'plantillas/user/edit_user.inc.php';
+        break;
+      case 'update_password':
+        $id_user = $partes_ruta[4];
+        include_once 'plantillas/user/update_password.inc.php';
         break;
       default:
         break;
