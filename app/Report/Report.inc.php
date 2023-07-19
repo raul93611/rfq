@@ -295,8 +295,8 @@ class Report {
           case 'monthly':
             $sql = 'SELECT * FROM rfq WHERE deleted = 0 AND invoice = 1 AND MONTH(invoice_date) = :month AND YEAR(invoice_date) = :year';
             $sentence = $connection->prepare($sql);
-            $sentence->bindParam(':month', $month, PDO::PARAM_STR);
-            $sentence->bindParam(':year', $year, PDO::PARAM_STR);
+            $sentence->bindValue(':month', $month, PDO::PARAM_STR);
+            $sentence->bindValue(':year', $year, PDO::PARAM_STR);
             break;
           case 'quarterly':
             switch ($quarter) {
@@ -315,12 +315,12 @@ class Report {
             }
             $sql = 'SELECT * FROM rfq WHERE deleted = 0 AND invoice = 1 AND MONTH(invoice_date) ' . $period . ' AND YEAR(invoice_date) = :year';
             $sentence = $connection->prepare($sql);
-            $sentence->bindParam(':year', $year, PDO::PARAM_STR);
+            $sentence->bindValue(':year', $year, PDO::PARAM_STR);
             break;
           case 'yearly':
             $sql = 'SELECT * FROM rfq WHERE deleted = 0 AND invoice = 1 AND YEAR(invoice_date) = :year';
             $sentence = $connection->prepare($sql);
-            $sentence->bindParam(':year', $year, PDO::PARAM_STR);
+            $sentence->bindValue(':year', $year, PDO::PARAM_STR);
             break;
         }
         $sentence->execute();
@@ -481,7 +481,7 @@ class Report {
             break;
         }
         $sentence = $connection->prepare($sql);
-        $sentence->bindParam(':search', $search, PDO::PARAM_STR);
+        $sentence->bindValue(':search', $search, PDO::PARAM_STR);
         $sentence->execute();
         while ($row = $sentence->fetch(PDO::FETCH_ASSOC)) {
           $data[] = $row;
@@ -605,7 +605,7 @@ class Report {
             break;
         }
         $sentence = $connection->prepare($sql);
-        $sentence->bindParam(':search', $search, PDO::PARAM_STR);
+        $sentence->bindValue(':search', $search, PDO::PARAM_STR);
         $sentence->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -754,7 +754,7 @@ class Report {
             break;
         }
         $sentence = $connection->prepare($sql);
-        $sentence->bindParam(':search', $search, PDO::PARAM_STR);
+        $sentence->bindValue(':search', $search, PDO::PARAM_STR);
         $sentence->execute();
         while ($row = $sentence->fetch(PDO::FETCH_ASSOC)) {
           $data[] = $row;
@@ -875,7 +875,7 @@ class Report {
             break;
         }
         $sentence = $connection->prepare($sql);
-        $sentence->bindParam(':search', $search, PDO::PARAM_STR);
+        $sentence->bindValue(':search', $search, PDO::PARAM_STR);
         $sentence->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -1057,7 +1057,7 @@ class Report {
             break;
         }
         $sentence = $connection->prepare($sql);
-        $sentence->bindParam(':search', $search, PDO::PARAM_STR);
+        $sentence->bindValue(':search', $search, PDO::PARAM_STR);
         $sentence->execute();
         while ($row = $sentence->fetch(PDO::FETCH_ASSOC)) {
           $data[] = $row;
@@ -1178,7 +1178,420 @@ class Report {
             break;
         }
         $sentence = $connection->prepare($sql);
-        $sentence->bindParam(':search', $search, PDO::PARAM_STR);
+        $sentence->bindValue(':search', $search, PDO::PARAM_STR);
+        $sentence->execute();
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $sentence->fetchColumn();
+  }
+
+  public static function getAccountsPayableFulfillmentReport(
+    $connection,
+    $start,
+    $length,
+    $search,
+    $sort_column_index,
+    $sort_direction,
+    $type,
+    $quarter,
+    $month,
+    $year
+  ) {
+    $data = [];
+    $search = '%' . $search . '%';
+    switch ($sort_column_index) {
+      case 0:
+        $sort_column = 'id';
+        break;
+      case 1:
+        $sort_column = 'provider';
+        break;
+      case 2:
+        $sort_column = 'real_cost';
+        break;
+      case 3:
+        $sort_column = 'payment_term';
+        break;
+      default:
+        $sort_column = 'r.id';
+        break;
+    }
+    if (isset($connection)) {
+      try {
+        switch ($type) {
+          case 'monthly':
+            $sql = "
+            SELECT id, provider, real_cost, payment_term 
+            FROM (
+            SELECT r.id, fi.provider, fi.real_cost, fi.payment_term FROM `fulfillment_items` fi
+            LEFT JOIN item i ON fi.id_item = i.id
+            LEFT JOIN rfq r ON i.id_rfq = r.id
+            WHERE r.fullfillment = 1
+            AND r.deleted = 0
+            AND MONTH(fulfillment_date) = {$month}
+            AND YEAR(fulfillment_date) = {$year}
+
+            UNION ALL
+
+            SELECT r.id, fsi.provider, fsi.real_cost, fsi.payment_term FROM `fulfillment_subitems` fsi
+            LEFT JOIN subitems si ON fsi.id_subitem = si.id
+            LEFT JOIN item i ON si.id_item = i.id
+            LEFT JOIN rfq r ON i.id_rfq = r.id
+            WHERE r.fullfillment = 1
+            AND r.deleted = 0
+            AND MONTH(fulfillment_date) = {$month}
+            AND YEAR(fulfillment_date) = {$year}
+
+            UNION ALL
+
+            SELECT r.id, fs.provider, fs.real_cost, fs.payment_term FROM `fulfillment_services` fs
+            LEFT JOIN services s ON fs.id_service = s.id
+            LEFT JOIN rfq r ON s.id_rfq = r.id
+            WHERE r.fullfillment = 1
+            AND r.deleted = 0
+            AND MONTH(fulfillment_date) = {$month}
+            AND YEAR(fulfillment_date) = {$year}
+            ) as accounts_payable_fulfillment
+            WHERE id LIKE :search OR 
+            provider LIKE :search OR
+            real_cost LIKE :search OR
+            payment_term LIKE :search  
+            ORDER BY {$sort_column} {$sort_direction} LIMIT {$start}, {$length};
+            ";
+            break;
+          case 'quarterly':
+            $sql = "
+            SELECT id, provider, real_cost, payment_term 
+            FROM (
+            SELECT r.id, fi.provider, fi.real_cost, fi.payment_term FROM `fulfillment_items` fi
+            LEFT JOIN item i ON fi.id_item = i.id
+            LEFT JOIN rfq r ON i.id_rfq = r.id
+            WHERE r.fullfillment = 1
+            AND r.deleted = 0
+            AND QUARTER(fulfillment_date) = {$quarter}
+            AND YEAR(fulfillment_date) = {$year}
+
+            UNION ALL
+
+            SELECT r.id, fsi.provider, fsi.real_cost, fsi.payment_term FROM `fulfillment_subitems` fsi
+            LEFT JOIN subitems si ON fsi.id_subitem = si.id
+            LEFT JOIN item i ON si.id_item = i.id
+            LEFT JOIN rfq r ON i.id_rfq = r.id
+            WHERE r.fullfillment = 1
+            AND r.deleted = 0
+            AND QUARTER(fulfillment_date) = {$quarter}
+            AND YEAR(fulfillment_date) = {$year}
+
+            UNION ALL
+
+            SELECT r.id, fs.provider, fs.real_cost, fs.payment_term FROM `fulfillment_services` fs
+            LEFT JOIN services s ON fs.id_service = s.id
+            LEFT JOIN rfq r ON s.id_rfq = r.id
+            WHERE r.fullfillment = 1
+            AND r.deleted = 0
+            AND QUARTER(fulfillment_date) = {$quarter}
+            AND YEAR(fulfillment_date) = {$year}
+            ) as accounts_payable_fulfillment
+            WHERE id LIKE :search OR 
+            provider LIKE :search OR
+            real_cost LIKE :search OR
+            payment_term LIKE :search  
+            ORDER BY {$sort_column} {$sort_direction} LIMIT {$start}, {$length};
+            ";
+            break;
+          case 'yearly':
+            $sql = "
+            SELECT id, provider, real_cost, payment_term 
+            FROM (
+            SELECT r.id, fi.provider, fi.real_cost, fi.payment_term FROM `fulfillment_items` fi
+            LEFT JOIN item i ON fi.id_item = i.id
+            LEFT JOIN rfq r ON i.id_rfq = r.id
+            WHERE r.fullfillment = 1
+            AND r.deleted = 0
+            AND YEAR(fulfillment_date) = {$year}
+
+            UNION ALL
+
+            SELECT r.id, fsi.provider, fsi.real_cost, fsi.payment_term FROM `fulfillment_subitems` fsi
+            LEFT JOIN subitems si ON fsi.id_subitem = si.id
+            LEFT JOIN item i ON si.id_item = i.id
+            LEFT JOIN rfq r ON i.id_rfq = r.id
+            WHERE r.fullfillment = 1
+            AND r.deleted = 0
+            AND YEAR(fulfillment_date) = {$year}
+
+            UNION ALL
+
+            SELECT r.id, fs.provider, fs.real_cost, fs.payment_term FROM `fulfillment_services` fs
+            LEFT JOIN services s ON fs.id_service = s.id
+            LEFT JOIN rfq r ON s.id_rfq = r.id
+            WHERE r.fullfillment = 1
+            AND r.deleted = 0
+            AND YEAR(fulfillment_date) = {$year}
+            ) as accounts_payable_fulfillment
+            WHERE id LIKE :search OR 
+            provider LIKE :search OR
+            real_cost LIKE :search OR
+            payment_term LIKE :search  
+            ORDER BY {$sort_column} {$sort_direction} LIMIT {$start}, {$length};
+            ";
+            break;
+        }
+        $sentence = $connection->prepare($sql);
+        $sentence->bindValue(':search', $search, PDO::PARAM_STR);
+        $sentence->execute();
+        while ($row = $sentence->fetch(PDO::FETCH_ASSOC)) {
+          $data[] = $row;
+        }
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $data;
+  }
+
+  public static function getAccountsPayableFulfillmentReportCount($connection, $type, $quarter, $month, $year) {
+    $month = (int)$month;
+    $year = (int)$year;
+    if (isset($connection)) {
+      try {
+        switch ($type) {
+          case 'monthly':
+            $sql = "
+            SELECT SUM(total) 
+            FROM (
+            SELECT COUNT(r.id) AS total FROM `fulfillment_items` fi
+            LEFT JOIN item i ON fi.id_item = i.id
+            LEFT JOIN rfq r ON i.id_rfq = r.id
+            WHERE r.fullfillment = 1
+            AND r.deleted = 0
+            AND MONTH(fulfillment_date) = {$month}
+            AND YEAR(fulfillment_date) = {$year}
+
+            UNION ALL
+
+            SELECT COUNT(r.id) AS total FROM `fulfillment_subitems` fsi
+            LEFT JOIN subitems si ON fsi.id_subitem = si.id
+            LEFT JOIN item i ON si.id_item = i.id
+            LEFT JOIN rfq r ON i.id_rfq = r.id
+            WHERE r.fullfillment = 1
+            AND r.deleted = 0
+            AND MONTH(fulfillment_date) = {$month}
+            AND YEAR(fulfillment_date) = {$year}
+
+            UNION ALL
+
+            SELECT COUNT(r.id) AS total FROM `fulfillment_services` fs
+            LEFT JOIN services s ON fs.id_service = s.id
+            LEFT JOIN rfq r ON s.id_rfq = r.id
+            WHERE r.fullfillment = 1
+            AND r.deleted = 0
+            AND MONTH(fulfillment_date) = {$month}
+            AND YEAR(fulfillment_date) = {$year}
+            ) as accounts_payable_fulfillment;
+            ";
+            break;
+          case 'quarterly':
+            $sql = "
+            SELECT SUM(total) 
+            FROM (
+            SELECT COUNT(r.id) AS total FROM `fulfillment_items` fi
+            LEFT JOIN item i ON fi.id_item = i.id
+            LEFT JOIN rfq r ON i.id_rfq = r.id
+            WHERE r.fullfillment = 1
+            AND r.deleted = 0
+            AND QUARTER(fulfillment_date) = {$quarter}
+            AND YEAR(fulfillment_date) = {$year}
+
+            UNION ALL
+
+            SELECT COUNT(r.id) AS total FROM `fulfillment_subitems` fsi
+            LEFT JOIN subitems si ON fsi.id_subitem = si.id
+            LEFT JOIN item i ON si.id_item = i.id
+            LEFT JOIN rfq r ON i.id_rfq = r.id
+            WHERE r.fullfillment = 1
+            AND r.deleted = 0
+            AND QUARTER(fulfillment_date) = {$quarter}
+            AND YEAR(fulfillment_date) = {$year}
+
+            UNION ALL
+
+            SELECT COUNT(r.id) AS total FROM `fulfillment_services` fs
+            LEFT JOIN services s ON fs.id_service = s.id
+            LEFT JOIN rfq r ON s.id_rfq = r.id
+            WHERE r.fullfillment = 1
+            AND r.deleted = 0
+            AND QUARTER(fulfillment_date) = {$quarter}
+            AND YEAR(fulfillment_date) = {$year}
+            ) as accounts_payable_fulfillment;
+            ";
+            break;
+          case 'yearly':
+            $sql = "
+            SELECT SUM(total) 
+            FROM (
+            SELECT COUNT(r.id) AS total FROM `fulfillment_items` fi
+            LEFT JOIN item i ON fi.id_item = i.id
+            LEFT JOIN rfq r ON i.id_rfq = r.id
+            WHERE r.fullfillment = 1
+            AND r.deleted = 0
+            AND YEAR(fulfillment_date) = {$year}
+
+            UNION ALL
+
+            SELECT COUNT(r.id) AS total FROM `fulfillment_subitems` fsi
+            LEFT JOIN subitems si ON fsi.id_subitem = si.id
+            LEFT JOIN item i ON si.id_item = i.id
+            LEFT JOIN rfq r ON i.id_rfq = r.id
+            WHERE r.fullfillment = 1
+            AND r.deleted = 0
+            AND YEAR(fulfillment_date) = {$year}
+
+            UNION ALL
+
+            SELECT COUNT(r.id) AS total FROM `fulfillment_services` fs
+            LEFT JOIN services s ON fs.id_service = s.id
+            LEFT JOIN rfq r ON s.id_rfq = r.id
+            WHERE r.fullfillment = 1
+            AND r.deleted = 0
+            AND YEAR(fulfillment_date) = {$year}
+            ) as accounts_payable_fulfillment;
+            ";
+            break;
+        }
+        $sentencia = $connection->prepare($sql);
+        $sentencia->execute();
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $sentencia->fetchColumn();
+  }
+
+  public static function getFilteredAccountsPayableFulfillmentReportCount($connection, $search, $type, $quarter, $month, $year) {
+    $search = '%' . $search . '%';
+    if (isset($connection)) {
+      try {
+        switch ($type) {
+          case 'monthly':
+            $sql = "
+            SELECT COUNT(id)
+            FROM (
+            SELECT r.id, fi.provider, fi.real_cost, fi.payment_term FROM `fulfillment_items` fi
+            LEFT JOIN item i ON fi.id_item = i.id
+            LEFT JOIN rfq r ON i.id_rfq = r.id
+            WHERE r.fullfillment = 1
+            AND r.deleted = 0
+            AND MONTH(fulfillment_date) = {$month}
+            AND YEAR(fulfillment_date) = {$year}
+
+            UNION ALL
+
+            SELECT r.id, fsi.provider, fsi.real_cost, fsi.payment_term FROM `fulfillment_subitems` fsi
+            LEFT JOIN subitems si ON fsi.id_subitem = si.id
+            LEFT JOIN item i ON si.id_item = i.id
+            LEFT JOIN rfq r ON i.id_rfq = r.id
+            WHERE r.fullfillment = 1
+            AND r.deleted = 0
+            AND MONTH(fulfillment_date) = {$month}
+            AND YEAR(fulfillment_date) = {$year}
+
+            UNION ALL
+
+            SELECT r.id, fs.provider, fs.real_cost, fs.payment_term FROM `fulfillment_services` fs
+            LEFT JOIN services s ON fs.id_service = s.id
+            LEFT JOIN rfq r ON s.id_rfq = r.id
+            WHERE r.fullfillment = 1
+            AND r.deleted = 0
+            AND MONTH(fulfillment_date) = {$month}
+            AND YEAR(fulfillment_date) = {$year}
+            ) as accounts_payable_fulfillment
+            WHERE id LIKE :search OR 
+            provider LIKE :search OR
+            real_cost LIKE :search OR
+            payment_term LIKE :search;
+            ";
+            break;
+          case 'quarterly':
+            $sql = "
+            SELECT COUNT(id) 
+            FROM (
+            SELECT r.id, fi.provider, fi.real_cost, fi.payment_term FROM `fulfillment_items` fi
+            LEFT JOIN item i ON fi.id_item = i.id
+            LEFT JOIN rfq r ON i.id_rfq = r.id
+            WHERE r.fullfillment = 1
+            AND r.deleted = 0
+            AND QUARTER(fulfillment_date) = {$quarter}
+            AND YEAR(fulfillment_date) = {$year}
+
+            UNION ALL
+
+            SELECT r.id, fsi.provider, fsi.real_cost, fsi.payment_term FROM `fulfillment_subitems` fsi
+            LEFT JOIN subitems si ON fsi.id_subitem = si.id
+            LEFT JOIN item i ON si.id_item = i.id
+            LEFT JOIN rfq r ON i.id_rfq = r.id
+            WHERE r.fullfillment = 1
+            AND r.deleted = 0
+            AND QUARTER(fulfillment_date) = {$quarter}
+            AND YEAR(fulfillment_date) = {$year}
+
+            UNION ALL
+
+            SELECT r.id, fs.provider, fs.real_cost, fs.payment_term FROM `fulfillment_services` fs
+            LEFT JOIN services s ON fs.id_service = s.id
+            LEFT JOIN rfq r ON s.id_rfq = r.id
+            WHERE r.fullfillment = 1
+            AND r.deleted = 0
+            AND QUARTER(fulfillment_date) = {$quarter}
+            AND YEAR(fulfillment_date) = {$year}
+            ) as accounts_payable_fulfillment
+            WHERE id LIKE :search OR 
+            provider LIKE :search OR
+            real_cost LIKE :search OR
+            payment_term LIKE :search;
+            ";
+            break;
+          case 'yearly':
+            $sql = "
+            SELECT COUNT(id)
+            FROM (
+            SELECT r.id, fi.provider, fi.real_cost, fi.payment_term FROM `fulfillment_items` fi
+            LEFT JOIN item i ON fi.id_item = i.id
+            LEFT JOIN rfq r ON i.id_rfq = r.id
+            WHERE r.fullfillment = 1
+            AND r.deleted = 0
+            AND YEAR(fulfillment_date) = {$year}
+
+            UNION ALL
+
+            SELECT r.id, fsi.provider, fsi.real_cost, fsi.payment_term FROM `fulfillment_subitems` fsi
+            LEFT JOIN subitems si ON fsi.id_subitem = si.id
+            LEFT JOIN item i ON si.id_item = i.id
+            LEFT JOIN rfq r ON i.id_rfq = r.id
+            WHERE r.fullfillment = 1
+            AND r.deleted = 0
+            AND YEAR(fulfillment_date) = {$year}
+
+            UNION ALL
+
+            SELECT r.id, fs.provider, fs.real_cost, fs.payment_term FROM `fulfillment_services` fs
+            LEFT JOIN services s ON fs.id_service = s.id
+            LEFT JOIN rfq r ON s.id_rfq = r.id
+            WHERE r.fullfillment = 1
+            AND r.deleted = 0
+            AND YEAR(fulfillment_date) = {$year}
+            ) as accounts_payable_fulfillment
+            WHERE id LIKE :search OR 
+            provider LIKE :search OR
+            real_cost LIKE :search OR
+            payment_term LIKE :search;
+            ";
+            break;
+        }
+        $sentence = $connection->prepare($sql);
+        $sentence->bindValue(':search', $search, PDO::PARAM_STR);
         $sentence->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';

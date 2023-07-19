@@ -28,9 +28,9 @@ class TaskCommentRepository{
       try{
         $sql = 'INSERT INTO task_comments(id_task, id_user, comment, created_at) VALUES(:id_task, :id_user, :comment, NOW())';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_task', $comment-> get_id_task(), PDO::PARAM_STR);
-        $sentence-> bindParam(':id_user', $comment-> get_id_user(), PDO::PARAM_STR);
-        $sentence-> bindParam(':comment', $comment-> get_comment(), PDO::PARAM_STR);
+        $sentence-> bindValue(':id_task', $comment-> get_id_task(), PDO::PARAM_STR);
+        $sentence-> bindValue(':id_user', $comment-> get_id_user(), PDO::PARAM_STR);
+        $sentence-> bindValue(':comment', $comment-> get_comment(), PDO::PARAM_STR);
         $sentence-> execute();
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -44,7 +44,7 @@ class TaskCommentRepository{
       try{
         $sql = 'SELECT * FROM task_comments WHERE id_task = :id_task ORDER BY created_at DESC';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_task', $id_task, PDO::PARAM_STR);
+        $sentence-> bindValue(':id_task', $id_task, PDO::PARAM_STR);
         $sentence-> execute();
         $comments = self::array_to_object($sentence);
       }catch(PDOException $ex){

@@ -7,11 +7,11 @@ class ServiceRepository
       try {
         $sql = 'INSERT INTO services(id_rfq, description, quantity, unit_price, total_price) VALUES(:id_rfq, :description, :quantity, :unit_price, :total_price)';
         $sentence = $connection->prepare($sql);
-        $sentence->bindParam(':id_rfq', $service->get_id_rfq(), PDO::PARAM_STR);
-        $sentence->bindParam(':description', $service->get_description(), PDO::PARAM_STR);
-        $sentence->bindParam(':quantity', $service->get_quantity(), PDO::PARAM_STR);
-        $sentence->bindParam(':unit_price', $service->get_unit_price(), PDO::PARAM_STR);
-        $sentence->bindParam(':total_price', $service->get_total_price(), PDO::PARAM_STR);
+        $sentence->bindValue(':id_rfq', $service->get_id_rfq(), PDO::PARAM_STR);
+        $sentence->bindValue(':description', $service->get_description(), PDO::PARAM_STR);
+        $sentence->bindValue(':quantity', $service->get_quantity(), PDO::PARAM_STR);
+        $sentence->bindValue(':unit_price', $service->get_unit_price(), PDO::PARAM_STR);
+        $sentence->bindValue(':total_price', $service->get_total_price(), PDO::PARAM_STR);
         $sentence->execute();
         $id = $connection->lastInsertId();
       } catch (PDOException $ex) {
@@ -28,7 +28,7 @@ class ServiceRepository
       try {
         $sql = 'SELECT * FROM services WHERE id_rfq = :id_rfq';
         $sentence = $connection->prepare($sql);
-        $sentence->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentence->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentence->execute();
         $result = $sentence->fetchAll(PDO::FETCH_ASSOC);
         if (count($result)) {
@@ -49,8 +49,8 @@ class ServiceRepository
       try {
         $sql = 'UPDATE services SET fulfillment_profit = :fulfillment_profit WHERE id = :id_service';
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':fulfillment_profit', $fulfillment_profit, PDO::PARAM_STR);
-        $sentencia->bindParam(':id_service', $id_service, PDO::PARAM_STR);
+        $sentencia->bindValue(':fulfillment_profit', $fulfillment_profit, PDO::PARAM_STR);
+        $sentencia->bindValue(':id_service', $id_service, PDO::PARAM_STR);
         $sentencia->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -140,7 +140,7 @@ class ServiceRepository
       try {
         $sql = 'SELECT * FROM services WHERE id = :id_service';
         $sentence = $connection->prepare($sql);
-        $sentence->bindParam(':id_service', $id_service, PDO::PARAM_STR);
+        $sentence->bindValue(':id_service', $id_service, PDO::PARAM_STR);
         $sentence->execute();
         $result = $sentence->fetch(PDO::FETCH_ASSOC);
         if (!empty($result)) {
@@ -159,11 +159,11 @@ class ServiceRepository
       try {
         $sql = 'UPDATE services SET description = :description, quantity = :quantity, unit_price = :unit_price, total_price = :total_price WHERE id = :id_service';
         $sentence = $connection->prepare($sql);
-        $sentence->bindParam(':description', $description, PDO::PARAM_STR);
-        $sentence->bindParam(':quantity', $quantity, PDO::PARAM_STR);
-        $sentence->bindParam(':unit_price', $unit_price, PDO::PARAM_STR);
-        $sentence->bindParam(':total_price', $total_price, PDO::PARAM_STR);
-        $sentence->bindParam(':id_service', $id, PDO::PARAM_STR);
+        $sentence->bindValue(':description', $description, PDO::PARAM_STR);
+        $sentence->bindValue(':quantity', $quantity, PDO::PARAM_STR);
+        $sentence->bindValue(':unit_price', $unit_price, PDO::PARAM_STR);
+        $sentence->bindValue(':total_price', $total_price, PDO::PARAM_STR);
+        $sentence->bindValue(':id_service', $id, PDO::PARAM_STR);
         $sentence->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -177,7 +177,7 @@ class ServiceRepository
       try {
         $sql = 'DELETE FROM services WHERE id = :id_service';
         $sentence = $connection->prepare($sql);
-        $sentence->bindParam(':id_service', $id_service, PDO::PARAM_STR);
+        $sentence->bindValue(':id_service', $id_service, PDO::PARAM_STR);
         $sentence->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -192,7 +192,7 @@ class ServiceRepository
       try {
         $sql = 'SELECT SUM(total_price) AS total_service FROM services WHERE id_rfq = :id_rfq';
         $sentence = $connection->prepare($sql);
-        $sentence->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentence->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentence->execute();
         $result = $sentence->fetch(PDO::FETCH_ASSOC);
         if (!empty($result)) {
@@ -212,8 +212,8 @@ class ServiceRepository
       try {
         $sql = 'UPDATE services SET total_price = quantity * (unit_price * :payment_term) WHERE id_rfq = :id_rfq';
         $sentence = $connection->prepare($sql);
-        $sentence->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-        $sentence->bindParam(':payment_term', $payment_term, PDO::PARAM_STR);
+        $sentence->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentence->bindValue(':payment_term', $payment_term, PDO::PARAM_STR);
         $sentence->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';

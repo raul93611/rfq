@@ -5,19 +5,19 @@ class ReQuoteItemRepository{
       try{
         $sql = 'INSERT INTO re_quote_items(id_re_quote, brand, brand_project, part_number, part_number_project, description, description_project, quantity, unit_price, total_price, comments, website, additional) VALUES(:id_re_quote, :brand, :brand_project, :part_number, :part_number_project, :description, :description_project, :quantity, :unit_price, :total_price, :comments, :website, :additional)';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_re_quote', $re_quote_item-> get_id_re_quote(), PDO::PARAM_STR);
-        $sentence-> bindParam(':brand', $re_quote_item-> get_brand(), PDO::PARAM_STR);
-        $sentence-> bindParam(':brand_project', $re_quote_item-> get_brand_project(), PDO::PARAM_STR);
-        $sentence-> bindParam(':part_number', $re_quote_item-> get_part_number(), PDO::PARAM_STR);
-        $sentence-> bindParam(':part_number_project', $re_quote_item-> get_part_number_project(), PDO::PARAM_STR);
-        $sentence-> bindParam(':description', $re_quote_item-> get_description(), PDO::PARAM_STR);
-        $sentence-> bindParam(':description_project', $re_quote_item-> get_description_project(), PDO::PARAM_STR);
-        $sentence-> bindParam(':quantity', $re_quote_item-> get_quantity(), PDO::PARAM_STR);
-        $sentence-> bindParam(':unit_price', $re_quote_item-> get_unit_price(), PDO::PARAM_STR);
-        $sentence-> bindParam(':total_price', $re_quote_item-> get_total_price(), PDO::PARAM_STR);
-        $sentence-> bindParam(':comments', $re_quote_item-> get_comments(), PDO::PARAM_STR);
-        $sentence-> bindParam(':website', $re_quote_item-> get_website(), PDO::PARAM_STR);
-        $sentence-> bindParam(':additional', $re_quote_item-> get_additional(), PDO::PARAM_STR);
+        $sentence-> bindValue(':id_re_quote', $re_quote_item-> get_id_re_quote(), PDO::PARAM_STR);
+        $sentence-> bindValue(':brand', $re_quote_item-> get_brand(), PDO::PARAM_STR);
+        $sentence-> bindValue(':brand_project', $re_quote_item-> get_brand_project(), PDO::PARAM_STR);
+        $sentence-> bindValue(':part_number', $re_quote_item-> get_part_number(), PDO::PARAM_STR);
+        $sentence-> bindValue(':part_number_project', $re_quote_item-> get_part_number_project(), PDO::PARAM_STR);
+        $sentence-> bindValue(':description', $re_quote_item-> get_description(), PDO::PARAM_STR);
+        $sentence-> bindValue(':description_project', $re_quote_item-> get_description_project(), PDO::PARAM_STR);
+        $sentence-> bindValue(':quantity', $re_quote_item-> get_quantity(), PDO::PARAM_STR);
+        $sentence-> bindValue(':unit_price', $re_quote_item-> get_unit_price(), PDO::PARAM_STR);
+        $sentence-> bindValue(':total_price', $re_quote_item-> get_total_price(), PDO::PARAM_STR);
+        $sentence-> bindValue(':comments', $re_quote_item-> get_comments(), PDO::PARAM_STR);
+        $sentence-> bindValue(':website', $re_quote_item-> get_website(), PDO::PARAM_STR);
+        $sentence-> bindValue(':additional', $re_quote_item-> get_additional(), PDO::PARAM_STR);
         $sentence-> execute();
         $id = $connection-> lastInsertId();
       }catch(PDOException $ex){
@@ -288,7 +288,7 @@ class ReQuoteItemRepository{
       try{
         $sql = 'SELECT * FROM re_quote_items WHERE id_re_quote = :id_re_quote';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_re_quote', $id_re_quote, PDO::PARAM_STR);
+        $sentence-> bindValue(':id_re_quote', $id_re_quote, PDO::PARAM_STR);
         $sentence-> execute();
         $result = $sentence-> fetchAll(PDO::FETCH_ASSOC);
         if(count($result)){
@@ -309,7 +309,7 @@ class ReQuoteItemRepository{
       try{
         $sql = 'SELECT * FROM re_quote_items WHERE id = :id_re_quote_item';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_re_quote_item', $id_re_quote_item, PDO::PARAM_STR);
+        $sentence-> bindValue(':id_re_quote_item', $id_re_quote_item, PDO::PARAM_STR);
         $sentence-> execute();
         $result = $sentence-> fetch(PDO::FETCH_ASSOC);
         if(!empty($result)){
@@ -327,16 +327,16 @@ class ReQuoteItemRepository{
       try{
         $sql = 'UPDATE re_quote_items SET brand = :brand, brand_project = :brand_project, part_number = :part_number, part_number_project = :part_number_project, description = :description, description_project = :description_project, quantity = :quantity, comments = :comments, website = :website WHERE id = :id_re_quote_item';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':brand', $brand, PDO::PARAM_STR);
-        $sentence-> bindParam(':brand_project', $brand_project, PDO::PARAM_STR);
-        $sentence-> bindParam(':part_number', $part_number, PDO::PARAM_STR);
-        $sentence-> bindParam(':part_number_project', $part_number_project, PDO::PARAM_STR);
-        $sentence-> bindParam(':description', $description, PDO::PARAM_STR);
-        $sentence-> bindParam(':description_project', $description_project, PDO::PARAM_STR);
-        $sentence-> bindParam(':quantity', $quantity, PDO::PARAM_STR);
-        $sentence-> bindParam(':comments', $comments, PDO::PARAM_STR);
-        $sentence-> bindParam(':website', $website, PDO::PARAM_STR);
-        $sentence-> bindParam(':id_re_quote_item', $id_re_quote_item, PDO::PARAM_STR);
+        $sentence-> bindValue(':brand', $brand, PDO::PARAM_STR);
+        $sentence-> bindValue(':brand_project', $brand_project, PDO::PARAM_STR);
+        $sentence-> bindValue(':part_number', $part_number, PDO::PARAM_STR);
+        $sentence-> bindValue(':part_number_project', $part_number_project, PDO::PARAM_STR);
+        $sentence-> bindValue(':description', $description, PDO::PARAM_STR);
+        $sentence-> bindValue(':description_project', $description_project, PDO::PARAM_STR);
+        $sentence-> bindValue(':quantity', $quantity, PDO::PARAM_STR);
+        $sentence-> bindValue(':comments', $comments, PDO::PARAM_STR);
+        $sentence-> bindValue(':website', $website, PDO::PARAM_STR);
+        $sentence-> bindValue(':id_re_quote_item', $id_re_quote_item, PDO::PARAM_STR);
         $sentence-> execute();
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -350,11 +350,11 @@ class ReQuoteItemRepository{
         $connection-> beginTransaction();
         $sql1 = 'DELETE FROM re_quote_providers WHERE id_re_quote_item = :id_re_quote_item';
         $sentence1 = $connection-> prepare($sql1);
-        $sentence1-> bindParam(':id_re_quote_item', $id_re_quote_item, PDO::PARAM_STR);
+        $sentence1-> bindValue(':id_re_quote_item', $id_re_quote_item, PDO::PARAM_STR);
         $sentence1-> execute();
         $sql2 = 'DELETE FROM re_quote_items WHERE id = :id_re_quote_item';
         $sentence2 = $connection-> prepare($sql2);
-        $sentence2-> bindParam(':id_re_quote_item', $id_re_quote_item, PDO::PARAM_STR);
+        $sentence2-> bindValue(':id_re_quote_item', $id_re_quote_item, PDO::PARAM_STR);
         $sentence2-> execute();
         $connection-> commit();
       }catch(PDOException $ex){
@@ -369,10 +369,10 @@ class ReQuoteItemRepository{
       try{
         $sql = 'UPDATE re_quote_items SET unit_price = :unit_price, total_price = :total_price, additional = :additional WHERE id = :id_re_quote_item';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':unit_price', $unit_price, PDO::PARAM_STR);
-        $sentence-> bindParam(':total_price', $total_price, PDO::PARAM_STR);
-        $sentence-> bindParam(':additional', $additional, PDO::PARAM_STR);
-        $sentence-> bindParam(':id_re_quote_item', $id_re_quote_item, PDO::PARAM_STR);
+        $sentence-> bindValue(':unit_price', $unit_price, PDO::PARAM_STR);
+        $sentence-> bindValue(':total_price', $total_price, PDO::PARAM_STR);
+        $sentence-> bindValue(':additional', $additional, PDO::PARAM_STR);
+        $sentence-> bindValue(':id_re_quote_item', $id_re_quote_item, PDO::PARAM_STR);
         $sentence-> execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';

@@ -6,9 +6,9 @@ class RepositorioProvider{
       try{
         $sql = 'INSERT INTO provider(id_item, provider, price) VALUES(:id_item, :provider, :price)';
         $sentencia = $conexion-> prepare($sql);
-        $sentencia-> bindParam(':id_item', $provider-> obtener_id_item(), PDO::PARAM_STR);
-        $sentencia-> bindParam(':provider', $provider-> obtener_provider(), PDO::PARAM_STR);
-        $sentencia-> bindParam(':price', $provider-> obtener_price(), PDO::PARAM_STR);
+        $sentencia-> bindValue(':id_item', $provider-> obtener_id_item(), PDO::PARAM_STR);
+        $sentencia-> bindValue(':provider', $provider-> obtener_provider(), PDO::PARAM_STR);
+        $sentencia-> bindValue(':price', $provider-> obtener_price(), PDO::PARAM_STR);
         $resultado = $sentencia-> execute();
         if($resultado){
           $provider_insertado = true;
@@ -26,7 +26,7 @@ class RepositorioProvider{
       try{
         $sql = 'DELETE FROM provider WHERE id = :id_provider';
         $sentencia = $conexion-> prepare($sql);
-        $sentencia->bindParam(':id_provider', $id_provider, PDO::PARAM_STR);
+        $sentencia->bindValue(':id_provider', $id_provider, PDO::PARAM_STR);
         $resultado = $sentencia-> execute();
         if($resultado){
           $deleted_provider = true;
@@ -44,7 +44,7 @@ class RepositorioProvider{
       try{
         $sql = 'SELECT * FROM provider WHERE id_item = :id_item';
         $sentencia = $conexion-> prepare($sql);
-        $sentencia-> bindParam(':id_item', $id_item, PDO::PARAM_STR);
+        $sentencia-> bindValue(':id_item', $id_item, PDO::PARAM_STR);
         $sentencia-> execute();
         $resultado = $sentencia-> fetchAll();
         if(count($resultado)){
@@ -65,7 +65,7 @@ class RepositorioProvider{
       try{
         $sql = 'SELECT * FROM provider WHERE id = :id_provider';
         $sentencia = $conexion-> prepare($sql);
-        $sentencia-> bindParam(':id_provider', $id_provider, PDO::PARAM_STR);
+        $sentencia-> bindValue(':id_provider', $id_provider, PDO::PARAM_STR);
         $sentencia-> execute();
         $resultado = $sentencia-> fetch();
         if(!empty($resultado)){
@@ -84,9 +84,9 @@ class RepositorioProvider{
       try{
         $sql = 'UPDATE provider SET provider = :provider, price = :price WHERE id = :id_provider';
         $sentencia = $conexion-> prepare($sql);
-        $sentencia-> bindParam(':provider', $provider, PDO::PARAM_STR);
-        $sentencia-> bindParam(':price', $price, PDO::PARAM_STR);
-        $sentencia-> bindParam(':id_provider', $id_provider, PDO::PARAM_STR);
+        $sentencia-> bindValue(':provider', $provider, PDO::PARAM_STR);
+        $sentencia-> bindValue(':price', $price, PDO::PARAM_STR);
+        $sentencia-> bindValue(':id_provider', $id_provider, PDO::PARAM_STR);
         $sentencia-> execute();
         if($sentencia){
           $provider_editado = true;
@@ -108,8 +108,8 @@ class RepositorioProvider{
           $sql = 'UPDATE provider SET price = price - :price WHERE id = :id_provider';
         }
         $sentencia = $conexion-> prepare($sql);
-        $sentencia-> bindParam(':price', $price, PDO::PARAM_STR);
-        $sentencia-> bindParam(':id_provider', $id_provider, PDO::PARAM_STR);
+        $sentencia-> bindValue(':price', $price, PDO::PARAM_STR);
+        $sentencia-> bindValue(':id_provider', $id_provider, PDO::PARAM_STR);
         $sentencia-> execute();
         if($sentencia){
           $provider_editado = true;

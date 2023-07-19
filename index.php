@@ -1,120 +1,38 @@
 <?php
 // error_reporting(E_ALL);
 // ini_set('display_errors', '1');
+spl_autoload_register(function ($class) {
+  $subfolder = [
+    'Bootstrap' => ['Conexion', 'ControlSesion', 'Redireccion'],
+    'User' => ['RepositorioUsuario', 'Usuario', 'ValidadorUsuario', 'ValidadorLogin', 'ValidadorRegistro'],
+    'Cuestionario' => ['Cuestionario', 'RepositorioCuestionario'],
+    'Quote' => ['Rfq', 'RepositorioRfq', 'ValidadorCotizacion', 'ValidadorCotizacionRegistro', 'Item', 'RepositorioItem', 'Provider', 'RepositorioProvider', 'Subitem', 'RepositorioSubitem', 'ProviderSubitem', 'RepositorioProviderSubitem', 'AuditTrail', 'AuditTrailRepository'],
+    'Comment' => ['Comment', 'RepositorioComment'],
+    'ReQuote' => ['ReQuote', 'ReQuoteRepository', 'ReQuoteItem', 'ReQuoteItemRepository', 'ReQuoteProvider', 'ReQuoteProviderRepository', 'ReQuoteSubitem', 'ReQuoteSubitemRepository', 'ReQuoteSubitemProvider', 'ReQuoteSubitemProviderRepository', 'ReQuoteAuditTrail', 'ReQuoteAuditTrailRepository', 'ReQuoteService', 'ReQuoteServiceRepository'],
+    'Utilities' => ['ProposalRepository', 'ExcelRepository', 'Input', 'Email', 'TeamsIntegration'],
+    'TypeOfBid' => ['TypeOfBid', 'TypeOfBidRepository'],
+    'Service' => ['Service', 'ServiceRepository'],
+    'Tracking' => ['Tracking', 'TrackingRepository', 'TrackingSubitem', 'TrackingSubitemRepository'],
+    'Fulfillment' => ['FulfillmentRepository', 'FulfillmentItem', 'FulfillmentItemRepository', 'FulfillmentSubitem', 'FulfillmentSubitemRepository', 'FulfillmentService', 'FulfillmentServiceRepository', 'FulfillmentAuditTrailRepository'],
+    'ProviderList' => ['ProviderList', 'ProviderListRepository'],
+    'PaymentTerm' => ['PaymentTerm', 'PaymentTermRepository'],
+    'Report' => ['Report'],
+    'Task' => ['Task', 'TaskRepository'],
+    'TaskComment' => ['TaskComment', 'TaskCommentRepository'],
+    'TypeOfContract' => ['TypeOfContract', 'TypeOfContractRepository'],
+    'SalesCommission' => ['SalesCommission', 'SalesCommissionRepository'],
+    'Invoice' => ['Invoice', 'InvoiceRepository']
+  ];
+
+  foreach ($subfolder as $key => $array) {
+    if (in_array($class, $array)) {
+      include_once "app/{$key}/{$class}.inc.php";
+    }
+  }
+});
+
 include_once 'app/Bootstrap/config.inc.php';
 include_once 'app/Bootstrap/routes.inc.php';
-include_once 'app/Bootstrap/Conexion.inc.php';
-include_once 'app/Bootstrap/ControlSesion.inc.php';
-include_once 'app/Bootstrap/Redireccion.inc.php';
-
-include_once 'app/User/RepositorioUsuario.inc.php';
-include_once 'app/User/Usuario.inc.php';
-include_once 'app/User/ValidadorUsuario.inc.php';
-include_once 'app/User/ValidadorLogin.inc.php';
-include_once 'app/User/ValidadorRegistro.inc.php';
-
-include_once 'app/Cuestionario/Cuestionario.inc.php';
-include_once 'app/Cuestionario/RepositorioCuestionario.inc.php';
-
-include_once 'app/Quote/Rfq.inc.php';
-include_once 'app/Quote/RepositorioRfq.inc.php';
-include_once 'app/Quote/ValidadorCotizacion.inc.php';
-include_once 'app/Quote/ValidadorCotizacionRegistro.inc.php';
-
-include_once 'app/Quote/Item.inc.php';
-include_once 'app/Quote/RepositorioItem.inc.php';
-
-include_once 'app/Quote/Provider.inc.php';
-include_once 'app/Quote/RepositorioProvider.inc.php';
-
-include_once 'app/Quote/Subitem.inc.php';
-include_once 'app/Quote/RepositorioSubitem.inc.php';
-
-include_once 'app/Quote/ProviderSubitem.inc.php';
-include_once 'app/Quote/RepositorioProviderSubitem.inc.php';
-
-include_once 'app/Comment/Comment.inc.php';
-include_once 'app/Comment/RepositorioComment.inc.php';
-
-include_once 'app/ReQuote/ReQuote.inc.php';
-include_once 'app/ReQuote/ReQuoteRepository.inc.php';
-
-include_once 'app/ReQuote/ReQuoteItem.inc.php';
-include_once 'app/ReQuote/ReQuoteItemRepository.inc.php';
-
-include_once 'app/ReQuote/ReQuoteProvider.inc.php';
-include_once 'app/ReQuote/ReQuoteProviderRepository.inc.php';
-
-include_once 'app/ReQuote/ReQuoteSubitem.inc.php';
-include_once 'app/ReQuote/ReQuoteSubitemRepository.inc.php';
-
-include_once 'app/ReQuote/ReQuoteSubitemProvider.inc.php';
-include_once 'app/ReQuote/ReQuoteSubitemProviderRepository.inc.php';
-
-include_once 'app/Utilities/ProposalRepository.inc.php';
-include_once 'app/Utilities/ExcelRepository.inc.php';
-
-include_once 'app/Utilities/Input.inc.php';
-include_once 'app/Utilities/Email.inc.php';
-
-include_once 'app/Quote/AuditTrail.inc.php';
-include_once 'app/Quote/AuditTrailRepository.inc.php';
-
-include_once 'app/ReQuote/ReQuoteAuditTrail.inc.php';
-include_once 'app/ReQuote/ReQuoteAuditTrailRepository.inc.php';
-
-include_once 'app/TypeOfBid/TypeOfBid.inc.php';
-include_once 'app/TypeOfBid/TypeOfBidRepository.inc.php';
-
-include_once 'app/Service/Service.inc.php';
-include_once 'app/Service/ServiceRepository.inc.php';
-
-include_once 'app/Tracking/Tracking.inc.php';
-include_once 'app/Tracking/TrackingRepository.inc.php';
-
-include_once 'app/Tracking/TrackingSubitem.inc.php';
-include_once 'app/Tracking/TrackingSubitemRepository.inc.php';
-
-include_once 'app/Fulfillment/FulfillmentRepository.inc.php';
-
-include_once 'app/Fulfillment/FulfillmentItem.inc.php';
-include_once 'app/Fulfillment/FulfillmentItemRepository.inc.php';
-
-include_once 'app/Fulfillment/FulfillmentSubitem.inc.php';
-include_once 'app/Fulfillment/FulfillmentSubitemRepository.inc.php';
-
-include_once 'app/Fulfillment/FulfillmentService.inc.php';
-include_once 'app/Fulfillment/FulfillmentServiceRepository.inc.php';
-
-include_once 'app/ProviderList/ProviderList.inc.php';
-include_once 'app/ProviderList/ProviderListRepository.inc.php';
-
-include_once 'app/PaymentTerm/PaymentTerm.inc.php';
-include_once 'app/PaymentTerm/PaymentTermRepository.inc.php';
-
-include_once 'app/Report/Report.inc.php';
-
-include_once 'app/Task/Task.inc.php';
-include_once 'app/Task/TaskRepository.inc.php';
-
-include_once 'app/TaskComment/TaskComment.inc.php';
-include_once 'app/TaskComment/TaskCommentRepository.inc.php';
-
-include_once 'app/Fulfillment/FulfillmentAuditTrailRepository.inc.php';
-
-include_once 'app/TypeOfContract/TypeOfContract.inc.php';
-include_once 'app/TypeOfContract/TypeOfContractRepository.inc.php';
-
-include_once 'app/SalesCommission/SalesCommission.inc.php';
-include_once 'app/SalesCommission/SalesCommissionRepository.inc.php';
-
-include_once 'app/Invoice/Invoice.inc.php';
-include_once 'app/Invoice/InvoiceRepository.inc.php';
-
-include_once 'app/ReQuote/ReQuoteService.inc.php';
-include_once 'app/ReQuote/ReQuoteServiceRepository.inc.php';
-
-include_once 'app/Utilities/TeamsIntegration.inc.php';
 
 session_start();
 
@@ -126,7 +44,7 @@ $partes_ruta = array_filter($partes_ruta);
 $partes_ruta = array_slice($partes_ruta, 0);
 $ruta_elegida = 'vistas/404.php';
 
-switch ($partes_ruta[1]) {
+switch ($partes_ruta[1] ?? null) {
   case '':
     $ruta_elegida = 'vistas/home.php';
     break;
@@ -331,6 +249,9 @@ switch ($partes_ruta[1]) {
     break;
   case 'user':
     switch ($partes_ruta[2]) {
+      case 'users':
+        $ruta_elegida = 'scripts/user/users.php';
+        break;
       case 'recover_password_form':
         $ruta_elegida = 'herramientas/recover_password_form.php';
         break;
@@ -345,6 +266,12 @@ switch ($partes_ruta[1]) {
       case 'restart_password':
         $url_secreta = $partes_ruta[3];
         $ruta_elegida = 'herramientas/restart_password.php';
+        break;
+      case 'update':
+        $ruta_elegida = 'scripts/user/update_user.php';
+        break;
+      case 'update_password':
+        $ruta_elegida = 'scripts/user/update_password.php';
         break;
       default:
         break;
@@ -629,6 +556,15 @@ switch ($partes_ruta[1]) {
   case 'kpi':
     $id_rfq = $partes_ruta[2];
     $ruta_elegida = 'scripts/kpi/load_kpi_charts.php';
+    break;
+  case 'utilities':
+    switch ($partes_ruta[2]) {
+      case 'search_quotes':
+        $ruta_elegida = 'scripts/utilities/search_quotes.php';
+        break;
+      default:
+        break;
+    }
     break;
   default:
     break;

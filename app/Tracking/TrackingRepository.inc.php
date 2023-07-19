@@ -22,7 +22,7 @@ class TrackingRepository{
       try{
         $sql = 'SELECT * FROM trackings WHERE id_item = :id_item';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_item', $id_item, PDO::PARAM_STR);
+        $sentence-> bindValue(':id_item', $id_item, PDO::PARAM_STR);
         $sentence-> execute();
         $trackings = self::array_to_object($sentence);
       }catch(PDOException $ex){
@@ -38,7 +38,7 @@ class TrackingRepository{
       try{
         $sql = 'SELECT * FROM trackings WHERE id = :id_tracking';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_tracking', $id_tracking, PDO::PARAM_STR);
+        $sentence-> bindValue(':id_tracking', $id_tracking, PDO::PARAM_STR);
         $sentence-> execute();
         $tracking = self::single_result_to_object($sentence);
       }catch(PDOException $ex){
@@ -53,14 +53,14 @@ class TrackingRepository{
       try{
         $sql = 'INSERT INTO trackings(id_item, quantity, carrier, tracking_number, delivery_date, due_date, signed_by, comments) VALUES(:id_item, :quantity, :carrier, :tracking_number, :delivery_date, :due_date, :signed_by, :comments)';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_item', $tracking-> get_id_item(), PDO::PARAM_STR);
-        $sentence-> bindParam(':quantity', $tracking-> get_quantity(), PDO::PARAM_STR);
-        $sentence-> bindParam(':carrier', $tracking-> get_carrier(), PDO::PARAM_STR);
-        $sentence-> bindParam(':tracking_number', $tracking-> get_tracking_number(), PDO::PARAM_STR);
-        $sentence-> bindParam(':delivery_date', $tracking-> get_delivery_date(), PDO::PARAM_STR);
-        $sentence-> bindParam(':due_date', $tracking-> get_due_date(), PDO::PARAM_STR);
-        $sentence-> bindParam(':signed_by', $tracking-> get_signed_by(), PDO::PARAM_STR);
-        $sentence-> bindParam(':comments', $tracking-> get_comments(), PDO::PARAM_STR);
+        $sentence-> bindValue(':id_item', $tracking-> get_id_item(), PDO::PARAM_STR);
+        $sentence-> bindValue(':quantity', $tracking-> get_quantity(), PDO::PARAM_STR);
+        $sentence-> bindValue(':carrier', $tracking-> get_carrier(), PDO::PARAM_STR);
+        $sentence-> bindValue(':tracking_number', $tracking-> get_tracking_number(), PDO::PARAM_STR);
+        $sentence-> bindValue(':delivery_date', $tracking-> get_delivery_date(), PDO::PARAM_STR);
+        $sentence-> bindValue(':due_date', $tracking-> get_due_date(), PDO::PARAM_STR);
+        $sentence-> bindValue(':signed_by', $tracking-> get_signed_by(), PDO::PARAM_STR);
+        $sentence-> bindValue(':comments', $tracking-> get_comments(), PDO::PARAM_STR);
         $sentence-> execute();
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -73,14 +73,14 @@ class TrackingRepository{
       try{
         $sql = 'UPDATE trackings SET quantity = :quantity, carrier = :carrier, tracking_number = :tracking_number, delivery_date = :delivery_date, due_date = :due_date, signed_by = :signed_by, comments = :comments WHERE id = :id_tracking';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':quantity', $quantity, PDO::PARAM_STR);
-        $sentence-> bindParam(':carrier', $carrier, PDO::PARAM_STR);
-        $sentence-> bindParam(':tracking_number', $tracking_number, PDO::PARAM_STR);
-        $sentence-> bindParam(':delivery_date', $delivery_date, PDO::PARAM_STR);
-        $sentence-> bindParam(':due_date', $due_date, PDO::PARAM_STR);
-        $sentence-> bindParam(':signed_by', $signed_by, PDO::PARAM_STR);
-        $sentence-> bindParam(':comments', $comments, PDO::PARAM_STR);
-        $sentence-> bindParam(':id_tracking', $id_tracking, PDO::PARAM_STR);
+        $sentence-> bindValue(':quantity', $quantity, PDO::PARAM_STR);
+        $sentence-> bindValue(':carrier', $carrier, PDO::PARAM_STR);
+        $sentence-> bindValue(':tracking_number', $tracking_number, PDO::PARAM_STR);
+        $sentence-> bindValue(':delivery_date', $delivery_date, PDO::PARAM_STR);
+        $sentence-> bindValue(':due_date', $due_date, PDO::PARAM_STR);
+        $sentence-> bindValue(':signed_by', $signed_by, PDO::PARAM_STR);
+        $sentence-> bindValue(':comments', $comments, PDO::PARAM_STR);
+        $sentence-> bindValue(':id_tracking', $id_tracking, PDO::PARAM_STR);
         $sentence-> execute();
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -93,7 +93,7 @@ class TrackingRepository{
       try{
         $sql = 'DELETE FROM trackings WHERE id = :id_tracking';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_tracking', $id_tracking, PDO::PARAM_STR);
+        $sentence-> bindValue(':id_tracking', $id_tracking, PDO::PARAM_STR);
         $sentence-> execute();
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';

@@ -76,7 +76,8 @@ class TeamsIntegration {
     self::sendMessage('Status Award', 'Quote ID: ' . $quote_id, $users, EDITAR_COTIZACION . "/{$quote_id}", 'Open quote', WEBHOOK_AWARD);
   }
 
-  public static function notifyQuoteFulfillment($quote_id, $users){
-    self::sendMessage('Status Fulfillment', 'Quote ID: ' . $quote_id, $users, EDITAR_COTIZACION . "/{$quote_id}", 'Open quote', WEBHOOK_FULFILLMENT);
+  public static function notifyQuoteFulfillment($quote_id, $type_of_contract, $users){
+    $message = "Quote ID:  {$quote_id} \n Type of Contract: {$type_of_contract}";
+    self::sendMessage('Status Fulfillment', $message, $users, EDITAR_COTIZACION . "/{$quote_id}", 'Open quote', WEBHOOK_FULFILLMENT);
   }
 }

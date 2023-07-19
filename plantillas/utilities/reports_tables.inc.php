@@ -42,6 +42,7 @@
                       <option value="submitted" <?php echo $report == 'submitted' ? 'selected' : ''; ?>>Submitted</option>
                       <option value="award" <?php echo $report == 'award' ? 'selected' : ''; ?>>Award</option>
                       <option value="fulfillment" <?php echo $report == 'fulfillment' ? 'selected' : ''; ?>>Fulfillment</option>
+                      <option value="accounts-payable-fulfillment" <?php echo $report == 'accounts-payable-fulfillment' ? 'selected' : ''; ?>>Accounts Payable Fulfillment</option>
                       <!-- <option value="fulfillment_pending" <?php echo $report == 'fulfillment_pending' ? 'selected' : ''; ?>>Fulfillment Partial Invoices</option> -->
                     </select>
                   </div>

@@ -5,20 +5,20 @@ class RepositorioSubitem{
       try {
         $sql = 'INSERT INTO subitems(id_item, provider_menor, brand, brand_project, part_number, part_number_project, description, description_project, quantity, unit_price, total_price, comments, website, additional) VALUES(:id_item, :provider_menor, :brand, :brand_project, :part_number, :part_number_project, :description, :description_project, :quantity, :unit_price, :total_price, :comments, :website, :additional)';
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':id_item', $subitem->obtener_id_item(), PDO::PARAM_STR);
-        $sentencia->bindParam(':provider_menor', $subitem->obtener_provider_menor(), PDO::PARAM_STR);
-        $sentencia->bindParam(':brand', $subitem->obtener_brand(), PDO::PARAM_STR);
-        $sentencia->bindParam(':brand_project', $subitem->obtener_brand_project(), PDO::PARAM_STR);
-        $sentencia->bindParam(':part_number', $subitem->obtener_part_number(), PDO::PARAM_STR);
-        $sentencia->bindParam(':part_number_project', $subitem->obtener_part_number_project(), PDO::PARAM_STR);
-        $sentencia->bindParam(':description', $subitem->obtener_description(), PDO::PARAM_STR);
-        $sentencia->bindParam(':description_project', $subitem->obtener_description_project(), PDO::PARAM_STR);
-        $sentencia->bindParam(':quantity', $subitem->obtener_quantity(), PDO::PARAM_STR);
-        $sentencia->bindParam(':unit_price', $subitem->obtener_unit_price(), PDO::PARAM_STR);
-        $sentencia->bindParam(':total_price', $subitem->obtener_total_price(), PDO::PARAM_STR);
-        $sentencia->bindParam(':comments', $subitem->obtener_comments(), PDO::PARAM_STR);
-        $sentencia->bindParam(':website', $subitem->obtener_website(), PDO::PARAM_STR);
-        $sentencia->bindParam(':additional', $subitem->obtener_additional(), PDO::PARAM_STR);
+        $sentencia->bindValue(':id_item', $subitem->obtener_id_item(), PDO::PARAM_STR);
+        $sentencia->bindValue(':provider_menor', $subitem->obtener_provider_menor(), PDO::PARAM_STR);
+        $sentencia->bindValue(':brand', $subitem->obtener_brand(), PDO::PARAM_STR);
+        $sentencia->bindValue(':brand_project', $subitem->obtener_brand_project(), PDO::PARAM_STR);
+        $sentencia->bindValue(':part_number', $subitem->obtener_part_number(), PDO::PARAM_STR);
+        $sentencia->bindValue(':part_number_project', $subitem->obtener_part_number_project(), PDO::PARAM_STR);
+        $sentencia->bindValue(':description', $subitem->obtener_description(), PDO::PARAM_STR);
+        $sentencia->bindValue(':description_project', $subitem->obtener_description_project(), PDO::PARAM_STR);
+        $sentencia->bindValue(':quantity', $subitem->obtener_quantity(), PDO::PARAM_STR);
+        $sentencia->bindValue(':unit_price', $subitem->obtener_unit_price(), PDO::PARAM_STR);
+        $sentencia->bindValue(':total_price', $subitem->obtener_total_price(), PDO::PARAM_STR);
+        $sentencia->bindValue(':comments', $subitem->obtener_comments(), PDO::PARAM_STR);
+        $sentencia->bindValue(':website', $subitem->obtener_website(), PDO::PARAM_STR);
+        $sentencia->bindValue(':additional', $subitem->obtener_additional(), PDO::PARAM_STR);
         $sentencia->execute();
         $id = $conexion->lastInsertId();
       } catch (PDOException $ex) {
@@ -34,11 +34,11 @@ class RepositorioSubitem{
         $conexion -> beginTransaction();
         $sql1 = "DELETE FROM provider_subitems WHERE id_subitem = :id_subitem";
         $sentencia1 = $conexion-> prepare($sql1);
-        $sentencia1-> bindParam(':id_subitem', $id_subitem, PDO::PARAM_STR);
+        $sentencia1-> bindValue(':id_subitem', $id_subitem, PDO::PARAM_STR);
         $sentencia1-> execute();
         $sql2 = "DELETE FROM subitems WHERE id = :id_subitem";
         $sentencia2 = $conexion-> prepare($sql2);
-        $sentencia2-> bindParam(':id_subitem', $id_subitem, PDO::PARAM_STR);
+        $sentencia2-> bindValue(':id_subitem', $id_subitem, PDO::PARAM_STR);
         $sentencia2-> execute();
         $conexion-> commit();
       } catch (PDOException $ex) {
@@ -53,8 +53,8 @@ class RepositorioSubitem{
       try{
         $sql = 'UPDATE subitems SET provider_menor = :provider_menor WHERE id = :id_subitem';
         $sentencia = $conexion-> prepare($sql);
-        $sentencia-> bindParam(':provider_menor', $provider_menor, PDO::PARAM_STR);
-        $sentencia-> bindParam(':id_subitem', $id_subitem, PDO::PARAM_STR);
+        $sentencia-> bindValue(':provider_menor', $provider_menor, PDO::PARAM_STR);
+        $sentencia-> bindValue(':id_subitem', $id_subitem, PDO::PARAM_STR);
         $sentencia-> execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -67,16 +67,16 @@ class RepositorioSubitem{
       try {
         $sql = 'UPDATE subitems SET brand = :brand, brand_project = :brand_project, part_number = :part_number, part_number_project = :part_number_project, description = :description, description_project = :description_project, quantity = :quantity, comments = :comments, website = :website WHERE id = :id_subitem';
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':brand', $brand, PDO::PARAM_STR);
-        $sentencia->bindParam(':brand_project', $brand_project, PDO::PARAM_STR);
-        $sentencia->bindParam(':part_number', $part_number, PDO::PARAM_STR);
-        $sentencia->bindParam(':part_number_project', $part_number_project, PDO::PARAM_STR);
-        $sentencia->bindParam(':description', $description, PDO::PARAM_STR);
-        $sentencia->bindParam(':description_project', $description_project, PDO::PARAM_STR);
-        $sentencia->bindParam(':quantity', $quantity, PDO::PARAM_STR);
-        $sentencia->bindParam(':comments', $comments, PDO::PARAM_STR);
-        $sentencia->bindParam(':website', $website, PDO::PARAM_STR);
-        $sentencia->bindParam(':id_subitem', $id_subitem, PDO::PARAM_STR);
+        $sentencia->bindValue(':brand', $brand, PDO::PARAM_STR);
+        $sentencia->bindValue(':brand_project', $brand_project, PDO::PARAM_STR);
+        $sentencia->bindValue(':part_number', $part_number, PDO::PARAM_STR);
+        $sentencia->bindValue(':part_number_project', $part_number_project, PDO::PARAM_STR);
+        $sentencia->bindValue(':description', $description, PDO::PARAM_STR);
+        $sentencia->bindValue(':description_project', $description_project, PDO::PARAM_STR);
+        $sentencia->bindValue(':quantity', $quantity, PDO::PARAM_STR);
+        $sentencia->bindValue(':comments', $comments, PDO::PARAM_STR);
+        $sentencia->bindValue(':website', $website, PDO::PARAM_STR);
+        $sentencia->bindValue(':id_subitem', $id_subitem, PDO::PARAM_STR);
         $sentencia->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -90,7 +90,7 @@ class RepositorioSubitem{
       try {
         $sql = 'SELECT * FROM subitems WHERE id = :id_subitem';
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':id_subitem', $id_subitem, PDO::PARAM_STR);
+        $sentencia->bindValue(':id_subitem', $id_subitem, PDO::PARAM_STR);
         $sentencia->execute();
         $resultado = $sentencia->fetch();
         if (!empty($resultado)) {
@@ -109,7 +109,7 @@ class RepositorioSubitem{
       try {
         $sql = 'SELECT * FROM subitems WHERE id_item = :id_item';
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':id_item', $id_item, PDO::PARAM_STR);
+        $sentencia->bindValue(':id_item', $id_item, PDO::PARAM_STR);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll();
         if (count($resultado)) {
@@ -211,10 +211,10 @@ class RepositorioSubitem{
       try{
         $sql = 'UPDATE subitems SET unit_price = :unit_price, total_price = :total_price, additional = :additional WHERE id = :id_subitem';
         $sentencia = $conexion-> prepare($sql);
-        $sentencia-> bindParam(':unit_price', $unit_price_subitem, PDO::PARAM_STR);
-        $sentencia-> bindParam(':total_price', $total_price_subitem, PDO::PARAM_STR);
-        $sentencia-> bindParam(':additional', $additional_subitem, PDO::PARAM_STR);
-        $sentencia-> bindParam(':id_subitem', $id_subitem, PDO::PARAM_STR);
+        $sentencia-> bindValue(':unit_price', $unit_price_subitem, PDO::PARAM_STR);
+        $sentencia-> bindValue(':total_price', $total_price_subitem, PDO::PARAM_STR);
+        $sentencia-> bindValue(':additional', $additional_subitem, PDO::PARAM_STR);
+        $sentencia-> bindValue(':id_subitem', $id_subitem, PDO::PARAM_STR);
         $sentencia-> execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -227,8 +227,8 @@ class RepositorioSubitem{
       try{
         $sql = 'UPDATE subitems SET fulfillment_profit = :fulfillment_profit WHERE id = :id_subitem';
         $sentencia = $conexion-> prepare($sql);
-        $sentencia-> bindParam(':fulfillment_profit', $fulfillment_profit, PDO::PARAM_STR);
-        $sentencia-> bindParam(':id_subitem', $id_subitem, PDO::PARAM_STR);
+        $sentencia-> bindValue(':fulfillment_profit', $fulfillment_profit, PDO::PARAM_STR);
+        $sentencia-> bindValue(':id_subitem', $id_subitem, PDO::PARAM_STR);
         $sentencia-> execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';

@@ -6,54 +6,54 @@ class RepositorioRfq {
       try {
         $sql = 'INSERT INTO rfq(id_usuario, usuario_designado, canal, email_code, type_of_bid, issue_date, end_date, status, completado, total_cost, total_price, comments, award, fecha_completado, fecha_submitted, fecha_award, payment_terms, address, ship_to, expiration_date, ship_via, taxes, profit, additional, shipping, shipping_cost, fullfillment, fulfillment_date, contract_number, fulfillment_profit, services_fulfillment_profit, total_fulfillment, total_services_fulfillment, invoice, invoice_date, multi_year_project, submitted_invoice, submitted_invoice_date, fulfillment_pending, fulfillment_shipping_cost, fulfillment_shipping, type_of_contract, net30_fulfillment, sales_commission, city, zip_code, state, client) VALUES(:id_usuario, :usuario_designado, :canal, :email_code, :type_of_bid, :issue_date, :end_date, :status, :completado, :total_cost, :total_price, :comments, :award, :fecha_completado, :fecha_submitted, :fecha_award, :payment_terms, :address, :ship_to, :expiration_date, :ship_via, :taxes, :profit, :additional, :shipping, :shipping_cost, :fullfillment, :fulfillment_date, :contract_number, :fulfillment_profit, :services_fulfillment_profit, :total_fulfillment, :total_services_fulfillment, :invoice, :invoice_date, :multi_year_project, :submitted_invoice, :submitted_invoice_date, :fulfillment_pending, :fulfillment_shipping_cost, :fulfillment_shipping, :type_of_contract, :net30_fulfillment, :sales_commission, :city, :zip_code, :state, :client)';
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':id_usuario', $cotizacion->obtener_id_usuario(), PDO::PARAM_STR);
-        $sentencia->bindParam(':usuario_designado', $cotizacion->obtener_usuario_designado(), PDO::PARAM_STR);
-        $sentencia->bindParam(':canal', $cotizacion->obtener_canal(), PDO::PARAM_STR);
-        $sentencia->bindParam(':email_code', $cotizacion->obtener_email_code(), PDO::PARAM_STR);
-        $sentencia->bindParam(':type_of_bid', $cotizacion->obtener_type_of_bid(), PDO::PARAM_STR);
-        $sentencia->bindParam(':issue_date', $cotizacion->obtener_issue_date(), PDO::PARAM_STR);
-        $sentencia->bindParam(':end_date', $cotizacion->obtener_end_date(), PDO::PARAM_STR);
-        $sentencia->bindParam(':status', $cotizacion->obtener_status(), PDO::PARAM_STR);
-        $sentencia->bindParam(':completado', $cotizacion->obtener_completado(), PDO::PARAM_STR);
-        $sentencia->bindParam(':total_cost', $cotizacion->obtener_total_cost(), PDO::PARAM_STR);
-        $sentencia->bindParam(':total_price', $cotizacion->obtener_total_price(), PDO::PARAM_STR);
-        $sentencia->bindParam(':comments', $cotizacion->obtener_comments(), PDO::PARAM_STR);
-        $sentencia->bindParam(':award', $cotizacion->obtener_award(), PDO::PARAM_STR);
-        $sentencia->bindParam(':fecha_completado', $cotizacion->obtener_fecha_completado(), PDO::PARAM_STR);
-        $sentencia->bindParam(':fecha_submitted', $cotizacion->obtener_fecha_submitted(), PDO::PARAM_STR);
-        $sentencia->bindParam(':fecha_award', $cotizacion->obtener_fecha_award(), PDO::PARAM_STR);
-        $sentencia->bindParam(':payment_terms', $cotizacion->obtener_payment_terms(), PDO::PARAM_STR);
-        $sentencia->bindParam(':address', $cotizacion->obtener_address(), PDO::PARAM_STR);
-        $sentencia->bindParam(':ship_to', $cotizacion->obtener_ship_to(), PDO::PARAM_STR);
-        $sentencia->bindParam(':expiration_date', $cotizacion->obtener_expiration_date(), PDO::PARAM_STR);
-        $sentencia->bindParam(':ship_via', $cotizacion->obtener_ship_via(), PDO::PARAM_STR);
-        $sentencia->bindParam(':taxes', $cotizacion->obtener_taxes(), PDO::PARAM_STR);
-        $sentencia->bindParam(':profit', $cotizacion->obtener_profit(), PDO::PARAM_STR);
-        $sentencia->bindParam(':additional', $cotizacion->obtener_additional(), PDO::PARAM_STR);
-        $sentencia->bindParam(':shipping', $cotizacion->obtener_shipping(), PDO::PARAM_STR);
-        $sentencia->bindParam(':shipping_cost', $cotizacion->obtener_shipping_cost(), PDO::PARAM_STR);
-        $sentencia->bindParam(':fullfillment', $cotizacion->obtener_fullfillment(), PDO::PARAM_STR);
-        $sentencia->bindParam(':fulfillment_date', $cotizacion->obtener_fulfillment_date(), PDO::PARAM_STR);
-        $sentencia->bindParam(':contract_number', $cotizacion->obtener_contract_number(), PDO::PARAM_STR);
-        $sentencia->bindParam(':fulfillment_profit', $cotizacion->obtener_fulfillment_profit(), PDO::PARAM_STR);
-        $sentencia->bindParam(':services_fulfillment_profit', $cotizacion->obtener_services_fulfillment_profit(), PDO::PARAM_STR);
-        $sentencia->bindParam(':total_fulfillment', $cotizacion->obtener_total_fulfillment(), PDO::PARAM_STR);
-        $sentencia->bindParam(':total_services_fulfillment', $cotizacion->obtener_total_services_fulfillment(), PDO::PARAM_STR);
-        $sentencia->bindParam(':invoice', $cotizacion->obtener_invoice(), PDO::PARAM_STR);
-        $sentencia->bindParam(':invoice_date', $cotizacion->obtener_invoice_date(), PDO::PARAM_STR);
-        $sentencia->bindParam(':multi_year_project', $cotizacion->obtener_multi_year_project(), PDO::PARAM_STR);
-        $sentencia->bindParam(':submitted_invoice', $cotizacion->obtener_submitted_invoice(), PDO::PARAM_STR);
-        $sentencia->bindParam(':submitted_invoice_date', $cotizacion->obtener_submitted_invoice_date(), PDO::PARAM_STR);
-        $sentencia->bindParam(':fulfillment_pending', $cotizacion->obtener_fulfillment_pending(), PDO::PARAM_STR);
-        $sentencia->bindParam(':fulfillment_shipping_cost', $cotizacion->obtener_fulfillment_shipping_cost(), PDO::PARAM_STR);
-        $sentencia->bindParam(':fulfillment_shipping', $cotizacion->obtener_fulfillment_shipping(), PDO::PARAM_STR);
-        $sentencia->bindParam(':type_of_contract', $cotizacion->obtener_type_of_contract(), PDO::PARAM_STR);
-        $sentencia->bindParam(':net30_fulfillment', $cotizacion->obtener_net30_fulfillment(), PDO::PARAM_STR);
-        $sentencia->bindParam(':sales_commission', $cotizacion->obtener_sales_commission(), PDO::PARAM_STR);
-        $sentencia->bindParam(':city', $cotizacion->obtener_city(), PDO::PARAM_STR);
-        $sentencia->bindParam(':zip_code', $cotizacion->obtener_zip_code(), PDO::PARAM_STR);
-        $sentencia->bindParam(':state', $cotizacion->obtener_state(), PDO::PARAM_STR);
-        $sentencia->bindParam(':client', $cotizacion->obtener_client(), PDO::PARAM_STR);
+        $sentencia->bindValue(':id_usuario', $cotizacion->obtener_id_usuario(), PDO::PARAM_STR);
+        $sentencia->bindValue(':usuario_designado', $cotizacion->obtener_usuario_designado(), PDO::PARAM_STR);
+        $sentencia->bindValue(':canal', $cotizacion->obtener_canal(), PDO::PARAM_STR);
+        $sentencia->bindValue(':email_code', $cotizacion->obtener_email_code(), PDO::PARAM_STR);
+        $sentencia->bindValue(':type_of_bid', $cotizacion->obtener_type_of_bid(), PDO::PARAM_STR);
+        $sentencia->bindValue(':issue_date', $cotizacion->obtener_issue_date(), PDO::PARAM_STR);
+        $sentencia->bindValue(':end_date', $cotizacion->obtener_end_date(), PDO::PARAM_STR);
+        $sentencia->bindValue(':status', $cotizacion->obtener_status(), PDO::PARAM_STR);
+        $sentencia->bindValue(':completado', $cotizacion->obtener_completado(), PDO::PARAM_STR);
+        $sentencia->bindValue(':total_cost', $cotizacion->obtener_total_cost(), PDO::PARAM_STR);
+        $sentencia->bindValue(':total_price', $cotizacion->obtener_total_price(), PDO::PARAM_STR);
+        $sentencia->bindValue(':comments', $cotizacion->obtener_comments(), PDO::PARAM_STR);
+        $sentencia->bindValue(':award', $cotizacion->obtener_award(), PDO::PARAM_STR);
+        $sentencia->bindValue(':fecha_completado', $cotizacion->obtener_fecha_completado(), PDO::PARAM_STR);
+        $sentencia->bindValue(':fecha_submitted', $cotizacion->obtener_fecha_submitted(), PDO::PARAM_STR);
+        $sentencia->bindValue(':fecha_award', $cotizacion->obtener_fecha_award(), PDO::PARAM_STR);
+        $sentencia->bindValue(':payment_terms', $cotizacion->obtener_payment_terms(), PDO::PARAM_STR);
+        $sentencia->bindValue(':address', $cotizacion->obtener_address(), PDO::PARAM_STR);
+        $sentencia->bindValue(':ship_to', $cotizacion->obtener_ship_to(), PDO::PARAM_STR);
+        $sentencia->bindValue(':expiration_date', $cotizacion->obtener_expiration_date(), PDO::PARAM_STR);
+        $sentencia->bindValue(':ship_via', $cotizacion->obtener_ship_via(), PDO::PARAM_STR);
+        $sentencia->bindValue(':taxes', $cotizacion->obtener_taxes(), PDO::PARAM_STR);
+        $sentencia->bindValue(':profit', $cotizacion->obtener_profit(), PDO::PARAM_STR);
+        $sentencia->bindValue(':additional', $cotizacion->obtener_additional(), PDO::PARAM_STR);
+        $sentencia->bindValue(':shipping', $cotizacion->obtener_shipping(), PDO::PARAM_STR);
+        $sentencia->bindValue(':shipping_cost', $cotizacion->obtener_shipping_cost(), PDO::PARAM_STR);
+        $sentencia->bindValue(':fullfillment', $cotizacion->obtener_fullfillment(), PDO::PARAM_STR);
+        $sentencia->bindValue(':fulfillment_date', $cotizacion->obtener_fulfillment_date(), PDO::PARAM_STR);
+        $sentencia->bindValue(':contract_number', $cotizacion->obtener_contract_number(), PDO::PARAM_STR);
+        $sentencia->bindValue(':fulfillment_profit', $cotizacion->obtener_fulfillment_profit(), PDO::PARAM_STR);
+        $sentencia->bindValue(':services_fulfillment_profit', $cotizacion->obtener_services_fulfillment_profit(), PDO::PARAM_STR);
+        $sentencia->bindValue(':total_fulfillment', $cotizacion->obtener_total_fulfillment(), PDO::PARAM_STR);
+        $sentencia->bindValue(':total_services_fulfillment', $cotizacion->obtener_total_services_fulfillment(), PDO::PARAM_STR);
+        $sentencia->bindValue(':invoice', $cotizacion->obtener_invoice(), PDO::PARAM_STR);
+        $sentencia->bindValue(':invoice_date', $cotizacion->obtener_invoice_date(), PDO::PARAM_STR);
+        $sentencia->bindValue(':multi_year_project', $cotizacion->obtener_multi_year_project(), PDO::PARAM_STR);
+        $sentencia->bindValue(':submitted_invoice', $cotizacion->obtener_submitted_invoice(), PDO::PARAM_STR);
+        $sentencia->bindValue(':submitted_invoice_date', $cotizacion->obtener_submitted_invoice_date(), PDO::PARAM_STR);
+        $sentencia->bindValue(':fulfillment_pending', $cotizacion->obtener_fulfillment_pending(), PDO::PARAM_STR);
+        $sentencia->bindValue(':fulfillment_shipping_cost', $cotizacion->obtener_fulfillment_shipping_cost(), PDO::PARAM_STR);
+        $sentencia->bindValue(':fulfillment_shipping', $cotizacion->obtener_fulfillment_shipping(), PDO::PARAM_STR);
+        $sentencia->bindValue(':type_of_contract', $cotizacion->obtener_type_of_contract(), PDO::PARAM_STR);
+        $sentencia->bindValue(':net30_fulfillment', $cotizacion->obtener_net30_fulfillment(), PDO::PARAM_STR);
+        $sentencia->bindValue(':sales_commission', $cotizacion->obtener_sales_commission(), PDO::PARAM_STR);
+        $sentencia->bindValue(':city', $cotizacion->obtener_city(), PDO::PARAM_STR);
+        $sentencia->bindValue(':zip_code', $cotizacion->obtener_zip_code(), PDO::PARAM_STR);
+        $sentencia->bindValue(':state', $cotizacion->obtener_state(), PDO::PARAM_STR);
+        $sentencia->bindValue(':client', $cotizacion->obtener_client(), PDO::PARAM_STR);
         $resultado = $sentencia->execute();
         $id = $conexion->lastInsertId();
         if ($resultado) {
@@ -89,7 +89,7 @@ class RepositorioRfq {
       try {
         $sql = 'SELECT * FROM rfq WHERE deleted = 0 AND email_code = :email_code';
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':email_code', $email_code, PDO::PARAM_STR);
+        $sentencia->bindValue(':email_code', $email_code, PDO::PARAM_STR);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(PDO::FETCH_ASSOC);
         if (count($resultado)) {
@@ -126,7 +126,7 @@ class RepositorioRfq {
       try {
         $sql = 'SELECT id FROM rfq WHERE deleted = 0 AND multi_year_project = :multi_year_project';
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':multi_year_project', $id_parent, PDO::PARAM_STR);
+        $sentencia->bindValue(':multi_year_project', $id_parent, PDO::PARAM_STR);
         $sentencia->execute();
         while ($row = $sentencia->fetch(PDO::FETCH_ASSOC)) {
           $data[] = $row;
@@ -171,8 +171,8 @@ class RepositorioRfq {
         (rfq.id LIKE :search OR nombre_usuario LIKE :search OR rfq.type_of_bid LIKE :search OR rfq.email_code LIKE :search) 
         ORDER BY ' . $sort_column . ' ' . $sort_direction . ' LIMIT ' . $start . ', ' . $length;
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
-        $sentencia->bindParam(':search', $search, PDO::PARAM_STR);
+        $sentencia->bindValue(':canal', $canal, PDO::PARAM_STR);
+        $sentencia->bindValue(':search', $search, PDO::PARAM_STR);
         $sentencia->execute();
         while ($row = $sentencia->fetch(PDO::FETCH_ASSOC)) {
           $data[] = $row;
@@ -196,7 +196,7 @@ class RepositorioRfq {
         award = 0 
         AND (comments = "Working on it" OR comments = "No comments" OR comments = "")';
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
+        $sentencia->bindValue(':canal', $canal, PDO::PARAM_STR);
         $sentencia->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -220,8 +220,8 @@ class RepositorioRfq {
         AND (comments = "Working on it" OR comments = "No comments" OR comments = "") AND 
         (rfq.id LIKE :search OR nombre_usuario LIKE :search OR rfq.type_of_bid LIKE :search OR rfq.email_code LIKE :search)';
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
-        $sentencia->bindParam(':search', $search, PDO::PARAM_STR);
+        $sentencia->bindValue(':canal', $canal, PDO::PARAM_STR);
+        $sentencia->bindValue(':search', $search, PDO::PARAM_STR);
         $sentencia->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -260,8 +260,8 @@ class RepositorioRfq {
         (rfq.id LIKE :search OR nombre_usuario LIKE :search OR rfq.type_of_bid LIKE :search OR rfq.email_code LIKE :search) 
         ORDER BY $sort_column $sort_direction LIMIT $start, $length";
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
-        $sentencia->bindParam(':search', $search, PDO::PARAM_STR);
+        $sentencia->bindValue(':canal', $canal, PDO::PARAM_STR);
+        $sentencia->bindValue(':search', $search, PDO::PARAM_STR);
         $sentencia->execute();
         while ($row = $sentencia->fetch(PDO::FETCH_ASSOC)) {
           $data[] = $row;
@@ -285,7 +285,7 @@ class RepositorioRfq {
         award = 0 
         AND (comments = "Working on it" OR comments = "No comments")';
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
+        $sentencia->bindValue(':canal', $canal, PDO::PARAM_STR);
         $sentencia->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -309,8 +309,8 @@ class RepositorioRfq {
         AND (comments = "Working on it" OR comments = "No comments") AND 
         (rfq.id LIKE :search OR nombre_usuario LIKE :search OR rfq.type_of_bid LIKE :search OR rfq.email_code LIKE :search)';
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
-        $sentencia->bindParam(':search', $search, PDO::PARAM_STR);
+        $sentencia->bindValue(':canal', $canal, PDO::PARAM_STR);
+        $sentencia->bindValue(':search', $search, PDO::PARAM_STR);
         $sentencia->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -325,7 +325,7 @@ class RepositorioRfq {
       try {
         $sql = "SELECT * FROM rfq WHERE id = :id_rfq";
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia->execute();
         $cotizacion_recuperada = self::single_result_to_object($sentencia);
       } catch (PDOException $ex) {
@@ -347,7 +347,7 @@ class RepositorioRfq {
         id != {$id_rfq} AND 
         id LIKE :searchTerm";
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':searchTerm', $searchTerm, PDO::PARAM_STR);
+        $sentencia->bindValue(':searchTerm', $searchTerm, PDO::PARAM_STR);
         $sentencia->execute();
         while ($row = $sentencia->fetch(PDO::FETCH_ASSOC)) {
           $data[] = $row;
@@ -364,7 +364,7 @@ class RepositorioRfq {
       try {
         $sql = 'UPDATE rfq SET fullfillment = 1 WHERE id = :id_rfq';
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -377,8 +377,8 @@ class RepositorioRfq {
       try {
         $sql = 'UPDATE rfq SET services_payment_term = :services_payment_term WHERE id = :id_rfq';
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-        $sentencia->bindParam(':services_payment_term', $payment_term, PDO::PARAM_STR);
+        $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia->bindValue(':services_payment_term', $payment_term, PDO::PARAM_STR);
         $sentencia->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -391,8 +391,8 @@ class RepositorioRfq {
       try {
         $sql = 'UPDATE rfq SET type_of_contract = :type_of_contract WHERE id = :id_rfq';
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-        $sentencia->bindParam(':type_of_contract', $type_of_contract, PDO::PARAM_STR);
+        $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia->bindValue(':type_of_contract', $type_of_contract, PDO::PARAM_STR);
         $sentencia->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -405,9 +405,9 @@ class RepositorioRfq {
       try {
         $sql = 'UPDATE rfq SET sales_commission = :sales_commission, sales_commission_comment = :sales_commission_comment WHERE id = :id_rfq';
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-        $sentencia->bindParam(':sales_commission', $sales_commission, PDO::PARAM_STR);
-        $sentencia->bindParam(':sales_commission_comment', $sales_commission_comment, PDO::PARAM_STR);
+        $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia->bindValue(':sales_commission', $sales_commission, PDO::PARAM_STR);
+        $sentencia->bindValue(':sales_commission_comment', $sales_commission_comment, PDO::PARAM_STR);
         $sentencia->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -420,9 +420,9 @@ class RepositorioRfq {
       try {
         $sql = 'UPDATE rfq SET fulfillment_shipping = :fulfillment_shipping, fulfillment_shipping_cost = :fulfillment_shipping_cost WHERE id = :id_rfq';
         $sentence = $connection->prepare($sql);
-        $sentence->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-        $sentence->bindParam(':fulfillment_shipping', $fulfillment_shipping, PDO::PARAM_STR);
-        $sentence->bindParam(':fulfillment_shipping_cost', $fulfillment_shipping_cost, PDO::PARAM_STR);
+        $sentence->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentence->bindValue(':fulfillment_shipping', $fulfillment_shipping, PDO::PARAM_STR);
+        $sentence->bindValue(':fulfillment_shipping_cost', $fulfillment_shipping_cost, PDO::PARAM_STR);
         $sentence->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -479,26 +479,26 @@ class RepositorioRfq {
         WHERE id = :id_rfq
         ";
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':usuario_designado', $designated_user, PDO::PARAM_STR);
-        $sentencia->bindParam(':ship_to', $ship_to, PDO::PARAM_STR);
-        $sentencia->bindParam(':email_code', $email_code, PDO::PARAM_STR);
-        $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
-        $sentencia->bindParam(':contract_number', $contract_number, PDO::PARAM_STR);
-        $sentencia->bindParam(':city', $city, PDO::PARAM_STR);
-        $sentencia->bindParam(':zip_code', $zip_code, PDO::PARAM_STR);
-        $sentencia->bindParam(':state', $state, PDO::PARAM_STR);
-        $sentencia->bindParam(':client', $client, PDO::PARAM_STR);
-        $sentencia->bindParam(':set_side', $set_side, PDO::PARAM_STR);
-        $sentencia->bindParam(':poc', $poc, PDO::PARAM_STR);
-        $sentencia->bindParam(':co', $co, PDO::PARAM_STR);
-        $sentencia->bindParam(':estimated_delivery_date', $estimated_delivery_date, PDO::PARAM_STR);
-        $sentencia->bindParam(':file_document', $file_document, PDO::PARAM_STR);
-        $sentencia->bindParam(':accounting', $accounting, PDO::PARAM_STR);
-        $sentencia->bindParam(':shipping_address', $shipping_address, PDO::PARAM_STR);
-        $sentencia->bindParam(':special_requirements', $special_requirements, PDO::PARAM_STR);
-        $sentencia->bindParam(':gsa', $gsa, PDO::PARAM_STR);
-        $sentencia->bindParam(':client_payment_terms', $client_payment_terms, PDO::PARAM_STR);
-        $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia->bindValue(':usuario_designado', $designated_user, PDO::PARAM_STR);
+        $sentencia->bindValue(':ship_to', $ship_to, PDO::PARAM_STR);
+        $sentencia->bindValue(':email_code', $email_code, PDO::PARAM_STR);
+        $sentencia->bindValue(':canal', $canal, PDO::PARAM_STR);
+        $sentencia->bindValue(':contract_number', $contract_number, PDO::PARAM_STR);
+        $sentencia->bindValue(':city', $city, PDO::PARAM_STR);
+        $sentencia->bindValue(':zip_code', $zip_code, PDO::PARAM_STR);
+        $sentencia->bindValue(':state', $state, PDO::PARAM_STR);
+        $sentencia->bindValue(':client', $client, PDO::PARAM_STR);
+        $sentencia->bindValue(':set_side', $set_side, PDO::PARAM_STR);
+        $sentencia->bindValue(':poc', $poc, PDO::PARAM_STR);
+        $sentencia->bindValue(':co', $co, PDO::PARAM_STR);
+        $sentencia->bindValue(':estimated_delivery_date', $estimated_delivery_date, PDO::PARAM_STR);
+        $sentencia->bindValue(':file_document', $file_document, PDO::PARAM_STR);
+        $sentencia->bindValue(':accounting', $accounting, PDO::PARAM_STR);
+        $sentencia->bindValue(':shipping_address', $shipping_address, PDO::PARAM_STR);
+        $sentencia->bindValue(':special_requirements', $special_requirements, PDO::PARAM_STR);
+        $sentencia->bindValue(':gsa', $gsa, PDO::PARAM_STR);
+        $sentencia->bindValue(':client_payment_terms', $client_payment_terms, PDO::PARAM_STR);
+        $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia->execute();
         if ($sentencia) {
           $cotizacion_editada = true;
@@ -545,19 +545,19 @@ class RepositorioRfq {
         WHERE id = :id_rfq
         ";
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':ship_via', $ship_via, PDO::PARAM_STR);
-        $sentencia->bindParam(':address', $address, PDO::PARAM_STR);
-        $sentencia->bindParam(':fecha_completado', $fecha_completado, PDO::PARAM_STR);
-        $sentencia->bindParam(':expiration_date', $expiration_date, PDO::PARAM_STR);
-        $sentencia->bindParam(':type_of_bid', $type_of_bid, PDO::PARAM_STR);
-        $sentencia->bindParam(':issue_date', $issue_date, PDO::PARAM_STR);
-        $sentencia->bindParam(':end_date', $end_date, PDO::PARAM_STR);
-        $sentencia->bindParam(':usuario_designado', $designated_user, PDO::PARAM_STR);
-        $sentencia->bindParam(':email_code', $email_code, PDO::PARAM_STR);
-        $sentencia->bindParam(':canal', $channel, PDO::PARAM_STR);
-        $sentencia->bindParam(':ship_to', $ship_to, PDO::PARAM_STR);
-        $sentencia->bindParam(':comments', $comments, PDO::PARAM_STR);
-        $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia->bindValue(':ship_via', $ship_via, PDO::PARAM_STR);
+        $sentencia->bindValue(':address', $address, PDO::PARAM_STR);
+        $sentencia->bindValue(':fecha_completado', $fecha_completado, PDO::PARAM_STR);
+        $sentencia->bindValue(':expiration_date', $expiration_date, PDO::PARAM_STR);
+        $sentencia->bindValue(':type_of_bid', $type_of_bid, PDO::PARAM_STR);
+        $sentencia->bindValue(':issue_date', $issue_date, PDO::PARAM_STR);
+        $sentencia->bindValue(':end_date', $end_date, PDO::PARAM_STR);
+        $sentencia->bindValue(':usuario_designado', $designated_user, PDO::PARAM_STR);
+        $sentencia->bindValue(':email_code', $email_code, PDO::PARAM_STR);
+        $sentencia->bindValue(':canal', $channel, PDO::PARAM_STR);
+        $sentencia->bindValue(':ship_to', $ship_to, PDO::PARAM_STR);
+        $sentencia->bindValue(':comments', $comments, PDO::PARAM_STR);
+        $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia->execute();
         if ($sentencia) {
           $cotizacion_editada = true;
@@ -574,15 +574,15 @@ class RepositorioRfq {
       try {
         $sql = 'UPDATE rfq SET payment_terms = :payment_terms, taxes = :taxes, profit = :profit, total_cost = :total_cost, total_price = :total_price, additional = :additional, shipping = :shipping, shipping_cost = :shipping_cost WHERE id = :id_rfq';
         $sentence = $connection->prepare($sql);
-        $sentence->bindParam(':payment_terms', $payment_terms, PDO::PARAM_STR);
-        $sentence->bindParam(':taxes', $taxes, PDO::PARAM_STR);
-        $sentence->bindParam(':profit', $profit, PDO::PARAM_STR);
-        $sentence->bindParam(':total_cost', $total_cost, PDO::PARAM_STR);
-        $sentence->bindParam(':total_price', $total_price, PDO::PARAM_STR);
-        $sentence->bindParam(':additional', $additional, PDO::PARAM_STR);
-        $sentence->bindParam(':shipping', $shipping, PDO::PARAM_STR);
-        $sentence->bindParam(':shipping_cost', $shipping_cost, PDO::PARAM_STR);
-        $sentence->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentence->bindValue(':payment_terms', $payment_terms, PDO::PARAM_STR);
+        $sentence->bindValue(':taxes', $taxes, PDO::PARAM_STR);
+        $sentence->bindValue(':profit', $profit, PDO::PARAM_STR);
+        $sentence->bindValue(':total_cost', $total_cost, PDO::PARAM_STR);
+        $sentence->bindValue(':total_price', $total_price, PDO::PARAM_STR);
+        $sentence->bindValue(':additional', $additional, PDO::PARAM_STR);
+        $sentence->bindValue(':shipping', $shipping, PDO::PARAM_STR);
+        $sentence->bindValue(':shipping_cost', $shipping_cost, PDO::PARAM_STR);
+        $sentence->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentence->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -611,9 +611,9 @@ class RepositorioRfq {
       try {
         $sql = 'UPDATE rfq SET fulfillment_profit = :fulfillment_profit, total_fulfillment = :total_fulfillment WHERE id = :id_rfq';
         $sentence = $connection->prepare($sql);
-        $sentence->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-        $sentence->bindParam(':fulfillment_profit', $total_profit, PDO::PARAM_STR);
-        $sentence->bindParam(':total_fulfillment', $total_cost, PDO::PARAM_STR);
+        $sentence->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentence->bindValue(':fulfillment_profit', $total_profit, PDO::PARAM_STR);
+        $sentence->bindValue(':total_fulfillment', $total_cost, PDO::PARAM_STR);
         $sentence->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -651,9 +651,9 @@ class RepositorioRfq {
       try {
         $sql = 'UPDATE rfq SET services_fulfillment_profit = :services_fulfillment_profit, total_services_fulfillment = :total_services_fulfillment WHERE id = :id_rfq';
         $sentence = $connection->prepare($sql);
-        $sentence->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-        $sentence->bindParam(':services_fulfillment_profit', $total_profit, PDO::PARAM_STR);
-        $sentence->bindParam(':total_services_fulfillment', $total_cost, PDO::PARAM_STR);
+        $sentence->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentence->bindValue(':services_fulfillment_profit', $total_profit, PDO::PARAM_STR);
+        $sentence->bindValue(':total_services_fulfillment', $total_cost, PDO::PARAM_STR);
         $sentence->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -679,7 +679,7 @@ class RepositorioRfq {
       try {
         $sql = "SELECT * FROM rfq WHERE deleted = 0 AND completado = 1 AND status = 1 AND award = 0 AND canal = :canal AND comments = 'No comments' ORDER BY fecha_submitted DESC LIMIT 100";
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
+        $sentencia->bindValue(':canal', $canal, PDO::PARAM_STR);
         $sentencia->execute();
         $cotizaciones = self::array_to_object($sentencia);
       } catch (PDOException $ex) {
@@ -695,7 +695,7 @@ class RepositorioRfq {
     }
     $partes_fecha_submitted = explode('-', $cotizacion->obtener_fecha_submitted());
     $fecha_submitted = $partes_fecha_submitted[1] . '/' . $partes_fecha_submitted[2] . '/' . $partes_fecha_submitted[0];
-    ?>
+?>
     <tr>
       <td>
         <a href="<?php echo EDITAR_COTIZACION . '/' . $cotizacion->obtener_id(); ?>" class="btn-block">
@@ -775,7 +775,7 @@ class RepositorioRfq {
       try {
         $sql = "SELECT * FROM rfq WHERE deleted = 0 AND completado = 1 AND status = 1 AND award = 1 AND fullfillment = 0 AND canal = :canal AND (comments = 'No comments' OR comments = 'QuickBooks') ORDER BY fecha_award DESC";
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':canal', $canal, PDO::PARAM_STR);
+        $sentencia->bindValue(':canal', $canal, PDO::PARAM_STR);
         $sentencia->execute();
         $cotizaciones = self::array_to_object($sentencia);
       } catch (PDOException $ex) {
@@ -886,7 +886,7 @@ class RepositorioRfq {
         (rfq.id LIKE :search OR nombre_usuario LIKE :search OR type_of_bid LIKE :search OR email_code LIKE :search OR comments LIKE :search) 
         ORDER BY ' . $sort_column . ' ' . $sort_direction . ' LIMIT ' . $start . ', ' . $length;
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':search', $search, PDO::PARAM_STR);
+        $sentencia->bindValue(':search', $search, PDO::PARAM_STR);
         $sentencia->execute();
         while ($row = $sentencia->fetch(PDO::FETCH_ASSOC)) {
           $data[] = $row;
@@ -925,7 +925,7 @@ class RepositorioRfq {
         AND (comments = "No Bid" OR comments = "Manufacturer in the Bid" OR comments = "Expired due date" OR comments = "Supplier did not provide a quote" OR comments = "Others") AND 
         (rfq.id LIKE :search OR nombre_usuario LIKE :search OR type_of_bid LIKE :search OR email_code LIKE :search OR comments LIKE :search)';
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':search', $search, PDO::PARAM_STR);
+        $sentencia->bindValue(':search', $search, PDO::PARAM_STR);
         $sentencia->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -952,7 +952,7 @@ class RepositorioRfq {
         (rfq.id LIKE :search OR nombre_usuario LIKE :search OR type_of_bid LIKE :search OR email_code LIKE :search) 
         ORDER BY ' . $sort_column . ' ' . $sort_direction . ' LIMIT ' . $start . ', ' . $length;
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':search', $search, PDO::PARAM_STR);
+        $sentencia->bindValue(':search', $search, PDO::PARAM_STR);
         $sentencia->execute();
         while ($row = $sentencia->fetch(PDO::FETCH_ASSOC)) {
           $data[] = $row;
@@ -991,7 +991,7 @@ class RepositorioRfq {
         AND comments = "Cancelled" AND 
         (rfq.id LIKE :search OR nombre_usuario LIKE :search OR type_of_bid LIKE :search OR email_code LIKE :search)';
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':search', $search, PDO::PARAM_STR);
+        $sentencia->bindValue(':search', $search, PDO::PARAM_STR);
         $sentencia->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -1018,7 +1018,7 @@ class RepositorioRfq {
         (rfq.id LIKE :search OR nombre_usuario LIKE :search OR type_of_bid LIKE :search OR email_code LIKE :search) 
         ORDER BY ' . $sort_column . ' ' . $sort_direction . ' LIMIT ' . $start . ', ' . $length;
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':search', $search, PDO::PARAM_STR);
+        $sentencia->bindValue(':search', $search, PDO::PARAM_STR);
         $sentencia->execute();
         while ($row = $sentencia->fetch(PDO::FETCH_ASSOC)) {
           $data[] = $row;
@@ -1057,7 +1057,7 @@ class RepositorioRfq {
         AND comments = "Not submitted" AND 
         (rfq.id LIKE :search OR nombre_usuario LIKE :search OR type_of_bid LIKE :search OR email_code LIKE :search)';
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':search', $search, PDO::PARAM_STR);
+        $sentencia->bindValue(':search', $search, PDO::PARAM_STR);
         $sentencia->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -1117,7 +1117,7 @@ class RepositorioRfq {
       try {
         $sql = '(SELECT * FROM rfq WHERE (contract_number LIKE :termino_busqueda OR id LIKE :termino_busqueda OR email_code LIKE :termino_busqueda OR total_price LIKE :termino_busqueda OR address LIKE :termino_busqueda OR ship_to LIKE :termino_busqueda)) UNION (SELECT rfq.* FROM rfq INNER JOIN item ON rfq.id = item.id_rfq WHERE (item.brand LIKE :termino_busqueda OR item.brand_project LIKE :termino_busqueda OR item.part_number LIKE :termino_busqueda OR item.part_number_project LIKE :termino_busqueda OR item.description LIKE :termino_busqueda OR item.description_project LIKE :termino_busqueda)) UNION (SELECT rfq.* FROM rfq INNER JOIN item ON rfq.id = item.id_rfq INNER JOIN subitems ON item.id = subitems.id_item WHERE (subitems.brand LIKE :termino_busqueda OR subitems.brand_project LIKE :termino_busqueda OR subitems.part_number LIKE :termino_busqueda OR subitems.part_number_project LIKE :termino_busqueda OR subitems.description LIKE :termino_busqueda OR subitems.description_project LIKE :termino_busqueda))';
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':termino_busqueda', $termino_busqueda, PDO::PARAM_STR);
+        $sentencia->bindValue(':termino_busqueda', $termino_busqueda, PDO::PARAM_STR);
         $sentencia->execute();
         $cotizaciones = self::array_to_object($sentencia);
       } catch (PDOException $ex) {
@@ -1150,6 +1150,174 @@ class RepositorioRfq {
       </tbody>
     </table>
     <?php
+  }
+
+  public static function getSearchedQuotesByChannel($conexion, $start, $length, $search, $sort_column_index, $sort_direction, $search_term) {
+    $data = [];
+    $search_term = '%' . $search_term . '%';
+    switch ($sort_column_index) {
+      case 0:
+        $sort_column = 'sq.id';
+        break;
+      case 1:
+        $sort_column = 'sq.nombre_usuario';
+        break;
+      case 2:
+        $sort_column = 'sq.type_of_bid';
+        break;
+      case 3:
+        $sort_column = 'sq.comments';
+        break;
+      default:
+        $sort_column = 'sq.id';
+        break;
+    }
+    if (isset($conexion)) {
+      try {
+        $sql = "
+        SELECT sq.id,
+          sq.email_code,
+          sq.nombre_usuario,
+          sq.type_of_bid,
+          sq.comments,
+          sq.total_price,
+          NULL AS options
+        FROM (
+            SELECT r.id,
+              r.email_code,
+              u.nombre_usuario,
+              r.type_of_bid,
+              r.comments,
+              r.contract_number,
+              r.city,
+              r.zip_code,
+              r.state,
+              r.client,
+              r.shipping_address,
+              r.special_requirements,
+              COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)),0) AS total_price
+            FROM rfq r
+              LEFT JOIN usuarios u ON r.usuario_designado = u.id
+              LEFT JOIN services s ON r.id = s.id_rfq
+            WHERE r.deleted = 0
+            GROUP BY r.id
+          ) as sq
+        WHERE sq.email_code LIKE :search_term
+          OR sq.type_of_bid LIKE :search_term
+          OR sq.comments LIKE :search_term
+          OR sq.total_price LIKE :search_term
+          OR sq.contract_number LIKE :search_term
+          OR sq.city LIKE :search_term
+          OR sq.zip_code LIKE :search_term
+          OR sq.state LIKE :search_term
+          OR sq.client LIKE :search_term
+          OR sq.shipping_address LIKE :search_term
+          OR sq.special_requirements LIKE :search_term
+          OR sq.id LIKE :search_term
+          OR sq.id IN (
+            SELECT i.id_rfq
+            FROM item i
+            WHERE i.provider_menor LIKE :search_term
+              OR i.brand LIKE :search_term
+              OR i.brand_project LIKE :search_term
+              OR i.part_number LIKE :search_term
+              OR i.part_number_project LIKE :search_term
+              OR i.description LIKE :search_term
+              OR i.description_project LIKE :search_term
+              OR i.comments LIKE :search_term
+          )
+          OR sq.id IN (
+            SELECT s.id_rfq
+            FROM services s
+            WHERE s.description LIKE :search_term
+          )
+          OR sq.id IN (
+            SELECT i.id_rfq
+            FROM subitems si
+              JOIN item i ON si.id_item = i.id
+            WHERE si.provider_menor LIKE :search_term
+              OR si.brand LIKE :search_term
+              OR si.brand_project LIKE :search_term
+              OR si.part_number LIKE :search_term
+              OR si.part_number_project LIKE :search_term
+              OR si.description LIKE :search_term
+              OR si.description_project LIKE :search_term
+              OR si.comments LIKE :search_term
+          )
+        ORDER BY {$sort_column} {$sort_direction} LIMIT {$start}, {$length}
+        ";
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindValue(':search_term', $search_term, PDO::PARAM_STR);
+        $sentencia->execute();
+        while ($row = $sentencia->fetch(PDO::FETCH_ASSOC)) {
+          $data[] = $row;
+        }
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $data;
+  }
+
+  public static function getTotalSearchedQuotesByChannelCount($conexion, $search_term) {
+    $search_term = '%' . $search_term . '%';
+    if (isset($conexion)) {
+      try {
+        $sql = "
+        SELECT COUNT(r.id)
+        FROM rfq r
+        LEFT JOIN usuarios u ON r.usuario_designado = u.id
+        WHERE r.deleted = 0 
+          AND r.email_code LIKE :search_term
+          OR r.type_of_bid LIKE :search_term
+          OR r.comments LIKE :search_term
+          OR r.contract_number LIKE :search_term
+          OR r.city LIKE :search_term
+          OR r.zip_code LIKE :search_term
+          OR r.state LIKE :search_term
+          OR r.client LIKE :search_term
+          OR r.shipping_address LIKE :search_term
+          OR r.special_requirements LIKE :search_term
+          OR r.id LIKE :search_term
+          OR r.id IN (
+            SELECT i.id_rfq
+            FROM item i
+            WHERE i.provider_menor LIKE :search_term
+              OR i.brand LIKE :search_term
+              OR i.brand_project LIKE :search_term
+              OR i.part_number LIKE :search_term
+              OR i.part_number_project LIKE :search_term
+              OR i.description LIKE :search_term
+              OR i.description_project LIKE :search_term
+              OR i.comments LIKE :search_term
+          )
+          OR r.id IN (
+            SELECT s.id_rfq
+            FROM services s
+            WHERE s.description LIKE :search_term
+          )
+          OR r.id IN (
+            SELECT i.id_rfq
+            FROM subitems si
+              JOIN item i ON si.id_item = i.id
+            WHERE si.provider_menor LIKE :search_term
+              OR si.brand LIKE :search_term
+              OR si.brand_project LIKE :search_term
+              OR si.part_number LIKE :search_term
+              OR si.part_number_project LIKE :search_term
+              OR si.description LIKE :search_term
+              OR si.description_project LIKE :search_term
+              OR si.comments LIKE :search_term
+          )
+        ";
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindValue(':search_term', $search_term, PDO::PARAM_STR);
+        $sentencia->execute();
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $sentencia->fetchColumn();
   }
 
   public static function getAnnualAwardsAmountByMonth($connection, $year) {
@@ -1298,7 +1466,7 @@ class RepositorioRfq {
       try {
         $sql = 'UPDATE rfq SET status = 1, fecha_submitted = NOW() WHERE id = :id_rfq';
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia->execute();
         if ($sentencia) {
           $rfq_editado = true;
@@ -1316,7 +1484,7 @@ class RepositorioRfq {
       try {
         $sql = 'UPDATE rfq SET completado = 1 WHERE id = :id_rfq';
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia->execute();
         if ($sentencia) {
           $rfq_editado = true;
@@ -1334,7 +1502,7 @@ class RepositorioRfq {
       try {
         $sql = 'UPDATE rfq SET award = 1, fecha_award = NOW() WHERE id = :id_rfq';
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia->execute();
         if ($sentencia) {
           $rfq_editado = true;
@@ -1352,7 +1520,7 @@ class RepositorioRfq {
       try {
         $sql = 'UPDATE rfq SET fullfillment = 1, fulfillment_date = NOW() WHERE id = :id_rfq';
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia->execute();
         if ($sentencia) {
           $rfq_editado = true;
@@ -1370,7 +1538,7 @@ class RepositorioRfq {
       try {
         $sql = 'UPDATE rfq SET invoice = 1, invoice_date = NOW() WHERE id = :id_rfq';
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia->execute();
         if ($sentencia) {
           $rfq_editado = true;
@@ -1388,7 +1556,7 @@ class RepositorioRfq {
       try {
         $sql = 'UPDATE rfq SET submitted_invoice = 1, submitted_invoice_date = NOW() WHERE id = :id_rfq';
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia->execute();
         if ($sentencia) {
           $rfq_editado = true;
@@ -1405,9 +1573,9 @@ class RepositorioRfq {
       try {
         $sql = 'UPDATE rfq SET total_cost = :total_cost_fedbid, total_price = :total_price_fedbid WHERE id = :id_rfq';
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':total_cost_fedbid', $total_cost_fedbid, PDO::PARAM_STR);
-        $sentencia->bindParam(':total_price_fedbid', $total_price_fedbid, PDO::PARAM_STR);
-        $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia->bindValue(':total_cost_fedbid', $total_cost_fedbid, PDO::PARAM_STR);
+        $sentencia->bindValue(':total_price_fedbid', $total_price_fedbid, PDO::PARAM_STR);
+        $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -1420,8 +1588,8 @@ class RepositorioRfq {
       try {
         $sql = 'UPDATE rfq SET total_price = :total_price_chemonics WHERE id = :id_rfq';
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':total_price_chemonics', $total_price_chemonics, PDO::PARAM_STR);
-        $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia->bindValue(':total_price_chemonics', $total_price_chemonics, PDO::PARAM_STR);
+        $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -1434,7 +1602,7 @@ class RepositorioRfq {
       try {
         $sql = 'UPDATE rfq SET deleted = 1 WHERE id = :id_rfq';
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia->execute();
       } catch (PDOException $ex) {
         print "ERROR:" . $ex->getMessage() . "<br>";
@@ -1644,7 +1812,7 @@ class RepositorioRfq {
       try {
         $sql = 'UPDATE rfq SET award = 0 WHERE id = :id_rfq';
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -1657,7 +1825,7 @@ class RepositorioRfq {
       try {
         $sql = 'UPDATE rfq SET fullfillment = 0 WHERE id = :id_rfq';
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -1670,7 +1838,7 @@ class RepositorioRfq {
       try {
         $sql = 'UPDATE rfq SET invoice = 0 WHERE id = :id_rfq';
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -1683,7 +1851,7 @@ class RepositorioRfq {
       try {
         $sql = 'UPDATE rfq SET submitted_invoice = 0 WHERE id = :id_rfq';
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -1696,7 +1864,7 @@ class RepositorioRfq {
       try {
         $sql = 'UPDATE rfq SET multi_year_project = null WHERE id = :id_rfq';
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -1721,8 +1889,8 @@ class RepositorioRfq {
       try {
         $sql = 'UPDATE rfq SET fulfillment_pending = :value WHERE id = :id_rfq';
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-        $sentencia->bindParam(':value', $value, PDO::PARAM_STR);
+        $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia->bindValue(':value', $value, PDO::PARAM_STR);
         $sentencia->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -1735,8 +1903,8 @@ class RepositorioRfq {
       try {
         $sql = 'UPDATE rfq SET net30_fulfillment = :net30_fulfillment WHERE id = :id_rfq';
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindParam(':id_rfq', $id_rfq, PDO::PARAM_STR);
-        $sentencia->bindParam(':net30_fulfillment', $value, PDO::PARAM_STR);
+        $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia->bindValue(':net30_fulfillment', $value, PDO::PARAM_STR);
         $sentencia->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';

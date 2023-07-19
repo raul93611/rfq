@@ -5,9 +5,9 @@ class ReQuoteAuditTrailRepository{
       try{
         $sql = 'INSERT INTO re_quote_audit_trails(id_re_quote, username, audit_trail, created_date) VALUES(:id_re_quote, :username, :audit_trail, NOW())';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_re_quote', $audit_trail-> get_id_re_quote(), PDO::PARAM_STR);
-        $sentence-> bindParam(':username', $audit_trail-> get_username(), PDO::PARAM_STR);
-        $sentence-> bindParam(':audit_trail', $audit_trail-> get_audit_trail(), PDO::PARAM_STR);
+        $sentence-> bindValue(':id_re_quote', $audit_trail-> get_id_re_quote(), PDO::PARAM_STR);
+        $sentence-> bindValue(':username', $audit_trail-> get_username(), PDO::PARAM_STR);
+        $sentence-> bindValue(':audit_trail', $audit_trail-> get_audit_trail(), PDO::PARAM_STR);
         $sentence-> execute();
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -21,7 +21,7 @@ class ReQuoteAuditTrailRepository{
       try{
         $sql = 'SELECT * FROM re_quote_audit_trails WHERE id_re_quote = :id_re_quote ORDER BY created_date DESC';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_re_quote', $id_re_quote, PDO::PARAM_STR);
+        $sentence-> bindValue(':id_re_quote', $id_re_quote, PDO::PARAM_STR);
         $sentence-> execute();
         $result = $sentence-> fetchAll(PDO::FETCH_ASSOC);
         if(count($result)){
@@ -41,7 +41,7 @@ class ReQuoteAuditTrailRepository{
       try{
         $sql = 'DELETE FROM re_quote_audit_trails WHERE id_re_quote = :id_re_quote';
         $sentence = $connection-> prepare($sql);
-        $sentence-> bindParam(':id_re_quote', $id_re_quote, PDO::PARAM_STR);
+        $sentence-> bindValue(':id_re_quote', $id_re_quote, PDO::PARAM_STR);
         $sentence-> execute();
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
