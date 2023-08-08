@@ -83,9 +83,6 @@ include_once 'plantillas/user/validacion_login.inc.php';
           <p>- OR -</p>
           <a href="https://www.elogicportal.com" class="btn btn_home btn-flat">Home</a>
         </div>
-        <div class="social-auth-links text-center">
-          <a href="https://www.elogicportal.com/rfq/recover_password_form" class="">Did you forget your password?</a>
-        </div>
       </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>

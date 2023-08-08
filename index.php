@@ -270,6 +270,9 @@ switch ($partes_ruta[1] ?? null) {
       case 'update':
         $ruta_elegida = 'scripts/user/update_user.php';
         break;
+      case 'create':
+        $ruta_elegida = 'scripts/user/create_user.php';
+        break;
       case 'update_password':
         $ruta_elegida = 'scripts/user/update_password.php';
         break;
