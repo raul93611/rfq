@@ -98,6 +98,9 @@ switch ($partes_ruta[1] ?? null) {
       case 'cancelled_table':
         $ruta_elegida = 'scripts/quote/cancelled_table.php';
         break;
+      case 'deleted_table':
+        $ruta_elegida = 'scripts/quote/deleted_table.php';
+        break;
       case 'reports':
         $ruta_elegida = 'scripts/quote/reports.php';
         break;
@@ -205,6 +208,10 @@ switch ($partes_ruta[1] ?? null) {
       case 'delete_quote':
         $id_rfq = $partes_ruta[3];
         $ruta_elegida = 'scripts/quote/delete_quote.php';
+        break;
+      case 'restore_quote':
+        $id_rfq = $partes_ruta[3];
+        $ruta_elegida = 'scripts/quote/restore_quote.php';
         break;
       case 'guardar_editar_cotizacion':
         $id_rfq = $partes_ruta[3];

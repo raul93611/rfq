@@ -414,6 +414,41 @@ $(document).ready(function () {
     ]
   });
 
+  $('#deleted_table').DataTable({
+    "processing": true,
+    "serverSide": true,
+    "ajax": {
+      "url": '/rfq/quote/deleted_table',
+      "type": "POST"
+    },
+    "columns": [
+      {
+        "data": "id",
+        "render": function (data, type, row, meta) {
+          if (type === 'display') {
+            return '<a href="/rfq/perfil/quote/editar_cotizacion/' + data + '">' + data + '</a>';
+          } else {
+            return data;
+          }
+        }
+      },
+      { "data": "nombre_usuario" },
+      { "data": "email_code" },
+      { "data": "type_of_bid" },
+      {
+        "data": "options",
+        "orderable": false,
+        "render": function (data, type, row, meta) {
+          if (type === 'display') {
+            return '<a href="/rfq/quote/restore_quote/' + row.id + '" class="btn btn-sm btn-success"><i class="fas fa-sync"></i></a>';
+          } else {
+            return data;
+          }
+        }
+      },
+    ]
+  });
+
   $('.invoice_table').DataTable({
     'order': [[3, "desc"]],
     'pageLength': 50
