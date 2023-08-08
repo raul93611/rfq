@@ -1000,6 +1000,70 @@ class RepositorioRfq {
     return $sentencia->fetchColumn();
   }
 
+  public static function getDeletedQuotes($conexion, $start, $length, $search, $sort_column_index, $sort_direction) {
+    $data = [];
+    $search = '%' . $search . '%';
+    $sort_column = $sort_column_index == 0 ? 'rfq.id' : ($sort_column_index == 1 ? 'nombre_usuario' : ($sort_column_index == 2 ? 'email_code' : 'type_of_bid'));
+    if (isset($conexion)) {
+      try {
+        $sql = 'SELECT rfq.id, 
+        usuarios.nombre_usuario, 
+        email_code, 
+        type_of_bid,
+        NULL AS options 
+        FROM rfq 
+        LEFT JOIN usuarios ON rfq.usuario_designado = usuarios.id
+        WHERE rfq.deleted = 1 AND  
+        (rfq.id LIKE :search OR nombre_usuario LIKE :search OR type_of_bid LIKE :search OR email_code LIKE :search) 
+        ORDER BY ' . $sort_column . ' ' . $sort_direction . ' LIMIT ' . $start . ', ' . $length;
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindValue(':search', $search, PDO::PARAM_STR);
+        $sentencia->execute();
+        while ($row = $sentencia->fetch(PDO::FETCH_ASSOC)) {
+          $data[] = $row;
+        }
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $data;
+  }
+
+  public static function getTotalDeletedQuotesCount($conexion) {
+    if (isset($conexion)) {
+      try {
+        $sql = 'SELECT COUNT(*)
+        FROM rfq 
+        WHERE deleted = 1 
+        ';
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->execute();
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $sentencia->fetchColumn();
+  }
+
+  public static function getTotalFilteredDeletedQuotesCount($conexion, $search) {
+    $search = '%' . $search . '%';
+    if (isset($conexion)) {
+      try {
+        $sql = 'SELECT COUNT(*)
+        FROM rfq 
+        LEFT JOIN usuarios ON rfq.usuario_designado = usuarios.id 
+        WHERE deleted = 1 AND  
+        (rfq.id LIKE :search OR nombre_usuario LIKE :search OR type_of_bid LIKE :search OR email_code LIKE :search)';
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindValue(':search', $search, PDO::PARAM_STR);
+        $sentencia->execute();
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $sentencia->fetchColumn();
+  }
+
   public static function getNotSubmittedQuotes($conexion, $start, $length, $search, $sort_column_index, $sort_direction) {
     $data = [];
     $search = '%' . $search . '%';
@@ -1601,6 +1665,19 @@ class RepositorioRfq {
     if (isset($conexion)) {
       try {
         $sql = 'UPDATE rfq SET deleted = 1 WHERE id = :id_rfq';
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia->execute();
+      } catch (PDOException $ex) {
+        print "ERROR:" . $ex->getMessage() . "<br>";
+      }
+    }
+  }
+
+  public static function restore_quote($conexion, $id_rfq) {
+    if (isset($conexion)) {
+      try {
+        $sql = 'UPDATE rfq SET deleted = 0 WHERE id = :id_rfq';
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia->execute();

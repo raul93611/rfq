@@ -341,5 +341,13 @@ echo ($partes_ruta[2] ?? null) == 'quote' ? 'menu-open' : '';
         </p>
       </a>
     </li>
+    <li class="nav-item">
+      <a href="<?php echo DELETED; ?>" class="nav-link <?php echo ($partes_ruta[3] ?? null) == 'deleted' ? 'active' : ''; ?>">
+        <i class="nav-icon fas fa-th"></i>
+        <p>
+          Deleted
+        </p>
+      </a>
+    </li>
   </ul>
 </li>

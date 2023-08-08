@@ -92,6 +92,7 @@ define('QUOTE', PERFIL . 'quote/');
 define('NO_BID', QUOTE . 'no_bid');
 define('NO_SUBMITTED', QUOTE . 'no_submitted');
 define('CANCELLED', QUOTE . 'cancelled');
+define('DELETED', QUOTE . 'deleted');
 define('NUEVA_COTIZACION', QUOTE . 'nuevo');
 define('EDITAR_COTIZACION', QUOTE . 'editar_cotizacion');
 define('CHECKLIST', QUOTE . 'checklist/');
