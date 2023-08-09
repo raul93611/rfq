@@ -1,8 +1,8 @@
 <?php
 class ValidadorCotizacionRegistro extends ValidadorCotizacion{
   public function __construct($conexion, $email_code, $issue_date, $end_date, $type_of_bid, $usuario_designado, $canal){
-    $this->aviso_inicio = "<br><div class='alert alert-danger' role='alert'>";
-    $this->aviso_cierre = "</div>";
+    $this->aviso_inicio = "<label class='text-danger' role='alert'>";
+    $this->aviso_cierre = "</label>";
 
     $this-> email_code = '';
     $this-> issue_date = '';
