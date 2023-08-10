@@ -471,6 +471,9 @@ switch ($partes_ruta[1] ?? null) {
             break;
         }
         break;
+      case 'fulfillment_quotes_table':
+        $ruta_elegida = 'scripts/fulfillment/fulfillment_quotes_table.php';
+        break;
       case 'load_fulfillment_audit_trails':
         $ruta_elegida = 'scripts/fulfillment/load_fulfillment_audit_trails.php';
         break;

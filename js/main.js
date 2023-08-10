@@ -183,11 +183,6 @@ $(document).ready(function () {
     autoApply: true
   });
   /************************************DATETABLES JQUERY PARA TABLAS**************************/
-  $('#tabla').DataTable({
-    'pageLength': 50,
-    'order': [[3, "desc"]]
-  });
-
   $('#tabla_quotes').DataTable({
     "processing": true,
     "serverSide": true,
@@ -567,15 +562,36 @@ $(document).ready(function () {
     ]
   });
 
+  $('#fulfillment_quotes_table').DataTable({
+    "processing": true,
+    "serverSide": true,
+    'order': [[3, "desc"]],
+    "pageLength": 50,
+    "ajax": {
+      "url": '/rfq/fulfillment/fulfillment_quotes_table',
+      "type": "POST"
+    },
+    "columns": [
+      {
+        "data": "id",
+        "render": function (data, type, row, meta) {
+          if (type === 'display') {
+            return '<a href="/rfq/perfil/quote/editar_cotizacion/' + data + '">' + data + '</a>';
+          } else {
+            return data;
+          }
+        }
+      },
+      { "data": "email_code" },
+      { "data": "canal" },
+      { "data": "fulfillment_date" },
+      { "data": "fecha_award" },
+      { "data": "type_of_contract" }
+    ]
+  });
+
   $('.invoice_table').DataTable({
     'order': [[3, "desc"]],
     'pageLength': 50
   });
-
-  $('.fulfillment_table').DataTable({
-    'order': [[4, "desc"]],
-    'pageLength': 50
-  });
-
-  $('.regular_table').DataTable();
 });
