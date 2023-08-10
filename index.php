@@ -92,6 +92,9 @@ switch ($partes_ruta[1] ?? null) {
       case 'submitted_table':
         $ruta_elegida = 'scripts/quote/submitted_table.php';
         break;
+      case 'award_table':
+        $ruta_elegida = 'scripts/quote/award_table.php';
+        break;
       case 'no_bid_table':
         $ruta_elegida = 'scripts/quote/no_bid_table.php';
         break;

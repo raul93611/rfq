@@ -408,6 +408,95 @@ class RepositorioRfq {
     return $sentencia->fetchColumn();
   }
 
+  public static function getAwardQuotesByChannel($conexion, $start, $length, $search, $sort_column_index, $sort_direction, $canal) {
+    $data = [];
+    $search = '%' . $search . '%';
+    $sort_column = $sort_column_index == 0 ? 'rfq.id' : ($sort_column_index == 1 ? 'nombre_usuario' : ($sort_column_index == 2 ? 'rfq.type_of_bid' : ($sort_column_index == 3 ? 'rfq.fecha_award' : 'rfq.email_code')));
+    if (isset($conexion)) {
+      try {
+        $sql = "SELECT rfq.id, 
+        usuarios.nombre_usuario, 
+        rfq.type_of_bid, 
+        DATE_FORMAT(fecha_award, '%m/%d/%Y') as fecha_award, 
+        rfq.email_code, 
+        CASE
+          WHEN type_of_bid = 'Services' THEN 'true'
+          WHEN type_of_bid = 'Audio Visual' THEN 'true'
+          WHEN type_of_bid = 'Computers' THEN 'true'
+          ELSE 'false'
+        END AS rfp,
+        NULL AS options,
+        comments
+        FROM rfq 
+        LEFT JOIN usuarios ON rfq.usuario_designado = usuarios.id
+        WHERE rfq.deleted = 0 AND 
+        rfq.canal = :canal AND 
+        rfq.completado = 1 AND 
+        rfq.status = 1 AND 
+        rfq.award = 1 
+        AND (rfq.comments = 'Working on it' OR rfq.comments = 'No comments') AND 
+        (rfq.id LIKE :search OR nombre_usuario LIKE :search OR rfq.type_of_bid LIKE :search OR rfq.email_code LIKE :search) 
+        ORDER BY $sort_column $sort_direction LIMIT $start, $length";
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindValue(':canal', $canal, PDO::PARAM_STR);
+        $sentencia->bindValue(':search', $search, PDO::PARAM_STR);
+        $sentencia->execute();
+        while ($row = $sentencia->fetch(PDO::FETCH_ASSOC)) {
+          $data[] = $row;
+        }
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $data;
+  }
+
+  public static function getTotalAwardQuotesByChannelCount($conexion, $canal) {
+    if (isset($conexion)) {
+      try {
+        $sql = 'SELECT COUNT(*)
+        FROM rfq 
+        WHERE deleted = 0 AND 
+        canal = :canal AND 
+        completado = 1 AND 
+        status = 1 AND 
+        award = 1 
+        AND (comments = "Working on it" OR comments = "No comments")';
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindValue(':canal', $canal, PDO::PARAM_STR);
+        $sentencia->execute();
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $sentencia->fetchColumn();
+  }
+
+  public static function getTotalFilteredAwardQuotesByChannelCount($conexion, $canal, $search) {
+    $search = '%' . $search . '%';
+    if (isset($conexion)) {
+      try {
+        $sql = 'SELECT COUNT(*)
+        FROM rfq 
+        LEFT JOIN usuarios ON rfq.usuario_designado = usuarios.id 
+        WHERE deleted = 0 AND 
+        canal = :canal AND 
+        completado = 1 AND 
+        rfq.status = 1 AND 
+        award = 1 
+        AND (comments = "Working on it" OR comments = "No comments") AND 
+        (rfq.id LIKE :search OR nombre_usuario LIKE :search OR rfq.type_of_bid LIKE :search OR rfq.email_code LIKE :search)';
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindValue(':canal', $canal, PDO::PARAM_STR);
+        $sentencia->bindValue(':search', $search, PDO::PARAM_STR);
+        $sentencia->execute();
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $sentencia->fetchColumn();
+  }
+
   public static function obtener_cotizacion_por_id($conexion, $id_rfq) {
     $cotizacion_recuperada = null;
     if (isset($conexion)) {
