@@ -503,6 +503,24 @@ switch ($partes_ruta[1] ?? null) {
         break;
     }
     break;
+  case 'invoice':
+    switch ($partes_ruta[2]) {
+      case 'invoice_quotes_table':
+        $ruta_elegida = 'scripts/invoice/invoice_quotes_table.php';
+        break;
+      default:
+        break;
+    }
+    break;
+  case 'submitted_invoice':
+    switch ($partes_ruta[2]) {
+      case 'submitted_invoice_quotes_table':
+        $ruta_elegida = 'scripts/submitted_invoice/submitted_invoice_quotes_table.php';
+        break;
+      default:
+        break;
+    }
+    break;
   case 'provider':
     switch ($partes_ruta[2]) {
       case 'save_provider':

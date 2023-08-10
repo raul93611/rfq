@@ -1128,12 +1128,12 @@ class RepositorioRfq {
         $sort_column = 'canal';
         break;
       case 3:
-        $sort_column = 'fulfillment_date';
+        $sort_column = 'rfq.fulfillment_date';
         break;
       case 4:
-        $sort_column = 'fecha_award';
+        $sort_column = 'rfq.fecha_award';
         break;
-      case 4:
+      case 5:
         $sort_column = 'type_of_contract';
         break;
       default:
@@ -1160,8 +1160,8 @@ class RepositorioRfq {
         (id LIKE :search OR 
         email_code LIKE :search OR 
         canal LIKE :search OR 
-        fulfillment_date LIKE :search OR 
-        fecha_award LIKE :search OR 
+        DATE_FORMAT(fulfillment_date, '%m/%d/%Y') LIKE :search OR 
+        DATE_FORMAT(fecha_award, '%m/%d/%Y') LIKE :search OR 
         type_of_contract LIKE :search) 
         ORDER BY {$sort_column} {$sort_direction} LIMIT {$start}, {$length}
         ";
@@ -1210,8 +1210,222 @@ class RepositorioRfq {
         (id LIKE :search OR 
         email_code LIKE :search OR 
         canal LIKE :search OR 
-        fulfillment_date LIKE :search OR 
-        fecha_award LIKE :search OR 
+        DATE_FORMAT(fulfillment_date, '%m/%d/%Y') LIKE :search OR 
+        DATE_FORMAT(fecha_award, '%m/%d/%Y') LIKE :search OR 
+        type_of_contract LIKE :search) 
+        ";
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindValue(':search', $search, PDO::PARAM_STR);
+        $sentencia->execute();
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $sentencia->fetchColumn();
+  }
+
+  public static function getInvoiceQuotes($conexion, $start, $length, $search, $sort_column_index, $sort_direction) {
+    $data = [];
+    $search = '%' . $search . '%';
+    switch ($sort_column_index) {
+      case 0:
+        $sort_column = 'id';
+        break;
+      case 1:
+        $sort_column = 'email_code';
+        break;
+      case 2:
+        $sort_column = 'canal';
+        break;
+      case 3:
+        $sort_column = 'rfq.invoice_date';
+        break;
+      case 4:
+        $sort_column = 'type_of_contract';
+        break;
+      default:
+        $sort_column = 'id';
+        break;
+    }
+    if (isset($conexion)) {
+      try {
+        $sql = "
+        SELECT id, 
+        email_code, 
+        CASE
+          WHEN canal = 'FedBid' THEN 'Unison'
+          WHEN canal = 'FBO' THEN 'SAM'
+          ELSE canal
+        END AS canal,
+        DATE_FORMAT(invoice_date, '%m/%d/%Y') as invoice_date, 
+        type_of_contract  
+        FROM rfq 
+        WHERE rfq.deleted = 0 AND 
+        fullfillment = 1 AND 
+        invoice = 1 AND
+        (submitted_invoice IS NULL OR submitted_invoice = 0) AND
+        (id LIKE :search OR 
+        email_code LIKE :search OR 
+        canal LIKE :search OR 
+        DATE_FORMAT(invoice_date, '%m/%d/%Y') LIKE :search OR 
+        type_of_contract LIKE :search) 
+        ORDER BY {$sort_column} {$sort_direction} LIMIT {$start}, {$length}
+        ";
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindValue(':search', $search, PDO::PARAM_STR);
+        $sentencia->execute();
+        while ($row = $sentencia->fetch(PDO::FETCH_ASSOC)) {
+          $data[] = $row;
+        }
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $data;
+  }
+
+  public static function getTotalInvoiceQuotesCount($conexion) {
+    if (isset($conexion)) {
+      try {
+        $sql = "
+        SELECT COUNT(id)
+        FROM rfq 
+        WHERE rfq.deleted = 0 AND 
+        fullfillment = 1 AND 
+        invoice = 1 AND
+        (submitted_invoice IS NULL OR submitted_invoice = 0)
+        ";
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->execute();
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $sentencia->fetchColumn();
+  }
+
+  public static function getTotalFilteredInvoiceQuotesCount($conexion, $search) {
+    $search = '%' . $search . '%';
+    if (isset($conexion)) {
+      try {
+        $sql = "
+        SELECT COUNT(id) 
+        FROM rfq 
+        WHERE rfq.deleted = 0 AND 
+        fullfillment = 1 AND 
+        invoice = 1 AND
+        (submitted_invoice IS NULL OR submitted_invoice = 0) AND
+        (id LIKE :search OR 
+        email_code LIKE :search OR 
+        canal LIKE :search OR 
+        DATE_FORMAT(invoice_date, '%m/%d/%Y') LIKE :search OR 
+        type_of_contract LIKE :search) 
+        ";
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindValue(':search', $search, PDO::PARAM_STR);
+        $sentencia->execute();
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $sentencia->fetchColumn();
+  }
+
+  public static function getSubmittedInvoiceQuotes($conexion, $start, $length, $search, $sort_column_index, $sort_direction) {
+    $data = [];
+    $search = '%' . $search . '%';
+    switch ($sort_column_index) {
+      case 0:
+        $sort_column = 'id';
+        break;
+      case 1:
+        $sort_column = 'email_code';
+        break;
+      case 2:
+        $sort_column = 'canal';
+        break;
+      case 3:
+        $sort_column = 'rfq.submitted_invoice_date';
+        break;
+      case 4:
+        $sort_column = 'type_of_contract';
+        break;
+      default:
+        $sort_column = 'id';
+        break;
+    }
+    if (isset($conexion)) {
+      try {
+        $sql = "
+        SELECT id, 
+        email_code, 
+        CASE
+          WHEN canal = 'FedBid' THEN 'Unison'
+          WHEN canal = 'FBO' THEN 'SAM'
+          ELSE canal
+        END AS canal,
+        DATE_FORMAT(submitted_invoice_date, '%m/%d/%Y') as submitted_invoice_date, 
+        type_of_contract  
+        FROM rfq 
+        WHERE rfq.deleted = 0 AND 
+        fullfillment = 1 AND 
+        invoice = 1 AND
+        submitted_invoice = 1 AND
+        (id LIKE :search OR 
+        email_code LIKE :search OR 
+        canal LIKE :search OR 
+        DATE_FORMAT(submitted_invoice_date, '%m/%d/%Y') LIKE :search OR 
+        type_of_contract LIKE :search) 
+        ORDER BY {$sort_column} {$sort_direction} LIMIT {$start}, {$length}
+        ";
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindValue(':search', $search, PDO::PARAM_STR);
+        $sentencia->execute();
+        while ($row = $sentencia->fetch(PDO::FETCH_ASSOC)) {
+          $data[] = $row;
+        }
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $data;
+  }
+
+  public static function getTotalSubmittedInvoiceQuotesCount($conexion) {
+    if (isset($conexion)) {
+      try {
+        $sql = "
+        SELECT COUNT(id)
+        FROM rfq 
+        WHERE rfq.deleted = 0 AND 
+        fullfillment = 1 AND 
+        invoice = 1 AND
+        submitted_invoice = 1
+        ";
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->execute();
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $sentencia->fetchColumn();
+  }
+
+  public static function getTotalFilteredSubmittedInvoiceQuotesCount($conexion, $search) {
+    $search = '%' . $search . '%';
+    if (isset($conexion)) {
+      try {
+        $sql = "
+        SELECT COUNT(id) 
+        FROM rfq 
+        WHERE rfq.deleted = 0 AND 
+        fullfillment = 1 AND 
+        invoice = 1 AND
+        submitted_invoice = 1 AND
+        (id LIKE :search OR 
+        email_code LIKE :search OR 
+        canal LIKE :search OR 
+        DATE_FORMAT(submitted_invoice_date, '%m/%d/%Y') LIKE :search OR 
         type_of_contract LIKE :search) 
         ";
         $sentencia = $conexion->prepare($sql);
@@ -1693,132 +1907,6 @@ class RepositorioRfq {
         print "ERROR:" . $ex->getMessage() . "<br>";
       }
     }
-  }
-
-  public static function print_invoice_quotes() {
-    Conexion::abrir_conexion();
-    $quotes = self::get_all_invoice_quotes(Conexion::obtener_conexion());
-    Conexion::cerrar_conexion();
-    if (count($quotes)) {
-    ?>
-      <table class="invoice_table table table-bordered">
-        <thead>
-          <tr>
-            <th>PROPOSAL</th>
-            <th>CODE</th>
-            <th>CHANNEL</th>
-            <th>INVOICE DATE</th>
-            <th>TYPE OF CONTRACT</th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php
-          foreach ($quotes as $quote) {
-            self::print_invoice_quote($quote);
-          }
-          ?>
-        </tbody>
-      </table>
-    <?php
-    }
-  }
-
-  public static function print_invoice_quote($quote) {
-    if (!isset($quote)) {
-      return;
-    }
-    $invoice_date = RepositorioComment::mysql_datetime_to_english_format($quote->obtener_invoice_date());
-    ?>
-    <tr>
-      <td>
-        <a href="<?php echo EDITAR_COTIZACION . '/' . $quote->obtener_id(); ?>" class="btn-block">
-          <?php echo $quote->obtener_id(); ?>
-        </a>
-      </td>
-      <td><?php echo $quote->obtener_email_code(); ?></td>
-      <td><?php echo $quote->print_channel(); ?></td>
-      <td><?php echo $invoice_date; ?></td>
-      <td><?php echo $quote->obtener_type_of_contract(); ?></td>
-    </tr>
-    <?php
-  }
-
-  public static function get_all_invoice_quotes($connection) {
-    $quotes = [];
-    if (isset($connection)) {
-      try {
-        $sql = 'SELECT * FROM rfq WHERE deleted = 0 AND invoice = 1 AND (submitted_invoice IS NULL OR submitted_invoice = 0)';
-        $sentence = $connection->prepare($sql);
-        $sentence->execute();
-        $quotes = self::array_to_object($sentence);
-      } catch (PDOException $ex) {
-        print 'ERROR:' . $ex->getMessage() . '<br>';
-      }
-    }
-    return $quotes;
-  }
-
-  public static function print_submitted_invoice_quotes() {
-    Conexion::abrir_conexion();
-    $quotes = self::get_all_submitted_invoice_quotes(Conexion::obtener_conexion());
-    Conexion::cerrar_conexion();
-    if (count($quotes)) {
-    ?>
-      <table class="invoice_table table table-bordered">
-        <thead>
-          <tr>
-            <th>PROPOSAL</th>
-            <th>CODE</th>
-            <th>CHANNEL</th>
-            <th>SUBMITTED INVOICE DATE</th>
-            <th>TYPE OF CONTRACT</th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php
-          foreach ($quotes as $quote) {
-            self::print_submitted_invoice_quote($quote);
-          }
-          ?>
-        </tbody>
-      </table>
-    <?php
-    }
-  }
-
-  public static function print_submitted_invoice_quote($quote) {
-    if (!isset($quote)) {
-      return;
-    }
-    $submitted_invoice_date = RepositorioComment::mysql_datetime_to_english_format($quote->obtener_submitted_invoice_date());
-    ?>
-    <tr>
-      <td>
-        <a href="<?php echo EDITAR_COTIZACION . '/' . $quote->obtener_id(); ?>" class="btn-block">
-          <?php echo $quote->obtener_id(); ?>
-        </a>
-      </td>
-      <td><?php echo $quote->obtener_email_code(); ?></td>
-      <td><?php echo $quote->print_channel(); ?></td>
-      <td><?php echo $submitted_invoice_date; ?></td>
-      <td><?php echo $quote->obtener_type_of_contract(); ?></td>
-    </tr>
-<?php
-  }
-
-  public static function get_all_submitted_invoice_quotes($connection) {
-    $quotes = [];
-    if (isset($connection)) {
-      try {
-        $sql = 'SELECT * FROM rfq WHERE deleted = 0 AND submitted_invoice = 1';
-        $sentence = $connection->prepare($sql);
-        $sentence->execute();
-        $quotes = self::array_to_object($sentence);
-      } catch (PDOException $ex) {
-        print 'ERROR:' . $ex->getMessage() . '<br>';
-      }
-    }
-    return $quotes;
   }
 
   public static function remove_award($conexion, $id_rfq) {

@@ -19,9 +19,19 @@
               <h3 class="card-title">Submitted Invoice</h3>
             </div>
             <div class="card-body">
-              <?php
-              RepositorioRfq::print_submitted_invoice_quotes();
-              ?>
+              <table id="submitted_invoice_quotes_table" class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>PROPOSAL</th>
+                    <th>CODE</th>
+                    <th>CHANNEL</th>
+                    <th>SUBMITTED INVOICE DATE</th>
+                    <th>TYPE OF CONTRACT</th>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
             </div>
           </div>
         </section>

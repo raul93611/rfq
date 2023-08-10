@@ -590,8 +590,57 @@ $(document).ready(function () {
     ]
   });
 
-  $('.invoice_table').DataTable({
+  $('#invoice_quotes_table').DataTable({
+    "processing": true,
+    "serverSide": true,
     'order': [[3, "desc"]],
-    'pageLength': 50
+    "pageLength": 50,
+    "ajax": {
+      "url": '/rfq/invoice/invoice_quotes_table',
+      "type": "POST"
+    },
+    "columns": [
+      {
+        "data": "id",
+        "render": function (data, type, row, meta) {
+          if (type === 'display') {
+            return '<a href="/rfq/perfil/quote/editar_cotizacion/' + data + '">' + data + '</a>';
+          } else {
+            return data;
+          }
+        }
+      },
+      { "data": "email_code" },
+      { "data": "canal" },
+      { "data": "invoice_date" },
+      { "data": "type_of_contract" }
+    ]
+  });
+
+  $('#submitted_invoice_quotes_table').DataTable({
+    "processing": true,
+    "serverSide": true,
+    'order': [[3, "desc"]],
+    "pageLength": 50,
+    "ajax": {
+      "url": '/rfq/submitted_invoice/submitted_invoice_quotes_table',
+      "type": "POST"
+    },
+    "columns": [
+      {
+        "data": "id",
+        "render": function (data, type, row, meta) {
+          if (type === 'display') {
+            return '<a href="/rfq/perfil/quote/editar_cotizacion/' + data + '">' + data + '</a>';
+          } else {
+            return data;
+          }
+        }
+      },
+      { "data": "email_code" },
+      { "data": "canal" },
+      { "data": "submitted_invoice_date" },
+      { "data": "type_of_contract" }
+    ]
   });
 });
