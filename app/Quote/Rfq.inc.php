@@ -256,7 +256,7 @@ class Rfq {
   }
 
   public function obtener_total_price() {
-    return $this->total_price;
+    return (float)$this->total_price;
   }
 
   public function obtener_comments() {
@@ -426,7 +426,7 @@ class Rfq {
     Conexion::abrir_conexion();
     $re_quote = ReQuoteRepository::get_re_quote_by_id_rfq(Conexion::obtener_conexion(), $this->id);
     Conexion::cerrar_conexion();
-    return $re_quote->get_total_cost();
+    return $re_quote?->get_total_cost() ?? 0;
   }
 
   public function obtener_re_quote_rfq_profit() {
