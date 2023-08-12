@@ -1,109 +1,70 @@
 <div class="card-body">
   <div class="row">
+    <?php $validador->mostrar_error_email_code(); ?>
+  </div>
+  <div class="row">
     <div class="col-md-6">
       <div class="form-group">
         <label for="email_code">Code:</label>
         <input type="text" class="form-control form-control-sm" id="email_code" name="email_code" placeholder="Code" autofocus required <?php $validador->mostrar_email_code(); ?>>
-        <?php $validador->mostrar_error_email_code(); ?>
       </div>
       <div class="form-group">
         <label for="issue_date">Issue date:</label>
-        <input type="text" class="date form-control form-control-sm" id="issue_date" name="issue_date" placeholder="Issue date" required <?php $validador-> mostrar_issue_date(); ?>>
-        <?php $validador->mostrar_error_issue_date(); ?>
+        <input type="text" class="date form-control form-control-sm" id="issue_date" name="issue_date" placeholder="Issue date" required <?php $validador->mostrar_issue_date(); ?>>
       </div>
       <div class="form-group">
         <?php
         Conexion::abrir_conexion();
         $usuarios = RepositorioUsuario::obtener_usuarios_rfq(Conexion::obtener_conexion());
         Conexion::cerrar_conexion();
-        ?>
-        <?php
         if (count($usuarios)) {
-          ?>
+        ?>
           <label for="usuario_designado">Designated user:</label>
           <select id="usuario_designado" class="form-control form-control-sm" name="usuario_designado">
-            <?php
-            foreach ($usuarios as $usuario) {
-              ?>
-              <option <?php if($validador-> obtener_usuario_designado() == $usuario-> obtener_nombre_usuario()){echo 'selected';} ?>><?php echo $usuario->obtener_nombre_usuario(); ?></option>
-              <?php
-            }
-            ?>
+            <?php foreach ($usuarios as $usuario) : ?>
+              <option <?= $validador->obtener_usuario_designado() == $usuario->obtener_nombre_usuario() ? 'selected' : ''; ?>><?= $usuario->obtener_nombre_usuario(); ?></option>
+            <?php endforeach; ?>
           </select>
-          <?php
+        <?php
         }
         ?>
-      </div>
-      <div class="form-group">
-        <label for="city">City:</label>
-        <input type="text" class="form-control form-control-sm" id="city" name="city" placeholder="City ...">
-      </div>
-      <div class="form-group">
-        <label for="state">State:</label>
-        <select id="state" class="form-control form-control-sm" name="state">
-          <?php
-          foreach (STATES as $key => $state) {
-          ?>
-            <option value="<?php echo $key; ?>"><?php echo $state; ?></option>
-          <?php
-          }
-          ?>
-        </select>
       </div>
     </div>
     <div class="col-md-6">
       <div class="form-group">
         <label for="type_of_bid">Type of bid:</label>
         <select class="form-control form-control-sm" name="type_of_bid" id="type_of_bid">
-          <option <?php if($validador-> obtener_type_of_bid() == 'Audio Visual'){echo 'selected';} ?>>Audio Visual</option>
-          <option <?php if($validador-> obtener_type_of_bid() == 'Back up Batteries'){echo 'selected';} ?>>Back up Batteries</option>
-          <option <?php if($validador-> obtener_type_of_bid() == 'Cameras'){echo 'selected';} ?>>Cameras</option>
-          <option <?php if($validador-> obtener_type_of_bid() == 'Computer Peripherals'){echo 'selected';} ?>>Computer Peripherals</option>
-          <option <?php if($validador-> obtener_type_of_bid() == 'Computers'){echo 'selected';} ?>>Computers</option>
-          <option <?php if($validador-> obtener_type_of_bid() == 'Medical'){echo 'selected';} ?>>Medical</option>
-          <option <?php if($validador-> obtener_type_of_bid() == 'Miscellaneous'){echo 'selected';} ?>>Miscellaneous</option>
-          <option <?php if($validador-> obtener_type_of_bid() == 'Monitors & Televisions'){echo 'selected';} ?>>Monitors & Televisions</option>
-          <option <?php if($validador-> obtener_type_of_bid() == 'Office Supplies'){echo 'selected';} ?>>Office Supplies</option>
-          <option <?php if($validador-> obtener_type_of_bid() == 'Peripherals'){echo 'selected';} ?>>Peripherals</option>
-          <option <?php if($validador-> obtener_type_of_bid() == 'Portable Radios'){echo 'selected';} ?>>Portable Radios</option>
-          <option <?php if($validador-> obtener_type_of_bid() == 'Printers'){echo 'selected';} ?>>Printers</option>
-          <option <?php if($validador-> obtener_type_of_bid() == 'Servers'){echo 'selected';} ?>>Servers</option>
-          <option <?php if($validador-> obtener_type_of_bid() == 'Software'){echo 'selected';} ?>>Software</option>
-          <option <?php if($validador-> obtener_type_of_bid() == 'Tactical'){echo 'selected';} ?>>Tactical</option>
-          <option <?php if($validador-> obtener_type_of_bid() == 'Tools'){echo 'selected';} ?>>Tools</option>
-          <option <?php if($validador-> obtener_type_of_bid() == 'Scanners'){echo 'selected';} ?>>Scanners</option>
-          <option <?php if($validador-> obtener_type_of_bid() == 'Projectors'){echo 'selected';} ?>>Projectors</option>
-          <option <?php if($validador-> obtener_type_of_bid() == 'Video Cameras'){echo 'selected';} ?>>Video Cameras</option>
-          <option <?php if($validador-> obtener_type_of_bid() == 'Phones'){echo 'selected';} ?>>Phones</option>
+          <?php
+          Conexion::abrir_conexion();
+          $type_of_bids = TypeOfBidRepository::get_all(Conexion::obtener_conexion());
+          Conexion::cerrar_conexion();
+          foreach ($type_of_bids as $key => $type_of_bid) {
+          ?>
+            <option <?= $validador->obtener_type_of_bid() == $type_of_bid->get_type_of_bid() ? 'selected' : ''; ?>><?php echo $type_of_bid->get_type_of_bid(); ?></option>
+          <?php
+          }
+          ?>
         </select>
       </div>
       <div class="form-group">
         <label for="end_date">End date:</label>
-        <input type="text" class="form-control form-control-sm" id="end_date" name="end_date" placeholder="End date" required <?php $validador-> mostrar_end_date(); ?>>
+        <input type="text" class="form-control form-control-sm" id="end_date" name="end_date" placeholder="End date" required <?php $validador->mostrar_end_date(); ?>>
         <?php $validador->mostrar_error_end_date(); ?>
       </div>
       <div class="form-group">
         <label for="canal">Channel:</label>
         <select class="form-control form-control-sm" name="canal" id="canal">
-          <option <?php if($validador-> obtener_canal() == 'GSA-Buy'){echo 'selected';} ?>>GSA-Buy</option>
-          <option value="FedBid" <?php if($validador-> obtener_canal() == 'FedBid'){echo 'selected';} ?>>Unison</option>
-          <option <?php if($validador-> obtener_canal() == 'E-mails'){echo 'selected';} ?>>E-mails</option>
-          <option <?php if($validador-> obtener_canal() == 'Mailbox'){echo 'selected';} ?>>Mailbox</option>
-          <option <?php if($validador-> obtener_canal() == 'FindFRP'){echo 'selected';} ?>>FindFRP</option>
-          <option <?php if($validador-> obtener_canal() == 'Embassies'){echo 'selected';} ?>>Embassies</option>
-          <option value="FBO" <?php if($validador-> obtener_canal() == 'FBO'){echo 'selected';} ?>>SAM</option>
-          <option <?php if($validador-> obtener_canal() == 'Chemonics'){echo 'selected';} ?>>Chemonics</option>
-          <option <?php if($validador-> obtener_canal() == 'Ebay & Amazon'){echo 'selected';} ?>>Ebay & Amazon</option>
-          <option <?php if($validador-> obtener_canal() == 'Stars III'){echo 'selected';} ?>>Stars III</option>
+          <option <?= $validador->obtener_canal() == 'GSA-Buy' ? 'selected' : ''; ?>>GSA-Buy</option>
+          <option value="FedBid" <?= $validador->obtener_canal() == 'FedBid' ? 'selected' : ''; ?>>Unison</option>
+          <option <?= $validador->obtener_canal() == 'E-mails' ? 'selected' : ''; ?>>E-mails</option>
+          <option <?= $validador->obtener_canal() == 'Mailbox' ? 'selected' : ''; ?>>Mailbox</option>
+          <option <?= $validador->obtener_canal() == 'FindFRP' ? 'selected' : ''; ?>>FindFRP</option>
+          <option <?= $validador->obtener_canal() == 'Embassies' ? 'selected' : ''; ?>>Embassies</option>
+          <option value="FBO" <?= $validador->obtener_canal() == 'FBO' ? 'selected' : ''; ?>>SAM</option>
+          <option <?= $validador->obtener_canal() == 'Chemonics' ? 'selected' : ''; ?>>Chemonics</option>
+          <option <?= $validador->obtener_canal() == 'Ebay & Amazon' ? 'selected' : ''; ?>>Ebay & Amazon</option>
+          <option <?= $validador->obtener_canal() == 'Stars III' ? 'selected' : ''; ?>>Stars III</option>
         </select>
-      </div>
-      <div class="form-group">
-        <label for="zip_code">Zip Code:</label>
-        <input type="text" class="form-control form-control-sm" id="zip_code" name="zip_code" placeholder="Zip Code ...">
-      </div>
-      <div class="form-group">
-        <label for="client">Client:</label>
-        <input type="text" class="form-control form-control-sm" id="client" name="client" placeholder="Client name ...">
       </div>
     </div>
   </div>

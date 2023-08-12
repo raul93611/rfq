@@ -183,11 +183,6 @@ $(document).ready(function () {
     autoApply: true
   });
   /************************************DATETABLES JQUERY PARA TABLAS**************************/
-  $('#tabla').DataTable({
-    'pageLength': 50,
-    'order': [[3, "desc"]]
-  });
-
   $('#tabla_quotes').DataTable({
     "processing": true,
     "serverSide": true,
@@ -237,7 +232,7 @@ $(document).ready(function () {
         "orderable": false,
         "render": function (data, type, row, meta) {
           if (type === 'display') {
-            return '<a href="/rfq/quote/delete_quote/' + row.id + '" class="delete_quote_button text-danger"><i class="fa fa-times"></i> Delete</a>';
+            return '<a href="/rfq/quote/delete_quote/' + row.id + '" class="delete_quote_button btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>';
           } else {
             return data;
           }
@@ -250,7 +245,7 @@ $(document).ready(function () {
     "processing": true,
     "serverSide": true,
     "pageLength": 50,
-    "order": [[4, "desc"]],
+    "order": [[3, "desc"]],
     "ajax": {
       "url": '/rfq/quote/completed_table',
       "type": "POST",
@@ -272,6 +267,124 @@ $(document).ready(function () {
       { "data": "nombre_usuario" },
       { "data": "type_of_bid" },
       { "data": "fecha_completado" },
+      { "data": "email_code" },
+      {
+        "data": "rfp",
+        "orderable": false,
+        "render": function (data, type, row, meta) {
+          if (type === 'display') {
+            return data ? '<i class="text-success fas fa-check"></i>' : '<i class="text-danger fas fa-times"></i>';
+          } else {
+            return data;
+          }
+        }
+      },
+      {
+        "data": "options",
+        "orderable": false,
+        "render": function (data, type, row, meta) {
+          if (type === 'display') {
+            return `
+              <a class="btn btn-sm calculate" href="/rfq/quote/proposal/${row.id}" target="_blank">
+                <i class="fa fa-copy"></i>
+              </a>
+              <a class="btn btn-primary btn-sm" href="/rfq/quote/proposal_gsa/${row.id}" target="_blank">
+                <i class="fa fa-copy"></i>
+              </a>
+            `;
+          } else {
+            return data;
+          }
+        }
+      },
+    ]
+  });
+
+  $('#submitted_table').DataTable({
+    "processing": true,
+    "serverSide": true,
+    "pageLength": 50,
+    "order": [[3, "desc"]],
+    "ajax": {
+      "url": '/rfq/quote/submitted_table',
+      "type": "POST",
+      "data": {
+        "channel": $('#submitted_table').data('channel'),
+      }
+    },
+    "columns": [
+      {
+        "data": "id",
+        "render": function (data, type, row, meta) {
+          if (type === 'display') {
+            return '<a href="/rfq/perfil/quote/editar_cotizacion/' + data + '">' + data + '</a>';
+          } else {
+            return data;
+          }
+        }
+      },
+      { "data": "nombre_usuario" },
+      { "data": "type_of_bid" },
+      { "data": "fecha_submitted" },
+      { "data": "email_code" },
+      {
+        "data": "rfp",
+        "orderable": false,
+        "render": function (data, type, row, meta) {
+          if (type === 'display') {
+            return data ? '<i class="text-success fas fa-check"></i>' : '<i class="text-danger fas fa-times"></i>';
+          } else {
+            return data;
+          }
+        }
+      },
+      {
+        "data": "options",
+        "orderable": false,
+        "render": function (data, type, row, meta) {
+          if (type === 'display') {
+            return `
+              <a class="btn btn-sm calculate" href="/rfq/quote/proposal/${row.id}" target="_blank">
+                <i class="fa fa-copy"></i>
+              </a>
+              <a class="btn btn-primary btn-sm" href="/rfq/quote/proposal_gsa/${row.id}" target="_blank">
+                <i class="fa fa-copy"></i>
+              </a>
+            `;
+          } else {
+            return data;
+          }
+        }
+      },
+    ]
+  });
+
+  $('#award_table').DataTable({
+    "processing": true,
+    "serverSide": true,
+    "pageLength": 50,
+    "order": [[3, "desc"]],
+    "ajax": {
+      "url": '/rfq/quote/award_table',
+      "type": "POST",
+      "data": {
+        "channel": $('#award_table').data('channel'),
+      }
+    },
+    "columns": [
+      {
+        "data": "id",
+        "render": function (data, type, row, meta) {
+          if (type === 'display') {
+            return '<a href="/rfq/perfil/quote/editar_cotizacion/' + data + '">' + data + '</a>';
+          } else {
+            return data;
+          }
+        }
+      },
+      { "data": "nombre_usuario" },
+      { "data": "type_of_bid" },
+      { "data": "fecha_award" },
       { "data": "email_code" },
       {
         "data": "rfp",
@@ -414,15 +527,120 @@ $(document).ready(function () {
     ]
   });
 
-  $('.invoice_table').DataTable({
+  $('#deleted_table').DataTable({
+    "processing": true,
+    "serverSide": true,
+    "ajax": {
+      "url": '/rfq/quote/deleted_table',
+      "type": "POST"
+    },
+    "columns": [
+      {
+        "data": "id",
+        "render": function (data, type, row, meta) {
+          if (type === 'display') {
+            return '<a href="/rfq/perfil/quote/editar_cotizacion/' + data + '">' + data + '</a>';
+          } else {
+            return data;
+          }
+        }
+      },
+      { "data": "nombre_usuario" },
+      { "data": "email_code" },
+      { "data": "type_of_bid" },
+      {
+        "data": "options",
+        "orderable": false,
+        "render": function (data, type, row, meta) {
+          if (type === 'display') {
+            return '<a href="/rfq/quote/restore_quote/' + row.id + '" class="btn btn-sm btn-success"><i class="fas fa-sync"></i></a>';
+          } else {
+            return data;
+          }
+        }
+      },
+    ]
+  });
+
+  $('#fulfillment_quotes_table').DataTable({
+    "processing": true,
+    "serverSide": true,
     'order': [[3, "desc"]],
-    'pageLength': 50
+    "pageLength": 50,
+    "ajax": {
+      "url": '/rfq/fulfillment/fulfillment_quotes_table',
+      "type": "POST"
+    },
+    "columns": [
+      {
+        "data": "id",
+        "render": function (data, type, row, meta) {
+          if (type === 'display') {
+            return '<a href="/rfq/perfil/quote/editar_cotizacion/' + data + '">' + data + '</a>';
+          } else {
+            return data;
+          }
+        }
+      },
+      { "data": "email_code" },
+      { "data": "canal" },
+      { "data": "fulfillment_date" },
+      { "data": "fecha_award" },
+      { "data": "type_of_contract" }
+    ]
   });
 
-  $('.fulfillment_table').DataTable({
-    'order': [[4, "desc"]],
-    'pageLength': 50
+  $('#invoice_quotes_table').DataTable({
+    "processing": true,
+    "serverSide": true,
+    'order': [[3, "desc"]],
+    "pageLength": 50,
+    "ajax": {
+      "url": '/rfq/invoice/invoice_quotes_table',
+      "type": "POST"
+    },
+    "columns": [
+      {
+        "data": "id",
+        "render": function (data, type, row, meta) {
+          if (type === 'display') {
+            return '<a href="/rfq/perfil/quote/editar_cotizacion/' + data + '">' + data + '</a>';
+          } else {
+            return data;
+          }
+        }
+      },
+      { "data": "email_code" },
+      { "data": "canal" },
+      { "data": "invoice_date" },
+      { "data": "type_of_contract" }
+    ]
   });
 
-  $('.regular_table').DataTable();
+  $('#submitted_invoice_quotes_table').DataTable({
+    "processing": true,
+    "serverSide": true,
+    'order': [[3, "desc"]],
+    "pageLength": 50,
+    "ajax": {
+      "url": '/rfq/submitted_invoice/submitted_invoice_quotes_table',
+      "type": "POST"
+    },
+    "columns": [
+      {
+        "data": "id",
+        "render": function (data, type, row, meta) {
+          if (type === 'display') {
+            return '<a href="/rfq/perfil/quote/editar_cotizacion/' + data + '">' + data + '</a>';
+          } else {
+            return data;
+          }
+        }
+      },
+      { "data": "email_code" },
+      { "data": "canal" },
+      { "data": "submitted_invoice_date" },
+      { "data": "type_of_contract" }
+    ]
+  });
 });

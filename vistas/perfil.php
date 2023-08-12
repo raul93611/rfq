@@ -45,6 +45,9 @@ switch ($partes_ruta[2] ?? null) {
       case 'cancelled':
         include_once 'plantillas/cancelled/cancelled.inc.php';
         break;
+      case 'deleted':
+        include_once 'plantillas/deleted/deleted.inc.php';
+        break;
       case 'nuevo':
         include_once 'plantillas/quote/nueva_cotizacion.inc.php';
         break;

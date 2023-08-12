@@ -20,12 +20,24 @@ $printable_channel = Input::printable_channel($channel);
         <section class="col-12">
           <div class="card card-primary">
             <div class="card-header">
-              <h3 class="card-title"><?php echo $printable_channel; ?></h3>
+              <h3 class="card-title"><?= $printable_channel; ?></h3>
             </div>
             <div class="card-body">
-              <?php
-              RepositorioRfq::escribir_cotizaciones_submitted_por_canal($channel);
-              ?>
+              <table id="submitted_table" data-channel="<?= $channel; ?>" class="table table-bordered table-responsive-md">
+                <thead>
+                  <tr>
+                    <th>PROPOSAL</th>
+                    <th>DESIGNATED USER</th>
+                    <th>TYPE OF BID</th>
+                    <th>SUBMITTED DATE</th>
+                    <th>CODE</th>
+                    <th>RFP</th>
+                    <th>OPTIONS</th>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
             </div>
           </div>
         </section>

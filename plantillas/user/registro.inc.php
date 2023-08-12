@@ -1,6 +1,3 @@
-<?php
-include_once 'plantillas/user/validacion_registro_usuario.inc.php';
-?>
 <div class="content-wrapper">
   <section class="content-header">
     <div class="container-fluid">
@@ -22,13 +19,9 @@ include_once 'plantillas/user/validacion_registro_usuario.inc.php';
             <div class="card-header">
               <h3 class="card-title"><i class="fa fa-user-plus"></i> Sign in</h3>
             </div>
-            <form role="form" method="post" action="<?php echo REGISTRO; ?>">
+            <form id="add-user-form" role="form" method="post" action="">
               <?php
-              if (isset($_POST['registrar_usuario'])) {
-                include_once 'forms/user/registro_usuario_validado.inc.php';
-              } else {
-                include_once 'forms/user/registro_usuario_vacio.inc.php';
-              }
+              include_once 'forms/user/registro_usuario_vacio.inc.php';
               ?>
             </form>
           </div>
@@ -37,3 +30,4 @@ include_once 'plantillas/user/validacion_registro_usuario.inc.php';
     </div>
   </section>
 </div>
+<script src="<?php echo RUTA_JS; ?>users.js"></script>

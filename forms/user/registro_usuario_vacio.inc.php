@@ -1,27 +1,28 @@
 <div class="card-body">
+  <div id="errors"></div>
   <div class="form-group">
-    <label for="nombre_usuario">Username:</label>
-    <input type="text" class="form-control" id="nombre_usuario" name="nombre_usuario" placeholder="Username" autofocus required>
-  </div>
-  <div class="form-group">
-    <label for="password1">Password:</label>
-    <input type="password" class="form-control" id="password1" name="password1" placeholder="Password" required>
-  </div>
-  <div class="form-group">
-    <label for="password2">Confirm password:</label>
-    <input type="password" class="form-control" id="password2" name="password2" placeholder="Confirm password" required>
+    <label for="username">Username:</label>
+    <input type="text" class="form-control form-control-sm" id="username" name="username" placeholder="Username" autofocus>
   </div>
   <div class="form-group">
     <label for="nombres">First names:</label>
-    <input type="text" class="form-control" id="nombres" name="nombres" placeholder="First names" required>
+    <input type="text" class="form-control form-control-sm" id="nombres" name="nombres" placeholder="First names">
   </div>
   <div class="form-group">
     <label for="apellidos">Last names:</label>
-    <input type="text" class="form-control" id="apellidos" name="apellidos" placeholder="Last names" required>
+    <input type="text" class="form-control form-control-sm" id="apellidos" name="apellidos" placeholder="Last names">
   </div>
   <div class="form-group">
     <label for="email">E-mail:</label>
-    <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
+    <input type="email" class="form-control form-control-sm" id="email" name="email" placeholder="Email">
+  </div>
+  <div class="form-group">
+    <label for="password">Password:</label>
+    <input type="password" class="form-control form-control-sm" id="password" name="password" placeholder="Password">
+  </div>
+  <div class="form-group">
+    <label for="password-confirmation">Confirm password:</label>
+    <input type="password" class="form-control form-control-sm" id="password-confirmation" name="password-confirmation" placeholder="Confirm password">
   </div>
   <div class="form-group">
     <label for="cargo">Roles:</label>
@@ -44,5 +45,6 @@
   </div>
 </div>
 <div class="card-footer">
-  <button type="submit" class="btn btn-success" name="registrar_usuario"><i class="fa fa-check"></i> Sign in</button>
+  <a class="btn btn-primary" id="go_back" href="<?php echo USERS; ?>"><i class="fa fa-reply"></i></a>
+  <button type="submit" class="btn btn-success" name="registrar_usuario"><i class="fa fa-check"></i> Save</button>
 </div>

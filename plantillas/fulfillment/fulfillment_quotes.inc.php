@@ -19,9 +19,20 @@
               <h3 class="card-title">Fulfillment</h3>
             </div>
             <div class="card-body">
-              <?php
-              RepositorioRfq::print_fulfillment_quotes();
-              ?>
+              <table id="fulfillment_quotes_table" class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>PROPOSAL</th>
+                    <th>CODE</th>
+                    <th>CHANNEL</th>
+                    <th>FULFILLMENT DATE</th>
+                    <th>AWARD DATE</th>
+                    <th>TYPE OF CONTRACT</th>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
             </div>
           </div>
         </section>

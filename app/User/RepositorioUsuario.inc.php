@@ -129,56 +129,51 @@ class RepositorioUsuario {
   }
 
   public static function nombre_usuario_existe($conexion, $nombre_usuario) {
-    $nombre_usuario_existe = true;
-    if (isset($conexion)) {
-      try {
-        $sql = "SELECT * FROM usuarios WHERE nombre_usuario = :nombre_usuario";
-        $sentencia = $conexion->prepare($sql);
-        $sentencia->bindValue(':nombre_usuario', $nombre_usuario, PDO::PARAM_STR);
-        $sentencia->execute();
-        $resultado = $sentencia->fetchAll(PDO::FETCH_ASSOC);
-        if (count($resultado)) {
-          $nombre_usuario_existe = true;
-        } else {
-          $nombre_usuario_existe = false;
-        }
-      } catch (PDOException $ex) {
-        print 'ERROR:' . $ex->getMessage() . '<br>';
-      }
-    }
-    return $nombre_usuario_existe;
-  }
-
-  public static function email_existe($conexion, $email) {
-    $email_existe = true;
-    if (isset($conexion)) {
-      try {
-        $sql = "SELECT * FROM usuarios WHERE email LIKE :email";
-        $sentencia = $conexion->prepare($sql);
-        $sentencia->bindValue(':email', $email, PDO::PARAM_STR);
-        $sentencia->execute();
-        $resultado = $sentencia->fetchAll(PDO::FETCH_ASSOC);
-        if (count($resultado)) {
-          $email_existe = true;
-        } else {
-          $email_existe = false;
-        }
-      } catch (PDOException $ex) {
-        print 'ERROR:' . $ex->getMessage() . '<br>';
-      }
-    }
-    return $email_existe;
-  }
-
-  public static function usernameExistMoreThan2($conexion, $username) {
     $exists = true;
     if (isset($conexion)) {
       try {
-        $sql = "SELECT COUNT(nombre_usuario) FROM usuarios WHERE nombre_usuario LIKE :username";
+        $sql = "SELECT COUNT(*) FROM usuarios WHERE nombre_usuario = :nombre_usuario";
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindValue(':nombre_usuario', $nombre_usuario, PDO::PARAM_STR);
+        $sentencia->execute();
+        if ($sentencia->fetchColumn() == 0) {
+          $exists = false;
+        }
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $exists;
+  }
+
+  public static function email_existe($conexion, $email) {
+    $exists = true;
+    if (isset($conexion)) {
+      try {
+        $sql = "SELECT COUNT(*) FROM usuarios WHERE email = :email";
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindValue(':email', $email, PDO::PARAM_STR);
+        $sentencia->execute();
+        if ($sentencia->fetchColumn() == 0) {
+          $exists = false;
+        }
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $exists;
+  }
+
+  public static function usernameExistMoreThan2($conexion, $username, $id) {
+    $exists = true;
+    if (isset($conexion)) {
+      try {
+        $sql = "SELECT COUNT(nombre_usuario) FROM usuarios WHERE nombre_usuario = :username AND id != :id";
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindValue(':username', $username, PDO::PARAM_STR);
+        $sentencia->bindValue(':id', $id, PDO::PARAM_STR);
         $sentencia->execute();
-        if ($sentencia->fetchColumn() <= 1) {
+        if ($sentencia->fetchColumn() == 0) {
           $exists = false;
         }
       } catch (PDOException $ex) {

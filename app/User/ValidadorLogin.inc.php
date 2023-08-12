@@ -1,7 +1,9 @@
 <?php
-class ValidadorLogin extends ValidadorUsuario {
+class ValidadorLogin {
   private $usuario;
   private $error;
+  private $aviso_inicio;
+  private $aviso_cierre;
 
   public function __construct($nombre_usuario, $password, $conexion) {
     $this->aviso_inicio = "<br><div class='alert alert-danger' role='alert'>";
@@ -15,6 +17,14 @@ class ValidadorLogin extends ValidadorUsuario {
       if (is_null($this->usuario) || !password_verify($password, $this->usuario->obtener_password()) || !$this-> usuario-> obtener_status()) {
         $this->error = 'Wrong values.';
       }
+    }
+  }
+
+  public function variable_iniciada($variable) {
+    if (isset($variable) && !empty($variable)) {
+      return true;
+    } else {
+      return false;
     }
   }
 

@@ -74,7 +74,8 @@ $(document).ready(function () {
   $('#edit-user-form').validate({
     rules: {
       username: {
-        required: true
+        required: true,
+        pattern: /^[a-zA-Z0-9_-]+$/
       },
       nombres: {
         required: true
@@ -86,16 +87,13 @@ $(document).ready(function () {
         required: true,
         email: true
       },
-      // password: {
-      //   required: true,
-      //   minlength: 6
-      // },
-      // 'password-confirmation': {
-      //   required: true,
-      //   equalTo: '#password'
-      // },
       'cargo[]': {
         checkboxGroup: true
+      }
+    },
+    messages: {
+      username: {
+        pattern: 'Only letters, numbers, hyphens, and underscores are allowed'
       }
     },
     submitHandler: function (form) {
@@ -153,6 +151,67 @@ $(document).ready(function () {
           console.error(error);
         }
       });
+    }
+  });
+
+  $('#add-user-form').validate({
+    rules: {
+      username: {
+        required: true,
+        pattern: /^[a-zA-Z0-9_-]+$/
+      },
+      nombres: {
+        required: true
+      },
+      apellidos: {
+        required: true
+      },
+      email: {
+        required: true,
+        email: true
+      },
+      password: {
+        required: true,
+        minlength: 6
+      },
+      'password-confirmation': {
+        required: true,
+        equalTo: '#password'
+      },
+      'cargo[]': {
+        checkboxGroup: true
+      }
+    },
+    messages: {
+      username: {
+        pattern: 'Only letters, numbers, hyphens, and underscores are allowed'
+      }
+    },
+    submitHandler: function (form) {
+      $.ajax({
+        url: '/rfq/user/create',
+        type: 'POST',
+        data: $(form).serialize(),
+        success: function (response) {
+          let message = '';
+          if (response.errors) {
+            message = $(`<label class="error">${response.errors}</label>`);
+          } else {
+            message = $(`<label class="text-success">User created correctly</label>`);
+          }
+          $('form #errors').html(message);
+        },
+        error: function (xhr, status, error) {
+          console.error(error);
+        }
+      });
+    },
+    errorPlacement: function (error, element) {
+      if (element.is(':checkbox')) {
+        error.insertAfter(element.closest('div.form-group'));
+      } else {
+        error.insertAfter(element);
+      }
     }
   });
 });

@@ -1,7 +1,7 @@
 <?php
 if (isset($_POST['save_checklist'])) {
-  $file_document = is_null($_POST['file_document']) ? [] : $_POST['file_document'];
-  $accounting = is_null($_POST['accounting']) ? [] : $_POST['accounting'];
+  $file_document = $_POST['file_document'] ?? [];
+  $accounting = $_POST['accounting'] ?? [];
   $estimated_delivery_date = !empty($_POST['estimated_delivery_date']) ? RepositorioComment::english_format_to_mysql_date($_POST['estimated_delivery_date']) : null;
   Conexion::abrir_conexion();
   $cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $_POST['id_rfq']);

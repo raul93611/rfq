@@ -16,17 +16,17 @@
         <section class="col-12">
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title">Submitted Invoice</h3>
+              <h3 class="card-title">Deleted</h3>
             </div>
             <div class="card-body">
-              <table id="submitted_invoice_quotes_table" class="table table-bordered">
+              <table id="deleted_table" class="table table-bordered table-responsive-md">
                 <thead>
                   <tr>
                     <th>PROPOSAL</th>
+                    <th>DEDIGNATED USER</th>
                     <th>CODE</th>
-                    <th>CHANNEL</th>
-                    <th>SUBMITTED INVOICE DATE</th>
-                    <th>TYPE OF CONTRACT</th>
+                    <th>TYPE OF BID</th>
+                    <th>OPTIONS</th>
                   </tr>
                 </thead>
                 <tbody>

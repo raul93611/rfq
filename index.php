@@ -9,7 +9,7 @@ spl_autoload_register(function ($class) {
     'Quote' => ['Rfq', 'RepositorioRfq', 'ValidadorCotizacion', 'ValidadorCotizacionRegistro', 'Item', 'RepositorioItem', 'Provider', 'RepositorioProvider', 'Subitem', 'RepositorioSubitem', 'ProviderSubitem', 'RepositorioProviderSubitem', 'AuditTrail', 'AuditTrailRepository'],
     'Comment' => ['Comment', 'RepositorioComment'],
     'ReQuote' => ['ReQuote', 'ReQuoteRepository', 'ReQuoteItem', 'ReQuoteItemRepository', 'ReQuoteProvider', 'ReQuoteProviderRepository', 'ReQuoteSubitem', 'ReQuoteSubitemRepository', 'ReQuoteSubitemProvider', 'ReQuoteSubitemProviderRepository', 'ReQuoteAuditTrail', 'ReQuoteAuditTrailRepository', 'ReQuoteService', 'ReQuoteServiceRepository'],
-    'Utilities' => ['ProposalRepository', 'ExcelRepository', 'Input', 'Email', 'TeamsIntegration'],
+    'Utilities' => ['PDFGenerator', 'ProposalRepository', 'ExcelRepository', 'Input', 'Email', 'TeamsIntegration'],
     'TypeOfBid' => ['TypeOfBid', 'TypeOfBidRepository'],
     'Service' => ['Service', 'ServiceRepository'],
     'Tracking' => ['Tracking', 'TrackingRepository', 'TrackingSubitem', 'TrackingSubitemRepository'],
@@ -89,6 +89,12 @@ switch ($partes_ruta[1] ?? null) {
       case 'completed_table':
         $ruta_elegida = 'scripts/quote/completed_table.php';
         break;
+      case 'submitted_table':
+        $ruta_elegida = 'scripts/quote/submitted_table.php';
+        break;
+      case 'award_table':
+        $ruta_elegida = 'scripts/quote/award_table.php';
+        break;
       case 'no_bid_table':
         $ruta_elegida = 'scripts/quote/no_bid_table.php';
         break;
@@ -97,6 +103,9 @@ switch ($partes_ruta[1] ?? null) {
         break;
       case 'cancelled_table':
         $ruta_elegida = 'scripts/quote/cancelled_table.php';
+        break;
+      case 'deleted_table':
+        $ruta_elegida = 'scripts/quote/deleted_table.php';
         break;
       case 'reports':
         $ruta_elegida = 'scripts/quote/reports.php';
@@ -183,6 +192,7 @@ switch ($partes_ruta[1] ?? null) {
         break;
       case 'proposal':
         $id_rfq = $partes_ruta[3];
+        $encabezado = 0;
         $ruta_elegida = 'scripts/utilities/proposal.php';
         break;
       case 'proposal_gsa':
@@ -205,6 +215,10 @@ switch ($partes_ruta[1] ?? null) {
       case 'delete_quote':
         $id_rfq = $partes_ruta[3];
         $ruta_elegida = 'scripts/quote/delete_quote.php';
+        break;
+      case 'restore_quote':
+        $id_rfq = $partes_ruta[3];
+        $ruta_elegida = 'scripts/quote/restore_quote.php';
         break;
       case 'guardar_editar_cotizacion':
         $id_rfq = $partes_ruta[3];
@@ -269,6 +283,9 @@ switch ($partes_ruta[1] ?? null) {
         break;
       case 'update':
         $ruta_elegida = 'scripts/user/update_user.php';
+        break;
+      case 'create':
+        $ruta_elegida = 'scripts/user/create_user.php';
         break;
       case 'update_password':
         $ruta_elegida = 'scripts/user/update_password.php';
@@ -455,6 +472,9 @@ switch ($partes_ruta[1] ?? null) {
             break;
         }
         break;
+      case 'fulfillment_quotes_table':
+        $ruta_elegida = 'scripts/fulfillment/fulfillment_quotes_table.php';
+        break;
       case 'load_fulfillment_audit_trails':
         $ruta_elegida = 'scripts/fulfillment/load_fulfillment_audit_trails.php';
         break;
@@ -479,6 +499,24 @@ switch ($partes_ruta[1] ?? null) {
         break;
       case 'update_invoice':
         $ruta_elegida = 'scripts/fulfillment/update_invoice.php';
+        break;
+      default:
+        break;
+    }
+    break;
+  case 'invoice':
+    switch ($partes_ruta[2]) {
+      case 'invoice_quotes_table':
+        $ruta_elegida = 'scripts/invoice/invoice_quotes_table.php';
+        break;
+      default:
+        break;
+    }
+    break;
+  case 'submitted_invoice':
+    switch ($partes_ruta[2]) {
+      case 'submitted_invoice_quotes_table':
+        $ruta_elegida = 'scripts/submitted_invoice/submitted_invoice_quotes_table.php';
         break;
       default:
         break;

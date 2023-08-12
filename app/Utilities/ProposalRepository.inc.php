@@ -6,7 +6,7 @@ class ProposalRepository{
     $html_item_description = explode('<br />', nl2br($item-> obtener_description()));
     $j = 0;
     while (strlen($item_description) <= $limit && $j <= count($html_item_description)) {
-      $item_description .= $html_item_description[$j] . '<br />';
+      $item_description .= ($html_item_description[$j] ?? '')  . '<br />';
       $j++;
     }
     $html = '<tr>
