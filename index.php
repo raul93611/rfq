@@ -9,7 +9,7 @@ spl_autoload_register(function ($class) {
     'Quote' => ['Rfq', 'RepositorioRfq', 'ValidadorCotizacion', 'ValidadorCotizacionRegistro', 'Item', 'RepositorioItem', 'Provider', 'RepositorioProvider', 'Subitem', 'RepositorioSubitem', 'ProviderSubitem', 'RepositorioProviderSubitem', 'AuditTrail', 'AuditTrailRepository'],
     'Comment' => ['Comment', 'RepositorioComment'],
     'ReQuote' => ['ReQuote', 'ReQuoteRepository', 'ReQuoteItem', 'ReQuoteItemRepository', 'ReQuoteProvider', 'ReQuoteProviderRepository', 'ReQuoteSubitem', 'ReQuoteSubitemRepository', 'ReQuoteSubitemProvider', 'ReQuoteSubitemProviderRepository', 'ReQuoteAuditTrail', 'ReQuoteAuditTrailRepository', 'ReQuoteService', 'ReQuoteServiceRepository'],
-    'Utilities' => ['ProposalRepository', 'ExcelRepository', 'Input', 'Email', 'TeamsIntegration'],
+    'Utilities' => ['PDFGenerator', 'ProposalRepository', 'ExcelRepository', 'Input', 'Email', 'TeamsIntegration'],
     'TypeOfBid' => ['TypeOfBid', 'TypeOfBidRepository'],
     'Service' => ['Service', 'ServiceRepository'],
     'Tracking' => ['Tracking', 'TrackingRepository', 'TrackingSubitem', 'TrackingSubitemRepository'],
@@ -192,6 +192,7 @@ switch ($partes_ruta[1] ?? null) {
         break;
       case 'proposal':
         $id_rfq = $partes_ruta[3];
+        $encabezado = 0;
         $ruta_elegida = 'scripts/utilities/proposal.php';
         break;
       case 'proposal_gsa':
