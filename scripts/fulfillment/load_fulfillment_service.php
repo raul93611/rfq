@@ -19,18 +19,22 @@ Conexion::cerrar_conexion();
           }
           ?>
         </select>
+        <input type="hidden" name="provider_original" value="<?= $fulfillment_service->get_provider(); ?>">
       </div>
       <div class="form-group">
         <label for="quantity">Quantity:</label>
         <input type="number" id="quantity" class="form-control form-control-sm" name="quantity" value="<?php echo $fulfillment_service->get_quantity(); ?>">
+        <input type="hidden" name="quantity_original" value="<?= $fulfillment_service->get_quantity(); ?>">
       </div>
       <div class="form-group">
         <label for="unit_cost">Unit Cost:</label>
         <input type="number" step=".01" id="unit_cost" class="form-control form-control-sm" name="unit_cost" value="<?php echo $fulfillment_service->get_unit_cost(); ?>">
+        <input type="hidden" name="unit_cost_original" value="<?= $fulfillment_service->get_unit_cost(); ?>">
       </div>
       <div class="form-group">
         <label for="other_cost">Other Cost:</label>
         <input type="number" step=".01" id="other_cost" class="form-control form-control-sm" name="other_cost" value="<?php echo $fulfillment_service->get_other_cost(); ?>">
+        <input type="hidden" name="other_cost_original" value="<?= $fulfillment_service->get_other_cost(); ?>">
       </div>
       <div class="form-group">
         <label for="payment_term">Payment Term:</label>
@@ -43,6 +47,7 @@ Conexion::cerrar_conexion();
           }
           ?>
         </select>
+        <input type="hidden" name="payment_term_original" value="<?= $fulfillment_service->get_payment_term(); ?>">
       </div>
       <div class="form-group">
         <label for="comment">Comment:</label>
