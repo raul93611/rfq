@@ -47,7 +47,7 @@ class FulfillmentRepository {
               <td>$ <?php echo $quote->obtener_shipping_cost(); ?></td>
               <td></td>
               <td colspan="4">
-                <?php echo str_replace('|', '<br>', $quote->obtener_fulfillment_shipping()); ?>
+                <?php echo str_replace('|', '<br>', $quote->obtener_fulfillment_shipping() ?? ''); ?>
               </td>
               <td>
                 <?php echo str_replace('|', '<br>', $quote->obtener_fulfillment_shipping_cost()); ?>
@@ -278,6 +278,7 @@ class FulfillmentRepository {
           <th class="thin">OTHER COST</th>
           <th>REAL COST</th>
           <th>PAYMENT TERM</th>
+          <th>COMMENTS</th>
           <th>PROFIT</th>
         </tr>
       </thead>
@@ -292,6 +293,7 @@ class FulfillmentRepository {
           <td><?php echo $total; ?></td>
           <td colspan="5"></td>
           <td><?php echo $quote->obtener_total_services_fulfillment(); ?></td>
+          <td></td>
           <td></td>
           <td></td>
         </tr>
@@ -338,6 +340,11 @@ class FulfillmentRepository {
     <td class="service<?php echo $fulfillment_services[0]->get_id(); ?>"><?php echo $fulfillment_services[0]->get_other_cost(); ?></td>
     <td class="service<?php echo $fulfillment_services[0]->get_id(); ?>"><?php echo $fulfillment_services[0]->get_real_cost(); ?></td>
     <td class="service<?php echo $fulfillment_services[0]->get_id(); ?>"><?php echo $fulfillment_services[0]->get_payment_term(); ?></td>
+    <td class="service<?php echo $fulfillment_services[0]->get_id(); ?> text-center">
+      <button type="button" class="btn btn-link" data-toggle="tooltip" data-html="true" title="<?php echo !empty($fulfillment_services[0]->getComments()) ? nl2br($fulfillment_services[0]->getComments()) : 'No comments'; ?>">
+        <i class="fas fa-comment fa-2x"></i>
+      </button>
+    </td>
     <td rowspan="<?php echo $fulfillment_services_quantity; ?>"><?php echo $service->get_fulfillment_profit(); ?></td>
     <?php
     ?>
@@ -357,6 +364,11 @@ class FulfillmentRepository {
     <td><?php echo $fulfillment_service->get_other_cost(); ?></td>
     <td><?php echo $fulfillment_service->get_real_cost(); ?></td>
     <td><?php echo $fulfillment_service->get_payment_term(); ?></td>
+    <td class="text-center">
+      <button type="button" class="btn btn-link" data-toggle="tooltip" data-html="true" title="<?php echo !empty($fulfillment_service->getComments()) ? nl2br($fulfillment_service->getComments()) : 'No comments'; ?>">
+        <i class="fas fa-comment fa-2x"></i>
+      </button>
+    </td>
   </tr>
 <?php
         }

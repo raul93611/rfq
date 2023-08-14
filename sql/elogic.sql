@@ -336,6 +336,7 @@ CREATE TABLE fulfillment_services(
   payment_term VARCHAR(255) NOT NULL,
   reviewed INT DEFAULT 0,
   created_at DATETIME,
+  comments TEXT CHARACTER SET utf8 NOT NULL,
   PRIMARY KEY(id),
   FOREIGN KEY(id_service) REFERENCES services(id) ON UPDATE CASCADE ON DELETE RESTRICT
 );

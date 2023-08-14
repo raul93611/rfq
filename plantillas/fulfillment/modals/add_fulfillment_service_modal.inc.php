@@ -16,9 +16,9 @@
                 <select name="provider" class="custom-select">
                   <?php
                   foreach ($providers_list as $key => $provider) {
-                    ?>
-                    <option><?php echo $provider-> get_company_name(); ?></option>
-                    <?php
+                  ?>
+                    <option><?php echo $provider->get_company_name(); ?></option>
+                  <?php
                   }
                   ?>
                 </select>
@@ -38,14 +38,14 @@
               <div class="form-group">
                 <label for="payment_term">Payment Term:</label>
                 <select class="custom-select" name="payment_term">
-                  <?php
-                    foreach ($payment_terms as $key => $payment_term) {
-                      ?>
-                      <option><?php echo $payment_term-> get_payment_term(); ?></option>
-                      <?php
-                    }
-                  ?>
+                  <?php foreach ($payment_terms as $key => $payment_term) : ?>
+                    <option><?= $payment_term->get_payment_term(); ?></option>
+                  <?php endforeach; ?>
                 </select>
+              </div>
+              <div class="form-group">
+                <label for="comment">Comment:</label>
+                <textarea id="comment" name="comment" rows="5" class="form-control form-control-sm"></textarea>
               </div>
             </div>
           </div>
