@@ -1,45 +1,37 @@
 <?php
-use PhpOffice\PhpSpreadsheet\Helper\Sample;
-use PhpOffice\PhpSpreadsheet\IOFactory;
+require 'vendor/autoload.php';
+
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
-require_once 'vendor_excel/phpoffice/phpspreadsheet/src/Bootstrap.php';
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 
 $spreadsheet = new Spreadsheet();
-$spreadsheet->getProperties()->setCreator('E-logic.Inc')
-    ->setLastModifiedBy('E-logic')
-    ->setTitle('SubmittedReport')
-    ->setSubject('SubmittedReport')
-    ->setDescription('SubmittedReport')
-    ->setKeywords('SubmittedReport')
-    ->setCategory('SubmittedReport');
+$activeWorksheet = $spreadsheet->getActiveSheet();
 
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('A1', 'SUBMITTED DATE');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('B1', 'PROPOSAL #');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('C1', 'CODE');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('D1', 'DESIGNATED USER');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('E1', 'CHANNEL');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('F1', 'TYPE OF BID');
-$spreadsheet->getActiveSheet()->getStyle('G1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('197bff');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('G1', 'TOTAL COST');
-$spreadsheet->getActiveSheet()->getStyle('H1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('197bff');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('H1', 'TOTAL PRICE');
-$spreadsheet->getActiveSheet()->getStyle('I1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('197bff');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('I1', 'PROFIT');
-$spreadsheet->getActiveSheet()->getStyle('J1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('197bff');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('J1', 'PROFIT (%)');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('K1', 'TYPE');
+$activeWorksheet->setCellValue('A1', 'SUBMITTED DATE');
+$activeWorksheet->setCellValue('B1', 'PROPOSAL #');
+$activeWorksheet->setCellValue('C1', 'CODE');
+$activeWorksheet->setCellValue('D1', 'DESIGNATED USER');
+$activeWorksheet->setCellValue('E1', 'CHANNEL');
+$activeWorksheet->setCellValue('F1', 'TYPE OF BID');
+$activeWorksheet->getStyle('G1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('197bff');
+$activeWorksheet->setCellValue('G1', 'TOTAL COST');
+$activeWorksheet->getStyle('H1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('197bff');
+$activeWorksheet->setCellValue('H1', 'TOTAL PRICE');
+$activeWorksheet->getStyle('I1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('197bff');
+$activeWorksheet->setCellValue('I1', 'PROFIT');
+$activeWorksheet->getStyle('J1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('197bff');
+$activeWorksheet->setCellValue('J1', 'PROFIT (%)');
+$activeWorksheet->setCellValue('K1', 'TYPE');
 
 Conexion::abrir_conexion();
-ExcelRepository::submittedReport(Conexion::obtener_conexion(), $_POST['type'], $_POST['quarter'], $_POST['month'], $_POST['year'], $spreadsheet);
+ExcelRepository::submittedReport(Conexion::obtener_conexion(), $_POST['type'], $_POST['quarter'], $_POST['month'], $_POST['year'], $activeWorksheet);
 Conexion::cerrar_conexion();
 
-$spreadsheet->setActiveSheetIndex(0);
+$writer = new Xlsx($spreadsheet);
 
 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 header('Content-Disposition: attachment;filename="SubmittedReport.xlsx"');
 header('Cache-Control: max-age=0');
 
-$writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
 $writer->save('php://output');
-exit;
-?>

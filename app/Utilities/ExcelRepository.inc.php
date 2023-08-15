@@ -1,71 +1,105 @@
 <?php
-class ExcelRepository{
-  public static function print_tracking($connection, $spreadsheet, $quote, $re_quote){
-    $items = RepositorioItem::obtener_items_por_id_rfq($connection, $quote-> obtener_id());
-    $re_quote_items = ReQuoteItemRepository::get_re_quote_items_by_id_re_quote($connection, $re_quote-> get_id());
+class ExcelRepository {
+  public static function print_tracking($connection, $activeWorksheet, $quote, $re_quote) {
+    $items = RepositorioItem::obtener_items_por_id_rfq($connection, $quote->obtener_id());
+    $re_quote_items = ReQuoteItemRepository::get_re_quote_items_by_id_re_quote($connection, $re_quote->get_id());
 
     $y = 5;
     $a = 1;
     foreach ($items as $key => $item) {
       $re_quote_item = $re_quote_items[$key];
-      $trackings = TrackingRepository::get_all_trackings_by_id_item($connection, $item-> obtener_id());
+      $trackings = TrackingRepository::get_all_trackings_by_id_item($connection, $item->obtener_id());
       $x = 'A';
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $a);$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, "Brand name: " . $re_quote_item-> get_brand() . "\n Part number: " . $re_quote_item-> get_part_number() . "\n Description: " . mb_substr($re_quote_item-> get_description(), 0, 150));
-      $spreadsheet->getActiveSheet()->getStyle($x.$y)->getAlignment()->setWrapText(true);$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $re_quote_item-> get_quantity());$x++;
-      if(count($trackings)){
-        $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings[0]-> get_quantity());$x++;
-        $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings[0]-> get_carrier());$x++;
-        $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings[0]-> get_tracking_number());$x++;
-        $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, RepositorioComment::mysql_date_to_english_format($trackings[0]-> get_delivery_date()));$x++;
-        $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, RepositorioComment::mysql_date_to_english_format($trackings[0]-> get_due_date()));$x++;
-        $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings[0]-> get_signed_by());$x++;
-        $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings[0]-> get_comments());$x++;
-        for ($i=1; $i < count($trackings); $i++) {
+      $activeWorksheet->setCellValue($x . $y, $a);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, "Brand name: " . $re_quote_item->get_brand() . "\n Part number: " . $re_quote_item->get_part_number() . "\n Description: " . mb_substr($re_quote_item->get_description(), 0, 150));
+      $activeWorksheet->getStyle($x . $y)->getAlignment()->setWrapText(true);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $re_quote_item->get_quantity());
+      $x++;
+      if (count($trackings)) {
+        $activeWorksheet->setCellValue($x . $y, $trackings[0]->get_quantity());
+        $x++;
+        $activeWorksheet->setCellValue($x . $y, $trackings[0]->get_carrier());
+        $x++;
+        $activeWorksheet->setCellValue($x . $y, $trackings[0]->get_tracking_number());
+        $x++;
+        $activeWorksheet->setCellValue($x . $y, RepositorioComment::mysql_date_to_english_format($trackings[0]->get_delivery_date()));
+        $x++;
+        $activeWorksheet->setCellValue($x . $y, RepositorioComment::mysql_date_to_english_format($trackings[0]->get_due_date()));
+        $x++;
+        $activeWorksheet->setCellValue($x . $y, $trackings[0]->get_signed_by());
+        $x++;
+        $activeWorksheet->setCellValue($x . $y, $trackings[0]->get_comments());
+        $x++;
+        for ($i = 1; $i < count($trackings); $i++) {
           $y++;
           $x = 'D';
-          $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings[$i]-> get_quantity());$x++;
-          $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings[$i]-> get_carrier());$x++;
-          $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings[$i]-> get_tracking_number());$x++;
-          $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, RepositorioComment::mysql_date_to_english_format($trackings[$i]-> get_delivery_date()));$x++;
-          $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, RepositorioComment::mysql_date_to_english_format($trackings[$i]-> get_due_date()));$x++;
-          $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings[$i]-> get_signed_by());$x++;
-          $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings[$i]-> get_comments());$x++;
+          $activeWorksheet->setCellValue($x . $y, $trackings[$i]->get_quantity());
+          $x++;
+          $activeWorksheet->setCellValue($x . $y, $trackings[$i]->get_carrier());
+          $x++;
+          $activeWorksheet->setCellValue($x . $y, $trackings[$i]->get_tracking_number());
+          $x++;
+          $activeWorksheet->setCellValue($x . $y, RepositorioComment::mysql_date_to_english_format($trackings[$i]->get_delivery_date()));
+          $x++;
+          $activeWorksheet->setCellValue($x . $y, RepositorioComment::mysql_date_to_english_format($trackings[$i]->get_due_date()));
+          $x++;
+          $activeWorksheet->setCellValue($x . $y, $trackings[$i]->get_signed_by());
+          $x++;
+          $activeWorksheet->setCellValue($x . $y, $trackings[$i]->get_comments());
+          $x++;
         }
       }
       $y++;
-      $subitems = RepositorioSubitem::obtener_subitems_por_id_item($connection, $item-> obtener_id());
-      $re_quote_subitems = ReQuoteSubitemRepository::get_re_quote_subitems_by_id_re_quote_item($connection, $re_quote_item-> get_id());
-      if(count($subitems)){
-        foreach ($subitems as $key => $subitem){
+      $subitems = RepositorioSubitem::obtener_subitems_por_id_item($connection, $item->obtener_id());
+      $re_quote_subitems = ReQuoteSubitemRepository::get_re_quote_subitems_by_id_re_quote_item($connection, $re_quote_item->get_id());
+      if (count($subitems)) {
+        foreach ($subitems as $key => $subitem) {
           $x = 'A';
 
           $re_quote_subitem = $re_quote_subitems[$key];
-          $trackings_subitems = TrackingSubitemRepository::get_all_trackings_by_id_subitem($connection, $subitem-> obtener_id());
-          $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, '');$x++;
-          $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, "Brand name: " . $re_quote_subitem-> get_brand() . "\n Part number: " . $re_quote_subitem-> get_part_number() . "\n Description: " . mb_substr($re_quote_subitem-> get_description(), 0, 150));
-          $spreadsheet->getActiveSheet()->getStyle($x.$y)->getAlignment()->setWrapText(true);$x++;
-          $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $re_quote_subitem-> get_quantity());$x++;
+          $trackings_subitems = TrackingSubitemRepository::get_all_trackings_by_id_subitem($connection, $subitem->obtener_id());
+          $activeWorksheet->setCellValue($x . $y, '');
+          $x++;
+          $activeWorksheet->setCellValue($x . $y, "Brand name: " . $re_quote_subitem->get_brand() . "\n Part number: " . $re_quote_subitem->get_part_number() . "\n Description: " . mb_substr($re_quote_subitem->get_description(), 0, 150));
+          $activeWorksheet->getStyle($x . $y)->getAlignment()->setWrapText(true);
+          $x++;
+          $activeWorksheet->setCellValue($x . $y, $re_quote_subitem->get_quantity());
+          $x++;
 
-          if(count($trackings_subitems)){
-            $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings_subitems[0]-> get_quantity());$x++;
-            $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings_subitems[0]-> get_carrier());$x++;
-            $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings_subitems[0]-> get_tracking_number());$x++;
-            $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, RepositorioComment::mysql_date_to_english_format($trackings_subitems[0]-> get_delivery_date()));$x++;
-            $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, RepositorioComment::mysql_date_to_english_format($trackings_subitems[0]-> get_due_date()));$x++;
-            $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings_subitems[0]-> get_signed_by());$x++;
-            $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings_subitems[0]-> get_comments());$x++;
+          if (count($trackings_subitems)) {
+            $activeWorksheet->setCellValue($x . $y, $trackings_subitems[0]->get_quantity());
+            $x++;
+            $activeWorksheet->setCellValue($x . $y, $trackings_subitems[0]->get_carrier());
+            $x++;
+            $activeWorksheet->setCellValue($x . $y, $trackings_subitems[0]->get_tracking_number());
+            $x++;
+            $activeWorksheet->setCellValue($x . $y, RepositorioComment::mysql_date_to_english_format($trackings_subitems[0]->get_delivery_date()));
+            $x++;
+            $activeWorksheet->setCellValue($x . $y, RepositorioComment::mysql_date_to_english_format($trackings_subitems[0]->get_due_date()));
+            $x++;
+            $activeWorksheet->setCellValue($x . $y, $trackings_subitems[0]->get_signed_by());
+            $x++;
+            $activeWorksheet->setCellValue($x . $y, $trackings_subitems[0]->get_comments());
+            $x++;
             for ($i = 1; $i < count($trackings_subitems); $i++) {
               $y++;
               $x = 'D';
-              $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings_subitems[$i]-> get_quantity());$x++;
-              $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings_subitems[$i]-> get_carrier());$x++;
-              $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings_subitems[$i]-> get_tracking_number());$x++;
-              $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, RepositorioComment::mysql_date_to_english_format($trackings_subitems[$i]-> get_delivery_date()));$x++;
-              $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, RepositorioComment::mysql_date_to_english_format($trackings_subitems[$i]-> get_due_date()));$x++;
-              $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings_subitems[$i]-> get_signed_by());$x++;
-              $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $y, $trackings_subitems[$i]-> get_comments());$x++;
+              $activeWorksheet->setCellValue($x . $y, $trackings_subitems[$i]->get_quantity());
+              $x++;
+              $activeWorksheet->setCellValue($x . $y, $trackings_subitems[$i]->get_carrier());
+              $x++;
+              $activeWorksheet->setCellValue($x . $y, $trackings_subitems[$i]->get_tracking_number());
+              $x++;
+              $activeWorksheet->setCellValue($x . $y, RepositorioComment::mysql_date_to_english_format($trackings_subitems[$i]->get_delivery_date()));
+              $x++;
+              $activeWorksheet->setCellValue($x . $y, RepositorioComment::mysql_date_to_english_format($trackings_subitems[$i]->get_due_date()));
+              $x++;
+              $activeWorksheet->setCellValue($x . $y, $trackings_subitems[$i]->get_signed_by());
+              $x++;
+              $activeWorksheet->setCellValue($x . $y, $trackings_subitems[$i]->get_comments());
+              $x++;
             }
           }
           $y++;
@@ -75,121 +109,89 @@ class ExcelRepository{
     }
   }
 
-  public static function print_items($connection, $spreadsheet, $providers_name, $requote_providers_name, $requote, $id_rfq){
+  public static function print_items($connection, $activeWorksheet, $providers_name, $requote_providers_name, $requote, $id_rfq) {
     $i = 3;
     $j = 1;
     $quote = RepositorioRfq::obtener_cotizacion_por_id($connection, $id_rfq);
     $items = RepositorioItem::obtener_items_por_id_rfq($connection, $id_rfq);
-    $requote_items = ReQuoteItemRepository::get_re_quote_items_by_id_re_quote($connection, $requote-> get_id());
+    $requote_items = ReQuoteItemRepository::get_re_quote_items_by_id_re_quote($connection, $requote->get_id());
 
     foreach ($items as $key => $item) {
       $requote_item = $requote_items[$key];
       $x = 'A';
-      $providers_item = RepositorioProvider::obtener_providers_por_id_item($connection, $item-> obtener_id());
-      $requote_providers = ReQuoteProviderRepository::get_re_quote_providers_by_id_re_quote_item($connection, $requote_item-> get_id());
-      list($i, $x) = self::print_item($i, $j, $x, $item, $providers_name, $providers_item, $requote_providers_name, $requote_providers, $spreadsheet);
+      $providers_item = RepositorioProvider::obtener_providers_por_id_item($connection, $item->obtener_id());
+      $requote_providers = ReQuoteProviderRepository::get_re_quote_providers_by_id_re_quote_item($connection, $requote_item->get_id());
+      list($i, $x) = self::print_item($i, $j, $x, $item, $providers_name, $providers_item, $requote_providers_name, $requote_providers, $activeWorksheet);
 
-      $subitems = RepositorioSubitem::obtener_subitems_por_id_item($connection, $item-> obtener_id());
-      $requote_subitems = ReQuoteSubitemRepository::get_re_quote_subitems_by_id_re_quote_item($connection, $requote_item-> get_id());
+      $subitems = RepositorioSubitem::obtener_subitems_por_id_item($connection, $item->obtener_id());
+      $requote_subitems = ReQuoteSubitemRepository::get_re_quote_subitems_by_id_re_quote_item($connection, $requote_item->get_id());
       foreach ($subitems as $key1 => $subitem) {
         $requote_subitem = $requote_subitems[$key1];
         $x = 'A';
-        $providers_subitem = RepositorioProviderSubitem::obtener_providers_subitem_por_id_subitem($connection, $subitem-> obtener_id());
-        $requote_subitem_providers = ReQuoteSubitemProviderRepository::get_re_quote_subitem_providers_by_id_re_quote_subitem($connection, $requote_subitem-> get_id());
-        list($i, $x) = self::print_item($i, '', $x, $subitem, $providers_name, $providers_subitem, $requote_providers_name, $requote_subitem_providers, $spreadsheet);
+        $providers_subitem = RepositorioProviderSubitem::obtener_providers_subitem_por_id_subitem($connection, $subitem->obtener_id());
+        $requote_subitem_providers = ReQuoteSubitemProviderRepository::get_re_quote_subitem_providers_by_id_re_quote_subitem($connection, $requote_subitem->get_id());
+        list($i, $x) = self::print_item($i, '', $x, $subitem, $providers_name, $providers_subitem, $requote_providers_name, $requote_subitem_providers, $activeWorksheet);
       }
       $j++;
     }
     $x = 'A';
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $i, '');$x++;
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $i, '');$x++;
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $i, '');$x++;
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $i, '');$x++;
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $i, '');$x++;
+    $activeWorksheet->setCellValue($x . $i, '');
+    $x++;
+    $activeWorksheet->setCellValue($x . $i, '');
+    $x++;
+    $activeWorksheet->setCellValue($x . $i, '');
+    $x++;
+    $activeWorksheet->setCellValue($x . $i, '');
+    $x++;
+    $activeWorksheet->setCellValue($x . $i, '');
+    $x++;
     foreach ($providers_name as $key1 => $provider_name) {
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $i, '');$x++;
+      $activeWorksheet->setCellValue($x . $i, '');
+      $x++;
     }
     foreach ($requote_providers_name as $key1 => $requote_provider_name) {
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $i, '');$x++;
+      $activeWorksheet->setCellValue($x . $i, '');
+      $x++;
     }
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $i, '');$x++;
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $i, $quote-> obtener_total_price());$x++;
+    $activeWorksheet->setCellValue($x . $i, '');
+    $x++;
+    $activeWorksheet->setCellValue($x . $i, $quote->obtener_total_price());
+    $x++;
   }
 
-  public static function print_item($i, $j, $x, $item, $providers_name, $providers, $requote_providers_name, $requote_providers, $spreadsheet){
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $i, $j);$x++;
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $i, $item-> obtener_description_project());$x++;
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $i, $item-> obtener_description());$x++;
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $i, $item-> obtener_part_number());$x++;
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $i, $item-> obtener_quantity());$x++;
+  public static function print_item($i, $j, $x, $item, $providers_name, $providers, $requote_providers_name, $requote_providers, $activeWorksheet) {
+    $activeWorksheet->setCellValue($x . $i, $j);
+    $x++;
+    $activeWorksheet->setCellValue($x . $i, $item->obtener_description_project());
+    $x++;
+    $activeWorksheet->setCellValue($x . $i, $item->obtener_description());
+    $x++;
+    $activeWorksheet->setCellValue($x . $i, $item->obtener_part_number());
+    $x++;
+    $activeWorksheet->setCellValue($x . $i, $item->obtener_quantity());
+    $x++;
     foreach ($providers_name as $key1 => $provider_name) {
       foreach ($providers as $key2 => $provider) {
-        if($provider_name == $provider-> obtener_provider()){
-          $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $i, $provider-> obtener_price());
+        if ($provider_name == $provider->obtener_provider()) {
+          $activeWorksheet->setCellValue($x . $i, $provider->obtener_price());
         }
       }
       $x++;
     }
     foreach ($requote_providers_name as $key1 => $requote_provider_name) {
       foreach ($requote_providers as $key2 => $requote_provider) {
-        if($requote_provider_name == $requote_provider-> get_provider()){
-          $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $i, $requote_provider-> get_price());
+        if ($requote_provider_name == $requote_provider->get_provider()) {
+          $activeWorksheet->setCellValue($x . $i, $requote_provider->get_price());
         }
       }
       $x++;
     }
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $i, $item-> obtener_unit_price());$x++;
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . $i, $item-> obtener_total_price());$x++;
+    $activeWorksheet->setCellValue($x . $i, $item->obtener_unit_price());
+    $x++;
+    $activeWorksheet->setCellValue($x . $i, $item->obtener_total_price());
+    $x++;
     $i++;
     return array($i, $x);
-  }
-
-  public static function profit_report($connection, $type, $quarter, $month, $year, $spreadsheet){
-    $quotes = Report::get_profit_report($connection, $type, $quarter, $month, $year);
-    $total['total_cost']= 0;
-    $total['total_price']= 0;
-    $total['re_quote_total_cost']= 0;
-    $total['fulfillment_total_cost']= 0;
-
-    $y = 3;
-    foreach ($quotes as $key => $quote) {
-      $x = 'A';
-      $re_quote = ReQuoteRepository::get_re_quote_by_id_rfq($connection, $quote-> obtener_id());
-      $total['total_cost'] += $quote-> obtener_total_cost();
-      $total['total_price'] += $quote-> obtener_quote_total_price();
-      $total['re_quote_total_cost'] += $re_quote-> get_total_cost();
-      $total['fulfillment_total_cost'] += $quote-> obtener_total_fulfillment() + $quote-> obtener_total_services_fulfillment();
-
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, RepositorioComment::mysql_date_to_english_format($quote-> obtener_invoice_date()));$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_id());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_total_cost());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_quote_total_price());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_quote_profit() . "\n" . number_format($quote-> obtener_quote_profit_percentage(), 2) . '%');
-      $spreadsheet->getActiveSheet()->getStyle($x.$y)->getAlignment()->setWrapText(true);$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $re_quote-> get_total_cost());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_quote_total_price());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_quote_total_price() - $re_quote-> get_total_cost() . "\n" . number_format(100*(($quote-> obtener_quote_total_price() - $re_quote-> get_total_cost())/$quote-> obtener_quote_total_price()), 2) . '%');
-      $spreadsheet->getActiveSheet()->getStyle($x.$y)->getAlignment()->setWrapText(true);$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_total_fulfillment() + $quote-> obtener_total_services_fulfillment());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_quote_total_price());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($quote-> obtener_real_fulfillment_profit(), 2) . "\n" . number_format($quote-> obtener_real_fulfillment_profit_percentage(), 2));
-      $spreadsheet->getActiveSheet()->getStyle($x.$y)->getAlignment()->setWrapText(true);$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_type_of_contract());
-      $y++;
-    }
-    $x = 'C';
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($total['total_cost'], 2));$x++;
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($total['total_price'], 2));$x++;
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($total_profit = $total['total_price'] - $total['total_cost'], 2) . "\n" . number_format(100*($total_profit/$total['total_price']), 2) . '%');
-    $spreadsheet->getActiveSheet()->getStyle($x.$y)->getAlignment()->setWrapText(true);$x++;
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($total['re_quote_total_cost'], 2));$x++;
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($total['total_price'], 2));$x++;
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($re_quote_total_profit = $total['total_price'] - $total['re_quote_total_cost'], 2) . "\n" . number_format(100*($re_quote_total_profit/$total['total_price']), 2) . '%');
-    $spreadsheet->getActiveSheet()->getStyle($x.$y)->getAlignment()->setWrapText(true);$x++;
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($total['fulfillment_total_cost'], 2));$x++;
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($total['total_price'], 2));$x++;
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($fulfillment_total_profit = $total['total_price'] - $total['fulfillment_total_cost'], 2) . "\n" . number_format(100*($fulfillment_total_profit/$total['total_price']), 2) . '%');
-    $spreadsheet->getActiveSheet()->getStyle($x.$y)->getAlignment()->setWrapText(true);$x++;
   }
 
   public static function getAwardReport(
@@ -284,10 +286,10 @@ class ExcelRepository{
     return $data;
   }
 
-  public static function awardReport($connection, $type, $quarter, $month, $year, $spreadsheet){
+  public static function awardReport($connection, $type, $quarter, $month, $year, $activeWorksheet) {
     $quotes = self::getAwardReport($connection, $type, $quarter, $month, $year);
-    $total['total_cost']= 0;
-    $total['total_price']= 0;
+    $total['total_cost'] = 0;
+    $total['total_price'] = 0;
 
     $y = 2;
     foreach ($quotes as $key => $quote) {
@@ -295,25 +297,40 @@ class ExcelRepository{
       $total['total_cost'] += $quote['total_cost'];
       $total['total_price'] += $quote['total_price'];
 
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['id']);$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['fecha_award']);$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['contract_number']);$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['email_code']);$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['nombre_usuario']);$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['canal']);$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['type_of_bid']);$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['total_cost']);$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['total_price']);$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['profit']);$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($quote['profit_percentage'], 2) . '%');$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['type_of_contract']);
+      $activeWorksheet->setCellValue($x . $y, $quote['id']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['fecha_award']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['contract_number']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['email_code']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['nombre_usuario']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['canal']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['type_of_bid']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['total_cost']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['total_price']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['profit']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, number_format($quote['profit_percentage'], 2) . '%');
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['type_of_contract']);
       $y++;
     }
     $x = 'H';
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($total['total_cost'], 2));$x++;
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($total['total_price'], 2));$x++;
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($total_profit = $total['total_price'] - $total['total_cost'], 2));$x++;
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format(100*($total_profit/$total['total_price']), 2) . '%');$x++;
+    $activeWorksheet->setCellValue($x . $y, number_format($total['total_cost'], 2));
+    $x++;
+    $activeWorksheet->setCellValue($x . $y, number_format($total['total_price'], 2));
+    $x++;
+    $activeWorksheet->setCellValue($x . $y, number_format($total_profit = $total['total_price'] - $total['total_cost'], 2));
+    $x++;
+    $activeWorksheet->setCellValue($x . $y, number_format(100 * ($total_profit / $total['total_price']), 2) . '%');
+    $x++;
   }
 
   public static function getSubmittedReport(
@@ -405,10 +422,10 @@ class ExcelRepository{
     return $data;
   }
 
-  public static function submittedReport($connection, $type, $quarter, $month, $year, $spreadsheet){
+  public static function submittedReport($connection, $type, $quarter, $month, $year, $activeWorksheet) {
     $quotes = self::getSubmittedReport($connection, $type, $quarter, $month, $year);
-    $total['total_cost']= 0;
-    $total['total_price']= 0;
+    $total['total_cost'] = 0;
+    $total['total_price'] = 0;
 
     $y = 2;
     foreach ($quotes as $key => $quote) {
@@ -416,24 +433,38 @@ class ExcelRepository{
       $total['total_cost'] += $quote['total_cost'];
       $total['total_price'] += $quote['total_price'];
 
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['fecha_submitted']);$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['id']);$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['email_code']);$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['nombre_usuario']);$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['canal']);$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['type_of_bid']);$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['total_cost']);$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['total_price']);$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['profit']);$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($quote['profit_percentage'], 2) . '%');$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['type_of_contract']);
+      $activeWorksheet->setCellValue($x . $y, $quote['fecha_submitted']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['id']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['email_code']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['nombre_usuario']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['canal']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['type_of_bid']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['total_cost']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['total_price']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['profit']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, number_format($quote['profit_percentage'], 2) . '%');
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['type_of_contract']);
       $y++;
     }
     $x = 'G';
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($total['total_cost'], 2));$x++;
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($total['total_price'], 2));$x++;
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($total_profit = $total['total_price'] - $total['total_cost'], 2));$x++;
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format(100*($total_profit/$total['total_price']), 2) . '%');$x++;
+    $activeWorksheet->setCellValue($x . $y, number_format($total['total_cost'], 2));
+    $x++;
+    $activeWorksheet->setCellValue($x . $y, number_format($total['total_price'], 2));
+    $x++;
+    $activeWorksheet->setCellValue($x . $y, number_format($total_profit = $total['total_price'] - $total['total_cost'], 2));
+    $x++;
+    $activeWorksheet->setCellValue($x . $y, number_format(100 * ($total_profit / $total['total_price']), 2) . '%');
+    $x++;
   }
 
   public static function getFulfillmentReport(
@@ -546,11 +577,11 @@ class ExcelRepository{
     return $data;
   }
 
-  public static function fulfillmentReport($connection, $type, $quarter, $month, $year, $spreadsheet){
+  public static function fulfillmentReport($connection, $type, $quarter, $month, $year, $activeWorksheet) {
     $quotes = self::getFulfillmentReport($connection, $type, $quarter, $month, $year);
-    $total['total_cost']= 0;
-    $total['total_price']= 0;
-    $total['re_quote_total_cost']= 0;
+    $total['total_cost'] = 0;
+    $total['total_price'] = 0;
+    $total['re_quote_total_cost'] = 0;
 
     $y = 3;
     foreach ($quotes as $key => $quote) {
@@ -559,33 +590,55 @@ class ExcelRepository{
       $total['total_price'] += $quote['total_price'];
       $total['re_quote_total_cost'] += $quote['total_cost_requote'];
 
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['fulfillment_date']);$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['id']);$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['nombre_usuario']);$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['canal']);$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['email_code']);$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['type_of_bid']);$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['contract_number']);$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['total_cost']);$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['total_cost']);$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['profit']);$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($quote['profit_percentage'], 2) . '%');$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['total_cost_requote']);$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['total_price']);$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['profit_requote']);$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($quote['profit_requote_percentage'], 2) . '%');$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['type_of_contract']);
+      $activeWorksheet->setCellValue($x . $y, $quote['fulfillment_date']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['id']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['nombre_usuario']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['canal']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['email_code']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['type_of_bid']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['contract_number']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['total_cost']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['total_cost']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['profit']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, number_format($quote['profit_percentage'], 2) . '%');
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['total_cost_requote']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['total_price']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['profit_requote']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, number_format($quote['profit_percentage_requote'], 2) . '%');
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['type_of_contract']);
       $y++;
     }
     $x = 'H';
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($total['total_cost'], 2));$x++;
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($total['total_price'], 2));$x++;
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($total_profit = $total['total_price'] - $total['total_cost'], 2));$x++;
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format(100*($total_profit/$total['total_price']), 2) . '%');$x++;
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($total['re_quote_total_cost'], 2));$x++;
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($total['total_price'], 2));$x++;
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($re_quote_total_profit = $total['total_price'] - $total['re_quote_total_cost'], 2));$x++;
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format(100*($re_quote_total_profit/$total['total_price']), 2) . '%');
+    $activeWorksheet->setCellValue($x . $y, number_format($total['total_cost'], 2));
+    $x++;
+    $activeWorksheet->setCellValue($x . $y, number_format($total['total_price'], 2));
+    $x++;
+    $activeWorksheet->setCellValue($x . $y, number_format($total_profit = $total['total_price'] - $total['total_cost'], 2));
+    $x++;
+    $activeWorksheet->setCellValue($x . $y, number_format(100 * ($total_profit / $total['total_price']), 2) . '%');
+    $x++;
+    $activeWorksheet->setCellValue($x . $y, number_format($total['re_quote_total_cost'], 2));
+    $x++;
+    $activeWorksheet->setCellValue($x . $y, number_format($total['total_price'], 2));
+    $x++;
+    $activeWorksheet->setCellValue($x . $y, number_format($re_quote_total_profit = $total['total_price'] - $total['re_quote_total_cost'], 2));
+    $x++;
+    $activeWorksheet->setCellValue($x . $y, number_format(100 * ($re_quote_total_profit / $total['total_price']), 2) . '%');
   }
 
   public static function getAccountsPayableFulfillmentReport(
@@ -717,62 +770,21 @@ class ExcelRepository{
     return $data;
   }
 
-  public static function accountsPayableFulfillmentReport($connection, $type, $quarter, $month, $year, $spreadsheet){
+  public static function accountsPayableFulfillmentReport($connection, $type, $quarter, $month, $year, $activeWorksheet) {
     $quotes = self::getAccountsPayableFulfillmentReport($connection, $type, $quarter, $month, $year);
 
     $y = 2;
     foreach ($quotes as $key => $quote) {
       $x = 'A';
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['id']);$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['provider']);$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['real_cost']);$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote['payment_term']);$x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['id']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['provider']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['real_cost']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['payment_term']);
+      $x++;
       $y++;
     }
-  }
-
-  public static function fulfillment_pending_report($connection, $spreadsheet){
-    $quotes = Report::get_fulfillment_pending_report($connection);
-    $total['total_cost']= 0;
-    $total['total_price']= 0;
-    $total['re_quote_total_cost']= 0;
-
-    $y = 3;
-    foreach ($quotes as $key => $quote) {
-      $x = 'A';
-      $re_quote = ReQuoteRepository::get_re_quote_by_id_rfq($connection, $quote-> obtener_id());
-      $total['total_cost'] += $quote-> obtener_total_cost();
-      $total['total_price'] += $quote-> obtener_quote_total_price();
-      $total['re_quote_total_cost'] += $re_quote-> get_total_cost();
-
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, RepositorioComment::mysql_date_to_english_format($quote-> obtener_fulfillment_date()));$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_id());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_designated_username());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> print_channel());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_email_code());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_type_of_bid());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, RepositorioComment::mysql_date_to_english_format($quote-> obtener_fecha_award()));$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_contract_number());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_total_cost());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_quote_total_price());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_quote_profit());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($quote-> obtener_quote_profit_percentage(), 2) . '%');$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $re_quote-> get_total_cost());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_quote_total_price());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_quote_total_price() - $re_quote-> get_total_cost());$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format(100*(($quote-> obtener_quote_total_price() - $re_quote-> get_total_cost())/$quote-> obtener_quote_total_price()), 2) . '%');$x++;
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, $quote-> obtener_type_of_contract());
-      $y++;
-    }
-    $x = 'I';
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($total['total_cost'], 2));$x++;
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($total['total_price'], 2));$x++;
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($total_profit = $total['total_price'] - $total['total_cost'], 2));$x++;
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format(100*($total_profit/$total['total_price']), 2) . '%');$x++;
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($total['re_quote_total_cost'], 2));$x++;
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($total['total_price'], 2));$x++;
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format($re_quote_total_profit = $total['total_price'] - $total['re_quote_total_cost'], 2));$x++;
-    $spreadsheet->setActiveSheetIndex(0)->setCellValue($x.$y, number_format(100*($re_quote_total_profit/$total['total_price']), 2) . '%');
   }
 }
-?>
