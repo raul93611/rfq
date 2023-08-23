@@ -343,12 +343,12 @@ class Rfq {
     return (float)$this->total_fulfillment;
   }
   
-  public function obtenerRfqFulfillmentProfit() {
+  public function getRfqFulfillmentProfit() {
     return $this->obtener_total_price() - $this->obtener_total_fulfillment();
   }
 
-  public function obtenerRfqFulfillmentProfitPercentage() {
-    return $this->obtener_total_price() ? 100 * ($this->obtenerRfqFulfillmentProfit() / $this->obtener_total_price()) : 0;
+  public function getRfqFulfillmentProfitPercentage() {
+    return $this->obtener_total_price() ? 100 * ($this->getRfqFulfillmentProfit() / $this->obtener_total_price()) : 0;
   }
   //fulfillment rfp
   public function obtener_total_services_fulfillment() {
@@ -409,6 +409,25 @@ class Rfq {
   }
 
   //reQuote amounts
+  public function getRfqReQuoteTotalCost() {
+    Conexion::abrir_conexion();
+    $re_quote = ReQuoteRepository::get_re_quote_by_id_rfq(Conexion::obtener_conexion(), $this->id);
+    Conexion::cerrar_conexion();
+    return $re_quote->get_total_cost();
+  }
+
+  public function getRfqReQuoteProfit(){
+    return $this->obtener_total_price() - $this->getRfqReQuoteTotalCost();
+  }
+
+  public function getRfqReQuoteProfitPercentage() {
+    if ($this->obtener_total_price()) {
+      return 100 * ($this->getRfqReQuoteProfit() / $this->obtener_total_price());
+    } else {
+      return 0;
+    }
+  }
+
   public function obtener_re_quote_total_cost() {
     Conexion::abrir_conexion();
     $re_quote = ReQuoteRepository::get_re_quote_by_id_rfq(Conexion::obtener_conexion(), $this->id);

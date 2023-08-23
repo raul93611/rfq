@@ -6,9 +6,8 @@ Conexion::cerrar_conexion();
 if ($isReQuoteCreated) {
   $sales_commissions_amounts = [
     '$0',
-    '$' . number_format($cotizacion_recuperada->obtener_re_quote_profit(), 2) . '/' .
-      number_format($cotizacion_recuperada->obtener_re_quote_profit_percentage(), 2) . '%',
-    '$' . number_format($cotizacion_recuperada->obtenerRfqFulfillmentProfit(), 2) . '/' . number_format($cotizacion_recuperada->obtenerRfqFulfillmentProfitPercentage(), 2) . '%'
+    '$' . number_format($cotizacion_recuperada->getRfqReQuoteProfit(), 2) . '/' . number_format($cotizacion_recuperada->getRfqReQuoteProfitPercentage(), 2) . '%',
+    '$' . number_format($cotizacion_recuperada->getRfqFulfillmentProfit(), 2) . '/' . number_format($cotizacion_recuperada->getRfqFulfillmentProfitPercentage(), 2) . '%'
   ];
 ?>
   <div class="modal fade" id="sales_commission_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

@@ -8,15 +8,15 @@ switch ($quote->obtener_sales_commission()) {
     break;
   case 'Same commission':
     $sales_commission = [
-      '$' . number_format($quote->obtener_quote_total_price() - $re_quote->get_total_cost(), 2) . ' / ' . number_format(100 * (($quote->obtener_quote_total_price() - $re_quote->get_total_cost()) / $quote->obtener_quote_total_price()), 2) . '%',
-      number_format(($quote->obtener_quote_total_price() - $re_quote->get_total_cost()) * 0.03, 2),
+      '$' . number_format($quote->getRfqReQuoteProfit(), 2) . ' / ' . number_format($quote->getRfqReQuoteProfitPercentage(), 2) . '%',
+      number_format(($quote->getRfqReQuoteProfit()) * 0.03, 2),
       'Same commission'
     ];
     break;
   case 'Other commission':
     $sales_commission = [
-      '$' . number_format($quote->obtener_real_fulfillment_profit(), 2) . ' / ' . number_format($quote->obtener_real_fulfillment_profit_percentage(), 2) . '%',
-      number_format($quote->obtener_real_fulfillment_profit() * 0.03, 2),
+      '$' . number_format($quote->getRfqFulfillmentProfit(), 2) . ' / ' . number_format($quote->getRfqFulfillmentProfitPercentage(), 2) . '%',
+      number_format($quote->getRfqFulfillmentProfit() * 0.03, 2),
       'Other commission'
     ];
     break;
