@@ -15,7 +15,7 @@ switch ($quote->obtener_sales_commission()) {
     break;
   case 'Other commission':
     $sales_commission = [
-      '$' . number_format($quote->obtenerRfqFulfillmentProfit(), 2) . ' / ' . number_format($quote->obtenerRfqFulfillmentProfitPercentage(), 2) . '%',
+      '$' . number_format($quote->obtener_real_fulfillment_profit(), 2) . ' / ' . number_format($quote->obtener_real_fulfillment_profit_percentage(), 2) . '%',
       number_format($quote->obtener_real_fulfillment_profit() * 0.03, 2),
       'Other commission'
     ];

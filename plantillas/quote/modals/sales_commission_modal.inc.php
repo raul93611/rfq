@@ -8,7 +8,7 @@ if ($isReQuoteCreated) {
     '$0',
     '$' . number_format($cotizacion_recuperada->obtener_re_quote_profit(), 2) . '/' .
       number_format($cotizacion_recuperada->obtener_re_quote_profit_percentage(), 2) . '%',
-    '$' . number_format($cotizacion_recuperada->obtener_real_fulfillment_profit(), 2) . '/' . number_format($cotizacion_recuperada->obtener_real_fulfillment_profit_percentage(), 2) . '%'
+    '$' . number_format($cotizacion_recuperada->obtenerRfqFulfillmentProfit(), 2) . '/' . number_format($cotizacion_recuperada->obtenerRfqFulfillmentProfitPercentage(), 2) . '%'
   ];
 ?>
   <div class="modal fade" id="sales_commission_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

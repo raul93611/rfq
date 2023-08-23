@@ -344,11 +344,11 @@ class Rfq {
   }
   
   public function obtenerRfqFulfillmentProfit() {
-    return $this->obtener_quote_total_price() - $this->obtener_total_fulfillment();
+    return $this->obtener_total_price() - $this->obtener_total_fulfillment();
   }
 
   public function obtenerRfqFulfillmentProfitPercentage() {
-    return $this->obtener_quote_total_price() ? 100 * ($this->obtenerRfqFulfillmentProfit() / $this->obtener_quote_total_price()) : 0;
+    return $this->obtener_total_price() ? 100 * ($this->obtenerRfqFulfillmentProfit() / $this->obtener_total_price()) : 0;
   }
   //fulfillment rfp
   public function obtener_total_services_fulfillment() {
@@ -597,11 +597,11 @@ class Rfq {
   }
 
   public function getFileDocument() {
-    return explode('|', $this->file_document);
+    return explode('|', $this->file_document ?? '');
   }
 
   public function getAccounting() {
-    return explode('|', $this->accounting);
+    return explode('|', $this->accounting ?? '');
   }
 
   public function getGsa() {
