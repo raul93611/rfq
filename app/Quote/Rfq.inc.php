@@ -338,11 +338,19 @@ class Rfq {
   public function obtener_services_fulfillment_profit() {
     return $this->services_fulfillment_profit;
   }
-
+  //fulfillment rfq
   public function obtener_total_fulfillment() {
-    return $this->total_fulfillment;
+    return (float)$this->total_fulfillment;
+  }
+  
+  public function obtenerRfqFulfillmentProfit() {
+    return $this->obtener_quote_total_price() - $this->obtener_total_fulfillment();
   }
 
+  public function obtenerRfqFulfillmentProfitPercentage() {
+    return $this->obtener_quote_total_price() ? 100 * ($this->obtenerRfqFulfillmentProfit() / $this->obtener_quote_total_price()) : 0;
+  }
+  //fulfillment rfp
   public function obtener_total_services_fulfillment() {
     return $this->total_services_fulfillment;
   }
