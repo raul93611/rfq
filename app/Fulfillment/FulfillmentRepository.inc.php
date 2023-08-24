@@ -5,10 +5,10 @@ class FulfillmentRepository {
     $quote = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
     $items = RepositorioItem::obtener_items_por_id_rfq(Conexion::obtener_conexion(), $id_rfq);
     Conexion::cerrar_conexion();
-    if (count($items)) {
+    if (count($items)) :
 ?>
       <div class="custom-control custom-checkbox">
-        <input type="checkbox" data="<?php echo $id_rfq; ?>" class="custom-control-input" id="net30_cc" <?php echo $quote->obtener_net30_fulfillment() ? 'checked' : ''; ?>>
+        <input type="checkbox" data="<?= $id_rfq; ?>" class="custom-control-input" id="net30_cc" <?= $quote->obtener_net30_fulfillment() ? 'checked' : ''; ?>>
         <label class="custom-control-label" for="net30_cc">Net30/CC</label>
       </div>
       <br>
@@ -41,16 +41,16 @@ class FulfillmentRepository {
             ?>
             <tr>
               <td class="align-middle text-center">
-                <button type="button" id="edit_fulfillment_shipping" data="<?php echo $quote->obtener_id(); ?>" class="btn btn-warning" name=""><i class="fas fa-pen"></i></button>
+                <button type="button" id="edit_fulfillment_shipping" data="<?= $quote->obtener_id(); ?>" class="btn btn-warning" name=""><i class="fas fa-pen"></i></button>
               </td>
-              <td colspan="4">Shipping (from Proposal): <?php echo $quote->obtener_shipping(); ?></td>
-              <td>$ <?php echo $quote->obtener_shipping_cost(); ?></td>
+              <td colspan="4">Shipping (from Proposal): <?= $quote->obtener_shipping(); ?></td>
+              <td>$ <?= $quote->obtener_shipping_cost(); ?></td>
               <td></td>
               <td colspan="4">
-                <?php echo str_replace('|', '<br>', $quote->obtener_fulfillment_shipping() ?? ''); ?>
+                <?= str_replace('|', '<br>', $quote->obtener_fulfillment_shipping() ?? ''); ?>
               </td>
               <td>
-                <?php echo str_replace('|', '<br>', $quote->obtener_fulfillment_shipping_cost()); ?>
+                <?= str_replace('|', '<br>', $quote->obtener_fulfillment_shipping_cost()); ?>
               </td>
               <td></td>
               <td></td>
@@ -59,18 +59,18 @@ class FulfillmentRepository {
             <tr>
               <td></td>
               <td colspan="4">Total RFQ (from Proposal):</td>
-              <td><?php echo $quote->obtener_total_price(); ?></td>
+              <td><?= $quote->obtener_total_price(); ?></td>
               <td colspan="5"></td>
-              <td><?php echo $quote->obtener_total_fulfillment(); ?></td>
+              <td><?= $quote->obtener_total_fulfillment(); ?></td>
               <td></td>
               <td></td>
-              <td></td>
+              <td><?= $quote->getRfqFulfillmentProfit(); ?></td>
             </tr>
           </tbody>
         </table>
       </div>
     <?php
-    }
+    endif;
   }
 
   public static function item_list($item, $i, $id_rfq) {
@@ -257,9 +257,8 @@ class FulfillmentRepository {
       Conexion::abrir_conexion();
       $quote = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
       $services = ServiceRepository::get_services(Conexion::obtener_conexion(), $id_rfq);
-      $total = ServiceRepository::get_total(Conexion::obtener_conexion(), $id_rfq);
       Conexion::cerrar_conexion();
-      if (count($services)) {
+      if (count($services)) :
   ?>
   <div class="table-responsive">
     <table id="fulfillment_services_table" class="table table-bordered table-hover">
@@ -290,18 +289,17 @@ class FulfillmentRepository {
         ?>
         <tr>
           <td colspan="5">Total RFP (from Proposal):</td>
-          <td><?php echo $total; ?></td>
+          <td><?= $quote->getTotalQuoteServices(); ?></td>
           <td colspan="5"></td>
-          <td><?php echo $quote->obtener_total_services_fulfillment(); ?></td>
+          <td><?= $quote->obtener_total_services_fulfillment(); ?></td>
           <td></td>
           <td></td>
-          <td></td>
+          <td><?= $quote->getRfpFulfillmentProfit(); ?></td>
         </tr>
       </tbody>
     </table>
   </div>
-<?php
-      }
+<?php endif;
     }
 
     public static function service_list($service, $i, $payment_term) {

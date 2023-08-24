@@ -344,7 +344,7 @@ class Rfq {
   }
   
   public function getRfqFulfillmentProfit() {
-    return $this->obtener_total_price() - $this->obtener_total_fulfillment();
+    return $this->obtener_total_price() - $this->total_fulfillment;
   }
 
   public function getRfqFulfillmentProfitPercentage() {
@@ -353,6 +353,14 @@ class Rfq {
   //fulfillment rfp
   public function obtener_total_services_fulfillment() {
     return $this->total_services_fulfillment;
+  }
+
+  public function getRfpFulfillmentProfit() {
+    return $this->getTotalQuoteServices() - $this->total_services_fulfillment;
+  }
+
+  public function getRfpFulfillmentProfitPercentage() {
+    return $this->getTotalQuoteServices() ? 100 * ($this->getRfpFulfillmentProfit() / $this->getTotalQuoteServices()) : 0;
   }
 
   public function obtener_invoice() {
