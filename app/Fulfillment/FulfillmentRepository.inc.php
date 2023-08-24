@@ -50,7 +50,7 @@ class FulfillmentRepository {
                 <?= str_replace('|', '<br>', $quote->obtener_fulfillment_shipping() ?? ''); ?>
               </td>
               <td>
-                <?= str_replace('|', '<br>', $quote->obtener_fulfillment_shipping_cost()); ?>
+                <?= str_replace('|', '<br>', $quote->obtener_fulfillment_shipping_cost() ?? ''); ?>
               </td>
               <td></td>
               <td></td>

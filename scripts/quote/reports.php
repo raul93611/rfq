@@ -163,6 +163,37 @@ switch ($_POST['report']) {
     );
     Conexion::cerrar_conexion();
     break;
+  case 'sales-commission':
+    Conexion::abrir_conexion();
+    $quotes = Report::getSalesCommissionReport(
+      Conexion::obtener_conexion(),
+      $start,
+      $length,
+      $search,
+      $sort_column_index,
+      $sort_direction,
+      $_POST['type'],
+      $_POST['quarter'],
+      $_POST['month'],
+      $_POST['year']
+    );
+    $total_records = Report::getSalesCommissionReportCount(
+      Conexion::obtener_conexion(),
+      $_POST['type'],
+      $_POST['quarter'],
+      $_POST['month'],
+      $_POST['year']
+    );
+    $total_filtered_records = Report::getFilteredSalesCommissionReportCount(
+      Conexion::obtener_conexion(),
+      $search,
+      $_POST['type'],
+      $_POST['quarter'],
+      $_POST['month'],
+      $_POST['year']
+    );
+    Conexion::cerrar_conexion();
+    break;
   default:
     break;
 }

@@ -761,7 +761,7 @@ class Report {
         $sort_column = 'r.id';
         break;
       case 1:
-        $sort_column = 'fecha_award';
+        $sort_column = 'fulfillment_date';
         break;
       case 2:
         $sort_column = 'contract_number';
@@ -832,7 +832,7 @@ class Report {
             MONTH(fulfillment_date) = {$month} AND 
             YEAR(fulfillment_date) = {$year} AND 
             (r.id LIKE :search OR 
-            fulfillment_date LIKE :search OR
+            DATE_FORMAT(fulfillment_date, '%m/%d/%Y') LIKE :search OR
             contract_number LIKE :search OR
             email_code LIKE :search OR
             nombre_usuario LIKE :search OR
@@ -868,7 +868,7 @@ class Report {
             QUARTER(fulfillment_date) = {$quarter} AND
             YEAR(fulfillment_date) = {$year} AND
             (r.id LIKE :search OR 
-            fulfillment_date LIKE :search OR
+            DATE_FORMAT(fulfillment_date, '%m/%d/%Y') LIKE :search OR
             contract_number LIKE :search OR
             email_code LIKE :search OR
             nombre_usuario LIKE :search OR
@@ -903,7 +903,7 @@ class Report {
             fullfillment = 1 AND
             YEAR(fulfillment_date) = {$year} AND
             (r.id LIKE :search OR 
-            fulfillment_date LIKE :search OR
+            DATE_FORMAT(fulfillment_date, '%m/%d/%Y') LIKE :search OR
             contract_number LIKE :search OR
             email_code LIKE :search OR
             nombre_usuario LIKE :search OR
@@ -988,7 +988,7 @@ class Report {
             MONTH(fulfillment_date) = {$month} AND 
             YEAR(fulfillment_date) = {$year} AND 
             (r.id LIKE :search OR 
-            fulfillment_date LIKE :search OR
+            DATE_FORMAT(fulfillment_date, '%m/%d/%Y') LIKE :search OR
             contract_number LIKE :search OR
             email_code LIKE :search OR
             nombre_usuario LIKE :search OR
@@ -1007,7 +1007,7 @@ class Report {
             QUARTER(fulfillment_date) = {$quarter} AND
             YEAR(fulfillment_date) = {$year} AND
             (r.id LIKE :search OR 
-            fulfillment_date LIKE :search OR
+            DATE_FORMAT(fulfillment_date, '%m/%d/%Y') LIKE :search OR
             contract_number LIKE :search OR
             email_code LIKE :search OR
             nombre_usuario LIKE :search OR
@@ -1025,7 +1025,7 @@ class Report {
             fullfillment = 1 AND
             YEAR(fulfillment_date) = {$year} AND
             (r.id LIKE :search OR 
-            fulfillment_date LIKE :search OR
+            DATE_FORMAT(fulfillment_date, '%m/%d/%Y') LIKE :search OR
             contract_number LIKE :search OR
             email_code LIKE :search OR
             nombre_usuario LIKE :search OR
@@ -1457,5 +1457,344 @@ class Report {
     }
     return $sentence->fetchColumn();
   }
+
+  public static function getSalesCommissionReport(
+    $connection,
+    $start,
+    $length,
+    $search,
+    $sort_column_index,
+    $sort_direction,
+    $type,
+    $quarter,
+    $month,
+    $year
+  ) {
+    $data = [];
+    $search = '%' . $search . '%';
+    switch ($sort_column_index) {
+      case 0:
+        $sort_column = 'r.id';
+        break;
+      case 1:
+        $sort_column = 'invoice_date';
+        break;
+      case 2:
+        $sort_column = 'contract_number';
+        break;
+      case 3:
+        $sort_column = 'code';
+        break;
+      case 4:
+        $sort_column = 'nombre_usuario';
+        break;
+      case 5:
+        $sort_column = 'state';
+        break;
+      case 6:
+        $sort_column = 'client';
+        break;
+      case 7:
+        $sort_column = 'total_cost';
+        break;
+      case 8:
+        $sort_column = 'total_price';
+        break;
+      case 9:
+        $sort_column = 'profit';
+        break;
+      case 10:
+        $sort_column = 'total_cost_requote';
+        break;
+      case 11:
+        $sort_column = 'total_price_requote';
+        break;
+      case 12:
+        $sort_column = 'profit_requote';
+        break;
+      case 10:
+        $sort_column = 'total_cost_fulfillment';
+        break;
+      case 11:
+        $sort_column = 'total_price_fulfillment';
+        break;
+      case 12:
+        $sort_column = 'profit_fulfillment';
+        break;
+      case 13:
+        $sort_column = 'type_of_contract';
+        break;
+      case 14:
+        $sort_column = 'sales_commission';
+        break;
+      default:
+        $sort_column = 'r.id';
+        break;
+    }
+    if (isset($connection)) {
+      try {
+        switch ($type) {
+          case 'monthly':
+            $sql = "
+            SELECT r.id, 
+            DATE_FORMAT(r.invoice_date, '%m/%d/%Y') as invoice_date, 
+            r.contract_number, 
+            r.email_code, 
+            u.nombre_usuario,
+            r.state, 
+            r.client, 
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) AS total_cost,
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) AS total_price,
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) - COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) as profit, 
+            COALESCE(SUM(COALESCE(rqs.total_price, 0) + COALESCE(rq.total_cost, 0)), 0) AS total_cost_requote,
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) AS total_price_requote,
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) - COALESCE(SUM(COALESCE(rqs.total_price, 0) + COALESCE(rq.total_cost, 0)), 0) as profit_requote,
+            COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0) AS total_cost_fulfillment,
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) AS total_price_fulfillment,
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) - (COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0)) as profit_fulfillment,
+            r.type_of_contract,
+            CASE r.sales_commission
+            	WHEN 'Other commission' THEN ROUND((COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) - (COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0))) * 0.03, 2)
+              WHEN 'Same commission' THEN ROUND((COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) - COALESCE(SUM(COALESCE(rqs.total_price, 0) + COALESCE(rq.total_cost, 0)), 0)) * 0.03, 2)
+              WHEN 'No commission' THEN 0
+            END as sales_commission
+            FROM rfq r
+            LEFT JOIN services s ON r.id = s.id_rfq
+            LEFT JOIN usuarios u ON r.usuario_designado = u.id
+            LEFT JOIN re_quotes rq ON r.id = rq.id_rfq
+            LEFT JOIN re_quote_services rqs ON rq.id = rqs.id_re_quote
+            WHERE deleted = 0 AND
+            invoice = 1 AND
+            MONTH(invoice_date) = {$month} AND 
+            YEAR(invoice_date) = {$year} AND 
+            (r.id LIKE :search OR 
+            DATE_FORMAT(r.invoice_date, '%m/%d/%Y') LIKE :search OR
+            r.contract_number LIKE :search OR
+            r.email_code LIKE :search OR
+            nombre_usuario LIKE :search OR
+            r.state LIKE :search OR
+            r.client LIKE :search OR 
+            r.type_of_contract LIKE :search) 
+            GROUP BY r.id
+            ORDER BY {$sort_column} {$sort_direction} LIMIT {$start}, {$length}
+            ";
+            break;
+          case 'quarterly':
+            $sql = "
+            SELECT r.id, 
+            DATE_FORMAT(r.invoice_date, '%m/%d/%Y') as invoice_date, 
+            r.contract_number, 
+            r.email_code, 
+            u.nombre_usuario,
+            r.state, 
+            r.client, 
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) AS total_cost,
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) AS total_price,
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) - COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) as profit, 
+            COALESCE(SUM(COALESCE(rqs.total_price, 0) + COALESCE(rq.total_cost, 0)), 0) AS total_cost_requote,
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) AS total_price_requote,
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) - COALESCE(SUM(COALESCE(rqs.total_price, 0) + COALESCE(rq.total_cost, 0)), 0) as profit_requote,
+            COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0) AS total_cost_fulfillment,
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) AS total_price_fulfillment,
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) - (COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0)) as profit_fulfillment,
+            r.type_of_contract,
+            CASE r.sales_commission
+            	WHEN 'Other commission' THEN ROUND((COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) - (COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0))) * 0.03, 2)
+              WHEN 'Same commission' THEN ROUND((COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) - COALESCE(SUM(COALESCE(rqs.total_price, 0) + COALESCE(rq.total_cost, 0)), 0)) * 0.03, 2)
+              WHEN 'No commission' THEN 0
+            END as sales_commission
+            FROM rfq r
+            LEFT JOIN services s ON r.id = s.id_rfq
+            LEFT JOIN usuarios u ON r.usuario_designado = u.id
+            LEFT JOIN re_quotes rq ON r.id = rq.id_rfq
+            LEFT JOIN re_quote_services rqs ON rq.id = rqs.id_re_quote
+            WHERE deleted = 0 AND
+            invoice = 1 AND
+            QUARTER(invoice_date) = {$quarter} AND
+            YEAR(invoice_date) = {$year} AND
+            (r.id LIKE :search OR 
+            DATE_FORMAT(r.invoice_date, '%m/%d/%Y') LIKE :search OR
+            r.contract_number LIKE :search OR
+            r.email_code LIKE :search OR
+            nombre_usuario LIKE :search OR
+            r.state LIKE :search OR
+            r.client LIKE :search OR 
+            r.type_of_contract LIKE :search) 
+            GROUP BY r.id
+            ORDER BY {$sort_column} {$sort_direction} LIMIT {$start}, {$length}";
+            break;
+          case 'yearly':
+            $sql = "
+            SELECT r.id, 
+            DATE_FORMAT(r.invoice_date, '%m/%d/%Y') as invoice_date, 
+            r.contract_number, 
+            r.email_code, 
+            u.nombre_usuario,
+            r.state, 
+            r.client, 
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) AS total_cost,
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) AS total_price,
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) - COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) as profit, 
+            COALESCE(SUM(COALESCE(rqs.total_price, 0) + COALESCE(rq.total_cost, 0)), 0) AS total_cost_requote,
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) AS total_price_requote,
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) - COALESCE(SUM(COALESCE(rqs.total_price, 0) + COALESCE(rq.total_cost, 0)), 0) as profit_requote,
+            COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0) AS total_cost_fulfillment,
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) AS total_price_fulfillment,
+            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) - (COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0)) as profit_fulfillment,
+            r.type_of_contract,
+            CASE r.sales_commission
+            	WHEN 'Other commission' THEN ROUND((COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) - (COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0))) * 0.03, 2)
+              WHEN 'Same commission' THEN ROUND((COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)), 0) - COALESCE(SUM(COALESCE(rqs.total_price, 0) + COALESCE(rq.total_cost, 0)), 0)) * 0.03, 2)
+              WHEN 'No commission' THEN 0
+            END as sales_commission
+            FROM rfq r
+            LEFT JOIN services s ON r.id = s.id_rfq
+            LEFT JOIN usuarios u ON r.usuario_designado = u.id
+            LEFT JOIN re_quotes rq ON r.id = rq.id_rfq
+            LEFT JOIN re_quote_services rqs ON rq.id = rqs.id_re_quote
+            WHERE deleted = 0 AND
+            invoice = 1 AND
+            YEAR(invoice_date) = {$year} AND
+            (r.id LIKE :search OR 
+            DATE_FORMAT(r.invoice_date, '%m/%d/%Y') LIKE :search OR
+            r.contract_number LIKE :search OR
+            r.email_code LIKE :search OR
+            nombre_usuario LIKE :search OR
+            r.state LIKE :search OR
+            r.client LIKE :search OR 
+            r.type_of_contract LIKE :search)
+            GROUP BY r.id
+            ORDER BY {$sort_column} {$sort_direction} LIMIT {$start}, {$length}";
+            break;
+        }
+        $sentence = $connection->prepare($sql);
+        $sentence->bindValue(':search', $search, PDO::PARAM_STR);
+        $sentence->execute();
+        while ($row = $sentence->fetch(PDO::FETCH_ASSOC)) {
+          $data[] = $row;
+        }
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $data;
+  }
+
+  public static function getSalesCommissionReportCount($connection, $type, $quarter, $month, $year) {
+    $month = (int)$month;
+    $year = (int)$year;
+    if (isset($connection)) {
+      try {
+        switch ($type) {
+          case 'monthly':
+            $sql = "
+            SELECT COUNT(r.id)
+            FROM rfq r
+            JOIN usuarios u ON r.usuario_designado = u.id
+            WHERE deleted = 0 AND 
+            MONTH(invoice_date) = {$month} AND 
+            YEAR(invoice_date) = {$year} AND
+            invoice = 1  
+            ";
+            break;
+          case 'quarterly':
+            $sql = "
+            SELECT COUNT(r.id)
+            FROM rfq r
+            JOIN usuarios u ON r.usuario_designado = u.id
+            WHERE deleted = 0 AND
+            invoice = 1 AND
+            QUARTER(invoice_date) = {$quarter} AND
+            YEAR(invoice_date) = {$year}";
+            break;
+          case 'yearly':
+            $sql = "
+            SELECT COUNT(r.id)
+            FROM rfq r
+            JOIN usuarios u ON r.usuario_designado = u.id
+            WHERE deleted = 0 AND
+            invoice = 1 AND
+            YEAR(invoice_date) = {$year}";
+            break;
+        }
+        $sentencia = $connection->prepare($sql);
+        $sentencia->execute();
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $sentencia->fetchColumn();
+  }
+
+  public static function getFilteredSalesCommissionReportCount($connection, $search, $type, $quarter, $month, $year) {
+    $search = '%' . $search . '%';
+    if (isset($connection)) {
+      try {
+        switch ($type) {
+          case 'monthly':
+            $sql = "
+            SELECT COUNT(r.id)
+            FROM rfq r
+            JOIN usuarios u ON r.usuario_designado = u.id
+            WHERE deleted = 0 AND
+            invoice = 1 AND
+            MONTH(invoice_date) = {$month} AND 
+            YEAR(invoice_date) = {$year} AND 
+            (r.id LIKE :search OR 
+            DATE_FORMAT(r.invoice_date, '%m/%d/%Y') LIKE :search OR
+            r.contract_number LIKE :search OR
+            r.email_code LIKE :search OR
+            nombre_usuario LIKE :search OR
+            r.state LIKE :search OR
+            r.client LIKE :search OR 
+            r.type_of_contract LIKE :search)
+            ";
+            break;
+          case 'quarterly':
+            $sql = "
+            SELECT COUNT(r.id)
+            FROM rfq r
+            JOIN usuarios u ON r.usuario_designado = u.id
+            WHERE deleted = 0 AND
+            invoice = 1 AND
+            QUARTER(invoice_date) = {$quarter} AND
+            YEAR(invoice_date) = {$year} AND
+            (r.id LIKE :search OR 
+            DATE_FORMAT(r.invoice_date, '%m/%d/%Y') LIKE :search OR
+            r.contract_number LIKE :search OR
+            r.email_code LIKE :search OR
+            nombre_usuario LIKE :search OR
+            r.state LIKE :search OR
+            r.client LIKE :search OR 
+            r.type_of_contract LIKE :search)
+            ";
+            break;
+          case 'yearly':
+            $sql = "
+            SELECT COUNT(r.id)
+            FROM rfq r
+            JOIN usuarios u ON r.usuario_designado = u.id
+            WHERE deleted = 0 AND
+            invoice = 1 AND
+            YEAR(invoice_date) = {$year} AND
+            (r.id LIKE :search OR 
+            DATE_FORMAT(r.invoice_date, '%m/%d/%Y') LIKE :search OR
+            r.contract_number LIKE :search OR
+            r.email_code LIKE :search OR
+            nombre_usuario LIKE :search OR
+            r.state LIKE :search OR
+            r.client LIKE :search OR 
+            r.type_of_contract LIKE :search)
+            ";
+            break;
+        }
+        $sentence = $connection->prepare($sql);
+        $sentence->bindValue(':search', $search, PDO::PARAM_STR);
+        $sentence->execute();
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $sentence->fetchColumn();
+  }
 }
-?>

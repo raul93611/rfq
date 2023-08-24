@@ -8,8 +8,8 @@ switch ($quote->obtener_sales_commission()) {
     break;
   case 'Same commission':
     $sales_commission = [
-      '$' . number_format($quote->getRfqReQuoteProfit(), 2) . ' / ' . number_format($quote->getRfqReQuoteProfitPercentage(), 2) . '%',
-      number_format(($quote->getRfqReQuoteProfit()) * 0.03, 2),
+      '$' . number_format($quote->obtener_re_quote_rfq_profit(), 2) . ' / ' . number_format($quote->obtener_re_quote_rfq_profit_percentage(), 2) . '%',
+      number_format(($quote->obtener_re_quote_rfq_profit()) * 0.03, 2),
       'Same commission'
     ];
     break;
