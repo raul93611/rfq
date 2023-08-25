@@ -6,7 +6,7 @@ Conexion::cerrar_conexion();
 if ($isReQuoteCreated) {
   $sales_commissions_amounts = [
     '$0',
-    '$' . number_format($cotizacion_recuperada->getRfqReQuoteProfit(), 2) . '/' . number_format($cotizacion_recuperada->getRfqReQuoteProfitPercentage(), 2) . '%',
+    '$' . number_format($cotizacion_recuperada->obtener_re_quote_rfq_profit(), 2) . '/' . number_format($cotizacion_recuperada->obtener_re_quote_rfq_profit_percentage(), 2) . '%',
     '$' . number_format($cotizacion_recuperada->getRfqFulfillmentProfit(), 2) . '/' . number_format($cotizacion_recuperada->getRfqFulfillmentProfitPercentage(), 2) . '%'
   ];
 ?>

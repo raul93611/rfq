@@ -252,6 +252,59 @@ $(document).ready(function () {
           { "data": "payment_term" }
         ];
         break;
+      case 'sales-commission':
+        $table = $('<table>').attr('id', 'reportsTable').attr('class', 'table table-bordered table-hover');
+        $('#report_results_container').append($table);
+        headerRow = $('<tr>').appendTo($('<thead>').appendTo($table));
+        $('<th>').text('PROPOSAL').appendTo(headerRow);
+        $('<th>').text('INVOICE DATE').appendTo(headerRow);
+        $('<th>').text('CONTRACT NUMBER').appendTo(headerRow);
+        $('<th>').text('CODE').appendTo(headerRow);
+        $('<th>').text('DESIGNATED USER').appendTo(headerRow);
+        $('<th>').text('STATE').appendTo(headerRow);
+        $('<th>').text('CLIENT').appendTo(headerRow);
+        $('<th>').attr('class', 'bg-primary').text('TOTAL COST').appendTo(headerRow);
+        $('<th>').attr('class', 'bg-primary').text('TOTAL PRICE').appendTo(headerRow);
+        $('<th>').attr('class', 'bg-primary').text('PROFIT').appendTo(headerRow);
+        $('<th>').attr('class', 'bg-warning').text('TOTAL COST').appendTo(headerRow);
+        $('<th>').attr('class', 'bg-warning').text('TOTAL PRICE').appendTo(headerRow);
+        $('<th>').attr('class', 'bg-warning').text('PROFIT').appendTo(headerRow);
+        $('<th>').attr('class', 'bg-danger').text('TOTAL COST').appendTo(headerRow);
+        $('<th>').attr('class', 'bg-danger').text('TOTAL PRICE').appendTo(headerRow);
+        $('<th>').attr('class', 'bg-danger').text('PROFIT').appendTo(headerRow);
+        $('<th>').text('TYPE OF CONTRACT').appendTo(headerRow);
+        $('<th>').text('SALES COMMISSION').appendTo(headerRow);
+
+        columns = [
+          {
+            "data": "id",
+            "render": function (data, type, row, meta) {
+              if (type === 'display') {
+                return '<a href="/rfq/perfil/quote/editar_cotizacion/' + data + '">' + data + '</a>';
+              } else {
+                return data;
+              }
+            }
+          },
+          { "data": "invoice_date" },
+          { "data": "contract_number" },
+          { "data": "email_code" },
+          { "data": "nombre_usuario" },
+          { "data": "state" },
+          { "data": "client" },
+          { "data": "total_cost" },
+          { "data": "total_price" },
+          { "data": "profit" },
+          { "data": "total_cost_requote" },
+          { "data": "total_price_requote" },
+          { "data": "profit_requote" },
+          { "data": "total_cost_fulfillment" },
+          { "data": "total_price_fulfillment" },
+          { "data": "profit_fulfillment" },
+          { "data": "type_of_contract" },
+          { "data": "sales_commission" },
+        ];
+        break;
       default:
         break;
     }

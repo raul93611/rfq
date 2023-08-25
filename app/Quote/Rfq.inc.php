@@ -342,7 +342,7 @@ class Rfq {
   public function obtener_total_fulfillment() {
     return (float)$this->total_fulfillment;
   }
-  
+
   public function getRfqFulfillmentProfit() {
     return $this->obtener_total_price() - $this->total_fulfillment;
   }
@@ -415,27 +415,7 @@ class Rfq {
       return 0;
     }
   }
-
-  //reQuote amounts
-  public function getRfqReQuoteTotalCost() {
-    Conexion::abrir_conexion();
-    $re_quote = ReQuoteRepository::get_re_quote_by_id_rfq(Conexion::obtener_conexion(), $this->id);
-    Conexion::cerrar_conexion();
-    return $re_quote->get_total_cost();
-  }
-
-  public function getRfqReQuoteProfit(){
-    return $this->obtener_total_price() - $this->getRfqReQuoteTotalCost();
-  }
-
-  public function getRfqReQuoteProfitPercentage() {
-    if ($this->obtener_total_price()) {
-      return 100 * ($this->getRfqReQuoteProfit() / $this->obtener_total_price());
-    } else {
-      return 0;
-    }
-  }
-
+  //requote amounts
   public function obtener_re_quote_total_cost() {
     Conexion::abrir_conexion();
     $re_quote = ReQuoteRepository::get_re_quote_by_id_rfq(Conexion::obtener_conexion(), $this->id);
