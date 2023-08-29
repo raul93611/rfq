@@ -1481,7 +1481,7 @@ class RepositorioRfq {
               r.client,
               r.shipping_address,
               r.special_requirements,
-              COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)),0) AS total_price
+              COALESCE(SUM(COALESCE(s.total_price, 0)) + COALESCE(r.total_price, 0),0) AS total_price
             FROM rfq r
               LEFT JOIN usuarios u ON r.usuario_designado = u.id
               LEFT JOIN services s ON r.id = s.id_rfq
