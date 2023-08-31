@@ -7,7 +7,7 @@ $items = RepositorioItem::obtener_items_por_id_rfq(Conexion::obtener_conexion(),
 if ($cotizacion->isServices()) {
   $services = ServiceRepository::get_services(Conexion::obtener_conexion(), $id_rfq);
   $total_service = ServiceRepository::get_total(Conexion::obtener_conexion(), $id_rfq);
-  $payment_terms = $cotizacion->obtener_services_payment_term();
+  $payment_terms = $cotizacion->obtener_services_payment_term() ?? $cotizacion->obtener_payment_terms();
 } else {
   $total_service = 0;
   $payment_terms = $cotizacion->obtener_payment_terms();
