@@ -119,11 +119,9 @@ class FulfillmentRepository {
             <i class="fas fa-comment fa-2x"></i>
           </button>
           <br>
-          <?php if ($_SESSION['user']->is_accounting()) : ?>
-            <button data="<?php echo $fulfillment_items[0]->get_id(); ?>" id_item="<?php echo $item->obtener_id(); ?>" type="button" class="reviewed_button text-success btn btn-link">
-              <i class="fas fa-check-circle fa-2x"></i>
-            </button>
-          <?php endif; ?>
+          <button data="<?php echo $fulfillment_items[0]->get_id(); ?>" id_item="<?php echo $item->obtener_id(); ?>" type="button" class="reviewed_button text-success btn btn-link">
+            <i class="fas fa-check-circle fa-2x"></i>
+          </button>
         </td>
         <td rowspan="<?php echo $fulfillment_items_quantity; ?>"><?php echo $item->obtener_fulfillment_profit(); ?></td>
         <?php
@@ -149,11 +147,9 @@ class FulfillmentRepository {
             <i class="fas fa-comment fa-2x"></i>
           </button>
           <br>
-          <?php if ($_SESSION['user']->is_accounting()) : ?>
-            <button data="<?php echo $fulfillment_item->get_id(); ?>" id_item="<?php echo $item->obtener_id(); ?>" type="button" class="reviewed_button text-success btn btn-link">
-              <i class="fas fa-check-circle fa-2x"></i>
-            </button>
-          <?php endif; ?>
+          <button data="<?php echo $fulfillment_item->get_id(); ?>" id_item="<?php echo $item->obtener_id(); ?>" type="button" class="reviewed_button text-success btn btn-link">
+            <i class="fas fa-check-circle fa-2x"></i>
+          </button>
         </td>
       </tr>
   <?php
