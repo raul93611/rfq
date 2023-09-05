@@ -6,8 +6,8 @@ class ValidadorLogin {
   private $aviso_cierre;
 
   public function __construct($nombre_usuario, $password, $conexion) {
-    $this->aviso_inicio = "<br><div class='alert alert-danger' role='alert'>";
-    $this->aviso_cierre = "</div>";
+    $this->aviso_inicio = "<br><label class='text-danger'>";
+    $this->aviso_cierre = "</label>";
     $this->error = '';
     if (!$this->variable_iniciada($nombre_usuario) || !$this->variable_iniciada($password)) {
       $this->usuario = null;
@@ -43,4 +43,3 @@ class ValidadorLogin {
   }
 
 }
-?>

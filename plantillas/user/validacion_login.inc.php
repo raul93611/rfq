@@ -8,4 +8,3 @@ if(isset($_POST['iniciar_sesion'])){
     Redireccion::redirigir1(ALL_TASKS);
   }
 }
-?>
