@@ -200,8 +200,6 @@ define('DOCS', SERVIDOR . 'documentos/');
 define('RUTA_CSS', SERVIDOR . 'css/');
 define('RUTA_JS', SERVIDOR . 'js/');
 define('RUTA_IMG', SERVIDOR . 'img/');
-define('PLUGINS', SERVIDOR . 'plugins/');
-define('DIST', SERVIDOR . 'dist/');
 define('STATES', [
   'AL' => 'Alabama',
   'AK' => 'Alaska',

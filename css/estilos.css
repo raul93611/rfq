@@ -2,6 +2,10 @@
 html {
   scroll-behavior: smooth;
 }
+body#login-background{
+  background-image: url('/rfq/img/gif.gif') !important;
+  background-size: cover;
+}
 body{
   font-family: 'Raleway', sans-serif;
   font-size: 11pt !important;

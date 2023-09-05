@@ -1,43 +1,46 @@
-<?php
-header($_SERVER['SERVER_PROTOCOL'] . '404Not Found', true, 404);
-?>
-<!DOCTYPE html>
-<html lang="es">
-  <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<?php header($_SERVER['SERVER_PROTOCOL'] . '404Not Found', true, 404); ?>
+<html lang="en">
 
-    <title>Página no encontrada</title>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>404 Page not found</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
+  <link rel="stylesheet" href="<?= RUTA_CSS; ?>estilos.css">
+</head>
 
-    <link href="<?php echo PLUGINS; ?>bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="<?php echo PLUGINS; ?>font-awesome/font-awesome.min.css" rel="stylesheet">
-  </head>
-  <body class="inicio">
-    <div class="container-fluid">
-      <div class="row">
-
-        <div class="col-md-2">
-
-        </div>
-        <div class="col-md-8">
-          <br>
-          <br>
-          <br>
-          <br>
-          <div class="jumbotron bg-danger text-white">
-            <h1>ERROR: 404</h1>
-            <p>Page not found.</p>
+<body>
+  <div>
+    <div>
+      <section class="content-header">
+        <div class="container">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1>404 Error Page</h1>
+            </div>
           </div>
         </div>
-        <div class="col-md-2">
-
+      </section>
+      <section class="content">
+        <div class="error-page">
+          <h2 class="headline text-warning"> 404</h2>
+          <div class="error-content">
+            <h3><i class="fas fa-exclamation-triangle text-warning"></i> Oops! Page not found.</h3>
+            <p>
+              We could not find the page you were looking for.
+            </p>
+          </div>
         </div>
-      </div>
+      </section>
     </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
+</body>
 
-    <script src="<?php echo PLUGINS; ?>jquery/jquery.min.js"></script>
-    <script src="<?php echo PLUGINS; ?>bootstrap/js/bootstrap.min.js"></script>
-    <script src="<?php echo PLUGINS; ?>popper/popper.min.js"></script>
-  </body>
 </html>

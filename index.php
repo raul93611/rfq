@@ -57,12 +57,6 @@ switch ($partes_ruta[1] ?? null) {
   case 'perfil':
     $ruta_elegida = isset($_POST['generate_excel_report']) ? $ruta_elegida = 'scripts/utilities/excel_report_' . $_POST['report'] . '.php' :  'vistas/perfil.php';
     break;
-  case 'email':
-    $ruta_elegida = 'email.php';
-    break;
-  case 'genera_usuario':
-    $ruta_elegida = 'herramientas/generate_services_re_quote.php';
-    break;
   case 'logout':
     $ruta_elegida = 'scripts/user/logout.php';
     break;
