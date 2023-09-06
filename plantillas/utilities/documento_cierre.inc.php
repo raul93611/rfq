@@ -33,6 +33,12 @@
     </div>
   </div>
 </div>
+<footer class="main-footer">
+  <strong>Copyright &copy; <?= date("Y") ?></strong>
+  <div class="float-right d-none d-sm-inline-block">
+    <b>Version</b> 1.0
+  </div>
+</footer>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.3.2/dist/chart.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
