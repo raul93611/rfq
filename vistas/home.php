@@ -15,7 +15,7 @@ include_once 'plantillas/user/validacion_login.inc.php';
   <link rel="Shortcut Icon" href="<?= RUTA_IMG; ?>eP_favicon.png" type="image/x-icon" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="<?= RUTA_CSS; ?>estilos.css">
   <style>
     .login-box {
