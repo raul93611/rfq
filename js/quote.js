@@ -1,4 +1,13 @@
 $(document).ready(function () {
+  const newItemButton = $('#new-item-button');
+  const newItemModal = $('#new-item-modal');
+
+  newItemButton.click(function(e){
+    e.preventDefault();
+    newItemModal.modal('show');
+  });
+
+  /*-----------------------------------------------------------------*/
   let monto = [];
   let quantity = [];
 

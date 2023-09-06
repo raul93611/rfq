@@ -1,4 +1,4 @@
-<input type="hidden" name="id_rfq" value="<?php echo $cotizacion_recuperada->obtener_id(); ?>">
+<input type="hidden" name="id_rfq" value="<?= $cotizacion_recuperada->obtener_id(); ?>">
 <div class="card-body">
   <div class="row">
     <div class="col-md-6">
@@ -7,7 +7,7 @@
           <b>Contract Number:</b>
         </div>
         <div class="col-md-8">
-          <?php echo $cotizacion_recuperada->obtener_contract_number(); ?>
+          <?= $cotizacion_recuperada->obtener_contract_number(); ?>
         </div>
       </div>
       <div class="row">
@@ -15,7 +15,7 @@
           <b>Code:</b>
         </div>
         <div class="col-md-8">
-          <?php echo $cotizacion_recuperada->obtener_email_code(); ?>
+          <?= $cotizacion_recuperada->obtener_email_code(); ?>
         </div>
       </div>
       <div class="row">
@@ -23,7 +23,7 @@
           <b>Channel:</b>
         </div>
         <div class="col-md-8">
-          <?php echo $cotizacion_recuperada->print_channel(); ?>
+          <?= $cotizacion_recuperada->print_channel(); ?>
         </div>
       </div>
       <div class="row">
@@ -31,7 +31,7 @@
           <b>Designated User:</b>
         </div>
         <div class="col-md-8">
-          <?php echo $usuario_designado->obtener_nombres() . ' ' . $usuario_designado->obtener_apellidos(); ?>
+          <?= $usuario_designado->getFullName(); ?>
         </div>
       </div>
       <div class="row">
@@ -49,7 +49,7 @@
           <b>Address:</b>
         </div>
         <div class="col-md-9">
-          <?php echo nl2br($cotizacion_recuperada->obtener_address()); ?>
+          <?= nl2br($cotizacion_recuperada->obtener_address()); ?>
         </div>
       </div>
       <br>
@@ -58,7 +58,7 @@
           <b>Ship To:</b>
         </div>
         <div class="col-md-9">
-          <?php echo nl2br($cotizacion_recuperada->obtener_ship_to()); ?>
+          <?= nl2br($cotizacion_recuperada->obtener_ship_to()); ?>
         </div>
       </div>
     </div>
@@ -67,10 +67,10 @@
   </div>
   <div class="row">
     <div class="col-md-12 mt-2">
-      <a href="<?php echo CHECKLIST . $cotizacion_recuperada->obtener_id(); ?>" id="" class="btn btn-primary"><i class="fas fa-clipboard-list"></i> Checklist</a>
+      <a href="<?= CHECKLIST . $cotizacion_recuperada->obtener_id(); ?>" class="btn btn-primary"><i class="fas fa-clipboard-list"></i> Checklist</a>
     </div>
     <div class="col-md-12 mt-2">
-      <a href="<?php echo INFORMATION . $cotizacion_recuperada->obtener_id(); ?>" id="" class="btn btn-primary"><i class="fas fa-clipboard-list"></i> Information</a>
+      <a href="<?= INFORMATION . $cotizacion_recuperada->obtener_id(); ?>" class="btn btn-primary"><i class="fas fa-clipboard-list"></i> Information</a>
     </div>
   </div>
   <br>
@@ -83,14 +83,14 @@
   <?php
   RepositorioItem::escribir_items($cotizacion_recuperada->obtener_id());
   ?>
-  <input type="hidden" name="id_rfq" value="<?php echo $cotizacion_recuperada->obtener_id(); ?>">
+  <input type="hidden" name="id_rfq" value="<?= $cotizacion_recuperada->obtener_id(); ?>">
   <?php
   if ($cotizacion_recuperada->obtener_canal() == 'Chemonics') {
   ?>
     <div class="row">
       <div class="col-md-12">
         <label for="total_price_chemonics">Total price:</label>
-        <input type="number" step=".01" name="total_price_chemonics" class="form-control form-control-sm" value="<?php echo $cotizacion_recuperada->obtener_total_price(); ?>">
+        <input type="number" step=".01" name="total_price_chemonics" class="form-control form-control-sm" value="<?= $cotizacion_recuperada->obtener_total_price(); ?>">
       </div>
     </div>
     <br>

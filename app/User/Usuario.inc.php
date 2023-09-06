@@ -42,6 +42,10 @@ class Usuario{
     return $this-> apellidos;
   }
 
+  public function getFullName(){
+    return $this->nombres . ' ' . $this->apellidos;
+  }
+
   public function obtener_cargo_string(){
     return $this-> cargo;
   }
