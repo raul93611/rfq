@@ -101,15 +101,15 @@
       </div>
       <div class="form-group">
         <label>Contract Amount:</label>
-        <input type="text" class="form-control form-control-sm" value="<?php echo $quote->obtener_quote_total_price(); ?>" disabled>
+        <input type="text" class="form-control form-control-sm" value="<?= number_format($quote->obtener_quote_total_price(), 2); ?>" disabled>
       </div>
       <div class="form-group">
         <label>RFQ Amount:</label>
-        <input type="text" class="form-control form-control-sm" value="<?php echo $quote->obtener_total_price(); ?>" disabled>
+        <input type="text" class="form-control form-control-sm" value="<?= number_format($quote->obtener_total_price(), 2); ?>" disabled>
       </div>
       <div class="form-group">
         <label>RFP Amount:</label>
-        <input type="text" class="form-control form-control-sm" value="<?php echo $quote->getTotalQuoteServices(); ?>" disabled>
+        <input type="text" class="form-control form-control-sm" value="<?= number_format($quote->getTotalQuoteServices() ?? 0, 2); ?>" disabled>
       </div>
       <div class="form-group">
         <label for="estimated_delivery_date">Estimated Delivery Date:</label>
@@ -129,7 +129,7 @@
       </div>
       <div class="form-group">
         <label>Estimated Profit (RFQ):</label>
-        <input type="text" class="form-control form-control-sm" value="<?php echo '$ ' . $quote->obtener_re_quote_rfq_profit() . ' / ' . number_format($quote->obtener_re_quote_rfq_profit_percentage(), 2) . ' %'; ?>" disabled>
+        <input type="text" class="form-control form-control-sm" value="<?php echo '$ ' . number_format($quote->obtener_re_quote_rfq_profit(), 2) . ' / ' . number_format($quote->obtener_re_quote_rfq_profit_percentage(), 2) . ' %'; ?>" disabled>
       </div>
       <div class="form-group">
         <label for="shipping_address">Shipping Address:</label>
