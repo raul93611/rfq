@@ -197,6 +197,12 @@ switch ($partes_ruta[2] ?? null) {
       case 'weekly_projections_2023':
         include_once 'plantillas/weekly_projections/weekly_projections_2023.inc.php';
         break;
+      case 'personnel_calendar':
+        include_once 'plantillas/fulfillment/personnel_calendar/personnel_calendar.inc.php';
+        break;
+      case 'personnel':
+        include_once 'plantillas/fulfillment/personnel/personnel.inc.php';
+        break;
       default:
         $id_rfq = $partes_ruta[3];
         include_once 'plantillas/fulfillment/fulfillment.inc.php';

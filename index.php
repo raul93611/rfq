@@ -21,7 +21,9 @@ spl_autoload_register(function ($class) {
     'TaskComment' => ['TaskComment', 'TaskCommentRepository'],
     'TypeOfContract' => ['TypeOfContract', 'TypeOfContractRepository'],
     'SalesCommission' => ['SalesCommission', 'SalesCommissionRepository'],
-    'Invoice' => ['Invoice', 'InvoiceRepository']
+    'Invoice' => ['Invoice', 'InvoiceRepository'],
+    'Personnel' => ['Personnel', 'PersonnelRepository'],
+    'CalendarEvent' => ['CalendarEvent', 'CalendarEventRepository']
   ];
 
   foreach ($subfolder as $key => $array) {
@@ -461,6 +463,48 @@ switch ($partes_ruta[1] ?? null) {
           case 'load_fulfillment_service':
             $id_fulfillment_service = $partes_ruta[4];
             $ruta_elegida = 'scripts/fulfillment/load_fulfillment_service.php';
+            break;
+          default:
+            break;
+        }
+        break;
+      case 'personnel':
+        switch ($partes_ruta[3]) {
+          case 'table':
+            $ruta_elegida = 'scripts/fulfillment/personnel/table.php';
+            break;
+          case 'save':
+            $ruta_elegida = 'scripts/fulfillment/personnel/save.php';
+            break;
+          case 'load':
+            $ruta_elegida = 'scripts/fulfillment/personnel/load.php';
+            break;
+          case 'update':
+            $ruta_elegida = 'scripts/fulfillment/personnel/update.php';
+            break;
+          case 'delete':
+            $ruta_elegida = 'scripts/fulfillment/personnel/delete.php';
+            break;
+          case 'get_personnel_events':
+            $ruta_elegida = 'scripts/fulfillment/personnel/get_personnel_events.php';
+            break;
+          default:
+            break;
+        }
+        break;
+      case 'personnel_calendar':
+        switch ($partes_ruta[3]) {
+          case 'save':
+            $ruta_elegida = 'scripts/fulfillment/personnel_calendar/save.php';
+            break;
+          case 'load':
+            $ruta_elegida = 'scripts/fulfillment/personnel_calendar/load.php';
+            break;
+          case 'update':
+            $ruta_elegida = 'scripts/fulfillment/personnel_calendar/update.php';
+            break;
+          case 'delete':
+            $ruta_elegida = 'scripts/fulfillment/personnel_calendar/delete.php';
             break;
           default:
             break;
