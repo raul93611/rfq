@@ -133,7 +133,7 @@
           </tr>
           <tr>
             <td><b>Award Date:</b></td>
-            <td><?= $quote->obtener_fecha_award() ?></td>
+            <td><?= date('m/d/Y', strtotime($quote->obtener_fecha_award())) ?></td>
           </tr>
           <tr>
             <td><b>POC:</b></td>
@@ -153,11 +153,11 @@
           </tr>
           <tr>
             <td class="blue"><b>RFQ Amount:</b></td>
-            <td>$ <?= $quote->obtener_total_price() ?></td>
+            <td>$ <?= number_format($quote->obtener_total_price(), 2) ?></td>
           </tr>
           <tr>
             <td class="blue"><b>RFP Amount:</b></td>
-            <td>$ <?= $quote->getTotalQuoteServices() ?></td>
+            <td>$ <?= number_format($quote->getTotalQuoteServices(), 2) ?></td>
           </tr>
           <tr>
             <td><b>Estimated Delivery Date:</b></td>
@@ -169,7 +169,7 @@
           </tr>
           <tr>
             <td class="blue"><b>Estimated Profit (RFQ):</b></td>
-            <td>$ <?= $quote->obtener_re_quote_rfq_profit() . ' / ' . number_format($quote->obtener_re_quote_rfq_profit_percentage(), 2) . ' %' ?></td>
+            <td>$ <?= number_format($quote->obtener_re_quote_rfq_profit(), 2) . ' / ' . number_format($quote->obtener_re_quote_rfq_profit_percentage(), 2) . ' %' ?></td>
           </tr>
           <tr>
             <td><b>Shipping Address:</b></td>
