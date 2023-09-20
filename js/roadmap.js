@@ -45,6 +45,10 @@ $(document).ready(function () {
       addEventModal.find('#start').val(moment(e.time).format('MM/DD/YYYY'));
       addEventModal.find('#end').val(moment(e.time).add(1, 'days').format('MM/DD/YYYY'));
       addEventModal.find('input[name="id_personnel"]').val(e.group);
+      addEventModal.find('#color').colorpicker();
+      addEventModal.find('#color').on('colorpickerChange', function (event) {
+        $(this).parent().find('.fa-square').css('color', event.color.toString());
+      })
       $('#start, #end').daterangepicker({
         singleDatePicker: true,
         autoApply: true
@@ -56,6 +60,10 @@ $(document).ready(function () {
     if (e.items.length == 0) return;
     editEventForm.load(`/rfq/fulfillment/personnel_calendar/load`, { id: e.items[0] }, () => {
       editEventModal.modal();
+      editEventForm.find('#color').colorpicker();
+      editEventForm.find('#color').on('colorpickerChange', function (event) {
+        $(this).parent().find('.fa-square').css('color', event.color.toString());
+      })
       $('#start, #end').daterangepicker({
         singleDatePicker: true,
         autoApply: true

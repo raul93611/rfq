@@ -23,9 +23,18 @@
                 <label for="end">End:</label>
                 <input readonly type="text" id="end" class="form-control form-control-sm" name="end" value="">
               </div>
+              <div class="form-group">
+                <label for="color">Color:</label>
+                <div class="input-group">
+                  <input type="text" id="color" class="form-control form-control-sm" name="color" value="">
+                  <div class="input-group-append">
+                    <span class="input-group-text"><i class="fas fa-square"></i></span>
+                  </div>
+                </div>
+              </div>
             </div>
+            <input type="hidden" name="id_personnel">
           </div>
-          <input type="hidden" name="id_personnel">
         </form>
       </div>
       <div class="modal-footer">

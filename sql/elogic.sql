@@ -415,6 +415,7 @@ CREATE TABLE calendar_events(
   name VARCHAR(255) NOT NULL,
   start DATE,
   end DATE,
+  color VARCHAR(255),
   PRIMARY KEY(id),
   FOREIGN KEY(id_personnel) REFERENCES personnel(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
