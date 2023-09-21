@@ -178,7 +178,6 @@ $(document).ready(function () {
         data: $(form).serialize(),
         success: function (response) {
           addSharedEventModal.modal('hide');
-          
           reloadDatasets();
         },
         error: function (xhr, status, error) {
