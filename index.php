@@ -506,6 +506,9 @@ switch ($partes_ruta[1] ?? null) {
           case 'delete':
             $ruta_elegida = 'scripts/fulfillment/personnel_calendar/delete.php';
             break;
+          case 'save_shared_event':
+            $ruta_elegida = 'scripts/fulfillment/personnel_calendar/save_shared_event.php';
+            break;
           default:
             break;
         }

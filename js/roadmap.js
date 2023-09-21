@@ -3,7 +3,11 @@ $(document).ready(function () {
   const editEventModal = $('#edit-event-modal');
   const addEventForm = $('#add-event-form');
   const editEventForm = $('#edit-event-form');
+  const addSharedEventButton = $('#add-shared-event-button');
+  const addSharedEventModal = $('#add-shared-event-modal');
+  const addSharedEventForm = $('#add-shared-event-form');
   let timeline;
+
   $.ajax({
     url: '/rfq/fulfillment/personnel/get_personnel_events',
     data: {
@@ -137,6 +141,43 @@ $(document).ready(function () {
         data: $(form).serialize(),
         success: function (response) {
           editEventModal.modal('hide');
+          reloadDatasets();
+        },
+        error: function (xhr, status, error) {
+          console.error(error);
+        }
+      });
+    }
+  });
+
+  addSharedEventButton.click(function () {
+    addSharedEventForm[0].reset();
+    addSharedEventModal.modal('show');
+    addSharedEventModal.find('#start').val(moment().format('MM/DD/YYYY'));
+    addSharedEventModal.find('#end').val(moment().add(1, 'days').format('MM/DD/YYYY'));
+    addSharedEventModal.find('#color').colorpicker();
+    addSharedEventModal.find('#color').on('colorpickerChange', function (event) {
+      $(this).parent().find('.fa-square').css('color', event.color.toString());
+    })
+    addSharedEventModal.find('#start, #end').daterangepicker({
+      singleDatePicker: true,
+      autoApply: true
+    });
+  });
+
+  addSharedEventForm.validate({
+    rules: {
+      name: { required: true },
+      start: { required: true },
+      end: { required: true }
+    },
+    submitHandler: function (form) {
+      $.ajax({
+        url: '/rfq/fulfillment/personnel_calendar/save_shared_event',
+        type: 'POST',
+        data: $(form).serialize(),
+        success: function (response) {
+          addSharedEventModal.modal('hide');
           reloadDatasets();
         },
         error: function (xhr, status, error) {
