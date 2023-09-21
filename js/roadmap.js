@@ -8,6 +8,35 @@ $(document).ready(function () {
   const addSharedEventForm = $('#add-shared-event-form');
   let timeline;
 
+  const colorpickerOptions = {
+    extensions: [
+      {
+        name: 'swatches',
+        options: {
+          colors: {
+            '#000000': '#000000',
+            '#888888': '#888888',
+            '#ffffff': '#ffffff',
+            '#ff0000': '#ff0000',
+            '#777777': '#777777',
+            '#337ab7': '#337ab7',
+            '#5cb85c': '#5cb85c',
+            '#5bc0de': '#5bc0de',
+            '#f0ad4e': '#f0ad4e',
+            '#d9534f': '#d9534f',
+            '#007bff': '#007bff',
+            '#6610f2': '#6610f2',
+            '#fd7e14': '#fd7e14',
+            '#dc3545': '#dc3545',
+            '#e83e8c': '#e83e8c',
+            '#6f42c1': '#6f42c1'
+          },
+          namesAsValues: true
+        }
+      }
+    ]
+  };
+
   $.ajax({
     url: '/rfq/fulfillment/personnel/get_personnel_events',
     data: {
@@ -49,7 +78,7 @@ $(document).ready(function () {
       addEventModal.find('#start').val(moment(e.time).format('MM/DD/YYYY'));
       addEventModal.find('#end').val(moment(e.time).add(1, 'days').format('MM/DD/YYYY'));
       addEventModal.find('input[name="id_personnel"]').val(e.group);
-      addEventModal.find('#color').colorpicker();
+      addEventModal.find('#color').colorpicker(colorpickerOptions);
       addEventModal.find('#color').on('colorpickerChange', function (event) {
         $(this).parent().find('.fa-square').css('color', event.color.toString());
       })
@@ -64,7 +93,7 @@ $(document).ready(function () {
     if (e.items.length == 0) return;
     editEventForm.load(`/rfq/fulfillment/personnel_calendar/load`, { id: e.items[0] }, () => {
       editEventModal.modal();
-      editEventForm.find('#color').colorpicker();
+      editEventForm.find('#color').colorpicker(colorpickerOptions);
       editEventForm.find('#color').on('colorpickerChange', function (event) {
         $(this).parent().find('.fa-square').css('color', event.color.toString());
       })
@@ -155,7 +184,7 @@ $(document).ready(function () {
     addSharedEventModal.modal('show');
     addSharedEventModal.find('#start').val(moment().format('MM/DD/YYYY'));
     addSharedEventModal.find('#end').val(moment().add(1, 'days').format('MM/DD/YYYY'));
-    addSharedEventModal.find('#color').colorpicker();
+    addSharedEventModal.find('#color').colorpicker(colorpickerOptions);
     addSharedEventModal.find('#color').on('colorpickerChange', function (event) {
       $(this).parent().find('.fa-square').css('color', event.color.toString());
     })
