@@ -25,6 +25,7 @@
                   <tr>
                     <th>ID</th>
                     <th>NAME</th>
+                    <th>CRITERIA</th>
                     <th>OPTIONS</th>
                   </tr>
                 </thead>

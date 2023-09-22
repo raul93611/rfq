@@ -10,6 +10,13 @@ Conexion::cerrar_conexion();
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" class="form-control form-control-sm" value="<?= $personnel->getName(); ?>">
       </div>
+      <div class="form-group">
+        <label for="criteria">Criteria:</label>
+        <select name="criteria" class="custom-select" id="criteria">
+          <option <?= $personnel->getCriteria() == 'CONTRACTOR' ? 'selected' : '' ?>>CONTRACTOR</option>
+          <option <?= $personnel->getCriteria() == 'PAYROLL' ? 'selected' : '' ?>>PAYROLL</option>
+        </select>
+      </div>
     </div>
   </div>
 </div>

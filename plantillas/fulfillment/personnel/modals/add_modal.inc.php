@@ -15,6 +15,13 @@
                 <label for="name">Name:</label>
                 <input type="text" id="name" class="form-control form-control-sm" name="name" value="">
               </div>
+              <div class="form-group">
+                <label for="criteria">Criteria:</label>
+                <select name="criteria" class="custom-select" id="criteria">
+                  <option>CONTRACTOR</option>
+                  <option>PAYROLL</option>
+                </select>
+              </div>
             </div>
           </div>
         </form>

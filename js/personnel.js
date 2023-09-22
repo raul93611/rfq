@@ -15,6 +15,7 @@ $(document).ready(function () {
         "visible": false
       },
       { "data": "name" },
+      { "data": "criteria" },
       {
         "data": "options",
         "orderable": false,

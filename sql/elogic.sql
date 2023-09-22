@@ -407,6 +407,7 @@ CREATE TABLE fulfillment_audit_trails(
 CREATE TABLE personnel(
   id INT NOT NULL AUTO_INCREMENT UNIQUE,
   name VARCHAR(255) NOT NULL,
+  criteria VARCHAR(255),
   PRIMARY KEY(id)
 );
 CREATE TABLE calendar_events(
