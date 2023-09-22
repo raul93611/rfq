@@ -176,6 +176,7 @@ define('WEEKLY_PROJECTIONS', FULFILLMENT . 'weekly_projections');
 define('WEEKLY_PROJECTIONS_2023', FULFILLMENT . 'weekly_projections_2023');
 define('PERSONNEL_CALENDAR', FULFILLMENT . 'personnel_calendar');
 define('PERSONNEL', FULFILLMENT . 'personnel');
+define('TYPE_OF_PROJECT', FULFILLMENT . 'type_of_project');
 define('INVOICE', FULFILLMENT . 'invoice/');
 /********************************ACCOUNTING_CHECKBOX VIEWS*****************************************/
 define('ACCOUNTING', PERFIL . 'accounting/');

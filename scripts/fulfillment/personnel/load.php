@@ -1,6 +1,7 @@
 <?php
 Conexion::abrir_conexion();
 $personnel = PersonnelRepository::getById(Conexion::obtener_conexion(), $_POST['id']);
+$types_of_projects = TypeOfProjectRepository::getAll(Conexion::obtener_conexion());
 Conexion::cerrar_conexion();
 ?>
 <div class="modal-body">
@@ -15,6 +16,16 @@ Conexion::cerrar_conexion();
         <select name="criteria" class="custom-select" id="criteria">
           <option <?= $personnel->getCriteria() == 'CONTRACTOR' ? 'selected' : '' ?>>CONTRACTOR</option>
           <option <?= $personnel->getCriteria() == 'PAYROLL' ? 'selected' : '' ?>>PAYROLL</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="id_type_of_project">Type:</label>
+        <select name="id_type_of_project" class="custom-select" id="id_type_of_project">
+          <?php foreach ($types_of_projects as $key => $type_of_project) : ?>
+            <option value="<?= $type_of_project->getId() ?>" <?= $type_of_project->getId() == $personnel->getIdTypeOfProject() ? 'selected' : '' ?>>
+              <?= $type_of_project->getName() ?>
+            </option>
+          <?php endforeach; ?>
         </select>
       </div>
     </div>

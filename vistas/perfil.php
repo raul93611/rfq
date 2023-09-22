@@ -203,6 +203,9 @@ switch ($partes_ruta[2] ?? null) {
       case 'personnel':
         include_once 'plantillas/fulfillment/personnel/personnel.inc.php';
         break;
+      case 'type_of_project':
+        include_once 'plantillas/fulfillment/type_of_project/type_of_project.inc.php';
+        break;
       default:
         $id_rfq = $partes_ruta[3];
         include_once 'plantillas/fulfillment/fulfillment.inc.php';

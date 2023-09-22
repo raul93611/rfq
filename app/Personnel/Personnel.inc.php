@@ -3,11 +3,13 @@ class Personnel{
   private $id;
   private $name;
   private $criteria;
+  private $id_type_of_project;
 
-  public function __construct($id, $name, $criteria) {
+  public function __construct($id, $name, $criteria, $id_type_of_project) {
     $this->id = $id;
     $this->name = $name;
     $this->criteria = $criteria;
+    $this->id_type_of_project = $id_type_of_project;
   }
 
   public function getId() {
@@ -20,5 +22,9 @@ class Personnel{
 
   public function getCriteria() {
     return $this->criteria;
+  }
+
+  public function getIdTypeOfProject() {
+    return $this->id_type_of_project;
   }
 }

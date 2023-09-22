@@ -48,6 +48,14 @@
       </a>
     </li>
     <li class="nav-item">
+      <a href="<?= TYPE_OF_PROJECT; ?>" class="nav-link <?= $partes_ruta[3] == 'type_of_project' ? 'active' : ''; ?>">
+        <i class="nav-icon fas fa-address-book"></i>
+        <p>
+          Types of Projects
+        </p>
+      </a>
+    </li>
+    <li class="nav-item">
       <a href="<?= PROVIDERS; ?>" class="nav-link <?= $partes_ruta[3] == 'providers' ? 'active' : ''; ?>">
         <i class="nav-icon far fa-address-book"></i>
         <p>

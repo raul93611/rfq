@@ -23,7 +23,8 @@ spl_autoload_register(function ($class) {
     'SalesCommission' => ['SalesCommission', 'SalesCommissionRepository'],
     'Invoice' => ['Invoice', 'InvoiceRepository'],
     'Personnel' => ['Personnel', 'PersonnelRepository'],
-    'CalendarEvent' => ['CalendarEvent', 'CalendarEventRepository']
+    'CalendarEvent' => ['CalendarEvent', 'CalendarEventRepository'],
+    'TypeOfProject' => ['TypeOfProject', 'TypeOfProjectRepository']
   ];
 
   foreach ($subfolder as $key => $array) {
@@ -508,6 +509,27 @@ switch ($partes_ruta[1] ?? null) {
             break;
           case 'save_shared_event':
             $ruta_elegida = 'scripts/fulfillment/personnel_calendar/save_shared_event.php';
+            break;
+          default:
+            break;
+        }
+        break;
+      case 'type_of_project':
+        switch ($partes_ruta[3]) {
+          case 'table':
+            $ruta_elegida = 'scripts/fulfillment/type_of_project/table.php';
+            break;
+          case 'save':
+            $ruta_elegida = 'scripts/fulfillment/type_of_project/save.php';
+            break;
+          case 'load':
+            $ruta_elegida = 'scripts/fulfillment/type_of_project/load.php';
+            break;
+          case 'update':
+            $ruta_elegida = 'scripts/fulfillment/type_of_project/update.php';
+            break;
+          case 'delete':
+            $ruta_elegida = 'scripts/fulfillment/type_of_project/delete.php';
             break;
           default:
             break;

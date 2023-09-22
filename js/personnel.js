@@ -16,6 +16,7 @@ $(document).ready(function () {
       },
       { "data": "name" },
       { "data": "criteria" },
+      { "data": "type" },
       {
         "data": "options",
         "orderable": false,

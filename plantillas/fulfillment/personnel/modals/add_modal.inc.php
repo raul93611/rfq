@@ -1,3 +1,8 @@
+<?php
+Conexion::abrir_conexion();
+$types_of_projects = TypeOfProjectRepository::getAll(Conexion::obtener_conexion());
+Conexion::cerrar_conexion();
+?>
 <div class="modal fade" id="add-personnel-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -20,6 +25,14 @@
                 <select name="criteria" class="custom-select" id="criteria">
                   <option>CONTRACTOR</option>
                   <option>PAYROLL</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="id_type_of_project">Type:</label>
+                <select name="id_type_of_project" class="custom-select" id="id_type_of_project">
+                  <?php foreach ($types_of_projects as $key => $type_of_project) : ?>
+                    <option value="<?= $type_of_project->getId() ?>"><?= $type_of_project->getName() ?></option>
+                  <?php endforeach; ?>
                 </select>
               </div>
             </div>

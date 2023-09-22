@@ -1,34 +1,25 @@
 <?php
-class PersonnelRepository {
-  public static function getPersonnel($conexion, $start, $length, $search, $sort_column_index, $sort_direction) {
+class TypeOfProjectRepository {
+  public static function getTypesOfProjects($conexion, $start, $length, $search, $sort_column_index, $sort_direction) {
     $data = [];
     $search = '%' . $search . '%';
     switch ($sort_column_index) {
       case 1:
-        $sort_column = 'p.name';
-        break;
-      case 2:
-        $sort_column = 'p.criteria';
-        break;
-      case 3:
-        $sort_column = 'type';
+        $sort_column = 'name';
         break;
       default:
-        $sort_column = 'p.name';
+        $sort_column = 'name';
         break;
     }
     if (isset($conexion)) {
       try {
         $sql = "
-        SELECT p.id, 
-        p.name, 
-        p.criteria,
-        t.name as type,
+        SELECT id, 
+        name, 
         NULL AS options  
-        FROM personnel p
-        LEFT JOIN types_of_projects t ON t.id = p.id_type_of_project
+        FROM types_of_projects 
         WHERE 
-        (p.name LIKE :search OR t.name LIKE :search)
+        name LIKE :search 
         ORDER BY {$sort_column} {$sort_direction} LIMIT {$start}, {$length}
         ";
         $sentencia = $conexion->prepare($sql);
@@ -44,12 +35,12 @@ class PersonnelRepository {
     return $data;
   }
 
-  public static function getTotalPersonnelCount($conexion) {
+  public static function getTotalTypesOfProjectsCount($conexion) {
     if (isset($conexion)) {
       try {
         $sql = "
         SELECT COUNT(id)
-        FROM personnel 
+        FROM types_of_projects 
         ";
         $sentencia = $conexion->prepare($sql);
         $sentencia->execute();
@@ -60,16 +51,15 @@ class PersonnelRepository {
     return $sentencia->fetchColumn();
   }
 
-  public static function getTotalFilteredPersonnelCount($conexion, $search) {
+  public static function getTotalFilteredTypesOfProjectsCount($conexion, $search) {
     $search = '%' . $search . '%';
     if (isset($conexion)) {
       try {
         $sql = "
-        SELECT COUNT(p.id) 
-        FROM personnel p
-        LEFT JOIN types_of_projects t ON t.id = p.id_type_of_project
+        SELECT COUNT(id) 
+        FROM types_of_projects 
         WHERE 
-        (p.name LIKE :search OR t.name LIKE :search)
+        name LIKE :search
         ";
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindValue(':search', $search, PDO::PARAM_STR);
@@ -84,7 +74,7 @@ class PersonnelRepository {
   public static function array_to_object($sentence) {
     $objects = [];
     while ($row = $sentence->fetch(PDO::FETCH_ASSOC)) {
-      $objects[] = new Personnel($row['id'], $row['name'], $row['criteria'], $row['id_type_of_project']);
+      $objects[] = new TypeOfProject($row['id'], $row['name']);
     }
 
     return $objects;
@@ -92,19 +82,17 @@ class PersonnelRepository {
 
   public static function single_result_to_object($sentence) {
     $row = $sentence->fetch(PDO::FETCH_ASSOC);
-    $object = new Personnel($row['id'], $row['name'], $row['criteria'], $row['id_type_of_project']);
+    $object = new TypeOfProject($row['id'], $row['name']);
 
     return $object;
   }
 
-  public static function save($connection, $personnel) {
+  public static function save($connection, $typeOfProject) {
     if (isset($connection)) {
       try {
-        $sql = 'INSERT INTO personnel(name, criteria, id_type_of_project) VALUES(:name, :criteria, :id_type_of_project)';
+        $sql = 'INSERT INTO types_of_projects(name) VALUES(:name)';
         $sentence = $connection->prepare($sql);
-        $sentence->bindValue(':name', $personnel->getName(), PDO::PARAM_STR);
-        $sentence->bindValue(':criteria', $personnel->getCriteria(), PDO::PARAM_STR);
-        $sentence->bindValue(':id_type_of_project', $personnel->getIdTypeOfProject(), PDO::PARAM_STR);
+        $sentence->bindValue(':name', $typeOfProject->getName(), PDO::PARAM_STR);
         $sentence->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -116,7 +104,7 @@ class PersonnelRepository {
     $item = null;
     if (isset($connection)) {
       try {
-        $sql = 'SELECT * FROM personnel WHERE id = :id';
+        $sql = 'SELECT * FROM types_of_projects WHERE id = :id';
         $sentence = $connection->prepare($sql);
         $sentence->bindValue(':id', $id, PDO::PARAM_STR);
         $sentence->execute();
@@ -128,14 +116,12 @@ class PersonnelRepository {
     return $item;
   }
 
-  public static function update($connection, $name, $criteria, $id_type_of_project, $id) {
+  public static function update($connection, $name, $id) {
     if (isset($connection)) {
       try {
-        $sql = 'UPDATE personnel SET name = :name, criteria = :criteria, id_type_of_project = :id_type_of_project WHERE id = :id';
+        $sql = 'UPDATE types_of_projects SET name = :name WHERE id = :id';
         $sentence = $connection->prepare($sql);
         $sentence->bindValue(':name', $name, PDO::PARAM_STR);
-        $sentence->bindValue(':criteria', $criteria, PDO::PARAM_STR);
-        $sentence->bindValue(':id_type_of_project', $id_type_of_project, PDO::PARAM_STR);
         $sentence->bindValue(':id', $id, PDO::PARAM_STR);
         $sentence->execute();
       } catch (PDOException $ex) {
@@ -147,7 +133,7 @@ class PersonnelRepository {
   public static function delete($connection, $id) {
     if (isset($connection)) {
       try {
-        $sql = 'DELETE FROM personnel WHERE id = :id';
+        $sql = 'DELETE FROM types_of_projects WHERE id = :id';
         $sentence = $connection->prepare($sql);
         $sentence->bindValue(':id', $id, PDO::PARAM_STR);
         $sentence->execute();
@@ -157,25 +143,18 @@ class PersonnelRepository {
     }
   }
 
-  public static function getAll($conexion) {
-    $data = [];
-    if (isset($conexion)) {
-      try {
-        $sql = "
-        SELECT id, 
-        CONCAT(name, ' ', IFNULL(CONCAT('(', criteria, ')'), '')) as content
-        FROM personnel
-        ORDER BY id_type_of_project, name ASC
-        ";
-        $sentencia = $conexion->prepare($sql);
-        $sentencia->execute();
-        while ($row = $sentencia->fetch(PDO::FETCH_ASSOC)) {
-          $data[] = $row;
-        }
-      } catch (PDOException $ex) {
+  public static function getAll($connection){
+    $items = [];
+    if(isset($connection)){
+      try{
+        $sql = 'SELECT * FROM types_of_projects ORDER BY id';
+        $sentence = $connection-> prepare($sql);
+        $sentence-> execute();
+        $items = self::array_to_object($sentence);
+      }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
-    return $data;
+    return $items;
   }
 }
