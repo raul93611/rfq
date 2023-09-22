@@ -12,13 +12,11 @@ CREATE TABLE usuarios(
   hash_recover_email VARCHAR(255) NOT NULL,
   PRIMARY KEY(id)
 );
-
 CREATE TABLE roles (
   id INT NOT NULL AUTO_INCREMENT UNIQUE,
   name VARCHAR(255),
   PRIMARY KEY(id)
 );
-
 CREATE TABLE rfq(
   id INT NOT NULL AUTO_INCREMENT UNIQUE,
   id_usuario INT NOT NULL,
@@ -403,5 +401,28 @@ CREATE TABLE fulfillment_audit_trails(
   created_date DATETIME,
   PRIMARY KEY(id),
   FOREIGN KEY(id_rfq) REFERENCES rfq(id) ON UPDATE CASCADE ON DELETE RESTRICT
+);
+CREATE TABLE personnel(
+  id INT NOT NULL AUTO_INCREMENT UNIQUE,
+  name VARCHAR(255) NOT NULL,
+  criteria VARCHAR(255),
+  type_of_project_id INT,
+  PRIMARY KEY(id),
+  FOREIGN KEY(type_of_project_id) REFERENCES types_of_projects(id) ON UPDATE CASCADE ON DELETE SET NULL
+);
+CREATE TABLE calendar_events(
+  id INT NOT NULL AUTO_INCREMENT UNIQUE,
+  id_personnel INT NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  start DATE,
+end DATE,
+color VARCHAR(255),
+PRIMARY KEY(id),
+FOREIGN KEY(id_personnel) REFERENCES personnel(id) ON UPDATE CASCADE ON DELETE CASCADE
+);
+CREATE TABLE types_of_projects(
+  id INT NOT NULL AUTO_INCREMENT UNIQUE,
+  name VARCHAR(255) NOT NULL,
+  PRIMARY KEY(id)
 );
 ALTER TABLE rfq AUTO_INCREMENT = 300;
