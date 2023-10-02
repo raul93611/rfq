@@ -10,7 +10,6 @@ $(document).ready(function () {
   const editInvoiceBtn = $('#edit_invoice');
   const editInvoiceModal = $('#edit_invoice_modal');
   editInvoiceBtn.click(function () {
-    console.log('asdsadas');
     editInvoiceModal.modal();
   });
   /****************************************************************************/
