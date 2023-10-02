@@ -402,13 +402,18 @@ CREATE TABLE fulfillment_audit_trails(
   PRIMARY KEY(id),
   FOREIGN KEY(id_rfq) REFERENCES rfq(id) ON UPDATE CASCADE ON DELETE RESTRICT
 );
+CREATE TABLE types_of_projects(
+  id INT NOT NULL AUTO_INCREMENT UNIQUE,
+  name VARCHAR(255) NOT NULL,
+  PRIMARY KEY(id)
+);
 CREATE TABLE personnel(
   id INT NOT NULL AUTO_INCREMENT UNIQUE,
   name VARCHAR(255) NOT NULL,
   criteria VARCHAR(255),
-  type_of_project_id INT,
+  id_type_of_project INT,
   PRIMARY KEY(id),
-  FOREIGN KEY(type_of_project_id) REFERENCES types_of_projects(id) ON UPDATE CASCADE ON DELETE SET NULL
+  FOREIGN KEY(id_type_of_project) REFERENCES types_of_projects(id) ON UPDATE CASCADE ON DELETE SET NULL
 );
 CREATE TABLE calendar_events(
   id INT NOT NULL AUTO_INCREMENT UNIQUE,
@@ -419,10 +424,5 @@ end DATE,
 color VARCHAR(255),
 PRIMARY KEY(id),
 FOREIGN KEY(id_personnel) REFERENCES personnel(id) ON UPDATE CASCADE ON DELETE CASCADE
-);
-CREATE TABLE types_of_projects(
-  id INT NOT NULL AUTO_INCREMENT UNIQUE,
-  name VARCHAR(255) NOT NULL,
-  PRIMARY KEY(id)
 );
 ALTER TABLE rfq AUTO_INCREMENT = 300;
