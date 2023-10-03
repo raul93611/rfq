@@ -7,11 +7,10 @@ class FulfillmentRepository {
     Conexion::cerrar_conexion();
     if (count($items)) :
 ?>
-      <div class="custom-control custom-checkbox">
+      <div class="custom-control custom-checkbox mb-3">
         <input type="checkbox" data="<?= $id_rfq; ?>" class="custom-control-input" id="net30_cc" <?= $quote->obtener_net30_fulfillment() ? 'checked' : ''; ?>>
         <label class="custom-control-label" for="net30_cc">Net30/CC</label>
       </div>
-      <br>
       <div class="table-responsive">
         <table id="fulfillment_items_table" class="table table-bordered table-hover">
           <thead>
@@ -254,6 +253,10 @@ class FulfillmentRepository {
       Conexion::cerrar_conexion();
       if (count($services)) :
   ?>
+  <div class="custom-control custom-checkbox mb-3">
+    <input type="checkbox" data="<?= $id_rfq; ?>" class="custom-control-input" id="net30_cc_services" <?= $quote->getNet30FulfillmentServices() ? 'checked' : ''; ?>>
+    <label class="custom-control-label" for="net30_cc_services">Net30/CC</label>
+  </div>
   <div class="table-responsive">
     <table id="fulfillment_services_table" class="table table-bordered table-hover">
       <thead>

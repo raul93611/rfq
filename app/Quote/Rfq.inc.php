@@ -62,6 +62,7 @@ class Rfq {
   private $accounting;
   private $gsa;
   private $client_payment_terms;
+  private $net30_fulfillment_services;
 
   public function __construct(
     $id,
@@ -125,7 +126,8 @@ class Rfq {
     $file_document,
     $accounting,
     $gsa,
-    $client_payment_terms
+    $client_payment_terms,
+    $net30_fulfillment_services
   ) {
     $this->id = $id;
     $this->id_usuario = $id_usuario;
@@ -189,6 +191,7 @@ class Rfq {
     $this->accounting = $accounting;
     $this->gsa = $gsa;
     $this->client_payment_terms = $client_payment_terms;
+    $this->net30_fulfillment_services = $net30_fulfillment_services;
   }
 
   public function obtener_id() {
@@ -545,7 +548,7 @@ class Rfq {
     return !$this->fullfillment &&
       $this->award &&
       $re_quote_exists &&
-      strlen($this->city) &&
+      strlen($this->city ?? '') &&
       strlen($this->zip_code) &&
       strlen($this->client) &&
       strlen($this->set_side) &&
@@ -617,5 +620,9 @@ class Rfq {
 
   public function getClientPaymentTerms() {
     return $this->client_payment_terms;
+  }
+
+  public function getNet30FulfillmentServices() {
+    return $this->net30_fulfillment_services;
   }
 }

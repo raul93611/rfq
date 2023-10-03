@@ -63,12 +63,6 @@ class TeamsIntegration {
     ));
     $response = curl_exec($curl);
     curl_close($curl);
-
-    if ($response === false) {
-      echo "Error sending message: " . curl_error($curl);
-    } else {
-      echo "Message sent successfully!";
-    }
   }
 
   public static function notifyQuoteAward($quote_id, $user){

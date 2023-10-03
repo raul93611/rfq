@@ -465,6 +465,9 @@ switch ($partes_ruta[1] ?? null) {
             $id_fulfillment_service = $partes_ruta[4];
             $ruta_elegida = 'scripts/fulfillment/load_fulfillment_service.php';
             break;
+          case 'save_net_30':
+            $ruta_elegida = 'scripts/fulfillment/save_net_30_services.php';
+            break;
           default:
             break;
         }

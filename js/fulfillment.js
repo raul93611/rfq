@@ -43,7 +43,7 @@ $(document).ready(function () {
     });
     return false;
   });
-  /****************************************************************************/
+  /***************************************NET30 FULFILLMENT*************************************/
   const net30Checkbox = $('#net30_cc');
   const fulfillmentPage = $('#fulfillment_page');
   let net30Fulfillment;
@@ -58,6 +58,22 @@ $(document).ready(function () {
       data: {
         id_rfq: $(this).attr('data'),
         value: net30Fulfillment
+      },
+      type: 'POST',
+      success: function(res){
+        $('#fulfillment_page').load('/rfq/fulfillment/load_fulfillment_page/' + res.id_rfq);
+      }
+    });
+  });
+
+  let net30FulfillmentServices;
+  fulfillmentPage.on('change', '#net30_cc_services', function(){
+    net30FulfillmentServices = $(this).is(':checked') ? 1 : 0;
+    $.ajax({
+      url: '/rfq/fulfillment/service/save_net_30/',
+      data: {
+        id_rfq: $(this).attr('data'),
+        value: net30FulfillmentServices
       },
       type: 'POST',
       success: function(res){
