@@ -2,8 +2,10 @@
 Conexion::abrir_conexion();
 $cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
 $re_quote = ReQuoteRepository::get_re_quote_by_id_rfq(Conexion::obtener_conexion(), $id_rfq);
-$total_services = ServiceRepository::get_total(Conexion::obtener_conexion(), $id_rfq);
 $usuario_designado = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), $cotizacion_recuperada->obtener_usuario_designado());
+$total_services = ServiceRepository::get_total(Conexion::obtener_conexion(), $id_rfq);
+$re_quote_exists = ReQuoteRepository::re_quote_exists(Conexion::obtener_conexion(), $cotizacion_recuperada->obtener_id());
+$items_exists = RepositorioItem::items_exists(Conexion::obtener_conexion(), $cotizacion_recuperada->obtener_id());
 Conexion::cerrar_conexion();
 if (is_null($cotizacion_recuperada)) Redireccion::redirigir1(ERROR);
 ?>
@@ -37,19 +39,32 @@ if (is_null($cotizacion_recuperada)) Redireccion::redirigir1(ERROR);
       <div class="row">
         <div class="col-md-12">
           <div class="card card-primary">
-            <div class="card-header">
-              <h3 class="card-title"><i class="fas fa-highlighter"></i> Enter the data</h3>
+            <div class="card-body">
+              <?php include_once 'templates/main_info.inc.php' ?>
             </div>
-            <form role="form" id="form_edited_quote" method="post" enctype="multipart/form-data" action="<?= GUARDAR_EDITAR_COTIZACION . $id_rfq; ?>">
-              <?php
-              include_once 'forms/quote/edicion_cotizacion_recuperada.inc.php';
-              ?>
-            </form>
           </div>
           <div class="card card-primary">
-            <div class="card-header">
-              <h3 class="card-title"><i class="fas fa-dollar-sign"></i> Total</h3>
+            <div class="card-body">
+              <?php include_once 'templates/file_manager.inc.php' ?>
             </div>
+          </div>
+          <div class="card card-primary">
+            <div class="card-body">
+              <?php include_once 'forms/quote/edicion_cotizacion_recuperada.inc.php' ?>
+            </div>
+          </div>
+          <div class="card card-primary">
+            <div class="card-body">
+              <?php include_once 'forms/quote/templates/status_checkbox.inc.php'; ?>
+            </div>
+          </div>
+          <div class="card-footer footer_item" id="footer_lg">
+            <?php include_once 'forms/quote/templates/go_back_button.inc.php'; ?>
+            <?php include_once 'forms/quote/templates/add_item.inc.php'; ?>
+            <a href="#" id="add_comment" class="btn btn-primary add_item_charter"><i class="fas fa-plus"></i> Add comment</a>
+            <?php include_once 'forms/quote/templates/actions_button.inc.php'; ?>
+          </div>
+          <div class="card card-primary">
             <div class="card-body">
               <div class="row">
                 <div class="col-md-4">

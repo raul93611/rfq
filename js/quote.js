@@ -1,10 +1,35 @@
 $(document).ready(function () {
   const newItemButton = $('#new-item-button');
   const newItemModal = $('#new-item-modal');
+  const newItemForm = $('#new-item-form');
 
-  newItemButton.click(function(e){
+  newItemButton.click(function (e) {
     e.preventDefault();
     newItemModal.modal('show');
+  });
+
+  newItemForm.validate({
+    rules: {
+      quantity: {
+        required: true,
+        digits: true,
+        min: 0
+      }
+    },
+    submitHandler: function (form) {
+      $.ajax({
+        url: '/rfq/quote/equipment/guardar_add_item',
+        type: 'POST',
+        data: $(form).serialize(),
+        success: function (response) {
+          newItemModal.modal('hide');
+          // personnelDataTable.ajax.reload(null, false);
+        },
+        error: function (xhr, status, error) {
+          console.error(error);
+        }
+      });
+    }
   });
 
   /*-----------------------------------------------------------------*/
@@ -176,13 +201,13 @@ $(document).ready(function () {
       url: '/rfq/quote/ids',
       dataType: 'json',
       delay: 250,
-      data: function(params) {
+      data: function (params) {
         return {
           term: params.term,
           id_rfq: idSlave
         };
       },
-      processResults: function(data) {
+      processResults: function (data) {
         return {
           results: data
         };

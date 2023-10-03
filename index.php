@@ -136,7 +136,7 @@ switch ($partes_ruta[1] ?? null) {
       case 'equipment':
         switch ($partes_ruta[3]) {
           case 'guardar_add_item':
-            $id_rfq = $partes_ruta[4];
+            // $id_rfq = $partes_ruta[4];
             $ruta_elegida = 'scripts/quote/guardar_add_item.php';
             break;
           case 'guardar_edit_item':

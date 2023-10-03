@@ -164,9 +164,7 @@ class RepositorioItem {
     $re_quote_exists = ReQuoteRepository::re_quote_exists(Conexion::obtener_conexion(), $id_rfq);
     Conexion::cerrar_conexion();
 ?>
-    <br>
     <h2 id="caja_items">Items:</h2>
-
     <br>
     <div class="dropdown">
       <button class="float-right btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
