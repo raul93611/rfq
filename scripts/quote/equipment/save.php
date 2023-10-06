@@ -6,5 +6,5 @@ $id = RepositorioItem::insertar_item(Conexion::obtener_conexion(), $item);
 AuditTrailRepository::create_audit_trail_item_created(Conexion::obtener_conexion(), $id, 'Item', $_POST['part_number_project'], 'Part Number',  $_POST['id_rfq']);
 Conexion::cerrar_conexion();
 echo json_encode(array(
-  'data'=> 'success'
+  'id'=> $_POST['id_rfq']
 ));

@@ -109,7 +109,7 @@ class ServiceRepository
     <?php
     } else {
     ?>
-      <h3 class="text-info text-center"><i class="fas fa-exclamation-circle"></i> No Services to display!</h3>
+      <h3 class="text-info text-center"><i class="fas fa-exclamation-circle"></i> No Services!</h3>
     <?php
     }
   }

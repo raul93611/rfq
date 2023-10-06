@@ -48,10 +48,7 @@ if (is_null($cotizacion_recuperada)) Redireccion::redirigir1(ERROR);
               <?php include_once 'templates/file_manager.inc.php' ?>
             </div>
           </div>
-          <div class="card card-primary">
-            <div class="card-body">
-              <?php include_once 'forms/quote/edicion_cotizacion_recuperada.inc.php' ?>
-            </div>
+          <div class="card card-primary" id="quote-table" data-id="<?= $id_rfq ?>">
           </div>
           <div class="card card-primary">
             <div class="card-body">
@@ -63,21 +60,6 @@ if (is_null($cotizacion_recuperada)) Redireccion::redirigir1(ERROR);
             <?php include_once 'forms/quote/templates/add_item.inc.php'; ?>
             <a href="#" id="add_comment" class="btn btn-primary add_item_charter"><i class="fas fa-plus"></i> Add comment</a>
             <?php include_once 'forms/quote/templates/actions_button.inc.php'; ?>
-          </div>
-          <div class="card card-primary">
-            <div class="card-body">
-              <div class="row">
-                <div class="col-md-4">
-                  <h3 class="text-info text-center">Total Price: $ <?= number_format($cotizacion_recuperada->obtener_quote_total_price(), 2); ?></h3>
-                </div>
-                <div class="col-md-4">
-                  <h3 class="text-info text-center">Total profit: $ <?= number_format($cotizacion_recuperada->obtener_quote_profit(), 2); ?></h3>
-                </div>
-                <div class="col-md-4">
-                  <h3 class="text-info text-center">Total profit(%): <?= number_format($cotizacion_recuperada->obtener_quote_profit_percentage(), 2); ?></h3>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -94,6 +76,7 @@ include_once 'modals/type_of_contract_modal.inc.php';
 include_once 'modals/sales_commission_modal.inc.php';
 include_once 'modals/link_quote_modal.inc.php';
 include_once 'modals/new_item_modal.inc.php';
+include_once 'modals/edit_item_modal.inc.php';
 ?>
 <script src="<?php echo RUTA_JS; ?>services.js"></script>
 <script src="<?php echo RUTA_JS; ?>quote.js"></script>

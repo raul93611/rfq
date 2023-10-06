@@ -2,9 +2,10 @@ $(document).ready(function () {
   const newItemButton = $('#new-item-button');
   const newItemModal = $('#new-item-modal');
   const newItemForm = $('#new-item-form');
+  const quoteTable = $('#quote-table');
 
   newItemButton.click(function (e) {
-    e.preventDefault();
+    newItemForm[0].reset();
     newItemModal.modal('show');
   });
 
@@ -18,12 +19,12 @@ $(document).ready(function () {
     },
     submitHandler: function (form) {
       $.ajax({
-        url: '/rfq/quote/equipment/guardar_add_item',
+        url: '/rfq/quote/equipment/save',
         type: 'POST',
         data: $(form).serialize(),
         success: function (response) {
           newItemModal.modal('hide');
-          // personnelDataTable.ajax.reload(null, false);
+          loadQuote(response.id);
         },
         error: function (xhr, status, error) {
           console.error(error);
@@ -32,6 +33,81 @@ $(document).ready(function () {
     }
   });
 
+  //edit item
+  const editItemModal = $('#edit-item-modal');
+  const editItemForm = $('#edit-item-form');
+  quoteTable.on('click', '.edit-item-button', function () {
+    editItemForm.load(`/rfq/quote/equipment/load`, { id: $(this).data('id') }, () => {
+      $('.summernote_textarea').summernote({
+        callbacks: {
+          onPaste: function (e) {
+            var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('text/html');
+            e.preventDefault();
+            bufferText = bufferText.replace(/<\/?[^>]+(>|$)/g, '');
+            setTimeout($(this).summernote('insertText', bufferText), 10);
+          }
+        },
+        toolbar: [
+          ['color', ['color']],
+          ['insert', ['link']],
+        ]
+      });
+      editItemModal.modal('show');
+    });
+  });
+
+  editItemForm.validate({
+    rules: {
+      quantity: {
+        required: true,
+        digits: true,
+        min: 0
+      }
+    },
+    submitHandler: function (form) {
+      $.ajax({
+        url: '/rfq/quote/equipment/update',
+        type: 'POST',
+        data: $(form).serialize(),
+        success: function (response) {
+          editItemModal.modal('hide');
+          loadQuote(response.id);
+        },
+        error: function (xhr, status, error) {
+          console.error(error);
+        }
+      });
+    }
+  });
+
+  //delete item
+  const deleteItemModal = $('#alert_delete_system');
+  quoteTable.on('click', '.delete-item-button', function () {
+    const continueButton = $('#continue_button');
+    const idItem = $(this).attr('data-id');
+    deleteItemModal.modal('show');
+    continueButton.click(function (e) {
+      e.preventDefault();
+      $.ajax({
+        url: '/rfq/quote/equipment/delete',
+        data: {
+          id: idItem,
+        },
+        type: 'POST',
+        success: function (response) {
+          deleteItemModal.modal('hide');
+          loadQuote(response.id);
+        }
+      });
+    });
+  });
+
+
+  function loadQuote(id) {
+    quoteTable.load('/rfq/quote/load', { id: id });
+  }
+
+  loadQuote(quoteTable.data('id'));
   /*-----------------------------------------------------------------*/
   let monto = [];
   let quantity = [];

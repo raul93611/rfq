@@ -124,11 +124,6 @@ $(document).ready(function () {
     habilitar_continue_button($(this));
     return false;
   });
-  /***********************************ALERT EN BOTONES PARA BORRAR ITEMS******************/
-  $('.delete_item_button').click(function () {
-    habilitar_continue_button($(this));
-    return false;
-  });
   /**********************************ALERT EN BOTONES PARA BORRAR SUBITEMS******************/
   $('.delete_subitem_button').click(function () {
     habilitar_continue_button($(this));

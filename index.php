@@ -65,6 +65,9 @@ switch ($partes_ruta[1] ?? null) {
     break;
   case 'quote':
     switch ($partes_ruta[2]) {
+      case 'load':
+        $ruta_elegida = 'scripts/quote/load.php';
+        break;
       case 'remove_slave':
         $ruta_elegida = 'scripts/quote/remove_slave.php';
         break;
@@ -135,17 +138,17 @@ switch ($partes_ruta[1] ?? null) {
         break;
       case 'equipment':
         switch ($partes_ruta[3]) {
-          case 'guardar_add_item':
-            // $id_rfq = $partes_ruta[4];
-            $ruta_elegida = 'scripts/quote/guardar_add_item.php';
+          case 'save':
+            $ruta_elegida = 'scripts/quote/equipment/save.php';
             break;
-          case 'guardar_edit_item':
-            $id_item = $partes_ruta[4];
-            $ruta_elegida = 'scripts/quote/guardar_edit_item.php';
+          case 'load':
+            $ruta_elegida = 'scripts/quote/equipment/load.php';
             break;
-          case 'delete_item':
-            $id_item = $partes_ruta[4];
-            $ruta_elegida = 'scripts/quote/delete_item.php';
+          case 'update':
+            $ruta_elegida = 'scripts/quote/equipment/update.php';
+            break;
+          case 'delete':
+            $ruta_elegida = 'scripts/quote/equipment/delete.php';
             break;
           case 'guardar_add_provider':
             $id_item = $partes_ruta[4];

@@ -96,63 +96,82 @@ class RepositorioItem {
     Conexion::abrir_conexion();
     $providers = RepositorioProvider::obtener_providers_por_id_item(Conexion::obtener_conexion(), $item->obtener_id());
     Conexion::cerrar_conexion();
-    echo '<tr id="item' . $item->obtener_id() . '">';
-    echo '<td><a href="' . ADD_PROVIDER . '/' . $item->obtener_id() . '" class="btn btn-warning btn-block"><i class="fa fa-plus-circle"></i> Add Provider</a><br><a href="' . EDIT_ITEM . '/' . $item->obtener_id() . '" class="btn btn-warning btn-block"><i class="fa fa-edit"></i> Edit item</a><br><a href="' . DELETE_ITEM . '/' . $item->obtener_id() . '" class="delete_item_button btn btn-warning btn-block"><i class="fa fa-trash"></i> Delete</a><br><a href="' . ADD_SUBITEM . '/' . $item->obtener_id() . '" class="btn btn-warning btn-block"><i class="fa fa-plus-circle"></i> Add subitem</a></td>';
-    echo '<td>' . $numeracion . '</td>';
-    if (strlen($item->obtener_description_project()) >= 100) {
-      echo '<td><b>Brand:</b> ' . $item->obtener_brand_project() . '<br><b>Part #:</b> ' . $item->obtener_part_number_project() . '<br><b>Description:</b> ' . nl2br(mb_substr($item->obtener_description_project(), 0, 100)) . ' ...</td>';
-    } else {
-      echo '<td><b>Brand:</b> ' . $item->obtener_brand_project() . '<br><b>Part #:</b> ' . $item->obtener_part_number_project() . '<br><b>Description:</b> ' . nl2br($item->obtener_description_project()) . '</td>';
-    }
-    if (strlen($item->obtener_description()) >= 100) {
-      echo '<td><b>Brand:</b> ' . $item->obtener_brand() . '<br><b>Part #:</b> ' . $item->obtener_part_number() . '<br><b>Description:</b> ' . nl2br(mb_substr($item->obtener_description(), 0, 100)) . ' ...</td>';
-    } else {
-      echo '<td><b>Brand:</b> ' . $item->obtener_brand() . '<br><b>Part #:</b> ' . $item->obtener_part_number() . '<br><b>Description:</b> ' . nl2br($item->obtener_description()) . '</td>';
-    }
-    echo '<td class="estrechar"><a target="_blank" href="' . $item->obtener_website() . '">' . $item->obtener_website() . '</a></td>';
-    echo '<td>' . $item->obtener_quantity() . '</td>';
-    echo '<td><div class="row"><div class="col-6">';
-    for ($i = 0; $i < count($providers); $i++) {
-      $provider = $providers[$i];
-      if (strlen($provider->obtener_provider()) >= 10) {
-        echo '<a href="' . EDIT_PROVIDER . '/' . $provider->obtener_id() . '"><b>' . mb_substr($provider->obtener_provider(), 0, 10) . '... :</b></a><br>';
-      } else {
-        echo '<a href="' . EDIT_PROVIDER . '/' . $provider->obtener_id() . '"><b>' . $provider->obtener_provider() . ':</b></a><br>';
-      }
-    }
-    echo '</div><div class="col-6">';
-    for ($i = 0; $i < count($providers); $i++) {
-      $provider = $providers[$i];
-      echo '$ ' . $provider->obtener_price() . '<br>';
-    }
-    echo '</div></div></td>';
-    if ($item->obtener_additional() != 0) {
-      echo '<td><input type="number" step=".01" class="form-control form-control-sm" id="add_cost' . $j . '" size="10" value="' . $item->obtener_additional() . '"></td>';
-    } else {
-      echo '<td><input type="number" step=".01" class="form-control form-control-sm" id="add_cost' . $j . '" size="10" value="0"></td>';
-    }
-    echo '<td>';
-    for ($i = 0; $i < count($providers); $i++) {
-      $provider = $providers[$i];
-      $precios[$i] = $provider->obtener_price();
-    }
-    if (!empty($precios)) {
-      $best_unit_price = min($precios);
-      for ($i = 0; $i < count($precios); $i++) {
-        if ($best_unit_price == $precios[$i]) {
+?>
+    <tr id="item<?= $item->obtener_id() ?>">
+      <td>
+        <a href="<?= ADD_PROVIDER . '/' . $item->obtener_id() ?>" class="btn btn-warning mb-2">
+          <i class="fas fa-user-tie"></i>
+        </a>
+        <button data-id="<?= $item->obtener_id() ?>" class="edit-item-button btn btn-warning mb-2">
+          <i class="fas fa-pen"></i>
+        </button>
+        <button data-id="<?= $item->obtener_id() ?>" class="delete-item-button btn btn-danger mb-2">
+          <i class="fa fa-trash"></i>
+        </button>
+        <a href="<?= ADD_SUBITEM . '/' . $item->obtener_id() ?>" class="btn btn-warning">
+          <i class="fa fa-plus-circle"></i>
+        </a>
+      </td>
+      <td><?= $numeracion ?></td>
+      <td>
+        <b>Brand: </b><?= $item->obtener_brand_project() ?>
+        <br>
+        <b>Part #: </b><?= $item->obtener_part_number_project() ?>
+        <br>
+        <b>Description: </b><?= strlen($item->obtener_description_project()) > 100 ? nl2br(mb_substr($item->obtener_description_project(), 0, 100)) . '...' : $item->obtener_description_project() ?>
+      </td>
+      <td>
+        <b>Brand: </b><?= $item->obtener_brand() ?>
+        <br>
+        <b>Part #: </b><?= $item->obtener_part_number() ?>
+        <br>
+        <b>Description: </b><?= strlen($item->obtener_description()) > 100 ? nl2br(mb_substr($item->obtener_description(), 0, 100)) . '...' : $item->obtener_description() ?>
+      </td>
+      <td class="estrechar">
+        <a target="_blank" href="<?= $item->obtener_website() ?>"><?= $item->obtener_website() ?></a>
+      </td>
+      <td><?= $item->obtener_quantity() ?></td>
+      <td>
+        <div class="row">
+          <div class="col-6">
+            <?php foreach ($providers as $key => $provider) : ?>
+              <a href="<?= EDIT_PROVIDER . '/' . $provider->obtener_id() ?>">
+                <b><?= strlen($provider->obtener_provider()) > 10 ? mb_substr($provider->obtener_provider(), 0, 10) . '...' : $provider->obtener_provider() ?></b>
+              </a>
+              <br>
+            <?php endforeach; ?>
+          </div>
+          <div class="col-6">
+            <?php foreach ($providers as $key => $provider) : ?>
+              $ <?= $provider->obtener_price() ?>
+              <br>
+            <?php endforeach; ?>
+          </div>
+        </div>
+      </td>
+      <td>
+        <input type="number" step=".01" class="form-control form-control-sm" id="add_cost<?= $j ?>" size="10" value="<?= $item->obtener_additional() ?>">
+      </td>
+      <td>
+        <?php
+        $minorProvider = array_reduce($providers, function ($carry, $provider) {
+          return $provider->obtener_price() < $carry['value'] ? ['value' => $provider->obtener_price(), 'id' => $provider->obtener_id()] : $carry;
+        }, ['value' => PHP_INT_MAX, 'id' => null]);
+
+        if (!is_null($minorProvider['id'])) {
           Conexion::abrir_conexion();
-          self::actualizar_provider_menor_item(Conexion::obtener_conexion(), $providers[$i]->obtener_id(), $item->obtener_id());
+          self::actualizar_provider_menor_item(Conexion::obtener_conexion(), $minorProvider['id'], $item->obtener_id());
           Conexion::cerrar_conexion();
+          echo '$ ' . $minorProvider['value'];
         }
-      }
-      echo '$ ' . $best_unit_price;
-    }
-    echo '</td>';
-    echo '<td></td>';
-    echo '<td></td>';
-    echo '<td></td>';
-    echo '<td class="estrechar">' . nl2br($item->obtener_comments()) . '</td>';
-    echo '</tr>';
+        ?>
+      </td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td class="estrechar"><?= nl2br($item->obtener_comments()) ?></td>
+    </tr>
+  <?php
     $j = RepositorioSubitem::escribir_subitems($item->obtener_id(), $j);
     return $j;
   }
@@ -163,68 +182,59 @@ class RepositorioItem {
     $items = self::obtener_items_por_id_rfq(Conexion::obtener_conexion(), $id_rfq);
     $re_quote_exists = ReQuoteRepository::re_quote_exists(Conexion::obtener_conexion(), $id_rfq);
     Conexion::cerrar_conexion();
-?>
-    <h2 id="caja_items">Items:</h2>
-    <br>
-    <div class="dropdown">
-      <button class="float-right btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Downloads
-      </button>
-      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <?php
-        if (count($items)) {
-        ?>
-          <a target="_blank" href="<?php echo PDF_TABLA_ITEMS . $id_rfq; ?>" class="dropdown-item">PDF - Items table</a>
-          <?php
-          if ($re_quote_exists) {
-          ?>
-            <a target="_blank" href="<?php echo EXCEL_ITEMS_TABLE . $id_rfq; ?>" class="dropdown-item">EXCEL - Quote&Re-quote</a>
-          <?php
-          }
-        }
-        if ($cotizacion->obtener_canal() != 'FedBid') {
-          ?>
-          <a class="dropdown-item" href="<?php echo PROPOSAL . '/' . $cotizacion->obtener_id(); ?>" target="_blank">Proposal</a>
-          <?php
-          if ($cotizacion->obtener_canal() == 'GSA-Buy') {
-          ?>
-            <a class="dropdown-item" href="<?php echo PROPOSAL_GSA . '/' . $cotizacion->obtener_id(); ?>" target="_blank">GSA Proposal</a>
-        <?php
-          }
-        }
-        ?>
+  ?>
+    <div class="row">
+      <div class="col-md-6">
+        <h2 id="caja_items">Items:</h2>
+      </div>
+      <div class="col-md-6">
+        <div class="dropdown">
+          <button class="float-right btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Downloads
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <?php if (count($items)) : ?>
+              <a target="_blank" href="<?= PDF_TABLA_ITEMS . $id_rfq; ?>" class="dropdown-item">PDF - Items table</a>
+              <?php if ($re_quote_exists) : ?>
+                <a target="_blank" href="<?= EXCEL_ITEMS_TABLE . $id_rfq; ?>" class="dropdown-item">EXCEL - Quote&Re-quote</a>
+              <?php endif; ?>
+            <?php endif; ?>
+            <a class="dropdown-item" href="<?= PROPOSAL . '/' . $cotizacion->obtener_id(); ?>" target="_blank">Proposal</a>
+            <?php if ($cotizacion->obtener_canal() == 'GSA-Buy') : ?>
+              <a class="dropdown-item" href="<?= PROPOSAL_GSA . '/' . $cotizacion->obtener_id(); ?>" target="_blank">GSA Proposal</a>
+            <?php endif; ?>
+          </div>
+        </div>
       </div>
     </div>
-    <?php
-    if (count($items)) {
-    ?>
+    <?php if (count($items)) : ?>
       <div class="row">
         <div class="col-md-3">
           <label>Taxes (%):</label>
-          <input type="hidden" name="taxes_original" value="<?php echo $cotizacion->obtener_taxes(); ?>">
-          <input type="number" step=".01" name="taxes" id="taxes" class="form-control form-control-sm" value="<?php echo $cotizacion->obtener_taxes(); ?>">
+          <input type="hidden" name="taxes_original" value="<?= $cotizacion->obtener_taxes(); ?>">
+          <input type="number" step=".01" name="taxes" id="taxes" class="form-control form-control-sm" value="<?= $cotizacion->obtener_taxes(); ?>">
         </div>
         <div class="col-md-3">
           <label>Profit (%):</label>
-          <input type="hidden" name="profit_original" value="<?php echo $cotizacion->obtener_profit(); ?>">
-          <input type="number" step=".01" name="profit" id="profit" class="form-control form-control-sm" value="<?php echo $cotizacion->obtener_profit(); ?>">
+          <input type="hidden" name="profit_original" value="<?= $cotizacion->obtener_profit(); ?>">
+          <input type="number" step=".01" name="profit" id="profit" class="form-control form-control-sm" value="<?= $cotizacion->obtener_profit(); ?>">
         </div>
         <div class="col-md-3">
           <label>Additional general ($):</label>
-          <input type="hidden" name="additional_general_original" value="<?php echo $cotizacion->obtener_additional(); ?>">
-          <input type="number" step=".01" name="additional_general" id="additional_general" class="form-control form-control-sm" value="<?php echo $cotizacion->obtener_additional(); ?>">
+          <input type="hidden" name="additional_general_original" value="<?= $cotizacion->obtener_additional(); ?>">
+          <input type="number" step=".01" name="additional_general" id="additional_general" class="form-control form-control-sm" value="<?= $cotizacion->obtener_additional(); ?>">
         </div>
         <div class="col-md-3">
           <label>Payment terms:</label>
           <div class="custom-control custom-radio">
-            <input type="radio" id="net_30" name="payment_terms" class="custom-control-input" value="Net 30" <?php echo $cotizacion->obtener_payment_terms() == 'Net 30' ? 'checked' : ''; ?>>
+            <input type="radio" id="net_30" name="payment_terms" class="custom-control-input" value="Net 30" <?= $cotizacion->obtener_payment_terms() == 'Net 30' ? 'checked' : ''; ?>>
             <label class="custom-control-label" for="net_30">Net 30</label>
           </div>
           <div class="custom-control custom-radio">
-            <input type="radio" id="net_30cc" name="payment_terms" class="custom-control-input" value="Net 30/CC" <?php echo $cotizacion->obtener_payment_terms() == 'Net 30/CC' ? 'checked' : ''; ?>>
+            <input type="radio" id="net_30cc" name="payment_terms" class="custom-control-input" value="Net 30/CC" <?= $cotizacion->obtener_payment_terms() == 'Net 30/CC' ? 'checked' : ''; ?>>
             <label class="custom-control-label" for="net_30cc">Net 30/CC</label>
           </div>
-          <input type="hidden" name="payment_terms_original" value="<?php echo $cotizacion->obtener_payment_terms(); ?>">
+          <input type="hidden" name="payment_terms_original" value="<?= $cotizacion->obtener_payment_terms(); ?>">
         </div>
       </div>
       <br>
@@ -232,7 +242,7 @@ class RepositorioItem {
         <table id="tabla_items" class="table table-bordered table-hover">
           <thead>
             <tr>
-              <th class="options">Options</th>
+              <th>OPT</th>
               <th id="numeracion">#</th>
               <th class="description">PROJECT SPECIFICATIONS</th>
               <th class="description">E-LOGIC PROPOSAL</th>
@@ -274,32 +284,20 @@ class RepositorioItem {
         </table>
       </div>
       <?php
-      $id_items = '';
-      $id_subitems = '';
-      $contador_subitems = 0;
-      for ($i = 0; $i < count($items); $i++) {
-        $item = $items[$i];
-        if ($i == 0) {
-          $id_items = $id_items . $item->obtener_id();
-        } else {
-          $id_items = $id_items . ',' . $item->obtener_id();
-        }
+      $arrayIdItems = array_map(function ($item) {
+        return $item->obtener_id();
+      }, $items);
+      $arrayIdSubitems = array_map(function ($idItem) {
         Conexion::abrir_conexion();
-        $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Conexion::obtener_conexion(), $item->obtener_id());
+        $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Conexion::obtener_conexion(), $idItem);
         Conexion::cerrar_conexion();
-        for ($j = 0; $j < count($subitems); $j++) {
-          $subitem = $subitems[$j];
-          if ($contador_subitems == 0) {
-            $id_subitems = $id_subitems . $subitem->obtener_id();
-          } else {
-            $id_subitems = $id_subitems . ',' . $subitem->obtener_id();
-          }
-          $contador_subitems++;
-        }
-      }
+        return implode(',', array_map(function ($subitem) {
+          return $subitem->obtener_id();
+        }, $subitems));
+      }, $arrayIdItems);
       ?>
-      <input type="hidden" id="id_items" name="id_items" value="<?php echo $id_items; ?>">
-      <input type="hidden" id="id_subitems" name="id_subitems" value="<?php echo $id_subitems; ?>">
+      <input type="hidden" id="id_items" name="id_items" value="<?= implode(',', $arrayIdItems); ?>">
+      <input type="hidden" id="id_subitems" name="id_subitems" value="<?= implode(',', array_filter($arrayIdSubitems)); ?>">
       <input type="hidden" id="partes_total_price" name="partes_total_price" value="">
       <input type="hidden" id="partes_total_price_subitems" name="partes_total_price_subitems" value="">
       <input type="hidden" id="additional" name="additional" value="">
@@ -312,19 +310,21 @@ class RepositorioItem {
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <textarea class="form-control form-control-sm" rows="1" id="shipping" name="shipping" placeholder="Enter shipping ..."><?php echo $cotizacion->obtener_shipping(); ?></textarea>
-            <input type="hidden" name="shipping_original" value="<?php echo $cotizacion->obtener_shipping(); ?>">
+            <textarea class="form-control form-control-sm" rows="1" id="shipping" name="shipping" placeholder="Enter shipping ..."><?= $cotizacion->obtener_shipping(); ?></textarea>
+            <input type="hidden" name="shipping_original" value="<?= $cotizacion->obtener_shipping(); ?>">
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-group">
-            <input type="number" step=".01" class="form-control form-control-sm" id="shipping_cost" name="shipping_cost" value="<?php echo $cotizacion->obtener_shipping_cost(); ?>">
-            <input type="hidden" name="shipping_cost_original" value="<?php echo $cotizacion->obtener_shipping_cost(); ?>">
+            <input type="number" step=".01" class="form-control form-control-sm" id="shipping_cost" name="shipping_cost" value="<?= $cotizacion->obtener_shipping_cost(); ?>">
+            <input type="hidden" name="shipping_cost_original" value="<?= $cotizacion->obtener_shipping_cost(); ?>">
           </div>
         </div>
       </div>
+    <?php else : ?>
+      <h3 class="text-info text-center"><i class="fas fa-exclamation-circle"></i> No Items!</h3>
 <?php
-    }
+    endif;
   }
 
   public static function obtener_item_por_id($conexion, $id_item) {
