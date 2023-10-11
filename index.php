@@ -150,17 +150,17 @@ switch ($partes_ruta[1] ?? null) {
           case 'delete':
             $ruta_elegida = 'scripts/quote/equipment/delete.php';
             break;
-          case 'guardar_add_provider':
-            $id_item = $partes_ruta[4];
-            $ruta_elegida = 'scripts/quote/guardar_add_provider.php';
+          case 'save_provider':
+            $ruta_elegida = 'scripts/quote/equipment/save_provider.php';
             break;
-          case 'guardar_edit_provider':
-            $id_provider = $partes_ruta[4];
-            $ruta_elegida = 'scripts/quote/guardar_edit_provider.php';
+          case 'load_provider':
+            $ruta_elegida = 'scripts/quote/equipment/load_provider.php';
+            break;
+          case 'update_provider':
+            $ruta_elegida = 'scripts/quote/equipment/update_provider.php';
             break;
           case 'delete_provider':
-            $id_provider = $partes_ruta[4];
-            $ruta_elegida = 'scripts/quote/delete_provider.php';
+            $ruta_elegida = 'scripts/quote/equipment/delete_provider.php';
             break;
           case 'guardar_add_subitem':
             $id_item = $partes_ruta[4];

@@ -59,6 +59,22 @@ class RepositorioProvider{
     return $providers;
   }
 
+  public static function setSelectedProvider($id_item){
+    Conexion::abrir_conexion();
+    $providers = self::obtener_providers_por_id_item(Conexion::obtener_conexion(), $id_item);
+    Conexion::cerrar_conexion();
+
+    $minorProvider = array_reduce($providers, function ($carry, $provider) {
+      return $provider->obtener_price() < $carry['value'] ? ['value' => $provider->obtener_price(), 'id' => $provider->obtener_id()] : $carry;
+    }, ['value' => PHP_INT_MAX, 'id' => null]);
+
+    if (!is_null($minorProvider['id'])) {
+      Conexion::abrir_conexion();
+      RepositorioItem::updateMinorProvider(Conexion::obtener_conexion(), $minorProvider, $id_item);
+      Conexion::cerrar_conexion();
+    }
+  }
+
   public static function obtener_provider_por_id($conexion, $id_provider){
     $provider = null;
     if(isset($conexion)){

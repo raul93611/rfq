@@ -65,14 +65,6 @@ switch ($partes_ruta[2] ?? null) {
         break;
       case 'equipment':
         switch ($partes_ruta[4]) {
-          case 'add_item':
-            $id_rfq = $partes_ruta[5];
-            include_once 'plantillas/quote/add_item.inc.php';
-            break;
-          case 'edit_item':
-            $id_item = $partes_ruta[5];
-            include_once 'plantillas/quote/edit_item.inc.php';
-            break;
           case 'add_provider':
             $id_item = $partes_ruta[5];
             include_once 'plantillas/quote/add_provider.inc.php';

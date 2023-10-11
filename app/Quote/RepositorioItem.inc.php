@@ -29,13 +29,14 @@ class RepositorioItem {
     return $id;
   }
 
-  public static function actualizar_provider_menor_item($conexion, $provider_menor, $id_item) {
+  public static function updateMinorProvider($conexion, $minor_provider, $id_item) {
     $item_editado = false;
     if (isset($conexion)) {
       try {
-        $sql = 'UPDATE item SET provider_menor = :provider_menor WHERE id = :id_item';
+        $sql = "UPDATE item SET provider_menor = :provider_menor, unit_price = :unit_price, total_price = (:unit_price * quantity) WHERE id = :id_item";
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindValue(':provider_menor', $provider_menor, PDO::PARAM_STR);
+        $sentencia->bindValue(':provider_menor', $minor_provider['id'], PDO::PARAM_STR);
+        $sentencia->bindValue(':unit_price', $minor_provider['value'], PDO::PARAM_STR);
         $sentencia->bindValue(':id_item', $id_item, PDO::PARAM_STR);
         $sentencia->execute();
         if ($sentencia) {
@@ -95,13 +96,14 @@ class RepositorioItem {
     $j = $i;
     Conexion::abrir_conexion();
     $providers = RepositorioProvider::obtener_providers_por_id_item(Conexion::obtener_conexion(), $item->obtener_id());
+    $minor_provider = RepositorioProvider::obtener_provider_por_id(Conexion::obtener_conexion(), $item->obtener_provider_menor());
     Conexion::cerrar_conexion();
 ?>
     <tr id="item<?= $item->obtener_id() ?>">
       <td>
-        <a href="<?= ADD_PROVIDER . '/' . $item->obtener_id() ?>" class="btn btn-warning mb-2">
+        <button data-id="<?= $item->obtener_id() ?>" class="add-provider-button btn btn-warning mb-2">
           <i class="fas fa-user-tie"></i>
-        </a>
+        </button>
         <button data-id="<?= $item->obtener_id() ?>" class="edit-item-button btn btn-warning mb-2">
           <i class="fas fa-pen"></i>
         </button>
@@ -132,43 +134,26 @@ class RepositorioItem {
       </td>
       <td><?= $item->obtener_quantity() ?></td>
       <td>
-        <div class="row">
-          <div class="col-6">
-            <?php foreach ($providers as $key => $provider) : ?>
-              <a href="<?= EDIT_PROVIDER . '/' . $provider->obtener_id() ?>">
+        <?php foreach ($providers as $key => $provider) : ?>
+          <div class="row">
+            <div class="col-6">
+              <a href="#" class="edit-provider-button" data-id="<?= $provider->obtener_id() ?>">
                 <b><?= strlen($provider->obtener_provider()) > 10 ? mb_substr($provider->obtener_provider(), 0, 10) . '...' : $provider->obtener_provider() ?></b>
               </a>
-              <br>
-            <?php endforeach; ?>
-          </div>
-          <div class="col-6">
-            <?php foreach ($providers as $key => $provider) : ?>
+            </div>
+            <div class="col-6">
               $ <?= $provider->obtener_price() ?>
-              <br>
-            <?php endforeach; ?>
+            </div>
           </div>
-        </div>
+        <?php endforeach; ?>
       </td>
       <td>
         <input type="number" step=".01" class="form-control form-control-sm" id="add_cost<?= $j ?>" size="10" value="<?= $item->obtener_additional() ?>">
       </td>
-      <td>
-        <?php
-        $minorProvider = array_reduce($providers, function ($carry, $provider) {
-          return $provider->obtener_price() < $carry['value'] ? ['value' => $provider->obtener_price(), 'id' => $provider->obtener_id()] : $carry;
-        }, ['value' => PHP_INT_MAX, 'id' => null]);
-
-        if (!is_null($minorProvider['id'])) {
-          Conexion::abrir_conexion();
-          self::actualizar_provider_menor_item(Conexion::obtener_conexion(), $minorProvider['id'], $item->obtener_id());
-          Conexion::cerrar_conexion();
-          echo '$ ' . $minorProvider['value'];
-        }
-        ?>
-      </td>
-      <td></td>
-      <td></td>
-      <td></td>
+      <td>$ <?= $minor_provider?->obtener_price() ?></td>
+      <td>$ <?= number_format($minor_provider?->obtener_price() * $item->obtener_quantity(), 2) ?></td>
+      <td>$ <?= number_format($item->obtener_unit_price()) ?></td>
+      <td>$ <?= number_format($item->obtener_total_price()) ?></td>
       <td class="estrechar"><?= nl2br($item->obtener_comments()) ?></td>
     </tr>
   <?php

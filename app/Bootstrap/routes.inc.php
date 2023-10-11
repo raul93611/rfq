@@ -31,10 +31,7 @@ define('EDIT_SERVICE', SERVICE_SC . 'edit_service');
 define('DELETE_SERVICE', SERVICE_SC . 'delete_service/');
 /********************************EQUIPMENT SCRIPTS*****************************************/
 define('EQUIPMENT_SC', QUOTE_SC . 'equipment/');
-define('GUARDAR_ADD_ITEM', EQUIPMENT_SC . 'guardar_add_item/');
 define('GUARDAR_ADD_PROVIDER', EQUIPMENT_SC . 'guardar_add_provider/');
-define('GUARDAR_EDIT_ITEM', EQUIPMENT_SC . 'guardar_edit_item/');
-define('DELETE_ITEM', EQUIPMENT_SC . 'delete_item');
 define('GUARDAR_EDIT_PROVIDER', EQUIPMENT_SC . 'guardar_edit_provider/');
 define('GUARDAR_ADD_SUBITEM', EQUIPMENT_SC . 'guardar_add_subitem/');
 define('GUARDAR_ADD_PROVIDER_SUBITEM', EQUIPMENT_SC . 'guardar_add_provider_subitem/');
@@ -149,11 +146,9 @@ define('EBAY_AMAZON_AWARD', AWARD . 'Ebay & Amazon');
 define('STARSIII_AWARD', AWARD . 'Stars III');
 /********************************EQUIPMENT VIEWS*****************************************/
 define('EQUIPMENT', QUOTE . 'equipment/');
-define('ADD_ITEM', EQUIPMENT . 'add_item');
 define('ADD_PROVIDER', EQUIPMENT . 'add_provider');
 define('ADD_PROVIDER_SUBITEM', EQUIPMENT . 'add_provider_subitem');
 define('ADD_SUBITEM', EQUIPMENT . 'add_subitem');
-define('EDIT_ITEM', EQUIPMENT . 'edit_item');
 define('EDIT_SUBITEM', EQUIPMENT . 'edit_subitem');
 define('EDIT_PROVIDER', EQUIPMENT . 'edit_provider');
 define('EDIT_PROVIDER_SUBITEM', EQUIPMENT . 'edit_provider_subitem');
