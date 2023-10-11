@@ -83,24 +83,41 @@ $(document).ready(function () {
 
   //delete item
   const deleteModal = $('#alert_delete_system');
+  const continueButton = $('#continue_button');
+
   quoteTable.on('click', '.delete-item-button', function () {
-    const continueButton = $('#continue_button');
-    const idItem = $(this).attr('data-id');
+    continueButton.attr('data-id', $(this).attr('data-id'));
+    continueButton.attr('data-type', 'item');
     deleteModal.modal('show');
-    continueButton.click(function (e) {
-      e.preventDefault();
-      $.ajax({
-        url: '/rfq/quote/equipment/delete',
-        data: {
-          id: idItem,
-        },
-        type: 'POST',
-        success: function (response) {
-          deleteModal.modal('hide');
-          loadQuote(response.id);
-        }
-      });
+  });
+
+  function deleteItem(id) {
+    $.ajax({
+      url: '/rfq/quote/equipment/delete',
+      data: {
+        id: id,
+      },
+      type: 'POST',
+      success: function (response) {
+        deleteModal.modal('hide');
+        loadQuote(response.id);
+      }
     });
+  }
+
+  continueButton.click(function (e) {
+    e.preventDefault();
+    switch ($(this).attr('data-type')) {
+      case 'item':
+        deleteItem($(this).attr('data-id'));
+        break;
+      case 'subitem':
+        deleteSubitem($(this).attr('data-id'));
+        break;
+      case 'provider':
+        deleteProvider($(this).attr('data-id'));
+        break;
+    }
   });
 
   const addProviderForm = $('#add-provider-form');
@@ -182,24 +199,127 @@ $(document).ready(function () {
   //delete provider
   editProviderModal.on('click', '.delete-provider-button', function () {
     editProviderModal.modal('hide');
-    const continueButton = $('#continue_button');
-    const idProvider = $(this).attr('data-id');
+    continueButton.attr('data-id', $(this).attr('data-id'));
+    continueButton.attr('data-type', 'provider');
     deleteModal.modal('show');
-    continueButton.click(function (e) {
-      e.preventDefault();
+  });
+
+  function deleteProvider(id) {
+    $.ajax({
+      url: '/rfq/quote/equipment/delete_provider',
+      data: {
+        id: id,
+      },
+      type: 'POST',
+      success: function (response) {
+        deleteModal.modal('hide');
+        loadQuote(response.id);
+      }
+    });
+  }
+
+  //add subitem
+  const addSubitemForm = $('#add-subitem-form');
+  const addSubitemModal = $('#add-subitem-modal');
+
+  quoteTable.on('click', '.add-subitem-button', function () {
+    addSubitemForm[0].reset();
+    console.log(addSubitemForm.find('input[name="id_item"]'));
+    addSubitemForm.find('input[name="id_item"]').val($(this).attr('data-id'));
+    addSubitemModal.modal('show');
+  });
+
+  addSubitemForm.validate({
+    rules: {
+      quantity: {
+        required: true,
+        digits: true,
+        min: 0
+      }
+    },
+    submitHandler: function (form) {
       $.ajax({
-        url: '/rfq/quote/equipment/delete_provider',
-        data: {
-          id: idProvider,
-        },
+        url: '/rfq/quote/equipment/save_subitem',
         type: 'POST',
+        data: $(form).serialize(),
         success: function (response) {
-          deleteModal.modal('hide');
+          addSubitemModal.modal('hide');
           loadQuote(response.id);
+        },
+        error: function (xhr, status, error) {
+          console.error(error);
         }
       });
+    }
+  });
+
+  //edit subitem
+  const editSubitemModal = $('#edit-subitem-modal');
+  const editSubitemForm = $('#edit-subitem-form');
+  quoteTable.on('click', '.edit-subitem-button', function () {
+    editSubitemForm.load(`/rfq/quote/equipment/load_subitem`, { id: $(this).data('id') }, () => {
+      $('.summernote_textarea').summernote({
+        callbacks: {
+          onPaste: function (e) {
+            var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('text/html');
+            e.preventDefault();
+            bufferText = bufferText.replace(/<\/?[^>]+(>|$)/g, '');
+            setTimeout($(this).summernote('insertText', bufferText), 10);
+          }
+        },
+        toolbar: [
+          ['color', ['color']],
+          ['insert', ['link']],
+        ]
+      });
+      editSubitemModal.modal('show');
     });
   });
+
+  editSubitemForm.validate({
+    rules: {
+      quantity: {
+        required: true,
+        digits: true,
+        min: 0
+      }
+    },
+    submitHandler: function (form) {
+      $.ajax({
+        url: '/rfq/quote/equipment/update_subitem',
+        type: 'POST',
+        data: $(form).serialize(),
+        success: function (response) {
+          editSubitemModal.modal('hide');
+          loadQuote(response.id);
+        },
+        error: function (xhr, status, error) {
+          console.error(error);
+        }
+      });
+    }
+  });
+
+  //delete subitem
+  quoteTable.on('click', '.delete-subitem-button', function () {
+    continueButton.attr('data-id', $(this).attr('data-id'));
+    continueButton.attr('data-type', 'subitem');
+    deleteModal.modal('show');
+  });
+
+  function deleteSubitem(id) {
+    $.ajax({
+      url: '/rfq/quote/equipment/delete_subitem',
+      data: {
+        id: id,
+      },
+      type: 'POST',
+      success: function (response) {
+        deleteModal.modal('hide');
+        loadQuote(response.id);
+      }
+    });
+  }
 
   function loadQuote(id) {
     quoteTable.load('/rfq/quote/load', { id: id });

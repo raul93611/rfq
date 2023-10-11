@@ -102,17 +102,17 @@ class RepositorioItem {
     <tr id="item<?= $item->obtener_id() ?>">
       <td>
         <button data-id="<?= $item->obtener_id() ?>" class="add-provider-button btn btn-warning mb-2">
-          <i class="fas fa-user-tie"></i>
+          <i class="fas fa-user-tie fa-fw"></i>
         </button>
         <button data-id="<?= $item->obtener_id() ?>" class="edit-item-button btn btn-warning mb-2">
-          <i class="fas fa-pen"></i>
+          <i class="fas fa-pen fa-fw"></i>
         </button>
         <button data-id="<?= $item->obtener_id() ?>" class="delete-item-button btn btn-danger mb-2">
-          <i class="fa fa-trash"></i>
+          <i class="fa fa-trash fa-fw"></i>
         </button>
-        <a href="<?= ADD_SUBITEM . '/' . $item->obtener_id() ?>" class="btn btn-warning">
-          <i class="fa fa-plus-circle"></i>
-        </a>
+        <button data-id="<?= $item->obtener_id() ?>" class="add-subitem-button btn btn-warning">
+          <i class="fa fa-plus-circle fa-fw"></i>
+        </button>
       </td>
       <td><?= $numeracion ?></td>
       <td>

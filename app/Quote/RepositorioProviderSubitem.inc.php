@@ -15,6 +15,22 @@ class RepositorioProviderSubitem{
     }
   }
 
+  public static function setSelectedProvider($id_subitem){
+    Conexion::abrir_conexion();
+    $providers = self::obtener_providers_subitem_por_id_subitem(Conexion::obtener_conexion(), $id_subitem);
+    Conexion::cerrar_conexion();
+
+    $minorProvider = array_reduce($providers, function ($carry, $provider) {
+      return $provider->obtener_price() < $carry['value'] ? ['value' => $provider->obtener_price(), 'id' => $provider->obtener_id()] : $carry;
+    }, ['value' => PHP_INT_MAX, 'id' => null]);
+
+    if (!is_null($minorProvider['id'])) {
+      Conexion::abrir_conexion();
+      RepositorioSubitem::updateMinorProvider(Conexion::obtener_conexion(), $minorProvider, $id_subitem);
+      Conexion::cerrar_conexion();
+    }
+  }
+
   public static function obtener_providers_subitem_por_id_subitem($conexion, $id_subitem){
     $providers_subitem = [];
     if(isset($conexion)){

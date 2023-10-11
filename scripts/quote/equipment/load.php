@@ -1,7 +1,6 @@
 <?php
 Conexion::abrir_conexion();
 $item = RepositorioItem::obtener_item_por_id(Conexion::obtener_conexion(), $_POST['id']);
-$cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $item->obtener_id_rfq());
 Conexion::cerrar_conexion();
 ?>
 <input type="hidden" name="id_item" value="<?= $item->obtener_id(); ?>">

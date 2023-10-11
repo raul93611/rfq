@@ -79,6 +79,8 @@ include_once 'modals/new_item_modal.inc.php';
 include_once 'modals/edit_item_modal.inc.php';
 include_once 'modals/add_provider_modal.inc.php';
 include_once 'modals/edit_provider_modal.inc.php';
+include_once 'modals/add_subitem_modal.inc.php';
+include_once 'modals/edit_subitem_modal.inc.php';
 ?>
 <script src="<?php echo RUTA_JS; ?>services.js"></script>
 <script src="<?php echo RUTA_JS; ?>quote.js"></script>

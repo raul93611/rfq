@@ -1,9 +1,9 @@
 <?php
 header('Content-Type: application/json');
 Conexion::abrir_conexion();
-RepositorioItem::actualizar_item(
+RepositorioSubitem::actualizar_subitem(
   Conexion::obtener_conexion(),
-  $_POST['id_item'],
+  $_POST['id_subitem'],
   $_POST['brand'],
   $_POST['brand_project'],
   $_POST['part_number'],
@@ -14,7 +14,7 @@ RepositorioItem::actualizar_item(
   $_POST['comments'],
   $_POST['website']
 );
-AuditTrailRepository::edit_item_events(
+AuditTrailRepository::edit_subitem_events(
   Conexion::obtener_conexion(),
   $_POST['brand'],
   $_POST['brand_original'],
@@ -34,10 +34,10 @@ AuditTrailRepository::edit_item_events(
   $_POST['comments_original'],
   $_POST['website'],
   $_POST['website_original'],
-  $_POST['id_item'],
+  $_POST['id_subitem'],
   $_POST['id_rfq']
 );
-RepositorioProvider::setSelectedProvider($_POST['id_item']);
+RepositorioProviderSubitem::setSelectedProvider($_POST['id_subitem']);
 Conexion::cerrar_conexion();
 echo json_encode(array(
   'id' => $_POST['id_rfq']
