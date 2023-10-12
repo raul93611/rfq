@@ -152,8 +152,8 @@ class RepositorioItem {
       </td>
       <td>$ <?= $minor_provider?->obtener_price() ?></td>
       <td>$ <?= number_format($minor_provider?->obtener_price() * $item->obtener_quantity(), 2) ?></td>
-      <td>$ <?= number_format($item->obtener_unit_price()) ?></td>
-      <td>$ <?= number_format($item->obtener_total_price()) ?></td>
+      <td>$ <?= number_format($item->obtener_unit_price(), 2) ?></td>
+      <td>$ <?= number_format($item->obtener_total_price(), 2) ?></td>
       <td class="estrechar"><?= nl2br($item->obtener_comments()) ?></td>
     </tr>
   <?php

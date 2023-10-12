@@ -117,6 +117,9 @@ $(document).ready(function () {
       case 'provider':
         deleteProvider($(this).attr('data-id'));
         break;
+      case 'subitem-provider':
+        deleteSubitemProvider($(this).attr('data-id'));
+        break;
     }
   });
 
@@ -186,7 +189,6 @@ $(document).ready(function () {
         data: $(form).serialize(),
         success: function (response) {
           editProviderModal.modal('hide');
-          console.log(response);
           loadQuote(response.id);
         },
         error: function (xhr, status, error) {
@@ -310,6 +312,103 @@ $(document).ready(function () {
   function deleteSubitem(id) {
     $.ajax({
       url: '/rfq/quote/equipment/delete_subitem',
+      data: {
+        id: id,
+      },
+      type: 'POST',
+      success: function (response) {
+        deleteModal.modal('hide');
+        loadQuote(response.id);
+      }
+    });
+  }
+
+  const addSubitemProviderForm = $('#add-subitem-provider-form');
+  const addSubitemProviderModal = $('#add-subitem-provider-modal');
+  //add subitem provider
+  quoteTable.on('click', '.add-subitem-provider-button', function (e) {
+    addSubitemProviderForm[0].reset();
+    addSubitemProviderForm.find('input[name="id_subitem"]').val($(this).attr('data-id'));
+    addSubitemProviderModal.modal('show');
+  });
+
+  addSubitemProviderForm.validate({
+    rules: {
+      price: {
+        required: true,
+        number: true,
+        min: 0
+      },
+      provider: {
+        required: true
+      }
+    },
+    submitHandler: function (form) {
+      $.ajax({
+        url: '/rfq/quote/equipment/save_subitem_provider',
+        type: 'POST',
+        data: $(form).serialize(),
+        success: function (response) {
+          addSubitemProviderModal.modal('hide');
+          loadQuote(response.id);
+        },
+        error: function (xhr, status, error) {
+          console.error(error);
+        }
+      });
+    }
+  });
+
+  //edit subitem provider
+  const editSubitemProviderModal = $('#edit-subitem-provider-modal');
+  const editSubitemProviderForm = $('#edit-subitem-provider-form');
+  quoteTable.on('click', '.edit-subitem-provider-button', function (e) {
+    e.preventDefault();
+    editSubitemProviderModal.find('.modal-footer .delete-subitem-provider-button').attr('data-id', $(this).attr('data-id'));
+
+    editSubitemProviderForm.load(`/rfq/quote/equipment/load_subitem_provider`, { id: $(this).data('id') }, () => {
+      editSubitemProviderModal.modal('show');
+    });
+  });
+
+  editSubitemProviderForm.validate({
+    rules: {
+      price: {
+        required: true,
+        number: true,
+        min: 0
+      },
+      provider: {
+        required: true
+      }
+    },
+    submitHandler: function (form) {
+      $.ajax({
+        url: '/rfq/quote/equipment/update_subitem_provider',
+        type: 'POST',
+        data: $(form).serialize(),
+        success: function (response) {
+          editSubitemProviderModal.modal('hide');
+          loadQuote(response.id);
+        },
+        error: function (xhr, status, error) {
+          console.error(error);
+        }
+      });
+    }
+  });
+
+  //delete subitem provider
+  editSubitemProviderModal.on('click', '.delete-subitem-provider-button', function () {
+    editSubitemProviderModal.modal('hide');
+    continueButton.attr('data-id', $(this).attr('data-id'));
+    continueButton.attr('data-type', 'subitem-provider');
+    deleteModal.modal('show');
+  });
+
+  function deleteSubitemProvider(id) {
+    $.ajax({
+      url: '/rfq/quote/equipment/delete_subitem_provider',
       data: {
         id: id,
       },
