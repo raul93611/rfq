@@ -420,6 +420,24 @@ $(document).ready(function () {
     });
   }
 
+  //Payment Terms radiobutton
+  quoteTable.on('change', 'input[name="payment_terms"]', function () {
+    $.ajax({
+      url: '/rfq/quote/equipment/update_payment_terms',
+      type: 'POST',
+      data: {
+        paymentTerms: $('input[name="payment_terms"]:checked').val(),
+        id: quoteTable.data('id')
+      },
+      success: function (response) {
+        loadQuote(response.id);
+      },
+      error: function (xhr, status, error) {
+        console.error(error);
+      }
+    });
+  });
+
   function loadQuote(id) {
     quoteTable.load('/rfq/quote/load', { id: id });
   }

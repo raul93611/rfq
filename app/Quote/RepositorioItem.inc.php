@@ -29,24 +29,90 @@ class RepositorioItem {
     return $id;
   }
 
-  public static function updateMinorProvider($conexion, $minor_provider, $id_item) {
-    $item_editado = false;
+  public static function updateMinorProvider($conexion, $id_item) {
     if (isset($conexion)) {
       try {
-        $sql = "UPDATE item SET provider_menor = :provider_menor, unit_price = :unit_price, total_price = (:unit_price * quantity) WHERE id = :id_item";
+        $sql = "
+        UPDATE item AS i
+        JOIN (
+          SELECT id, id_item, price
+		      FROM provider
+		      WHERE price = (SELECT MIN(price) FROM provider WHERE id_item = {$id_item})
+		      AND id_item = {$id_item}
+        ) AS min_providers ON i.id = min_providers.id_item
+        SET i.provider_menor = min_providers.id
+        WHERE i.id = {$id_item};
+        ";
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindValue(':provider_menor', $minor_provider['id'], PDO::PARAM_STR);
-        $sentencia->bindValue(':unit_price', $minor_provider['value'], PDO::PARAM_STR);
-        $sentencia->bindValue(':id_item', $id_item, PDO::PARAM_STR);
         $sentencia->execute();
-        if ($sentencia) {
-          $item_editado = true;
-        }
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
-    return $item_editado;
+  }
+
+  public static function updateItemsPrices($conexion, $id_rfq) {
+    if (isset($conexion)) {
+      try {
+        $sql = "
+        UPDATE item AS i
+        JOIN rfq ON i.id_rfq = rfq.id
+        JOIN (
+          SELECT id_item, MIN(price) AS min_price
+          FROM provider
+          GROUP BY id_item
+        ) AS min_providers ON i.id = min_providers.id_item
+        SET i.unit_price = 
+          CASE 
+              WHEN rfq.payment_terms = 'Net 30' THEN min_providers.min_price * 1
+              WHEN rfq.payment_terms = 'Net 30/CC' THEN min_providers.min_price * 1.0298661174047374
+          END,
+          i.total_price = 
+          CASE 
+              WHEN rfq.payment_terms = 'Net 30' THEN min_providers.min_price * 1 * i.quantity
+              WHEN rfq.payment_terms = 'Net 30/CC' THEN min_providers.min_price * 1.0298661174047374 * i.quantity
+          END
+        WHERE rfq.id = :id_rfq;
+        ";
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia->execute();
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+  }
+
+  public static function updateItemPrice($conexion, $id_item) {
+    if (isset($conexion)) {
+      try {
+        $sql = "
+        UPDATE item AS i
+        JOIN rfq ON i.id_rfq = rfq.id
+        JOIN (
+          SELECT id_item, MIN(price) AS min_price
+          FROM provider
+            WHERE id_item = {$id_item}
+          GROUP BY id_item
+        ) AS min_providers ON i.id = min_providers.id_item
+        SET i.unit_price = 
+          CASE 
+              WHEN rfq.payment_terms = 'Net 30' THEN min_providers.min_price * 1
+              WHEN rfq.payment_terms = 'Net 30/CC' THEN min_providers.min_price * 1.0298661174047374
+          END,
+          i.total_price = 
+          CASE 
+              WHEN rfq.payment_terms = 'Net 30' THEN min_providers.min_price * 1 * i.quantity
+              WHEN rfq.payment_terms = 'Net 30/CC' THEN min_providers.min_price * 1.0298661174047374 * i.quantity
+          END
+        WHERE i.id = {$id_item};
+        ";
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->execute();
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
   }
 
   public static function obtener_items_por_id_rfq($conexion, $id_rfq) {
@@ -95,9 +161,11 @@ class RepositorioItem {
     }
     $j = $i;
     Conexion::abrir_conexion();
+    $quote = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $item->obtener_id_rfq());
     $providers = RepositorioProvider::obtener_providers_por_id_item(Conexion::obtener_conexion(), $item->obtener_id());
     $minor_provider = RepositorioProvider::obtener_provider_por_id(Conexion::obtener_conexion(), $item->obtener_provider_menor());
     Conexion::cerrar_conexion();
+    $payment_terms = $quote->obtener_payment_terms() == 'Net 30/CC' ? 1.0298661174047374 : 1;
 ?>
     <tr id="item<?= $item->obtener_id() ?>">
       <td>
@@ -150,8 +218,8 @@ class RepositorioItem {
       <td>
         <input type="number" step=".01" class="form-control form-control-sm" id="add_cost<?= $j ?>" size="10" value="<?= $item->obtener_additional() ?>">
       </td>
-      <td>$ <?= $minor_provider?->obtener_price() ?></td>
-      <td>$ <?= number_format($minor_provider?->obtener_price() * $item->obtener_quantity(), 2) ?></td>
+      <td>$ <?= number_format($minor_provider?->obtener_price() * $payment_terms, 2) ?></td>
+      <td>$ <?= number_format($minor_provider?->obtener_price() * $item->obtener_quantity() * $payment_terms, 2) ?></td>
       <td>$ <?= number_format($item->obtener_unit_price(), 2) ?></td>
       <td>$ <?= number_format($item->obtener_total_price(), 2) ?></td>
       <td class="estrechar"><?= nl2br($item->obtener_comments()) ?></td>

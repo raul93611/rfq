@@ -48,24 +48,92 @@ class RepositorioSubitem {
     }
   }
 
-  public static function updateMinorProvider($conexion, $minor_provider, $id_subitem) {
-    $item_editado = false;
+  public static function updateMinorProvider($conexion, $id_subitem) {
     if (isset($conexion)) {
       try {
-        $sql = "UPDATE subitems SET provider_menor = :provider_menor, unit_price = :unit_price, total_price = (:unit_price * quantity) WHERE id = :id_subitem";
+        $sql = "
+        UPDATE subitems AS si
+        JOIN (
+          SELECT id, id_subitem, price
+		      FROM provider_subitems
+		      WHERE price = (SELECT MIN(price) FROM provider_subitems WHERE id_subitem = {$id_subitem})
+		      AND id_subitem = {$id_subitem}
+        ) AS min_providers ON si.id = min_providers.id_subitem
+        SET si.provider_menor = min_providers.id
+        WHERE si.id = {$id_subitem};
+        ";
         $sentencia = $conexion->prepare($sql);
-        $sentencia->bindValue(':provider_menor', $minor_provider['id'], PDO::PARAM_STR);
-        $sentencia->bindValue(':unit_price', $minor_provider['value'], PDO::PARAM_STR);
-        $sentencia->bindValue(':id_subitem', $id_subitem, PDO::PARAM_STR);
         $sentencia->execute();
-        if ($sentencia) {
-          $item_editado = true;
-        }
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
-    return $item_editado;
+  }
+
+  public static function updateSubitemPrice($conexion, $id_subitem) {
+    if (isset($conexion)) {
+      try {
+        $sql = "
+        UPDATE subitems AS si
+        JOIN item AS i ON si.id_item = i.id
+        JOIN rfq ON i.id_rfq = rfq.id
+        JOIN (
+          SELECT id_subitem, MIN(price) AS min_price
+          FROM provider_subitems
+            WHERE id_subitem = {$id_subitem}
+          GROUP BY id_subitem
+        ) AS min_providers ON si.id = min_providers.id_subitem
+        SET si.unit_price = 
+          CASE 
+            WHEN rfq.payment_terms = 'Net 30' THEN min_providers.min_price * 1
+            WHEN rfq.payment_terms = 'Net 30/CC' THEN min_providers.min_price * 1.0298661174047374
+          END,
+          si.total_price = 
+          CASE 
+            WHEN rfq.payment_terms = 'Net 30' THEN min_providers.min_price * 1 * i.quantity
+            WHEN rfq.payment_terms = 'Net 30/CC' THEN min_providers.min_price * 1.0298661174047374 * i.quantity
+          END
+        WHERE si.id = {$id_subitem};
+        ";
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->execute();
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+  }
+
+  public static function updateSubitemsPrices($conexion, $id_rfq) {
+    if (isset($conexion)) {
+      try {
+        $sql = "
+        UPDATE subitems AS si
+        JOIN item AS i ON si.id_item = i.id
+        JOIN rfq ON i.id_rfq = rfq.id
+        JOIN (
+          SELECT id_subitem, MIN(price) AS min_price
+          FROM provider_subitems
+          GROUP BY id_subitem
+        ) AS min_subitem_providers ON si.id = min_subitem_providers.id_subitem
+        SET si.unit_price = 
+          CASE 
+            WHEN rfq.payment_terms = 'Net 30' THEN min_subitem_providers.min_price * 1
+            WHEN rfq.payment_terms = 'Net 30/CC' THEN min_subitem_providers.min_price * 1.0298661174047374
+          END,
+          si.total_price = 
+          CASE 
+            WHEN rfq.payment_terms = 'Net 30' THEN min_subitem_providers.min_price * 1 * si.quantity
+            WHEN rfq.payment_terms = 'Net 30/CC' THEN min_subitem_providers.min_price * 1.0298661174047374 * si.quantity
+          END
+        WHERE i.id_rfq = :id_rfq;
+        ";
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia->execute();
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
   }
 
   public static function actualizar_subitem($conexion, $id_subitem, $brand, $brand_project, $part_number, $part_number_project, $description, $description_project, $quantity, $comments, $website) {
@@ -136,9 +204,12 @@ class RepositorioSubitem {
     }
     $j = $i;
     Conexion::abrir_conexion();
+    $item = RepositorioItem::obtener_item_por_id(Conexion::obtener_conexion(), $subitem->obtener_id_item());
+    $quote = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $item->obtener_id_rfq());
     $providers_subitem = RepositorioProviderSubitem::obtener_providers_subitem_por_id_subitem(Conexion::obtener_conexion(), $subitem->obtener_id());
     $minor_provider = RepositorioProviderSubitem::obtener_provider_subitem_por_id(Conexion::obtener_conexion(), $subitem->obtener_provider_menor());
     Conexion::cerrar_conexion();
+    $payment_terms = $quote->obtener_payment_terms() == 'Net 30/CC' ? 1.0298661174047374 : 1;
 ?>
     <tr id="subitem<?= $subitem->obtener_id() ?>" class="fila_subitem">
       <td>
@@ -188,8 +259,8 @@ class RepositorioSubitem {
       <td>
         <input type="number" step=".01" class="form-control form-control-sm" id="add_cost<?= $j ?>" size="10" value="<?= $subitem->obtener_additional() ?>">
       </td>
-      <td>$ <?= $minor_provider?->obtener_price() ?></td>
-      <td>$ <?= number_format($minor_provider?->obtener_price() * $subitem->obtener_quantity(), 2) ?></td>
+      <td>$ <?= number_format($minor_provider?->obtener_price() * $payment_terms, 2) ?></td>
+      <td>$ <?= number_format($minor_provider?->obtener_price() * $subitem->obtener_quantity() * $payment_terms, 2) ?></td>
       <td>$ <?= number_format($subitem->obtener_unit_price(), 2) ?></td>
       <td>$ <?= number_format($subitem->obtener_total_price(), 2) ?></td>
       <td class="estrechar"><?= nl2br($subitem->obtener_comments()) ?></td>

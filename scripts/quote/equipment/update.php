@@ -37,7 +37,8 @@ AuditTrailRepository::edit_item_events(
   $_POST['id_item'],
   $_POST['id_rfq']
 );
-RepositorioProvider::setSelectedProvider($_POST['id_item']);
+RepositorioItem::updateMinorProvider(Conexion::obtener_conexion(), $_POST['id_item']);
+RepositorioItem::updateItemPrice(Conexion::obtener_conexion(), $_POST['id_item']);
 Conexion::cerrar_conexion();
 echo json_encode(array(
   'id' => $_POST['id_rfq']

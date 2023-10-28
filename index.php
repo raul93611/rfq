@@ -186,6 +186,9 @@ switch ($partes_ruta[1] ?? null) {
           case 'delete_subitem_provider':
             $ruta_elegida = 'scripts/quote/equipment/delete_subitem_provider.php';
             break;
+          case 'update_payment_terms':
+            $ruta_elegida = 'scripts/quote/equipment/update_payment_terms.php';
+            break;
           default:
             break;
         }
