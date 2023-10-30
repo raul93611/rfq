@@ -90,8 +90,8 @@ class RepositorioSubitem {
           END,
           si.total_price = 
           CASE 
-            WHEN rfq.payment_terms = 'Net 30' THEN min_providers.min_price * 1 * i.quantity
-            WHEN rfq.payment_terms = 'Net 30/CC' THEN min_providers.min_price * 1.0298661174047374 * i.quantity
+            WHEN rfq.payment_terms = 'Net 30' THEN min_providers.min_price * 1 * si.quantity
+            WHEN rfq.payment_terms = 'Net 30/CC' THEN min_providers.min_price * 1.0298661174047374 * si.quantity
           END
         WHERE si.id = {$id_subitem};
         ";

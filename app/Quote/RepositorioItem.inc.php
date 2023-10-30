@@ -262,22 +262,38 @@ class RepositorioItem {
     </div>
     <?php if (count($items)) : ?>
       <div class="row">
-        <div class="col-md-3">
-          <label>Taxes (%):</label>
-          <input type="hidden" name="taxes_original" value="<?= $cotizacion->obtener_taxes(); ?>">
-          <input type="number" step=".01" name="taxes" id="taxes" class="form-control form-control-sm" value="<?= $cotizacion->obtener_taxes(); ?>">
+        <div class="col-md-4">
+          <div class="row">
+            <div class="col-md-10">
+              <label>Taxes (%):</label>
+            </div>
+            <div class="col-md-2">
+              <?= $cotizacion->obtener_taxes(); ?>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-10">
+              <label>Profit (%):</label>
+            </div>
+            <div class="col-md-2">
+              <?= $cotizacion->obtener_profit(); ?>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-10">
+              <label>Additional general ($):</label>
+            </div>
+            <div class="col-md-2">
+              <?= $cotizacion->obtener_additional(); ?>
+            </div>
+          </div>
         </div>
-        <div class="col-md-3">
-          <label>Profit (%):</label>
-          <input type="hidden" name="profit_original" value="<?= $cotizacion->obtener_profit(); ?>">
-          <input type="number" step=".01" name="profit" id="profit" class="form-control form-control-sm" value="<?= $cotizacion->obtener_profit(); ?>">
+        <div class="col-md-1">
+          <button id="edit-taxes-button" class="btn btn-sm btn-warning" style="font-size: 0.9rem !important;">
+            <i class="fas fa-pen fa-fw"></i>
+          </button>
         </div>
-        <div class="col-md-3">
-          <label>Additional general ($):</label>
-          <input type="hidden" name="additional_general_original" value="<?= $cotizacion->obtener_additional(); ?>">
-          <input type="number" step=".01" name="additional_general" id="additional_general" class="form-control form-control-sm" value="<?= $cotizacion->obtener_additional(); ?>">
-        </div>
-        <div class="col-md-3">
+        <div class="col-md-6">
           <label>Payment terms:</label>
           <div class="custom-control custom-radio">
             <input type="radio" id="net_30" name="payment_terms" class="custom-control-input" value="Net 30" <?= $cotizacion->obtener_payment_terms() == 'Net 30' ? 'checked' : ''; ?>>

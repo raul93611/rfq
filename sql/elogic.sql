@@ -42,7 +42,7 @@ CREATE TABLE rfq(
   ship_via VARCHAR(100) NOT NULL,
   taxes DECIMAL(10, 2) NOT NULL,
   profit DECIMAL(10, 2) NOT NULL,
-  additional VARCHAR(100) NOT NULL,
+  additional DECIMAL(10, 2) NOT NULL,
   shipping_cost DECIMAL(10, 2) NOT NULL,
   shipping VARCHAR(100) NOT NULL,
   fullfillment TINYINT NOT NULL,
@@ -413,7 +413,8 @@ CREATE TABLE personnel(
   criteria VARCHAR(255),
   id_type_of_project INT,
   PRIMARY KEY(id),
-  FOREIGN KEY(id_type_of_project) REFERENCES types_of_projects(id) ON UPDATE CASCADE ON DELETE SET NULL
+  FOREIGN KEY(id_type_of_project) REFERENCES types_of_projects(id) ON UPDATE CASCADE ON DELETE
+  SET NULL
 );
 CREATE TABLE calendar_events(
   id INT NOT NULL AUTO_INCREMENT UNIQUE,

@@ -438,6 +438,13 @@ $(document).ready(function () {
     });
   });
 
+  //Edit Taxes 
+  const editTaxesModal = $('#edit-taxes-modal');
+  quoteTable.on('click', '#edit-taxes-button', function(){
+    console.log('sdfdsaf');
+    editTaxesModal.modal('show');
+  });
+
   function loadQuote(id) {
     quoteTable.load('/rfq/quote/load', { id: id });
   }
