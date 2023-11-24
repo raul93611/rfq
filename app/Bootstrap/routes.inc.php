@@ -79,7 +79,6 @@ define('UPDATE_SERVICE_RE_QUOTE', RE_QUOTE_SC . 'update_service');
 define('FULFILLMENT_SC', SERVIDOR . 'fulfillment/');
 define('MARK_AS_PENDING', FULFILLMENT_SC . 'mark_as_pending/');
 define('UNMARK_AS_PENDING', FULFILLMENT_SC . 'unmark_as_pending/');
-define('SAVE_INVOICE', FULFILLMENT_SC . 'save_invoice');
 define('DELETE_INVOICE', FULFILLMENT_SC . 'delete_invoice/');
 define('UPDATE_INVOICE', FULFILLMENT_SC . 'update_invoice/');
 /********************************USER VIEWS*****************************************/

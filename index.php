@@ -538,6 +538,27 @@ switch ($partes_ruta[1] ?? null) {
             break;
         }
         break;
+      case 'invoice':
+        switch ($partes_ruta[3]) {
+          case 'save':
+            $ruta_elegida = 'scripts/fulfillment/invoice/save.php';
+            break;
+          case 'load':
+            $ruta_elegida = 'scripts/fulfillment/invoice/load.php';
+            break;
+          case 'load_dropdown':
+            $ruta_elegida = 'scripts/fulfillment/invoice/load_dropdown.php';
+            break;
+          case 'update':
+            $ruta_elegida = 'scripts/fulfillment/invoice/update.php';
+            break;
+          case 'delete':
+            $ruta_elegida = 'scripts/fulfillment/invoice/delete.php';
+            break;
+          default:
+            break;
+        }
+        break;
       case 'fulfillment_quotes_table':
         $ruta_elegida = 'scripts/fulfillment/fulfillment_quotes_table.php';
         break;
@@ -555,9 +576,6 @@ switch ($partes_ruta[1] ?? null) {
       case 'unmark_as_pending':
         $id_rfq = $partes_ruta[3];
         $ruta_elegida = 'scripts/fulfillment/unmark_as_pending.php';
-        break;
-      case 'save_invoice':
-        $ruta_elegida = 'scripts/fulfillment/save_invoice.php';
         break;
       case 'delete_invoice':
         $id_invoice = $partes_ruta[3];

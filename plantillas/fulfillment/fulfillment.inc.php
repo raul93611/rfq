@@ -5,10 +5,10 @@ $providers_list = ProviderListRepository::get_all(Conexion::obtener_conexion());
 $items_exists = RepositorioItem::items_exists(Conexion::obtener_conexion(), $id_rfq);
 $total_services = ServiceRepository::get_total(Conexion::obtener_conexion(), $id_rfq);
 $payment_terms = PaymentTermRepository::get_all(Conexion::obtener_conexion());
-$invoices = InvoiceRepository::get_all_by_id_rfq(Conexion::obtener_conexion(), $id_rfq);
 Conexion::cerrar_conexion();
 ?>
 <div class="content-wrapper">
+  <input type="hidden" id="id-rfq" value="<?= $id_rfq ?>">
   <section class="content-header">
     <div class="container-fluid">
       <div class="row mb-2">
@@ -27,22 +27,7 @@ Conexion::cerrar_conexion();
         </div>
       </div>
       <div class="row mb-2">
-        <div class="col-md-12">
-          <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Invoices
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <a class="dropdown-item" href="#" id="add_invoice"><i class="fas fa-plus"></i> Add Invoice</a>
-              <?php
-              foreach ($invoices as $key => $invoice) {
-              ?>
-                <a class="dropdown-item" href="<?php echo INVOICE . $invoice-> get_id(); ?>"><?php echo $invoice-> get_name(); ?></a>
-              <?php
-              }
-              ?>
-            </div>
-          </div>
+        <div class="col-md-12" id="invoice-dropdown">
         </div>
       </div>
     </div>
@@ -76,5 +61,6 @@ include_once 'plantillas/fulfillment/modals/new_comment_modal.inc.php';
 include_once 'plantillas/fulfillment/modals/comments_modal.inc.php';
 include_once 'modals/audit_trails_modal.inc.php';
 include_once 'modals/add_invoice_modal.inc.php';
+include_once 'modals/edit_invoice_modal.inc.php';
 ?>
 <script src="<?php echo RUTA_JS; ?>fulfillment.js"></script>
