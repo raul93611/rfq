@@ -11,8 +11,22 @@ class FulfillmentItem{
   private $comments;
   private $reviewed;
   private $created_at;
+  private $id_invoice;
 
-  public function __construct($id, $id_item, $provider, $quantity, $unit_cost, $other_cost, $real_cost, $payment_term, $comments, $reviewed, $created_at){
+  public function __construct(
+    $id, 
+    $id_item, 
+    $provider, 
+    $quantity, 
+    $unit_cost, 
+    $other_cost, 
+    $real_cost, 
+    $payment_term, 
+    $comments, 
+    $reviewed, 
+    $created_at,
+    $id_invoice
+    ){
     $this-> id = $id;
     $this-> id_item = $id_item;
     $this-> provider = $provider;
@@ -24,6 +38,7 @@ class FulfillmentItem{
     $this-> comments = $comments;
     $this-> reviewed = $reviewed;
     $this-> created_at = $created_at;
+    $this-> id_invoice = $id_invoice;
   }
 
   public function get_id(){
@@ -68,6 +83,10 @@ class FulfillmentItem{
 
   public function get_created_at(){
     return $this-> created_at;
+  }
+
+  public function getIdInvoice(){ 
+    return $this-> id_invoice;
   }
 }
 ?>

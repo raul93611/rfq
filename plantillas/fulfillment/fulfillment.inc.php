@@ -5,6 +5,7 @@ $providers_list = ProviderListRepository::get_all(Conexion::obtener_conexion());
 $items_exists = RepositorioItem::items_exists(Conexion::obtener_conexion(), $id_rfq);
 $total_services = ServiceRepository::get_total(Conexion::obtener_conexion(), $id_rfq);
 $payment_terms = PaymentTermRepository::get_all(Conexion::obtener_conexion());
+$invoices = InvoiceRepository::get_all_by_id_rfq(Conexion::obtener_conexion(), $id_rfq);
 Conexion::cerrar_conexion();
 ?>
 <div class="content-wrapper">

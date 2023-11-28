@@ -4,6 +4,7 @@ $(document).ready(function () {
   const addInvoiceForm = $('#add_invoice_form');
   const invoiceDropdown = $('#invoice-dropdown');
   const idRfq = $('#id-rfq').val();
+  const isPartialInvoices = $('input[name="is-partial-invoices"]').val();
 
   function loadInvoiceDropdown(idRfq) {
     invoiceDropdown.load('/rfq/fulfillment/invoice/load_dropdown', { id: idRfq });
@@ -264,7 +265,10 @@ $(document).ready(function () {
   });
 
   $('#fulfillment_page').on('click', '.edit_fulfillment_service_button', function () {
-    $('#edit_fulfillment_service_modal form').load('/rfq/fulfillment/service/load_fulfillment_service/' + $(this).attr('data'), function () {
+    $('#edit_fulfillment_service_modal form').load('/rfq/fulfillment/service/load_fulfillment_service/' + $(this).attr('data'), {
+      isPartialInvoices: isPartialInvoices,
+      idRfq: idRfq
+    }, function () {
       $('#edit_fulfillment_service_modal').modal();
     });
     return false;
@@ -278,7 +282,8 @@ $(document).ready(function () {
     return false;
   });
 
-  $('#fulfillment_page').on('click', '.delete_fulfillment_service_button', function () {
+  $('#fulfillment_page').on('click', '.delete_fulfillment_service_button', function (e) {
+    e.preventDefault();
     $.ajax({
       url: '/rfq/fulfillment/service/delete_fulfillment_service/',
       data: {
@@ -309,7 +314,10 @@ $(document).ready(function () {
   });
 
   $('#fulfillment_page').on('click', '.edit_fulfillment_item_button', function () {
-    $('#edit_fulfillment_item_modal form').load('/rfq/fulfillment/equipment/load_fulfillment_item/' + $(this).attr('data'), function () {
+    $('#edit_fulfillment_item_modal form').load('/rfq/fulfillment/equipment/load_fulfillment_item/' + $(this).attr('data'), {
+      isPartialInvoices: isPartialInvoices,
+      idRfq: idRfq
+    }, function () {
       $('#edit_fulfillment_item_modal').modal();
     });
     return false;
@@ -323,7 +331,8 @@ $(document).ready(function () {
     return false;
   });
 
-  $('#fulfillment_page').on('click', '.delete_fulfillment_item_button', function () {
+  $('#fulfillment_page').on('click', '.delete_fulfillment_item_button', function (e) {
+    e.preventDefault();
     $.ajax({
       url: '/rfq/fulfillment/equipment/delete_fulfillment_item/',
       data: {
@@ -353,7 +362,10 @@ $(document).ready(function () {
   });
 
   $('#fulfillment_page').on('click', '.edit_fulfillment_subitem_button', function () {
-    $('#edit_fulfillment_subitem_modal form').load('/rfq/fulfillment/equipment/load_fulfillment_subitem/' + $(this).attr('data'), function () {
+    $('#edit_fulfillment_subitem_modal form').load('/rfq/fulfillment/equipment/load_fulfillment_subitem/' + $(this).attr('data'), {
+      isPartialInvoices: isPartialInvoices,
+      idRfq: idRfq
+    }, function () {
       $('#edit_fulfillment_subitem_modal').modal();
     });
     return false;
@@ -367,7 +379,8 @@ $(document).ready(function () {
     return false;
   });
 
-  $('#fulfillment_page').on('click', '.delete_fulfillment_subitem_button', function () {
+  $('#fulfillment_page').on('click', '.delete_fulfillment_subitem_button', function (e) {
+    e.preventDefault();
     $.ajax({
       url: '/rfq/fulfillment/equipment/delete_fulfillment_subitem/',
       data: {
