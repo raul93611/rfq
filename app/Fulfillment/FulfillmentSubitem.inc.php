@@ -88,4 +88,11 @@ class FulfillmentSubitem {
   public function getIdInvoice() {
     return $this->id_invoice;
   }
+
+  public function getInvoiceName() {
+    Conexion::abrir_conexion();
+    $invoice = InvoiceRepository::get_one(Conexion::obtener_conexion(), $this-> id_invoice);
+    Conexion::cerrar_conexion();
+    return $invoice?->get_name();
+  }
 }
