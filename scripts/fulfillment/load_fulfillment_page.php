@@ -29,25 +29,40 @@ Conexion::cerrar_conexion();
     <?php endif; ?>
   </div>
 </div>
-<div class="card card-primary">
-  <div class="card-header">
-    <h3 class="card-title"><i class="fas fa-dollar-sign"></i> Invoices</h3>
+<?php if ($quote->obtener_fulfillment_pending()) : ?>
+  <?php 
+    Conexion::abrir_conexion();
+    $invoicesRetrieved = InvoiceRepository::listInvoices(Conexion::obtener_conexion(), $id_rfq);
+    Conexion::cerrar_conexion();
+  ?>
+  <div class="card card-primary">
+    <div class="card-header">
+      <h3 class="card-title"><i class="fas fa-dollar-sign"></i> Invoices</h3>
+    </div>
+    <div class="card-body">
+      <table class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>INVOICE</th>
+            <th>TOTAL PRICE</th>
+            <th>REAL COST</th>
+            <th>PROFIT</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach ($invoicesRetrieved as $key => $invoiceRetrieved) : ?>
+            <tr>
+              <td><?= $invoiceRetrieved['invoice_name'] ?></td>
+              <td><?= $invoiceRetrieved['total_item_price'] ?></td>
+              <td><?= $invoiceRetrieved['total_real_cost'] ?></td>
+              <td><?= $invoiceRetrieved['total_profit'] ?></td>
+            </tr>
+          <?php endforeach; ?>
+        </tbody>
+      </table>
+    </div>
   </div>
-  <div class="card-body">
-  <table class="table table-bordered table-hover">
-      <thead>
-        <tr>
-          <th>INVOICE</th>
-          <th>TOTAL PRICE</th>
-          <th>REAL COST</th>
-          <th>PROFIT</th>
-        </tr>
-      </thead>
-      <tbody>
-      </tbody>
-  </table>
-  </div>
-</div>
+<?php endif; ?>
 <div class="card card-primary">
   <div class="card-header">
     <h3 class="card-title"><i class="fas fa-dollar-sign"></i> Total</h3>

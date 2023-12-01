@@ -21,7 +21,7 @@ Conexion::cerrar_conexion();
           include_once 'plantillas/fulfillment/templates/comments_button.inc.php';
           include_once 'plantillas/fulfillment/templates/pending_button.inc.php';
           ?>
-          <button type="button" class="btn btn-info" id="fulfillment_audit_trails_button" data="<?php echo $id_rfq; ?>" name="button">Audit Trails</button>
+          <button type="button" class="btn btn-info" id="fulfillment_audit_trails_button" data="<?= $id_rfq; ?>" name="button">Audit Trails</button>
         </div>
         <div class="col-sm-4 text-right">
           <?php include_once 'templates/pending_status.inc.php'; ?>
@@ -43,7 +43,7 @@ Conexion::cerrar_conexion();
       <div class="row">
         <?php include_once 'plantillas/fulfillment/templates/fulfillment_table.inc.php'; ?>
         <div class="card-footer footer_item">
-          <a class="btn btn-primary" id="go_back" href="<?php echo EDITAR_COTIZACION . '/' . $quote->obtener_id(); ?>"><i class="fa fa-reply"></i></a>
+          <a class="btn btn-primary" id="go_back" href="<?= EDITAR_COTIZACION . '/' . $quote->obtener_id(); ?>"><i class="fa fa-reply"></i></a>
           <a href="#" id="add_comment" class="btn btn-primary add_item_charter"><i class="fas fa-plus"></i> Add comment</a>
         </div>
       </div>
@@ -64,4 +64,4 @@ include_once 'modals/audit_trails_modal.inc.php';
 include_once 'modals/add_invoice_modal.inc.php';
 include_once 'modals/edit_invoice_modal.inc.php';
 ?>
-<script src="<?php echo RUTA_JS; ?>fulfillment.js"></script>
+<script src="<?= RUTA_JS; ?>fulfillment.js"></script>
