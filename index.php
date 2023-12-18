@@ -24,7 +24,9 @@ spl_autoload_register(function ($class) {
     'Invoice' => ['Invoice', 'InvoiceRepository'],
     'Personnel' => ['Personnel', 'PersonnelRepository'],
     'CalendarEvent' => ['CalendarEvent', 'CalendarEventRepository'],
-    'TypeOfProject' => ['TypeOfProject', 'TypeOfProjectRepository']
+    'TypeOfProject' => ['TypeOfProject', 'TypeOfProjectRepository'],
+    'YearlyProjection' => ['YearlyProjection', 'YearlyProjectionRepository'],
+    'MonthlyProjection' => ['MonthlyProjection', 'MonthlyProjectionRepository']
   ];
 
   foreach ($subfolder as $key => $array) {
@@ -583,6 +585,30 @@ switch ($partes_ruta[1] ?? null) {
         break;
       case 'update_invoice':
         $ruta_elegida = 'scripts/fulfillment/update_invoice.php';
+        break;
+      default:
+        break;
+    }
+    break;
+  case 'projection':
+    switch ($partes_ruta[2]) {
+      case 'table':
+        $ruta_elegida = 'scripts/projection/table.php';
+        break;
+      case 'save':
+        $ruta_elegida = 'scripts/projection/save.php';
+        break;
+      case 'monthly':
+        $ruta_elegida = 'scripts/projection/monthly.php';
+        break;
+      case 'month':
+        $ruta_elegida = 'scripts/projection/month.php';
+        break;
+      case 'projected_amount':
+        $ruta_elegida = 'scripts/projection/projected_amount.php';
+        break;
+      case 'update_projected_amount':
+        $ruta_elegida = 'scripts/projection/update_projected_amount.php';
         break;
       default:
         break;

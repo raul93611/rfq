@@ -191,8 +191,8 @@ switch ($partes_ruta[2] ?? null) {
       case 'payment_terms':
         include_once 'plantillas/payment_terms/payment_terms.inc.php';
         break;
-      case 'weekly_projections':
-        include_once 'plantillas/weekly_projections/weekly_projections.inc.php';
+      case 'daily':
+        include_once 'plantillas/weekly_projections/daily.inc.php';
         break;
       case 'weekly_projections_2023':
         include_once 'plantillas/weekly_projections/weekly_projections_2023.inc.php';
@@ -209,6 +209,18 @@ switch ($partes_ruta[2] ?? null) {
       default:
         $id_rfq = $partes_ruta[3];
         include_once 'plantillas/fulfillment/fulfillment.inc.php';
+        break;
+    }
+    break;
+  case 'projection':
+    switch ($partes_ruta[3]) {
+      case 'month':
+        $id_month = $partes_ruta[4];
+        include_once 'plantillas/projection/month.inc.php';
+        break;
+      default:
+        $id_projection = $partes_ruta[3];
+        include_once 'plantillas/projection/monthly.inc.php';
         break;
     }
     break;

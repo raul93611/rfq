@@ -16,10 +16,10 @@
       </a>
     </li>
     <li class="nav-item">
-      <a href="<?= WEEKLY_PROJECTIONS; ?>" class="nav-link <?= $partes_ruta[3] == 'weekly_projections' ? 'active' : ''; ?>">
+      <a href="<?= DAILY; ?>" class="nav-link <?= $partes_ruta[3] == 'daily' ? 'active' : ''; ?>">
         <i class="nav-icon fas fa-th"></i>
         <p>
-          Weekly Projections 2022
+          Daily
         </p>
       </a>
     </li>
