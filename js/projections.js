@@ -22,7 +22,7 @@ $(document).ready(function () {
           if (type === 'display') {
             return `
             <a href="/rfq/perfil/projection/${row.id}" class="btn btn-sm btn-warning">
-              View
+              <i class="fas fa-info-circle"></i>
             </a>
             `;
           } else {

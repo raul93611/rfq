@@ -31,11 +31,11 @@ $(document).ready(function () {
         "orderable": false,
       },
       {
-        "data": "total_cost",
+        "data": "total_price",
         "orderable": false,
       },
       {
-        "data": "total_price",
+        "data": "total_cost",
         "orderable": false,
       },
       {

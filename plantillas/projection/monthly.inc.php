@@ -26,8 +26,8 @@
                     <th>MONTH ID</th>
                     <th>MONTH</th>
                     <th>MONTHLY GOAL RESULT</th>
-                    <th>TOTAL COST</th>
                     <th>TOTAL PRICE</th>
+                    <th>TOTAL COST</th>
                     <th>PROFIT</th>
                     <th>OPTIONS</th>
                   </tr>

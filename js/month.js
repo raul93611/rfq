@@ -17,8 +17,8 @@ $(document).ready(function () {
       { "data": "id" },
       { "data": "invoice_date" },
       { "data": "contract_number" },
-      { "data": "total_cost" },
       { "data": "total_price" },
+      { "data": "total_cost" },
       { "data": "profit" },
       { "data": "type_of_contract" }
     ]

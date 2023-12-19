@@ -6,7 +6,7 @@
           <h1 class="m-0 text-dark">Daily</h1>
         </div>
         <div class="col-sm-6">
-          <button id="add-projection-button" class="float-right btn btn-primary">Add</button>
+          <button id="add-projection-button" class="float-right btn btn-primary"><i class="fas fa-plus"></i></button>
         </div>
       </div>
     </div>

@@ -135,10 +135,10 @@ class YearlyProjectionRepository {
         SELECT monthly_projections.id,
           monthly_projections.month,
           monthname(str_to_date(monthly_projections.month, '%m')) as month_name,
-          monthly_projections.projected_amount,
-          SUM(total_price) AS total_price,
-          SUM(total_cost) AS total_cost,
-          SUM(profit) AS profit,
+          FORMAT(SUM(profit) - monthly_projections.projected_amount, 2) AS projected_amount,
+          FORMAT(SUM(total_price), 2) AS total_price,
+          FORMAT(SUM(total_cost), 2) AS total_cost,
+          FORMAT(SUM(profit), 2) AS profit,
           NULL as options
         FROM (
             (
@@ -336,9 +336,9 @@ class YearlyProjectionRepository {
             r.id,
             DATE_FORMAT(r.invoice_date, '%m/%d/%Y') as invoice_date, 
             r.contract_number, 
-            COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_price,
-            COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0) AS total_cost,
-            COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - (COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0)) as profit,
+            FORMAT(COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0), 2) AS total_price,
+            FORMAT(COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0), 2) AS total_cost,
+            FORMAT(COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - (COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0)), 2) as profit,
             r.type_of_contract
           FROM rfq r
           LEFT JOIN services s ON r.id = s.id_rfq
@@ -366,9 +366,9 @@ class YearlyProjectionRepository {
             i.name AS id,
             DATE_FORMAT(i.created_at, '%m/%d/%Y') as invoice_date,
             NULL as contract_number,
-            SUM(combined.item_total_price) AS total_price,
-            SUM(combined.sum_real_cost) AS total_cost,
-            SUM(combined.profit) AS profit,
+            FORMAT(SUM(combined.item_total_price), 2) AS total_price,
+            FORMAT(SUM(combined.sum_real_cost), 2) AS total_cost,
+            FORMAT(SUM(combined.profit), 2) AS profit,
             NULL as type_of_contract
           FROM (
             (
