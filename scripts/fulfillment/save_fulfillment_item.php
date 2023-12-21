@@ -15,7 +15,7 @@ $fulfillment_item = new FulfillmentItem(
   htmlspecialchars($_POST['comment']),
   0,
   '',
-  $_POST["invoice"] ?? null
+  empty($_POST["invoice"]) ? null : $_POST["invoice"]
 );
 $id = FulfillmentItemRepository::insert(Conexion::obtener_conexion(), $fulfillment_item);
 $total_cost = FulfillmentItemRepository::get_total_cost(Conexion::obtener_conexion(), $_POST['id_item']);

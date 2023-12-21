@@ -6,10 +6,7 @@ $(document).ready(function () {
   const idRfq = $('#id-rfq').val();
   const isPartialInvoices = $('input[name="is-partial-invoices"]').val();
 
-  console.log(idRfq + 'asdfsdafsdafsadfsdfds');
-
   function loadInvoiceDropdown(idRfq) {
-    console.log(idRfq + 'asdfsdafsdafsadfsdfds');
     invoiceDropdown.load('/rfq/fulfillment/invoice/load_dropdown', { id: idRfq });
   }
 

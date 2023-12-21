@@ -13,7 +13,7 @@ FulfillmentSubitemRepository::update(
   $real_cost, 
   $_POST['payment_term'], 
   htmlspecialchars($_POST['comment']),
-  $_POST["invoice"] ?? null
+  empty($_POST["invoice"]) ? null : $_POST["invoice"]
 );
 $total_cost = FulfillmentSubitemRepository::get_total_cost(Conexion::obtener_conexion(), $_POST['id_subitem']);
 RepositorioSubitem::set_fulfillment_profit(Conexion::obtener_conexion(), $subitem->obtener_total_price() - $total_cost, $_POST['id_subitem']);
