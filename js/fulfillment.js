@@ -37,6 +37,7 @@ $(document).ready(function () {
         success: function (response) {
           addInvoiceModal.modal('hide');
           loadInvoiceDropdown(idRfq);
+          location.reload();
         },
         error: function (xhr, status, error) {
           console.error(error);
@@ -77,6 +78,7 @@ $(document).ready(function () {
         success: function (response) {
           editInvoiceModal.modal('hide');
           loadInvoiceDropdown(idRfq);
+          location.reload();
         },
         error: function (xhr, status, error) {
           console.error(error);
@@ -86,7 +88,6 @@ $(document).ready(function () {
   });
 
   function deleteInvoice(e) {
-    console.log('sadfsdfsadfsd');
     $.ajax({
       url: '/rfq/fulfillment/invoice/delete',
       type: 'POST',
@@ -96,6 +97,7 @@ $(document).ready(function () {
       success: function (response) {
         editInvoiceModal.modal('hide');
         loadInvoiceDropdown(idRfq);
+        location.reload();
       },
       error: function (xhr, status, error) {
         console.error(error);
