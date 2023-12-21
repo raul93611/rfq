@@ -191,12 +191,7 @@ switch ($partes_ruta[2] ?? null) {
       case 'payment_terms':
         include_once 'plantillas/payment_terms/payment_terms.inc.php';
         break;
-      case 'daily':
-        include_once 'plantillas/weekly_projections/daily.inc.php';
-        break;
-      case 'weekly_projections_2023':
-        include_once 'plantillas/weekly_projections/weekly_projections_2023.inc.php';
-        break;
+
       case 'personnel_calendar':
         include_once 'plantillas/fulfillment/personnel_calendar/personnel_calendar.inc.php';
         break;
@@ -214,6 +209,15 @@ switch ($partes_ruta[2] ?? null) {
     break;
   case 'projection':
     switch ($partes_ruta[3]) {
+      case 'daily':
+        include_once 'plantillas/projection/daily.inc.php';
+        break;
+      case 'weekly_projections_2023':
+        include_once 'plantillas/projection/weekly_projections_2023.inc.php';
+        break;
+      case 'weekly_projections_2022':
+        include_once 'plantillas/projection/weekly_projections_2022.inc.php';
+        break;
       case 'month':
         $id_month = $partes_ruta[4];
         include_once 'plantillas/projection/month.inc.php';

@@ -4,8 +4,8 @@ $(document).ready(function () {
     "processing": true,
     "serverSide": true,
     "searching": false,
-    "pageLength": 50,
-    "order": [[1, "asc"]],
+    "pageLength": 10,
+    "order": [[0, "asc"]],
     "ajax": {
       "url": '/rfq/projection/month',
       "type": "POST",
@@ -14,13 +14,16 @@ $(document).ready(function () {
       }
     },
     "columns": [
-      { "data": "id" },
       { "data": "invoice_date" },
-      { "data": "contract_number" },
+      { "data": "id" },
+      { "data": "type_of_contract" },
       { "data": "total_price" },
-      { "data": "total_cost" },
+      {
+        "data": "total_cost",
+        "visible": false
+      },
       { "data": "profit" },
-      { "data": "type_of_contract" }
+      { "data": "profit_percentage" }
     ]
   });
 });

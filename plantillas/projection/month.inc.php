@@ -27,13 +27,13 @@ Conexion::cerrar_conexion();
               <table id="month-table" data-id="<?= $id_month ?>" class="table table-bordered">
                 <thead>
                   <tr>
-                    <th>ID</th>
                     <th>INVOICE DATE</th>
-                    <th>CONTRACT NUMBER</th>
-                    <th>TOTAL PRICE</th>
-                    <th>TOTAL COST</th>
-                    <th>PROFIT</th>
+                    <th>INVOICE</th>
                     <th>TYPE OF CONTRACT</th>
+                    <th>INVOICE AMOUNT</th>
+                    <th>TOTAL COST</th>
+                    <th>PROFIT($)</th>
+                    <th>PROFIT(%)</th>
                   </tr>
                 </thead>
                 <tbody>

@@ -25,10 +25,11 @@
                     <th>ID</th>
                     <th>MONTH ID</th>
                     <th>MONTH</th>
+                    <th>MONTHLY GOAL</th>
                     <th>MONTHLY GOAL RESULT</th>
-                    <th>TOTAL PRICE</th>
+                    <th>TOTAL MONTHLY INVOICE</th>
                     <th>TOTAL COST</th>
-                    <th>PROFIT</th>
+                    <th>TOTAL REAL PROFIT</th>
                     <th>OPTIONS</th>
                   </tr>
                 </thead>

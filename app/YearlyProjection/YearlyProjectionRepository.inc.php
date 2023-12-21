@@ -135,7 +135,8 @@ class YearlyProjectionRepository {
         SELECT monthly_projections.id,
           monthly_projections.month,
           monthname(str_to_date(monthly_projections.month, '%m')) as month_name,
-          FORMAT(SUM(profit) - monthly_projections.projected_amount, 2) AS projected_amount,
+          FORMAT(monthly_projections.projected_amount, 2) AS projected_amount,
+          FORMAT(SUM(profit) - monthly_projections.projected_amount, 2) AS projected_result,
           FORMAT(SUM(total_price), 2) AS total_price,
           FORMAT(SUM(total_cost), 2) AS total_cost,
           FORMAT(SUM(profit), 2) AS profit,
@@ -304,13 +305,13 @@ class YearlyProjectionRepository {
     $search = '%' . $search . '%';
     switch ($sort_column_index) {
       case 0:
-        $sort_column = 'id';
-        break;
-      case 1:
         $sort_column = 'invoice_date';
         break;
+      case 1:
+        $sort_column = 'id';
+        break;
       case 2:
-        $sort_column = 'contract_number';
+        $sort_column = 'type_of_contract';
         break;
       case 3:
         $sort_column = 'total_cost';
@@ -322,7 +323,7 @@ class YearlyProjectionRepository {
         $sort_column = 'profit';
         break;
       case 6:
-        $sort_column = 'type_of_contract';
+        $sort_column = 'profit_percentage';
         break;
       default:
         $sort_column = 'invoice_date';
@@ -333,13 +334,13 @@ class YearlyProjectionRepository {
         $sql = "
         (
           SELECT  
-            r.id,
             DATE_FORMAT(r.invoice_date, '%m/%d/%Y') as invoice_date, 
-            r.contract_number, 
+            r.id,
+            r.type_of_contract,
             FORMAT(COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0), 2) AS total_price,
             FORMAT(COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0), 2) AS total_cost,
             FORMAT(COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - (COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0)), 2) as profit,
-            r.type_of_contract
+            FORMAT(100 * ((COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - (COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0))) / (COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0))), 2) AS profit_percentage
           FROM rfq r
           LEFT JOIN services s ON r.id = s.id_rfq
           WHERE deleted = 0 AND
@@ -363,13 +364,13 @@ class YearlyProjectionRepository {
         UNION
         (
           SELECT 
-            i.name AS id,
             DATE_FORMAT(i.created_at, '%m/%d/%Y') as invoice_date,
-            NULL as contract_number,
+            i.name AS id,
+            NULL as type_of_contract,
             FORMAT(SUM(combined.item_total_price), 2) AS total_price,
             FORMAT(SUM(combined.sum_real_cost), 2) AS total_cost,
             FORMAT(SUM(combined.profit), 2) AS profit,
-            NULL as type_of_contract
+            FORMAT(100 * ((SUM(combined.profit)) / (SUM(combined.item_total_price))), 2) as profit_percentage
           FROM (
             (
               SELECT fi.id_invoice,
@@ -466,9 +467,8 @@ class YearlyProjectionRepository {
         (
           (
             SELECT  
-              r.id,
               DATE_FORMAT(r.invoice_date, '%m/%d/%Y') as invoice_date, 
-              r.contract_number, 
+              r.id,
               COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_price,
               COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0) AS total_cost,
               COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - (COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0)) as profit,
@@ -496,9 +496,8 @@ class YearlyProjectionRepository {
           UNION
           (
             SELECT 
-              i.name AS id,
               DATE_FORMAT(i.created_at, '%m/%d/%Y') as invoice_date,
-              NULL as contract_number,
+              i.name AS id,
               SUM(combined.item_total_price) AS total_price,
               SUM(combined.sum_real_cost) AS total_cost,
               SUM(combined.profit) AS profit,
@@ -597,9 +596,8 @@ class YearlyProjectionRepository {
         (
           (
             SELECT  
-              r.id,
               DATE_FORMAT(r.invoice_date, '%m/%d/%Y') as invoice_date, 
-              r.contract_number, 
+              r.id,
               COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_price,
               COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0) AS total_cost,
               COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - (COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0)) as profit,
@@ -627,9 +625,8 @@ class YearlyProjectionRepository {
           UNION
           (
             SELECT 
-              i.name AS id,
               DATE_FORMAT(i.created_at, '%m/%d/%Y') as invoice_date,
-              NULL as contract_number,
+              i.name AS id,
               SUM(combined.item_total_price) AS total_price,
               SUM(combined.sum_real_cost) AS total_cost,
               SUM(combined.profit) AS profit,

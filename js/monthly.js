@@ -31,12 +31,17 @@ $(document).ready(function () {
         "orderable": false,
       },
       {
+        "data": "projected_result",
+        "orderable": false,
+      },
+      {
         "data": "total_price",
         "orderable": false,
       },
       {
         "data": "total_cost",
         "orderable": false,
+        "visible": false,
       },
       {
         "data": "profit",
