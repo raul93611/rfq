@@ -11,8 +11,22 @@ class FulfillmentService {
   private $reviewed;
   private $created_at;
   private $comments;
+  private $id_invoice;
 
-  public function __construct($id, $id_service, $provider, $quantity, $unit_cost, $other_cost, $real_cost, $payment_term, $reviewed, $created_at, $comments) {
+  public function __construct(
+    $id,
+    $id_service,
+    $provider,
+    $quantity,
+    $unit_cost,
+    $other_cost,
+    $real_cost,
+    $payment_term,
+    $reviewed,
+    $created_at,
+    $comments,
+    $id_invoice
+  ) {
     $this->id = $id;
     $this->id_service = $id_service;
     $this->provider = $provider;
@@ -24,6 +38,7 @@ class FulfillmentService {
     $this->reviewed = $reviewed;
     $this->created_at = $created_at;
     $this->comments = $comments;
+    $this->id_invoice = $id_invoice;
   }
 
   public function get_id() {
@@ -68,5 +83,16 @@ class FulfillmentService {
 
   public function getComments() {
     return $this->comments;
+  }
+
+  public function getIdInvoice() {
+    return $this->id_invoice;
+  }
+
+  public function getInvoiceName() {
+    Conexion::abrir_conexion();
+    $invoice = InvoiceRepository::get_one(Conexion::obtener_conexion(), $this-> id_invoice);
+    Conexion::cerrar_conexion();
+    return $invoice?->get_name();
   }
 }

@@ -22,6 +22,7 @@
         include_once 'sales_sidebar.inc.php';
         include_once 'fulfillment_sidebar.inc.php';
         include_once 'accounting_sidebar.inc.php';
+        include_once 'projections_sidebar.inc.php';
         include_once 'employee_docs_sidebar.inc.php';
         include_once 'reports_sidebar.inc.php';
         ?>

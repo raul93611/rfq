@@ -14,13 +14,9 @@
               <div class="form-group">
                 <label>Provider:</label>
                 <select name="provider" class="custom-select">
-                  <?php
-                  foreach ($providers_list as $key => $provider) {
-                    ?>
-                    <option><?php echo $provider-> get_company_name(); ?></option>
-                    <?php
-                  }
-                  ?>
+                  <?php foreach ($providers_list as $key => $provider) : ?>
+                    <option><?= $provider->get_company_name(); ?></option>
+                  <?php endforeach; ?>
                 </select>
               </div>
               <div class="form-group">
@@ -38,15 +34,22 @@
               <div class="form-group">
                 <label for="payment_term">Payment Term:</label>
                 <select class="custom-select" name="payment_term">
-                  <?php
-                    foreach ($payment_terms as $key => $payment_term) {
-                      ?>
-                      <option><?php echo $payment_term-> get_payment_term(); ?></option>
-                      <?php
-                    }
-                  ?>
+                  <?php foreach ($payment_terms as $key => $payment_term) : ?>
+                    <option><?= $payment_term->get_payment_term(); ?></option>
+                  <?php endforeach; ?>
                 </select>
               </div>
+              <?php if ($quote->obtener_fulfillment_pending()) : ?>
+                <div class="form-group">
+                  <label for="invoice">Invoice:</label>
+                  <select class="custom-select" name="invoice">
+                    <option value="">Choose an option</option>
+                    <?php foreach ($invoices as $key => $invoice) : ?>
+                      <option value="<?= $invoice->get_id() ?>"><?= $invoice->get_name(); ?></option>
+                    <?php endforeach; ?>
+                  </select>
+                </div>
+              <?php endif; ?>
               <div class="form-group">
                 <label for="comment">Comment:</label>
                 <textarea id="comment" name="comment" rows="5" class="form-control form-control-sm"></textarea>
@@ -54,7 +57,7 @@
             </div>
           </div>
           <input type="hidden" id="id_subitem" name="id_subitem" value="">
-          <input type="hidden" id="id_rfq" name="id_rfq" value="<?php echo $quote-> obtener_id(); ?>">
+          <input type="hidden" id="id_rfq" name="id_rfq" value="<?= $quote->obtener_id(); ?>">
         </form>
       </div>
       <div class="modal-footer">

@@ -17,13 +17,14 @@ class InvoiceRepository{
     return $object;
   }
 
-  public static function insert($connection, $invoice){
+  public static function save($connection, $invoice){
     if(isset($connection)){
       try{
-        $sql = 'INSERT INTO invoices(id_rfq, name, created_at) VALUES(:id_rfq, :name, NOW())';
+        $sql = 'INSERT INTO invoices(id_rfq, name, created_at) VALUES(:id_rfq, :name, STR_TO_DATE(:created_at, "%m/%d/%Y"))';
         $sentence = $connection-> prepare($sql);
         $sentence-> bindValue(':id_rfq', $invoice-> get_id_rfq(), PDO::PARAM_STR);
         $sentence-> bindValue(':name', $invoice-> get_name(), PDO::PARAM_STR);
+        $sentence-> bindValue(':created_at', $invoice-> get_created_at(), PDO::PARAM_STR);
         $sentence-> execute();
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -63,23 +64,6 @@ class InvoiceRepository{
     return $item;
   }
 
-  public static function get_previous_invoice($connection, $id_invoice, $id_rfq){
-    $item = null;
-    if(isset($connection)){
-      try{
-        $sql = 'SELECT * FROM invoices WHERE id < :id_invoice AND id_rfq = :id_rfq ORDER BY id DESC LIMIT 1;';
-        $sentence = $connection-> prepare($sql);
-        $sentence-> bindValue(':id_invoice', $id_invoice, PDO::PARAM_STR);
-        $sentence-> bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
-        $sentence-> execute();
-        $item = self::single_result_to_object($sentence);
-      }catch(PDOException $ex){
-        print 'ERROR:' . $ex->getMessage() . '<br>';
-      }
-    }
-    return $item;
-  }
-
   public static function delete($connection, $id_invoice){
     if(isset($connection)){
       try{
@@ -93,18 +77,89 @@ class InvoiceRepository{
     }
   }
 
-  public static function update($connection, $name, $id_invoice){
+  public static function update($connection, $name, $created_at, $id_invoice){
     if(isset($connection)){
       try{
-        $sql = 'UPDATE invoices SET name = :name WHERE id = :id_invoice';
+        $sql = 'UPDATE invoices SET name = :name, created_at = STR_TO_DATE(:created_at, "%m/%d/%Y") WHERE id = :id_invoice';
         $sentence = $connection-> prepare($sql);
         $sentence-> bindValue(':name', $name, PDO::PARAM_STR);
+        $sentence-> bindValue(':created_at', $created_at, PDO::PARAM_STR);
         $sentence-> bindValue(':id_invoice', $id_invoice, PDO::PARAM_STR);
         $sentence-> execute();
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
+  }
+
+  public static function listInvoices($connection, $id_rfq){
+    $data = [];
+    if (isset($connection)) {
+      try {
+        $sql = "
+        SELECT combined.id_invoice,
+          i.name AS invoice_name,
+          SUM(combined.item_total_price) AS total_item_price,
+          SUM(combined.sum_real_cost) AS total_real_cost,
+          SUM(combined.profit) AS total_profit
+        FROM (
+            (
+              SELECT fi.id_invoice,
+                i.total_price AS item_total_price,
+                SUM(fi.real_cost) AS sum_real_cost,
+                i.total_price - SUM(fi.real_cost) AS profit
+              FROM item i
+                JOIN fulfillment_items fi ON i.id = fi.id_item
+              WHERE i.id_rfq = {$id_rfq}
+                AND fi.id_invoice IS NOT NULL
+              GROUP BY i.id,
+                fi.id_invoice
+            )
+            UNION ALL
+            (
+              SELECT fsi.id_invoice,
+                si.total_price AS item_total_price,
+                SUM(fsi.real_cost) AS sum_real_cost,
+                si.total_price - SUM(fsi.real_cost) AS profit
+              FROM subitems si
+                JOIN fulfillment_subitems fsi ON si.id = fsi.id_subitem
+              WHERE si.id_item IN (
+                  SELECT id
+                  FROM item
+                  WHERE id_rfq = {$id_rfq}
+                )
+                AND fsi.id_invoice IS NOT NULL
+              GROUP BY si.id,
+                fsi.id_invoice
+            )
+            UNION ALL
+            (
+              SELECT fs.id_invoice,
+                s.total_price AS item_total_price,
+                SUM(fs.real_cost) AS sum_real_cost,
+                s.total_price - SUM(fs.real_cost) AS profit
+              FROM services s
+                JOIN fulfillment_services fs ON s.id = fs.id_service
+              WHERE s.id_rfq = {$id_rfq}
+                AND fs.id_invoice IS NOT NULL
+              GROUP BY s.id,
+                fs.id_invoice
+            )
+          ) AS combined
+          JOIN invoices i ON combined.id_invoice = i.id
+        GROUP BY combined.id_invoice,
+          i.name;
+        ";
+        $sentencia = $connection->prepare($sql);
+        $sentencia->execute();
+        while ($row = $sentencia->fetch(PDO::FETCH_ASSOC)) {
+          $data[] = $row;
+        }
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $data;
   }
 }
 ?>

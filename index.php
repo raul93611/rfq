@@ -24,7 +24,9 @@ spl_autoload_register(function ($class) {
     'Invoice' => ['Invoice', 'InvoiceRepository'],
     'Personnel' => ['Personnel', 'PersonnelRepository'],
     'CalendarEvent' => ['CalendarEvent', 'CalendarEventRepository'],
-    'TypeOfProject' => ['TypeOfProject', 'TypeOfProjectRepository']
+    'TypeOfProject' => ['TypeOfProject', 'TypeOfProjectRepository'],
+    'YearlyProjection' => ['YearlyProjection', 'YearlyProjectionRepository'],
+    'MonthlyProjection' => ['MonthlyProjection', 'MonthlyProjectionRepository']
   ];
 
   foreach ($subfolder as $key => $array) {
@@ -538,6 +540,27 @@ switch ($partes_ruta[1] ?? null) {
             break;
         }
         break;
+      case 'invoice':
+        switch ($partes_ruta[3]) {
+          case 'save':
+            $ruta_elegida = 'scripts/fulfillment/invoice/save.php';
+            break;
+          case 'load':
+            $ruta_elegida = 'scripts/fulfillment/invoice/load.php';
+            break;
+          case 'load_dropdown':
+            $ruta_elegida = 'scripts/fulfillment/invoice/load_dropdown.php';
+            break;
+          case 'update':
+            $ruta_elegida = 'scripts/fulfillment/invoice/update.php';
+            break;
+          case 'delete':
+            $ruta_elegida = 'scripts/fulfillment/invoice/delete.php';
+            break;
+          default:
+            break;
+        }
+        break;
       case 'fulfillment_quotes_table':
         $ruta_elegida = 'scripts/fulfillment/fulfillment_quotes_table.php';
         break;
@@ -556,15 +579,36 @@ switch ($partes_ruta[1] ?? null) {
         $id_rfq = $partes_ruta[3];
         $ruta_elegida = 'scripts/fulfillment/unmark_as_pending.php';
         break;
-      case 'save_invoice':
-        $ruta_elegida = 'scripts/fulfillment/save_invoice.php';
-        break;
       case 'delete_invoice':
         $id_invoice = $partes_ruta[3];
         $ruta_elegida = 'scripts/fulfillment/delete_invoice.php';
         break;
       case 'update_invoice':
         $ruta_elegida = 'scripts/fulfillment/update_invoice.php';
+        break;
+      default:
+        break;
+    }
+    break;
+  case 'projection':
+    switch ($partes_ruta[2]) {
+      case 'table':
+        $ruta_elegida = 'scripts/projection/table.php';
+        break;
+      case 'save':
+        $ruta_elegida = 'scripts/projection/save.php';
+        break;
+      case 'monthly':
+        $ruta_elegida = 'scripts/projection/monthly.php';
+        break;
+      case 'month':
+        $ruta_elegida = 'scripts/projection/month.php';
+        break;
+      case 'projected_amount':
+        $ruta_elegida = 'scripts/projection/projected_amount.php';
+        break;
+      case 'update_projected_amount':
+        $ruta_elegida = 'scripts/projection/update_projected_amount.php';
         break;
       default:
         break;

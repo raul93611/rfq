@@ -284,12 +284,20 @@ CREATE TABLE trackings_subitems(
   PRIMARY KEY(id),
   FOREIGN KEY(id_subitem) REFERENCES subitems(id) ON UPDATE CASCADE ON DELETE RESTRICT
 );
+/*yearly summary*/
+CREATE TABLE summary(
+  id INT NOT NULL AUTO_INCREMENT UNIQUE,
+  id_rfq INT NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  created_at DATE,
+  PRIMARY KEY(id)
+);
 /*FULFILLMENT*/
 CREATE TABLE invoices(
   id INT NOT NULL AUTO_INCREMENT UNIQUE,
   id_rfq INT NOT NULL,
   name VARCHAR(255) NOT NULL,
-  created_at DATETIME,
+  created_at DATE,
   PRIMARY KEY(id)
 );
 CREATE TABLE fulfillment_items(
@@ -305,8 +313,11 @@ CREATE TABLE fulfillment_items(
   comments TEXT CHARACTER SET utf8 NOT NULL,
   reviewed INT DEFAULT 0,
   created_at DATETIME,
+  id_invoice INT,
   PRIMARY KEY(id),
-  FOREIGN KEY(id_item) REFERENCES item(id) ON UPDATE CASCADE ON DELETE RESTRICT
+  FOREIGN KEY(id_item) REFERENCES item(id) ON UPDATE CASCADE ON DELETE RESTRICT,
+  FOREIGN KEY(id_invoice) REFERENCES invoices(id) ON UPDATE CASCADE ON DELETE
+  SET NULL
 );
 CREATE TABLE fulfillment_subitems(
   id INT NOT NULL AUTO_INCREMENT UNIQUE,
@@ -321,8 +332,11 @@ CREATE TABLE fulfillment_subitems(
   comments TEXT CHARACTER SET utf8 NOT NULL,
   reviewed INT DEFAULT 0,
   created_at DATETIME,
+  id_invoice INT,
   PRIMARY KEY(id),
-  FOREIGN KEY(id_subitem) REFERENCES subitems(id) ON UPDATE CASCADE ON DELETE RESTRICT
+  FOREIGN KEY(id_subitem) REFERENCES subitems(id) ON UPDATE CASCADE ON DELETE RESTRICT,
+  FOREIGN KEY(id_invoice) REFERENCES invoices(id) ON UPDATE CASCADE ON DELETE
+  SET NULL
 );
 CREATE TABLE fulfillment_services(
   id INT NOT NULL AUTO_INCREMENT UNIQUE,
@@ -336,8 +350,11 @@ CREATE TABLE fulfillment_services(
   reviewed INT DEFAULT 0,
   created_at DATETIME,
   comments TEXT CHARACTER SET utf8 NOT NULL,
+  id_invoice INT,
   PRIMARY KEY(id),
-  FOREIGN KEY(id_service) REFERENCES services(id) ON UPDATE CASCADE ON DELETE RESTRICT
+  FOREIGN KEY(id_service) REFERENCES services(id) ON UPDATE CASCADE ON DELETE RESTRICT,
+  FOREIGN KEY(id_invoice) REFERENCES invoices(id) ON UPDATE CASCADE ON DELETE
+  SET NULL
 );
 CREATE TABLE providers_list(
   id INT NOT NULL AUTO_INCREMENT UNIQUE,
@@ -414,7 +431,8 @@ CREATE TABLE personnel(
   criteria VARCHAR(255),
   id_type_of_project INT,
   PRIMARY KEY(id),
-  FOREIGN KEY(id_type_of_project) REFERENCES types_of_projects(id) ON UPDATE CASCADE ON DELETE SET NULL
+  FOREIGN KEY(id_type_of_project) REFERENCES types_of_projects(id) ON UPDATE CASCADE ON DELETE
+  SET NULL
 );
 CREATE TABLE calendar_events(
   id INT NOT NULL AUTO_INCREMENT UNIQUE,
@@ -425,5 +443,18 @@ end DATE,
 color VARCHAR(255),
 PRIMARY KEY(id),
 FOREIGN KEY(id_personnel) REFERENCES personnel(id) ON UPDATE CASCADE ON DELETE CASCADE
+);
+CREATE TABLE yearly_projections (
+  id INT NOT NULL AUTO_INCREMENT UNIQUE,
+  year INT,
+  PRIMARY KEY(id)
+);
+CREATE TABLE monthly_projections (
+  id INT NOT NULL AUTO_INCREMENT UNIQUE,
+  yearly_projection_id INT,
+  month INT,
+  projected_amount DECIMAL(10, 2),
+  PRIMARY KEY(id),
+  FOREIGN KEY(yearly_projection_id) REFERENCES yearly_projections(id) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 ALTER TABLE rfq AUTO_INCREMENT = 300;

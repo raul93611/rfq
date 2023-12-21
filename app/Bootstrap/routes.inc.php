@@ -79,7 +79,6 @@ define('UPDATE_SERVICE_RE_QUOTE', RE_QUOTE_SC . 'update_service');
 define('FULFILLMENT_SC', SERVIDOR . 'fulfillment/');
 define('MARK_AS_PENDING', FULFILLMENT_SC . 'mark_as_pending/');
 define('UNMARK_AS_PENDING', FULFILLMENT_SC . 'unmark_as_pending/');
-define('SAVE_INVOICE', FULFILLMENT_SC . 'save_invoice');
 define('DELETE_INVOICE', FULFILLMENT_SC . 'delete_invoice/');
 define('UPDATE_INVOICE', FULFILLMENT_SC . 'update_invoice/');
 /********************************USER VIEWS*****************************************/
@@ -172,12 +171,15 @@ define('FULFILLMENT', PERFIL . 'fulfillment/');
 define('FULFILLMENT_QUOTES', FULFILLMENT . 'fulfillment_quotes');
 define('PROVIDERS', FULFILLMENT . 'providers');
 define('PAYMENT_TERMS', FULFILLMENT . 'payment_terms');
-define('WEEKLY_PROJECTIONS', FULFILLMENT . 'weekly_projections');
-define('WEEKLY_PROJECTIONS_2023', FULFILLMENT . 'weekly_projections_2023');
 define('PERSONNEL_CALENDAR', FULFILLMENT . 'personnel_calendar');
 define('PERSONNEL', FULFILLMENT . 'personnel');
 define('TYPE_OF_PROJECT', FULFILLMENT . 'type_of_project');
 define('INVOICE', FULFILLMENT . 'invoice/');
+/********************************PROJECTIONS VIEWS*****************************************/
+define('PROJECTION', PERFIL . 'projection/');
+define('DAILY', PROJECTION . 'daily');
+define('WEEKLY_PROJECTIONS_2023', PROJECTION . 'weekly_projections_2023');
+define('WEEKLY_PROJECTIONS_2022', PROJECTION . 'weekly_projections_2022');
 /********************************ACCOUNTING_CHECKBOX VIEWS*****************************************/
 define('ACCOUNTING', PERFIL . 'accounting/');
 define('INVOICE_QUOTES', ACCOUNTING . 'invoice_quotes');
