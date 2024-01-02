@@ -606,7 +606,7 @@ class ExcelRepository {
       $x++;
       $activeWorksheet->setCellValue($x . $y, $quote['total_cost']);
       $x++;
-      $activeWorksheet->setCellValue($x . $y, $quote['total_cost']);
+      $activeWorksheet->setCellValue($x . $y, $quote['total_price']);
       $x++;
       $activeWorksheet->setCellValue($x . $y, $quote['profit']);
       $x++;
