@@ -99,4 +99,8 @@ $(document).ready(function () {
       });
     }
   });
+
+  //totals
+  const totalsContainer = $('#totals-container');
+  totalsContainer.load('/rfq/projection/get_totals', { id: totalsContainer.data('id') });
 });

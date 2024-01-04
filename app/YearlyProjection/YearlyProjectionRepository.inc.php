@@ -118,6 +118,151 @@ class YearlyProjectionRepository {
     return $sentence->fetchColumn();
   }
 
+  public static function getYearTotals($connection, $id) {
+    $data = [];
+    if (isset($connection)) {
+      try {
+        $sql = "
+        SELECT 
+FORMAT(SUM(projected_amount), 2) AS total_projected_amount,
+FORMAT(SUM(projected_result), 2) AS total_projected_result,
+FORMAT(SUM(total_price), 2) AS total_total_price,
+FORMAT(SUM(profit), 2) AS total_profit
+FROM
+(
+SELECT monthly_projections.id,
+          monthly_projections.month,
+          monthname(str_to_date(monthly_projections.month, '%m')) as month_name,
+          monthly_projections.projected_amount AS projected_amount,
+          (SUM(profit) - monthly_projections.projected_amount) AS projected_result,
+          SUM(total_price) AS total_price,
+          FORMAT(SUM(total_cost), 2) AS total_cost,
+          SUM(profit) AS profit,
+          NULL as options
+        FROM (
+            (
+              SELECT r.id,
+                r.invoice_date,
+                r.contract_number,
+                COALESCE(
+                  COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)),
+                  0
+                ) AS total_price,
+                COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0) AS total_cost,
+                COALESCE(
+                  COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)),
+                  0
+                ) - (
+                  COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0)
+                ) as profit,
+                r.type_of_contract
+              FROM rfq r
+                LEFT JOIN services s ON r.id = s.id_rfq
+              WHERE deleted = 0
+                AND invoice = 1
+                AND r.fulfillment_pending = 0
+                AND YEAR(invoice_date) = (
+                  SELECT y.year
+                  FROM yearly_projections as y
+                  WHERE y.id = 1
+                )
+              GROUP BY r.id
+            )
+            UNION
+            (
+              SELECT i.name AS id,
+                i.created_at as invoice_date,
+                NULL as contract_number,
+                SUM(combined.item_total_price) AS total_price,
+                SUM(combined.sum_real_cost) AS total_cost,
+                SUM(combined.profit) AS profit,
+                NULL as type_of_contract
+              FROM (
+                  (
+                    SELECT fi.id_invoice,
+                      i.total_price AS item_total_price,
+                      SUM(fi.real_cost) AS sum_real_cost,
+                      i.total_price - SUM(fi.real_cost) AS profit
+                    FROM item i
+                      JOIN fulfillment_items fi ON i.id = fi.id_item
+                    WHERE i.id_rfq IN (
+                        SELECT id
+                        FROM rfq
+                        WHERE fulfillment_pending = 1
+                          AND invoice = 1
+                      )
+                      AND fi.id_invoice IS NOT NULL
+                    GROUP BY i.id,
+                      fi.id_invoice
+                  )
+                  UNION ALL
+                  (
+                    SELECT fsi.id_invoice,
+                      si.total_price AS item_total_price,
+                      SUM(fsi.real_cost) AS sum_real_cost,
+                      si.total_price - SUM(fsi.real_cost) AS profit
+                    FROM subitems si
+                      JOIN fulfillment_subitems fsi ON si.id = fsi.id_subitem
+                    WHERE si.id_item IN (
+                        SELECT id
+                        FROM item
+                        WHERE id_rfq IN (
+                            SELECT id
+                            FROM rfq
+                            WHERE fulfillment_pending = 1
+                              AND invoice = 1
+                          )
+                      )
+                      AND fsi.id_invoice IS NOT NULL
+                    GROUP BY si.id,
+                      fsi.id_invoice
+                  )
+                  UNION ALL
+                  (
+                    SELECT fs.id_invoice,
+                      s.total_price AS item_total_price,
+                      SUM(fs.real_cost) AS sum_real_cost,
+                      s.total_price - SUM(fs.real_cost) AS profit
+                    FROM services s
+                      JOIN fulfillment_services fs ON s.id = fs.id_service
+                    WHERE s.id_rfq IN (
+                        SELECT id
+                        FROM rfq
+                        WHERE fulfillment_pending = 1
+                          AND invoice = 1
+                      )
+                      AND fs.id_invoice IS NOT NULL
+                    GROUP BY s.id,
+                      fs.id_invoice
+                  )
+                ) AS combined
+                JOIN invoices i ON combined.id_invoice = i.id
+              WHERE YEAR(i.created_at) = (
+                  SELECT y.year
+                  FROM yearly_projections as y
+                  WHERE y.id = 1
+                )
+              GROUP BY combined.id_invoice,
+                i.name
+            )
+          ) AS combined_result
+          RIGHT JOIN monthly_projections ON MONTH(invoice_date) = monthly_projections.month
+        WHERE monthly_projections.yearly_projection_id = 1
+        GROUP BY monthly_projections.month
+) AS totals
+        ";
+        $sentence = $connection->prepare($sql);
+        $sentence->execute();
+        while ($row = $sentence->fetch(PDO::FETCH_ASSOC)) {
+          $data[] = $row;
+        }
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $data;
+  }
+
   public static function getMonthly($connection, $start, $length, $search, $sort_column_index, $sort_direction, $id) {
     $data = [];
     $search = '%' . $search . '%';
