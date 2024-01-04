@@ -164,7 +164,7 @@ SELECT monthly_projections.id,
                 AND YEAR(invoice_date) = (
                   SELECT y.year
                   FROM yearly_projections as y
-                  WHERE y.id = 1
+                  WHERE y.id = {$id}
                 )
               GROUP BY r.id
             )
@@ -240,14 +240,14 @@ SELECT monthly_projections.id,
               WHERE YEAR(i.created_at) = (
                   SELECT y.year
                   FROM yearly_projections as y
-                  WHERE y.id = 1
+                  WHERE y.id = {$id}
                 )
               GROUP BY combined.id_invoice,
                 i.name
             )
           ) AS combined_result
           RIGHT JOIN monthly_projections ON MONTH(invoice_date) = monthly_projections.month
-        WHERE monthly_projections.yearly_projection_id = 1
+        WHERE monthly_projections.yearly_projection_id = {$id}
         GROUP BY monthly_projections.month
 ) AS totals
         ";
