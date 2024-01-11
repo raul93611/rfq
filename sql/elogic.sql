@@ -298,6 +298,7 @@ CREATE TABLE invoices(
   id_rfq INT NOT NULL,
   name VARCHAR(255) NOT NULL,
   created_at DATE,
+  sales_commission INT,
   PRIMARY KEY(id)
 );
 CREATE TABLE fulfillment_items(

@@ -557,6 +557,9 @@ switch ($partes_ruta[1] ?? null) {
           case 'delete':
             $ruta_elegida = 'scripts/fulfillment/invoice/delete.php';
             break;
+          case 'attach_sales_commission':
+            $ruta_elegida = 'scripts/fulfillment/invoice/attach_sales_commission.php';
+            break;
           default:
             break;
         }

@@ -27,6 +27,7 @@ Conexion::cerrar_conexion();
               <table id="month-table" data-id="<?= $id_month ?>" class="table table-bordered">
                 <thead>
                   <tr>
+                    <th>RFQ ID</th>
                     <th>INVOICE DATE</th>
                     <th>INVOICE</th>
                     <th>TYPE OF CONTRACT</th>
@@ -34,6 +35,9 @@ Conexion::cerrar_conexion();
                     <th>TOTAL COST</th>
                     <th>PROFIT($)</th>
                     <th>PROFIT(%)</th>
+                    <th>SALES COMMISSION($)</th>
+                    <th>TOTAL PROFIT($)</th>
+                    <th>TOTAL PROFIT(%)</th>
                   </tr>
                 </thead>
                 <tbody>

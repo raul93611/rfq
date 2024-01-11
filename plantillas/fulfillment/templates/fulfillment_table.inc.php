@@ -27,6 +27,7 @@
     <?php
     Conexion::abrir_conexion();
     $invoicesRetrieved = InvoiceRepository::listInvoices(Conexion::obtener_conexion(), $id_rfq);
+    $isSalesCommissionAttached = InvoiceRepository::isSalesCommissionAttached(Conexion::obtener_conexion(), $id_rfq);
     Conexion::cerrar_conexion();
     ?>
     <div class="card card-primary">
@@ -34,6 +35,11 @@
         <h3 class="card-title"><i class="fas fa-dollar-sign"></i> Invoices</h3>
       </div>
       <div class="card-body">
+        <?php if (!$isSalesCommissionAttached) : ?>
+          <div class="mb-3">
+            <b class="text-danger">Sales Commission is not attached!</b>
+          </div>
+        <?php endif; ?>
         <table class="table table-bordered table-hover">
           <thead>
             <tr>
@@ -41,6 +47,8 @@
               <th>TOTAL PRICE</th>
               <th>REAL COST</th>
               <th>PROFIT</th>
+              <th>SALES COMMISSION</th>
+              <th>OPTIONS</th>
             </tr>
           </thead>
           <tbody>
@@ -50,6 +58,8 @@
                 <td><?= $invoiceRetrieved['total_item_price'] ?></td>
                 <td><?= $invoiceRetrieved['total_real_cost'] ?></td>
                 <td><?= $invoiceRetrieved['total_profit'] ?></td>
+                <td><b class="text-success"><?= $invoiceRetrieved['sales_commission'] ?></b></td>
+                <td><button data-id="<?= $invoiceRetrieved['id_invoice'] ?>" class="attach-sales-commission-button btn btn-warning"><i class="fas fa-paperclip"></i></button></td>
               </tr>
             <?php endforeach; ?>
           </tbody>

@@ -3,7 +3,7 @@ class InvoiceRepository{
   public static function array_to_object($sentence){
     $objects = [];
     while ($row = $sentence-> fetch(PDO::FETCH_ASSOC)) {
-      $objects[] = new Invoice($row['id'], $row['id_rfq'], $row['name'], $row['created_at']);
+      $objects[] = new Invoice($row['id'], $row['id_rfq'], $row['name'], $row['created_at'], $row['sales_commission']);
     }
 
     return $objects;
@@ -12,7 +12,7 @@ class InvoiceRepository{
   public static function single_result_to_object($sentence){
     $row = $sentence-> fetch(PDO::FETCH_ASSOC);
     if(empty($row)) return null;
-    $object = new Invoice($row['id'], $row['id_rfq'], $row['name'], $row['created_at']);
+    $object = new Invoice($row['id'], $row['id_rfq'], $row['name'], $row['created_at'], $row['sales_commission']);
 
     return $object;
   }
@@ -46,6 +46,20 @@ class InvoiceRepository{
       }
     }
     return $invoices;
+  }
+
+  public static function isSalesCommissionAttached($connection, $id_rfq){
+    $invoices = [];
+    if(isset($connection)){
+      try{
+        $sql = "SELECT COUNT(*) as commission_count FROM invoices WHERE id_rfq = $id_rfq AND sales_commission = 1";
+        $sentence = $connection-> prepare($sql);
+        $sentence-> execute();
+      }catch(PDOException $ex){
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $sentence->fetchColumn();
   }
 
   public static function get_one($connection, $id_invoice){
@@ -92,6 +106,26 @@ class InvoiceRepository{
     }
   }
 
+  public static function attachSalesCommission($connection, $id_invoice, $id_rfq){
+    if(isset($connection)){
+      try{
+        $sql = "
+        UPDATE invoices
+        SET sales_commission = 
+          CASE 
+            WHEN id = {$id_invoice} THEN 1
+            ELSE NULL
+          END
+        WHERE id_rfq = {$id_rfq}
+        ";
+        $sentence = $connection-> prepare($sql);
+        $sentence-> execute();
+      }catch(PDOException $ex){
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+  }
+
   public static function listInvoices($connection, $id_rfq){
     $data = [];
     if (isset($connection)) {
@@ -101,7 +135,10 @@ class InvoiceRepository{
           i.name AS invoice_name,
           SUM(combined.item_total_price) AS total_item_price,
           SUM(combined.sum_real_cost) AS total_real_cost,
-          SUM(combined.profit) AS total_profit
+          SUM(combined.profit) AS total_profit,
+          CASE i.sales_commission
+            WHEN 1 THEN 'Attached'
+          END as sales_commission
         FROM (
             (
               SELECT fi.id_invoice,

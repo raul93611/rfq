@@ -1,5 +1,6 @@
 $(document).ready(function () {
   /***************************************Invoices*************************************/
+  const fulfillmentPage = $('#fulfillment_page');
   const addInvoiceModal = $('#add_invoice_modal');
   const addInvoiceForm = $('#add_invoice_form');
   const invoiceDropdown = $('#invoice-dropdown');
@@ -105,6 +106,39 @@ $(document).ready(function () {
     });
   }
 
+  const attachSalesCommissionModal = $('#attach-sales-commission-modal');
+  const attachSalesCommissionForm = $('#attach-sales-commission-form');
+
+  fulfillmentPage.on('click', '.attach-sales-commission-button', function () {
+    console.log('asdfsafdsaf');
+    $.ajax({
+      url: '/rfq/fulfillment/invoice/attach_sales_commission',
+      type: 'POST',
+      data: {
+        id: $(this).data('id'),
+        idRfq: idRfq
+      },
+      success: function (res) {
+        fulfillmentPage.load('/rfq/fulfillment/load_fulfillment_page/' + res.id_rfq);
+      },
+      error: function (xhr, status, error) {
+        console.error(error);
+      }
+    });
+  });
+
+  invoiceDropdown.on('click', '.edit-invoice-button', function (e) {
+    e.preventDefault();
+    editInvoiceForm.load(`/rfq/fulfillment/invoice/load`, { id: $(this).data('id') }, function () {
+      editInvoiceModal.modal();
+      editInvoiceForm.find('#created_at').daterangepicker({
+        singleDatePicker: true,
+        autoApply: true
+      });
+    });
+    editInvoiceForm.on('click', '.delete-invoice-button', deleteInvoice);
+  });
+
   loadInvoiceDropdown(idRfq);
   /****************************************************************************/
   $('#fulfillment_page').on('click', '.reviewed_button', function () {
@@ -139,7 +173,6 @@ $(document).ready(function () {
   });
   /***************************************NET30 FULFILLMENT*************************************/
   const net30Checkbox = $('#net30_cc');
-  const fulfillmentPage = $('#fulfillment_page');
   let net30Fulfillment;
   fulfillmentPage.on('change', '#net30_cc', function () {
     if ($(this).is(':checked')) {

@@ -30,10 +30,10 @@ Conexion::cerrar_conexion();
   </div>
 </div>
 <?php if ($quote->obtener_fulfillment_pending()) : ?>
-  <?php 
-    Conexion::abrir_conexion();
-    $invoicesRetrieved = InvoiceRepository::listInvoices(Conexion::obtener_conexion(), $id_rfq);
-    Conexion::cerrar_conexion();
+  <?php
+  Conexion::abrir_conexion();
+  $invoicesRetrieved = InvoiceRepository::listInvoices(Conexion::obtener_conexion(), $id_rfq);
+  Conexion::cerrar_conexion();
   ?>
   <div class="card card-primary">
     <div class="card-header">
@@ -47,6 +47,8 @@ Conexion::cerrar_conexion();
             <th>TOTAL PRICE</th>
             <th>REAL COST</th>
             <th>PROFIT</th>
+            <th>SALES COMMISSION</th>
+            <th>OPTIONS</th>
           </tr>
         </thead>
         <tbody>
@@ -56,6 +58,8 @@ Conexion::cerrar_conexion();
               <td><?= $invoiceRetrieved['total_item_price'] ?></td>
               <td><?= $invoiceRetrieved['total_real_cost'] ?></td>
               <td><?= $invoiceRetrieved['total_profit'] ?></td>
+              <td><b class="text-success"><?= $invoiceRetrieved['sales_commission'] ?></b></td>
+              <td><button data-id="<?= $invoiceRetrieved['id_invoice'] ?>" class="attach-sales-commission-button btn btn-warning"><i class="fas fa-paperclip"></i></button></td>
             </tr>
           <?php endforeach; ?>
         </tbody>

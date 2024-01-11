@@ -1554,10 +1554,9 @@ class Report {
             COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - (COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0)) as profit_fulfillment,
             r.type_of_contract,
             CASE r.sales_commission
-            	WHEN 'Other commission' THEN ROUND((COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - (COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0))) * 0.03, 2)
-              WHEN 'Same commission' THEN ROUND((COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(SUM(COALESCE(rqs.total_price, 0) + COALESCE(rq.total_cost, 0)), 0)) * 0.03, 2)
+              WHEN 'Other commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(r.total_fulfillment, 0)) * 0.03, 2) 
+              WHEN 'Same commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(rq.total_cost, 0)) * 0.03, 2) 
               WHEN 'No commission' THEN 0
-            END as sales_commission
             FROM rfq r
             LEFT JOIN services s ON r.id = s.id_rfq
             LEFT JOIN usuarios u ON r.usuario_designado = u.id

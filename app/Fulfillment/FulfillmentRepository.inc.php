@@ -46,6 +46,7 @@ class FulfillmentRepository {
               <td colspan="4">Shipping (from Proposal): <?= $quote->obtener_shipping(); ?></td>
               <td>$ <?= $quote->obtener_shipping_cost(); ?></td>
               <td></td>
+              <td></td>
               <td colspan="4">
                 <?= str_replace('|', '<br>', $quote->obtener_fulfillment_shipping() ?? ''); ?>
               </td>
@@ -60,7 +61,7 @@ class FulfillmentRepository {
               <td></td>
               <td colspan="4">Total RFQ (from Proposal):</td>
               <td><?= $quote->obtener_total_price(); ?></td>
-              <td colspan="5"></td>
+              <td colspan="6"></td>
               <td><?= $quote->obtener_total_fulfillment(); ?></td>
               <td></td>
               <td></td>
@@ -289,7 +290,7 @@ class FulfillmentRepository {
         <tr>
           <td colspan="5">Total RFP (from Proposal):</td>
           <td><?= $quote->getTotalQuoteServices(); ?></td>
-          <td colspan="5"></td>
+          <td colspan="6"></td>
           <td><?= $quote->obtener_total_services_fulfillment(); ?></td>
           <td></td>
           <td></td>
