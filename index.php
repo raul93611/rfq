@@ -616,6 +616,9 @@ switch ($partes_ruta[1] ?? null) {
       case 'get_totals':
         $ruta_elegida = 'scripts/projection/get_totals.php';
         break;
+      case 'get_month_totals':
+        $ruta_elegida = 'scripts/projection/get_month_totals.php';
+        break;
       default:
         break;
     }

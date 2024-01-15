@@ -11,7 +11,6 @@ Conexion::cerrar_conexion();
       <th>MONTHLY GOAL RESULT</th>
       <th>TOTAL MONTHLY INVOICE</th>
       <th>TOTAL REAL PROFIT</th>
-      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -21,7 +20,6 @@ Conexion::cerrar_conexion();
       <td><?= $totals[0]['total_projected_result'] ?></td>
       <td><?= $totals[0]['total_total_price'] ?></td>
       <td><?= $totals[0]['total_profit'] ?></td>
-      <td></td>
     </tr>
   </tbody>
 </table>

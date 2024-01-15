@@ -36,10 +36,14 @@
                 <tbody>
                 </tbody>
               </table>
-              <div class="mt-3" id="totals-container" data-id="<?= $id_projection ?>"></div>
             </div>
             <div class="card-footer footer_item">
               <a class="btn btn-primary" id="go_back" href="<?= DAILY ?>"><i class="fa fa-reply"></i></a>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              <div class="mt-3" id="totals-container" data-id="<?= $id_projection ?>"></div>
             </div>
           </div>
         </section>

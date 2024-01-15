@@ -26,11 +26,21 @@ $(document).ready(function () {
         "data": "total_cost",
         "visible": false
       },
-      { "data": "profit" },
-      { "data": "profit_percentage" },
+      {
+        "data": "profit",
+        "visible": false
+      },
+      {
+        "data": "profit_percentage",
+        "visible": false
+      },
       { "data": "sales_commission" },
       { "data": "total_profit" },
       { "data": "total_profit_percentage" }
     ]
   });
+
+  //totals
+  const totalsContainer = $('#totals-container');
+  totalsContainer.load('/rfq/projection/get_month_totals', { id: totalsContainer.data('id') });
 });

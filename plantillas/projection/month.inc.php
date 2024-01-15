@@ -1,4 +1,4 @@
-<?php 
+<?php
 Conexion::abrir_conexion();
 $monthly_projection = MonthlyProjectionRepository::getById(Conexion::obtener_conexion(), $id_month);
 Conexion::cerrar_conexion();
@@ -46,6 +46,11 @@ Conexion::cerrar_conexion();
             </div>
             <div class="card-footer footer_item">
               <a class="btn btn-primary" id="go_back" href="<?= PROJECTION . $monthly_projection->getYearlyProjectionId() ?>"><i class="fa fa-reply"></i></a>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              <div class="mt-3" id="totals-container" data-id="<?= $id_month ?>"></div>
             </div>
           </div>
         </section>
