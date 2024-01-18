@@ -16,22 +16,6 @@
       </a>
     </li>
     <li class="nav-item">
-      <a href="<?= DAILY; ?>" class="nav-link <?= $partes_ruta[3] == 'daily' ? 'active' : ''; ?>">
-        <i class="nav-icon fas fa-th"></i>
-        <p>
-          Daily
-        </p>
-      </a>
-    </li>
-    <li class="nav-item">
-      <a href="<?= WEEKLY_PROJECTIONS_2023; ?>" class="nav-link <?= $partes_ruta[3] == 'weekly_projections_2023' ? 'active' : ''; ?>">
-        <i class="nav-icon fas fa-th"></i>
-        <p>
-          Weekly Projections 2023
-        </p>
-      </a>
-    </li>
-    <li class="nav-item">
       <a href="<?= PERSONNEL_CALENDAR; ?>" class="nav-link <?= $partes_ruta[3] == 'personnel_calendar' ? 'active' : ''; ?>">
         <i class="nav-icon fas fa-calendar"></i>
         <p>
