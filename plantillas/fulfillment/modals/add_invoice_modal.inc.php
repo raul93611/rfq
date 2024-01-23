@@ -21,6 +21,7 @@
               </div>
             </div>
           </div>
+          <div id="error"></div>
           <input type="hidden" name="id_rfq" value="<?php echo $id_rfq; ?>">
         </form>
       </div>

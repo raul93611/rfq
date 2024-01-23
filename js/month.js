@@ -1,4 +1,10 @@
 $(document).ready(function () {
+  $('body').tooltip({
+    selector: '[data-toggle="tooltip"]',
+    trigger: 'click',
+    placement: 'top',
+  });
+
   const monthTable = $('#month-table');
   const monthDataTable = $('#month-table').DataTable({
     "processing": true,
@@ -36,8 +42,65 @@ $(document).ready(function () {
       },
       { "data": "sales_commission" },
       { "data": "total_profit" },
-      { "data": "total_profit_percentage" }
+      { "data": "total_profit_percentage" },
+      {
+        "data": "invoice_acceptance",
+        "orderable": false,
+        "render": function (data, type, row, meta) {
+          if (type === 'display') {
+            return `
+            <button type="button" class="btn btn-link" data-toggle="tooltip" data-html="true" title="${data}">
+              <i class="fas fa-comment fa-2x"></i>
+            </button>
+            <button type="button" class="edit-invoice-acceptance-button btn btn-sm btn-warning" data-id="${row.id}" data-partial-invoice="${row.partial_invoice}">
+              <i class="fas fa-pencil-alt"></i>
+            </button>
+          `;
+          } else {
+            return data;
+          }
+        }
+      },
+      {
+        "data": "partial_invoice",
+        "visible": false
+      }
     ]
+  });
+
+  const editInvoiceAcceptanceModal = $('#edit-invoice-acceptance-modal');
+  const editInvoiceAcceptanceForm = $('#edit-invoice-acceptance-form');
+
+  monthTable.on('click', '.edit-invoice-acceptance-button', function () {
+    editInvoiceAcceptanceForm.load(`/rfq/projection/invoice_acceptance`, {
+      id: $(this).data('id'),
+      partialInvoice: $(this).data('partial-invoice')
+    }, () => {
+      editInvoiceAcceptanceModal.modal();
+    });
+  });
+
+  editInvoiceAcceptanceForm.validate({
+    rules: {
+      invoice_acceptance: {
+        required: true
+      }
+    },
+    submitHandler: function (form) {
+      $.ajax({
+        url: '/rfq/projection/update_invoice_acceptance',
+        type: 'POST',
+        data: $(form).serialize(),
+        success: function (response) {
+          editInvoiceAcceptanceModal.modal('hide');
+          monthDataTable.ajax.reload(null, false);
+          toastr.success('Successfully saved', 'Success');
+        },
+        error: function (xhr, status, error) {
+          console.error(error);
+        }
+      });
+    }
   });
 
   //totals

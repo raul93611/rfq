@@ -36,9 +36,15 @@ $(document).ready(function () {
         type: 'POST',
         data: $(form).serialize(),
         success: function (response) {
-          addInvoiceModal.modal('hide');
-          loadInvoiceDropdown(idRfq);
-          location.reload();
+          let message = '';
+          if (response.error != null) {
+            message = $(`<label class="error">${response.error}</label>`);
+            addInvoiceForm.find('#error').html(message);
+          } else {
+            addInvoiceModal.modal('hide');
+            loadInvoiceDropdown(idRfq);
+            location.reload();
+          }
         },
         error: function (xhr, status, error) {
           console.error(error);
@@ -77,9 +83,15 @@ $(document).ready(function () {
         type: 'POST',
         data: $(form).serialize(),
         success: function (response) {
-          editInvoiceModal.modal('hide');
-          loadInvoiceDropdown(idRfq);
-          location.reload();
+          let message = '';
+          if (response.error != null) {
+            message = $(`<label class="error">${response.error}</label>`);
+            editInvoiceModal.find('#error').html(message);
+          } else {
+            editInvoiceModal.modal('hide');
+            loadInvoiceDropdown(idRfq);
+            location.reload();
+          }
         },
         error: function (xhr, status, error) {
           console.error(error);

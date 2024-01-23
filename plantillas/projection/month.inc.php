@@ -38,6 +38,8 @@ Conexion::cerrar_conexion();
                     <th>SALES COMMISSION($)</th>
                     <th>TOTAL PROFIT($)</th>
                     <th>TOTAL PROFIT(%)</th>
+                    <th>INVOICE ACCEPTANCE</th>
+                    <th>PARTIAL INVOICE</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -58,4 +60,7 @@ Conexion::cerrar_conexion();
     </div>
   </section>
 </div>
+<?php
+include_once 'modals/edit_invoice_acceptance.inc.php';
+?>
 <script src="<?= RUTA_JS; ?>month.js"></script>

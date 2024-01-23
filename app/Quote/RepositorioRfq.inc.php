@@ -138,6 +138,35 @@ class RepositorioRfq {
     return $data;
   }
 
+  public static function getInvoiceAcceptance($connection, $id) {
+    if (isset($connection)) {
+      try {
+        $sql = "SELECT invoice_acceptance FROM rfq WHERE id = :id";
+        $sentence = $connection->prepare($sql);
+        $sentence->bindValue(':id', $id, PDO::PARAM_STR);
+        $sentence->execute();
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+
+    return $sentence->fetchColumn();
+  }
+
+  public static function updateInvoiceAcceptance($connection, $id, $invoice_acceptance){
+    if(isset($connection)){
+      try{
+        $sql = 'UPDATE rfq SET invoice_acceptance = :invoice_acceptance WHERE id = :id';
+        $sentence = $connection-> prepare($sql);
+        $sentence-> bindValue(':id', $id, PDO::PARAM_STR);
+        $sentence-> bindValue(':invoice_acceptance', $invoice_acceptance, PDO::PARAM_STR);
+        $sentence-> execute();
+      }catch(PDOException $ex){
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+  }
+
   public static function getCreatedQuotesByChannel($conexion, $start, $length, $search, $sort_column_index, $sort_direction, $canal) {
     $data = [];
     $search = '%' . $search . '%';

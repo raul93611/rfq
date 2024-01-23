@@ -3,7 +3,7 @@ class InvoiceRepository{
   public static function array_to_object($sentence){
     $objects = [];
     while ($row = $sentence-> fetch(PDO::FETCH_ASSOC)) {
-      $objects[] = new Invoice($row['id'], $row['id_rfq'], $row['name'], $row['created_at'], $row['sales_commission']);
+      $objects[] = new Invoice($row['id'], $row['id_rfq'], $row['name'], $row['created_at']);
     }
 
     return $objects;
@@ -12,7 +12,7 @@ class InvoiceRepository{
   public static function single_result_to_object($sentence){
     $row = $sentence-> fetch(PDO::FETCH_ASSOC);
     if(empty($row)) return null;
-    $object = new Invoice($row['id'], $row['id_rfq'], $row['name'], $row['created_at'], $row['sales_commission']);
+    $object = new Invoice($row['id'], $row['id_rfq'], $row['name'], $row['created_at']);
 
     return $object;
   }
@@ -46,6 +46,51 @@ class InvoiceRepository{
       }
     }
     return $invoices;
+  }
+
+  public static function isNameUnique($connection, $name) {
+    if (isset($connection)) {
+      try {
+        $sql = "SELECT COUNT(*) FROM invoices WHERE name = :name";
+        $sentence = $connection->prepare($sql);
+        $sentence->bindValue(':name', $name, PDO::PARAM_STR);
+        $sentence->execute();
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+
+    return !$sentence->fetchColumn();
+  }
+
+  public static function getInvoiceAcceptance($connection, $name) {
+    if (isset($connection)) {
+      try {
+        $sql = "SELECT invoice_acceptance FROM invoices WHERE name = :name";
+        $sentence = $connection->prepare($sql);
+        $sentence->bindValue(':name', $name, PDO::PARAM_STR);
+        $sentence->execute();
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+
+    return $sentence->fetchColumn();
+  }
+
+  public static function isNameEditable($connection, $name, $id) {
+    if (isset($connection)) {
+      try {
+        $sql = "SELECT COUNT(*) FROM invoices WHERE name = :name AND id != :id";
+        $sentence = $connection->prepare($sql);
+        $sentence->bindValue(':name', $name, PDO::PARAM_STR);
+        $sentence->bindValue(':id', $id, PDO::PARAM_STR);
+        $sentence->execute();
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return !$sentence->fetchColumn();
   }
 
   public static function isSalesCommissionAttached($connection, $id_rfq){
@@ -99,6 +144,20 @@ class InvoiceRepository{
         $sentence-> bindValue(':name', $name, PDO::PARAM_STR);
         $sentence-> bindValue(':created_at', $created_at, PDO::PARAM_STR);
         $sentence-> bindValue(':id_invoice', $id_invoice, PDO::PARAM_STR);
+        $sentence-> execute();
+      }catch(PDOException $ex){
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+  }
+
+  public static function updateInvoiceAcceptance($connection, $name, $invoice_acceptance){
+    if(isset($connection)){
+      try{
+        $sql = 'UPDATE invoices SET invoice_acceptance = :invoice_acceptance WHERE name = :name';
+        $sentence = $connection-> prepare($sql);
+        $sentence-> bindValue(':name', $name, PDO::PARAM_STR);
+        $sentence-> bindValue(':invoice_acceptance', $invoice_acceptance, PDO::PARAM_STR);
         $sentence-> execute();
       }catch(PDOException $ex){
         print 'ERROR:' . $ex->getMessage() . '<br>';

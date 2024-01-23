@@ -81,6 +81,7 @@ CREATE TABLE rfq(
   gsa VARCHAR(255),
   client_payment_terms VARCHAR(255),
   net30_fulfillment_services TINYINT,
+  invoice_acceptance TEXT CHARACTER SET utf8,
   PRIMARY KEY(id),
   FOREIGN KEY(id_usuario) REFERENCES usuarios(id) ON UPDATE CASCADE ON DELETE RESTRICT
 );
@@ -299,6 +300,7 @@ CREATE TABLE invoices(
   name VARCHAR(255) NOT NULL,
   created_at DATE,
   sales_commission INT,
+  invoice_acceptance TEXT CHARACTER SET utf8,
   PRIMARY KEY(id)
 );
 CREATE TABLE fulfillment_items(

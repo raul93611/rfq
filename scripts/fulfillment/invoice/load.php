@@ -17,6 +17,7 @@ Conexion::cerrar_conexion();
       </div>
     </div>
   </div>
+  <div id="error"></div>
 </div>
 <div class="modal-footer">
   <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Save</button>

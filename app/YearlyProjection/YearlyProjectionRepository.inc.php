@@ -741,7 +741,9 @@ class YearlyProjectionRepository {
           FORMAT(profit_percentage, 2) AS profit_percentage,
           sales_commission,
           FORMAT(profit - COALESCE(sales_commission, 0), 2) AS total_profit,
-          FORMAT(100 * ((profit - COALESCE(sales_commission, 0)) / (total_price)), 2) AS total_profit_percentage
+          FORMAT(100 * ((profit - COALESCE(sales_commission, 0)) / (total_price)), 2) AS total_profit_percentage,
+          invoice_acceptance,
+          partial_invoice
         FROM
         (
           (
@@ -757,7 +759,9 @@ class YearlyProjectionRepository {
                 WHEN 'Other commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(r.total_fulfillment, 0)) * 0.03, 2)
                 WHEN 'Same commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(rq.total_cost, 0)) * 0.03, 2)
                 WHEN 'No commission' THEN 0
-              END as sales_commission
+              END as sales_commission,
+              r.invoice_acceptance,
+              NULL AS partial_invoice
             FROM rfq r
               LEFT JOIN services s ON r.id = s.id_rfq
               LEFT JOIN re_quotes rq ON r.id = rq.id_rfq
@@ -797,7 +801,9 @@ class YearlyProjectionRepository {
                     WHEN 'No commission' THEN 0
                   END
                 ELSE NULL
-              END as sales_commission
+              END as sales_commission,
+              invoices_result_with_sales_commission.invoice_acceptance,
+              true AS partial_invoice
             FROM (
               SELECT r.id as id_quote,
                 DATE_FORMAT(i.created_at, '%m/%d/%Y') as invoice_date,
@@ -807,7 +813,8 @@ class YearlyProjectionRepository {
                 SUM(invoices_result.sum_real_cost) AS total_cost,
                 SUM(invoices_result.profit) AS profit,
                 100 * ((SUM(invoices_result.profit)) / (SUM(invoices_result.item_total_price))) as profit_percentage,
-                i.sales_commission AS attached_sales_commission
+                i.sales_commission AS attached_sales_commission,
+                i.invoice_acceptance
               FROM (
                   (
                     SELECT fi.id_invoice,
