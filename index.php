@@ -625,6 +625,10 @@ switch ($partes_ruta[1] ?? null) {
       case 'update_invoice_acceptance':
         $ruta_elegida = 'scripts/projection/update_invoice_acceptance.php';
         break;
+      case 'month_excel':
+        $id = $partes_ruta[3];
+        $ruta_elegida = 'scripts/projection/month_excel.php';
+        break;
       default:
         break;
     }

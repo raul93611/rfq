@@ -1008,4 +1008,229 @@ class ExcelRepository {
     $x++;
     $activeWorksheet->setCellValue($x . $y, number_format(100 * ($fulfillment_total_profit / $total['total_price']), 2) . '%');
   }
+
+  public static function getProjectionsMonthReport(
+    $connection,
+    $id
+  ) {
+    $data = [];
+    if (isset($connection)) {
+      try {
+        $sql = "
+        SELECT 
+          id_quote,
+          invoice_date,
+          id,
+          type_of_contract,
+          total_price AS total_price,
+          total_cost AS total_cost,
+          profit AS profit,
+          profit_percentage AS profit_percentage,
+          sales_commission,
+          profit - COALESCE(sales_commission, 0) AS total_profit,
+          100 * ((profit - COALESCE(sales_commission, 0)) / (total_price)) AS total_profit_percentage,
+          invoice_acceptance,
+          partial_invoice
+        FROM
+        (
+          (
+            SELECT r.id AS id_quote,
+              DATE_FORMAT(r.invoice_date, '%m/%d/%Y') as invoice_date,
+              r.id,
+              r.type_of_contract,
+              COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_price,
+              COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0) AS total_cost,
+              COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - (COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0)) as profit,
+              100 * ((COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - (COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0))) / (COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0))) AS profit_percentage,
+              CASE r.sales_commission
+                WHEN 'Other commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(r.total_fulfillment, 0)) * 0.03, 2)
+                WHEN 'Same commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(rq.total_cost, 0)) * 0.03, 2)
+                WHEN 'No commission' THEN 0
+              END as sales_commission,
+              r.invoice_acceptance,
+              NULL AS partial_invoice
+            FROM rfq r
+              LEFT JOIN services s ON r.id = s.id_rfq
+              LEFT JOIN re_quotes rq ON r.id = rq.id_rfq
+              LEFT JOIN re_quote_services rqs ON rq.id = rqs.id_re_quote
+            WHERE deleted = 0
+              AND invoice = 1
+              AND r.fulfillment_pending = 0
+              AND MONTH(invoice_date) = (
+                SELECT m.month
+                FROM monthly_projections as m
+                WHERE m.id = {$id}
+              )
+              AND YEAR(invoice_date) = (
+                SELECT y.year
+                FROM monthly_projections as m
+                  LEFT JOIN yearly_projections y ON m.yearly_projection_id = y.id
+                WHERE m.id = {$id}
+              )
+            GROUP BY r.id
+          )
+          UNION
+          (
+            SELECT 
+              invoices_result_with_sales_commission.id_quote,
+              invoices_result_with_sales_commission.invoice_date,
+              invoices_result_with_sales_commission.id,
+              invoices_result_with_sales_commission.type_of_contract,
+              invoices_result_with_sales_commission.total_price,
+              invoices_result_with_sales_commission.total_cost,
+              invoices_result_with_sales_commission.profit,
+              invoices_result_with_sales_commission.profit_percentage,
+              CASE invoices_result_with_sales_commission.attached_sales_commission
+                WHEN 1 THEN 
+                  CASE r.sales_commission
+                    WHEN 'Other commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(r.total_fulfillment, 0)) * 0.03, 2)
+                    WHEN 'Same commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(rq.total_cost, 0)) * 0.03, 2)
+                    WHEN 'No commission' THEN 0
+                  END
+                ELSE NULL
+              END as sales_commission,
+              invoices_result_with_sales_commission.invoice_acceptance,
+              true AS partial_invoice
+            FROM (
+              SELECT r.id as id_quote,
+                DATE_FORMAT(i.created_at, '%m/%d/%Y') as invoice_date,
+                i.name AS id,
+                r.type_of_contract as type_of_contract,
+                SUM(invoices_result.item_total_price) AS total_price,
+                SUM(invoices_result.sum_real_cost) AS total_cost,
+                SUM(invoices_result.profit) AS profit,
+                100 * ((SUM(invoices_result.profit)) / (SUM(invoices_result.item_total_price))) as profit_percentage,
+                i.sales_commission AS attached_sales_commission,
+                i.invoice_acceptance
+              FROM (
+                  (
+                    SELECT fi.id_invoice,
+                      i.total_price AS item_total_price,
+                      SUM(fi.real_cost) AS sum_real_cost,
+                      i.total_price - SUM(fi.real_cost) AS profit
+                    FROM item i
+                      JOIN fulfillment_items fi ON i.id = fi.id_item
+                    WHERE i.id_rfq IN (
+                        SELECT id
+                        FROM rfq
+                        WHERE fulfillment_pending = 1
+                          AND invoice = 1
+                      )
+                      AND fi.id_invoice IS NOT NULL
+                    GROUP BY i.id,
+                      fi.id_invoice
+                  )
+                  UNION ALL
+                  (
+                    SELECT fsi.id_invoice,
+                      si.total_price AS item_total_price,
+                      SUM(fsi.real_cost) AS sum_real_cost,
+                      si.total_price - SUM(fsi.real_cost) AS profit
+                    FROM subitems si
+                      JOIN fulfillment_subitems fsi ON si.id = fsi.id_subitem
+                    WHERE si.id_item IN (
+                        SELECT id
+                        FROM item
+                        WHERE id_rfq IN (
+                            SELECT id
+                            FROM rfq
+                            WHERE fulfillment_pending = 1
+                              AND invoice = 1
+                          )
+                      )
+                      AND fsi.id_invoice IS NOT NULL
+                    GROUP BY si.id,
+                      fsi.id_invoice
+                  )
+                  UNION ALL
+                  (
+                    SELECT fs.id_invoice,
+                      s.total_price AS item_total_price,
+                      SUM(fs.real_cost) AS sum_real_cost,
+                      s.total_price - SUM(fs.real_cost) AS profit
+                    FROM services s
+                      JOIN fulfillment_services fs ON s.id = fs.id_service
+                    WHERE s.id_rfq IN (
+                        SELECT id
+                        FROM rfq
+                        WHERE fulfillment_pending = 1
+                          AND invoice = 1
+                      )
+                      AND fs.id_invoice IS NOT NULL
+                    GROUP BY s.id,
+                      fs.id_invoice
+                  )
+                ) AS invoices_result
+                RIGHT JOIN invoices i ON invoices_result.id_invoice = i.id
+                RIGHT JOIN rfq r ON r.id = i.id_rfq
+              WHERE MONTH(i.created_at) = (
+                  SELECT m.month
+                  FROM monthly_projections as m
+                  WHERE m.id = {$id}
+                )
+                AND YEAR(i.created_at) = (
+                  SELECT y.year
+                  FROM monthly_projections as m
+                    LEFT JOIN yearly_projections y ON m.yearly_projection_id = y.id
+                  WHERE m.id = {$id}
+                )
+              GROUP BY invoices_result.id_invoice, i.name
+            ) as invoices_result_with_sales_commission
+            LEFT JOIN rfq r ON r.id = invoices_result_with_sales_commission.id_quote
+            LEFT JOIN re_quotes rq ON r.id = rq.id_rfq
+            GROUP BY invoices_result_with_sales_commission.id
+          )
+        ) AS final_result
+        ORDER BY invoice_date ASC
+        ";
+        $sentence = $connection->prepare($sql);
+        $sentence->execute();
+        while ($row = $sentence->fetch(PDO::FETCH_ASSOC)) {
+          $data[] = $row;
+        }
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $data;
+  }
+
+  public static function projectionsMonth($connection, $id, $activeWorksheet) {
+    $quotes = self::getProjectionsMonthReport($connection, $id);
+    $total['sales_commission'] = 0;
+    $total['total_price'] = 0;
+    $total['total_profit'] = 0;
+
+    $y = 2;
+    foreach ($quotes as $key => $quote) {
+      $x = 'A';
+      $total['total_price'] += $quote['total_price'];
+      $total['sales_commission'] += $quote['sales_commission'];
+      $total['total_profit'] += $quote['total_profit'];
+
+      $activeWorksheet->setCellValue($x . $y, $quote['invoice_date']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['id']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['type_of_contract']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['total_price']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['sales_commission']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['total_profit']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['total_profit_percentage']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['invoice_acceptance']);
+      $y++;
+    }
+    $x = 'D';
+    $activeWorksheet->setCellValue($x . $y, number_format($total['total_price'], 2));
+    $x++;
+    $activeWorksheet->setCellValue($x . $y, number_format($total['sales_commission'], 2));
+    $x++;
+    $activeWorksheet->setCellValue($x . $y, number_format($total['total_profit'], 2));
+    $x++;
+  }
 }

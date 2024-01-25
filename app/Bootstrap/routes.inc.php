@@ -81,6 +81,9 @@ define('MARK_AS_PENDING', FULFILLMENT_SC . 'mark_as_pending/');
 define('UNMARK_AS_PENDING', FULFILLMENT_SC . 'unmark_as_pending/');
 define('DELETE_INVOICE', FULFILLMENT_SC . 'delete_invoice/');
 define('UPDATE_INVOICE', FULFILLMENT_SC . 'update_invoice/');
+/********************************PROJECTION SCRIPTS*****************************************/
+define('PROJECTION_SC', SERVIDOR . 'projection/');
+define('MONTH_EXCEL', PROJECTION_SC . 'month_excel/');
 /********************************USER VIEWS*****************************************/
 define('USER', PERFIL . 'user/');
 define('REGISTRO', USER . 'registro');

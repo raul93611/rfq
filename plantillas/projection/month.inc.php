@@ -11,6 +11,7 @@ Conexion::cerrar_conexion();
           <h1 class="m-0 text-dark">Details</h1>
         </div>
         <div class="col-sm-6">
+          <a href="<?= MONTH_EXCEL . $id_month ?>" target="_blank" class="float-right btn btn-success"><i class="fas fa-file-excel"></i></a>
         </div>
       </div>
     </div>
