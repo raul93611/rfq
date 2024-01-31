@@ -34,11 +34,6 @@ Conexion::cerrar_conexion();
     </div>
   </section>
   <section class="content">
-    <?php
-    if ($quote->obtener_invoice()) {
-      include_once 'plantillas/fulfillment/templates/sales_commission.inc.php';
-    }
-    ?>
     <div class="container-fluid">
       <div class="row">
         <?php include_once 'plantillas/fulfillment/templates/fulfillment_table.inc.php'; ?>

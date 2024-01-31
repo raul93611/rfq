@@ -1,4 +1,5 @@
 <div id="fulfillment_page" class="col-md-12">
+  <?php if ($quote->obtener_invoice()) include_once 'plantillas/fulfillment/templates/sales_commission.inc.php'; ?>
   <div class="card card-primary">
     <div class="card-header">
       <h3 class="card-title"><i class="fas fa-highlighter"></i> RFQ</h3>
@@ -99,4 +100,5 @@
       </div>
     </div>
   <?php endif; ?>
+  <?php include_once 'plantillas/fulfillment/modals/add_fulfillment_item_modal.inc.php'; ?>
 </div>

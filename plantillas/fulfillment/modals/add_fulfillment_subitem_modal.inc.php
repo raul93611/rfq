@@ -7,8 +7,14 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
-        <form id="add_fulfillment_subitem_form" method="post" enctype="multipart/form-data" action="">
+      <form id="add_fulfillment_subitem_form" method="post" enctype="multipart/form-data" action="">
+        
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- <div class="modal-body">
           <div class="row">
             <div class="col-md-12">
               <div class="form-group">
@@ -58,12 +64,8 @@
           </div>
           <input type="hidden" id="id_subitem" name="id_subitem" value="">
           <input type="hidden" id="id_rfq" name="id_rfq" value="<?= $quote->obtener_id(); ?>">
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="submit" name="save_fulfillment_subitem" form="add_fulfillment_subitem_form" class="btn btn-success"><i class="fa fa-check"></i> Save</button>
-        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-ban"></i> Cancel</button>
-      </div>
-    </div>
-  </div>
-</div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" name="save_fulfillment_subitem" form="add_fulfillment_subitem_form" class="btn btn-success"><i class="fa fa-check"></i> Save</button>
+          <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-ban"></i> Cancel</button>
+        </div> -->

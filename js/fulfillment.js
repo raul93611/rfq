@@ -1,4 +1,10 @@
 $(document).ready(function () {
+  /***********************************TOOLTIP INITIALIZATION******************/
+  $('body').tooltip({
+    selector: '[data-toggle="tooltip"]',
+    trigger: 'click',
+    placement: 'top',
+  });
   /***************************************Invoices*************************************/
   const fulfillmentPage = $('#fulfillment_page');
   const addInvoiceModal = $('#add_invoice_modal');
@@ -43,7 +49,6 @@ $(document).ready(function () {
           } else {
             addInvoiceModal.modal('hide');
             loadInvoiceDropdown(idRfq);
-            location.reload();
           }
         },
         error: function (xhr, status, error) {
@@ -91,6 +96,7 @@ $(document).ready(function () {
             editInvoiceModal.modal('hide');
             loadInvoiceDropdown(idRfq);
             location.reload();
+            fulfillmentPage.load('/rfq/fulfillment/load_fulfillment_page/' + idRfq);
           }
         },
         error: function (xhr, status, error) {
@@ -110,16 +116,14 @@ $(document).ready(function () {
       success: function (response) {
         editInvoiceModal.modal('hide');
         loadInvoiceDropdown(idRfq);
-        location.reload();
+        fulfillmentPage.load('/rfq/fulfillment/load_fulfillment_page/' + idRfq);
+
       },
       error: function (xhr, status, error) {
         console.error(error);
       }
     });
   }
-
-  const attachSalesCommissionModal = $('#attach-sales-commission-modal');
-  const attachSalesCommissionForm = $('#attach-sales-commission-form');
 
   fulfillmentPage.on('click', '.attach-sales-commission-button', function () {
     console.log('asdfsafdsaf');
@@ -152,8 +156,8 @@ $(document).ready(function () {
   });
 
   loadInvoiceDropdown(idRfq);
-  /****************************************************************************/
-  $('#fulfillment_page').on('click', '.reviewed_button', function () {
+  /****************************************REVIEWED CHECK************************************/
+  fulfillmentPage.on('click', '.reviewed_button', function () {
     $.ajax({
       url: '/rfq/fulfillment/equipment/mark_as_reviewed/',
       data: {
@@ -162,13 +166,13 @@ $(document).ready(function () {
       },
       type: 'POST',
       success: function (res) {
-        $('#fulfillment_page').load('/rfq/fulfillment/load_fulfillment_page/' + res.id_rfq);
+        fulfillmentPage.load('/rfq/fulfillment/load_fulfillment_page/' + res.id_rfq);
       }
     });
     return false;
   });
 
-  $('#fulfillment_page').on('click', '.subitem_reviewed_button', function () {
+  fulfillmentPage.on('click', '.subitem_reviewed_button', function () {
     $.ajax({
       url: '/rfq/fulfillment/equipment/mark_subitem_as_reviewed/',
       data: {
@@ -178,13 +182,12 @@ $(document).ready(function () {
       },
       type: 'POST',
       success: function (res) {
-        $('#fulfillment_page').load('/rfq/fulfillment/load_fulfillment_page/' + res.id_rfq);
+        fulfillmentPage.load('/rfq/fulfillment/load_fulfillment_page/' + res.id_rfq);
       }
     });
     return false;
   });
   /***************************************NET30 FULFILLMENT*************************************/
-  const net30Checkbox = $('#net30_cc');
   let net30Fulfillment;
   fulfillmentPage.on('change', '#net30_cc', function () {
     if ($(this).is(':checked')) {
@@ -200,7 +203,7 @@ $(document).ready(function () {
       },
       type: 'POST',
       success: function (res) {
-        $('#fulfillment_page').load('/rfq/fulfillment/load_fulfillment_page/' + res.id_rfq);
+        fulfillmentPage.load('/rfq/fulfillment/load_fulfillment_page/' + res.id_rfq);
       }
     });
   });
@@ -216,21 +219,14 @@ $(document).ready(function () {
       },
       type: 'POST',
       success: function (res) {
-        $('#fulfillment_page').load('/rfq/fulfillment/load_fulfillment_page/' + res.id_rfq);
+        fulfillmentPage.load('/rfq/fulfillment/load_fulfillment_page/' + res.id_rfq);
       }
     });
-  });
-  /***********************************TOOLTIP INITIALIZATION******************/
-  $('body').tooltip({
-    selector: '[data-toggle="tooltip"]',
-    trigger: 'click',
-    placement: 'top',
   });
   /***********************************FULFILLMENT AUDIT TRAILS******************/
   const btnAuditTrail = $('#fulfillment_audit_trails_button');
   const auditTrailModal = $('#fulfillment_audit_trails_modal');
   const auditTrailModalBody = $('#fulfillment_audit_trails_modal .modal-body');
-  const auditTrailLink = $('.audit_trail_link');
 
   btnAuditTrail.click(function () {
     auditTrailModalBody.load('/rfq/fulfillment/load_fulfillment_audit_trails', { id_rfq: $(this).attr('data') }, function () {
@@ -246,29 +242,29 @@ $(document).ready(function () {
       $(id).removeClass('highlight');
     }, 5000);
   });
-
   /***********************************FULFILLMENT SHIPPING******************/
   let counterShipping = $('#edit_fulfillment_shipping_modal form').attr('data');
+  const editFulfillmentShippingModal = $('#edit_fulfillment_shipping_modal');
+  const editFulfillmentShippingForm = $('#edit_fulfillment_shipping_form');
+  const removeShippingButton = $('.remove_shipping');
 
-  $('#fulfillment_page').on('click', '#edit_fulfillment_shipping', function () {
-    $('#edit_fulfillment_shipping_modal form').load('/rfq/fulfillment/equipment/load_fulfillment_shipping/' + $(this).attr('data'), function () {
-      if (!+counterShipping) $('.remove_shipping').attr('disabled', 'disabled');
-      $('#edit_fulfillment_shipping_modal').modal();
+  fulfillmentPage.on('click', '#edit_fulfillment_shipping', function () {
+    editFulfillmentShippingModal.find('form').load('/rfq/fulfillment/equipment/load_fulfillment_shipping/' + $(this).attr('data'), function () {
+      if (!+counterShipping) removeShippingButton.attr('disabled', 'disabled');
+      editFulfillmentShippingModal.modal();
     });
   });
 
-  $('#edit_fulfillment_shipping_form').submit(function () {
+  editFulfillmentShippingForm.submit(function () {
     $.post('/rfq/fulfillment/equipment/update_fulfillment_shipping', $(this).serialize(), function (res) {
-      $('#edit_fulfillment_shipping_form')[0].reset();
-      $('#edit_fulfillment_shipping_modal').modal('hide');
-      $('#fulfillment_page').load('/rfq/fulfillment/load_fulfillment_page/' + res.id_rfq);
+      editFulfillmentShippingForm[0].reset();
+      editFulfillmentShippingModal.modal('hide');
+      fulfillmentPage.load('/rfq/fulfillment/load_fulfillment_page/' + res.id_rfq);
     });
     return false;
   });
 
-
-
-  $('#edit_fulfillment_shipping_modal form').on('click', '.add_shipping', function () {
+  editFulfillmentShippingModal.find('form').on('click', '.add_shipping', function () {
     counterShipping++;
     $('input[name="shipping_counter"]').val(counterShipping);
     const shippingFields = `
@@ -286,50 +282,64 @@ $(document).ready(function () {
     </div>
     `;
     $('.shipping_container').append(shippingFields);
-    if (counterShipping) $('.remove_shipping').removeAttr('disabled');
+    if (counterShipping) removeShippingButton.removeAttr('disabled');
   });
 
-  $('#edit_fulfillment_shipping_modal form').on('click', '.remove_shipping', function () {
+  editFulfillmentShippingModal.find('form').on('click', '.remove_shipping', function () {
     $(`.shipping${counterShipping}`).remove();
     counterShipping--;
     $('input[name="shipping_counter"]').val(counterShipping);
-    if (!counterShipping) $('.remove_shipping').attr('disabled', 'disabled');
+    if (!counterShipping) removeShippingButton.attr('disabled', 'disabled');
   });
   /***********************************FULFILLMENT SERVICES******************/
-  $('#fulfillment_page').on('click', '.add_fulfillment_service_button', function () {
-    var id_service = $(this).attr('name');
-    $('#new_fulfillment_service_modal #id_service').val(id_service);
-    $('#new_fulfillment_service_modal').modal();
-  });
+  const addFulfillmentServiceModal = $('#new_fulfillment_service_modal');
+  const addFulfillmentServiceForm = $('#add_fulfillment_service_form');
 
-  $('#add_fulfillment_service_form').submit(function () {
-    $.post('/rfq/fulfillment/service/save_fulfillment_service', $(this).serialize(), function (res) {
-      $('#add_fulfillment_service_form')[0].reset();
-      $('#new_fulfillment_service_modal').modal('hide');
-      $('#fulfillment_page').load('/rfq/fulfillment/load_fulfillment_page/' + res.id_rfq);
-    });
-    return false;
-  });
-
-  $('#fulfillment_page').on('click', '.edit_fulfillment_service_button', function () {
-    $('#edit_fulfillment_service_modal form').load('/rfq/fulfillment/service/load_fulfillment_service/' + $(this).attr('data'), {
+  fulfillmentPage.on('click', '.add_fulfillment_service_button', function () {
+    const idService = $(this).attr('name');
+    addFulfillmentServiceModal.find('form').load('/rfq/fulfillment/service/load_fulfillment_service/', {
+      idService: idService,
       isPartialInvoices: isPartialInvoices,
       idRfq: idRfq
     }, function () {
-      $('#edit_fulfillment_service_modal').modal();
+      addFulfillmentServiceModal.modal();
+    });
+
+    // addFulfillmentServiceModal.find('#id_service').val(id_service);
+    // addFulfillmentServiceModal.modal();
+  });
+
+  addFulfillmentServiceForm.submit(function () {
+    $.post('/rfq/fulfillment/service/save_fulfillment_service', $(this).serialize(), function (res) {
+      addFulfillmentServiceForm[0].reset();
+      addFulfillmentServiceModal.modal('hide');
+      fulfillmentPage.load('/rfq/fulfillment/load_fulfillment_page/' + res.id_rfq);
     });
     return false;
   });
 
-  $('#edit_fulfillment_service_form').submit(function () {
+  const editFulfillmentServiceModal = $('#edit_fulfillment_service_modal');
+  const editFulfillmentServiceForm = $('#edit_fulfillment_service_form');
+
+  fulfillmentPage.on('click', '.edit_fulfillment_service_button', function () {
+    editFulfillmentServiceModal.find('form').load('/rfq/fulfillment/service/load_fulfillment_service/' + $(this).attr('data'), {
+      isPartialInvoices: isPartialInvoices,
+      idRfq: idRfq
+    }, function () {
+      editFulfillmentServiceModal.modal();
+    });
+    return false;
+  });
+
+  editFulfillmentServiceForm.submit(function () {
     $.post('/rfq/fulfillment/service/save_edit_fulfillment_service', $(this).serialize(), function (res) {
-      $('#edit_fulfillment_service_modal').modal('hide');
-      $('#fulfillment_page').load('/rfq/fulfillment/load_fulfillment_page/' + res.id_rfq);
+      editFulfillmentServiceModal.modal('hide');
+      fulfillmentPage.load('/rfq/fulfillment/load_fulfillment_page/' + res.id_rfq);
     });
     return false;
   });
 
-  $('#fulfillment_page').on('click', '.delete_fulfillment_service_button', function (e) {
+  fulfillmentPage.on('click', '.delete_fulfillment_service_button', function (e) {
     e.preventDefault();
     $.ajax({
       url: '/rfq/fulfillment/service/delete_fulfillment_service/',
@@ -339,46 +349,60 @@ $(document).ready(function () {
       },
       type: 'POST',
       success: function (res) {
-        $('#fulfillment_page').load('/rfq/fulfillment/load_fulfillment_page/' + res.id_rfq);
+        fulfillmentPage.load('/rfq/fulfillment/load_fulfillment_page/' + res.id_rfq);
       }
     });
     return false;
   });
   /***********************************FULFILLMENT***************************/
-  $('#fulfillment_page').on('click', '.add_fulfillment_item_button', function () {
-    var id_item = $(this).attr('name');
-    $('#new_fulfillment_item_modal #id_item').val(id_item);
-    $('#new_fulfillment_item_modal').modal();
+  /**
+   * items
+   */
+  const addFulfillmentItemModal = $('#new_fulfillment_item_modal');
+  const addFulfillmentItemForm = $('#add_fulfillment_item_form');
+
+  fulfillmentPage.on('click', '.add_fulfillment_item_button', function () {
+    var idItem = $(this).attr('name');
+    addFulfillmentItemModal.find('form').load('/rfq/fulfillment/equipment/load_fulfillment_item/', {
+      isPartialInvoices: isPartialInvoices,
+      idItem: idItem,
+      idRfq: idRfq
+    }, function () {
+      addFulfillmentItemModal.modal();
+    });
   });
 
-  $('#add_fulfillment_item_form').submit(function () {
+  addFulfillmentItemForm.submit(function () {
     $.post('/rfq/fulfillment/equipment/save_fulfillment_item', $(this).serialize(), function (res) {
-      $('#add_fulfillment_item_form')[0].reset();
-      $('#new_fulfillment_item_modal').modal('hide');
-      $('#fulfillment_page').load('/rfq/fulfillment/load_fulfillment_page/' + res.id_rfq);
+      addFulfillmentItemForm[0].reset();
+      addFulfillmentItemModal.modal('hide');
+      fulfillmentPage.load('/rfq/fulfillment/load_fulfillment_page/' + res.id_rfq);
     });
     return false;
   });
 
-  $('#fulfillment_page').on('click', '.edit_fulfillment_item_button', function () {
-    $('#edit_fulfillment_item_modal form').load('/rfq/fulfillment/equipment/load_fulfillment_item/' + $(this).attr('data'), {
+  const editFulfillmentItemModal = $('#edit_fulfillment_item_modal');
+  const editFulfillmentItemForm = $('#edit_fulfillment_item_form');
+
+  fulfillmentPage.on('click', '.edit_fulfillment_item_button', function () {
+    editFulfillmentItemModal.find('form').load('/rfq/fulfillment/equipment/load_fulfillment_item/' + $(this).attr('data'), {
       isPartialInvoices: isPartialInvoices,
       idRfq: idRfq
     }, function () {
-      $('#edit_fulfillment_item_modal').modal();
+      editFulfillmentItemModal.modal();
     });
     return false;
   });
 
-  $('#edit_fulfillment_item_form').submit(function () {
+  editFulfillmentItemForm.submit(function () {
     $.post('/rfq/fulfillment/equipment/save_edit_fulfillment_item', $(this).serialize(), function (res) {
-      $('#edit_fulfillment_item_modal').modal('hide');
-      $('#fulfillment_page').load('/rfq/fulfillment/load_fulfillment_page/' + res.id_rfq);
+      editFulfillmentItemModal.modal('hide');
+      fulfillmentPage.load('/rfq/fulfillment/load_fulfillment_page/' + res.id_rfq);
     });
     return false;
   });
 
-  $('#fulfillment_page').on('click', '.delete_fulfillment_item_button', function (e) {
+  fulfillmentPage.on('click', '.delete_fulfillment_item_button', function (e) {
     e.preventDefault();
     $.ajax({
       url: '/rfq/fulfillment/equipment/delete_fulfillment_item/',
@@ -388,45 +412,59 @@ $(document).ready(function () {
       },
       type: 'POST',
       success: function (res) {
-        $('#fulfillment_page').load('/rfq/fulfillment/load_fulfillment_page/' + res.id_rfq);
+        fulfillmentPage.load('/rfq/fulfillment/load_fulfillment_page/' + res.id_rfq);
       }
     });
   });
 
-  $('#fulfillment_page').on('click', '.add_fulfillment_subitem_button', function () {
-    var id_subitem = $(this).attr('name');
-    $('#new_fulfillment_subitem_modal #id_subitem').val(id_subitem);
-    $('#new_fulfillment_subitem_modal').modal();
+  /**
+   * subitems
+   */
+  const addFulfillmentSubitemModal = $('#new_fulfillment_subitem_modal');
+  const addFulfillmentSubitemForm = $('#add_fulfillment_subitem_form');
+
+  fulfillmentPage.on('click', '.add_fulfillment_subitem_button', function () {
+    var idSubitem = $(this).attr('name');
+    addFulfillmentSubitemModal.find('form').load('/rfq/fulfillment/equipment/load_fulfillment_subitem/', {
+      isPartialInvoices: isPartialInvoices,
+      idSubitem: idSubitem,
+      idRfq: idRfq
+    }, function () {
+      addFulfillmentSubitemModal.modal();
+    });
   });
 
-  $('#add_fulfillment_subitem_form').submit(function () {
+  addFulfillmentSubitemForm.submit(function () {
     $.post('/rfq/fulfillment/equipment/save_fulfillment_subitem', $(this).serialize(), function (res) {
-      $('#add_fulfillment_subitem_form')[0].reset();
-      $('#new_fulfillment_subitem_modal').modal('hide');
-      $('#fulfillment_page').load('/rfq/fulfillment/load_fulfillment_page/' + res.id_rfq);
+      addFulfillmentSubitemForm[0].reset();
+      addFulfillmentSubitemModal.modal('hide');
+      fulfillmentPage.load('/rfq/fulfillment/load_fulfillment_page/' + res.id_rfq);
     });
     return false;
   });
 
-  $('#fulfillment_page').on('click', '.edit_fulfillment_subitem_button', function () {
-    $('#edit_fulfillment_subitem_modal form').load('/rfq/fulfillment/equipment/load_fulfillment_subitem/' + $(this).attr('data'), {
+  const editFulfillmentSubitemModal = $('#edit_fulfillment_subitem_modal');
+  const editFulfillmentSubitemForm = $('#edit_fulfillment_subitem_form');
+
+  fulfillmentPage.on('click', '.edit_fulfillment_subitem_button', function () {
+    editFulfillmentSubitemModal.find('form').load('/rfq/fulfillment/equipment/load_fulfillment_subitem/' + $(this).attr('data'), {
       isPartialInvoices: isPartialInvoices,
       idRfq: idRfq
     }, function () {
-      $('#edit_fulfillment_subitem_modal').modal();
+      editFulfillmentSubitemModal.modal();
     });
     return false;
   });
 
-  $('#edit_fulfillment_subitem_form').submit(function () {
+  editFulfillmentSubitemForm.submit(function () {
     $.post('/rfq/fulfillment/equipment/save_edit_fulfillment_subitem', $(this).serialize(), function (res) {
-      $('#edit_fulfillment_subitem_modal').modal('hide');
-      $('#fulfillment_page').load('/rfq/fulfillment/load_fulfillment_page/' + res.id_rfq);
+      editFulfillmentSubitemModal.modal('hide');
+      fulfillmentPage.load('/rfq/fulfillment/load_fulfillment_page/' + res.id_rfq);
     });
     return false;
   });
 
-  $('#fulfillment_page').on('click', '.delete_fulfillment_subitem_button', function (e) {
+  fulfillmentPage.on('click', '.delete_fulfillment_subitem_button', function (e) {
     e.preventDefault();
     $.ajax({
       url: '/rfq/fulfillment/equipment/delete_fulfillment_subitem/',
@@ -437,7 +475,7 @@ $(document).ready(function () {
       },
       type: 'POST',
       success: function (res) {
-        $('#fulfillment_page').load('/rfq/fulfillment/load_fulfillment_page/' + res.id_rfq);
+        fulfillmentPage.load('/rfq/fulfillment/load_fulfillment_page/' + res.id_rfq);
       }
     });
   });

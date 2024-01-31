@@ -1,7 +1,4 @@
 <?php
-Conexion::abrir_conexion();
-$re_quote = ReQuoteRepository::get_re_quote_by_id_rfq(Conexion::obtener_conexion(), $id_rfq);
-Conexion::cerrar_conexion();
 switch ($quote->obtener_sales_commission()) {
   case 'No commission':
     $sales_commission = ['$0', '0', 'No commission'];

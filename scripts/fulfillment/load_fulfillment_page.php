@@ -3,7 +3,9 @@ Conexion::abrir_conexion();
 $quote = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
 $items_exists = RepositorioItem::items_exists(Conexion::obtener_conexion(), $id_rfq);
 $total_services = ServiceRepository::get_total(Conexion::obtener_conexion(), $id_rfq);
+$invoices = InvoiceRepository::get_all_by_id_rfq(Conexion::obtener_conexion(), $id_rfq);
 Conexion::cerrar_conexion();
+if ($quote->obtener_invoice()) include_once 'plantillas/fulfillment/templates/sales_commission.inc.php'; 
 ?>
 <div class="card card-primary">
   <div class="card-header">
@@ -85,3 +87,17 @@ Conexion::cerrar_conexion();
     </div>
   </div>
 </div>
+<?php if ($quote->obtener_invoice()) : ?>
+  <div class="card card-primary">
+    <div class="card-header">
+      <h3 class="card-title"><i class="fas fa-dollar-sign"></i> Total Profit - Real Sales Commission</h3>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-12">
+          <h3 class="text-info text-center">Total Profit - Real Sales Commission: $ <?= number_format($quote->obtener_real_fulfillment_profit() - str_replace(',', '', $sales_commission[1]), 2); ?></h3>
+        </div>
+      </div>
+    </div>
+  </div>
+<?php endif; ?>
