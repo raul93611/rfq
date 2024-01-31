@@ -8,8 +8,8 @@ use PhpOffice\PhpSpreadsheet\Style\Fill;
 $spreadsheet = new Spreadsheet();
 $activeWorksheet = $spreadsheet->getActiveSheet();
 
-$activeWorksheet->setCellValue('A1', 'AWARD DATE');
-$activeWorksheet->setCellValue('B1', 'PROPOSAL #');
+$activeWorksheet->setCellValue('A1', 'PROPOSAL #');
+$activeWorksheet->setCellValue('B1', 'AWARD DATE');
 $activeWorksheet->setCellValue('C1', 'CONTRACT NUMBER');
 $activeWorksheet->setCellValue('D1', 'CODE');
 $activeWorksheet->setCellValue('E1', 'DESIGNATED USER');
