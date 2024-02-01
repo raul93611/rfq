@@ -319,7 +319,7 @@ class FulfillmentRepository {
     <button type="button" class="add_fulfillment_service_button btn btn-warning" name="<?= $service->get_id(); ?>"><i class="fas fa-plus"></i></button>
   </td>
   <td rowspan="<?= $fulfillment_services_quantity; ?>"><?= $i + 1; ?></td>
-  <td rowspan="<?= $fulfillment_services_quantity; ?>"><?= $service->get_description(); ?></td>
+  <td rowspan="<?= $fulfillment_services_quantity; ?>"><?= mb_substr($service->get_description(), 0, 100) . ' ...'; ?></td>
   <td rowspan="<?= $fulfillment_services_quantity; ?>"><?= $service->get_quantity(); ?></td>
   <td rowspan="<?= $fulfillment_services_quantity; ?>"><?= number_format($service->get_unit_price() * $payment_term, 2); ?></td>
   <td rowspan="<?= $fulfillment_services_quantity; ?>"><?= $service->get_total_price(); ?></td>
