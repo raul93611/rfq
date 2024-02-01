@@ -121,11 +121,11 @@ class ServiceRepository
       <td>
         <div class="btn-group-vertical">
           <button type="button" class="btn btn-warning edit_service" data="<?php echo $service->get_id(); ?>"><i class="fas fa-pen"></i></button>
-          <a href="<?php echo DELETE_SERVICE . $service->get_id(); ?>" class="btn btn-warning"><i class="fas fa-trash"></i></a>
+          <a href="<?php echo DELETE_SERVICE . $service->get_id(); ?>" class="delete_service_button btn btn-warning"><i class="fas fa-trash"></i></a>
         </div>
       </td>
       <td><?php echo $key + 1; ?></td>
-      <td><?php echo nl2br($service->get_description()); ?></td>
+      <td><?php echo nl2br(mb_substr($service->get_description(), 0, 100)) . ' ...'; ?></td>
       <td><?php echo $service->get_quantity(); ?></td>
       <td><?php echo $service->get_unit_price(); ?></td>
       <td><?php echo $service->get_total_price(); ?></td>
