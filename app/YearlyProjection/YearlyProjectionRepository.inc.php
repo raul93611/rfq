@@ -208,7 +208,7 @@ class YearlyProjectionRepository {
                           SELECT id
                           FROM rfq
                           WHERE fulfillment_pending = 1
-                            AND invoice = 1
+                            AND fullfillment = 1
                         )
                         AND fi.id_invoice IS NOT NULL
                       GROUP BY i.id,
@@ -229,7 +229,7 @@ class YearlyProjectionRepository {
                               SELECT id
                               FROM rfq
                               WHERE fulfillment_pending = 1
-                                AND invoice = 1
+                                AND fullfillment = 1
                             )
                         )
                         AND fsi.id_invoice IS NOT NULL
@@ -248,7 +248,7 @@ class YearlyProjectionRepository {
                           SELECT id
                           FROM rfq
                           WHERE fulfillment_pending = 1
-                            AND invoice = 1
+                            AND fullfillment = 1
                         )
                         AND fs.id_invoice IS NOT NULL
                       GROUP BY s.id,
@@ -394,7 +394,7 @@ class YearlyProjectionRepository {
                           SELECT id
                           FROM rfq
                           WHERE fulfillment_pending = 1
-                            AND invoice = 1
+                            AND fullfillment = 1
                         )
                         AND fi.id_invoice IS NOT NULL
                       GROUP BY i.id,
@@ -415,7 +415,7 @@ class YearlyProjectionRepository {
                               SELECT id
                               FROM rfq
                               WHERE fulfillment_pending = 1
-                                AND invoice = 1
+                                AND fullfillment = 1
                             )
                         )
                         AND fsi.id_invoice IS NOT NULL
@@ -434,7 +434,7 @@ class YearlyProjectionRepository {
                           SELECT id
                           FROM rfq
                           WHERE fulfillment_pending = 1
-                            AND invoice = 1
+                            AND fullfillment = 1
                         )
                         AND fs.id_invoice IS NOT NULL
                       GROUP BY s.id,
