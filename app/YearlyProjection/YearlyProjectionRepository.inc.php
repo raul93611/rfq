@@ -118,7 +118,7 @@ class YearlyProjectionRepository {
     return $sentence->fetchColumn();
   }
 
-  public static function getYearTotals($connection, $id) {
+  public static function getMonthTotals($connection, $id) {
     $data = [];
     if (isset($connection)) {
       try {
@@ -509,7 +509,7 @@ class YearlyProjectionRepository {
     return $sentence->fetchColumn();
   }
 
-  public static function getMonthTotals($connection, $id) {
+  public static function getYearTotals($connection, $id) {
     $data = [];
     if (isset($connection)) {
       try {
@@ -612,7 +612,7 @@ class YearlyProjectionRepository {
                             SELECT id
                             FROM rfq
                             WHERE fulfillment_pending = 1
-                              AND invoice = 1
+                              AND fullfillment = 1
                           )
                           AND fi.id_invoice IS NOT NULL
                         GROUP BY i.id,
@@ -633,7 +633,7 @@ class YearlyProjectionRepository {
                                 SELECT id
                                 FROM rfq
                                 WHERE fulfillment_pending = 1
-                                  AND invoice = 1
+                                  AND fullfillment = 1
                               )
                           )
                           AND fsi.id_invoice IS NOT NULL
@@ -652,7 +652,7 @@ class YearlyProjectionRepository {
                             SELECT id
                             FROM rfq
                             WHERE fulfillment_pending = 1
-                              AND invoice = 1
+                              AND fullfillment = 1
                           )
                           AND fs.id_invoice IS NOT NULL
                         GROUP BY s.id,

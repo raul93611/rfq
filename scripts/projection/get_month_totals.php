@@ -1,6 +1,6 @@
 <?php
 Conexion::abrir_conexion();
-$totals = YearlyProjectionRepository::getYearTotals(Conexion::obtener_conexion(), $_POST['id']);
+$totals = YearlyProjectionRepository::getMonthTotals(Conexion::obtener_conexion(), $_POST['id']);
 Conexion::cerrar_conexion();
 ?>
 <table class="table table-bordered">
