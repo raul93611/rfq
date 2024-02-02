@@ -304,9 +304,6 @@ $(document).ready(function () {
     }, function () {
       addFulfillmentServiceModal.modal();
     });
-
-    // addFulfillmentServiceModal.find('#id_service').val(id_service);
-    // addFulfillmentServiceModal.modal();
   });
 
   addFulfillmentServiceForm.submit(function () {

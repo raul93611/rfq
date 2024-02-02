@@ -100,5 +100,4 @@
       </div>
     </div>
   <?php endif; ?>
-  <?php include_once 'plantillas/fulfillment/modals/add_fulfillment_item_modal.inc.php'; ?>
 </div>
