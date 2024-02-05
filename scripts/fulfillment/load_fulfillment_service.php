@@ -20,17 +20,17 @@ Conexion::cerrar_conexion();
       </div>
       <div class="form-group">
         <label for="quantity">Quantity:</label>
-        <input type="number" id="quantity" class="form-control form-control-sm" name="quantity" value="<?= $fulfillment_service?->get_quantity(); ?>">
+        <input type="number" id="quantity" class="form-control form-control-sm" name="quantity" value="<?= $fulfillment_service ? $fulfillment_service->get_quantity() : 0; ?>">
         <input type="hidden" name="quantity_original" value="<?= $fulfillment_service?->get_quantity(); ?>">
       </div>
       <div class="form-group">
         <label for="unit_cost">Unit Cost:</label>
-        <input type="number" step=".01" id="unit_cost" class="form-control form-control-sm" name="unit_cost" value="<?= $fulfillment_service?->get_unit_cost(); ?>">
+        <input type="number" step=".01" id="unit_cost" class="form-control form-control-sm" name="unit_cost" value="<?= $fulfillment_service ? $fulfillment_service->get_unit_cost() : 0; ?>">
         <input type="hidden" name="unit_cost_original" value="<?= $fulfillment_service?->get_unit_cost(); ?>">
       </div>
       <div class="form-group">
         <label for="other_cost">Other Cost:</label>
-        <input type="number" step=".01" id="other_cost" class="form-control form-control-sm" name="other_cost" value="<?= $fulfillment_service?->get_other_cost(); ?>">
+        <input type="number" step=".01" id="other_cost" class="form-control form-control-sm" name="other_cost" value="<?= $fulfillment_service ? $fulfillment_service->get_other_cost() : 0; ?>">
         <input type="hidden" name="other_cost_original" value="<?= $fulfillment_service?->get_other_cost(); ?>">
       </div>
       <div class="form-group">

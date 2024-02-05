@@ -21,17 +21,17 @@ Conexion::cerrar_conexion();
       <div class="form-group">
         <label for="quantity">Quantity:</label>
         <input type="hidden" name="quantity_original" value="<?= $fulfillment_subitem?->get_quantity(); ?>">
-        <input type="number" id="quantity" class="form-control form-control-sm" name="quantity" value="<?= $fulfillment_subitem?->get_quantity(); ?>">
+        <input type="number" id="quantity" class="form-control form-control-sm" name="quantity" value="<?= $fulfillment_subitem ? $fulfillment_subitem->get_quantity() : 0; ?>">
       </div>
       <div class="form-group">
         <label for="unit_cost">Unit Cost:</label>
         <input type="hidden" name="unit_cost_original" value="<?= $fulfillment_subitem?->get_unit_cost(); ?>">
-        <input type="number" step=".01" id="unit_cost" class="form-control form-control-sm" name="unit_cost" value="<?= $fulfillment_subitem?->get_unit_cost(); ?>">
+        <input type="number" step=".01" id="unit_cost" class="form-control form-control-sm" name="unit_cost" value="<?= $fulfillment_subitem ? $fulfillment_subitem->get_unit_cost() : 0; ?>">
       </div>
       <div class="form-group">
         <label for="other_cost">Other Cost:</label>
         <input type="hidden" name="other_cost_original" value="<?= $fulfillment_subitem?->get_other_cost(); ?>">
-        <input type="number" step=".01" id="other_cost" class="form-control form-control-sm" name="other_cost" value="<?= $fulfillment_subitem?->get_other_cost(); ?>">
+        <input type="number" step=".01" id="other_cost" class="form-control form-control-sm" name="other_cost" value="<?= $fulfillment_subitem ? $fulfillment_subitem->get_other_cost() : 0; ?>">
       </div>
       <div class="form-group">
         <label for="payment_term">Payment Term:</label>
