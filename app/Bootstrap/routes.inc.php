@@ -29,6 +29,7 @@ define('SERVICE_SC', QUOTE_SC . 'service/');
 define('ADD_SERVICE', SERVICE_SC . 'add_service');
 define('EDIT_SERVICE', SERVICE_SC . 'edit_service');
 define('DELETE_SERVICE', SERVICE_SC . 'delete_service/');
+define('DUPLICATE_SERVICE', SERVICE_SC . 'duplicate_service/');
 /********************************EQUIPMENT SCRIPTS*****************************************/
 define('EQUIPMENT_SC', QUOTE_SC . 'equipment/');
 define('GUARDAR_ADD_ITEM', EQUIPMENT_SC . 'guardar_add_item/');

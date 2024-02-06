@@ -131,6 +131,10 @@ switch ($partes_ruta[1] ?? null) {
             $id_service = $partes_ruta[4];
             $ruta_elegida = 'scripts/service/delete_service.php';
             break;
+          case 'duplicate_service';
+            $id_service = $partes_ruta[4];
+            $ruta_elegida = 'scripts/service/duplicate_service.php';
+            break;
           default:
             break;
         }

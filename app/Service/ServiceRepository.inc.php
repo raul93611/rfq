@@ -69,11 +69,11 @@ class ServiceRepository
           <div class="col-md-6">
             <label>Payment terms:</label>
             <div class="custom-control custom-radio">
-              <input type="radio" id="net_30Services" name="services_payment_term" class="custom-control-input" value="Net 30" <?php echo $quote-> obtener_services_payment_term() == 'Net 30' ? 'checked' : ''; ?>>
+              <input type="radio" id="net_30Services" name="services_payment_term" class="custom-control-input" value="Net 30" <?= $quote-> obtener_services_payment_term() == 'Net 30' ? 'checked' : ''; ?>>
               <label class="custom-control-label" for="net_30Services">Net 30</label>
             </div>
             <div class="custom-control custom-radio">
-              <input type="radio" id="net_30ccServices" name="services_payment_term" class="custom-control-input" value="Net 30/CC" <?php echo $quote-> obtener_services_payment_term() == 'Net 30/CC' ? 'checked' : ''; ?>>
+              <input type="radio" id="net_30ccServices" name="services_payment_term" class="custom-control-input" value="Net 30/CC" <?= $quote-> obtener_services_payment_term() == 'Net 30/CC' ? 'checked' : ''; ?>>
               <label class="custom-control-label" for="net_30ccServices">Net 30/CC</label>
             </div>
           </div>
@@ -101,7 +101,7 @@ class ServiceRepository
               <td colspan="5" class="display-4"><b>
                   <h4>TOTAL:</h4>
                 </b></td>
-              <td id="total_service">$ <?php echo $total_service; ?></td>
+              <td id="total_service">$ <?= $total_service; ?></td>
             </tr>
           </tbody>
         </table>
@@ -117,18 +117,19 @@ class ServiceRepository
   public static function display_service($service, $key)
   {
     ?>
-    <tr class="service_item" id="service<?php echo $service->get_id(); ?>">
+    <tr class="service_item" id="service<?= $service->get_id(); ?>">
       <td>
         <div class="btn-group-vertical">
-          <button type="button" class="btn btn-warning edit_service" data="<?php echo $service->get_id(); ?>"><i class="fas fa-pen"></i></button>
-          <a href="<?php echo DELETE_SERVICE . $service->get_id(); ?>" class="delete_service_button btn btn-warning"><i class="fas fa-trash"></i></a>
+          <button type="button" class="btn btn-warning edit_service" data="<?= $service->get_id(); ?>"><i class="fas fa-pen"></i></button>
+          <a href="<?= DELETE_SERVICE . $service->get_id(); ?>" class="delete_service_button btn btn-warning"><i class="fas fa-trash"></i></a>
+          <a href="<?= DUPLICATE_SERVICE . $service->get_id(); ?>" class="btn btn-warning"><i class="fas fa-copy"></i></a>
         </div>
       </td>
-      <td><?php echo $key + 1; ?></td>
-      <td><?php echo nl2br(mb_substr($service->get_description(), 0, 100)) . ' ...'; ?></td>
-      <td><?php echo $service->get_quantity(); ?></td>
-      <td><?php echo $service->get_unit_price(); ?></td>
-      <td><?php echo $service->get_total_price(); ?></td>
+      <td><?= $key + 1; ?></td>
+      <td><?= nl2br(mb_substr($service->get_description(), 0, 100)) . ' ...'; ?></td>
+      <td><?= $service->get_quantity(); ?></td>
+      <td><?= $service->get_unit_price(); ?></td>
+      <td><?= $service->get_total_price(); ?></td>
     </tr>
 <?php
   }
