@@ -94,7 +94,7 @@
       <div class="card-body">
         <div class="row">
           <div class="col-md-12">
-            <h3 class="text-info text-center">Total Profit - Real Sales Commission: $ <?= number_format($quote->obtener_real_fulfillment_profit() - str_replace(',', '', $sales_commission[1]), 2); ?></h3>
+            <h3 class="text-info text-center">Total Profit - Real Sales Commission: $ <?= number_format($quote->obtener_real_fulfillment_profit() - (float)str_replace(',', '', $sales_commission[1]), 2); ?></h3>
           </div>
         </div>
       </div>
