@@ -537,8 +537,8 @@ class Rfq {
 
   public function isEnabledToInvoice() {
     return $this->obtener_fullfillment() &&
-      !is_null($this->obtener_fulfillment_profit()) ||
-      !is_null($this->obtener_services_fulfillment_profit());
+      (!is_null($this->obtener_fulfillment_profit()) ||
+      !is_null($this->obtener_services_fulfillment_profit()));
   }
 
   public function isEnabledToFulfillment() {
