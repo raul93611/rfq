@@ -56,6 +56,7 @@
             <?php foreach ($invoicesRetrieved as $key => $invoiceRetrieved) : ?>
               <tr>
                 <td><?= $invoiceRetrieved['invoice_name'] ?></td>
+                <td><?= $invoiceRetrieved['invoice_date'] ?></td>
                 <td><?= $invoiceRetrieved['total_item_price'] ?></td>
                 <td><?= $invoiceRetrieved['total_real_cost'] ?></td>
                 <td><?= $invoiceRetrieved['total_profit'] ?></td>

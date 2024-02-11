@@ -192,6 +192,7 @@ class InvoiceRepository{
         $sql = "
         SELECT combined.id_invoice,
           i.name AS invoice_name,
+          DATE_FORMAT(i.created_at, '%m/%d/%Y') as invoice_date,
           SUM(combined.item_total_price) AS total_item_price,
           SUM(combined.sum_real_cost) AS total_real_cost,
           SUM(combined.profit) AS total_profit,
