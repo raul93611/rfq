@@ -61,7 +61,7 @@ if ($quote->obtener_invoice()) include_once 'plantillas/fulfillment/templates/sa
               <td><?= $invoiceRetrieved['invoice_date'] ?></td>
               <td><?= $invoiceRetrieved['total_item_price'] ?></td>
               <td><?= $invoiceRetrieved['total_real_cost'] ?></td>
-              <td><?= $invoiceRetrieved['total_profit'] ?></td>
+              <td><?= is_null($invoiceRetrieved['sales_commission']) ? $invoiceRetrieved['total_profit'] : $invoiceRetrieved['total_profit'] - (float)str_replace(',', '', $sales_commission[1]); ?></td>
               <td><b class="text-success"><?= $invoiceRetrieved['sales_commission'] ?></b></td>
               <td><button data-id="<?= $invoiceRetrieved['id_invoice'] ?>" class="attach-sales-commission-button btn btn-warning"><i class="fas fa-paperclip"></i></button></td>
             </tr>
