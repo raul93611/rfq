@@ -45,6 +45,7 @@
           <thead>
             <tr>
               <th>INVOICE</th>
+              <th>INVOICE DATE</th>
               <th>TOTAL PRICE</th>
               <th>REAL COST</th>
               <th>PROFIT</th>

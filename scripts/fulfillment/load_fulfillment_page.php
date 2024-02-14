@@ -46,6 +46,7 @@ if ($quote->obtener_invoice()) include_once 'plantillas/fulfillment/templates/sa
         <thead>
           <tr>
             <th>INVOICE</th>
+            <th>INVOICE DATE</th>
             <th>TOTAL PRICE</th>
             <th>REAL COST</th>
             <th>PROFIT</th>
