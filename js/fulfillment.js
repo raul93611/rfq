@@ -187,6 +187,22 @@ $(document).ready(function () {
     });
     return false;
   });
+
+  /****************************************REVIEWED SERVICE CHECK************************************/
+  fulfillmentPage.on('click', '.reviewed_service_button', function () {
+    $.ajax({
+      url: '/rfq/fulfillment/service/mark_as_reviewed_service/',
+      data: {
+        id_fulfillment_service: $(this).attr('data'),
+        id_service: $(this).attr('id_service')
+      },
+      type: 'POST',
+      success: function (res) {
+        fulfillmentPage.load('/rfq/fulfillment/load_fulfillment_page/' + res.id_rfq);
+      }
+    });
+    return false;
+  });
   /***************************************NET30 FULFILLMENT*************************************/
   let net30Fulfillment;
   fulfillmentPage.on('change', '#net30_cc', function () {

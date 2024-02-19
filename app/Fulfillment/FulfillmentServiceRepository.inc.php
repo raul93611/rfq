@@ -208,4 +208,17 @@ class FulfillmentServiceRepository {
     }
     return $item;
   }
+
+  public static function mark_as_reviewed($connection, $id_fulfillment_service) {
+    if (isset($connection)) {
+      try {
+        $sql = 'UPDATE fulfillment_services SET reviewed = 1 - reviewed WHERE id = :id_fulfillment_service';
+        $sentence = $connection->prepare($sql);
+        $sentence->bindValue(':id_fulfillment_service', $id_fulfillment_service, PDO::PARAM_STR);
+        $sentence->execute();
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+  }
 }

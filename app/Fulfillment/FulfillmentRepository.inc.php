@@ -326,20 +326,24 @@ class FulfillmentRepository {
   <?php
       if (count($fulfillment_services)) {
   ?>
-    <td class="service<?= $fulfillment_services[0]->get_id(); ?> align-middle text-center">
+    <td class="service<?= $fulfillment_services[0]->get_id() . ($fulfillment_services[0]->get_reviewed() ? ' success-opacity' : ''); ?> align-middle text-center">
       <a href="#" data="<?= $fulfillment_services[0]->get_id(); ?>" id_service="<?= $service->get_id(); ?>" class="delete_fulfillment_service_button mb-2 btn btn-warning"><i class="fas fa-trash"></i></a><br>
       <a href="#" data="<?= $fulfillment_services[0]->get_id(); ?>" class="edit_fulfillment_service_button btn btn-warning"><i class="fas fa-pen"></i></a>
     </td>
-    <td class="service<?= $fulfillment_services[0]->get_id(); ?>"><?= $fulfillment_services[0]->getInvoiceName(); ?></td>
-    <td class="service<?= $fulfillment_services[0]->get_id(); ?>"><?= $fulfillment_services[0]->get_provider(); ?></td>
-    <td class="service<?= $fulfillment_services[0]->get_id(); ?>"><?= $fulfillment_services[0]->get_quantity(); ?></td>
-    <td class="service<?= $fulfillment_services[0]->get_id(); ?>"><?= $fulfillment_services[0]->get_unit_cost(); ?></td>
-    <td class="service<?= $fulfillment_services[0]->get_id(); ?>"><?= $fulfillment_services[0]->get_other_cost(); ?></td>
-    <td class="service<?= $fulfillment_services[0]->get_id(); ?>"><?= $fulfillment_services[0]->get_real_cost(); ?></td>
-    <td class="service<?= $fulfillment_services[0]->get_id(); ?>"><?= $fulfillment_services[0]->get_payment_term(); ?></td>
-    <td class="service<?= $fulfillment_services[0]->get_id(); ?> text-center">
+    <td class="service<?= $fulfillment_services[0]->get_id() . ($fulfillment_services[0]->get_reviewed() ? ' success-opacity' : ''); ?>"><?= $fulfillment_services[0]->getInvoiceName(); ?></td>
+    <td class="service<?= $fulfillment_services[0]->get_id() . ($fulfillment_services[0]->get_reviewed() ? ' success-opacity' : ''); ?>"><?= $fulfillment_services[0]->get_provider(); ?></td>
+    <td class="service<?= $fulfillment_services[0]->get_id() . ($fulfillment_services[0]->get_reviewed() ? ' success-opacity' : ''); ?>"><?= $fulfillment_services[0]->get_quantity(); ?></td>
+    <td class="service<?= $fulfillment_services[0]->get_id() . ($fulfillment_services[0]->get_reviewed() ? ' success-opacity' : ''); ?>"><?= $fulfillment_services[0]->get_unit_cost(); ?></td>
+    <td class="service<?= $fulfillment_services[0]->get_id() . ($fulfillment_services[0]->get_reviewed() ? ' success-opacity' : ''); ?>"><?= $fulfillment_services[0]->get_other_cost(); ?></td>
+    <td class="service<?= $fulfillment_services[0]->get_id() . ($fulfillment_services[0]->get_reviewed() ? ' success-opacity' : ''); ?>"><?= $fulfillment_services[0]->get_real_cost(); ?></td>
+    <td class="service<?= $fulfillment_services[0]->get_id() . ($fulfillment_services[0]->get_reviewed() ? ' success-opacity' : ''); ?>"><?= $fulfillment_services[0]->get_payment_term(); ?></td>
+    <td class="service<?= $fulfillment_services[0]->get_id() . ($fulfillment_services[0]->get_reviewed() ? ' success-opacity' : ''); ?> text-center">
       <button type="button" class="btn btn-link" data-toggle="tooltip" data-html="true" title="<?= !empty($fulfillment_services[0]->getComments()) ? nl2br($fulfillment_services[0]->getComments()) : 'No comments'; ?>">
         <i class="fas fa-comment fa-2x"></i>
+      </button>
+      <br>
+      <button data="<?= $fulfillment_services[0]->get_id(); ?>" id_service="<?= $service->get_id(); ?>" type="button" class="reviewed_service_button text-success btn btn-link">
+        <i class="fas fa-check-circle fa-2x"></i>
       </button>
     </td>
     <td rowspan="<?= $fulfillment_services_quantity; ?>"><?= $service->get_fulfillment_profit(); ?></td>
@@ -351,20 +355,24 @@ class FulfillmentRepository {
           $fulfillment_service = $fulfillment_services[$j];
 ?>
   <tr class="service<?= $fulfillment_service->get_id(); ?>">
-    <td class="align-middle text-center">
+    <td class="align-middle text-center <?= $fulfillment_service->get_reviewed() ? 'success-opacity' : ''; ?>">
       <a href="#" data="<?= $fulfillment_service->get_id(); ?>" id_service="<?= $service->get_id(); ?>" class="delete_fulfillment_service_button mb-2 btn btn-warning"><i class="fas fa-trash"></i></a><br>
       <a href="#" data="<?= $fulfillment_service->get_id(); ?>" class="edit_fulfillment_service_button btn btn-warning"><i class="fas fa-pen"></i></a>
     </td>
-    <td><?= $fulfillment_service->getInvoiceName(); ?></td>
-    <td><?= $fulfillment_service->get_provider(); ?></td>
-    <td><?= $fulfillment_service->get_quantity(); ?></td>
-    <td><?= $fulfillment_service->get_unit_cost(); ?></td>
-    <td><?= $fulfillment_service->get_other_cost(); ?></td>
-    <td><?= $fulfillment_service->get_real_cost(); ?></td>
-    <td><?= $fulfillment_service->get_payment_term(); ?></td>
-    <td class="text-center">
+    <td class="<?= $fulfillment_service->get_reviewed() ? 'success-opacity' : ''; ?>"><?= $fulfillment_service->getInvoiceName(); ?></td>
+    <td class="<?= $fulfillment_service->get_reviewed() ? 'success-opacity' : ''; ?>"><?= $fulfillment_service->get_provider(); ?></td>
+    <td class="<?= $fulfillment_service->get_reviewed() ? 'success-opacity' : ''; ?>"><?= $fulfillment_service->get_quantity(); ?></td>
+    <td class="<?= $fulfillment_service->get_reviewed() ? 'success-opacity' : ''; ?>"><?= $fulfillment_service->get_unit_cost(); ?></td>
+    <td class="<?= $fulfillment_service->get_reviewed() ? 'success-opacity' : ''; ?>"><?= $fulfillment_service->get_other_cost(); ?></td>
+    <td class="<?= $fulfillment_service->get_reviewed() ? 'success-opacity' : ''; ?>"><?= $fulfillment_service->get_real_cost(); ?></td>
+    <td class="<?= $fulfillment_service->get_reviewed() ? 'success-opacity' : ''; ?>"><?= $fulfillment_service->get_payment_term(); ?></td>
+    <td class="<?= $fulfillment_service->get_reviewed() ? 'success-opacity' : ''; ?> text-center">
       <button type="button" class="btn btn-link" data-toggle="tooltip" data-html="true" title="<?= !empty($fulfillment_service->getComments()) ? nl2br($fulfillment_service->getComments()) : 'No comments'; ?>">
         <i class="fas fa-comment fa-2x"></i>
+      </button>
+      <br>
+      <button data="<?= $fulfillment_service->get_id(); ?>" id_service="<?= $service->get_id(); ?>" type="button" class="reviewed_service_button text-success btn btn-link">
+        <i class="fas fa-check-circle fa-2x"></i>
       </button>
     </td>
   </tr>
