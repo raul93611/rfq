@@ -607,12 +607,19 @@ class RepositorioRfq {
     }
   }
 
-  public static function set_sales_commission($conexion, $sales_commission, $sales_commission_comment, $id_rfq) {
+  public static function set_sales_commission($conexion, $invoice_date, $sales_commission, $sales_commission_comment, $id_rfq) {
     if (isset($conexion)) {
       try {
-        $sql = 'UPDATE rfq SET sales_commission = :sales_commission, sales_commission_comment = :sales_commission_comment WHERE id = :id_rfq';
+        $sql = "
+        UPDATE rfq SET 
+        invoice_date = STR_TO_DATE(:invoice_date, '%m/%d/%Y'), 
+        sales_commission = :sales_commission, 
+        sales_commission_comment = :sales_commission_comment 
+        WHERE id = :id_rfq
+        ";
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia->bindValue(':invoice_date', $invoice_date, PDO::PARAM_STR);
         $sentencia->bindValue(':sales_commission', $sales_commission, PDO::PARAM_STR);
         $sentencia->bindValue(':sales_commission_comment', $sales_commission_comment, PDO::PARAM_STR);
         $sentencia->execute();
@@ -1850,11 +1857,11 @@ class RepositorioRfq {
     return $rfq_editado;
   }
 
-  public static function check_invoice_and_date($conexion, $id_rfq) {
+  public static function check_invoice($conexion, $id_rfq) {
     $rfq_editado = false;
     if (isset($conexion)) {
       try {
-        $sql = 'UPDATE rfq SET invoice = 1, invoice_date = NOW() WHERE id = :id_rfq';
+        $sql = 'UPDATE rfq SET invoice = 1 WHERE id = :id_rfq';
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia->execute();

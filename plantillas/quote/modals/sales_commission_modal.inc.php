@@ -18,6 +18,10 @@ if ($isReQuoteCreated) {
         </div>
         <div class="modal-body">
           <div class="form-group">
+            <label for="invoice_date">Invoice Date:</label>
+            <input type="text" id="invoice_date" form="form_edited_quote" readonly value="<?= date("m/d/Y", strtotime($cotizacion_recuperada->obtener_invoice_date())) ?>" class="date form-control form-control-sm" name="invoice_date">
+          </div>
+          <div class="form-group">
             <select class="form-control form-control-sm" name="sales_commission" form="form_edited_quote">
               <?php
               foreach ($sales_commissions as $key => $sales_commission) {
