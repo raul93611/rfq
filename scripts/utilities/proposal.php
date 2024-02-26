@@ -15,7 +15,7 @@ if ($cotizacion->isServices()) {
 Conexion::cerrar_conexion();
 $fecha_completado = RepositorioComment::mysql_date_to_english_format($cotizacion->obtener_fecha_completado());
 $expiration_date = RepositorioComment::mysql_date_to_english_format($cotizacion->obtener_expiration_date());
-$logo = $cotizacion->obtener_canal() == 'Stars III' ? 'logoSinergy.png' : 'logo_proposal.jpg';
+$logo = $cotizacion->obtener_canal() == 'Stars III' ? 'logoSinergy.png' : 'extra_logo.jpg';
 
 $pdfGenerator = new PDFGenerator();
 
@@ -25,11 +25,11 @@ require_once 'herramientas/pdfTemplates/proposal.inc.php';
 
 $html = ob_get_clean();
 
-$pdfGenerator->setFooter('
-  <div class="color letra_chiquita" style="text-align:center;">
-  EIN: 51-0629765, DUNS: 786-965876, CAGE:4QTF4<br>SBA 8(a) and HUBZone certified
-  </div>
-');
+// $pdfGenerator->setFooter('
+//   <div class="color letra_chiquita" style="text-align:center;">
+//   EIN: 51-0629765, DUNS: 786-965876, CAGE:4QTF4<br>SBA 8(a) and HUBZone certified
+//   </div>
+// ');
 
 $pdfGenerator->generatePDF($html);
 $pdfGenerator->saveInServer($_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $cotizacion->obtener_id() . '/' . preg_replace('/[^a-z0-9-_\-\.]/i', '_', $cotizacion->obtener_email_code()) . '(proposal)' . '.pdf');

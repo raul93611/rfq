@@ -59,20 +59,16 @@
   <table border=0 width="100%">
     <tr>
       <td width="400">
-        <img style="width:350px;height:130px;" src="img/<?= $logo ?>">
+        <img style="width:200px;height:200px;" src="img/<?= $logo ?>">
       </td>
       <td align="right">
         <span class="color letra_grande">PROPOSAL</span>
         <br><br>
         <table id="tabla">
           <tr>
-            <th>PROPOSAL #</th>
-            <th>DATE</th>
             <th>EXPIRATION DATE</th>
           </tr>
           <tr>
-            <td style="text-align:center;"><?= $cotizacion->obtener_id() ?></td>
-            <td style="text-align:center;"><?= $fecha_completado ?></td>
             <td style="text-align:center;"><?= $expiration_date ?></td>
           </tr>
         </table>
@@ -82,29 +78,10 @@
   <br>
   <table id="tabla" style="width:100%">
     <tr>
-      <th style="width:50%">ADDRESS</th>
-      <th style="width:50%">SHIP TO</th>
+      <th>CLIENT NAME</th>
     </tr>
     <tr>
-      <td><?= nl2br($cotizacion->obtener_address()) ?></td>
-      <td><?= nl2br($cotizacion->obtener_ship_to()) ?></td>
-    </tr>
-  </table>
-  <br>
-  <table id="tabla" style="width:100%">
-    <tr>
-      <th>SHIP VIA</th>
-      <th>CONTRACT NUMBER</th>
-      <th>SALES REP</th>
-      <th>E-MAIL</th>
-      <th>PAYMENT TERMS</th>
-    </tr>
-    <tr>
-      <td style="text-align:center;"><?= $cotizacion->obtener_ship_via() ?></td>
-      <td style="text-align:center;"><?= $cotizacion->obtener_email_code() ?></td>
-      <td style="text-align:center;"><?= $usuario_designado->obtener_nombres() . ' ' . $usuario_designado->obtener_apellidos() ?></td>
-      <td style="text-align:center;"><?= $usuario_designado->obtener_email() ?></td>
-      <td style="text-align:center;"><?= $payment_terms ?></td>
+      <td style="text-align:center;">Olzaa Agencia de Aduana SA</td>
     </tr>
   </table>
   <br>
@@ -162,7 +139,7 @@
   </table>
   <?php if ($payment_terms == 'Net 30') : ?>
     <br>
-    <div class="color letra_chiquita"><b>PAYMENT TERMS</b><br><b>NET TERMS: </b>30 Days<br><b>CREDIT CARD PAYMENT: </b>Please add an additional 3% to process credit card payments.</div>
+    <!-- <div class="color letra_chiquita"><b>PAYMENT TERMS</b><br><b>NET TERMS: </b>30 Days<br><b>CREDIT CARD PAYMENT: </b>Please add an additional 3% to process credit card payments.</div> -->
   <?php endif; ?>
 </body>
 
