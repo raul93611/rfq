@@ -355,7 +355,7 @@ switch ($partes_ruta[1] ?? null) {
         $ruta_elegida = 'scripts/re_quote/load_service.php';
         break;
       case 'update_service':
-        $id_service = $partes_ruta[3];
+        $id_service = $partes_ruta[3] ?? null;
         $ruta_elegida = 'scripts/re_quote/update_service.php';
         break;
       default:
