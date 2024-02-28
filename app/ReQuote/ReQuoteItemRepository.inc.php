@@ -41,7 +41,6 @@ class ReQuoteItemRepository {
           <i class="fas fa-exclamation-triangle"></i> Attention: The quantity of items in the initial quote has been modified, leading to an outdated RFQ Re Quote. Please review and <b>RELOAD</b> to ensure accuracy.
         </div>
       <?php endif; ?>
-      <br>
       <a target="_blank" href="<?= PDF_RE_QUOTE . $re_quote->get_id_rfq(); ?>" class="btn btn-primary float-right"><i class="fa fa-file"></i> PDF</a>
       <h2>Items:</h2>
       <div class="p-3">
