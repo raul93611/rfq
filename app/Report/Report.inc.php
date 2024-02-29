@@ -27,9 +27,9 @@ class Report {
         $sql = "
         SELECT 
           months.month,
-          COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) AS total_cost,
+          COALESCE(COALESCE(r.total_cost, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_cost,
           COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_price,
-          COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) as profit
+          COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(COALESCE(r.total_cost, 0) + SUM(COALESCE(s.total_price, 0)), 0) as profit
         FROM 
           (SELECT 1 AS month 
           UNION SELECT 2 AS month 
@@ -254,9 +254,9 @@ class Report {
             u.nombre_usuario,
             canal, 
             type_of_bid, 
-            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) AS total_cost,
+            COALESCE(COALESCE(r.total_cost, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_cost,
             COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_price,
-            COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) as profit,  
+            COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(COALESCE(r.total_cost, 0) + SUM(COALESCE(s.total_price, 0)), 0) as profit,  
             type_of_contract 
             FROM rfq r
             LEFT JOIN services s ON r.id = s.id_rfq
@@ -285,9 +285,9 @@ class Report {
             u.nombre_usuario,
             canal, 
             type_of_bid, 
-            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) AS total_cost,
+            COALESCE(COALESCE(r.total_cost, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_cost,
             COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_price,
-            COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) as profit,  
+            COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(COALESCE(r.total_cost, 0) + SUM(COALESCE(s.total_price, 0)), 0) as profit,  
             type_of_contract 
             FROM rfq r
             LEFT JOIN services s ON r.id = s.id_rfq
@@ -316,9 +316,9 @@ class Report {
             u.nombre_usuario,
             canal, 
             type_of_bid, 
-            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) AS total_cost,
+            COALESCE(COALESCE(r.total_cost, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_cost,
             COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_price,
-            COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) as profit,  
+            COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(COALESCE(r.total_cost, 0) + SUM(COALESCE(s.total_price, 0)), 0) as profit,  
             type_of_contract 
             FROM rfq r
             LEFT JOIN services s ON r.id = s.id_rfq
@@ -532,9 +532,9 @@ class Report {
             u.nombre_usuario,
             canal, 
             type_of_bid, 
-            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) AS total_cost,
+            COALESCE(COALESCE(r.total_cost, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_cost,
             COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_price,
-            COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) as profit,  
+            COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(COALESCE(r.total_cost, 0) + SUM(COALESCE(s.total_price, 0)), 0) as profit,  
             type_of_contract 
             FROM rfq r
             LEFT JOIN services s ON r.id = s.id_rfq
@@ -561,9 +561,9 @@ class Report {
             u.nombre_usuario,
             canal, 
             type_of_bid, 
-            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) AS total_cost,
+            COALESCE(COALESCE(r.total_cost, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_cost,
             COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_price,
-            COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) as profit,  
+            COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(COALESCE(r.total_cost, 0) + SUM(COALESCE(s.total_price, 0)), 0) as profit,  
             type_of_contract 
             FROM rfq r
             LEFT JOIN services s ON r.id = s.id_rfq
@@ -590,9 +590,9 @@ class Report {
             u.nombre_usuario,
             canal, 
             type_of_bid, 
-            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) AS total_cost,
+            COALESCE(COALESCE(r.total_cost, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_cost,
             COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_price,
-            COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) as profit,  
+            COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(COALESCE(r.total_cost, 0) + SUM(COALESCE(s.total_price, 0)), 0) as profit,  
             type_of_contract 
             FROM rfq r
             LEFT JOIN services s ON r.id = s.id_rfq
@@ -815,9 +815,9 @@ class Report {
             u.nombre_usuario,
             canal, 
             type_of_bid, 
-            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) AS total_cost,
+            COALESCE(COALESCE(r.total_cost, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_cost,
             COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_price,
-            COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) as profit, 
+            COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(COALESCE(r.total_cost, 0) + SUM(COALESCE(s.total_price, 0)), 0) as profit, 
             COALESCE(SUM(COALESCE(rqs.total_price, 0) + COALESCE(rq.total_cost, 0)), 0) AS total_cost_requote,
             COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_price_requote,
             COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(SUM(COALESCE(rqs.total_price, 0) + COALESCE(rq.total_cost, 0)), 0) as profit_requote,
@@ -851,9 +851,9 @@ class Report {
             u.nombre_usuario,
             canal, 
             type_of_bid, 
-            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) AS total_cost,
+            COALESCE(COALESCE(r.total_cost, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_cost,
             COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_price,
-            COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) as profit, 
+            COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(COALESCE(r.total_cost, 0) + SUM(COALESCE(s.total_price, 0)), 0) as profit, 
             COALESCE(SUM(COALESCE(rqs.total_price, 0) + COALESCE(rq.total_cost, 0)), 0) AS total_cost_requote,
             COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_price_requote,
             COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(SUM(COALESCE(rqs.total_price, 0) + COALESCE(rq.total_cost, 0)), 0) as profit_requote, 
@@ -887,9 +887,9 @@ class Report {
             u.nombre_usuario,
             canal, 
             type_of_bid, 
-            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) AS total_cost,
+            COALESCE(COALESCE(r.total_cost, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_cost,
             COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_price,
-            COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) as profit, 
+            COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(COALESCE(r.total_cost, 0) + SUM(COALESCE(s.total_price, 0)), 0) as profit, 
             COALESCE(SUM(COALESCE(rqs.total_price, 0) + COALESCE(rq.total_cost, 0)), 0) AS total_cost_requote,
             COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_price_requote,
             COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(SUM(COALESCE(rqs.total_price, 0) + COALESCE(rq.total_cost, 0)), 0) as profit_requote, 
@@ -1543,9 +1543,9 @@ class Report {
             u.nombre_usuario,
             r.state, 
             r.client, 
-            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) AS total_cost,
+            COALESCE(COALESCE(r.total_cost, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_cost,
             COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_price,
-            COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) as profit, 
+            COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(COALESCE(r.total_cost, 0) + SUM(COALESCE(s.total_price, 0)), 0) as profit, 
             COALESCE(SUM(COALESCE(rqs.total_price, 0) + COALESCE(rq.total_cost, 0)), 0) AS total_cost_requote,
             COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_price_requote,
             COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(SUM(COALESCE(rqs.total_price, 0) + COALESCE(rq.total_cost, 0)), 0) as profit_requote,
@@ -1587,9 +1587,9 @@ class Report {
             u.nombre_usuario,
             r.state, 
             r.client, 
-            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) AS total_cost,
+            COALESCE(COALESCE(r.total_cost, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_cost,
             COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_price,
-            COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) as profit, 
+            COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(COALESCE(r.total_cost, 0) + SUM(COALESCE(s.total_price, 0)), 0) as profit, 
             COALESCE(SUM(COALESCE(rqs.total_price, 0) + COALESCE(rq.total_cost, 0)), 0) AS total_cost_requote,
             COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_price_requote,
             COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(SUM(COALESCE(rqs.total_price, 0) + COALESCE(rq.total_cost, 0)), 0) as profit_requote,
@@ -1631,9 +1631,9 @@ class Report {
             u.nombre_usuario,
             r.state, 
             r.client, 
-            COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) AS total_cost,
+            COALESCE(COALESCE(r.total_cost, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_cost,
             COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_price,
-            COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_cost, 0)), 0) as profit, 
+            COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(COALESCE(r.total_cost, 0) + SUM(COALESCE(s.total_price, 0)), 0) as profit, 
             COALESCE(SUM(COALESCE(rqs.total_price, 0) + COALESCE(rq.total_cost, 0)), 0) AS total_cost_requote,
             COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_price_requote,
             COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(SUM(COALESCE(rqs.total_price, 0) + COALESCE(rq.total_cost, 0)), 0) as profit_requote,
