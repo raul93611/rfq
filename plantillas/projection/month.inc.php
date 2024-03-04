@@ -1,6 +1,7 @@
 <?php
 Conexion::abrir_conexion();
 $monthly_projection = MonthlyProjectionRepository::getById(Conexion::obtener_conexion(), $id_month);
+$yearly_projection = YearlyProjectionRepository::getById(Conexion::obtener_conexion(), $monthly_projection->getYearlyProjectionId());
 Conexion::cerrar_conexion();
 ?>
 <div class="content-wrapper">
@@ -8,7 +9,7 @@ Conexion::cerrar_conexion();
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0 text-dark">Details</h1>
+          <h1 class="m-0 text-dark"><?= date('F', mktime(0, 0, 0, $monthly_projection->getMonth(), 1)) . ' - ' . $yearly_projection->getYear(); ?></h1>
         </div>
         <div class="col-sm-6">
           <a href="<?= MONTH_EXCEL . $id_month ?>" target="_blank" class="float-right btn btn-success"><i class="fas fa-file-excel"></i></a>
