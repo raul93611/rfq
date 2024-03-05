@@ -40,7 +40,10 @@ $(document).ready(function () {
         "data": "profit_percentage",
         "visible": false
       },
-      { "data": "sales_commission" },
+      {
+        "data": "sales_commission",
+        "visible": false
+      },
       { "data": "total_profit" },
       { "data": "total_profit_percentage" },
       {
