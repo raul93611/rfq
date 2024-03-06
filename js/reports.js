@@ -235,6 +235,7 @@ $(document).ready(function () {
         $('<th>').text('PROVIDER').appendTo(headerRow);
         $('<th>').text('REAL COST').appendTo(headerRow);
         $('<th>').text('PAYMENT TERMS').appendTo(headerRow);
+        $('<th>').text('CREATED AT').appendTo(headerRow);
 
         columns = [
           {
@@ -249,7 +250,8 @@ $(document).ready(function () {
           },
           { "data": "provider" },
           { "data": "real_cost" },
-          { "data": "payment_term" }
+          { "data": "payment_term" },
+          { "data": "created_at" }
         ];
         break;
       case 'sales-commission':

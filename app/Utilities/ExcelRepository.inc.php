@@ -654,9 +654,9 @@ class ExcelRepository {
         switch ($type) {
           case 'monthly':
             $sql = "
-            SELECT id, provider, real_cost, payment_term 
+            SELECT id, provider, real_cost, payment_term, created_at 
             FROM (
-            SELECT r.id, fi.provider, fi.real_cost, fi.payment_term FROM `fulfillment_items` fi
+            SELECT r.id, fi.provider, fi.real_cost, fi.payment_term, DATE_FORMAT(fi.created_at, '%m/%d/%Y') AS created_at FROM `fulfillment_items` fi
             LEFT JOIN item i ON fi.id_item = i.id
             LEFT JOIN rfq r ON i.id_rfq = r.id
             WHERE r.fullfillment = 1
@@ -666,7 +666,7 @@ class ExcelRepository {
 
             UNION ALL
 
-            SELECT r.id, fsi.provider, fsi.real_cost, fsi.payment_term FROM `fulfillment_subitems` fsi
+            SELECT r.id, fsi.provider, fsi.real_cost, fsi.payment_term, DATE_FORMAT(fsi.created_at, '%m/%d/%Y') AS created_at FROM `fulfillment_subitems` fsi
             LEFT JOIN subitems si ON fsi.id_subitem = si.id
             LEFT JOIN item i ON si.id_item = i.id
             LEFT JOIN rfq r ON i.id_rfq = r.id
@@ -677,7 +677,7 @@ class ExcelRepository {
 
             UNION ALL
 
-            SELECT r.id, fs.provider, fs.real_cost, fs.payment_term FROM `fulfillment_services` fs
+            SELECT r.id, fs.provider, fs.real_cost, fs.payment_term, DATE_FORMAT(fs.created_at, '%m/%d/%Y') AS created_at FROM `fulfillment_services` fs
             LEFT JOIN services s ON fs.id_service = s.id
             LEFT JOIN rfq r ON s.id_rfq = r.id
             WHERE r.fullfillment = 1
@@ -692,7 +692,7 @@ class ExcelRepository {
             $sql = "
             SELECT id, provider, real_cost, payment_term 
             FROM (
-            SELECT r.id, fi.provider, fi.real_cost, fi.payment_term FROM `fulfillment_items` fi
+            SELECT r.id, fi.provider, fi.real_cost, fi.payment_term, DATE_FORMAT(fi.created_at, '%m/%d/%Y') AS created_at FROM `fulfillment_items` fi
             LEFT JOIN item i ON fi.id_item = i.id
             LEFT JOIN rfq r ON i.id_rfq = r.id
             WHERE r.fullfillment = 1
@@ -702,7 +702,7 @@ class ExcelRepository {
 
             UNION ALL
 
-            SELECT r.id, fsi.provider, fsi.real_cost, fsi.payment_term FROM `fulfillment_subitems` fsi
+            SELECT r.id, fsi.provider, fsi.real_cost, fsi.payment_term, DATE_FORMAT(fsi.created_at, '%m/%d/%Y') AS created_at FROM `fulfillment_subitems` fsi
             LEFT JOIN subitems si ON fsi.id_subitem = si.id
             LEFT JOIN item i ON si.id_item = i.id
             LEFT JOIN rfq r ON i.id_rfq = r.id
@@ -713,7 +713,7 @@ class ExcelRepository {
 
             UNION ALL
 
-            SELECT r.id, fs.provider, fs.real_cost, fs.payment_term FROM `fulfillment_services` fs
+            SELECT r.id, fs.provider, fs.real_cost, fs.payment_term, DATE_FORMAT(fs.created_at, '%m/%d/%Y') AS created_at FROM `fulfillment_services` fs
             LEFT JOIN services s ON fs.id_service = s.id
             LEFT JOIN rfq r ON s.id_rfq = r.id
             WHERE r.fullfillment = 1
@@ -728,7 +728,7 @@ class ExcelRepository {
             $sql = "
             SELECT id, provider, real_cost, payment_term 
             FROM (
-            SELECT r.id, fi.provider, fi.real_cost, fi.payment_term FROM `fulfillment_items` fi
+            SELECT r.id, fi.provider, fi.real_cost, fi.payment_term, DATE_FORMAT(fi.created_at, '%m/%d/%Y') AS created_at FROM `fulfillment_items` fi
             LEFT JOIN item i ON fi.id_item = i.id
             LEFT JOIN rfq r ON i.id_rfq = r.id
             WHERE r.fullfillment = 1
@@ -737,7 +737,7 @@ class ExcelRepository {
 
             UNION ALL
 
-            SELECT r.id, fsi.provider, fsi.real_cost, fsi.payment_term FROM `fulfillment_subitems` fsi
+            SELECT r.id, fsi.provider, fsi.real_cost, fsi.payment_term, DATE_FORMAT(fsi.created_at, '%m/%d/%Y') AS created_at FROM `fulfillment_subitems` fsi
             LEFT JOIN subitems si ON fsi.id_subitem = si.id
             LEFT JOIN item i ON si.id_item = i.id
             LEFT JOIN rfq r ON i.id_rfq = r.id
@@ -747,7 +747,7 @@ class ExcelRepository {
 
             UNION ALL
 
-            SELECT r.id, fs.provider, fs.real_cost, fs.payment_term FROM `fulfillment_services` fs
+            SELECT r.id, fs.provider, fs.real_cost, fs.payment_term, DATE_FORMAT(fs.created_at, '%m/%d/%Y') AS created_at FROM `fulfillment_services` fs
             LEFT JOIN services s ON fs.id_service = s.id
             LEFT JOIN rfq r ON s.id_rfq = r.id
             WHERE r.fullfillment = 1
@@ -783,6 +783,8 @@ class ExcelRepository {
       $activeWorksheet->setCellValue($x . $y, $quote['real_cost']);
       $x++;
       $activeWorksheet->setCellValue($x . $y, $quote['payment_term']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['created_at']);
       $x++;
       $y++;
     }
