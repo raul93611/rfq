@@ -100,6 +100,6 @@ class FulfillmentService {
   }
 
   public function getTransactionDate() {
-    return $this->transaction_date;
+    return $this->transaction_date == '0000-00-00' && $this->transaction_date ? '' : $this->transaction_date;
   }
 }

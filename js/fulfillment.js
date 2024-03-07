@@ -1,4 +1,19 @@
 $(document).ready(function () {
+  /***************************************CLEAN DATE FIELD***********************************/
+  function setDateField(dateField) {
+    dateField.daterangepicker({
+      singleDatePicker: true,
+      autoUpdateInput: false,
+      autoApply: true
+    });
+    dateField.on('apply.daterangepicker', function (ev, picker) {
+      $(this).val(picker.startDate.format('MM/DD/YYYY'));
+    });
+  
+    dateField.on('cancel.daterangepicker', function (ev, picker) {
+      $(this).val('');
+    });
+  }
   /***********************************TOOLTIP INITIALIZATION******************/
   $('body').tooltip({
     selector: '[data-toggle="tooltip"]',
@@ -318,10 +333,7 @@ $(document).ready(function () {
       isPartialInvoices: isPartialInvoices,
       idRfq: idRfq
     }, function () {
-      $(this).find('#transaction_date').daterangepicker({
-        singleDatePicker: true,
-        autoApply: true
-      });
+      setDateField($(this).find('#transaction_date'));
       addFulfillmentServiceModal.modal();
     });
   });
@@ -343,10 +355,7 @@ $(document).ready(function () {
       isPartialInvoices: isPartialInvoices,
       idRfq: idRfq
     }, function () {
-      $(this).find('#transaction_date').daterangepicker({
-        singleDatePicker: true,
-        autoApply: true
-      });
+      setDateField($(this).find('#transaction_date'));
       editFulfillmentServiceModal.modal();
     });
     return false;
@@ -389,10 +398,7 @@ $(document).ready(function () {
       idItem: idItem,
       idRfq: idRfq
     }, function () {
-      $(this).find('#transaction_date').daterangepicker({
-        singleDatePicker: true,
-        autoApply: true
-      });
+      setDateField($(this).find('#transaction_date'));
       addFulfillmentItemModal.modal();
     });
   });
@@ -414,10 +420,7 @@ $(document).ready(function () {
       isPartialInvoices: isPartialInvoices,
       idRfq: idRfq
     }, function () {
-      $(this).find('#transaction_date').daterangepicker({
-        singleDatePicker: true,
-        autoApply: true
-      });
+      setDateField($(this).find('#transaction_date'));
       editFulfillmentItemModal.modal();
     });
     return false;
@@ -459,10 +462,7 @@ $(document).ready(function () {
       idSubitem: idSubitem,
       idRfq: idRfq
     }, function () {
-      $(this).find('#transaction_date').daterangepicker({
-        singleDatePicker: true,
-        autoApply: true
-      });
+      setDateField($(this).find('#transaction_date'));
       addFulfillmentSubitemModal.modal();
     });
   });
@@ -484,10 +484,7 @@ $(document).ready(function () {
       isPartialInvoices: isPartialInvoices,
       idRfq: idRfq
     }, function () {
-      $(this).find('#transaction_date').daterangepicker({
-        singleDatePicker: true,
-        autoApply: true
-      });
+      setDateField($(this).find('#transaction_date'));
       editFulfillmentSubitemModal.modal();
     });
     return false;
