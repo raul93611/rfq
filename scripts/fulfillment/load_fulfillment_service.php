@@ -55,7 +55,7 @@ Conexion::cerrar_conexion();
       <?php endif; ?>
       <div class="form-group">
         <label for="transaction_date">Transaction Date:</label>
-        <input type="text" id="transaction_date" readonly class="form-control form-control-sm" name="transaction_date" value="<?= $fulfillment_service ? date("m/d/Y", strtotime($fulfillment_service->getTransactionDate())) : date("m/d/Y") ?>">
+        <input type="text" id="transaction_date" readonly class="form-control form-control-sm" name="transaction_date" value="<?= date("m/d/Y", strtotime($fulfillment_service?->getTransactionDate() ?? date("m/d/Y"))) ?>">
       </div>
       <div class="form-group">
         <label for="comment">Comment:</label>
