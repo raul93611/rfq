@@ -1073,7 +1073,7 @@ class Report {
         $sort_column = 'payment_term';
         break;
       case 4:
-        $sort_column = 'created_at';
+        $sort_column = 'transaction_date';
         break;
       default:
         $sort_column = 'r.id';
@@ -1084,9 +1084,9 @@ class Report {
         switch ($type) {
           case 'monthly':
             $sql = "
-            SELECT id, provider, real_cost, payment_term, created_at
+            SELECT id, provider, real_cost, payment_term, transaction_date
             FROM (
-            SELECT r.id, fi.provider, fi.real_cost, fi.payment_term, DATE_FORMAT(fi.created_at, '%m/%d/%Y') AS created_at FROM `fulfillment_items` fi
+            SELECT r.id, fi.provider, fi.real_cost, fi.payment_term, DATE_FORMAT(fi.transaction_date, '%m/%d/%Y') AS transaction_date FROM `fulfillment_items` fi
             LEFT JOIN item i ON fi.id_item = i.id
             LEFT JOIN rfq r ON i.id_rfq = r.id
             WHERE r.fullfillment = 1
@@ -1096,7 +1096,7 @@ class Report {
 
             UNION ALL
 
-            SELECT r.id, fsi.provider, fsi.real_cost, fsi.payment_term, DATE_FORMAT(fsi.created_at, '%m/%d/%Y') AS created_at FROM `fulfillment_subitems` fsi
+            SELECT r.id, fsi.provider, fsi.real_cost, fsi.payment_term, DATE_FORMAT(fsi.transaction_date, '%m/%d/%Y') AS transaction_date FROM `fulfillment_subitems` fsi
             LEFT JOIN subitems si ON fsi.id_subitem = si.id
             LEFT JOIN item i ON si.id_item = i.id
             LEFT JOIN rfq r ON i.id_rfq = r.id
@@ -1107,7 +1107,7 @@ class Report {
 
             UNION ALL
 
-            SELECT r.id, fs.provider, fs.real_cost, fs.payment_term, DATE_FORMAT(fs.created_at, '%m/%d/%Y') AS created_at FROM `fulfillment_services` fs
+            SELECT r.id, fs.provider, fs.real_cost, fs.payment_term, DATE_FORMAT(fs.transaction_date, '%m/%d/%Y') AS transaction_date FROM `fulfillment_services` fs
             LEFT JOIN services s ON fs.id_service = s.id
             LEFT JOIN rfq r ON s.id_rfq = r.id
             WHERE r.fullfillment = 1
@@ -1126,7 +1126,7 @@ class Report {
             $sql = "
             SELECT id, provider, real_cost, payment_term 
             FROM (
-            SELECT r.id, fi.provider, fi.real_cost, fi.payment_term, DATE_FORMAT(fi.created_at, '%m/%d/%Y') AS created_at FROM `fulfillment_items` fi
+            SELECT r.id, fi.provider, fi.real_cost, fi.payment_term, DATE_FORMAT(fi.transaction_date, '%m/%d/%Y') AS transaction_date FROM `fulfillment_items` fi
             LEFT JOIN item i ON fi.id_item = i.id
             LEFT JOIN rfq r ON i.id_rfq = r.id
             WHERE r.fullfillment = 1
@@ -1136,7 +1136,7 @@ class Report {
 
             UNION ALL
 
-            SELECT r.id, fsi.provider, fsi.real_cost, fsi.payment_term, DATE_FORMAT(fsi.created_at, '%m/%d/%Y') AS created_at FROM `fulfillment_subitems` fsi
+            SELECT r.id, fsi.provider, fsi.real_cost, fsi.payment_term, DATE_FORMAT(fsi.transaction_date, '%m/%d/%Y') AS transaction_date FROM `fulfillment_subitems` fsi
             LEFT JOIN subitems si ON fsi.id_subitem = si.id
             LEFT JOIN item i ON si.id_item = i.id
             LEFT JOIN rfq r ON i.id_rfq = r.id
@@ -1147,7 +1147,7 @@ class Report {
 
             UNION ALL
 
-            SELECT r.id, fs.provider, fs.real_cost, fs.payment_term, DATE_FORMAT(fs.created_at, '%m/%d/%Y') AS created_at FROM `fulfillment_services` fs
+            SELECT r.id, fs.provider, fs.real_cost, fs.payment_term, DATE_FORMAT(fs.transaction_date, '%m/%d/%Y') AS transaction_date FROM `fulfillment_services` fs
             LEFT JOIN services s ON fs.id_service = s.id
             LEFT JOIN rfq r ON s.id_rfq = r.id
             WHERE r.fullfillment = 1
@@ -1166,7 +1166,7 @@ class Report {
             $sql = "
             SELECT id, provider, real_cost, payment_term 
             FROM (
-            SELECT r.id, fi.provider, fi.real_cost, fi.payment_term, DATE_FORMAT(fi.created_at, '%m/%d/%Y') AS created_at FROM `fulfillment_items` fi
+            SELECT r.id, fi.provider, fi.real_cost, fi.payment_term, DATE_FORMAT(fi.transaction_date, '%m/%d/%Y') AS transaction_date FROM `fulfillment_items` fi
             LEFT JOIN item i ON fi.id_item = i.id
             LEFT JOIN rfq r ON i.id_rfq = r.id
             WHERE r.fullfillment = 1
@@ -1175,7 +1175,7 @@ class Report {
 
             UNION ALL
 
-            SELECT r.id, fsi.provider, fsi.real_cost, fsi.payment_term, DATE_FORMAT(fsi.created_at, '%m/%d/%Y') AS created_at FROM `fulfillment_subitems` fsi
+            SELECT r.id, fsi.provider, fsi.real_cost, fsi.payment_term, DATE_FORMAT(fsi.transaction_date, '%m/%d/%Y') AS transaction_date FROM `fulfillment_subitems` fsi
             LEFT JOIN subitems si ON fsi.id_subitem = si.id
             LEFT JOIN item i ON si.id_item = i.id
             LEFT JOIN rfq r ON i.id_rfq = r.id
@@ -1185,7 +1185,7 @@ class Report {
 
             UNION ALL
 
-            SELECT r.id, fs.provider, fs.real_cost, fs.payment_term, DATE_FORMAT(fs.created_at, '%m/%d/%Y') AS created_at FROM `fulfillment_services` fs
+            SELECT r.id, fs.provider, fs.real_cost, fs.payment_term, DATE_FORMAT(fs.transaction_date, '%m/%d/%Y') AS transaction_date FROM `fulfillment_services` fs
             LEFT JOIN services s ON fs.id_service = s.id
             LEFT JOIN rfq r ON s.id_rfq = r.id
             WHERE r.fullfillment = 1

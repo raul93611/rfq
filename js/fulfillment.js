@@ -318,6 +318,10 @@ $(document).ready(function () {
       isPartialInvoices: isPartialInvoices,
       idRfq: idRfq
     }, function () {
+      $(this).find('#transaction_date').daterangepicker({
+        singleDatePicker: true,
+        autoApply: true
+      });
       addFulfillmentServiceModal.modal();
     });
   });
@@ -339,6 +343,10 @@ $(document).ready(function () {
       isPartialInvoices: isPartialInvoices,
       idRfq: idRfq
     }, function () {
+      $(this).find('#transaction_date').daterangepicker({
+        singleDatePicker: true,
+        autoApply: true
+      });
       editFulfillmentServiceModal.modal();
     });
     return false;
@@ -381,6 +389,10 @@ $(document).ready(function () {
       idItem: idItem,
       idRfq: idRfq
     }, function () {
+      $(this).find('#transaction_date').daterangepicker({
+        singleDatePicker: true,
+        autoApply: true
+      });
       addFulfillmentItemModal.modal();
     });
   });
@@ -402,6 +414,10 @@ $(document).ready(function () {
       isPartialInvoices: isPartialInvoices,
       idRfq: idRfq
     }, function () {
+      $(this).find('#transaction_date').daterangepicker({
+        singleDatePicker: true,
+        autoApply: true
+      });
       editFulfillmentItemModal.modal();
     });
     return false;
@@ -443,6 +459,10 @@ $(document).ready(function () {
       idSubitem: idSubitem,
       idRfq: idRfq
     }, function () {
+      $(this).find('#transaction_date').daterangepicker({
+        singleDatePicker: true,
+        autoApply: true
+      });
       addFulfillmentSubitemModal.modal();
     });
   });
@@ -464,6 +484,10 @@ $(document).ready(function () {
       isPartialInvoices: isPartialInvoices,
       idRfq: idRfq
     }, function () {
+      $(this).find('#transaction_date').daterangepicker({
+        singleDatePicker: true,
+        autoApply: true
+      });
       editFulfillmentSubitemModal.modal();
     });
     return false;

@@ -3,7 +3,7 @@ class FulfillmentServiceRepository {
   public static function array_to_object($sentence) {
     $objects = [];
     while ($row = $sentence->fetch(PDO::FETCH_ASSOC)) {
-      $objects[] = new FulfillmentService($row['id'], $row['id_service'], $row['provider'], $row['quantity'], $row['unit_cost'], $row['other_cost'], $row['real_cost'], $row['payment_term'], $row['reviewed'], $row['created_at'], $row['comments'], $row['id_invoice']);
+      $objects[] = new FulfillmentService($row['id'], $row['id_service'], $row['provider'], $row['quantity'], $row['unit_cost'], $row['other_cost'], $row['real_cost'], $row['payment_term'], $row['reviewed'], $row['created_at'], $row['comments'], $row['id_invoice'], $row['transaction_date']);
     }
 
     return $objects;
@@ -11,7 +11,7 @@ class FulfillmentServiceRepository {
 
   public static function single_result_to_object($sentence) {
     $row = $sentence->fetch(PDO::FETCH_ASSOC);
-    $object = new FulfillmentService($row['id'], $row['id_service'], $row['provider'], $row['quantity'], $row['unit_cost'], $row['other_cost'], $row['real_cost'], $row['payment_term'], $row['reviewed'], $row['created_at'], $row['comments'], $row['id_invoice']);
+    $object = new FulfillmentService($row['id'], $row['id_service'], $row['provider'], $row['quantity'], $row['unit_cost'], $row['other_cost'], $row['real_cost'], $row['payment_term'], $row['reviewed'], $row['created_at'], $row['comments'], $row['id_invoice'], $row['transaction_date']);
 
     return $object;
   }
@@ -64,7 +64,8 @@ class FulfillmentServiceRepository {
           payment_term, 
           created_at, 
           comments,
-          id_invoice
+          id_invoice,
+          transaction_date
         ) VALUES(
           :id_service, 
           :provider, 
@@ -75,7 +76,8 @@ class FulfillmentServiceRepository {
           :payment_term, 
           NOW(), 
           :comments,
-          :id_invoice
+          :id_invoice,
+          STR_TO_DATE(:transaction_date, '%m/%d/%Y')
         )
         ";
         $sentence = $connection->prepare($sql);
@@ -88,6 +90,7 @@ class FulfillmentServiceRepository {
         $sentence->bindValue(':payment_term', $fulfillment_service->get_payment_term(), PDO::PARAM_STR);
         $sentence->bindValue(':comments', $fulfillment_service->getComments(), PDO::PARAM_STR);
         $sentence->bindValue(':id_invoice', $fulfillment_service->getIdInvoice(), PDO::PARAM_STR);
+        $sentence->bindValue(':transaction_date', $fulfillment_service->getTransactionDate(), PDO::PARAM_STR);
         $sentence->execute();
         $id = $connection->lastInsertId();
       } catch (PDOException $ex) {
@@ -107,7 +110,8 @@ class FulfillmentServiceRepository {
     $real_cost,
     $payment_term,
     $comments,
-    $id_invoice
+    $id_invoice,
+    $transaction_date
   ) {
     if (isset($connection)) {
       try {
@@ -120,7 +124,8 @@ class FulfillmentServiceRepository {
         real_cost = :real_cost, 
         payment_term = :payment_term, 
         comments = :comments,
-        id_invoice = :id_invoice 
+        id_invoice = :id_invoice,
+        transaction_date = STR_TO_DATE(:transaction_date, '%m/%d/%Y')
         WHERE id = :id_fulfillment_service
         ";
         $sentence = $connection->prepare($sql);
@@ -133,6 +138,7 @@ class FulfillmentServiceRepository {
         $sentence->bindValue(':comments', $comments, PDO::PARAM_STR);
         $sentence->bindValue(':id_fulfillment_service', $id_fulfillment_service, PDO::PARAM_STR);
         $sentence->bindValue(':id_invoice', $id_invoice, PDO::PARAM_STR);
+        $sentence->bindValue(':transaction_date', $transaction_date, PDO::PARAM_STR);
         $sentence->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';

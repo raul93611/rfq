@@ -24,6 +24,7 @@ class FulfillmentRepository {
               <th class="thin">OPTIONS</th>
               <th class="thin">INVOICE</th>
               <th class="thin">PROVIDER</th>
+              <th class="thin">TRANSACTION DATE</th>
               <th class="thin">QTY</th>
               <th class="thin">UNIT COST</th>
               <th class="thin">OTHER COST</th>
@@ -47,7 +48,7 @@ class FulfillmentRepository {
               <td>$ <?= $quote->obtener_shipping_cost(); ?></td>
               <td></td>
               <td></td>
-              <td colspan="4">
+              <td colspan="5">
                 <?= str_replace('|', '<br>', $quote->obtener_fulfillment_shipping() ?? ''); ?>
               </td>
               <td>
@@ -61,7 +62,7 @@ class FulfillmentRepository {
               <td></td>
               <td colspan="4">Total RFQ (from Proposal):</td>
               <td><?= $quote->obtener_total_price(); ?></td>
-              <td colspan="6"></td>
+              <td colspan="7"></td>
               <td><?= $quote->obtener_total_fulfillment(); ?></td>
               <td></td>
               <td></td>
@@ -109,6 +110,7 @@ class FulfillmentRepository {
         </td>
         <td class="item<?= $fulfillment_items[0]->get_id() . ($fulfillment_items[0]->get_reviewed() ? ' success-opacity' : ''); ?>"><?= $fulfillment_items[0]->getInvoiceName(); ?></td>
         <td class="item<?= $fulfillment_items[0]->get_id() . ($fulfillment_items[0]->get_reviewed() ? ' success-opacity' : ''); ?>"><?= $fulfillment_items[0]->get_provider(); ?></td>
+        <td class="item<?= $fulfillment_items[0]->get_id() . ($fulfillment_items[0]->get_reviewed() ? ' success-opacity' : ''); ?>"><?= date("m/d/Y", strtotime($fulfillment_items[0]->getTransactionDate())); ?></td>
         <td class="item<?= $fulfillment_items[0]->get_id() . ($fulfillment_items[0]->get_reviewed() ? ' success-opacity' : ''); ?>"><?= $fulfillment_items[0]->get_quantity(); ?></td>
         <td class="item<?= $fulfillment_items[0]->get_id() . ($fulfillment_items[0]->get_reviewed() ? ' success-opacity' : ''); ?>"><?= $fulfillment_items[0]->get_unit_cost(); ?></td>
         <td class="item<?= $fulfillment_items[0]->get_id() . ($fulfillment_items[0]->get_reviewed() ? ' success-opacity' : ''); ?>"><?= $fulfillment_items[0]->get_other_cost(); ?></td>
@@ -138,6 +140,7 @@ class FulfillmentRepository {
         </td>
         <td class="<?= $fulfillment_item->get_reviewed() ? 'success-opacity' : ''; ?>"><?= $fulfillment_item->getInvoiceName(); ?></td>
         <td class="<?= $fulfillment_item->get_reviewed() ? 'success-opacity' : ''; ?>"><?= $fulfillment_item->get_provider(); ?></td>
+        <td class="<?= $fulfillment_item->get_reviewed() ? 'success-opacity' : ''; ?>"><?= date("m/d/Y", strtotime($fulfillment_item->getTransactionDate())); ?></td>
         <td class="<?= $fulfillment_item->get_reviewed() ? 'success-opacity' : ''; ?>"><?= $fulfillment_item->get_quantity(); ?></td>
         <td class="<?= $fulfillment_item->get_reviewed() ? 'success-opacity' : ''; ?>"><?= $fulfillment_item->get_unit_cost(); ?></td>
         <td class="<?= $fulfillment_item->get_reviewed() ? 'success-opacity' : ''; ?>"><?= $fulfillment_item->get_other_cost(); ?></td>
@@ -199,6 +202,7 @@ class FulfillmentRepository {
       </td>
       <td class="subitem<?= $fulfillment_subitems[0]->get_id() . ($fulfillment_subitems[0]->get_reviewed() ? ' success-opacity' : ''); ?>"><?= $fulfillment_subitems[0]->getInvoiceName(); ?></td>
       <td class="subitem<?= $fulfillment_subitems[0]->get_id() . ($fulfillment_subitems[0]->get_reviewed() ? ' success-opacity' : ''); ?>"><?= $fulfillment_subitems[0]->get_provider(); ?></td>
+      <td class="subitem<?= $fulfillment_subitems[0]->get_id() . ($fulfillment_subitems[0]->get_reviewed() ? ' success-opacity' : ''); ?>"><?= date("m/d/Y", strtotime($fulfillment_subitems[0]->getTransactionDate())); ?></td>
       <td class="subitem<?= $fulfillment_subitems[0]->get_id() . ($fulfillment_subitems[0]->get_reviewed() ? ' success-opacity' : ''); ?>"><?= $fulfillment_subitems[0]->get_quantity(); ?></td>
       <td class="subitem<?= $fulfillment_subitems[0]->get_id() . ($fulfillment_subitems[0]->get_reviewed() ? ' success-opacity' : ''); ?>"><?= $fulfillment_subitems[0]->get_unit_cost(); ?></td>
       <td class="subitem<?= $fulfillment_subitems[0]->get_id() . ($fulfillment_subitems[0]->get_reviewed() ? ' success-opacity' : ''); ?>"><?= $fulfillment_subitems[0]->get_other_cost(); ?></td>
@@ -228,6 +232,7 @@ class FulfillmentRepository {
       </td>
       <td class="<?= $fulfillment_subitem->get_reviewed() ? ' success-opacity' : ''; ?>"><?= $fulfillment_subitem->getInvoiceName(); ?></td>
       <td class="<?= $fulfillment_subitem->get_reviewed() ? ' success-opacity' : ''; ?>"><?= $fulfillment_subitem->get_provider(); ?></td>
+      <td class="<?= $fulfillment_subitem->get_reviewed() ? ' success-opacity' : ''; ?>"><?= date("m/d/Y", strtotime($fulfillment_subitem->getTransactionDate())); ?></td>
       <td class="<?= $fulfillment_subitem->get_reviewed() ? ' success-opacity' : ''; ?>"><?= $fulfillment_subitem->get_quantity(); ?></td>
       <td class="<?= $fulfillment_subitem->get_reviewed() ? ' success-opacity' : ''; ?>"><?= $fulfillment_subitem->get_unit_cost(); ?></td>
       <td class="<?= $fulfillment_subitem->get_reviewed() ? ' success-opacity' : ''; ?>"><?= $fulfillment_subitem->get_other_cost(); ?></td>
@@ -272,6 +277,7 @@ class FulfillmentRepository {
           <th class="thin">OPTIONS</th>
           <th class="thin">INVOICE</th>
           <th class="thin">PROVIDER</th>
+          <th class="thin">TRANSACTION DATE</th>
           <th class="thin">QTY</th>
           <th class="thin">UNIT COST</th>
           <th class="thin">OTHER COST</th>
@@ -290,7 +296,7 @@ class FulfillmentRepository {
         <tr>
           <td colspan="5">Total RFP (from Proposal):</td>
           <td><?= $quote->getTotalQuoteServices(); ?></td>
-          <td colspan="6"></td>
+          <td colspan="7"></td>
           <td><?= $quote->obtener_total_services_fulfillment(); ?></td>
           <td></td>
           <td></td>
@@ -332,6 +338,7 @@ class FulfillmentRepository {
     </td>
     <td class="service<?= $fulfillment_services[0]->get_id() . ($fulfillment_services[0]->get_reviewed() ? ' success-opacity' : ''); ?>"><?= $fulfillment_services[0]->getInvoiceName(); ?></td>
     <td class="service<?= $fulfillment_services[0]->get_id() . ($fulfillment_services[0]->get_reviewed() ? ' success-opacity' : ''); ?>"><?= $fulfillment_services[0]->get_provider(); ?></td>
+    <td class="service<?= $fulfillment_services[0]->get_id() . ($fulfillment_services[0]->get_reviewed() ? ' success-opacity' : ''); ?>"><?= date("m/d/Y", strtotime($fulfillment_services[0]->getTransactionDate())); ?></td>
     <td class="service<?= $fulfillment_services[0]->get_id() . ($fulfillment_services[0]->get_reviewed() ? ' success-opacity' : ''); ?>"><?= $fulfillment_services[0]->get_quantity(); ?></td>
     <td class="service<?= $fulfillment_services[0]->get_id() . ($fulfillment_services[0]->get_reviewed() ? ' success-opacity' : ''); ?>"><?= $fulfillment_services[0]->get_unit_cost(); ?></td>
     <td class="service<?= $fulfillment_services[0]->get_id() . ($fulfillment_services[0]->get_reviewed() ? ' success-opacity' : ''); ?>"><?= $fulfillment_services[0]->get_other_cost(); ?></td>
@@ -361,6 +368,7 @@ class FulfillmentRepository {
     </td>
     <td class="<?= $fulfillment_service->get_reviewed() ? 'success-opacity' : ''; ?>"><?= $fulfillment_service->getInvoiceName(); ?></td>
     <td class="<?= $fulfillment_service->get_reviewed() ? 'success-opacity' : ''; ?>"><?= $fulfillment_service->get_provider(); ?></td>
+    <td class="<?= $fulfillment_service->get_reviewed() ? 'success-opacity' : ''; ?>"><?= date("m/d/Y", strtotime($fulfillment_service->getTransactionDate())); ?></td>
     <td class="<?= $fulfillment_service->get_reviewed() ? 'success-opacity' : ''; ?>"><?= $fulfillment_service->get_quantity(); ?></td>
     <td class="<?= $fulfillment_service->get_reviewed() ? 'success-opacity' : ''; ?>"><?= $fulfillment_service->get_unit_cost(); ?></td>
     <td class="<?= $fulfillment_service->get_reviewed() ? 'success-opacity' : ''; ?>"><?= $fulfillment_service->get_other_cost(); ?></td>

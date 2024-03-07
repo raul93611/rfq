@@ -54,6 +54,10 @@ Conexion::cerrar_conexion();
         </div>
       <?php endif; ?>
       <div class="form-group">
+        <label for="transaction_date">Transaction Date:</label>
+        <input type="text" id="transaction_date" readonly class="form-control form-control-sm" name="transaction_date" value="<?= $fulfillment_subitem ? date("m/d/Y", strtotime($fulfillment_subitem->getTransactionDate())) : date("m/d/Y") ?>">
+      </div>
+      <div class="form-group">
         <label for="comment">Comment:</label>
         <textarea id="comment" name="comment" class="form-control form-control-sm" rows="5"><?= $fulfillment_subitem?->get_comments(); ?></textarea>
       </div>

@@ -12,6 +12,7 @@ class FulfillmentSubitem {
   private $reviewed;
   private $created_at;
   private $id_invoice;
+  private $transaction_date;
 
   public function __construct(
     $id,
@@ -25,7 +26,8 @@ class FulfillmentSubitem {
     $comments,
     $reviewed,
     $created_at,
-    $id_invoice
+    $id_invoice,
+    $transaction_date
   ) {
     $this->id = $id;
     $this->id_subitem = $id_subitem;
@@ -39,6 +41,7 @@ class FulfillmentSubitem {
     $this->reviewed = $reviewed;
     $this->created_at = $created_at;
     $this->id_invoice = $id_invoice;
+    $this->transaction_date = $transaction_date;
   }
 
   public function get_id() {
@@ -94,5 +97,9 @@ class FulfillmentSubitem {
     $invoice = InvoiceRepository::get_one(Conexion::obtener_conexion(), $this-> id_invoice);
     Conexion::cerrar_conexion();
     return $invoice?->get_name();
+  }
+
+  public function getTransactionDate() {
+    return $this->transaction_date;
   }
 }

@@ -317,6 +317,7 @@ CREATE TABLE fulfillment_items(
   reviewed INT DEFAULT 0,
   created_at DATETIME,
   id_invoice INT,
+  transaction_date DATE,
   PRIMARY KEY(id),
   FOREIGN KEY(id_item) REFERENCES item(id) ON UPDATE CASCADE ON DELETE RESTRICT,
   FOREIGN KEY(id_invoice) REFERENCES invoices(id) ON UPDATE CASCADE ON DELETE
@@ -336,6 +337,7 @@ CREATE TABLE fulfillment_subitems(
   reviewed INT DEFAULT 0,
   created_at DATETIME,
   id_invoice INT,
+  transaction_date DATE,
   PRIMARY KEY(id),
   FOREIGN KEY(id_subitem) REFERENCES subitems(id) ON UPDATE CASCADE ON DELETE RESTRICT,
   FOREIGN KEY(id_invoice) REFERENCES invoices(id) ON UPDATE CASCADE ON DELETE
@@ -354,6 +356,7 @@ CREATE TABLE fulfillment_services(
   created_at DATETIME,
   comments TEXT CHARACTER SET utf8 NOT NULL,
   id_invoice INT,
+  transaction_date DATE,
   PRIMARY KEY(id),
   FOREIGN KEY(id_service) REFERENCES services(id) ON UPDATE CASCADE ON DELETE RESTRICT,
   FOREIGN KEY(id_invoice) REFERENCES invoices(id) ON UPDATE CASCADE ON DELETE

@@ -13,7 +13,8 @@ FulfillmentServiceRepository::update(
   $real_cost, 
   $_POST['payment_term'], 
   $_POST["comment"],
-  empty($_POST["invoice"]) ? null : $_POST["invoice"]
+  empty($_POST["invoice"]) ? null : $_POST["invoice"],
+  $_POST["transaction_date"]
 );
 $total_cost = FulfillmentServiceRepository::get_total_cost(Conexion::obtener_conexion(), $_POST['id_service']);
 ServiceRepository::set_fulfillment_profit(Conexion::obtener_conexion(), $service->get_total_price() - $total_cost, $_POST['id_service']);

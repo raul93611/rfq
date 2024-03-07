@@ -15,7 +15,8 @@ $fulfillment_service = new FulfillmentService(
   0, 
   '', 
   htmlspecialchars($_POST["comment"]),
-  empty($_POST["invoice"]) ? null : $_POST["invoice"]
+  empty($_POST["invoice"]) ? null : $_POST["invoice"],
+  $_POST["transaction_date"]
 );
 $id = FulfillmentServiceRepository::insert(Conexion::obtener_conexion(), $fulfillment_service);
 $total_cost = FulfillmentServiceRepository::get_total_cost(Conexion::obtener_conexion(), $_POST['id_service']);
