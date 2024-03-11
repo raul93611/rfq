@@ -19,6 +19,10 @@ Conexion::cerrar_conexion();
         <input type="hidden" name="provider_original" value="<?= $fulfillment_service?->get_provider(); ?>">
       </div>
       <div class="form-group">
+        <label for="transaction_date">Transaction Date:</label>
+        <input type="text" id="transaction_date" readonly class="form-control form-control-sm" name="transaction_date" value="<?= $fulfillment_service && !empty($fulfillment_service->getTransactionDate()) ? date("m/d/Y", strtotime($fulfillment_service->getTransactionDate())) : '' ?>">
+      </div>
+      <div class="form-group">
         <label for="quantity">Quantity:</label>
         <input type="number" id="quantity" class="form-control form-control-sm" name="quantity" value="<?= $fulfillment_service ? $fulfillment_service->get_quantity() : 0; ?>">
         <input type="hidden" name="quantity_original" value="<?= $fulfillment_service?->get_quantity(); ?>">
@@ -53,10 +57,6 @@ Conexion::cerrar_conexion();
           </select>
         </div>
       <?php endif; ?>
-      <div class="form-group">
-        <label for="transaction_date">Transaction Date:</label>
-        <input type="text" id="transaction_date" readonly class="form-control form-control-sm" name="transaction_date" value="<?= $fulfillment_service && !empty($fulfillment_service->getTransactionDate()) ? date("m/d/Y", strtotime($fulfillment_service->getTransactionDate())) : '' ?>">
-      </div>
       <div class="form-group">
         <label for="comment">Comment:</label>
         <textarea id="comment" name="comment" rows="5" class="form-control form-control-sm"><?= $fulfillment_service?->getComments(); ?></textarea>
