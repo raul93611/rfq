@@ -1486,34 +1486,25 @@ class Report {
         $sort_column = 'contract_number';
         break;
       case 3:
-        $sort_column = 'code';
-        break;
-      case 4:
         $sort_column = 'nombre_usuario';
         break;
-      case 5:
+      case 4:
         $sort_column = 'state';
         break;
-      case 6:
+      case 5:
         $sort_column = 'client';
         break;
-      case 7:
+      case 6:
         $sort_column = 'total_cost';
         break;
-      case 8:
+      case 7:
         $sort_column = 'total_price';
         break;
-      case 9:
+      case 8:
         $sort_column = 'profit';
         break;
-      case 10:
-        $sort_column = 'total_cost_requote';
-        break;
-      case 11:
-        $sort_column = 'total_price_requote';
-        break;
-      case 12:
-        $sort_column = 'profit_requote';
+      case 9:
+        $sort_column = 'profit_equipment_requote';
         break;
       case 10:
         $sort_column = 'total_cost_fulfillment';
@@ -1522,12 +1513,15 @@ class Report {
         $sort_column = 'total_price_fulfillment';
         break;
       case 12:
-        $sort_column = 'profit_fulfillment';
+        $sort_column = 'profit_equipment_fulfillment';
         break;
       case 13:
-        $sort_column = 'type_of_contract';
+        $sort_column = 'profit_service_fulfillment';
         break;
       case 14:
+        $sort_column = 'type_of_contract';
+        break;
+      case 15:
         $sort_column = 'sales_commission';
         break;
       default:
@@ -1542,30 +1536,28 @@ class Report {
             SELECT r.id, 
             DATE_FORMAT(r.invoice_date, '%m/%d/%Y') as invoice_date, 
             r.contract_number, 
-            r.email_code, 
             u.nombre_usuario,
             r.state, 
             r.client, 
             COALESCE(COALESCE(r.total_cost, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_cost,
             COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_price,
             COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(COALESCE(r.total_cost, 0) + SUM(COALESCE(s.total_price, 0)), 0) as profit, 
-            COALESCE(COALESCE(rq.total_cost, 0) + SUM(COALESCE(rqs.total_price, 0)), 0) AS total_cost_requote,
-            COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_price_requote,
-            COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(COALESCE(rq.total_cost, 0) + SUM(COALESCE(rqs.total_price, 0)), 0) as profit_requote,
+            COALESCE(r.total_price, 0) - COALESCE(rq.total_cost, 0) as profit_equipment_requote,
             COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0) AS total_cost_fulfillment,
             COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_price_fulfillment,
-            COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - (COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0)) as profit_fulfillment,
+            COALESCE(r.total_price, 0) - COALESCE(r.total_fulfillment, 0) as profit_equipment_fulfillment,
+            SUM(COALESCE(s.total_price, 0)) - COALESCE(r.total_services_fulfillment, 0) as profit_service_fulfillment,
             r.type_of_contract,
+            r.sales_commission,
             CASE r.sales_commission
               WHEN 'Other commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(r.total_fulfillment, 0)) * 0.03, 2) 
               WHEN 'Same commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(rq.total_cost, 0)) * 0.03, 2) 
               WHEN 'No commission' THEN 0
-            END as sales_commission
+            END as sales_commission_amount
             FROM rfq r
             LEFT JOIN services s ON r.id = s.id_rfq
             LEFT JOIN usuarios u ON r.usuario_designado = u.id
             LEFT JOIN re_quotes rq ON r.id = rq.id_rfq
-            LEFT JOIN re_quote_services rqs ON rq.id = rqs.id_re_quote
             WHERE deleted = 0 AND
             invoice = 1 AND
             MONTH(invoice_date) = {$month} AND 
@@ -1573,7 +1565,6 @@ class Report {
             (r.id LIKE :search OR 
             DATE_FORMAT(r.invoice_date, '%m/%d/%Y') LIKE :search OR
             r.contract_number LIKE :search OR
-            r.email_code LIKE :search OR
             nombre_usuario LIKE :search OR
             r.state LIKE :search OR
             r.client LIKE :search OR 
@@ -1587,30 +1578,28 @@ class Report {
             SELECT r.id, 
             DATE_FORMAT(r.invoice_date, '%m/%d/%Y') as invoice_date, 
             r.contract_number, 
-            r.email_code, 
             u.nombre_usuario,
             r.state, 
             r.client, 
             COALESCE(COALESCE(r.total_cost, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_cost,
             COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_price,
             COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(COALESCE(r.total_cost, 0) + SUM(COALESCE(s.total_price, 0)), 0) as profit, 
-            COALESCE(COALESCE(rq.total_cost, 0) + SUM(COALESCE(rqs.total_price, 0)), 0) AS total_cost_requote,
-            COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_price_requote,
-            COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(COALESCE(rq.total_cost, 0) + SUM(COALESCE(rqs.total_price, 0)), 0) as profit_requote,
+            COALESCE(r.total_price, 0) - COALESCE(rq.total_cost, 0) as profit_equipment_requote,
             COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0) AS total_cost_fulfillment,
             COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_price_fulfillment,
-            COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - (COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0)) as profit_fulfillment,
+            COALESCE(r.total_price, 0) - COALESCE(r.total_fulfillment, 0) as profit_equipment_fulfillment,
+            SUM(COALESCE(s.total_price, 0)) - COALESCE(r.total_services_fulfillment, 0) as profit_service_fulfillment,
             r.type_of_contract,
+            r.sales_commission,
             CASE r.sales_commission
             	WHEN 'Other commission' THEN ROUND((COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - (COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0))) * 0.03, 2)
               WHEN 'Same commission' THEN ROUND((COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(COALESCE(rq.total_cost, 0) + SUM(COALESCE(rqs.total_price, 0)), 0)) * 0.03, 2)
               WHEN 'No commission' THEN 0
-            END as sales_commission
+            END as sales_commission_amount
             FROM rfq r
             LEFT JOIN services s ON r.id = s.id_rfq
             LEFT JOIN usuarios u ON r.usuario_designado = u.id
             LEFT JOIN re_quotes rq ON r.id = rq.id_rfq
-            LEFT JOIN re_quote_services rqs ON rq.id = rqs.id_re_quote
             WHERE deleted = 0 AND
             invoice = 1 AND
             QUARTER(invoice_date) = {$quarter} AND
@@ -1618,7 +1607,6 @@ class Report {
             (r.id LIKE :search OR 
             DATE_FORMAT(r.invoice_date, '%m/%d/%Y') LIKE :search OR
             r.contract_number LIKE :search OR
-            r.email_code LIKE :search OR
             nombre_usuario LIKE :search OR
             r.state LIKE :search OR
             r.client LIKE :search OR 
@@ -1631,37 +1619,34 @@ class Report {
             SELECT r.id, 
             DATE_FORMAT(r.invoice_date, '%m/%d/%Y') as invoice_date, 
             r.contract_number, 
-            r.email_code, 
             u.nombre_usuario,
             r.state, 
             r.client, 
             COALESCE(COALESCE(r.total_cost, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_cost,
             COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_price,
             COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(COALESCE(r.total_cost, 0) + SUM(COALESCE(s.total_price, 0)), 0) as profit, 
-            COALESCE(COALESCE(rq.total_cost, 0) + SUM(COALESCE(rqs.total_price, 0)), 0) AS total_cost_requote,
-            COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_price_requote,
-            COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(COALESCE(rq.total_cost, 0) + SUM(COALESCE(rqs.total_price, 0)), 0) as profit_requote,
+            COALESCE(r.total_price, 0) - COALESCE(rq.total_cost, 0) as profit_equipment_requote,
             COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0) AS total_cost_fulfillment,
             COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_price_fulfillment,
-            COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - (COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0)) as profit_fulfillment,
+            COALESCE(r.total_price, 0) - COALESCE(r.total_fulfillment, 0) as profit_equipment_fulfillment,
+            SUM(COALESCE(s.total_price, 0)) - COALESCE(r.total_services_fulfillment, 0) as profit_service_fulfillment,
             r.type_of_contract,
+            r.sales_commission,
             CASE r.sales_commission
             	WHEN 'Other commission' THEN ROUND((COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - (COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0))) * 0.03, 2)
               WHEN 'Same commission' THEN ROUND((COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(COALESCE(rq.total_cost, 0) + SUM(COALESCE(rqs.total_price, 0)), 0)) * 0.03, 2)
               WHEN 'No commission' THEN 0
-            END as sales_commission
+            END as sales_commission_amount
             FROM rfq r
             LEFT JOIN services s ON r.id = s.id_rfq
             LEFT JOIN usuarios u ON r.usuario_designado = u.id
             LEFT JOIN re_quotes rq ON r.id = rq.id_rfq
-            LEFT JOIN re_quote_services rqs ON rq.id = rqs.id_re_quote
             WHERE deleted = 0 AND
             invoice = 1 AND
             YEAR(invoice_date) = {$year} AND
             (r.id LIKE :search OR 
             DATE_FORMAT(r.invoice_date, '%m/%d/%Y') LIKE :search OR
             r.contract_number LIKE :search OR
-            r.email_code LIKE :search OR
             nombre_usuario LIKE :search OR
             r.state LIKE :search OR
             r.client LIKE :search OR 
@@ -1746,7 +1731,6 @@ class Report {
             (r.id LIKE :search OR 
             DATE_FORMAT(r.invoice_date, '%m/%d/%Y') LIKE :search OR
             r.contract_number LIKE :search OR
-            r.email_code LIKE :search OR
             nombre_usuario LIKE :search OR
             r.state LIKE :search OR
             r.client LIKE :search OR 
@@ -1765,7 +1749,6 @@ class Report {
             (r.id LIKE :search OR 
             DATE_FORMAT(r.invoice_date, '%m/%d/%Y') LIKE :search OR
             r.contract_number LIKE :search OR
-            r.email_code LIKE :search OR
             nombre_usuario LIKE :search OR
             r.state LIKE :search OR
             r.client LIKE :search OR 
@@ -1783,7 +1766,6 @@ class Report {
             (r.id LIKE :search OR 
             DATE_FORMAT(r.invoice_date, '%m/%d/%Y') LIKE :search OR
             r.contract_number LIKE :search OR
-            r.email_code LIKE :search OR
             nombre_usuario LIKE :search OR
             r.state LIKE :search OR
             r.client LIKE :search OR 

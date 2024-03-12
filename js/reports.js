@@ -261,21 +261,20 @@ $(document).ready(function () {
         $('<th>').text('PROPOSAL').appendTo(headerRow);
         $('<th>').text('INVOICE DATE').appendTo(headerRow);
         $('<th>').text('CONTRACT NUMBER').appendTo(headerRow);
-        $('<th>').text('CODE').appendTo(headerRow);
         $('<th>').text('DESIGNATED USER').appendTo(headerRow);
         $('<th>').text('STATE').appendTo(headerRow);
         $('<th>').text('CLIENT').appendTo(headerRow);
         $('<th>').attr('class', 'bg-primary').text('TOTAL COST').appendTo(headerRow);
         $('<th>').attr('class', 'bg-primary').text('TOTAL PRICE').appendTo(headerRow);
         $('<th>').attr('class', 'bg-primary').text('PROFIT').appendTo(headerRow);
-        $('<th>').attr('class', 'bg-warning').text('TOTAL COST').appendTo(headerRow);
-        $('<th>').attr('class', 'bg-warning').text('TOTAL PRICE').appendTo(headerRow);
-        $('<th>').attr('class', 'bg-warning').text('PROFIT').appendTo(headerRow);
+        $('<th>').attr('class', 'bg-warning').text('PROFIT RFQ').appendTo(headerRow);
         $('<th>').attr('class', 'bg-danger').text('TOTAL COST').appendTo(headerRow);
         $('<th>').attr('class', 'bg-danger').text('TOTAL PRICE').appendTo(headerRow);
-        $('<th>').attr('class', 'bg-danger').text('PROFIT').appendTo(headerRow);
+        $('<th>').attr('class', 'bg-danger').text('PROFIT RFQ').appendTo(headerRow);
+        $('<th>').attr('class', 'bg-danger').text('PROFIT RFP').appendTo(headerRow);
         $('<th>').text('TYPE OF CONTRACT').appendTo(headerRow);
         $('<th>').text('SALES COMMISSION').appendTo(headerRow);
+        $('<th>').text('SALES COMMISSION ($)').appendTo(headerRow);
 
         columns = [
           {
@@ -290,21 +289,29 @@ $(document).ready(function () {
           },
           { "data": "invoice_date" },
           { "data": "contract_number" },
-          { "data": "email_code" },
           { "data": "nombre_usuario" },
           { "data": "state" },
           { "data": "client" },
-          { "data": "total_cost" },
-          { "data": "total_price" },
-          { "data": "profit" },
-          { "data": "total_cost_requote" },
-          { "data": "total_price_requote" },
-          { "data": "profit_requote" },
+          {
+            "data": "total_cost",
+            "visible": false
+          },
+          {
+            "data": "total_price",
+            "visible": false
+          },
+          {
+            "data": "profit",
+            "visible": false
+          },
+          { "data": "profit_equipment_requote" },
           { "data": "total_cost_fulfillment" },
           { "data": "total_price_fulfillment" },
-          { "data": "profit_fulfillment" },
+          { "data": "profit_equipment_fulfillment" },
+          { "data": "profit_service_fulfillment" },
           { "data": "type_of_contract" },
           { "data": "sales_commission" },
+          { "data": "sales_commission_amount" }
         ];
         break;
       default:
