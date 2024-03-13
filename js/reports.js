@@ -267,7 +267,10 @@ $(document).ready(function () {
         $('<th>').attr('class', 'bg-primary').text('TOTAL COST').appendTo(headerRow);
         $('<th>').attr('class', 'bg-primary').text('TOTAL PRICE').appendTo(headerRow);
         $('<th>').attr('class', 'bg-primary').text('PROFIT').appendTo(headerRow);
+        $('<th>').attr('class', 'bg-warning').text('TOTAL COST').appendTo(headerRow);
+        $('<th>').attr('class', 'bg-warning').text('TOTAL PRICE').appendTo(headerRow);
         $('<th>').attr('class', 'bg-warning').text('PROFIT RFQ').appendTo(headerRow);
+        $('<th>').attr('class', 'bg-warning').text('PROFIT RFP').appendTo(headerRow);
         $('<th>').attr('class', 'bg-danger').text('TOTAL COST').appendTo(headerRow);
         $('<th>').attr('class', 'bg-danger').text('TOTAL PRICE').appendTo(headerRow);
         $('<th>').attr('class', 'bg-danger').text('PROFIT RFQ').appendTo(headerRow);
@@ -304,7 +307,10 @@ $(document).ready(function () {
             "data": "profit",
             "visible": false
           },
+          { "data": "total_cost_requote" },
+          { "data": "total_price_requote" },
           { "data": "profit_equipment_requote" },
+          { "data": "profit_service_requote" },
           { "data": "total_cost_fulfillment" },
           { "data": "total_price_fulfillment" },
           { "data": "profit_equipment_fulfillment" },
