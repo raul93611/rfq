@@ -41,6 +41,10 @@
       width: 130px;
     }
 
+    .unit_price {
+      width: 100px;
+    }
+
     .letra_chiquita {
       font-size: 8pt;
     }
@@ -113,7 +117,7 @@
       <th class="quantity">#</th>
       <th>DESCRIPTION</th>
       <th class="quantity">QTY</th>
-      <th class="total_ancho">UNIT PRICE</th>
+      <th class="unit_price">UNIT PRICE</th>
       <th class="total_ancho">TOTAL</th>
     </tr>
     <?php if ($encabezado) : ?>
