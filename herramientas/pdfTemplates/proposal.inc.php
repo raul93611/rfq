@@ -113,7 +113,7 @@
       <th class="quantity">#</th>
       <th>DESCRIPTION</th>
       <th class="quantity">QTY</th>
-      <th>UNIT PRICE</th>
+      <th class="total_ancho">UNIT PRICE</th>
       <th class="total_ancho">TOTAL</th>
     </tr>
     <?php if ($encabezado) : ?>
