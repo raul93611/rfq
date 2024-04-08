@@ -21,7 +21,7 @@ include_once 'plantillas/quote/validacion_registro_cotizacion.inc.php';
             <div class="card-header">
               <h3 class="card-title"><i class="fas fa-highlighter"></i> Enter the data</h3>
             </div>
-            <form role="form" method="post" enctype="multipart/form-data" action="<?php echo NUEVA_COTIZACION; ?>">
+            <form role="form" method="post" enctype="multipart/form-data" action="<?= NUEVA_COTIZACION; ?>">
               <?php
               if (isset($_POST['registrar_cotizacion'])) {
                 include_once 'forms/quote/registro_cotizacion_validado.inc.php';

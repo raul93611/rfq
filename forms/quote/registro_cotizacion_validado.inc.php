@@ -64,6 +64,7 @@
           <option <?= $validador->obtener_canal() == 'Chemonics' ? 'selected' : ''; ?>>Chemonics</option>
           <option <?= $validador->obtener_canal() == 'Ebay & Amazon' ? 'selected' : ''; ?>>Ebay & Amazon</option>
           <option <?= $validador->obtener_canal() == 'Stars III' ? 'selected' : ''; ?>>Stars III</option>
+          <option <?= $validador->obtener_canal() == 'BPA' ? 'selected' : ''; ?>>BPA</option>
         </select>
       </div>
     </div>

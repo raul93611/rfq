@@ -536,12 +536,25 @@ class Rfq {
   }
 
   public function isEnabledToInvoice() {
+    Conexion::abrir_conexion();
+    $re_quote_exists = ReQuoteRepository::re_quote_exists(Conexion::obtener_conexion(), $this->id);
+    Conexion::cerrar_conexion();
     return $this->obtener_fullfillment() &&
-      (!is_null($this->obtener_fulfillment_profit()) ||
-      !is_null($this->obtener_services_fulfillment_profit()));
+      (!is_null($this->obtener_fulfillment_profit()) || !is_null($this->obtener_services_fulfillment_profit())) &&
+      $re_quote_exists &&
+      strlen($this->city ?? '') &&
+      strlen($this->zip_code) &&
+      strlen($this->client) &&
+      strlen($this->set_side) &&
+      strlen($this->poc) &&
+      strlen($this->co) &&
+      strlen($this->estimated_delivery_date) &&
+      strlen($this->file_document);
   }
 
   public function isEnabledToFulfillment() {
+    if ($this->obtener_canal() == 'BPA') return true;
+
     Conexion::abrir_conexion();
     $re_quote_exists = ReQuoteRepository::re_quote_exists(Conexion::obtener_conexion(), $this->id);
     Conexion::cerrar_conexion();
