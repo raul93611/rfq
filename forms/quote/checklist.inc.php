@@ -54,7 +54,6 @@
           <option <?= $quote->obtener_canal() == 'Seaport' ? 'selected' : ''; ?>>Seaport</option>
           <option <?= $quote->obtener_canal() == 'Ebay & Amazon' ? 'selected' : ''; ?>>Ebay & Amazon</option>
           <option <?= $quote->obtener_canal() == 'Stars III' ? 'selected' : ''; ?>>Stars III</option>
-          <option <?= $quote->obtener_canal() == 'BPA' ? 'selected' : ''; ?>>BPA</option>
         </select>
         <input type="hidden" name="canal_original" value="<?= $quote->obtener_canal(); ?>">
       </div>

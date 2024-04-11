@@ -18,13 +18,18 @@
           <option <?= $quote->obtener_canal() == 'Seaport' ? 'selected' : ''; ?>>Seaport</option>
           <option <?= $quote->obtener_canal() == 'Ebay & Amazon' ? 'selected' : ''; ?>>Ebay & Amazon</option>
           <option <?= $quote->obtener_canal() == 'Stars III' ? 'selected' : ''; ?>>Stars III</option>
-          <option <?= $quote->obtener_canal() == 'BPA' ? 'selected' : ''; ?>>BPA</option>
         </select>
         <input type="hidden" name="canal_original" value="<?= $quote->obtener_canal(); ?>">
       </div>
       <?php
       Input::print_designated_user($quote);
       ?>
+      <div class="form-group">
+        <div class="custom-control custom-checkbox">
+          <input type="checkbox" name="bpa" class="custom-control-input" id="bpa" <?= $quote->getBpa() ? 'checked' : '' ?> value="1">
+          <label class="custom-control-label" for="bpa">BPA</label>
+        </div>
+      </div>
       <div class="form-group">
         <label for="type_of_bid">Type of bid:</label>
         <select class="form-control form-control-sm" name="type_of_bid" id="type_of_bid">

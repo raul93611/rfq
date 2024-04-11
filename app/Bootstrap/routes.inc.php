@@ -113,7 +113,6 @@ define('SEAPORT', CHANNEL . 'Seaport');
 define('CHEMONICS', CHANNEL . 'Chemonics');
 define('EBAY_AMAZON', CHANNEL . 'Ebay & Amazon');
 define('STARSIII', CHANNEL . 'Stars III');
-define('BPA', CHANNEL . 'BPA');
 /*********************************COMPLETED*************************************/
 define('COMPLETED', QUOTE . 'completed/');
 define('GSA_BUY_COMPLETADOS', COMPLETED . 'GSA-Buy');
@@ -126,7 +125,6 @@ define('FBO_COMPLETADOS', COMPLETED . 'FBO');
 define('SEAPORT_COMPLETADOS', COMPLETED . 'Seaport');
 define('EBAY_AMAZON_COMPLETADOS', COMPLETED . 'Ebay & Amazon');
 define('STARSIII_COMPLETADOS', COMPLETED . 'Stars III');
-define('BPA_COMPLETADOS', COMPLETED . 'BPA');
 /*******************************SUBMITTED***************************************/
 define('SUBMITTED', QUOTE . 'submitted/');
 define('GSA_BUY_SUBMITTED', SUBMITTED . 'GSA-Buy');
@@ -139,7 +137,6 @@ define('FBO_SUBMITTED', SUBMITTED . 'FBO');
 define('SEAPORT_SUBMITTED', SUBMITTED . 'Seaport');
 define('EBAY_AMAZON_SUBMITTED', SUBMITTED . 'Ebay & Amazon');
 define('STARSIII_SUBMITTED', SUBMITTED . 'Stars III');
-define('BPA_SUBMITTED', SUBMITTED . 'BPA');
 /****************************AWARD**********************************************/
 define('AWARD', QUOTE . 'award/');
 define('GSA_BUY_AWARD', AWARD . 'GSA-Buy');
@@ -153,7 +150,6 @@ define('SEAPORT_AWARD', AWARD . 'Seaport');
 define('CHEMONICS_AWARD', AWARD . 'Chemonics');
 define('EBAY_AMAZON_AWARD', AWARD . 'Ebay & Amazon');
 define('STARSIII_AWARD', AWARD . 'Stars III');
-define('BPA_AWARD', AWARD . 'BPA');
 /********************************EQUIPMENT VIEWS*****************************************/
 define('EQUIPMENT', QUOTE . 'equipment/');
 define('ADD_ITEM', EQUIPMENT . 'add_item');

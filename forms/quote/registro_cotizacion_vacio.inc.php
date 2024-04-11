@@ -62,7 +62,6 @@
           <option>Ebay & Amazon</option>
           <option>Seaport</option>
           <option>Stars III</option>
-          <option>BPA</option>
         </select>
       </div>
     </div>

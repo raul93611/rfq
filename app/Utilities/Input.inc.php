@@ -6,9 +6,11 @@ class Input {
       $usuario = self::get_designated_user($quote);
       Conexion::cerrar_conexion();
 ?>
-      <label for="usuario_designado">Designated user:</label>
-      <input type="text" name="usuario_designado" class="form-control form-control-sm" value="<?php echo $usuario; ?>" readonly>
-      <input type="hidden" name="designated_user_original" value="<?php echo $usuario; ?>">
+      <div class="form-group">
+        <label for="usuario_designado">Designated user:</label>
+        <input type="text" name="usuario_designado" class="form-control form-control-sm" value="<?= $usuario; ?>" readonly>
+        <input type="hidden" name="designated_user_original" value="<?= $usuario; ?>">
+      </div>
     <?php
     } else {
     ?>
@@ -23,7 +25,7 @@ class Input {
         if (count($usuarios)) {
         ?>
           <label for="usuario_designado">Designated user:</label>
-          <input type="hidden" name="designated_user_original" value="<?php echo $designated_user; ?>">
+          <input type="hidden" name="designated_user_original" value="<?= $designated_user; ?>">
           <select id="usuario_designado" class="form-control form-control-sm" name="usuario_designado">
             <?php
             foreach ($usuarios as $usuario) {
@@ -32,7 +34,7 @@ class Input {
                       if ($usuario->obtener_id() == $quote->obtener_usuario_designado()) {
                         echo 'selected';
                       }
-                      ?>><?php echo $usuario->obtener_nombre_usuario(); ?></option>
+                      ?>><?= $usuario->obtener_nombre_usuario(); ?></option>
             <?php
             }
             ?>
@@ -73,7 +75,7 @@ class Input {
 
   public static function save_files($path, $files, $id_rfq) {
     if (!is_dir($path)) {
-      mkdir($path, 0777, true); 
+      mkdir($path, 0777, true);
     }
     $documentos = array_filter($files['name']);
     $total = count($documentos);
@@ -113,7 +115,7 @@ class Input {
       <?php
       for ($i = 2018; $i <= 2100; $i++) {
       ?>
-        <option <?php echo $year == $i ? 'selected' : ''; ?>><?php echo $i; ?></option>
+        <option <?= $year == $i ? 'selected' : ''; ?>><?= $i; ?></option>
       <?php
       }
       ?>

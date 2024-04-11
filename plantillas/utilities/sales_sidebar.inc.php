@@ -96,12 +96,6 @@ echo ($partes_ruta[2] ?? null) == 'quote' ? 'menu-open' : '';
             <p>Stars III</p>
           </a>
         </li>
-        <li class="nav-item">
-          <a href="<?= BPA; ?>" class="nav-link <?= ($partes_ruta[4] ?? null) == 'BPA' ? 'active' : ''; ?>">
-            <i class="far fa-circle nav-icon"></i>
-            <p>BPA</p>
-          </a>
-        </li>
       </ul>
     </li>
     <li class="nav-item <?= ($partes_ruta[3] ?? null) == 'completed' ? 'menu-open' : ''; ?>">
@@ -173,12 +167,6 @@ echo ($partes_ruta[2] ?? null) == 'quote' ? 'menu-open' : '';
             <p>Stars III</p>
           </a>
         </li>
-        <li class="nav-item">
-          <a href="<?= BPA_COMPLETADOS; ?>" class="nav-link <?= ($partes_ruta[4] ?? null) == 'BPA' ? 'active' : ''; ?>">
-            <i class="far fa-circle nav-icon"></i>
-            <p>BPA</p>
-          </a>
-        </li>
       </ul>
     </li>
     <li class="nav-item <?= ($partes_ruta[3] ?? null) == 'submitted' ? 'menu-open' : ''; ?>">
@@ -248,12 +236,6 @@ echo ($partes_ruta[2] ?? null) == 'quote' ? 'menu-open' : '';
           <a href="<?= STARSIII_SUBMITTED; ?>" class="nav-link <?= ($partes_ruta[4] ?? null) == 'Stars%20III' ? 'active' : ''; ?>">
             <i class="far fa-circle nav-icon"></i>
             <p>Stars III</p>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="<?= BPA_SUBMITTED; ?>" class="nav-link <?= ($partes_ruta[4] ?? null) == 'BPA' ? 'active' : ''; ?>">
-            <i class="far fa-circle nav-icon"></i>
-            <p>BPA</p>
           </a>
         </li>
       </ul>
@@ -331,12 +313,6 @@ echo ($partes_ruta[2] ?? null) == 'quote' ? 'menu-open' : '';
           <a href="<?= STARSIII_AWARD; ?>" class="nav-link <?= ($partes_ruta[4] ?? null) == 'Stars%20III' ? 'active' : ''; ?>">
             <i class="far fa-circle nav-icon"></i>
             <p>Stars III</p>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="<?= BPA_AWARD; ?>" class="nav-link <?= ($partes_ruta[4] ?? null) == 'BPA' ? 'active' : ''; ?>">
-            <i class="far fa-circle nav-icon"></i>
-            <p>BPA</p>
           </a>
         </li>
       </ul>

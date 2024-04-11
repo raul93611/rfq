@@ -64,7 +64,8 @@ $cotizacion_copia = new Rfq(
   $cotizacion->getAccounting(),
   $cotizacion->getGsa(),
   $cotizacion->getClientPaymentTerms(),
-  'Net 30'
+  'Net 30',
+  $cotizacion->getBpa()
 );
 list($cotizacion_insertada, $id_rfq_copia) = RepositorioRfq::insertar_cotizacion(Conexion::obtener_conexion(), $cotizacion_copia);
 AuditTrailRepository::quote_status_audit_trail(Conexion::obtener_conexion(), 'Copied', $id_rfq_copia);

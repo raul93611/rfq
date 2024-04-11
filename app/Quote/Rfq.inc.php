@@ -63,6 +63,7 @@ class Rfq {
   private $gsa;
   private $client_payment_terms;
   private $net30_fulfillment_services;
+  private $bpa;
 
   public function __construct(
     $id,
@@ -127,7 +128,8 @@ class Rfq {
     $accounting,
     $gsa,
     $client_payment_terms,
-    $net30_fulfillment_services
+    $net30_fulfillment_services,
+    $bpa
   ) {
     $this->id = $id;
     $this->id_usuario = $id_usuario;
@@ -192,6 +194,7 @@ class Rfq {
     $this->gsa = $gsa;
     $this->client_payment_terms = $client_payment_terms;
     $this->net30_fulfillment_services = $net30_fulfillment_services;
+    $this->bpa = $bpa;
   }
 
   public function obtener_id() {
@@ -553,7 +556,7 @@ class Rfq {
   }
 
   public function isEnabledToFulfillment() {
-    if ($this->obtener_canal() == 'BPA') return true;
+    if ($this->getBpa() && $this->obtener_completado() && $this->obtener_status() && $this->obtener_award()) return true;
 
     Conexion::abrir_conexion();
     $re_quote_exists = ReQuoteRepository::re_quote_exists(Conexion::obtener_conexion(), $this->id);
@@ -637,5 +640,9 @@ class Rfq {
 
   public function getNet30FulfillmentServices() {
     return $this->net30_fulfillment_services;
+  }
+
+  public function getBpa() {
+    return $this->bpa;
   }
 }
