@@ -117,11 +117,15 @@
           </tr>
           <tr>
             <td><b>GSA:</b></td>
-            <td><?= GSA[$quote->getGsa()] ?></td>
+            <td><?= GSA[$quote->getGsa()] ?? '' ?></td>
           </tr>
           <tr>
             <td class="blue"><b>Contract Number:</b></td>
             <td><?= $quote->obtener_contract_number() ?></td>
+          </tr>
+          <tr>
+            <td class="blue"><b>BPA:</b></td>
+            <td><?= $quote->getBpa() ? $check : $cross ?></td>
           </tr>
           <tr>
             <td><b>Sales Rep:</b></td>
@@ -157,7 +161,7 @@
           </tr>
           <tr>
             <td class="blue"><b>RFP Amount:</b></td>
-            <td>$ <?= number_format($quote->getTotalQuoteServices(), 2) ?></td>
+            <td>$ <?= number_format($quote->getTotalQuoteServices() ?? 0, 2) ?></td>
           </tr>
           <tr>
             <td><b>Estimated Delivery Date:</b></td>
@@ -165,7 +169,7 @@
           </tr>
           <tr>
             <td><b>Client Payment Terms:</b></td>
-            <td><?= CLIENT_PAYMENT_TERMS[$quote->getClientPaymentTerms()] ?></td>
+            <td><?= CLIENT_PAYMENT_TERMS[$quote->getClientPaymentTerms()] ?? '' ?></td>
           </tr>
           <tr>
             <td class="blue"><b>Estimated Profit (RFQ):</b></td>
@@ -173,7 +177,7 @@
           </tr>
           <tr>
             <td><b>Shipping Address:</b></td>
-            <td><?= SHIPPING_ADDRESS[$quote->getShippingAddress()] ?></td>
+            <td><?= SHIPPING_ADDRESS[$quote->getShippingAddress()] ?? '' ?></td>
           </tr>
           <tr>
             <td><b>City:</b></td>
@@ -193,7 +197,7 @@
           </tr>
           <tr>
             <td><b>Special Requirements/Risk/Extra Comments:</b></td>
-            <td><?= nl2br($quote->getSpecialRequirements()) ?></td>
+            <td><?= nl2br($quote->getSpecialRequirements() ?? '') ?></td>
           </tr>
         </table>
       </td>

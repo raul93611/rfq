@@ -665,6 +665,7 @@ class RepositorioRfq {
     $special_requirements,
     $gsa,
     $client_payment_terms,
+    $bpa,
     $id_rfq
   ) {
     $cotizacion_editada = false;
@@ -689,7 +690,8 @@ class RepositorioRfq {
         shipping_address = :shipping_address,
         special_requirements = :special_requirements,
         gsa = :gsa,
-        client_payment_terms = :client_payment_terms
+        client_payment_terms = :client_payment_terms,
+        bpa = :bpa
         WHERE id = :id_rfq
         ";
         $sentencia = $conexion->prepare($sql);
@@ -712,6 +714,7 @@ class RepositorioRfq {
         $sentencia->bindValue(':special_requirements', $special_requirements, PDO::PARAM_STR);
         $sentencia->bindValue(':gsa', $gsa, PDO::PARAM_STR);
         $sentencia->bindValue(':client_payment_terms', $client_payment_terms, PDO::PARAM_STR);
+        $sentencia->bindValue(':bpa', $bpa, PDO::PARAM_STR);
         $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia->execute();
         if ($sentencia) {
@@ -738,7 +741,6 @@ class RepositorioRfq {
     $channel,
     $ship_to,
     $comments,
-    $bpa,
     $id_rfq
   ) {
     $cotizacion_editada = false;
@@ -756,8 +758,7 @@ class RepositorioRfq {
         email_code = :email_code, 
         canal = :canal, 
         ship_to = :ship_to, 
-        comments = :comments,
-        bpa = :bpa
+        comments = :comments
         WHERE id = :id_rfq
         ";
         $sentencia = $conexion->prepare($sql);
@@ -773,7 +774,6 @@ class RepositorioRfq {
         $sentencia->bindValue(':canal', $channel, PDO::PARAM_STR);
         $sentencia->bindValue(':ship_to', $ship_to, PDO::PARAM_STR);
         $sentencia->bindValue(':comments', $comments, PDO::PARAM_STR);
-        $sentencia->bindValue(':bpa', $bpa, PDO::PARAM_STR);
         $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia->execute();
         if ($sentencia) {

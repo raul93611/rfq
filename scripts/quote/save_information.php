@@ -19,7 +19,6 @@ if (isset($_POST['save_information'])) {
     $_POST['canal'],
     htmlspecialchars($_POST['ship_to']),
     $_POST['comments'],
-    $_POST["bpa"] ?? null,
     $_POST['id_rfq']
   );
   AuditTrailRepository::information_events(

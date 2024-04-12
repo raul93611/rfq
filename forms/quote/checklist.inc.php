@@ -70,6 +70,12 @@
         </select>
       </div>
       <div class="form-group">
+        <div class="custom-control custom-checkbox">
+          <input type="checkbox" name="bpa" class="custom-control-input" id="bpa" <?= $quote->getBpa() ? 'checked' : '' ?> value="1">
+          <label class="custom-control-label" for="bpa">BPA</label>
+        </div>
+      </div>
+      <div class="form-group">
         <label for="contract_number">Contract Number:</label>
         <input type="text" class="form-control form-control-sm" name="contract_number" value="<?= $quote->obtener_contract_number(); ?>">
         <input type="hidden" name="contract_number_original" value="<?= $quote->obtener_contract_number(); ?>">

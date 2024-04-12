@@ -28,6 +28,7 @@ if (isset($_POST['save_checklist'])) {
     $_POST['special_requirements'],
     $_POST['gsa'],
     $_POST['client_payment_terms'],
+    $_POST["bpa"] ?? null,
     $_POST['id_rfq']
   );
   AuditTrailRepository::checklist_events(
