@@ -1686,24 +1686,30 @@ class Report {
         $sort_column = 'profit_service_requote';
         break;
       case 13:
-        $sort_column = 'total_cost_fulfillment';
+        $sort_column = 'profit_requote_percentage';
         break;
       case 14:
-        $sort_column = 'total_price_fulfillment';
+        $sort_column = 'total_cost_fulfillment';
         break;
       case 15:
-        $sort_column = 'profit_equipment_fulfillment';
+        $sort_column = 'total_price_fulfillment';
         break;
       case 16:
-        $sort_column = 'profit_service_fulfillment';
+        $sort_column = 'profit_equipment_fulfillment';
         break;
       case 17:
-        $sort_column = 'type_of_contract';
+        $sort_column = 'profit_service_fulfillment';
         break;
       case 18:
-        $sort_column = 'sales_commission';
+        $sort_column = 'profit_fulfillment_percentage';
         break;
       case 19:
+        $sort_column = 'type_of_contract';
+        break;
+      case 20:
+        $sort_column = 'sales_commission';
+        break;
+      case 21:
         $sort_column = 'sales_commission_amount';
         break;
       default:
@@ -1729,10 +1735,12 @@ class Report {
               quotes.total_price AS total_price_requote,
               quotes.profit_equipment_requote,
               quotes.total_service_price - requotes.total_requote_service AS profit_service_requote,
+              ROUND(((quotes.profit_equipment_requote + quotes.total_service_price - requotes.total_requote_service)/quotes.total_price)*100, 2) AS profit_requote_percentage,
               quotes.total_cost_fulfillment,
               quotes.total_price_fulfillment,
               quotes.profit_equipment_fulfillment,
               quotes.profit_service_fulfillment,
+              ROUND(((quotes.profit_equipment_fulfillment + quotes.profit_service_fulfillment)/quotes.total_price)*100, 2) AS profit_fulfillment_percentage,
               quotes.type_of_contract,
               quotes.sales_commission,
               quotes.sales_commission_amount

@@ -271,10 +271,12 @@ $(document).ready(function () {
         $('<th>').attr('class', 'bg-warning').text('TOTAL PRICE').appendTo(headerRow);
         $('<th>').attr('class', 'bg-warning').text('PROFIT RFQ').appendTo(headerRow);
         $('<th>').attr('class', 'bg-warning').text('PROFIT RFP').appendTo(headerRow);
+        $('<th>').attr('class', 'bg-warning').text('PROFIT %').appendTo(headerRow);
         $('<th>').attr('class', 'bg-danger').text('TOTAL COST').appendTo(headerRow);
         $('<th>').attr('class', 'bg-danger').text('TOTAL PRICE').appendTo(headerRow);
         $('<th>').attr('class', 'bg-danger').text('PROFIT RFQ').appendTo(headerRow);
         $('<th>').attr('class', 'bg-danger').text('PROFIT RFP').appendTo(headerRow);
+        $('<th>').attr('class', 'bg-danger').text('PROFIT %').appendTo(headerRow);
         $('<th>').text('TYPE OF CONTRACT').appendTo(headerRow);
         $('<th>').text('SALES COMMISSION').appendTo(headerRow);
         $('<th>').text('SALES COMMISSION ($)').appendTo(headerRow);
@@ -311,10 +313,12 @@ $(document).ready(function () {
           { "data": "total_price_requote" },
           { "data": "profit_equipment_requote" },
           { "data": "profit_service_requote" },
+          { "data": "profit_requote_percentage" },
           { "data": "total_cost_fulfillment" },
           { "data": "total_price_fulfillment" },
           { "data": "profit_equipment_fulfillment" },
           { "data": "profit_service_fulfillment" },
+          { "data": "profit_fulfillment_percentage" },
           { "data": "type_of_contract" },
           { "data": "sales_commission" },
           { "data": "sales_commission_amount" }

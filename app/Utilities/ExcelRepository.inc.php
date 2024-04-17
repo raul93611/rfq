@@ -817,10 +817,12 @@ class ExcelRepository {
               quotes.total_price AS total_price_requote,
               quotes.profit_equipment_requote,
               quotes.total_service_price - requotes.total_requote_service AS profit_service_requote,
+              ROUND(((quotes.profit_equipment_requote + quotes.total_service_price - requotes.total_requote_service)/quotes.total_price)*100, 2) AS profit_requote_percentage,
               quotes.total_cost_fulfillment,
               quotes.total_price_fulfillment,
               quotes.profit_equipment_fulfillment,
               quotes.profit_service_fulfillment,
+              ROUND(((quotes.profit_equipment_fulfillment + quotes.profit_service_fulfillment)/quotes.total_price)*100, 2) AS profit_fulfillment_percentage,
               quotes.type_of_contract,
               quotes.sales_commission,
               quotes.sales_commission_amount
@@ -1147,18 +1149,10 @@ class ExcelRepository {
 
   public static function salesCommissionReport($connection, $type, $quarter, $month, $year, $activeWorksheet) {
     $quotes = self::getSalesCommissionReport($connection, $type, $quarter, $month, $year);
-    $total['total_cost'] = 0;
-    $total['total_price'] = 0;
-    $total['re_quote_total_cost'] = 0;
-    $total['fulfillment_total_cost'] = 0;
 
     $y = 3;
     foreach ($quotes as $key => $quote) {
       $x = 'A';
-      $total['total_cost'] += $quote['total_cost'];
-      $total['total_price'] += $quote['total_price'];
-      $total['re_quote_total_cost'] += $quote['total_cost_requote'];
-      $total['fulfillment_total_cost'] += $quote['total_cost_fulfillment'];
 
       $activeWorksheet->setCellValue($x . $y, $quote['id']);
       $x++;
@@ -1186,6 +1180,8 @@ class ExcelRepository {
       $x++;
       $activeWorksheet->setCellValue($x . $y, $quote['profit_service_requote']);
       $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['profit_requote_percentage']);
+      $x++;
       $activeWorksheet->setCellValue($x . $y, $quote['total_cost_fulfillment']);
       $x++;
       $activeWorksheet->setCellValue($x . $y, $quote['total_price_fulfillment']);
@@ -1193,6 +1189,8 @@ class ExcelRepository {
       $activeWorksheet->setCellValue($x . $y, $quote['profit_equipment_fulfillment']);
       $x++;
       $activeWorksheet->setCellValue($x . $y, $quote['profit_service_fulfillment']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['profit_fulfillment_percentage']);
       $x++;
       $activeWorksheet->setCellValue($x . $y, $quote['type_of_contract']);
       $x++;
