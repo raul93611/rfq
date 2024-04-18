@@ -62,7 +62,14 @@ $activeWorksheet->setCellValue('U2', 'SALES COMMISSION');
 $activeWorksheet->setCellValue('V2', 'SALES COMMISSION AMOUNT');
 
 Conexion::abrir_conexion();
-ExcelRepository::salesCommissionReport(Conexion::obtener_conexion(), $_POST['type'], $_POST['quarter'], $_POST['month'], $_POST['year'], $activeWorksheet);
+ExcelRepository::salesCommissionReport(
+  Conexion::obtener_conexion(), 
+  $_POST['type'], 
+  $_POST['quarter'] ?? null, 
+  $_POST['month'] ?? null, 
+  $_POST['year'] ?? null, 
+  $activeWorksheet
+);
 Conexion::cerrar_conexion();
 
 $writer = new Xlsx($spreadsheet);

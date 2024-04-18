@@ -173,24 +173,24 @@ switch ($_POST['report']) {
       $sort_column_index,
       $sort_direction,
       $_POST['type'],
-      $_POST['quarter'],
-      $_POST['month'],
-      $_POST['year']
+      $_POST['quarter'] ?? null,
+      $_POST['month'] ?? null,
+      $_POST['year'] ?? null
     );
     $total_records = Report::getSalesCommissionReportCount(
       Conexion::obtener_conexion(),
       $_POST['type'],
-      $_POST['quarter'],
-      $_POST['month'],
-      $_POST['year']
+      $_POST['quarter'] ?? null,
+      $_POST['month'] ?? null,
+      $_POST['year'] ?? null
     );
     $total_filtered_records = Report::getFilteredSalesCommissionReportCount(
       Conexion::obtener_conexion(),
       $search,
       $_POST['type'],
-      $_POST['quarter'],
-      $_POST['month'],
-      $_POST['year']
+      $_POST['quarter'] ?? null,
+      $_POST['month'] ?? null,
+      $_POST['year'] ?? null
     );
     Conexion::cerrar_conexion();
     break;
