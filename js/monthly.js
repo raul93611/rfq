@@ -33,6 +33,13 @@ $(document).ready(function () {
       {
         "data": "projected_result",
         "orderable": false,
+        "render": (data, type, row, meta) => {
+          if (data) {
+            return parseFloat(data.replace(/,/g, '')) > 0 ? `<span class="text-success">${data}</span>` : `<span class="text-danger">${data}</span>`;
+          } else{
+            return data
+          }
+        }
       },
       {
         "data": "total_price",
