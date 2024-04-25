@@ -8,7 +8,7 @@ Conexion::cerrar_conexion();
     <tr>
       <th></th>
       <th>TOTAL INVOICE AMOUNT</th>
-      <th>TOTAL SALES COMMISSION($)</th>
+      <!-- <th>TOTAL SALES COMMISSION($)</th> -->
       <th>TOTAL PROFIT($)</th>
       <th>TOTAL PROFIT(%)</th>
     </tr>
@@ -17,7 +17,7 @@ Conexion::cerrar_conexion();
     <tr>
       <td style="width: 200px;">TOTALS</td>
       <td><?= $totals[0]['sum_total_price'] ?></td>
-      <td><?= $totals[0]['sum_sales_commission'] ?></td>
+      <!-- <td><?= $totals[0]['sum_sales_commission'] ?></td> -->
       <td><?= $totals[0]['sum_total_profit'] ?></td>
       <td><?= $totals[0]['sum_total_profit_percentage'] ?></td>
     </tr>
