@@ -17,6 +17,47 @@ $(document).ready(function () {
       "type": "POST",
       "data": {
         "id": monthTable.data('id'),
+      },
+      "dataSrc": function (json) {
+        const contractCounts = Object.keys(json.contractCounts).map(key => ({
+          category: key,
+          value: json.contractCounts[key],
+          color: getRandomColor()
+        }));
+
+        const labels = contractCounts.map(item => item.category);
+        const data = contractCounts.map(item => item.value);
+        const backgroundColors = contractCounts.map(item => item.color);
+
+        const ctx = document.getElementById('contract-counts').getContext('2d');
+        const myChart = new Chart(ctx, {
+          type: 'pie',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Contract Counts',
+              data: data,
+              backgroundColor: backgroundColors,
+              borderColor: backgroundColors,
+              borderWidth: 1
+            }]
+          },
+          options: {
+            maintainAspectRatio: false,
+            responsive: true,
+            plugins: {
+              legend: {
+                position: 'top',
+              },
+              tooltip: {
+                mode: 'index',
+                intersect: true,
+              }
+            }
+          }
+        });
+
+        return json.data;
       }
     },
     "columns": [
@@ -109,4 +150,11 @@ $(document).ready(function () {
   //totals
   const totalsContainer = $('#totals-container');
   totalsContainer.load('/rfq/projection/get_month_totals', { id: totalsContainer.data('id') });
+
+  function getRandomColor() {
+    const r = Math.floor(Math.random() * 256);
+    const g = Math.floor(Math.random() * 256);
+    const b = Math.floor(Math.random() * 256);
+    return `rgba(${r}, ${g}, ${b}, 1)`;
+  }
 });

@@ -57,6 +57,14 @@ Conexion::cerrar_conexion();
               <div class="mt-3" id="totals-container" data-id="<?= $id_month ?>"></div>
             </div>
           </div>
+          <div class="card">
+            <div class="card-header">
+            <h3 class="card-title">Type of Contracts</h3>
+            </div>
+            <div class="card-body">
+              <canvas id="contract-counts" height="400"></canvas>
+            </div>
+          </div>
         </section>
       </div>
     </div>
