@@ -17,47 +17,6 @@ $(document).ready(function () {
       "type": "POST",
       "data": {
         "id": monthTable.data('id'),
-      },
-      "dataSrc": function (json) {
-        const contractCounts = Object.keys(json.contractCounts).map(key => ({
-          category: key,
-          value: json.contractCounts[key],
-          color: getRandomColor()
-        }));
-
-        const labels = contractCounts.map(item => item.category);
-        const data = contractCounts.map(item => item.value);
-        const backgroundColors = contractCounts.map(item => item.color);
-
-        const ctx = document.getElementById('contract-counts').getContext('2d');
-        const myChart = new Chart(ctx, {
-          type: 'pie',
-          data: {
-            labels: labels,
-            datasets: [{
-              label: 'Contract Counts',
-              data: data,
-              backgroundColor: backgroundColors,
-              borderColor: backgroundColors,
-              borderWidth: 1
-            }]
-          },
-          options: {
-            maintainAspectRatio: false,
-            responsive: true,
-            plugins: {
-              legend: {
-                position: 'top',
-              },
-              tooltip: {
-                mode: 'index',
-                intersect: true,
-              }
-            }
-          }
-        });
-
-        return json.data;
       }
     },
     "columns": [
@@ -151,10 +110,101 @@ $(document).ready(function () {
   const totalsContainer = $('#totals-container');
   totalsContainer.load('/rfq/projection/get_month_totals', { id: totalsContainer.data('id') });
 
-  function getRandomColor() {
-    const r = Math.floor(Math.random() * 256);
-    const g = Math.floor(Math.random() * 256);
-    const b = Math.floor(Math.random() * 256);
-    return `rgba(${r}, ${g}, ${b}, 1)`;
-  }
+  //type of contracts charts
+  $.ajax({
+    url: "/rfq/projection/charts",
+    type: "POST",
+    data: {
+      id: totalsContainer.data('id')
+    },
+    success: function (json) {
+      const transformedData = {
+        type_of_contract: [],
+        value: [],
+        total_price: [],
+        color: []
+      };
+
+      json.typeOfContractData.forEach(item => {
+        transformedData.type_of_contract.push(item.type_of_contract);
+        transformedData.value.push(item.value);
+        transformedData.total_price.push(item.total_price);
+        transformedData.color.push(item.color);
+      });
+
+      console.log(transformedData);
+
+      const contractCountsCanva = document.getElementById('contract-counts').getContext('2d');
+      const contractCountsChart = new Chart(contractCountsCanva, {
+        type: 'pie',
+        data: {
+          labels: transformedData.type_of_contract,
+          datasets: [{
+            label: 'Contract Counts',
+            data: transformedData.value,
+            backgroundColor: transformedData.color,
+            borderColor: transformedData.color,
+            borderWidth: 1
+          }]
+        },
+        options: {
+          maintainAspectRatio: false,
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+            tooltip: {
+              mode: 'index',
+              intersect: true,
+            }
+          }
+        }
+      });
+
+      const contractAmountsCanva = document.getElementById('contract-amounts').getContext('2d');
+      const contractAmountsChart = new Chart(contractAmountsCanva, {
+        type: 'pie',
+        data: {
+          labels: transformedData.type_of_contract,
+          datasets: [{
+            label: 'Contract Amounts',
+            data: transformedData.total_price,
+            backgroundColor: transformedData.color,
+            borderColor: transformedData.color,
+            borderWidth: 1
+          }]
+        },
+        options: {
+          maintainAspectRatio: false,
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+            tooltip: {
+              mode: 'index',
+              intersect: true,
+              callbacks: {
+                label: function (context) {
+                  let label = context.dataset.label || '';
+
+                  if (label) {
+                    label += ': ';
+                  }
+                  if (context.parsed.y !== null) {
+                    label += '$' + context.parsed.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                  }
+                  return label;
+                }
+              }
+            }
+          }
+        }
+      });
+    },
+    error: function (xhr, status, error) {
+      console.error(xhr.responseText);
+    }
+  });
 });

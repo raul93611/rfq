@@ -636,6 +636,9 @@ switch ($partes_ruta[1] ?? null) {
         $id = $partes_ruta[3];
         $ruta_elegida = 'scripts/projection/month_excel.php';
         break;
+      case 'charts':
+        $ruta_elegida = 'scripts/projection/charts.php';
+        break;
       default:
         break;
     }

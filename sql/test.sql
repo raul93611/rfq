@@ -1,151 +1,183 @@
-SELECT 
-          COUNT(id_quote)
-        FROM
-        (
-          (
-            SELECT r.id AS id_quote,
-              DATE_FORMAT(r.invoice_date, '%m/%d/%Y') as invoice_date,
-              r.id,
-              r.type_of_contract,
-              COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_price,
-              COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0) AS total_cost,
-              COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - (COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0)) as profit,
-              100 * ((COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - (COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0))) / (COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0))) AS profit_percentage,
-              CASE r.sales_commission
-                WHEN 'Other commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(r.total_fulfillment, 0)) * 0.03, 2)
-                WHEN 'Same commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(rq.total_cost, 0)) * 0.03, 2)
-                WHEN 'No commission' THEN 0
-              END as sales_commission,
-              r.invoice_acceptance,
-              NULL AS partial_invoice
-            FROM rfq r
-              LEFT JOIN services s ON r.id = s.id_rfq
-              LEFT JOIN re_quotes rq ON r.id = rq.id_rfq
-            WHERE deleted = 0
-              AND invoice = 1
-              AND r.fulfillment_pending = 0
-              AND MONTH(invoice_date) = (
-                SELECT m.month
-                FROM monthly_projections as m
-                WHERE m.id = {$id}
-              )
-              AND YEAR(invoice_date) = (
-                SELECT y.year
-                FROM monthly_projections as m
-                  LEFT JOIN yearly_projections y ON m.yearly_projection_id = y.id
-                WHERE m.id = {$id}
-              )
-            GROUP BY r.id
-          )
-          UNION
-          (
-            SELECT 
-              invoices_result_with_sales_commission.id_quote,
-              invoices_result_with_sales_commission.invoice_date,
-              invoices_result_with_sales_commission.id,
-              invoices_result_with_sales_commission.type_of_contract,
-              invoices_result_with_sales_commission.total_price,
-              invoices_result_with_sales_commission.total_cost,
-              invoices_result_with_sales_commission.profit,
-              invoices_result_with_sales_commission.profit_percentage,
-              CASE invoices_result_with_sales_commission.attached_sales_commission
-                WHEN 1 THEN 
-                  CASE r.sales_commission
-                    WHEN 'Other commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(r.total_fulfillment, 0)) * 0.03, 2)
-                    WHEN 'Same commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(rq.total_cost, 0)) * 0.03, 2)
-                    WHEN 'No commission' THEN 0
-                  END
-                ELSE NULL
-              END as sales_commission,
-              invoices_result_with_sales_commission.invoice_acceptance,
-              true AS partial_invoice
-            FROM (
-              SELECT r.id as id_quote,
-                DATE_FORMAT(i.created_at, '%m/%d/%Y') as invoice_date,
-                i.name AS id,
-                r.type_of_contract as type_of_contract,
-                SUM(invoices_result.item_total_price) AS total_price,
-                SUM(invoices_result.sum_real_cost) AS total_cost,
-                SUM(invoices_result.profit) AS profit,
-                100 * ((SUM(invoices_result.profit)) / (SUM(invoices_result.item_total_price))) as profit_percentage,
-                i.sales_commission AS attached_sales_commission,
-                i.invoice_acceptance
-              FROM (
-                  (
-                    SELECT fi.id_invoice,
-                      i.total_price AS item_total_price,
-                      SUM(fi.real_cost) AS sum_real_cost,
-                      i.total_price - SUM(fi.real_cost) AS profit
-                    FROM item i
-                      JOIN fulfillment_items fi ON i.id = fi.id_item
-                    WHERE i.id_rfq IN (
-                        SELECT id
-                        FROM rfq
-                        WHERE fulfillment_pending = 1
-                          AND fullfillment = 1
-                      )
-                      AND fi.id_invoice IS NOT NULL
-                    GROUP BY i.id,
-                      fi.id_invoice
-                  )
-                  UNION ALL
-                  (
-                    SELECT fsi.id_invoice,
-                      si.total_price AS item_total_price,
-                      SUM(fsi.real_cost) AS sum_real_cost,
-                      si.total_price - SUM(fsi.real_cost) AS profit
-                    FROM subitems si
-                      JOIN fulfillment_subitems fsi ON si.id = fsi.id_subitem
-                    WHERE si.id_item IN (
-                        SELECT id
-                        FROM item
-                        WHERE id_rfq IN (
-                            SELECT id
-                            FROM rfq
-                            WHERE fulfillment_pending = 1
-                              AND fullfillment = 1
-                          )
-                      )
-                      AND fsi.id_invoice IS NOT NULL
-                    GROUP BY si.id,
-                      fsi.id_invoice
-                  )
-                  UNION ALL
-                  (
-                    SELECT fs.id_invoice,
-                      s.total_price AS item_total_price,
-                      SUM(fs.real_cost) AS sum_real_cost,
-                      s.total_price - SUM(fs.real_cost) AS profit
-                    FROM services s
-                      JOIN fulfillment_services fs ON s.id = fs.id_service
-                    WHERE s.id_rfq IN (
-                        SELECT id
-                        FROM rfq
-                        WHERE fulfillment_pending = 1
-                          AND fullfillment = 1
-                      )
-                      AND fs.id_invoice IS NOT NULL
-                    GROUP BY s.id,
-                      fs.id_invoice
-                  )
-                ) AS invoices_result
-                RIGHT JOIN invoices i ON invoices_result.id_invoice = i.id
-                RIGHT JOIN rfq r ON r.id = i.id_rfq
-              WHERE MONTH(i.created_at) = (
-                  SELECT m.month
-                  FROM monthly_projections as m
-                  WHERE m.id = {$id}
-                )
-                AND YEAR(i.created_at) = (
-                  SELECT y.year
-                  FROM monthly_projections as m
-                    LEFT JOIN yearly_projections y ON m.yearly_projection_id = y.id
-                  WHERE m.id = {$id}
-                )
-              GROUP BY invoices_result.id_invoice, i.name
-            ) as invoices_result_with_sales_commission
-            LEFT JOIN rfq r ON r.id = invoices_result_with_sales_commission.id_quote
-            LEFT JOIN re_quotes rq ON r.id = rq.id_rfq
-            GROUP BY invoices_result_with_sales_commission.id
-          )
-        ) AS final_result
+{
+  "draw": "1",
+  "recordsTotal": 42,
+  "recordsFiltered": 42,
+  "data": [
+    {
+      "id_quote": 99205,
+      "invoice_date": "03\/01\/2024",
+      "id": "99205",
+      "type_of_contract": "RFQ",
+      "total_price": "4,236.00",
+      "total_cost": "3,816.00",
+      "profit": "420.00",
+      "profit_percentage": "9.92",
+      "sales_commission": "12.60",
+      "total_profit": "407.40",
+      "total_profit_percentage": "9.62",
+      "invoice_acceptance": null,
+      "partial_invoice": null
+    },
+    {
+      "id_quote": 103515,
+      "invoice_date": "03\/01\/2024",
+      "id": "103515",
+      "type_of_contract": "RFQ",
+      "total_price": "517.95",
+      "total_cost": "472.20",
+      "profit": "45.75",
+      "profit_percentage": "8.83",
+      "sales_commission": "1.37",
+      "total_profit": "44.38",
+      "total_profit_percentage": "8.57",
+      "invoice_acceptance": null,
+      "partial_invoice": null
+    },
+    {
+      "id_quote": 103670,
+      "invoice_date": "03\/01\/2024",
+      "id": "103670",
+      "type_of_contract": "RFQ",
+      "total_price": "6,556.00",
+      "total_cost": "4,857.60",
+      "profit": "1,698.40",
+      "profit_percentage": "25.91",
+      "sales_commission": "50.95",
+      "total_profit": "1,647.45",
+      "total_profit_percentage": "25.13",
+      "invoice_acceptance": null,
+      "partial_invoice": null
+    },
+    {
+      "id_quote": 96543,
+      "invoice_date": "03\/04\/2024",
+      "id": "96543",
+      "type_of_contract": "RFQ",
+      "total_price": "1,657.97",
+      "total_cost": "900.06",
+      "profit": "757.91",
+      "profit_percentage": "45.71",
+      "sales_commission": "18.39",
+      "total_profit": "739.52",
+      "total_profit_percentage": "44.60",
+      "invoice_acceptance": null,
+      "partial_invoice": null
+    },
+    {
+      "id_quote": 103682,
+      "invoice_date": "03\/04\/2024",
+      "id": "103682",
+      "type_of_contract": "RFQ",
+      "total_price": "685.21",
+      "total_cost": "420.59",
+      "profit": "264.62",
+      "profit_percentage": "38.62",
+      "sales_commission": "3.30",
+      "total_profit": "261.32",
+      "total_profit_percentage": "38.14",
+      "invoice_acceptance": null,
+      "partial_invoice": null
+    },
+    {
+      "id_quote": 101533,
+      "invoice_date": "03\/04\/2024",
+      "id": "101533",
+      "type_of_contract": "RFQ",
+      "total_price": "978.99",
+      "total_cost": "354.26",
+      "profit": "624.73",
+      "profit_percentage": "63.81",
+      "sales_commission": "4.30",
+      "total_profit": "620.43",
+      "total_profit_percentage": "63.37",
+      "invoice_acceptance": null,
+      "partial_invoice": null
+    },
+    {
+      "id_quote": 103382,
+      "invoice_date": "03\/04\/2024",
+      "id": "103382",
+      "type_of_contract": "RFQ",
+      "total_price": "1,306.83",
+      "total_cost": "808.60",
+      "profit": "498.23",
+      "profit_percentage": "38.13",
+      "sales_commission": "4.57",
+      "total_profit": "493.66",
+      "total_profit_percentage": "37.78",
+      "invoice_acceptance": null,
+      "partial_invoice": null
+    },
+    {
+      "id_quote": 100785,
+      "invoice_date": "03\/05\/2024",
+      "id": "100785",
+      "type_of_contract": "RFQ",
+      "total_price": "145.67",
+      "total_cost": "73.10",
+      "profit": "72.57",
+      "profit_percentage": "49.82",
+      "sales_commission": "1.97",
+      "total_profit": "70.60",
+      "total_profit_percentage": "48.47",
+      "invoice_acceptance": null,
+      "partial_invoice": null
+    },
+    {
+      "id_quote": 101777,
+      "invoice_date": "03\/05\/2024",
+      "id": "101777",
+      "type_of_contract": "RFQ",
+      "total_price": "4,308.48",
+      "total_cost": "3,856.51",
+      "profit": "451.97",
+      "profit_percentage": "10.49",
+      "sales_commission": "13.56",
+      "total_profit": "438.41",
+      "total_profit_percentage": "10.18",
+      "invoice_acceptance": null,
+      "partial_invoice": null
+    },
+    {
+      "id_quote": 101582,
+      "invoice_date": "03\/05\/2024",
+      "id": "101582",
+      "type_of_contract": "RFQ",
+      "total_price": "4,319.10",
+      "total_cost": "3,689.70",
+      "profit": "629.40",
+      "profit_percentage": "14.57",
+      "sales_commission": "18.31",
+      "total_profit": "611.09",
+      "total_profit_percentage": "14.15",
+      "invoice_acceptance": null,
+      "partial_invoice": null
+    }
+  ],
+  "typeOfContractData": [
+    {
+      "value": 35,
+      "type_of_contract": "RFQ",
+      "total_price": "65,382.18",
+      "color": "rgba(65, 67, 143, 1)"
+    },
+    {
+      "value": 1,
+      "type_of_contract": "Moving and Logistics",
+      "total_price": "85,396.68",
+      "color": "rgba(0, 86, 171, 1)"
+    },
+    {
+      "value": 3,
+      "type_of_contract": "RFP Installation",
+      "total_price": "1,962.32",
+      "color": "rgba(89, 186, 154, 1)"
+    },
+    {
+      "value": 3,
+      "type_of_contract": "RFP Maintenance",
+      "total_price": "109,883.60",
+      "color": "rgba(211, 80, 26, 1)"
+    }
+  ]
+}

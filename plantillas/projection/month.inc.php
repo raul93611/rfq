@@ -57,12 +57,24 @@ Conexion::cerrar_conexion();
               <div class="mt-3" id="totals-container" data-id="<?= $id_month ?>"></div>
             </div>
           </div>
+        </section>
+        <section class="col-md-6">
           <div class="card">
             <div class="card-header">
-            <h3 class="card-title">Type of Contracts</h3>
+              <h3 class="card-title">Type of Contract: Distribution of Projects</h3>
             </div>
             <div class="card-body">
               <canvas id="contract-counts" height="400"></canvas>
+            </div>
+          </div>
+        </section>
+        <section class="col-md-6">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Type of Contract: Total Price Value</h3>
+            </div>
+            <div class="card-body">
+              <canvas id="contract-amounts" height="400"></canvas>
             </div>
           </div>
         </section>
