@@ -4,7 +4,7 @@ $path = $_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $id_rfq;
 if (is_dir($path)) {
   $gestor = opendir($path);
   $carpeta = @scandir($path);
-  if(count($carpeta) <= 2){
+  if (count($carpeta) <= 2) {
   }
   $archivos = [];
   while (($archivo = readdir($gestor)) !== false) {
@@ -18,4 +18,3 @@ if (is_dir($path)) {
 echo json_encode(array(
   'files' => $archivos,
 ));
-?>

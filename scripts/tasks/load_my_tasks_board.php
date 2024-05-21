@@ -15,17 +15,17 @@ conexion::cerrar_conexion();
     <div class="card-body">
       <?php
       foreach ($tasks_todo as $key => $task_todo) {
-        ?>
+      ?>
         <div class="card card-primary card-outline">
           <div class="card-header">
-            <h5 class="card-title"><a class="edit_task_button" data="<?php echo $task_todo-> get_id(); ?>" href="#"><?php echo $task_todo-> get_title(); ?></a></h5>
+            <h5 class="card-title"><a class="edit_task_button" data="<?= $task_todo->get_id(); ?>" href="#"><?= $task_todo->get_title(); ?></a></h5>
           </div>
           <div class="card-body">
-            <span class="text-info"><i class="fas fa-user"></i> Created by:</span> <?php echo $task_todo-> get_id_user_name(); ?><br>
-            <span class="text-info"><i class="fas fa-user"></i> Assigned to:</span> <?php echo $task_todo-> get_assigned_user_name(); ?>
+            <span class="text-info"><i class="fas fa-user"></i> Created by:</span> <?= $task_todo->get_id_user_name(); ?><br>
+            <span class="text-info"><i class="fas fa-user"></i> Assigned to:</span> <?= $task_todo->get_assigned_user_name(); ?>
           </div>
         </div>
-        <?php
+      <?php
       }
       ?>
     </div>
@@ -39,17 +39,17 @@ conexion::cerrar_conexion();
     <div class="card-body">
       <?php
       foreach ($tasks_in_progress as $key => $task_in_progress) {
-        ?>
+      ?>
         <div class="card card-primary card-outline">
           <div class="card-header">
-            <h5 class="card-title"><a class="edit_task_button" data="<?php echo $task_in_progress-> get_id(); ?>" href="#"><?php echo $task_in_progress-> get_title(); ?></a></h5>
+            <h5 class="card-title"><a class="edit_task_button" data="<?= $task_in_progress->get_id(); ?>" href="#"><?= $task_in_progress->get_title(); ?></a></h5>
           </div>
           <div class="card-body">
-            <span class="text-info"><i class="fas fa-user"></i> Created by:</span> <?php echo $task_in_progress-> get_id_user_name(); ?><br>
-            <span class="text-info"><i class="fas fa-user"></i> Assigned to:</span> <?php echo $task_in_progress-> get_assigned_user_name(); ?>
+            <span class="text-info"><i class="fas fa-user"></i> Created by:</span> <?= $task_in_progress->get_id_user_name(); ?><br>
+            <span class="text-info"><i class="fas fa-user"></i> Assigned to:</span> <?= $task_in_progress->get_assigned_user_name(); ?>
           </div>
         </div>
-        <?php
+      <?php
       }
       ?>
     </div>
@@ -63,17 +63,17 @@ conexion::cerrar_conexion();
     <div class="card-body">
       <?php
       foreach ($tasks_done as $key => $task_done) {
-        ?>
+      ?>
         <div class="card card-primary card-outline">
           <div class="card-header">
-            <h5 class="card-title"><a class="edit_task_button" data="<?php echo $task_done-> get_id(); ?>" href="#"><?php echo $task_done-> get_title(); ?></a></h5>
+            <h5 class="card-title"><a class="edit_task_button" data="<?= $task_done->get_id(); ?>" href="#"><?= $task_done->get_title(); ?></a></h5>
           </div>
           <div class="card-body">
-            <span class="text-info"><i class="fas fa-user"></i> Created by:</span> <?php echo $task_done-> get_id_user_name(); ?><br>
-            <span class="text-info"><i class="fas fa-user"></i> Assigned to:</span> <?php echo $task_done-> get_assigned_user_name(); ?>
+            <span class="text-info"><i class="fas fa-user"></i> Created by:</span> <?= $task_done->get_id_user_name(); ?><br>
+            <span class="text-info"><i class="fas fa-user"></i> Assigned to:</span> <?= $task_done->get_assigned_user_name(); ?>
           </div>
         </div>
-        <?php
+      <?php
       }
       ?>
     </div>

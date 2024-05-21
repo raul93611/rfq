@@ -11,4 +11,3 @@ echo json_encode(array(
   're_quotes_amounts' => $re_quotes_amounts,
   'fulfillment_amounts' => $fulfillment_amounts
 ));
-?>

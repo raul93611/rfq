@@ -13,13 +13,6 @@ $total_records = TaskRepository::getTotalDoneTasksCount(Conexion::obtener_conexi
 $total_filtered_records = TaskRepository::getTotalFilteredDoneTasksCount(Conexion::obtener_conexion(), $search);
 Conexion::cerrar_conexion();
 
-$columns = array(
-  0 => 'id',
-  1 => 'title',
-  2 => 'created_by',
-  3 => 'assigned_to',
-);
-
 $response = array(
   "draw" => $_POST['draw'],
   "recordsTotal" => $total_records,
@@ -28,4 +21,3 @@ $response = array(
 );
 
 echo json_encode($response);
-?>

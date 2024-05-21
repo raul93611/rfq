@@ -63,11 +63,11 @@ $activeWorksheet->setCellValue('V2', 'SALES COMMISSION AMOUNT');
 
 Conexion::abrir_conexion();
 ExcelRepository::salesCommissionReport(
-  Conexion::obtener_conexion(), 
-  $_POST['type'], 
-  $_POST['quarter'] ?? null, 
-  $_POST['month'] ?? null, 
-  $_POST['year'] ?? null, 
+  Conexion::obtener_conexion(),
+  $_POST['type'],
+  $_POST['quarter'] ?? null,
+  $_POST['month'] ?? null,
+  $_POST['year'] ?? null,
   $activeWorksheet
 );
 Conexion::cerrar_conexion();

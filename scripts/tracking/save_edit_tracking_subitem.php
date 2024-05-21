@@ -6,6 +6,5 @@ Conexion::abrir_conexion();
 TrackingSubitemRepository::update_tracking_subitem(Conexion::obtener_conexion(), $_POST['quantity'], $_POST['carrier'], htmlspecialchars($_POST['tracking_number']), $delivery_date, $due_date, $_POST['signed_by'], htmlspecialchars($_POST['comments']), $_POST['id_tracking_subitem']);
 Conexion::cerrar_conexion();
 echo json_encode(array(
-  'id_rfq'=> $_POST['id_rfq']
+  'id_rfq' => $_POST['id_rfq']
 ));
-?>
