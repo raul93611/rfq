@@ -90,19 +90,19 @@
         <h3>FILE DOCUMENT</h3><br>
         <?php
         foreach (FILE_DOCUMENT as $key => $file_document) {
-          echo (in_array($key, $quote->getFileDocument()) ? $check : $checkbox) . ' ' . $file_document . '<br>';
+          echo (in_array($key, $quote->getFileDocument()) ? $icons['check'] : $icons['checkbox']) . ' ' . $file_document . '<br>';
         }
-        echo $checkbox . '________________<br>';
-        echo $checkbox . '________________<br>';
+        echo $icons['checkbox'] . '________________<br>';
+        echo $icons['checkbox'] . '________________<br>';
         ?>
         <br>
         <h3>ACCOUNTING</h3><br>
         <?php
         foreach (ACCOUNTING_CHECKBOX as $key => $accounting) {
-          echo (in_array($key, $quote->getAccounting()) ? $check : $checkbox) . ' ' . $accounting . '<br>';
+          echo (in_array($key, $quote->getAccounting()) ? $icons['check'] : $icons['checkbox']) . ' ' . $accounting . '<br>';
         }
-        echo $checkbox . '________________<br>';
-        echo $checkbox . '________________<br>';
+        echo $icons['checkbox'] . '________________<br>';
+        echo $icons['checkbox'] . '________________<br>';
         ?>
       </td>
       <td style="width:70%;padding: 0;margin: 0;vertical-align:top;">
@@ -125,7 +125,7 @@
           </tr>
           <tr>
             <td class="blue"><b>BPA:</b></td>
-            <td><?= $quote->getBpa() ? $check : $cross ?></td>
+            <td><?= $quote->getBpa() ? $icons['check'] : $icons['cross'] ?></td>
           </tr>
           <tr>
             <td><b>Sales Rep:</b></td>

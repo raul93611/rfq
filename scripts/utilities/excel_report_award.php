@@ -5,34 +5,63 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 
-$spreadsheet = new Spreadsheet();
-$activeWorksheet = $spreadsheet->getActiveSheet();
+function createSpreadsheet() {
+  $spreadsheet = new Spreadsheet();
+  $activeWorksheet = $spreadsheet->getActiveSheet();
 
-$activeWorksheet->setCellValue('A1', 'PROPOSAL #');
-$activeWorksheet->setCellValue('B1', 'AWARD DATE');
-$activeWorksheet->setCellValue('C1', 'CONTRACT NUMBER');
-$activeWorksheet->setCellValue('D1', 'CODE');
-$activeWorksheet->setCellValue('E1', 'DESIGNATED USER');
-$activeWorksheet->setCellValue('F1', 'CHANNEL');
-$activeWorksheet->setCellValue('G1', 'TYPE OF BID');
-$activeWorksheet->getStyle('H1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('197bff');
-$activeWorksheet->setCellValue('H1', 'TOTAL COST');
-$activeWorksheet->getStyle('I1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('197bff');
-$activeWorksheet->setCellValue('I1', 'TOTAL PRICE');
-$activeWorksheet->getStyle('J1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('197bff');
-$activeWorksheet->setCellValue('J1', 'PROFIT');
-$activeWorksheet->getStyle('K1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('197bff');
-$activeWorksheet->setCellValue('K1', 'PROFIT (%)');
-$activeWorksheet->setCellValue('L1', 'TYPE');
+  // Setup headers
+  $headers = [
+    'A1' => 'PROPOSAL #',
+    'B1' => 'AWARD DATE',
+    'C1' => 'CONTRACT NUMBER',
+    'D1' => 'CODE',
+    'E1' => 'DESIGNATED USER',
+    'F1' => 'CHANNEL',
+    'G1' => 'TYPE OF BID',
+    'H1' => 'TOTAL COST',
+    'I1' => 'TOTAL PRICE',
+    'J1' => 'PROFIT',
+    'K1' => 'PROFIT (%)',
+    'L1' => 'TYPE'
+  ];
 
-Conexion::abrir_conexion();
-ExcelRepository::awardReport(Conexion::obtener_conexion(), $_POST['type'], $_POST['quarter'], $_POST['month'], $_POST['year'], $activeWorksheet);
-Conexion::cerrar_conexion();
+  foreach ($headers as $cell => $header) {
+    $activeWorksheet->setCellValue($cell, $header);
+    if (in_array($cell, ['H1', 'I1', 'J1', 'K1'])) {
+      $activeWorksheet->getStyle($cell)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('197bff');
+    }
+  }
 
-$writer = new Xlsx($spreadsheet);
+  return $spreadsheet;
+}
 
-header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-header('Content-Disposition: attachment;filename="AwardReport.xlsx"');
-header('Cache-Control: max-age=0');
+function fetchAndFillData($spreadsheet, $type, $quarter, $month, $year) {
+  try {
+    Conexion::abrir_conexion();
+    $conexion = Conexion::obtener_conexion();
+    ExcelRepository::awardReport($conexion, $type, $quarter, $month, $year, $spreadsheet->getActiveSheet());
+  } catch (Exception $e) {
+    echo 'Error fetching data: ' . $e->getMessage();
+  } finally {
+    Conexion::cerrar_conexion();
+  }
+}
 
-$writer->save('php://output');
+function outputSpreadsheet($spreadsheet) {
+  $writer = new Xlsx($spreadsheet);
+
+  header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+  header('Content-Disposition: attachment;filename="AwardReport.xlsx"');
+  header('Cache-Control: max-age=0');
+
+  $writer->save('php://output');
+}
+
+// Ensure required POST parameters are set
+if (isset($_POST['type'], $_POST['quarter'], $_POST['month'], $_POST['year'])) {
+  $spreadsheet = createSpreadsheet();
+  fetchAndFillData($spreadsheet, $_POST['type'], $_POST['quarter'], $_POST['month'], $_POST['year']);
+  outputSpreadsheet($spreadsheet);
+} else {
+  echo 'Error: Missing required POST parameters.';
+}

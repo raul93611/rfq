@@ -34,7 +34,7 @@ function generateAndSavePDF($cotizacion, $html) {
         ');
 
     $pdfGenerator->generatePDF($html);
-    $filePath = $_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $cotizacion->obtener_id() . '/' . preg_replace('/[^a-z0-9-_\-\.]/i', '_', $cotizacion->obtener_email_code()) . '(trackings).pdf';
+    $filePath = $_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $cotizacion->obtener_id() . '/' . Input::sanitize_filename($cotizacion->obtener_email_code()) . '(trackings).pdf';
     $pdfGenerator->saveInServer($filePath);
     $pdfGenerator->display($filePath);
   } catch (Exception $e) {

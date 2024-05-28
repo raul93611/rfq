@@ -73,6 +73,10 @@ class Input {
     return $canal;
   }
 
+  public static function sanitize_filename($filename) {
+    return preg_replace('/[^a-z0-9-_\-\.]/i', '_', $filename);
+  }
+
   public static function save_files($path, $files, $id_rfq) {
     if (!is_dir($path)) {
       mkdir($path, 0777, true);

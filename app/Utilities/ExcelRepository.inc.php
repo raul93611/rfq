@@ -451,7 +451,7 @@ class ExcelRepository {
       $x++;
       $activeWorksheet->setCellValue($x . $y, $quote['profit']);
       $x++;
-      $activeWorksheet->setCellValue($x . $y, number_format($quote['profit_percentage'], 2) . '%');
+      $activeWorksheet->setCellValue($x . $y, number_format($quote['profit_percentage']?? 0, 2) . '%');
       $x++;
       $activeWorksheet->setCellValue($x . $y, $quote['type_of_contract']);
       $y++;
