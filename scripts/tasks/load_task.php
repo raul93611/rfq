@@ -1,55 +1,56 @@
 <?php
-Conexion::abrir_conexion();
-$task = TaskRepository::get_one(Conexion::obtener_conexion(), $id_task);
-$users = RepositorioUsuario::get_enable_users(Conexion::obtener_conexion());
-$comments = TaskCommentRepository::get_all(Conexion::obtener_conexion(), $id_task);
-Conexion::cerrar_conexion();
+try {
+  Conexion::abrir_conexion();
+  $conexion = Conexion::obtener_conexion();
+
+  $task = TaskRepository::get_one($conexion, $id_task);
+  $users = RepositorioUsuario::get_enable_users($conexion);
+  $comments = TaskCommentRepository::get_all($conexion, $id_task);
+} catch (Exception $e) {
+  // Handle exceptions (e.g., log the error, display a message to the user)
+  die("Error fetching task data: " . $e->getMessage());
+} finally {
+  Conexion::cerrar_conexion();
+}
 ?>
-<input type="hidden" name="id_task" value="<?= $id_task; ?>">
+<input type="hidden" name="id_task" value="<?= htmlspecialchars($id_task); ?>">
 <div class="modal-body">
   <div class="row">
     <div class="col-md-12">
       <div class="form-group">
-        <input type="hidden" name="old_status" value="<?= $task->get_status(); ?>">
+        <input type="hidden" name="old_status" value="<?= htmlspecialchars($task->get_status()); ?>">
         <div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
-          <label class="btn bg-olive <?= $task->get_status() == 'todo' ? 'active' : ''; ?>">
-            <input type="radio" name="status" id="option_b1" autocomplete="off" value="todo" <?= $task->get_status() == 'todo' ? 'checked' : ''; ?>> To Do
-          </label>
-          <label class="btn bg-olive <?= $task->get_status() == 'in_progress' ? 'active' : ''; ?>">
-            <input type="radio" name="status" id="option_b2" autocomplete="off" value="in_progress" <?= $task->get_status() == 'in_progress' ? 'checked' : ''; ?>> In Progress
-          </label>
-          <label class="btn bg-olive <?= $task->get_status() == 'done' ? 'active' : ''; ?>">
-            <input type="radio" name="status" id="option_b3" autocomplete="off" value="done" <?= $task->get_status() == 'done' ? 'checked' : ''; ?>> Done
-          </label>
+          <?php
+          $statuses = ['todo' => 'To Do', 'in_progress' => 'In Progress', 'done' => 'Done'];
+          foreach ($statuses as $status => $label) {
+            $active = $task->get_status() === $status ? 'active' : '';
+            $checked = $task->get_status() === $status ? 'checked' : '';
+            echo "<label class='btn bg-olive $active'>
+                    <input type='radio' name='status' autocomplete='off' value='$status' $checked> $label
+                  </label>";
+          }
+          ?>
         </div>
       </div>
-      <h4>Title: <?= $task->get_title(); ?></h4>
+      <h4>Title: <?= htmlspecialchars($task->get_title()); ?></h4>
       <div class="form-group">
         <label for="assigned_user">Assigned user:</label>
-        <?php
-        if ($task->get_status() == 'done') {
-        ?>
-          <input type="hidden" name="assigned_user" value="<?= $task->get_assigned_user(); ?>">
-          <p><?= $task->get_assigned_user_name(); ?></p>
-        <?php
-        } else {
-        ?>
+        <?php if ($task->get_status() === 'done') : ?>
+          <input type="hidden" name="assigned_user" value="<?= htmlspecialchars($task->get_assigned_user()); ?>">
+          <p><?= htmlspecialchars($task->get_assigned_user_name()); ?></p>
+        <?php else : ?>
           <select id="assigned_user" class="form-control form-control-sm" name="assigned_user">
-            <?php
-            foreach ($users as $user) {
-            ?>
-              <option value="<?= $user->obtener_id(); ?>" <?= $user->obtener_id() == $task->get_assigned_user() ? 'selected' : ''; ?>><?= $user->obtener_nombre_usuario(); ?></option>
-            <?php
-            }
-            ?>
+            <?php foreach ($users as $user) : ?>
+              <option value="<?= htmlspecialchars($user->obtener_id()); ?>" <?= $user->obtener_id() == $task->get_assigned_user() ? 'selected' : ''; ?>>
+                <?= htmlspecialchars($user->obtener_nombre_usuario()); ?>
+              </option>
+            <?php endforeach; ?>
           </select>
-        <?php
-        }
-        ?>
+        <?php endif; ?>
       </div>
       <div class="form-group">
         <label>Message:</label>
-        <p><?= $task->get_message(); ?></p>
+        <p><?= nl2br(htmlspecialchars($task->get_message())); ?></p>
       </div>
       <div class="form-group">
         <label for="task_comment">Comment:</label>
@@ -62,27 +63,23 @@ Conexion::cerrar_conexion();
             <h3 class="timeline-header">Comments</h3>
           </div>
         </div>
-        <?php
-        if (count($comments)) {
-          foreach ($comments as $comment) {
-            $created_at = RepositorioComment::mysql_datetime_to_english_format($comment->get_created_at());
-        ?>
+        <?php if (count($comments)) : ?>
+          <?php foreach ($comments as $comment) : ?>
+            <?php $created_at = date("m/d/Y", strtotime($comment->get_created_at())); ?>
             <div>
               <i class="fa fa-user"></i>
               <div class="timeline-item">
-                <span class="time"><i class="far fa-clock"></i> <?= $created_at; ?></span>
+                <span class="time"><i class="far fa-clock"></i> <?= htmlspecialchars($created_at); ?></span>
                 <h3 class="timeline-header">
-                  <span class="text-primary"><?= $comment->get_id_user_name(); ?></span>
+                  <span class="text-primary"><?= htmlspecialchars($comment->get_id_user_name()); ?></span>
                 </h3>
                 <div class="timeline-body">
-                  <?= $comment->get_comment(); ?>
+                  <?= nl2br(htmlspecialchars($comment->get_comment())); ?>
                 </div>
               </div>
             </div>
-        <?php
-          }
-        }
-        ?>
+          <?php endforeach; ?>
+        <?php endif; ?>
         <div>
           <i class="fa fa-infinity"></i>
         </div>
