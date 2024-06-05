@@ -1,8 +1,6 @@
 <?php
-class ServiceRepository
-{
-  public static function store_service($connection, $service)
-  {
+class ServiceRepository {
+  public static function store_service($connection, $service) {
     if (isset($connection)) {
       try {
         $sql = 'INSERT INTO services(id_rfq, description, quantity, unit_price, total_price) VALUES(:id_rfq, :description, :quantity, :unit_price, :total_price)';
@@ -21,8 +19,7 @@ class ServiceRepository
     return $id;
   }
 
-  public static function get_services($connection, $id_rfq)
-  {
+  public static function get_services($connection, $id_rfq) {
     $services = [];
     if (isset($connection)) {
       try {
@@ -43,8 +40,7 @@ class ServiceRepository
     return $services;
   }
 
-  public static function set_fulfillment_profit($conexion, $fulfillment_profit, $id_service)
-  {
+  public static function set_fulfillment_profit($conexion, $fulfillment_profit, $id_service) {
     if (isset($conexion)) {
       try {
         $sql = 'UPDATE services SET fulfillment_profit = :fulfillment_profit WHERE id = :id_service';
@@ -58,22 +54,21 @@ class ServiceRepository
     }
   }
 
-  public static function display_services($connection, $quote)
-  {
-    $services = self::get_services($connection, $quote-> obtener_id());
-    $total_service = self::get_total($connection, $quote-> obtener_id());
+  public static function display_services($connection, $quote) {
+    $services = self::get_services($connection, $quote->obtener_id());
+    $total_service = self::get_total($connection, $quote->obtener_id());
     if (count($services)) {
-    ?>
+?>
       <div class="container-fluid my-2">
         <div class="row">
           <div class="col-md-6">
             <label>Payment terms:</label>
             <div class="custom-control custom-radio">
-              <input type="radio" id="net_30Services" name="services_payment_term" class="custom-control-input" value="Net 30" <?= $quote-> obtener_services_payment_term() == 'Net 30' ? 'checked' : ''; ?>>
+              <input type="radio" id="net_30Services" name="services_payment_term" class="custom-control-input" value="Net 30" <?= $quote->obtener_services_payment_term() == 'Net 30' ? 'checked' : ''; ?>>
               <label class="custom-control-label" for="net_30Services">Net 30</label>
             </div>
             <div class="custom-control custom-radio">
-              <input type="radio" id="net_30ccServices" name="services_payment_term" class="custom-control-input" value="Net 30/CC" <?= $quote-> obtener_services_payment_term() == 'Net 30/CC' ? 'checked' : ''; ?>>
+              <input type="radio" id="net_30ccServices" name="services_payment_term" class="custom-control-input" value="Net 30/CC" <?= $quote->obtener_services_payment_term() == 'Net 30/CC' ? 'checked' : ''; ?>>
               <label class="custom-control-label" for="net_30ccServices">Net 30/CC</label>
             </div>
           </div>
@@ -114,8 +109,7 @@ class ServiceRepository
     }
   }
 
-  public static function display_service($service, $key)
-  {
+  public static function display_service($service, $key) {
     ?>
     <tr class="service_item" id="service<?= $service->get_id(); ?>">
       <td>
@@ -134,8 +128,7 @@ class ServiceRepository
 <?php
   }
 
-  public static function get_service($connection, $id_service)
-  {
+  public static function get_service($connection, $id_service) {
     $service = null;
     if (isset($connection)) {
       try {
@@ -154,8 +147,7 @@ class ServiceRepository
     return $service;
   }
 
-  public static function edit_service($connection, $id, $description, $quantity, $unit_price, $total_price)
-  {
+  public static function edit_service($connection, $id, $description, $quantity, $unit_price, $total_price) {
     if (isset($connection)) {
       try {
         $sql = 'UPDATE services SET description = :description, quantity = :quantity, unit_price = :unit_price, total_price = :total_price WHERE id = :id_service';
@@ -166,28 +158,43 @@ class ServiceRepository
         $sentence->bindValue(':total_price', $total_price, PDO::PARAM_STR);
         $sentence->bindValue(':id_service', $id, PDO::PARAM_STR);
         $sentence->execute();
+        return true;
       } catch (PDOException $ex) {
-        print 'ERROR:' . $ex->getMessage() . '<br>';
+        error_log('ERROR: ' . $ex->getMessage());
+        return false;
       }
     }
+    return false;
   }
 
-  public static function delete_service($connection, $id_service)
-  {
+
+  public static function delete_service($connection, $id_service) {
     if (isset($connection)) {
       try {
         $sql = 'DELETE FROM services WHERE id = :id_service';
         $sentence = $connection->prepare($sql);
         $sentence->bindValue(':id_service', $id_service, PDO::PARAM_STR);
-        $sentence->execute();
+        $result = $sentence->execute();
+
+        // Check if any rows were affected
+        if ($sentence->rowCount() > 0) {
+          return true;
+        } else {
+          return false;
+        }
       } catch (PDOException $ex) {
-        print 'ERROR:' . $ex->getMessage() . '<br>';
+        // Log the error message
+        error_log('ERROR: ' . $ex->getMessage());
+        return false;
       }
+    } else {
+      // Return false if connection is not set
+      return false;
     }
   }
 
-  public static function get_total($connection, $id_rfq)
-  {
+
+  public static function get_total($connection, $id_rfq) {
     $total_service = 0;
     if (isset($connection)) {
       try {
@@ -206,7 +213,7 @@ class ServiceRepository
     return $total_service;
   }
 
-  public static function calc_items_with_CC($connection, $payment_term, $id_rfq){
+  public static function calc_items_with_CC($connection, $payment_term, $id_rfq) {
     RepositorioRfq::set_services_payment_term($connection, $payment_term, $id_rfq);
     $payment_term = $payment_term == 'Net 30/CC' ? 1.03 : 1;
     if (isset($connection)) {
