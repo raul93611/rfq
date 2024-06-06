@@ -13,7 +13,7 @@ try {
 ?>
 <div class="form-group">
   <label for="description">Description:</label>
-  <textarea name="description" rows="5" cols="80" class="form-control form-control-sm" required><?= htmlspecialchars($service->get_description(), ENT_QUOTES, 'UTF-8'); ?></textarea>
+  <textarea name="description" rows="5" cols="80" class="form-control form-control-sm" required><?= html_entity_decode($service->get_description(), ENT_QUOTES | ENT_HTML5, 'UTF-8') ?></textarea>
 </div>
 <div class="form-group">
   <label for="quantity">Quantity:</label>
