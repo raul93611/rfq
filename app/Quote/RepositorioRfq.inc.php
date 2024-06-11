@@ -153,15 +153,15 @@ class RepositorioRfq {
     return $sentence->fetchColumn();
   }
 
-  public static function updateInvoiceAcceptance($connection, $id, $invoice_acceptance){
-    if(isset($connection)){
-      try{
+  public static function updateInvoiceAcceptance($connection, $id, $invoice_acceptance) {
+    if (isset($connection)) {
+      try {
         $sql = 'UPDATE rfq SET invoice_acceptance = :invoice_acceptance WHERE id = :id';
-        $sentence = $connection-> prepare($sql);
-        $sentence-> bindValue(':id', $id, PDO::PARAM_STR);
-        $sentence-> bindValue(':invoice_acceptance', $invoice_acceptance, PDO::PARAM_STR);
-        $sentence-> execute();
-      }catch(PDOException $ex){
+        $sentence = $connection->prepare($sql);
+        $sentence->bindValue(':id', $id, PDO::PARAM_STR);
+        $sentence->bindValue(':invoice_acceptance', $invoice_acceptance, PDO::PARAM_STR);
+        $sentence->execute();
+      } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
@@ -684,7 +684,7 @@ class RepositorioRfq {
         set_side = :set_side, 
         poc = :poc, 
         co = :co, 
-        estimated_delivery_date = :estimated_delivery_date, 
+        estimated_delivery_date = STR_TO_DATE(:estimated_delivery_date, '%m/%d/%Y'), 
         file_document = :file_document,
         accounting = :accounting,
         shipping_address = :shipping_address,
@@ -747,8 +747,8 @@ class RepositorioRfq {
     if (isset($conexion)) {
       try {
         $sql = "UPDATE rfq SET 
-        expiration_date = :expiration_date, 
-        fecha_completado = :fecha_completado, 
+        expiration_date = STR_TO_DATE(:expiration_date, '%m/%d/%Y'),
+        fecha_completado = STR_TO_DATE(:fecha_completado, '%m/%d/%Y'),
         address = :address, 
         ship_via = :ship_via, 
         type_of_bid = :type_of_bid, 
@@ -2089,5 +2089,168 @@ class RepositorioRfq {
     $providers_name = array_unique($providers_name);
     return $providers_name;
   }
+
+  public static function copyRfq($conexion, $id_rfq) {
+    $cotizacion = RepositorioRfq::obtener_cotizacion_por_id($conexion, $id_rfq);
+
+    // Create a copy of the RFQ
+    $cotizacion_copia = new Rfq(
+      '',
+      $_SESSION['user']->obtener_id(),
+      $cotizacion->obtener_usuario_designado(),
+      $cotizacion->obtener_canal(),
+      $cotizacion->obtener_email_code() . '(copia)',
+      $cotizacion->obtener_type_of_bid(),
+      $cotizacion->obtener_issue_date(),
+      $cotizacion->obtener_end_date(),
+      0,
+      0,
+      $cotizacion->obtener_total_cost(),
+      $cotizacion->obtener_total_price(),
+      $cotizacion->obtener_comments(),
+      0,
+      null,
+      null,
+      null,
+      $cotizacion->obtener_payment_terms(),
+      $cotizacion->obtener_address(),
+      $cotizacion->obtener_ship_to(),
+      null,
+      $cotizacion->obtener_ship_via(),
+      $cotizacion->obtener_taxes(),
+      $cotizacion->obtener_profit(),
+      $cotizacion->obtener_additional(),
+      $cotizacion->obtener_shipping(),
+      $cotizacion->obtener_shipping_cost(),
+      0,
+      null,
+      $cotizacion->obtener_contract_number(),
+      null,
+      null,
+      0,
+      0,
+      0,
+      null,
+      $id_rfq,
+      0,
+      null,
+      0,
+      0,
+      null,
+      null,
+      null,
+      null,
+      null,
+      'Net 30',
+      $cotizacion->obtener_city(),
+      $cotizacion->obtener_zip_code(),
+      $cotizacion->obtener_state(),
+      $cotizacion->obtener_client(),
+      0,
+      $cotizacion->getSetSide(),
+      $cotizacion->getPoc(),
+      $cotizacion->getCo(),
+      $cotizacion->getEstimatedDeliveryDate(),
+      $cotizacion->getShippingAddress(),
+      $cotizacion->getSpecialRequirements(),
+      $cotizacion->getFileDocument(),
+      $cotizacion->getAccounting(),
+      $cotizacion->getGsa(),
+      $cotizacion->getClientPaymentTerms(),
+      'Net 30',
+      $cotizacion->getBpa()
+    );
+
+    // Insert the copied RFQ
+    list($cotizacion_insertada, $id_rfq_copia) = RepositorioRfq::insertar_cotizacion($conexion, $cotizacion_copia);
+
+    // Log the action in the audit trail
+    AuditTrailRepository::quote_status_audit_trail($conexion, 'Copied', $id_rfq_copia);
+
+    return $id_rfq_copia;
+  }
+
+  public static function copyRfqFiles($id_rfq, $id_rfq_copia) {
+    $rfq_directory = $_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $id_rfq;
+    $rfq_copia_directory = $_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $id_rfq_copia;
+    Input::copy_files($rfq_directory, $rfq_copia_directory);
+  }
+
+  public static function copyItems($conexion, $id_rfq, $id_rfq_copia) {
+    $items = RepositorioItem::obtener_items_por_id_rfq($conexion, $id_rfq);
+
+    if (count($items)) {
+      foreach ($items as $item) {
+        $item_copia = new Item(
+          '',
+          $id_rfq_copia,
+          $item->obtener_id_usuario(),
+          $item->obtener_provider_menor(),
+          $item->obtener_brand(),
+          $item->obtener_brand_project(),
+          $item->obtener_part_number(),
+          $item->obtener_part_number_project(),
+          $item->obtener_description(),
+          $item->obtener_description_project(),
+          $item->obtener_quantity(),
+          $item->obtener_unit_price(),
+          $item->obtener_total_price(),
+          $item->obtener_comments(),
+          $item->obtener_website(),
+          $item->obtener_additional(),
+          $item->obtener_fulfillment_profit()
+        );
+
+        $item_copia_id = RepositorioItem::insertar_item($conexion, $item_copia);
+
+        // Copy subitems
+        $subitems = RepositorioSubitem::obtener_subitems_por_id_item($conexion, $item->obtener_id());
+        foreach ($subitems as $subitem) {
+          $subitem_copia = new Subitem(
+            '',
+            $item_copia_id,
+            $subitem->obtener_provider_menor(),
+            $subitem->obtener_brand(),
+            $subitem->obtener_brand_project(),
+            $subitem->obtener_part_number(),
+            $subitem->obtener_part_number_project(),
+            $subitem->obtener_description(),
+            $subitem->obtener_description_project(),
+            $subitem->obtener_quantity(),
+            $subitem->obtener_unit_price(),
+            $subitem->obtener_total_price(),
+            $subitem->obtener_comments(),
+            $subitem->obtener_website(),
+            $subitem->obtener_additional(),
+            $subitem->obtener_fulfillment_profit()
+          );
+          $subitem_copia_id = RepositorioSubitem::insertar_subitem($conexion, $subitem_copia);
+
+          // Copy provider subitems
+          $providers_subitem = RepositorioProviderSubitem::obtener_providers_subitem_por_id_subitem($conexion, $subitem->obtener_id());
+          foreach ($providers_subitem as $provider_subitem) {
+            $provider_subitem_copia = new ProviderSubitem(
+              '',
+              $subitem_copia_id,
+              $provider_subitem->obtener_provider(),
+              $provider_subitem->obtener_price()
+            );
+            RepositorioProviderSubitem::insertar_provider_subitem($conexion, $provider_subitem_copia);
+          }
+        }
+
+        // Copy providers
+        $providers = RepositorioProvider::obtener_providers_por_id_item($conexion, $item->obtener_id());
+        foreach ($providers as $provider) {
+          $provider_copia = new Provider(
+            '',
+            $item_copia_id,
+            $provider->obtener_provider(),
+            $provider->obtener_price()
+          );
+          RepositorioProvider::insertar_provider($conexion, $provider_copia);
+        }
+      }
+    }
+  }
 }
-?>

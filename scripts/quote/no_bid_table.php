@@ -1,32 +1,45 @@
 <?php
 header('Content-Type: application/json');
 
-$start = $_POST['start'];
-$length = $_POST['length'];
-$search = $_POST['search']['value'];
-$sort_column_index = $_POST['order'][0]['column'];
-$sort_direction = $_POST['order'][0]['dir'];
+// Function to sanitize input
+function sanitize_input($input) {
+  return htmlspecialchars(trim($input), ENT_QUOTES, 'UTF-8');
+}
 
-Conexion::abrir_conexion();
-$quotes = RepositorioRfq::getNoBidQuotes(Conexion::obtener_conexion(), $start, $length, $search, $sort_column_index, $sort_direction);
-$total_records = RepositorioRfq::getTotalNoBidQuotesCount(Conexion::obtener_conexion());
-$total_filtered_records = RepositorioRfq::getTotalFilteredNoBidQuotesCount(Conexion::obtener_conexion(), $search);
-Conexion::cerrar_conexion();
+// Validate and sanitize inputs
+$start = isset($_POST['start']) ? (int)$_POST['start'] : 0;
+$length = isset($_POST['length']) ? (int)$_POST['length'] : 10;
+$search = isset($_POST['search']['value']) ? sanitize_input($_POST['search']['value']) : '';
+$sort_column_index = isset($_POST['order'][0]['column']) ? (int)$_POST['order'][0]['column'] : 0;
+$sort_direction = isset($_POST['order'][0]['dir']) && in_array($_POST['order'][0]['dir'], ['asc', 'desc']) ? $_POST['order'][0]['dir'] : 'asc';
+$draw = isset($_POST['draw']) ? (int)$_POST['draw'] : 0;
 
-$columns = array(
-  0 => 'id',
-  1 => 'nombre_usuario',
-  2 => 'email_code',
-  3 => 'type_of_bid',
-  4 => 'comments',
-  5 => 'options'
-);
+$response = [];
 
-$response = array(
-  "draw" => $_POST['draw'],
-  "recordsTotal" => $total_records,
-  "recordsFiltered" => $total_filtered_records,
-  "data" => $quotes
-);
+try {
+  // Open database connection
+  Conexion::abrir_conexion();
+  $conexion = Conexion::obtener_conexion();
 
+  // Get the quotes based on the provided parameters
+  $quotes = RepositorioRfq::getNoBidQuotes($conexion, $start, $length, $search, $sort_column_index, $sort_direction);
+  $total_records = RepositorioRfq::getTotalNoBidQuotesCount($conexion);
+  $total_filtered_records = RepositorioRfq::getTotalFilteredNoBidQuotesCount($conexion, $search);
+
+  // Close database connection
+  Conexion::cerrar_conexion();
+
+  // Format the response
+  $response = [
+    "draw" => $draw,
+    "recordsTotal" => $total_records,
+    "recordsFiltered" => $total_filtered_records,
+    "data" => $quotes
+  ];
+} catch (Exception $e) {
+  // Handle exceptions and send error response
+  $response = ['error' => 'An error occurred while processing your request'];
+}
+
+// Send the JSON response
 echo json_encode($response);

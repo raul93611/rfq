@@ -1,23 +1,44 @@
 <?php
 header('Content-Type: application/json');
 
-$start = $_POST['start'];
-$length = $_POST['length'];
-$search = $_POST['search']['value'];
-$sort_column_index = $_POST['order'][0]['column'];
-$sort_direction = $_POST['order'][0]['dir'];
+try {
+  // Extract and sanitize POST data
+  $start = filter_input(INPUT_POST, 'start', FILTER_VALIDATE_INT);
+  $length = filter_input(INPUT_POST, 'length', FILTER_VALIDATE_INT);
+  $search = filter_input(INPUT_POST, 'search', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY)['value'];
+  $sort_order = filter_input(INPUT_POST, 'order', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+  $sort_column_index = $sort_order[0]['column'];
+  $sort_direction = $sort_order[0]['dir'];
+  $draw = filter_input(INPUT_POST, 'draw', FILTER_VALIDATE_INT);
 
-Conexion::abrir_conexion();
-$quotes = RepositorioRfq::getDeletedQuotes(Conexion::obtener_conexion(), $start, $length, $search, $sort_column_index, $sort_direction);
-$total_records = RepositorioRfq::getTotalDeletedQuotesCount(Conexion::obtener_conexion());
-$total_filtered_records = RepositorioRfq::getTotalFilteredDeletedQuotesCount(Conexion::obtener_conexion(), $search);
-Conexion::cerrar_conexion();
+  // Open database connection
+  Conexion::abrir_conexion();
+  $conexion = Conexion::obtener_conexion();
 
-$response = array(
-  "draw" => $_POST['draw'],
-  "recordsTotal" => $total_records,
-  "recordsFiltered" => $total_filtered_records,
-  "data" => $quotes
-);
+  // Fetch data
+  $quotes = RepositorioRfq::getDeletedQuotes($conexion, $start, $length, $search, $sort_column_index, $sort_direction);
+  $total_records = RepositorioRfq::getTotalDeletedQuotesCount($conexion);
+  $total_filtered_records = RepositorioRfq::getTotalFilteredDeletedQuotesCount($conexion, $search);
 
-echo json_encode($response);
+  // Close the database connection
+  Conexion::cerrar_conexion();
+
+  // Prepare response
+  $response = array(
+    "draw" => $draw,
+    "recordsTotal" => $total_records,
+    "recordsFiltered" => $total_filtered_records,
+    "data" => $quotes
+  );
+
+  // Send JSON response
+  echo json_encode($response);
+} catch (Exception $e) {
+  // Ensure the connection is closed in case of an error
+  if (isset($conexion)) {
+    Conexion::cerrar_conexion();
+  }
+  // Output error message
+  echo 'Error: ' . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8');
+  exit;
+}
