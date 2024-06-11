@@ -8,7 +8,7 @@
   </a>
   <ul class="nav nav-treeview">
     <li class="nav-item">
-      <a href="<?= FULFILLMENT_QUOTES; ?>" class="nav-link <?= $partes_ruta[3] == 'fulfillment_quotes' ? 'active' : ''; ?>">
+      <a href="<?= FULFILLMENT_QUOTES; ?>" class="nav-link <?= ($partes_ruta[3] ?? null) == 'fulfillment_quotes' ? 'active' : ''; ?>">
         <i class="nav-icon fas fa-th"></i>
         <p>
           Fulfillment
@@ -16,7 +16,7 @@
       </a>
     </li>
     <li class="nav-item">
-      <a href="<?= PERSONNEL_CALENDAR; ?>" class="nav-link <?= $partes_ruta[3] == 'personnel_calendar' ? 'active' : ''; ?>">
+      <a href="<?= PERSONNEL_CALENDAR; ?>" class="nav-link <?= ($partes_ruta[3] ?? null) == 'personnel_calendar' ? 'active' : ''; ?>">
         <i class="nav-icon fas fa-calendar"></i>
         <p>
           Personnel Calendar
@@ -24,7 +24,7 @@
       </a>
     </li>
     <li class="nav-item">
-      <a href="<?= PERSONNEL; ?>" class="nav-link <?= $partes_ruta[3] == 'personnel' ? 'active' : ''; ?>">
+      <a href="<?= PERSONNEL; ?>" class="nav-link <?= ($partes_ruta[3] ?? null) == 'personnel' ? 'active' : ''; ?>">
         <i class="nav-icon fas fa-address-book"></i>
         <p>
           Personnel
@@ -32,7 +32,7 @@
       </a>
     </li>
     <li class="nav-item">
-      <a href="<?= TYPE_OF_PROJECT; ?>" class="nav-link <?= $partes_ruta[3] == 'type_of_project' ? 'active' : ''; ?>">
+      <a href="<?= TYPE_OF_PROJECT; ?>" class="nav-link <?= ($partes_ruta[3] ?? null) == 'type_of_project' ? 'active' : ''; ?>">
         <i class="nav-icon fas fa-address-book"></i>
         <p>
           Types of Projects
@@ -40,7 +40,7 @@
       </a>
     </li>
     <li class="nav-item">
-      <a href="<?= PROVIDERS; ?>" class="nav-link <?= $partes_ruta[3] == 'providers' ? 'active' : ''; ?>">
+      <a href="<?= PROVIDERS; ?>" class="nav-link <?= ($partes_ruta[3] ?? null) == 'providers' ? 'active' : ''; ?>">
         <i class="nav-icon far fa-address-book"></i>
         <p>
           Providers
@@ -48,7 +48,7 @@
       </a>
     </li>
     <li class="nav-item">
-      <a href="<?= PAYMENT_TERMS; ?>" class="nav-link <?= $partes_ruta[3] == 'payment_terms' ? 'active' : ''; ?>">
+      <a href="<?= PAYMENT_TERMS; ?>" class="nav-link <?= ($partes_ruta[3] ?? null) == 'payment_terms' ? 'active' : ''; ?>">
         <i class="nav-icon far fa-address-book"></i>
         <p>
           Payment Terms
