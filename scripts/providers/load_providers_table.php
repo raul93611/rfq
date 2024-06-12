@@ -1,18 +1,33 @@
 <?php
 header('Content-Type: application/json');
-Conexion::abrir_conexion();
-$providers = ProviderListRepository::get_all(Conexion::obtener_conexion());
-Conexion::cerrar_conexion();
-$json = [];
-foreach ($providers as $key => $provider) {
-  $row = [
-    $provider-> get_company_name(),
-    '<button type="button" data="' . $provider-> get_id() . '" class="edit_button btn btn-info btn-sm" name=""><i class="fas fa-pen"></i></button>
-    <button type="button" data="' . $provider-> get_id() . '" class="delete_button btn btn-danger btn-sm" name=""><i class="fas fa-trash"></i></button>'
-  ];
-  array_push($json, $row);
+
+try {
+  // Open database connection
+  Conexion::abrir_conexion();
+  $conexion = Conexion::obtener_conexion();
+
+  // Fetch all providers
+  $providers = ProviderListRepository::get_all($conexion);
+
+  // Close database connection
+  Conexion::cerrar_conexion();
+
+  // Prepare the JSON response
+  $json = array_map(function ($provider) {
+    return [
+      htmlspecialchars($provider->get_company_name()),
+      '<button type="button" data="' . htmlspecialchars($provider->get_id()) . '" class="edit_button btn btn-info btn-sm" name=""><i class="fas fa-pen"></i></button>
+       <button type="button" data="' . htmlspecialchars($provider->get_id()) . '" class="delete_button btn btn-danger btn-sm" name=""><i class="fas fa-trash"></i></button>'
+    ];
+  }, $providers);
+
+  // Output the JSON response
+  echo json_encode(['data' => $json]);
+} catch (Exception $e) {
+  // Close the database connection in case of an error
+  Conexion::cerrar_conexion();
+
+  // Output the error message as JSON
+  echo json_encode(['error' => 'An error occurred: ' . $e->getMessage()]);
+  exit;
 }
-echo json_encode(array(
-  'data' => $json
-));
-?>
