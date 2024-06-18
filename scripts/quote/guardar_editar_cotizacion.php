@@ -27,7 +27,7 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
   $type_of_contract = filter_input(INPUT_POST, 'type_of_contract', FILTER_SANITIZE_SPECIAL_CHARS);
   $services_payment_term = filter_input(INPUT_POST, 'services_payment_term', FILTER_SANITIZE_SPECIAL_CHARS);
   $invoice_date = filter_input(INPUT_POST, 'invoice_date', FILTER_SANITIZE_SPECIAL_CHARS);
-  $sales_commission = filter_input(INPUT_POST, 'sales_commission', FILTER_VALIDATE_FLOAT);
+  $sales_commission = filter_input(INPUT_POST, 'sales_commission', FILTER_SANITIZE_SPECIAL_CHARS);
   $sales_commission_comment = filter_input(INPUT_POST, 'sales_commission_comment', FILTER_SANITIZE_SPECIAL_CHARS);
 
   // Check required fields
@@ -44,14 +44,14 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
 
     RepositorioRfq::insert_calc(
       $conexion,
-      $id_items,
-      $id_subitems,
-      $partes_total_price,
-      $partes_total_price_subitems,
-      $unit_prices,
-      $unit_prices_subitems,
-      $additional,
-      $additional_subitems
+      $id_items ?? '',
+      $id_subitems ?? '',
+      $partes_total_price ?? '',
+      $partes_total_price_subitems ?? '',
+      $unit_prices ?? '',
+      $unit_prices_subitems ?? '',
+      $additional ?? '',
+      $additional_subitems ?? ''
     );
 
     RepositorioRfq::update_variables(
@@ -62,7 +62,7 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
       $total_cost,
       $total_price,
       $additional_general,
-      htmlspecialchars($shipping),
+      htmlspecialchars($shipping ?? ''),
       $shipping_cost,
       $id_rfq
     );
