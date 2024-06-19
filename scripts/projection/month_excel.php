@@ -3,28 +3,47 @@ require 'vendor/autoload.php';
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use PhpOffice\PhpSpreadsheet\Style\Fill;
 
-$spreadsheet = new Spreadsheet();
-$activeWorksheet = $spreadsheet->getActiveSheet();
+try {
+  // Initialize spreadsheet
+  $spreadsheet = new Spreadsheet();
+  $activeWorksheet = $spreadsheet->getActiveSheet();
 
-$activeWorksheet->setCellValue('A1', 'INVOICE DATE');
-$activeWorksheet->setCellValue('B1', 'INVOICE');
-$activeWorksheet->setCellValue('C1', 'TYPE OF CONTRACT');
-$activeWorksheet->setCellValue('D1', 'INVOICE AMOUNT');
-$activeWorksheet->setCellValue('E1', 'SALES COMMISSION');
-$activeWorksheet->setCellValue('F1', 'TOTAL PROFIT($)');
-$activeWorksheet->setCellValue('G1', 'TOTAL PROFIT(%)');
-$activeWorksheet->setCellValue('H1', 'INVOICE ACCEPTANCE');
+  // Set spreadsheet headers
+  $headers = [
+    'A1' => 'INVOICE DATE',
+    'B1' => 'INVOICE',
+    'C1' => 'TYPE OF CONTRACT',
+    'D1' => 'INVOICE AMOUNT',
+    'E1' => 'SALES COMMISSION',
+    'F1' => 'TOTAL PROFIT($)',
+    'G1' => 'TOTAL PROFIT(%)',
+    'H1' => 'INVOICE ACCEPTANCE'
+  ];
 
-Conexion::abrir_conexion();
-ExcelRepository::projectionsMonth(Conexion::obtener_conexion(), $id, $activeWorksheet);
-Conexion::cerrar_conexion();
+  foreach ($headers as $cell => $value) {
+    $activeWorksheet->setCellValue($cell, $value);
+  }
 
-$writer = new Xlsx($spreadsheet);
+  // Open database connection
+  Conexion::abrir_conexion();
 
-header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-header('Content-Disposition: attachment;filename="Projection.xlsx"');
-header('Cache-Control: max-age=0');
+  // Fetch data and populate spreadsheet
+  ExcelRepository::projectionsMonth(Conexion::obtener_conexion(), $id, $activeWorksheet);
 
-$writer->save('php://output');
+  // Close database connection
+  Conexion::cerrar_conexion();
+
+  // Prepare spreadsheet for download
+  $writer = new Xlsx($spreadsheet);
+
+  header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+  header('Content-Disposition: attachment;filename="Projection.xlsx"');
+  header('Cache-Control: max-age=0');
+
+  // Save the spreadsheet to the output stream
+  $writer->save('php://output');
+} catch (Exception $e) {
+  // Handle exceptions and display error message
+  echo "Error: " . $e->getMessage();
+}

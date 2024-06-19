@@ -1,12 +1,26 @@
 <?php
 header('Content-Type: application/json');
+
 $success = false;
-Conexion::abrir_conexion();
-if (!YearlyProjectionRepository::projectionExists(Conexion::obtener_conexion())) {
-  YearlyProjectionRepository::save(Conexion::obtener_conexion());
-  $success = true;
+
+try {
+  // Open the database connection
+  Conexion::abrir_conexion();
+
+  // Check if the projection exists
+  $conexion = Conexion::obtener_conexion();
+  if (!YearlyProjectionRepository::projectionExists($conexion)) {
+    // Save the projection if it doesn't exist
+    YearlyProjectionRepository::save($conexion);
+    $success = true;
+  }
+} catch (Exception $e) {
+  // Handle the exception (you may log the error message or take other actions)
+  echo json_encode(array('data' => $e->getMessage()));
+} finally {
+  // Ensure the database connection is closed
+  Conexion::cerrar_conexion();
 }
-Conexion::cerrar_conexion();
-echo json_encode(array(
-  'data' => $success
-));
+
+// Return the JSON response
+echo json_encode(array('data' => $success));
