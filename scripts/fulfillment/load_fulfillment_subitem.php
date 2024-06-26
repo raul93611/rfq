@@ -25,7 +25,7 @@ Conexion::cerrar_conexion();
       <div class="form-group">
         <label for="quantity">Quantity:</label>
         <input type="hidden" name="quantity_original" value="<?= $fulfillment_subitem?->get_quantity(); ?>">
-        <input type="number" id="quantity" class="form-control form-control-sm" name="quantity" value="<?= $fulfillment_subitem ? $fulfillment_subitem->get_quantity() : 0; ?>">
+        <input type="number" step=".01" id="quantity" class="form-control form-control-sm" name="quantity" value="<?= $fulfillment_subitem ? $fulfillment_subitem->get_quantity() : 0; ?>">
       </div>
       <div class="form-group">
         <label for="unit_cost">Unit Cost:</label>
