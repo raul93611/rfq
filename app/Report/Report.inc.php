@@ -260,7 +260,7 @@ class Report {
             type_of_contract 
             FROM rfq r
             LEFT JOIN services s ON r.id = s.id_rfq
-            JOIN usuarios u ON r.usuario_designado = u.id
+            LEFT JOIN usuarios u ON r.usuario_designado = u.id
             WHERE deleted = 0 AND
             award = 1 AND
             MONTH(fecha_award) = {$month} AND 
@@ -291,7 +291,7 @@ class Report {
             type_of_contract 
             FROM rfq r
             LEFT JOIN services s ON r.id = s.id_rfq
-            JOIN usuarios u ON r.usuario_designado = u.id
+            LEFT JOIN usuarios u ON r.usuario_designado = u.id
             WHERE deleted = 0 AND
             award = 1 AND
             QUARTER(fecha_award) = {$quarter} AND
@@ -322,7 +322,7 @@ class Report {
             type_of_contract 
             FROM rfq r
             LEFT JOIN services s ON r.id = s.id_rfq
-            JOIN usuarios u ON r.usuario_designado = u.id
+            LEFT JOIN usuarios u ON r.usuario_designado = u.id
             WHERE deleted = 0 AND
             award = 1 AND
             YEAR(fecha_award) = {$year} AND
@@ -361,7 +361,7 @@ class Report {
             $sql = "
             SELECT COUNT(r.id)
             FROM rfq r
-            JOIN usuarios u ON r.usuario_designado = u.id
+            LEFT JOIN usuarios u ON r.usuario_designado = u.id
             WHERE deleted = 0 AND 
             MONTH(fecha_award) = {$month} AND 
             YEAR(fecha_award) = {$year} AND
@@ -372,7 +372,7 @@ class Report {
             $sql = "
             SELECT COUNT(r.id)
             FROM rfq r
-            JOIN usuarios u ON r.usuario_designado = u.id
+            LEFT JOIN usuarios u ON r.usuario_designado = u.id
             WHERE deleted = 0 AND
             award = 1 AND
             QUARTER(fecha_award) = {$quarter} AND
@@ -382,7 +382,7 @@ class Report {
             $sql = "
             SELECT COUNT(r.id)
             FROM rfq r
-            JOIN usuarios u ON r.usuario_designado = u.id
+            LEFT JOIN usuarios u ON r.usuario_designado = u.id
             WHERE deleted = 0 AND
             award = 1 AND
             YEAR(fecha_award) = {$year}";
@@ -406,8 +406,7 @@ class Report {
             $sql = "
             SELECT COUNT(r.id)
             FROM rfq r
-            LEFT JOIN services s ON r.id = s.id_rfq
-            JOIN usuarios u ON r.usuario_designado = u.id
+            LEFT JOIN usuarios u ON r.usuario_designado = u.id
             WHERE deleted = 0 AND
             award = 1 AND
             MONTH(fecha_award) = {$month} AND 
@@ -426,8 +425,7 @@ class Report {
             $sql = "
             SELECT COUNT(r.id)
             FROM rfq r
-            LEFT JOIN services s ON r.id = s.id_rfq
-            JOIN usuarios u ON r.usuario_designado = u.id
+            LEFT JOIN usuarios u ON r.usuario_designado = u.id
             WHERE deleted = 0 AND
             award = 1 AND
             QUARTER(fecha_award) = {$quarter} AND
@@ -446,8 +444,7 @@ class Report {
             $sql = "
             SELECT COUNT(r.id)
             FROM rfq r
-            LEFT JOIN services s ON r.id = s.id_rfq
-            JOIN usuarios u ON r.usuario_designado = u.id
+            LEFT JOIN usuarios u ON r.usuario_designado = u.id
             WHERE deleted = 0 AND
             award = 1 AND
             YEAR(fecha_award) = {$year} AND

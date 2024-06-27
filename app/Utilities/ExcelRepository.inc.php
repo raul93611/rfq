@@ -221,12 +221,13 @@ class ExcelRepository {
             type_of_contract 
             FROM rfq r
             LEFT JOIN services s ON r.id = s.id_rfq
-            JOIN usuarios u ON r.usuario_designado = u.id
+            LEFT JOIN usuarios u ON r.usuario_designado = u.id
             WHERE deleted = 0 AND
             award = 1 AND
             MONTH(fecha_award) = {$month} AND 
             YEAR(fecha_award) = {$year} 
-            GROUP BY r.id";
+            GROUP BY r.id
+            ";
             break;
           case 'quarterly':
             $sql = "
@@ -244,7 +245,7 @@ class ExcelRepository {
             type_of_contract 
             FROM rfq r
             LEFT JOIN services s ON r.id = s.id_rfq
-            JOIN usuarios u ON r.usuario_designado = u.id
+            LEFT JOIN usuarios u ON r.usuario_designado = u.id
             WHERE deleted = 0 AND
             award = 1 AND
             QUARTER(fecha_award) = {$quarter} AND
@@ -267,7 +268,7 @@ class ExcelRepository {
             type_of_contract 
             FROM rfq r
             LEFT JOIN services s ON r.id = s.id_rfq
-            JOIN usuarios u ON r.usuario_designado = u.id
+            LEFT JOIN usuarios u ON r.usuario_designado = u.id
             WHERE deleted = 0 AND
             award = 1 AND
             YEAR(fecha_award) = {$year} 
@@ -317,7 +318,7 @@ class ExcelRepository {
       $x++;
       $activeWorksheet->setCellValue($x . $y, $quote['profit']);
       $x++;
-      $activeWorksheet->setCellValue($x . $y, number_format($quote['profit_percentage'], 2) . '%');
+      $activeWorksheet->setCellValue($x . $y, number_format($quote['profit_percentage'] ?? 0, 2) . '%');
       $x++;
       $activeWorksheet->setCellValue($x . $y, $quote['type_of_contract']);
       $y++;

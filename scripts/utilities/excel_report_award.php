@@ -58,10 +58,33 @@ function outputSpreadsheet($spreadsheet) {
 }
 
 // Ensure required POST parameters are set
-if (isset($_POST['type'], $_POST['quarter'], $_POST['month'], $_POST['year'])) {
-  $spreadsheet = createSpreadsheet();
-  fetchAndFillData($spreadsheet, $_POST['type'], $_POST['quarter'], $_POST['month'], $_POST['year']);
-  outputSpreadsheet($spreadsheet);
+if (isset($_POST['type'])) {
+  $type = $_POST['type'];
+  $year = $_POST['year'] ?? null;
+  $quarter = $_POST['quarter'] ?? null;
+  $month = $_POST['month'] ?? null;
+
+  $isValid = false;
+
+  switch ($type) {
+    case 'monthly':
+      $isValid = isset($month, $year);
+      break;
+    case 'quarterly':
+      $isValid = isset($quarter, $year);
+      break;
+    case 'yearly':
+      $isValid = isset($year);
+      break;
+  }
+
+  if ($isValid) {
+    $spreadsheet = createSpreadsheet();
+    fetchAndFillData($spreadsheet, $type, $quarter, $month, $year);
+    outputSpreadsheet($spreadsheet);
+  } else {
+    echo 'Error: Missing required POST parameters for ' . $type . ' report.';
+  }
 } else {
-  echo 'Error: Missing required POST parameters.';
+  echo 'Error: Missing report type.';
 }
