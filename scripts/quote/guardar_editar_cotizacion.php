@@ -31,7 +31,7 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
   $sales_commission_comment = filter_input(INPUT_POST, 'sales_commission_comment', FILTER_SANITIZE_SPECIAL_CHARS);
 
   // Check required fields
-  if ($id_rfq === false || $taxes === false || $profit === false || $total_cost === false || $total_price === false || $shipping_cost === false) {
+  if ($id_rfq === false || $total_cost === false || $total_price === false || $shipping_cost === false) {
     echo 'Error: Invalid input data.';
     exit;
   }
