@@ -1,26 +1,32 @@
 <?php
 Conexion::abrir_conexion();
-$fulfillment_service = is_null($id_fulfillment_service) ? null : FulfillmentServiceRepository::get_one(Conexion::obtener_conexion(), $id_fulfillment_service);
-$providers_list = ProviderListRepository::get_all(Conexion::obtener_conexion());
-$payment_terms = PaymentTermRepository::get_all(Conexion::obtener_conexion());
-$invoices = InvoiceRepository::get_all_by_id_rfq(Conexion::obtener_conexion(), $_POST["idRfq"]);
-Conexion::cerrar_conexion();
+try {
+  $conexion = Conexion::obtener_conexion();
+  $fulfillment_service = is_null($id_fulfillment_service) ? null : FulfillmentServiceRepository::get_one($conexion, $id_fulfillment_service);
+  $providers_list = ProviderListRepository::get_all($conexion);
+  $payment_terms = PaymentTermRepository::get_all($conexion);
+  $invoices = InvoiceRepository::get_all_by_id_rfq($conexion, $_POST["idRfq"]);
+} finally {
+  Conexion::cerrar_conexion();
+}
 ?>
 <div class="modal-body">
   <div class="row">
     <div class="col-md-12">
       <div class="form-group">
-        <label>Provider:</label>
-        <select name="provider" class="custom-select">
-          <?php foreach ($providers_list as $key => $provider) : ?>
-            <option <?= $provider->get_company_name() == $fulfillment_service?->get_provider() ? 'selected' : ''; ?>><?= $provider->get_company_name(); ?></option>
+        <label for="provider">Provider:</label>
+        <select name="provider" id="provider" class="custom-select">
+          <?php foreach ($providers_list as $provider) : ?>
+            <option <?= $provider->get_company_name() == $fulfillment_service?->get_provider() ? 'selected' : ''; ?>>
+              <?= htmlspecialchars($provider->get_company_name(), ENT_QUOTES, 'UTF-8'); ?>
+            </option>
           <?php endforeach; ?>
         </select>
-        <input type="hidden" name="provider_original" value="<?= $fulfillment_service?->get_provider(); ?>">
+        <input type="hidden" name="provider_original" value="<?= htmlspecialchars($fulfillment_service?->get_provider() ?? '', ENT_QUOTES, 'UTF-8'); ?>">
       </div>
       <div class="form-group">
         <label for="transaction_date">Transaction Date:</label>
-        <input type="text" id="transaction_date" readonly class="form-control form-control-sm" name="transaction_date" value="<?= $fulfillment_service && !empty($fulfillment_service->getTransactionDate()) ? date("m/d/Y", strtotime($fulfillment_service->getTransactionDate())) : '' ?>">
+        <input type="text" id="transaction_date" readonly class="form-control form-control-sm" name="transaction_date" value="<?= $fulfillment_service && !empty($fulfillment_service->getTransactionDate()) ? date("m/d/Y", strtotime($fulfillment_service->getTransactionDate())) : ''; ?>">
       </div>
       <div class="form-group">
         <label for="quantity">Quantity:</label>
@@ -40,26 +46,30 @@ Conexion::cerrar_conexion();
       <div class="form-group">
         <label for="payment_term">Payment Term:</label>
         <select class="custom-select" name="payment_term" id="payment_term">
-          <?php foreach ($payment_terms as $key => $payment_term) : ?>
-            <option <?= $payment_term->get_payment_term() == $fulfillment_service?->get_payment_term() ? 'selected' : ''; ?>><?= $payment_term->get_payment_term(); ?></option>
+          <?php foreach ($payment_terms as $payment_term) : ?>
+            <option <?= $payment_term->get_payment_term() == $fulfillment_service?->get_payment_term() ? 'selected' : ''; ?>>
+              <?= htmlspecialchars($payment_term->get_payment_term(), ENT_QUOTES, 'UTF-8'); ?>
+            </option>
           <?php endforeach; ?>
         </select>
-        <input type="hidden" name="payment_term_original" value="<?= $fulfillment_service?->get_payment_term(); ?>">
+        <input type="hidden" name="payment_term_original" value="<?= htmlspecialchars($fulfillment_service?->get_payment_term() ?? '', ENT_QUOTES, 'UTF-8'); ?>">
       </div>
       <?php if ($_POST["isPartialInvoices"]) : ?>
         <div class="form-group">
           <label for="invoice">Invoice:</label>
-          <select class="custom-select" name="invoice">
+          <select class="custom-select" name="invoice" id="invoice">
             <option value="">Choose an option</option>
-            <?php foreach ($invoices as $key => $invoice) : ?>
-              <option value="<?= $invoice->get_id() ?>" <?= $fulfillment_service?->getIdInvoice() == $invoice->get_id() ? 'selected' : '' ?>><?= $invoice->get_name(); ?></option>
+            <?php foreach ($invoices as $invoice) : ?>
+              <option value="<?= $invoice->get_id(); ?>" <?= $fulfillment_service?->getIdInvoice() == $invoice->get_id() ? 'selected' : ''; ?>>
+                <?= htmlspecialchars($invoice->get_name(), ENT_QUOTES, 'UTF-8'); ?>
+              </option>
             <?php endforeach; ?>
           </select>
         </div>
       <?php endif; ?>
       <div class="form-group">
         <label for="comment">Comment:</label>
-        <textarea id="comment" name="comment" rows="5" class="form-control form-control-sm"><?= $fulfillment_service?->getComments(); ?></textarea>
+        <textarea id="comment" name="comment" rows="5" class="form-control form-control-sm"><?= htmlspecialchars($fulfillment_service?->getComments() ?? '', ENT_QUOTES, 'UTF-8'); ?></textarea>
       </div>
     </div>
   </div>
