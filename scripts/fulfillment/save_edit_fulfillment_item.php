@@ -21,11 +21,11 @@ try {
   $quantity = floatval($_POST['quantity']);
   $unit_cost = floatval($_POST['unit_cost']);
   $other_cost = floatval($_POST['other_cost']);
-  $payment_term = htmlspecialchars($_POST['payment_term']);
+  $payment_term = $_POST['payment_term'];
   $comment = htmlspecialchars($_POST['comment']);
   $transaction_date = htmlspecialchars($_POST['transaction_date']);
   $invoice = empty($_POST["invoice"]) ? null : htmlspecialchars($_POST["invoice"]);
-  $provider = htmlspecialchars($_POST['provider']);
+  $provider = $_POST['provider'];
   $provider_original = htmlspecialchars($_POST['provider_original']);
   $quantity_original = floatval($_POST['quantity_original']);
   $unit_cost_original = floatval($_POST['unit_cost_original']);

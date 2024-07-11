@@ -33,7 +33,7 @@ try {
     <div class="col-md-12">
       <div class="form-group">
         <label for="name">Payment Term:</label>
-        <input type="text" id="name" class="form-control form-control-sm" name="name" value="<?= htmlspecialchars($payment_term->get_payment_term(), ENT_QUOTES, 'UTF-8'); ?>" required>
+        <input type="text" id="name" class="form-control form-control-sm" name="name" value="<?= $payment_term->get_payment_term(); ?>" required>
         <div class="error_message">
           Name cannot be empty and has to be different from existing ones.
         </div>

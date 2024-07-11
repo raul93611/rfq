@@ -17,8 +17,8 @@ try {
   $quantity = floatval($_POST['quantity']);
   $unit_cost = floatval($_POST['unit_cost']);
   $other_cost = floatval($_POST['other_cost']);
-  $provider = htmlspecialchars($_POST['provider']);
-  $payment_term = htmlspecialchars($_POST['payment_term']);
+  $provider = $_POST['provider'];
+  $payment_term = $_POST['payment_term'];
   $comment = htmlspecialchars($_POST['comment']);
   $transaction_date = htmlspecialchars($_POST['transaction_date']);
   $invoice = empty($_POST['invoice']) ? null : htmlspecialchars($_POST['invoice']);
