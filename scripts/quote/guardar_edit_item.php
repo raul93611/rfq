@@ -14,7 +14,7 @@ if (isset($_POST['guardar_cambios_item'])) {
   $website = filter_input(INPUT_POST, 'website', FILTER_SANITIZE_URL);
 
   // Validate required inputs
-  if ($id_item && $id_rfq && $brand && $part_number && $description && $quantity !== false) {
+  if ($id_item && $id_rfq && $brand && $description && $quantity !== false) {
     try {
       // Open database connection
       Conexion::abrir_conexion();

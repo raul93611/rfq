@@ -28,7 +28,7 @@ try {
     <div class="col-md-12">
       <div class="form-group">
         <label for="name">Name:</label>
-        <input type="text" id="name" class="form-control form-control-sm" name="name" value="<?= htmlspecialchars($provider->get_company_name()); ?>" required>
+        <input type="text" id="name" class="form-control form-control-sm" name="name" value="<?= $provider->get_company_name(); ?>" required>
         <div class="error_message">
           Name cannot be empty and has to be different from existing ones.
         </div>

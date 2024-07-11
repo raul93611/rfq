@@ -13,7 +13,7 @@ if (isset($_POST['guardar_item'])) {
   $website = filter_input(INPUT_POST, 'website', FILTER_SANITIZE_URL);
 
   // Validate required inputs
-  if ($id_rfq && $brand && $part_number && $description && $quantity) {
+  if ($id_rfq && $brand && $description && $quantity) {
     try {
       // Open database connection
       Conexion::abrir_conexion();
