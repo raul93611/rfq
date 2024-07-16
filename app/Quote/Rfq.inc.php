@@ -507,7 +507,7 @@ class Rfq {
   }
 
   public function isServices() {
-    $services = ['Services', 'Audio Visual', 'Computers'];
+    $services = ['Services', 'Audio Visual', 'Computers', 'Back Up Batteries'];
     if (in_array($this->type_of_bid, $services)) {
       return true;
     }
