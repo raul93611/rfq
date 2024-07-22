@@ -9,7 +9,7 @@ if (isset($_POST['guardar_item'])) {
   $description = htmlspecialchars($_POST['description'], ENT_QUOTES, 'UTF-8');
   $description_project = htmlspecialchars($_POST['description_project'], ENT_QUOTES, 'UTF-8');
   $quantity = filter_input(INPUT_POST, 'quantity', FILTER_VALIDATE_INT);
-  $comments = filter_input(INPUT_POST, 'comments', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+  $comments = trim($_POST["comments"]);
   $website = filter_input(INPUT_POST, 'website', FILTER_SANITIZE_URL);
 
   // Validate required inputs
