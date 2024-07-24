@@ -2253,4 +2253,17 @@ class RepositorioRfq {
       }
     }
   }
+
+  public static function copyRfqData($conexion, $id_rfq) {
+    $quote = RepositorioRfq::obtener_cotizacion_por_id($conexion, $id_rfq);
+    $id_rfq_copia = RepositorioRfq::copyRfq($conexion, $id_rfq);
+    RepositorioRfq::copyRfqFiles($id_rfq, $id_rfq_copia);
+    RepositorioRfq::copyItems($conexion, $id_rfq, $id_rfq_copia);
+  
+    if($quote->isServices()){
+      ServiceRepository::copyServices($conexion, $id_rfq, $id_rfq_copia);
+    }
+  
+    return $id_rfq_copia;
+  }
 }

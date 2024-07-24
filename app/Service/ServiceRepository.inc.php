@@ -228,5 +228,24 @@ class ServiceRepository {
       }
     }
   }
+
+  public static function copyServices($connnection, $id_rfq, $id_rfq_copia) {
+    $services = ServiceRepository::get_services($connnection, $id_rfq);
+    if (count($services)) {
+      foreach ($services as $key => $service) {
+        $service_duplicate = new Service(
+          '',
+          $id_rfq_copia,
+          $service->get_description(),
+          $service->get_quantity(),
+          $service->get_unit_price(),
+          $service->get_total_price(),
+          $service->get_fulfillment_profit()
+        );
+
+        ServiceRepository::store_service($connnection, $service_duplicate);
+      }
+    }
+  }
 }
 ?>

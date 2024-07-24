@@ -16,7 +16,7 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
   $total_cost = filter_input(INPUT_POST, 'total_cost', FILTER_VALIDATE_FLOAT);
   $total_price = filter_input(INPUT_POST, 'total_price', FILTER_VALIDATE_FLOAT);
   $additional_general = filter_input(INPUT_POST, 'additional_general', FILTER_SANITIZE_SPECIAL_CHARS);
-  $shipping = trim($_POST["shipping"]);
+  $shipping = trim($_POST["shipping"] ?? '');
   $shipping_cost = filter_input(INPUT_POST, 'shipping_cost', FILTER_VALIDATE_FLOAT);
   $award = filter_input(INPUT_POST, 'award', FILTER_SANITIZE_SPECIAL_CHARS);
   $completado = filter_input(INPUT_POST, 'completado', FILTER_SANITIZE_SPECIAL_CHARS);
