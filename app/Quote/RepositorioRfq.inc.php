@@ -2198,7 +2198,8 @@ class RepositorioRfq {
           $item->obtener_comments(),
           $item->obtener_website(),
           $item->obtener_additional(),
-          $item->obtener_fulfillment_profit()
+          $item->obtener_fulfillment_profit(),
+          $item->getIdRoom()
         );
 
         $item_copia_id = RepositorioItem::insertar_item($conexion, $item_copia);
@@ -2222,7 +2223,8 @@ class RepositorioRfq {
             $subitem->obtener_comments(),
             $subitem->obtener_website(),
             $subitem->obtener_additional(),
-            $subitem->obtener_fulfillment_profit()
+            $subitem->obtener_fulfillment_profit(),
+            $subitem->getIdRoom()
           );
           $subitem_copia_id = RepositorioSubitem::insertar_subitem($conexion, $subitem_copia);
 

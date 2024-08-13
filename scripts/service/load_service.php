@@ -2,6 +2,7 @@
 try {
   Conexion::abrir_conexion();
   $service = ServiceRepository::get_service(Conexion::obtener_conexion(), $id_service);
+  $rooms = RoomRepository::getAll(Conexion::obtener_conexion(), $service->get_id_rfq());
 } catch (Exception $e) {
   // Handle exceptions, e.g., log the error and display a user-friendly message
   error_log('ERROR: ' . $e->getMessage());
@@ -23,5 +24,16 @@ try {
   <label for="unit_price">Unit Price:</label>
   <input type="number" step=".01" name="unit_price" class="form-control form-control-sm" value="<?= htmlspecialchars($service->get_unit_price(), ENT_QUOTES, 'UTF-8'); ?>" required>
 </div>
+<?php if (count($rooms)) : ?>
+  <div class="form-group">
+    <label for="id_room">Room:</label>
+    <select class="custom-select" name="id_room">
+      <option value="">Open this select menu</option>
+      <?php foreach ($rooms as $key => $room) : ?>
+        <option value="<?= $room->getId(); ?>" <?= $room->getId() == $service->getIdRoom() ? 'selected' : '' ?>><?= $room->getName() ?></option>
+      <?php endforeach; ?>
+    </select>
+  </div>
+<?php endif; ?>
 <input type="hidden" name="id_rfq" value="<?= htmlspecialchars($service->get_id_rfq(), ENT_QUOTES, 'UTF-8'); ?>">
 <input type="hidden" name="id_service" value="<?= htmlspecialchars($id_service, ENT_QUOTES, 'UTF-8'); ?>">

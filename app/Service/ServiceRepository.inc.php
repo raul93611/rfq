@@ -3,13 +3,14 @@ class ServiceRepository {
   public static function store_service($connection, $service) {
     if (isset($connection)) {
       try {
-        $sql = 'INSERT INTO services(id_rfq, description, quantity, unit_price, total_price) VALUES(:id_rfq, :description, :quantity, :unit_price, :total_price)';
+        $sql = 'INSERT INTO services(id_rfq, description, quantity, unit_price, total_price, id_room) VALUES(:id_rfq, :description, :quantity, :unit_price, :total_price, :id_room)';
         $sentence = $connection->prepare($sql);
         $sentence->bindValue(':id_rfq', $service->get_id_rfq(), PDO::PARAM_STR);
         $sentence->bindValue(':description', $service->get_description(), PDO::PARAM_STR);
         $sentence->bindValue(':quantity', $service->get_quantity(), PDO::PARAM_STR);
         $sentence->bindValue(':unit_price', $service->get_unit_price(), PDO::PARAM_STR);
         $sentence->bindValue(':total_price', $service->get_total_price(), PDO::PARAM_STR);
+        $sentence->bindValue(':id_room', $service->getIdRoom(), PDO::PARAM_STR);
         $sentence->execute();
         $id = $connection->lastInsertId();
       } catch (PDOException $ex) {
@@ -30,7 +31,29 @@ class ServiceRepository {
         $result = $sentence->fetchAll(PDO::FETCH_ASSOC);
         if (count($result)) {
           foreach ($result as $key => $row) {
-            $services[] = new Service($row['id'], $row['id_rfq'], $row['description'], $row['quantity'], $row['unit_price'], $row['total_price'], $row['fulfillment_profit']);
+            $services[] = new Service($row['id'], $row['id_rfq'], $row['description'], $row['quantity'], $row['unit_price'], $row['total_price'], $row['fulfillment_profit'], $row['id_room']);
+          }
+        }
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $services;
+  }
+
+  public static function getServicesByRoomId($connection, $id_rfq, $id_room) {
+    $services = [];
+    if (isset($connection)) {
+      try {
+        $sql = 'SELECT * FROM services WHERE id_rfq = :id_rfq AND id_room = :id_room';
+        $sentence = $connection->prepare($sql);
+        $sentence->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentence->bindValue(':id_room', $id_room, PDO::PARAM_STR);
+        $sentence->execute();
+        $result = $sentence->fetchAll(PDO::FETCH_ASSOC);
+        if (count($result)) {
+          foreach ($result as $key => $row) {
+            $services[] = new Service($row['id'], $row['id_rfq'], $row['description'], $row['quantity'], $row['unit_price'], $row['total_price'], $row['fulfillment_profit'], $row['id_room']);
           }
         }
       } catch (PDOException $ex) {
@@ -110,6 +133,9 @@ class ServiceRepository {
   }
 
   public static function display_service($service, $key) {
+    Conexion::abrir_conexion();
+    $room = $service->getIdRoom() ? RoomRepository::getById(Conexion::obtener_conexion(), $service->getIdRoom()) : null;
+    Conexion::cerrar_conexion();
     ?>
     <tr class="service_item" id="service<?= $service->get_id(); ?>">
       <td>
@@ -119,7 +145,7 @@ class ServiceRepository {
           <a href="<?= DUPLICATE_SERVICE . $service->get_id(); ?>" class="btn btn-warning"><i class="fas fa-copy"></i></a>
         </div>
       </td>
-      <td><?= $key + 1; ?></td>
+      <td><?= $service->getIdRoom() ? '<span class="mb-2 badge badge-primary" style="background-color: ' . $room->getColor() . ';">' . $room->getName() . '</span>' : '' ?><?= $key + 1; ?></td>
       <td><?= nl2br(mb_substr($service->get_description(), 0, 100)) . ' ...'; ?></td>
       <td><?= $service->get_quantity(); ?></td>
       <td><?= $service->get_unit_price(); ?></td>
@@ -138,7 +164,7 @@ class ServiceRepository {
         $sentence->execute();
         $result = $sentence->fetch(PDO::FETCH_ASSOC);
         if (!empty($result)) {
-          $service = new Service($result['id'], $result['id_rfq'], $result['description'], $result['quantity'], $result['unit_price'], $result['total_price'], $result['fulfillment_profit']);
+          $service = new Service($result['id'], $result['id_rfq'], $result['description'], $result['quantity'], $result['unit_price'], $result['total_price'], $result['fulfillment_profit'], $result['id_room']);
         }
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -147,16 +173,17 @@ class ServiceRepository {
     return $service;
   }
 
-  public static function edit_service($connection, $id, $description, $quantity, $unit_price, $total_price) {
+  public static function edit_service($connection, $id, $description, $quantity, $unit_price, $total_price, $id_room) {
     if (isset($connection)) {
       try {
-        $sql = 'UPDATE services SET description = :description, quantity = :quantity, unit_price = :unit_price, total_price = :total_price WHERE id = :id_service';
+        $sql = 'UPDATE services SET description = :description, quantity = :quantity, unit_price = :unit_price, total_price = :total_price, id_room = :id_room WHERE id = :id_service';
         $sentence = $connection->prepare($sql);
         $sentence->bindValue(':description', $description, PDO::PARAM_STR);
         $sentence->bindValue(':quantity', $quantity, PDO::PARAM_STR);
         $sentence->bindValue(':unit_price', $unit_price, PDO::PARAM_STR);
         $sentence->bindValue(':total_price', $total_price, PDO::PARAM_STR);
         $sentence->bindValue(':id_service', $id, PDO::PARAM_STR);
+        $sentence->bindValue(':id_room', $id_room, PDO::PARAM_STR);
         $sentence->execute();
         return true;
       } catch (PDOException $ex) {
@@ -240,7 +267,8 @@ class ServiceRepository {
           $service->get_quantity(),
           $service->get_unit_price(),
           $service->get_total_price(),
-          $service->get_fulfillment_profit()
+          $service->get_fulfillment_profit(),
+          $service->getIdRoom()
         );
 
         ServiceRepository::store_service($connnection, $service_duplicate);

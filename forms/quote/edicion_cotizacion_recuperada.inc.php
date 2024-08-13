@@ -113,4 +113,5 @@
   <?php include_once 'forms/quote/templates/add_item.inc.php'; ?>
   <a href="#" id="add_comment" class="btn btn-primary add_item_charter"><i class="fas fa-plus"></i> Add comment</a>
   <?php include_once 'forms/quote/templates/actions_button.inc.php'; ?>
+  <?php include_once 'forms/quote/templates/rooms_button.inc.php'; ?>
 </div>

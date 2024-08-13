@@ -5,7 +5,7 @@ try {
 
   $service = ServiceRepository::get_service($connection, $id_service);
   if ($service) {
-    $duplicated_service = new Service('', $service->get_id_rfq(), $service->get_description(), $service->get_quantity(), $service->get_unit_price(), $service->get_total_price(), null);
+    $duplicated_service = new Service('', $service->get_id_rfq(), $service->get_description(), $service->get_quantity(), $service->get_unit_price(), $service->get_total_price(), null, $service->getIdRoom());
     $id = ServiceRepository::store_service($connection, $duplicated_service);
 
     if ($id) {

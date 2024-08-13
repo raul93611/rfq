@@ -11,6 +11,7 @@ if (isset($_POST['guardar_item'])) {
   $quantity = filter_input(INPUT_POST, 'quantity', FILTER_VALIDATE_INT);
   $comments = trim($_POST["comments"]);
   $website = filter_input(INPUT_POST, 'website', FILTER_SANITIZE_URL);
+  $id_room = empty($_POST['id_room']) ? null : htmlspecialchars($_POST['id_room']);
 
   // Validate required inputs
   if ($id_rfq && $brand && $description && $quantity) {
@@ -37,7 +38,8 @@ if (isset($_POST['guardar_item'])) {
         $comments,
         $website,
         '',
-        null
+        null,
+        $id_room
       );
 
       // Insert item and create audit trail

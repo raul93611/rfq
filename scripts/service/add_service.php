@@ -6,6 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_service_button'])
     $description = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $quantity = filter_input(INPUT_POST, 'quantity', FILTER_VALIDATE_FLOAT);
     $unit_price = filter_input(INPUT_POST, 'unit_price', FILTER_VALIDATE_FLOAT);
+    $id_room = empty($_POST['id_room']) ? null : htmlspecialchars($_POST['id_room']);
 
     if ($id_rfq === false || $description === false || $quantity === false || $unit_price === false) {
       throw new InvalidArgumentException("Invalid input data.");
@@ -15,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_service_button'])
     $total_price = $quantity * $unit_price;
 
     // Create new Service object
-    $service = new Service('', $id_rfq, $description, $quantity, $unit_price, $total_price, null);
+    $service = new Service('', $id_rfq, $description, $quantity, $unit_price, $total_price, null, $id_room);
 
     // Open database connection
     Conexion::abrir_conexion();

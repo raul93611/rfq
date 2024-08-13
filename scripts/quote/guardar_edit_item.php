@@ -12,6 +12,7 @@ if (isset($_POST['guardar_cambios_item'])) {
   $quantity = filter_input(INPUT_POST, 'quantity', FILTER_VALIDATE_INT);
   $comments = trim($_POST["comments"]);
   $website = filter_input(INPUT_POST, 'website', FILTER_SANITIZE_URL);
+  $id_room = empty($_POST['id_room']) ? null : htmlspecialchars($_POST['id_room']);
 
   // Validate required inputs
   if ($id_item && $id_rfq && $brand && $description && $quantity !== false) {
@@ -32,7 +33,8 @@ if (isset($_POST['guardar_cambios_item'])) {
         $description_project,
         $quantity,
         $comments,
-        $website
+        $website,
+        $id_room
       );
 
       // Create audit trail

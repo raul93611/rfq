@@ -11,6 +11,7 @@ define('GUARDAR_COMMENT', QUOTE_SC . 'guardar_comment/');
 define('SAVE_QUOTE_INFO', QUOTE_SC . 'save_quote_info');
 define('PROPOSAL', QUOTE_SC . 'proposal');
 define('PROPOSAL_GSA', QUOTE_SC . 'proposal_gsa');
+define('PROPOSAL_ROOM', QUOTE_SC . 'proposal_room');
 define('COPY_QUOTE', QUOTE_SC . 'copy_quote/');
 define('DELETE_QUOTE', QUOTE_SC . 'delete_quote');
 define('GUARDAR_EDITAR_COTIZACION', QUOTE_SC . 'guardar_editar_cotizacion/');

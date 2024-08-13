@@ -26,7 +26,8 @@ spl_autoload_register(function ($class) {
     'CalendarEvent' => ['CalendarEvent', 'CalendarEventRepository'],
     'TypeOfProject' => ['TypeOfProject', 'TypeOfProjectRepository'],
     'YearlyProjection' => ['YearlyProjection', 'YearlyProjectionRepository'],
-    'MonthlyProjection' => ['MonthlyProjection', 'MonthlyProjectionRepository']
+    'MonthlyProjection' => ['MonthlyProjection', 'MonthlyProjectionRepository'],
+    'Room' => ['Room', 'RoomRepository']
   ];
 
   foreach ($subfolder as $key => $array) {
@@ -192,6 +193,23 @@ switch ($partes_ruta[1] ?? null) {
           default:
             break;
         }
+      case 'rooms':
+        switch ($partes_ruta[3]) {
+          case 'load':
+            $ruta_elegida = 'scripts/quote/rooms/load.php';
+            break;
+          case 'save':
+            $ruta_elegida = 'scripts/quote/rooms/save.php';
+            break;
+          case 'update':
+            $ruta_elegida = 'scripts/quote/rooms/update.php';
+            break;
+          case 'delete':
+            $ruta_elegida = 'scripts/quote/rooms/delete.php';
+            break;
+          default:
+            break;
+        }
         break;
       case 'proposal':
         $id_rfq = $partes_ruta[3];
@@ -202,6 +220,10 @@ switch ($partes_ruta[1] ?? null) {
         $id_rfq = $partes_ruta[3];
         $encabezado = 1;
         $ruta_elegida = 'scripts/utilities/proposal.php';
+        break;
+      case 'proposal_room':
+        $id_rfq = $partes_ruta[3];
+        $ruta_elegida = 'scripts/utilities/proposal_room.php';
         break;
       case 'generate_checklist_pdf':
         $id_rfq = $partes_ruta[3];

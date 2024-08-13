@@ -1,7 +1,8 @@
 <?php
 Conexion::abrir_conexion();
 $item = RepositorioItem::obtener_item_por_id(Conexion::obtener_conexion(), $id_item);
-$cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $item-> obtener_id_rfq());
+$cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $item->obtener_id_rfq());
+$rooms = RoomRepository::getAll(Conexion::obtener_conexion(), $item->obtener_id_rfq());
 Conexion::cerrar_conexion();
 ?>
 <input type="hidden" name="id_item" value="<?php echo $id_item; ?>">
@@ -40,8 +41,8 @@ Conexion::cerrar_conexion();
       </div>
       <div class="form-group">
         <label for="description">Description:</label>
-        <textarea class="form-control form-control-sm" rows="5" placeholder="Enter description ..." id="description" name="description"><?php echo $item-> obtener_description(); ?></textarea>
-        <input type="hidden" name="description_original" value="<?php echo $item-> obtener_description(); ?>">
+        <textarea class="form-control form-control-sm" rows="5" placeholder="Enter description ..." id="description" name="description"><?php echo $item->obtener_description(); ?></textarea>
+        <input type="hidden" name="description_original" value="<?php echo $item->obtener_description(); ?>">
       </div>
     </div>
   </div>
@@ -60,8 +61,19 @@ Conexion::cerrar_conexion();
     <input type="text" class="form-control form-control-sm" id="website" name="website" placeholder="Website ..." value="<?php echo $item->obtener_website(); ?>">
     <input type="hidden" name="website_original" value="<?php echo $item->obtener_website(); ?>">
   </div>
+  <?php if (count($rooms)) : ?>
+    <div class="form-group">
+      <label for="id_room">Room:</label>
+      <select class="custom-select" name="id_room">
+        <option value="">Open this select menu</option>
+        <?php foreach ($rooms as $key => $room) : ?>
+          <option value="<?= $room->getId(); ?>" <?= $room->getId() == $item->getIdRoom() ? 'selected' : '' ?>><?= $room->getName() ?></option>
+        <?php endforeach; ?>
+      </select>
+    </div>
+  <?php endif; ?>
 </div>
 <div class="card-footer">
   <button type="submit" class="btn btn-success" name="guardar_cambios_item"><i class="fa fa-check"></i> Save</button>
-  <a href="<?php echo EDITAR_COTIZACION . '/' . $item-> obtener_id_rfq(); ?>" class="btn btn-danger"><i class="fa fa-times"></i> Cancel</a>
+  <a href="<?php echo EDITAR_COTIZACION . '/' . $item->obtener_id_rfq(); ?>" class="btn btn-danger"><i class="fa fa-times"></i> Cancel</a>
 </div>
