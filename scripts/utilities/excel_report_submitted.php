@@ -1,45 +1,60 @@
 <?php
-use PhpOffice\PhpSpreadsheet\Helper\Sample;
-use PhpOffice\PhpSpreadsheet\IOFactory;
+require 'vendor/autoload.php';
+
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
-require_once 'vendor_excel/phpoffice/phpspreadsheet/src/Bootstrap.php';
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 
-$spreadsheet = new Spreadsheet();
-$spreadsheet->getProperties()->setCreator('E-logic.Inc')
-    ->setLastModifiedBy('E-logic')
-    ->setTitle('SubmittedReport')
-    ->setSubject('SubmittedReport')
-    ->setDescription('SubmittedReport')
-    ->setKeywords('SubmittedReport')
-    ->setCategory('SubmittedReport');
+function createSpreadsheet() {
+  $spreadsheet = new Spreadsheet();
+  $activeWorksheet = $spreadsheet->getActiveSheet();
 
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('A1', 'SUBMITTED DATE');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('B1', 'PROPOSAL #');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('C1', 'CODE');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('D1', 'DESIGNATED USER');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('E1', 'CHANNEL');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('F1', 'TYPE OF BID');
-$spreadsheet->getActiveSheet()->getStyle('G1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('197bff');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('G1', 'TOTAL COST');
-$spreadsheet->getActiveSheet()->getStyle('H1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('197bff');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('H1', 'TOTAL PRICE');
-$spreadsheet->getActiveSheet()->getStyle('I1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('197bff');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('I1', 'PROFIT');
-$spreadsheet->getActiveSheet()->getStyle('J1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('197bff');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('J1', 'PROFIT (%)');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('K1', 'TYPE');
+  // Define headers and styles
+  $headers = [
+    'A1' => 'SUBMITTED DATE', 'B1' => 'PROPOSAL #', 'C1' => 'CODE',
+    'D1' => 'DESIGNATED USER', 'E1' => 'CHANNEL', 'F1' => 'TYPE OF BID',
+    'G1' => 'TOTAL COST', 'H1' => 'TOTAL PRICE', 'I1' => 'PROFIT',
+    'J1' => 'PROFIT (%)', 'K1' => 'TYPE'
+  ];
 
-Conexion::abrir_conexion();
-ExcelRepository::submittedReport(Conexion::obtener_conexion(), $_POST['type'], $_POST['quarter'], $_POST['month'], $_POST['year'], $spreadsheet);
-Conexion::cerrar_conexion();
+  // Set header values and styles
+  foreach ($headers as $cell => $header) {
+    $activeWorksheet->setCellValue($cell, $header);
+    if (in_array($cell, ['G1', 'H1', 'I1', 'J1'])) {
+      $activeWorksheet->getStyle($cell)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('197bff');
+    }
+  }
 
-$spreadsheet->setActiveSheetIndex(0);
+  return $spreadsheet;
+}
 
-header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-header('Content-Disposition: attachment;filename="SubmittedReport.xlsx"');
-header('Cache-Control: max-age=0');
+function fetchAndFillData($spreadsheet, $type, $quarter, $month, $year) {
+  try {
+    Conexion::abrir_conexion();
+    $conexion = Conexion::obtener_conexion();
+    ExcelRepository::submittedReport($conexion, $type, $quarter, $month, $year, $spreadsheet->getActiveSheet());
+  } catch (Exception $e) {
+    echo 'Error fetching data: ' . $e->getMessage();
+  } finally {
+    Conexion::cerrar_conexion();
+  }
+}
 
-$writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
-$writer->save('php://output');
-exit;
-?>
+function outputSpreadsheet($spreadsheet) {
+  $writer = new Xlsx($spreadsheet);
+
+  header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+  header('Content-Disposition: attachment;filename="SubmittedReport.xlsx"');
+  header('Cache-Control: max-age=0');
+
+  $writer->save('php://output');
+}
+
+// Ensure required POST parameters are set
+if (isset($_POST['type'])) {
+  $spreadsheet = createSpreadsheet();
+  fetchAndFillData($spreadsheet, $_POST['type'], $_POST['quarter'] ?? null, $_POST['month'] ?? null, $_POST['year'] ?? null);
+  outputSpreadsheet($spreadsheet);
+} else {
+  echo 'Error: Missing required POST parameters.';
+}

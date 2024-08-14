@@ -11,6 +11,7 @@ define('GUARDAR_COMMENT', QUOTE_SC . 'guardar_comment/');
 define('SAVE_QUOTE_INFO', QUOTE_SC . 'save_quote_info');
 define('PROPOSAL', QUOTE_SC . 'proposal');
 define('PROPOSAL_GSA', QUOTE_SC . 'proposal_gsa');
+define('PROPOSAL_ROOM', QUOTE_SC . 'proposal_room');
 define('COPY_QUOTE', QUOTE_SC . 'copy_quote/');
 define('DELETE_QUOTE', QUOTE_SC . 'delete_quote');
 define('GUARDAR_EDITAR_COTIZACION', QUOTE_SC . 'guardar_editar_cotizacion/');
@@ -29,6 +30,7 @@ define('SERVICE_SC', QUOTE_SC . 'service/');
 define('ADD_SERVICE', SERVICE_SC . 'add_service');
 define('EDIT_SERVICE', SERVICE_SC . 'edit_service');
 define('DELETE_SERVICE', SERVICE_SC . 'delete_service/');
+define('DUPLICATE_SERVICE', SERVICE_SC . 'duplicate_service/');
 /********************************EQUIPMENT SCRIPTS*****************************************/
 define('EQUIPMENT_SC', QUOTE_SC . 'equipment/');
 define('GUARDAR_ADD_ITEM', EQUIPMENT_SC . 'guardar_add_item/');
@@ -79,9 +81,11 @@ define('UPDATE_SERVICE_RE_QUOTE', RE_QUOTE_SC . 'update_service');
 define('FULFILLMENT_SC', SERVIDOR . 'fulfillment/');
 define('MARK_AS_PENDING', FULFILLMENT_SC . 'mark_as_pending/');
 define('UNMARK_AS_PENDING', FULFILLMENT_SC . 'unmark_as_pending/');
-define('SAVE_INVOICE', FULFILLMENT_SC . 'save_invoice');
 define('DELETE_INVOICE', FULFILLMENT_SC . 'delete_invoice/');
 define('UPDATE_INVOICE', FULFILLMENT_SC . 'update_invoice/');
+/********************************PROJECTION SCRIPTS*****************************************/
+define('PROJECTION_SC', SERVIDOR . 'projection/');
+define('MONTH_EXCEL', PROJECTION_SC . 'month_excel/');
 /********************************USER VIEWS*****************************************/
 define('USER', PERFIL . 'user/');
 define('REGISTRO', USER . 'registro');
@@ -172,9 +176,15 @@ define('FULFILLMENT', PERFIL . 'fulfillment/');
 define('FULFILLMENT_QUOTES', FULFILLMENT . 'fulfillment_quotes');
 define('PROVIDERS', FULFILLMENT . 'providers');
 define('PAYMENT_TERMS', FULFILLMENT . 'payment_terms');
-define('WEEKLY_PROJECTIONS', FULFILLMENT . 'weekly_projections');
-define('WEEKLY_PROJECTIONS_2023', FULFILLMENT . 'weekly_projections_2023');
+define('PERSONNEL_CALENDAR', FULFILLMENT . 'personnel_calendar');
+define('PERSONNEL', FULFILLMENT . 'personnel');
+define('TYPE_OF_PROJECT', FULFILLMENT . 'type_of_project');
 define('INVOICE', FULFILLMENT . 'invoice/');
+/********************************PROJECTIONS VIEWS*****************************************/
+define('PROJECTION', PERFIL . 'projection/');
+define('DAILY', PROJECTION . 'daily');
+define('WEEKLY_PROJECTIONS_2023', PROJECTION . 'weekly_projections_2023');
+define('WEEKLY_PROJECTIONS_2022', PROJECTION . 'weekly_projections_2022');
 /********************************ACCOUNTING_CHECKBOX VIEWS*****************************************/
 define('ACCOUNTING', PERFIL . 'accounting/');
 define('INVOICE_QUOTES', ACCOUNTING . 'invoice_quotes');
@@ -200,8 +210,6 @@ define('DOCS', SERVIDOR . 'documentos/');
 define('RUTA_CSS', SERVIDOR . 'css/');
 define('RUTA_JS', SERVIDOR . 'js/');
 define('RUTA_IMG', SERVIDOR . 'img/');
-define('PLUGINS', SERVIDOR . 'plugins/');
-define('DIST', SERVIDOR . 'dist/');
 define('STATES', [
   'AL' => 'Alabama',
   'AK' => 'Alaska',

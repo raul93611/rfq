@@ -8,15 +8,20 @@
         </button>
       </div>
       <div class="modal-body">
-        <form id="add_invoice_form" method="post" enctype="multipart/form-data" action="<?php echo SAVE_INVOICE; ?>">
+        <form id="add_invoice_form" method="post">
           <div class="row">
             <div class="col-md-12">
               <div class="form-group">
                 <label for="name">Name:</label>
                 <input type="text" id="name" class="form-control form-control-sm" name="name" value="<?php echo $id_rfq . '-'; ?>">
               </div>
+              <div class="form-group">
+                <label for="created_at">Created At:</label>
+                <input type="text" id="created_at" readonly class="form-control form-control-sm" name="created_at">
+              </div>
             </div>
           </div>
+          <div id="error"></div>
           <input type="hidden" name="id_rfq" value="<?php echo $id_rfq; ?>">
         </form>
       </div>

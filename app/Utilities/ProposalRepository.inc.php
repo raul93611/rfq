@@ -22,7 +22,7 @@ class ProposalRepository{
     while ($j <= count($html_item_description) && $j != 0) {
       $item_description = '';
       while (strlen($item_description) <= $limit && $j <= count($html_item_description)) {
-        $item_description .= $html_item_description[$j] . '<br />';
+        $item_description .= $html_item_description[$j] ?? '' . '<br />';
         $j++;
       }
       $html .= '
@@ -54,7 +54,7 @@ class ProposalRepository{
     $html_subitem_description = explode('<br />', nl2br($subitem-> obtener_description()));
     $j = 0;
     while (strlen($subitem_description) <= $limit && $j <= count($html_subitem_description)) {
-      $subitem_description .= $html_subitem_description[$j] . '<br />';
+      $subitem_description .= $html_subitem_description[$j] ?? '' . '<br />';
       $j++;
     }
     $html = '<tr>

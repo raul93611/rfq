@@ -182,10 +182,6 @@
       </table>
     <?php endif; ?>
   <?php endif; ?>
-  <?php if ($cotizacion->obtener_payment_terms() == 'Net 30') : ?>
-    <br>
-    <div class="color letra_chiquita"><b>PAYMENT TERMS</b><br><b>NET TERMS: </b>30 Days<br><b>CREDIT CARD PAYMENT: </b>Please add an additional 2.1% to process credit card payments.</div>
-  <?php endif; ?>
 </body>
 
 </html>

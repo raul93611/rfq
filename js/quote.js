@@ -187,6 +187,4 @@ $(document).ready(function () {
     e.preventDefault();
     linkQuoteModal.modal();
   });
-
-
 });

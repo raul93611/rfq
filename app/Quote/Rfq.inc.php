@@ -62,6 +62,8 @@ class Rfq {
   private $accounting;
   private $gsa;
   private $client_payment_terms;
+  private $net30_fulfillment_services;
+  private $bpa;
 
   public function __construct(
     $id,
@@ -125,7 +127,9 @@ class Rfq {
     $file_document,
     $accounting,
     $gsa,
-    $client_payment_terms
+    $client_payment_terms,
+    $net30_fulfillment_services,
+    $bpa
   ) {
     $this->id = $id;
     $this->id_usuario = $id_usuario;
@@ -189,6 +193,8 @@ class Rfq {
     $this->accounting = $accounting;
     $this->gsa = $gsa;
     $this->client_payment_terms = $client_payment_terms;
+    $this->net30_fulfillment_services = $net30_fulfillment_services;
+    $this->bpa = $bpa;
   }
 
   public function obtener_id() {
@@ -338,13 +344,29 @@ class Rfq {
   public function obtener_services_fulfillment_profit() {
     return $this->services_fulfillment_profit;
   }
-
+  //fulfillment rfq
   public function obtener_total_fulfillment() {
-    return $this->total_fulfillment;
+    return (float)$this->total_fulfillment;
   }
 
+  public function getRfqFulfillmentProfit() {
+    return $this->obtener_total_price() - $this->total_fulfillment;
+  }
+
+  public function getRfqFulfillmentProfitPercentage() {
+    return $this->obtener_total_price() ? 100 * ($this->getRfqFulfillmentProfit() / $this->obtener_total_price()) : 0;
+  }
+  //fulfillment rfp
   public function obtener_total_services_fulfillment() {
     return $this->total_services_fulfillment;
+  }
+
+  public function getRfpFulfillmentProfit() {
+    return $this->getTotalQuoteServices() - $this->total_services_fulfillment;
+  }
+
+  public function getRfpFulfillmentProfitPercentage() {
+    return $this->getTotalQuoteServices() ? 100 * ($this->getRfpFulfillmentProfit() / $this->getTotalQuoteServices()) : 0;
   }
 
   public function obtener_invoice() {
@@ -399,8 +421,7 @@ class Rfq {
       return 0;
     }
   }
-
-  //reQuote amounts
+  //requote amounts
   public function obtener_re_quote_total_cost() {
     Conexion::abrir_conexion();
     $re_quote = ReQuoteRepository::get_re_quote_by_id_rfq(Conexion::obtener_conexion(), $this->id);
@@ -486,7 +507,7 @@ class Rfq {
   }
 
   public function isServices() {
-    $services = ['Services', 'Audio Visual', 'Computers'];
+    $services = ['Services', 'Audio Visual', 'Computers', 'Back Up Batteries'];
     if (in_array($this->type_of_bid, $services)) {
       return true;
     }
@@ -518,19 +539,32 @@ class Rfq {
   }
 
   public function isEnabledToInvoice() {
+    Conexion::abrir_conexion();
+    $re_quote_exists = ReQuoteRepository::re_quote_exists(Conexion::obtener_conexion(), $this->id);
+    Conexion::cerrar_conexion();
     return $this->obtener_fullfillment() &&
-      !is_null($this->obtener_fulfillment_profit()) ||
-      !is_null($this->obtener_services_fulfillment_profit());
+      (!is_null($this->obtener_fulfillment_profit()) || !is_null($this->obtener_services_fulfillment_profit())) &&
+      $re_quote_exists &&
+      strlen($this->city ?? '') &&
+      strlen($this->zip_code) &&
+      strlen($this->client) &&
+      strlen($this->set_side) &&
+      strlen($this->poc) &&
+      strlen($this->co) &&
+      strlen($this->estimated_delivery_date) &&
+      strlen($this->file_document);
   }
 
   public function isEnabledToFulfillment() {
+    if ($this->getBpa() && $this->obtener_completado() && $this->obtener_status() && $this->obtener_award()) return true;
+
     Conexion::abrir_conexion();
     $re_quote_exists = ReQuoteRepository::re_quote_exists(Conexion::obtener_conexion(), $this->id);
     Conexion::cerrar_conexion();
     return !$this->fullfillment &&
       $this->award &&
       $re_quote_exists &&
-      strlen($this->city) &&
+      strlen($this->city ?? '') &&
       strlen($this->zip_code) &&
       strlen($this->client) &&
       strlen($this->set_side) &&
@@ -589,11 +623,11 @@ class Rfq {
   }
 
   public function getFileDocument() {
-    return explode('|', $this->file_document);
+    return explode('|', $this->file_document ?? '');
   }
 
   public function getAccounting() {
-    return explode('|', $this->accounting);
+    return explode('|', $this->accounting ?? '');
   }
 
   public function getGsa() {
@@ -602,5 +636,13 @@ class Rfq {
 
   public function getClientPaymentTerms() {
     return $this->client_payment_terms;
+  }
+
+  public function getNet30FulfillmentServices() {
+    return $this->net30_fulfillment_services;
+  }
+
+  public function getBpa() {
+    return $this->bpa;
   }
 }

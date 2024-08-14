@@ -21,7 +21,13 @@ spl_autoload_register(function ($class) {
     'TaskComment' => ['TaskComment', 'TaskCommentRepository'],
     'TypeOfContract' => ['TypeOfContract', 'TypeOfContractRepository'],
     'SalesCommission' => ['SalesCommission', 'SalesCommissionRepository'],
-    'Invoice' => ['Invoice', 'InvoiceRepository']
+    'Invoice' => ['Invoice', 'InvoiceRepository'],
+    'Personnel' => ['Personnel', 'PersonnelRepository'],
+    'CalendarEvent' => ['CalendarEvent', 'CalendarEventRepository'],
+    'TypeOfProject' => ['TypeOfProject', 'TypeOfProjectRepository'],
+    'YearlyProjection' => ['YearlyProjection', 'YearlyProjectionRepository'],
+    'MonthlyProjection' => ['MonthlyProjection', 'MonthlyProjectionRepository'],
+    'Room' => ['Room', 'RoomRepository']
   ];
 
   foreach ($subfolder as $key => $array) {
@@ -56,12 +62,6 @@ switch ($partes_ruta[1] ?? null) {
     break;
   case 'perfil':
     $ruta_elegida = isset($_POST['generate_excel_report']) ? $ruta_elegida = 'scripts/utilities/excel_report_' . $_POST['report'] . '.php' :  'vistas/perfil.php';
-    break;
-  case 'email':
-    $ruta_elegida = 'email.php';
-    break;
-  case 'genera_usuario':
-    $ruta_elegida = 'herramientas/generate_services_re_quote.php';
     break;
   case 'logout':
     $ruta_elegida = 'scripts/user/logout.php';
@@ -132,6 +132,10 @@ switch ($partes_ruta[1] ?? null) {
             $id_service = $partes_ruta[4];
             $ruta_elegida = 'scripts/service/delete_service.php';
             break;
+          case 'duplicate_service';
+            $id_service = $partes_ruta[4];
+            $ruta_elegida = 'scripts/service/duplicate_service.php';
+            break;
           default:
             break;
         }
@@ -189,6 +193,23 @@ switch ($partes_ruta[1] ?? null) {
           default:
             break;
         }
+      case 'rooms':
+        switch ($partes_ruta[3]) {
+          case 'load':
+            $ruta_elegida = 'scripts/quote/rooms/load.php';
+            break;
+          case 'save':
+            $ruta_elegida = 'scripts/quote/rooms/save.php';
+            break;
+          case 'update':
+            $ruta_elegida = 'scripts/quote/rooms/update.php';
+            break;
+          case 'delete':
+            $ruta_elegida = 'scripts/quote/rooms/delete.php';
+            break;
+          default:
+            break;
+        }
         break;
       case 'proposal':
         $id_rfq = $partes_ruta[3];
@@ -199,6 +220,10 @@ switch ($partes_ruta[1] ?? null) {
         $id_rfq = $partes_ruta[3];
         $encabezado = 1;
         $ruta_elegida = 'scripts/utilities/proposal.php';
+        break;
+      case 'proposal_room':
+        $id_rfq = $partes_ruta[3];
+        $ruta_elegida = 'scripts/utilities/proposal_room.php';
         break;
       case 'generate_checklist_pdf':
         $id_rfq = $partes_ruta[3];
@@ -352,7 +377,7 @@ switch ($partes_ruta[1] ?? null) {
         $ruta_elegida = 'scripts/re_quote/load_service.php';
         break;
       case 'update_service':
-        $id_service = $partes_ruta[3];
+        $id_service = $partes_ruta[3] ?? null;
         $ruta_elegida = 'scripts/re_quote/update_service.php';
         break;
       default:
@@ -419,7 +444,7 @@ switch ($partes_ruta[1] ?? null) {
             $ruta_elegida = 'scripts/fulfillment/delete_fulfillment_item.php';
             break;
           case 'load_fulfillment_item':
-            $id_fulfillment_item = $partes_ruta[4];
+            $id_fulfillment_item = $partes_ruta[4] ?? null;
             $ruta_elegida = 'scripts/fulfillment/load_fulfillment_item.php';
             break;
           case 'save_fulfillment_subitem':
@@ -432,7 +457,7 @@ switch ($partes_ruta[1] ?? null) {
             $ruta_elegida = 'scripts/fulfillment/delete_fulfillment_subitem.php';
             break;
           case 'load_fulfillment_subitem':
-            $id_fulfillment_subitem = $partes_ruta[4];
+            $id_fulfillment_subitem = $partes_ruta[4] ?? null;
             $ruta_elegida = 'scripts/fulfillment/load_fulfillment_subitem.php';
             break;
           case 'mark_as_reviewed':
@@ -465,8 +490,104 @@ switch ($partes_ruta[1] ?? null) {
             $ruta_elegida = 'scripts/fulfillment/delete_fulfillment_service.php';
             break;
           case 'load_fulfillment_service':
-            $id_fulfillment_service = $partes_ruta[4];
+            $id_fulfillment_service = $partes_ruta[4] ?? null;
             $ruta_elegida = 'scripts/fulfillment/load_fulfillment_service.php';
+            break;
+          case 'save_net_30':
+            $ruta_elegida = 'scripts/fulfillment/save_net_30_services.php';
+            break;
+          case 'mark_as_reviewed_service':
+            $ruta_elegida = 'scripts/fulfillment/mark_as_reviewed_service.php';
+            break;
+          default:
+            break;
+        }
+        break;
+      case 'personnel':
+        switch ($partes_ruta[3]) {
+          case 'table':
+            $ruta_elegida = 'scripts/fulfillment/personnel/table.php';
+            break;
+          case 'save':
+            $ruta_elegida = 'scripts/fulfillment/personnel/save.php';
+            break;
+          case 'load':
+            $ruta_elegida = 'scripts/fulfillment/personnel/load.php';
+            break;
+          case 'update':
+            $ruta_elegida = 'scripts/fulfillment/personnel/update.php';
+            break;
+          case 'delete':
+            $ruta_elegida = 'scripts/fulfillment/personnel/delete.php';
+            break;
+          case 'get_personnel_events':
+            $ruta_elegida = 'scripts/fulfillment/personnel/get_personnel_events.php';
+            break;
+          default:
+            break;
+        }
+        break;
+      case 'personnel_calendar':
+        switch ($partes_ruta[3]) {
+          case 'save':
+            $ruta_elegida = 'scripts/fulfillment/personnel_calendar/save.php';
+            break;
+          case 'load':
+            $ruta_elegida = 'scripts/fulfillment/personnel_calendar/load.php';
+            break;
+          case 'update':
+            $ruta_elegida = 'scripts/fulfillment/personnel_calendar/update.php';
+            break;
+          case 'delete':
+            $ruta_elegida = 'scripts/fulfillment/personnel_calendar/delete.php';
+            break;
+          case 'save_shared_event':
+            $ruta_elegida = 'scripts/fulfillment/personnel_calendar/save_shared_event.php';
+            break;
+          default:
+            break;
+        }
+        break;
+      case 'type_of_project':
+        switch ($partes_ruta[3]) {
+          case 'table':
+            $ruta_elegida = 'scripts/fulfillment/type_of_project/table.php';
+            break;
+          case 'save':
+            $ruta_elegida = 'scripts/fulfillment/type_of_project/save.php';
+            break;
+          case 'load':
+            $ruta_elegida = 'scripts/fulfillment/type_of_project/load.php';
+            break;
+          case 'update':
+            $ruta_elegida = 'scripts/fulfillment/type_of_project/update.php';
+            break;
+          case 'delete':
+            $ruta_elegida = 'scripts/fulfillment/type_of_project/delete.php';
+            break;
+          default:
+            break;
+        }
+        break;
+      case 'invoice':
+        switch ($partes_ruta[3]) {
+          case 'save':
+            $ruta_elegida = 'scripts/fulfillment/invoice/save.php';
+            break;
+          case 'load':
+            $ruta_elegida = 'scripts/fulfillment/invoice/load.php';
+            break;
+          case 'load_dropdown':
+            $ruta_elegida = 'scripts/fulfillment/invoice/load_dropdown.php';
+            break;
+          case 'update':
+            $ruta_elegida = 'scripts/fulfillment/invoice/update.php';
+            break;
+          case 'delete':
+            $ruta_elegida = 'scripts/fulfillment/invoice/delete.php';
+            break;
+          case 'attach_sales_commission':
+            $ruta_elegida = 'scripts/fulfillment/invoice/attach_sales_commission.php';
             break;
           default:
             break;
@@ -490,15 +611,55 @@ switch ($partes_ruta[1] ?? null) {
         $id_rfq = $partes_ruta[3];
         $ruta_elegida = 'scripts/fulfillment/unmark_as_pending.php';
         break;
-      case 'save_invoice':
-        $ruta_elegida = 'scripts/fulfillment/save_invoice.php';
-        break;
       case 'delete_invoice':
         $id_invoice = $partes_ruta[3];
         $ruta_elegida = 'scripts/fulfillment/delete_invoice.php';
         break;
       case 'update_invoice':
         $ruta_elegida = 'scripts/fulfillment/update_invoice.php';
+        break;
+      default:
+        break;
+    }
+    break;
+  case 'projection':
+    switch ($partes_ruta[2]) {
+      case 'table':
+        $ruta_elegida = 'scripts/projection/table.php';
+        break;
+      case 'save':
+        $ruta_elegida = 'scripts/projection/save.php';
+        break;
+      case 'monthly':
+        $ruta_elegida = 'scripts/projection/monthly.php';
+        break;
+      case 'month':
+        $ruta_elegida = 'scripts/projection/month.php';
+        break;
+      case 'projected_amount':
+        $ruta_elegida = 'scripts/projection/projected_amount.php';
+        break;
+      case 'update_projected_amount':
+        $ruta_elegida = 'scripts/projection/update_projected_amount.php';
+        break;
+      case 'get_totals':
+        $ruta_elegida = 'scripts/projection/get_totals.php';
+        break;
+      case 'get_month_totals':
+        $ruta_elegida = 'scripts/projection/get_month_totals.php';
+        break;
+      case 'invoice_acceptance':
+        $ruta_elegida = 'scripts/projection/invoice_acceptance.php';
+        break;
+      case 'update_invoice_acceptance':
+        $ruta_elegida = 'scripts/projection/update_invoice_acceptance.php';
+        break;
+      case 'month_excel':
+        $id = $partes_ruta[3];
+        $ruta_elegida = 'scripts/projection/month_excel.php';
+        break;
+      case 'charts':
+        $ruta_elegida = 'scripts/projection/charts.php';
         break;
       default:
         break;

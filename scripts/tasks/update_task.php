@@ -1,20 +1,46 @@
 <?php
 header('Content-Type: application/json');
-$task_comment = TaskCommentRepository::validate($_POST);
-Conexion::abrir_conexion();
-$task = new Task('', '', $_POST['assigned_user'], null, null, null, $_POST['status']);
-TaskRepository::update(Conexion::obtener_conexion(), $task, $_POST['id_task']);
-$task = TaskRepository::get_one(Conexion::obtener_conexion(), $_POST['id_task']);
-$user = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), $task-> get_id_user());
-if($task_comment){
-  TaskCommentRepository::insert(Conexion::obtener_conexion(), $task_comment);
-  Email::send_email_task_comment($task-> get_users_to_notify($_SESSION['user']-> obtener_id()), $task);
+
+try {
+  // Validate input data
+  $id_task = filter_input(INPUT_POST, 'id_task', FILTER_VALIDATE_INT);
+  $assigned_user_id = filter_input(INPUT_POST, 'assigned_user', FILTER_VALIDATE_INT);
+  $status = filter_input(INPUT_POST, 'status', FILTER_SANITIZE_SPECIAL_CHARS);
+
+  if (!$id_task || !$assigned_user_id || !$status) {
+    throw new Exception("Invalid input data.");
+  }
+
+  $task_comment = TaskCommentRepository::validate($_POST);
+
+  // Open connection
+  Conexion::abrir_conexion();
+  $conexion = Conexion::obtener_conexion();
+
+  // Update task status
+  $task = new Task('', '', $assigned_user_id, null, null, null, $status);
+  TaskRepository::update($conexion, $task, $id_task);
+
+  // Retrieve updated task and user details
+  $task = TaskRepository::get_one($conexion, $id_task);
+  $user = RepositorioUsuario::obtener_usuario_por_id($conexion, $task->get_id_user());
+
+  // Insert task comment if it exists
+  if ($task_comment) {
+    TaskCommentRepository::insert($conexion, $task_comment);
+  }
+
+  $response = array('result' => true);
+} catch (Exception $e) {
+  // Handle exceptions
+  $response = array(
+    'result' => false,
+    'error' => "An error occurred: " . $e->getMessage()
+  );
+} finally {
+  // Ensure connection is closed
+  Conexion::cerrar_conexion();
 }
-if($_POST['status'] == 'done' && ($_POST['old_status'] != $_POST['status'])){
-  Email::send_email_task_done($user-> obtener_email(), $task);
-}
-Conexion::cerrar_conexion();
-echo json_encode(array(
-  'result' => true,
-));
-?>
+
+// Send JSON response
+echo json_encode($response);

@@ -1,69 +1,70 @@
 <?php
-use PhpOffice\PhpSpreadsheet\Helper\Sample;
-use PhpOffice\PhpSpreadsheet\IOFactory;
+require 'vendor/autoload.php';
+
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
-require_once 'vendor_excel/phpoffice/phpspreadsheet/src/Bootstrap.php';
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 
-$spreadsheet = new Spreadsheet();
-$spreadsheet->getProperties()->setCreator('E-logic.Inc')
-    ->setLastModifiedBy('E-logic')
-    ->setTitle('FulfillmentReport')
-    ->setSubject('FulfillmentReport')
-    ->setDescription('FulfillmentReport')
-    ->setKeywords('FulfillmentReport')
-    ->setCategory('FulfillmentReport');
+function createSpreadsheet() {
+  $spreadsheet = new Spreadsheet();
+  $activeWorksheet = $spreadsheet->getActiveSheet();
 
-$spreadsheet->setActiveSheetIndex(0);
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('A1', '');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('B1', '');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('C1', '');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('D1', '');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('E1', '');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('F1', '');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('G1', '');
-$spreadsheet->getActiveSheet()->mergeCells('H1:K1');
-$spreadsheet->getActiveSheet()->getStyle('H1:K1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('197bff');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('H1', 'QUOTE');
-$spreadsheet->getActiveSheet()->mergeCells('L1:O1');
-$spreadsheet->getActiveSheet()->getStyle('L1:O1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('f0e716');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('L1', 'RE-QUOTE');
+  // Setup headers
+  $headers = [
+    'A2' => 'FULFILLMENT DATE', 'B2' => 'PROPOSAL #', 'C2' => 'DESIGNATED USER',
+    'D2' => 'CHANNEL', 'E2' => 'CODE', 'F2' => 'TYPE OF BID', 'G2' => 'CONTRACT NUMBER',
+    'H2' => 'TOTAL COST', 'I2' => 'TOTAL PRICE', 'J2' => 'PROFIT', 'K2' => 'PROFIT(%)',
+    'L2' => 'TOTAL COST', 'M2' => 'TOTAL PRICE', 'N2' => 'PROFIT', 'O2' => 'PROFIT(%)', 'P2' => 'TYPE'
+  ];
 
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('A2', 'FULFILLMENT DATE');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('B2', 'PROPOSAL #');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('C2', 'DESIGNATED USER');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('D2', 'CHANNEL');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('E2', 'CODE');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('F2', 'TYPE OF BID');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('G2', 'CONTRACT NUMBER');
-$spreadsheet->getActiveSheet()->getStyle('H2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('197bff');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('H2', 'TOTAL COST');
-$spreadsheet->getActiveSheet()->getStyle('I2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('197bff');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('I2', 'TOTAL PRICE');
-$spreadsheet->getActiveSheet()->getStyle('J2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('197bff');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('J2', 'PROFIT');
-$spreadsheet->getActiveSheet()->getStyle('K2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('197bff');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('K2', 'PROFIT(%)');
-$spreadsheet->getActiveSheet()->getStyle('L2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('f0e716');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('L2', 'TOTAL COST');
-$spreadsheet->getActiveSheet()->getStyle('M2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('f0e716');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('M2', 'TOTAL PRICE');
-$spreadsheet->getActiveSheet()->getStyle('N2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('f0e716');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('N2', 'PROFIT');
-$spreadsheet->getActiveSheet()->getStyle('O2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('f0e716');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('O2', 'PROFIT(%)');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('P2', 'TYPE');
+  $activeWorksheet->mergeCells('H1:K1');
+  $activeWorksheet->getStyle('H1:K1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('197bff');
+  $activeWorksheet->setCellValue('H1', 'QUOTE');
 
-Conexion::abrir_conexion();
-ExcelRepository::fulfillmentReport(Conexion::obtener_conexion(), $_POST['type'], $_POST['quarter'], $_POST['month'], $_POST['year'], $spreadsheet);
-Conexion::cerrar_conexion();
+  $activeWorksheet->mergeCells('L1:O1');
+  $activeWorksheet->getStyle('L1:O1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('f0e716');
+  $activeWorksheet->setCellValue('L1', 'RE-QUOTE');
 
-$spreadsheet->setActiveSheetIndex(0);
+  foreach ($headers as $cell => $header) {
+    $activeWorksheet->setCellValue($cell, $header);
+    if (in_array($cell, ['H2', 'I2', 'J2', 'K2'])) {
+      $activeWorksheet->getStyle($cell)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('197bff');
+    }
+    if (in_array($cell, ['L2', 'M2', 'N2', 'O2'])) {
+      $activeWorksheet->getStyle($cell)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('f0e716');
+    }
+  }
 
-header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-header('Content-Disposition: attachment;filename="FulfillmentReport.xlsx"');
-header('Cache-Control: max-age=0');
+  return $spreadsheet;
+}
 
-$writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
-$writer->save('php://output');
-exit;
-?>
+function fetchAndFillData($spreadsheet, $type, $quarter, $month, $year) {
+  try {
+    Conexion::abrir_conexion();
+    $conexion = Conexion::obtener_conexion();
+    ExcelRepository::fulfillmentReport($conexion, $type, $quarter, $month, $year, $spreadsheet->getActiveSheet());
+  } catch (Exception $e) {
+    echo 'Error fetching data: ' . $e->getMessage();
+  } finally {
+    Conexion::cerrar_conexion();
+  }
+}
+
+function outputSpreadsheet($spreadsheet) {
+  $writer = new Xlsx($spreadsheet);
+
+  header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+  header('Content-Disposition: attachment;filename="FulfillmentReport.xlsx"');
+  header('Cache-Control: max-age=0');
+
+  $writer->save('php://output');
+}
+
+// Ensure required POST parameters are set
+if (isset($_POST['type'], $_POST['quarter'], $_POST['month'], $_POST['year'])) {
+  $spreadsheet = createSpreadsheet();
+  fetchAndFillData($spreadsheet, $_POST['type'], $_POST['quarter'], $_POST['month'], $_POST['year']);
+  outputSpreadsheet($spreadsheet);
+} else {
+  echo 'Error: Missing required POST parameters.';
+}

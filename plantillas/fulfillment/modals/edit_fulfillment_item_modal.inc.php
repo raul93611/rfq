@@ -7,10 +7,10 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-        <input type="hidden" name="id_rfq" form="edit_fulfillment_item_form" value="<?php echo $quote-> obtener_id(); ?>">
-        <form id="edit_fulfillment_item_form" method="post" action="">
+      <input type="hidden" name="id_rfq" form="edit_fulfillment_item_form" value="<?= $quote->obtener_id(); ?>">
+      <form id="edit_fulfillment_item_form" method="post" action="">
 
-        </form>
+      </form>
     </div>
   </div>
 </div>

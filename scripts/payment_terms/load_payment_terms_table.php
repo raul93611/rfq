@@ -1,18 +1,36 @@
 <?php
 header('Content-Type: application/json');
-Conexion::abrir_conexion();
-$payment_terms = PaymentTermRepository::get_all(Conexion::obtener_conexion());
-Conexion::cerrar_conexion();
-$json = [];
-foreach ($payment_terms as $key => $payment_term) {
-  $row = [
-    $payment_term-> get_payment_term(),
-    '<button type="button" data="' . $payment_term-> get_id() . '" class="edit_button btn btn-info btn-sm" name=""><i class="fas fa-pen"></i></button>
-    <button type="button" data="' . $payment_term-> get_id() . '" class="delete_button btn btn-danger btn-sm" name=""><i class="fas fa-trash"></i></button>'
-  ];
-  array_push($json, $row);
+
+try {
+  // Open the database connection
+  Conexion::abrir_conexion();
+  $conexion = Conexion::obtener_conexion();
+
+  // Fetch all payment terms
+  $payment_terms = PaymentTermRepository::get_all($conexion);
+
+  // Close the database connection
+  Conexion::cerrar_conexion();
+
+  // Initialize the JSON response array
+  $json = [];
+
+  // Iterate through the payment terms and prepare the JSON response
+  foreach ($payment_terms as $payment_term) {
+    $row = [
+      htmlspecialchars($payment_term->get_payment_term(), ENT_QUOTES, 'UTF-8'),
+      '<button type="button" data="' . htmlspecialchars($payment_term->get_id(), ENT_QUOTES, 'UTF-8') . '" class="edit_button btn btn-info btn-sm"><i class="fas fa-pen"></i></button>
+       <button type="button" data="' . htmlspecialchars($payment_term->get_id(), ENT_QUOTES, 'UTF-8') . '" class="delete_button btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>'
+    ];
+    $json[] = $row;
+  }
+
+  // Encode the response as JSON
+  echo json_encode(['data' => $json]);
+} catch (Exception $e) {
+  // Handle exceptions and prepare an error response
+  echo json_encode(['error' => 'Error fetching payment terms: ' . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8')]);
+  if (Conexion::obtener_conexion()) {
+    Conexion::cerrar_conexion();
+  }
 }
-echo json_encode(array(
-  'data' => $json
-));
-?>

@@ -1,180 +1,97 @@
 <?php
 header('Content-Type: application/json');
 
-$start = $_POST['start'];
-$length = $_POST['length'];
-$search = $_POST['search']['value'];
-$sort_column_index = $_POST['order'][0]['column'];
-$sort_direction = $_POST['order'][0]['dir'];
+// Retrieve and validate input data
+$start = $_POST['start'] ?? 0;
+$length = $_POST['length'] ?? 10;
+$search = $_POST['search']['value'] ?? '';
+$sort_column_index = $_POST['order'][0]['column'] ?? 0;
+$sort_direction = $_POST['order'][0]['dir'] ?? 'asc';
+$report_type = $_POST['report'] ?? '';
+$type = $_POST['type'] ?? '';
+$quarter = $_POST['quarter'] ?? null;
+$month = $_POST['month'] ?? null;
+$year = $_POST['year'] ?? null;
 
-switch ($_POST['report']) {
-  case 'award':
-    Conexion::abrir_conexion();
-    $quotes = Report::getAwardReport(
-      Conexion::obtener_conexion(),
+$response = [
+  "draw" => $_POST['draw'],
+  "recordsTotal" => 0,
+  "recordsFiltered" => 0,
+  "data" => [],
+  "additional" => 'true'
+];
+
+try {
+  // Open database connection
+  Conexion::abrir_conexion();
+  $conexion = Conexion::obtener_conexion();
+
+  // Define report mappings
+  $reportMappings = [
+    'award' => [
+      'getReport' => 'getAwardReport',
+      'getTotalCount' => 'getAwardReportCount',
+      'getFilteredCount' => 'getFilteredAwardReportCount'
+    ],
+    'submitted' => [
+      'getReport' => 'getSubmittedReport',
+      'getTotalCount' => 'getSubmittedReportCount',
+      'getFilteredCount' => 'getFilteredSubmittedReportCount'
+    ],
+    'fulfillment' => [
+      'getReport' => 'getFulfillmentReport',
+      'getTotalCount' => 'getFulfillmentReportCount',
+      'getFilteredCount' => 'getFilteredFulfillmentReportCount'
+    ],
+    'accounts-payable-fulfillment' => [
+      'getReport' => 'getAccountsPayableFulfillmentReport',
+      'getTotalCount' => 'getAccountsPayableFulfillmentReportCount',
+      'getFilteredCount' => 'getFilteredAccountsPayableFulfillmentReportCount'
+    ],
+    'sales-commission' => [
+      'getReport' => 'getSalesCommissionReport',
+      'getTotalCount' => 'getSalesCommissionReportCount',
+      'getFilteredCount' => 'getFilteredSalesCommissionReportCount'
+    ]
+  ];
+
+  // Check if the report type is valid
+  if (isset($reportMappings[$report_type])) {
+    $report = $reportMappings[$report_type];
+
+    // Fetch report data
+    $quotes = Report::{$report['getReport']}(
+      $conexion,
       $start,
       $length,
       $search,
       $sort_column_index,
       $sort_direction,
-      $_POST['type'],
-      $_POST['quarter'],
-      $_POST['month'],
-      $_POST['year']
+      $type,
+      $quarter,
+      $month,
+      $year
     );
-    $total_records = Report::getAwardReportCount(
-      Conexion::obtener_conexion(),
-      $_POST['type'],
-      $_POST['quarter'],
-      $_POST['month'],
-      $_POST['year']
-    );
-    $total_filtered_records = Report::getFilteredAwardReportCount(
-      Conexion::obtener_conexion(),
-      $search,
-      $_POST['type'],
-      $_POST['quarter'],
-      $_POST['month'],
-      $_POST['year']
-    );
+
+    // Fetch total and filtered record counts
+    $total_records = Report::{$report['getTotalCount']}($conexion, $type, $quarter, $month, $year);
+    $total_filtered_records = Report::{$report['getFilteredCount']}($conexion, $search, $type, $quarter, $month, $year);
+
+    // Prepare response data
+    $response['recordsTotal'] = $total_records;
+    $response['recordsFiltered'] = $total_filtered_records;
+    $response['data'] = $quotes;
+  }
+
+  // Close database connection
+  Conexion::cerrar_conexion();
+} catch (Exception $e) {
+  // Handle any exceptions that occur
+  if (isset($conexion)) {
     Conexion::cerrar_conexion();
-    break;
-  case 'submitted':
-    Conexion::abrir_conexion();
-    $quotes = Report::getSubmittedReport(
-      Conexion::obtener_conexion(),
-      $start,
-      $length,
-      $search,
-      $sort_column_index,
-      $sort_direction,
-      $_POST['type'],
-      $_POST['quarter'],
-      $_POST['month'],
-      $_POST['year']
-    );
-    $total_records = Report::getSubmittedReportCount(
-      Conexion::obtener_conexion(),
-      $_POST['type'],
-      $_POST['quarter'],
-      $_POST['month'],
-      $_POST['year']
-    );
-    $total_filtered_records = Report::getFilteredSubmittedReportCount(
-      Conexion::obtener_conexion(),
-      $search,
-      $_POST['type'],
-      $_POST['quarter'],
-      $_POST['month'],
-      $_POST['year']
-    );
-    Conexion::cerrar_conexion();
-    break;
-  case 'submitted':
-    Conexion::abrir_conexion();
-    $quotes = Report::getSubmittedReport(
-      Conexion::obtener_conexion(),
-      $start,
-      $length,
-      $search,
-      $sort_column_index,
-      $sort_direction,
-      $_POST['type'],
-      $_POST['quarter'],
-      $_POST['month'],
-      $_POST['year']
-    );
-    $total_records = Report::getSubmittedReportCount(
-      Conexion::obtener_conexion(),
-      $_POST['type'],
-      $_POST['quarter'],
-      $_POST['month'],
-      $_POST['year']
-    );
-    $total_filtered_records = Report::getFilteredSubmittedReportCount(
-      Conexion::obtener_conexion(),
-      $search,
-      $_POST['type'],
-      $_POST['quarter'],
-      $_POST['month'],
-      $_POST['year']
-    );
-    Conexion::cerrar_conexion();
-    break;
-  case 'fulfillment':
-    Conexion::abrir_conexion();
-    $quotes = Report::getFulfillmentReport(
-      Conexion::obtener_conexion(),
-      $start,
-      $length,
-      $search,
-      $sort_column_index,
-      $sort_direction,
-      $_POST['type'],
-      $_POST['quarter'],
-      $_POST['month'],
-      $_POST['year']
-    );
-    $total_records = Report::getFulfillmentReportCount(
-      Conexion::obtener_conexion(),
-      $_POST['type'],
-      $_POST['quarter'],
-      $_POST['month'],
-      $_POST['year']
-    );
-    $total_filtered_records = Report::getFilteredFulfillmentReportCount(
-      Conexion::obtener_conexion(),
-      $search,
-      $_POST['type'],
-      $_POST['quarter'],
-      $_POST['month'],
-      $_POST['year']
-    );
-    Conexion::cerrar_conexion();
-    break;
-  case 'accounts-payable-fulfillment':
-    Conexion::abrir_conexion();
-    $quotes = Report::getAccountsPayableFulfillmentReport(
-      Conexion::obtener_conexion(),
-      $start,
-      $length,
-      $search,
-      $sort_column_index,
-      $sort_direction,
-      $_POST['type'],
-      $_POST['quarter'],
-      $_POST['month'],
-      $_POST['year']
-    );
-    $total_records = Report::getAccountsPayableFulfillmentReportCount(
-      Conexion::obtener_conexion(),
-      $_POST['type'],
-      $_POST['quarter'],
-      $_POST['month'],
-      $_POST['year']
-    );
-    $total_filtered_records = Report::getFilteredAccountsPayableFulfillmentReportCount(
-      Conexion::obtener_conexion(),
-      $search,
-      $_POST['type'],
-      $_POST['quarter'],
-      $_POST['month'],
-      $_POST['year']
-    );
-    Conexion::cerrar_conexion();
-    break;
-  default:
-    break;
+  }
+  $response['error'] = 'An error occurred: ' . $e->getMessage();
 }
 
-
-
-$response = array(
-  "draw" => $_POST['draw'],
-  "recordsTotal" => $total_records,
-  "recordsFiltered" => $total_filtered_records,
-  "data" => $quotes,
-  "additional" => 'true'
-);
-
+// Send JSON response
 echo json_encode($response);

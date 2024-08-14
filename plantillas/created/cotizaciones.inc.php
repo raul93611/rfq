@@ -7,7 +7,7 @@ $printable_channel = Input::printable_channel($channel);
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0 text-dark"><?php echo $printable_channel; ?></h1>
+          <h1 class="m-0 text-dark"><?= $printable_channel; ?></h1>
         </div>
         <div class="col-sm-6">
         </div>
@@ -23,7 +23,7 @@ $printable_channel = Input::printable_channel($channel);
               <h3 class="card-title">Quotes</h3>
             </div>
             <div class="card-body table-responsive">
-              <table id="tabla_quotes" data-channel="<?php echo $channel; ?>" class="table table-bordered table-hover">
+              <table id="tabla_quotes" data-channel="<?= $channel; ?>" class="table table-bordered table-hover">
                 <thead>
                   <tr>
                     <th>PROPOSAL</th>

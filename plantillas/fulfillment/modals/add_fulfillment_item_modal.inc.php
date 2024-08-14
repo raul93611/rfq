@@ -7,59 +7,9 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
-        <form id="add_fulfillment_item_form" method="post" enctype="multipart/form-data" action="">
-          <div class="row">
-            <div class="col-md-12">
-              <div class="form-group">
-                <label>Provider:</label>
-                <select name="provider" class="custom-select">
-                  <?php
-                  foreach ($providers_list as $key => $provider) {
-                    ?>
-                    <option><?php echo $provider-> get_company_name(); ?></option>
-                    <?php
-                  }
-                  ?>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="quantity">Quantity:</label>
-                <input type="number" id="quantity" class="form-control form-control-sm" name="quantity" value="">
-              </div>
-              <div class="form-group">
-                <label for="unit_cost">Unit Cost:</label>
-                <input type="number" step=".01" id="unit_cost" class="form-control form-control-sm" name="unit_cost" value="">
-              </div>
-              <div class="form-group">
-                <label for="other_cost">Other Cost:</label>
-                <input type="number" step=".01" id="other_cost" class="form-control form-control-sm" name="other_cost" value="0">
-              </div>
-              <div class="form-group">
-                <label for="payment_term">Payment Term:</label>
-                <select class="custom-select" name="payment_term">
-                  <?php
-                    foreach ($payment_terms as $key => $payment_term) {
-                      ?>
-                      <option><?php echo $payment_term-> get_payment_term(); ?></option>
-                      <?php
-                    }
-                  ?>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="comment">Comment:</label>
-                <textarea id="comment" name="comment" rows="5" class="form-control form-control-sm"></textarea>
-              </div>
-            </div>
-          </div>
-          <input type="hidden" id="id_item" name="id_item" value="">
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="submit" name="save_fulfillment_item" form="add_fulfillment_item_form" class="btn btn-success"><i class="fa fa-check"></i> Save</button>
-        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-ban"></i> Cancel</button>
-      </div>
+      <form id="add_fulfillment_item_form" method="post" enctype="multipart/form-data" action="">
+        
+      </form>
     </div>
   </div>
 </div>

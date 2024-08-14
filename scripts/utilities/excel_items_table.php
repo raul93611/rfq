@@ -1,75 +1,113 @@
 <?php
-use PhpOffice\PhpSpreadsheet\Helper\Sample;
-use PhpOffice\PhpSpreadsheet\IOFactory;
+require 'vendor/autoload.php';
+
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
-require_once 'vendor_excel/phpoffice/phpspreadsheet/src/Bootstrap.php';
-$helper = new Sample();
-if ($helper->isCli()) {
-    $helper->log('This example should only be run from a Web Browser' . PHP_EOL);
-    return;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+
+function fetchData($id_rfq) {
+  try {
+    Conexion::abrir_conexion();
+    $conexion = Conexion::obtener_conexion();
+
+    $providers_name = RepositorioRfq::get_all_providers_name($conexion, $id_rfq);
+    $requote = ReQuoteRepository::get_re_quote_by_id_rfq($conexion, $id_rfq);
+    $requote_providers_name = ReQuoteRepository::get_all_providers_name($conexion, $requote->get_id());
+
+    return [
+      'providers_name' => $providers_name,
+      'requote' => $requote,
+      'requote_providers_name' => $requote_providers_name
+    ];
+  } catch (Exception $e) {
+    echo 'Error fetching data: ' . $e->getMessage();
+    return null;
+  } finally {
+    Conexion::cerrar_conexion();
+  }
 }
-Conexion::abrir_conexion();
-$providers_name = RepositorioRfq::get_all_providers_name(Conexion::obtener_conexion(), $id_rfq);
-$requote = ReQuoteRepository::get_re_quote_by_id_rfq(Conexion::obtener_conexion(), $id_rfq);
-$requote_providers_name = ReQuoteRepository::get_all_providers_name(Conexion::obtener_conexion(), $requote-> get_id());
 
-$spreadsheet = new Spreadsheet();
-$spreadsheet->getProperties()->setCreator('E-logic.Inc')
-    ->setLastModifiedBy('E-logic')
-    ->setTitle('QuoteItemsTable')
-    ->setSubject('QuoteItemsTable')
-    ->setDescription('QuoteItemsTable')
-    ->setKeywords('QuoteItemsTable')
-    ->setCategory('QuoteItemsTable');
-$x = 6;
-$spreadsheet->getActiveSheet()->mergeCells(Coordinate::stringFromColumnIndex($x) . '1:' . Coordinate::stringFromColumnIndex($x - 1 + count($providers_name)) . '1');
-$spreadsheet->getActiveSheet()->getStyle(Coordinate::stringFromColumnIndex($x) . '1:' . Coordinate::stringFromColumnIndex($x - 1 + count($providers_name)) . '1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('4be3e3');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue(Coordinate::stringFromColumnIndex($x) . '1', 'QUOTE');
+function createSpreadsheet($data) {
+  $spreadsheet = new Spreadsheet();
+  $activeWorksheet = $spreadsheet->getActiveSheet();
 
-$x = $x + count($providers_name);
-$spreadsheet->getActiveSheet()->mergeCells(Coordinate::stringFromColumnIndex($x) . '1:' . Coordinate::stringFromColumnIndex($x - 1 + count($requote_providers_name)) . '1');
-$spreadsheet->getActiveSheet()->getStyle(Coordinate::stringFromColumnIndex($x) . '1:' . Coordinate::stringFromColumnIndex($x - 1 + count($requote_providers_name)) . '1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('03befc');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue(Coordinate::stringFromColumnIndex($x) . '1', 'RE-QUOTE');
+  // Setup headers
+  $headers = [
+    'QUOTE' => ['column_start' => 6, 'color' => '4be3e3', 'names' => $data['providers_name']],
+    'RE-QUOTE' => ['column_start' => 6 + count($data['providers_name']), 'color' => '03befc', 'names' => $data['requote_providers_name']]
+  ];
 
-$x = 'A';
-$spreadsheet->setActiveSheetIndex(0);
-$spreadsheet->getActiveSheet()->getStyle($x . '2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('ed9191');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue($x . '2', '#');$x++;
-$spreadsheet->getActiveSheet()->getStyle($x . '2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('ed9191');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue($x . '2', 'PROJECT SPECIFICATIONS');$x++;
-$spreadsheet->getActiveSheet()->getStyle($x . '2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('ed9191');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue($x . '2', 'E-LOGIC PROPOSAL');$x++;
-$spreadsheet->getActiveSheet()->getStyle($x . '2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('e8c92e');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue($x . '2', 'PART NUMBER');$x++;
-$spreadsheet->getActiveSheet()->getStyle($x . '2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('c2e34b');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue($x . '2', 'QUANTITY');$x++;
-foreach ($providers_name as $i => $provider_name) {
-  $spreadsheet->getActiveSheet()->getStyle($x . '2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('4be3e3');
-  $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . '2', strtoupper($provider_name));
-  $x++;
+  foreach ($headers as $title => $header) {
+    $start = $header['column_start'];
+    $end = $start + count($header['names']) - 1;
+    $range = Coordinate::stringFromColumnIndex($start) . '1:' . Coordinate::stringFromColumnIndex($end) . '1';
+    $activeWorksheet->mergeCells($range);
+    $activeWorksheet->getStyle($range)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($header['color']);
+    $activeWorksheet->getStyle($range)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+    $activeWorksheet->setCellValue(Coordinate::stringFromColumnIndex($start) . '1', $title);
+  }
+
+  // Setup columns
+  $columns = [
+    ['#', 'ed9191'],
+    ['PROJECT SPECIFICATIONS', 'ed9191'],
+    ['E-LOGIC PROPOSAL', 'ed9191'],
+    ['PART NUMBER', 'e8c92e'],
+    ['QUANTITY', 'c2e34b']
+  ];
+
+  $x = 1;
+  foreach ($columns as $column) {
+    $activeWorksheet->getStyle(Coordinate::stringFromColumnIndex($x) . '2')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($column[1]);
+    $activeWorksheet->setCellValue(Coordinate::stringFromColumnIndex($x) . '2', $column[0]);
+    $x++;
+  }
+
+  foreach (['providers_name', 'requote_providers_name'] as $key) {
+    $color = $key === 'providers_name' ? '4be3e3' : '03befc';
+    foreach ($data[$key] as $provider_name) {
+      $activeWorksheet->getStyle(Coordinate::stringFromColumnIndex($x) . '2')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($color);
+      $activeWorksheet->setCellValue(Coordinate::stringFromColumnIndex($x) . '2', strtoupper($provider_name));
+      $x++;
+    }
+  }
+
+  $extraColumns = [
+    ['PRICE FOR CLIENT', '668fe8'],
+    ['TOTAL PRICE', '668fe8']
+  ];
+
+  foreach ($extraColumns as $column) {
+    $activeWorksheet->getStyle(Coordinate::stringFromColumnIndex($x) . '2')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($column[1]);
+    $activeWorksheet->setCellValue(Coordinate::stringFromColumnIndex($x) . '2', $column[0]);
+    $x++;
+  }
+
+  return $spreadsheet;
 }
-foreach ($requote_providers_name as $i => $requote_provider_name) {
-  $spreadsheet->getActiveSheet()->getStyle($x . '2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('03befc');
-  $spreadsheet->setActiveSheetIndex(0)->setCellValue($x . '2', strtoupper($requote_provider_name));
-  $x++;
+
+function outputSpreadsheet($spreadsheet) {
+  $writer = new Xlsx($spreadsheet);
+
+  header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+  header('Content-Disposition: attachment;filename="ExcelItemsTable.xlsx"');
+  header('Cache-Control: max-age=0');
+
+  $writer->save('php://output');
 }
-$spreadsheet->getActiveSheet()->getStyle($x . '2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('668fe8');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue($x . '2', 'PRICE FOR CLIENT');$x++;
-$spreadsheet->getActiveSheet()->getStyle($x . '2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('668fe8');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue($x . '2', 'TOTAL PRICE');$x++;
 
-ExcelRepository::print_items(Conexion::obtener_conexion(), $spreadsheet, $providers_name, $requote_providers_name, $requote, $id_rfq);
-
-Conexion::cerrar_conexion();
-
-$spreadsheet->setActiveSheetIndex(0);
-
-header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-header('Content-Disposition: attachment;filename="QuoteItemsTable.xlsx"');
-header('Cache-Control: max-age=0');
-
-$writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
-$writer->save('php://output');
-exit;
-?>
+// Assuming $id_rfq is already declared and coming from another file
+if (isset($id_rfq)) {
+  $data = fetchData($id_rfq);
+  if ($data) {
+    $spreadsheet = createSpreadsheet($data);
+    Conexion::abrir_conexion();
+    ExcelRepository::print_items(Conexion::obtener_conexion(), $spreadsheet->getActiveSheet(), $data['providers_name'], $data['requote_providers_name'], $data['requote'], $id_rfq);
+    Conexion::cerrar_conexion();
+    outputSpreadsheet($spreadsheet);
+  }
+} else {
+  echo 'Error: No RFQ ID provided.';
+}

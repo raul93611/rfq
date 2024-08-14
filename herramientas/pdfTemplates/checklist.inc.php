@@ -90,19 +90,19 @@
         <h3>FILE DOCUMENT</h3><br>
         <?php
         foreach (FILE_DOCUMENT as $key => $file_document) {
-          echo (in_array($key, $quote->getFileDocument()) ? $check : $checkbox) . ' ' . $file_document . '<br>';
+          echo (in_array($key, $quote->getFileDocument()) ? $icons['check'] : $icons['checkbox']) . ' ' . $file_document . '<br>';
         }
-        echo $checkbox . '________________<br>';
-        echo $checkbox . '________________<br>';
+        echo $icons['checkbox'] . '________________<br>';
+        echo $icons['checkbox'] . '________________<br>';
         ?>
         <br>
         <h3>ACCOUNTING</h3><br>
         <?php
         foreach (ACCOUNTING_CHECKBOX as $key => $accounting) {
-          echo (in_array($key, $quote->getAccounting()) ? $check : $checkbox) . ' ' . $accounting . '<br>';
+          echo (in_array($key, $quote->getAccounting()) ? $icons['check'] : $icons['checkbox']) . ' ' . $accounting . '<br>';
         }
-        echo $checkbox . '________________<br>';
-        echo $checkbox . '________________<br>';
+        echo $icons['checkbox'] . '________________<br>';
+        echo $icons['checkbox'] . '________________<br>';
         ?>
       </td>
       <td style="width:70%;padding: 0;margin: 0;vertical-align:top;">
@@ -117,11 +117,15 @@
           </tr>
           <tr>
             <td><b>GSA:</b></td>
-            <td><?= GSA[$quote->getGsa()] ?></td>
+            <td><?= GSA[$quote->getGsa()] ?? '' ?></td>
           </tr>
           <tr>
             <td class="blue"><b>Contract Number:</b></td>
             <td><?= $quote->obtener_contract_number() ?></td>
+          </tr>
+          <tr>
+            <td class="blue"><b>BPA:</b></td>
+            <td><?= $quote->getBpa() ? $icons['check'] : $icons['cross'] ?></td>
           </tr>
           <tr>
             <td><b>Sales Rep:</b></td>
@@ -133,7 +137,7 @@
           </tr>
           <tr>
             <td><b>Award Date:</b></td>
-            <td><?= $quote->obtener_fecha_award() ?></td>
+            <td><?= date('m/d/Y', strtotime($quote->obtener_fecha_award())) ?></td>
           </tr>
           <tr>
             <td><b>POC:</b></td>
@@ -153,11 +157,11 @@
           </tr>
           <tr>
             <td class="blue"><b>RFQ Amount:</b></td>
-            <td>$ <?= $quote->obtener_total_price() ?></td>
+            <td>$ <?= number_format($quote->obtener_total_price(), 2) ?></td>
           </tr>
           <tr>
             <td class="blue"><b>RFP Amount:</b></td>
-            <td>$ <?= $quote->getTotalQuoteServices() ?></td>
+            <td>$ <?= number_format($quote->getTotalQuoteServices() ?? 0, 2) ?></td>
           </tr>
           <tr>
             <td><b>Estimated Delivery Date:</b></td>
@@ -165,15 +169,15 @@
           </tr>
           <tr>
             <td><b>Client Payment Terms:</b></td>
-            <td><?= CLIENT_PAYMENT_TERMS[$quote->getClientPaymentTerms()] ?></td>
+            <td><?= CLIENT_PAYMENT_TERMS[$quote->getClientPaymentTerms()] ?? '' ?></td>
           </tr>
           <tr>
             <td class="blue"><b>Estimated Profit (RFQ):</b></td>
-            <td>$ <?= $quote->obtener_re_quote_rfq_profit() . ' / ' . number_format($quote->obtener_re_quote_rfq_profit_percentage(), 2) . ' %' ?></td>
+            <td>$ <?= number_format($quote->obtener_re_quote_rfq_profit(), 2) . ' / ' . number_format($quote->obtener_re_quote_rfq_profit_percentage(), 2) . ' %' ?></td>
           </tr>
           <tr>
             <td><b>Shipping Address:</b></td>
-            <td><?= SHIPPING_ADDRESS[$quote->getShippingAddress()] ?></td>
+            <td><?= SHIPPING_ADDRESS[$quote->getShippingAddress()] ?? '' ?></td>
           </tr>
           <tr>
             <td><b>City:</b></td>
@@ -193,7 +197,7 @@
           </tr>
           <tr>
             <td><b>Special Requirements/Risk/Extra Comments:</b></td>
-            <td><?= nl2br($quote->getSpecialRequirements()) ?></td>
+            <td><?= nl2br($quote->getSpecialRequirements() ?? '') ?></td>
           </tr>
         </table>
       </td>

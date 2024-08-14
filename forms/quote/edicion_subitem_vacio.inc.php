@@ -1,8 +1,8 @@
 <?php
 Conexion::abrir_conexion();
 $subitem = RepositorioSubitem::obtener_subitem_por_id(Conexion::obtener_conexion(), $id_subitem);
-$item = RepositorioItem::obtener_item_por_id(Conexion::obtener_conexion(), $subitem-> obtener_id_item());
-$cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $item-> obtener_id_rfq());
+$item = RepositorioItem::obtener_item_por_id(Conexion::obtener_conexion(), $subitem->obtener_id_item());
+$cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $item->obtener_id_rfq());
 Conexion::cerrar_conexion();
 ?>
 <input type="hidden" name="id_subitem" value="<?php echo $id_subitem; ?>">
@@ -41,8 +41,8 @@ Conexion::cerrar_conexion();
       </div>
       <div class="form-group">
         <label for="description">Description:</label>
-        <textarea class="form-control form-control-sm" rows="5" placeholder="Enter description ..." id="description" name="description"><?php echo $subitem-> obtener_description(); ?></textarea>
-        <input type="hidden" name="description_original" value="<?php echo $subitem-> obtener_description(); ?>">
+        <textarea class="form-control form-control-sm" rows="5" placeholder="Enter description ..." id="description" name="description"><?php echo $subitem->obtener_description(); ?></textarea>
+        <input type="hidden" name="description_original" value="<?php echo $subitem->obtener_description(); ?>">
       </div>
     </div>
   </div>
@@ -64,5 +64,5 @@ Conexion::cerrar_conexion();
 </div>
 <div class="card-footer">
   <button type="submit" class="btn btn-success" name="guardar_cambios_subitem"><i class="fa fa-check"></i> Save</button>
-  <a href="<?php echo EDITAR_COTIZACION . '/' . $item-> obtener_id_rfq(); ?>" class="btn btn-danger"><i class="fa fa-times"></i> Cancel</a>
+  <a href="<?php echo EDITAR_COTIZACION . '/' . $item->obtener_id_rfq(); ?>" class="btn btn-danger"><i class="fa fa-times"></i> Cancel</a>
 </div>

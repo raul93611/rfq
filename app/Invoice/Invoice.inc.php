@@ -5,7 +5,7 @@ class Invoice{
   private $name;
   private $created_at;
 
-  public function __construct( $id, $id_rfq, $name, $created_at ){
+  public function __construct( $id, $id_rfq, $name, $created_at){
     $this->id = $id;
     $this->id_rfq = $id_rfq;
     $this->name = $name;

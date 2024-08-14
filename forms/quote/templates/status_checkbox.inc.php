@@ -23,6 +23,12 @@ if ($cotizacion_recuperada->obtener_canal() == 'Chemonics') {
       <label class="custom-control-label" for="invoice">Invoice</label>
     </div>
   <?php
+  } else if ($cotizacion_recuperada->obtener_fullfillment()) {
+  ?>
+    <div class="text-danger">
+      Fill out the required information!
+    </div>
+  <?php
   } else if ($cotizacion_recuperada->isEnabledToFulfillment()) {
   ?>
     <div id="id1" class="custom-control custom-checkbox">

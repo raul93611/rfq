@@ -1,0 +1,183 @@
+{
+  "draw": "1",
+  "recordsTotal": 42,
+  "recordsFiltered": 42,
+  "data": [
+    {
+      "id_quote": 99205,
+      "invoice_date": "03\/01\/2024",
+      "id": "99205",
+      "type_of_contract": "RFQ",
+      "total_price": "4,236.00",
+      "total_cost": "3,816.00",
+      "profit": "420.00",
+      "profit_percentage": "9.92",
+      "sales_commission": "12.60",
+      "total_profit": "407.40",
+      "total_profit_percentage": "9.62",
+      "invoice_acceptance": null,
+      "partial_invoice": null
+    },
+    {
+      "id_quote": 103515,
+      "invoice_date": "03\/01\/2024",
+      "id": "103515",
+      "type_of_contract": "RFQ",
+      "total_price": "517.95",
+      "total_cost": "472.20",
+      "profit": "45.75",
+      "profit_percentage": "8.83",
+      "sales_commission": "1.37",
+      "total_profit": "44.38",
+      "total_profit_percentage": "8.57",
+      "invoice_acceptance": null,
+      "partial_invoice": null
+    },
+    {
+      "id_quote": 103670,
+      "invoice_date": "03\/01\/2024",
+      "id": "103670",
+      "type_of_contract": "RFQ",
+      "total_price": "6,556.00",
+      "total_cost": "4,857.60",
+      "profit": "1,698.40",
+      "profit_percentage": "25.91",
+      "sales_commission": "50.95",
+      "total_profit": "1,647.45",
+      "total_profit_percentage": "25.13",
+      "invoice_acceptance": null,
+      "partial_invoice": null
+    },
+    {
+      "id_quote": 96543,
+      "invoice_date": "03\/04\/2024",
+      "id": "96543",
+      "type_of_contract": "RFQ",
+      "total_price": "1,657.97",
+      "total_cost": "900.06",
+      "profit": "757.91",
+      "profit_percentage": "45.71",
+      "sales_commission": "18.39",
+      "total_profit": "739.52",
+      "total_profit_percentage": "44.60",
+      "invoice_acceptance": null,
+      "partial_invoice": null
+    },
+    {
+      "id_quote": 103682,
+      "invoice_date": "03\/04\/2024",
+      "id": "103682",
+      "type_of_contract": "RFQ",
+      "total_price": "685.21",
+      "total_cost": "420.59",
+      "profit": "264.62",
+      "profit_percentage": "38.62",
+      "sales_commission": "3.30",
+      "total_profit": "261.32",
+      "total_profit_percentage": "38.14",
+      "invoice_acceptance": null,
+      "partial_invoice": null
+    },
+    {
+      "id_quote": 101533,
+      "invoice_date": "03\/04\/2024",
+      "id": "101533",
+      "type_of_contract": "RFQ",
+      "total_price": "978.99",
+      "total_cost": "354.26",
+      "profit": "624.73",
+      "profit_percentage": "63.81",
+      "sales_commission": "4.30",
+      "total_profit": "620.43",
+      "total_profit_percentage": "63.37",
+      "invoice_acceptance": null,
+      "partial_invoice": null
+    },
+    {
+      "id_quote": 103382,
+      "invoice_date": "03\/04\/2024",
+      "id": "103382",
+      "type_of_contract": "RFQ",
+      "total_price": "1,306.83",
+      "total_cost": "808.60",
+      "profit": "498.23",
+      "profit_percentage": "38.13",
+      "sales_commission": "4.57",
+      "total_profit": "493.66",
+      "total_profit_percentage": "37.78",
+      "invoice_acceptance": null,
+      "partial_invoice": null
+    },
+    {
+      "id_quote": 100785,
+      "invoice_date": "03\/05\/2024",
+      "id": "100785",
+      "type_of_contract": "RFQ",
+      "total_price": "145.67",
+      "total_cost": "73.10",
+      "profit": "72.57",
+      "profit_percentage": "49.82",
+      "sales_commission": "1.97",
+      "total_profit": "70.60",
+      "total_profit_percentage": "48.47",
+      "invoice_acceptance": null,
+      "partial_invoice": null
+    },
+    {
+      "id_quote": 101777,
+      "invoice_date": "03\/05\/2024",
+      "id": "101777",
+      "type_of_contract": "RFQ",
+      "total_price": "4,308.48",
+      "total_cost": "3,856.51",
+      "profit": "451.97",
+      "profit_percentage": "10.49",
+      "sales_commission": "13.56",
+      "total_profit": "438.41",
+      "total_profit_percentage": "10.18",
+      "invoice_acceptance": null,
+      "partial_invoice": null
+    },
+    {
+      "id_quote": 101582,
+      "invoice_date": "03\/05\/2024",
+      "id": "101582",
+      "type_of_contract": "RFQ",
+      "total_price": "4,319.10",
+      "total_cost": "3,689.70",
+      "profit": "629.40",
+      "profit_percentage": "14.57",
+      "sales_commission": "18.31",
+      "total_profit": "611.09",
+      "total_profit_percentage": "14.15",
+      "invoice_acceptance": null,
+      "partial_invoice": null
+    }
+  ],
+  "typeOfContractData": [
+    {
+      "value": 35,
+      "type_of_contract": "RFQ",
+      "total_price": "65,382.18",
+      "color": "rgba(65, 67, 143, 1)"
+    },
+    {
+      "value": 1,
+      "type_of_contract": "Moving and Logistics",
+      "total_price": "85,396.68",
+      "color": "rgba(0, 86, 171, 1)"
+    },
+    {
+      "value": 3,
+      "type_of_contract": "RFP Installation",
+      "total_price": "1,962.32",
+      "color": "rgba(89, 186, 154, 1)"
+    },
+    {
+      "value": 3,
+      "type_of_contract": "RFP Maintenance",
+      "total_price": "109,883.60",
+      "color": "rgba(211, 80, 26, 1)"
+    }
+  ]
+}

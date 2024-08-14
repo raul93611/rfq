@@ -1,35 +1,32 @@
 <?php
 Conexion::abrir_conexion();
-$quote = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
+$conexion = Conexion::obtener_conexion();
+$quote = RepositorioRfq::obtener_cotizacion_por_id($conexion, $id_rfq);
 Conexion::cerrar_conexion();
-$shippings = explode('|', $quote-> obtener_fulfillment_shipping());
-$costs = explode('|', $quote-> obtener_fulfillment_shipping_cost());
+
+$shippings = explode('|', $quote->obtener_fulfillment_shipping() ?? '');
+$costs = explode('|', $quote->obtener_fulfillment_shipping_cost());
 ?>
 <div class="modal-body">
   <div class="row">
     <div class="shipping_container col-md-12">
-      <?php
-      foreach ($shippings as $key => $shipping) {
-        $cost = $costs[$key];
-        ?>
-        <div class="shipping<?php echo $key; ?>">
+      <?php foreach ($shippings as $key => $shipping) : ?>
+        <div class="shipping<?= htmlspecialchars($key); ?>">
           <div class="form-group">
-            <label for="fulfillment_shipping<?php echo $key; ?>">Description:</label>
-            <input type="hidden" name="fulfillment_shipping_original<?php echo $key; ?>" value="<?php echo $shipping; ?>">
-            <input type="text" class="form-control form-control-sm" id="fulfillment_shipping<?php echo $key; ?>" name="fulfillment_shipping<?php echo $key; ?>" value="<?php echo $shipping; ?>">
+            <label for="fulfillment_shipping<?= htmlspecialchars($key); ?>">Description:</label>
+            <input type="hidden" name="fulfillment_shipping_original<?= htmlspecialchars($key); ?>" value="<?= htmlspecialchars($shipping); ?>">
+            <input type="text" class="form-control form-control-sm" id="fulfillment_shipping<?= htmlspecialchars($key); ?>" name="fulfillment_shipping<?= htmlspecialchars($key); ?>" value="<?= htmlspecialchars($shipping); ?>">
           </div>
           <div class="form-group">
-            <label for="amount<?php echo $key; ?>">Amount:</label>
-            <input type="hidden" name="amount_original<?php echo $key; ?>" value="<?php echo $cost; ?>">
-            <input type="number" step=".01" id="amount<?php echo $key; ?>" class="form-control form-control-sm" name="amount<?php echo $key; ?>" value="<?php echo $cost; ?>">
+            <label for="amount<?= htmlspecialchars($key); ?>">Amount:</label>
+            <input type="hidden" name="amount_original<?= htmlspecialchars($key); ?>" value="<?= htmlspecialchars($costs[$key]); ?>">
+            <input type="number" step=".01" id="amount<?= htmlspecialchars($key); ?>" class="form-control form-control-sm" name="amount<?= htmlspecialchars($key); ?>" value="<?= htmlspecialchars($costs[$key]); ?>">
           </div>
         </div>
-        <?php
-      }
-      ?>
+      <?php endforeach; ?>
     </div>
   </div>
-  <input type="hidden" name="shipping_counter" value="<?php echo count($shippings) - 1; ?>">
+  <input type="hidden" name="shipping_counter" value="<?= count($shippings) - 1; ?>">
   <button type="button" class="add_shipping btn btn-warning" name="button"><i class="fas fa-plus"></i> Add</button>
   <button type="button" class="remove_shipping btn btn-warning" name="button"><i class="fas fa-minus"></i> Remove</button>
 </div>

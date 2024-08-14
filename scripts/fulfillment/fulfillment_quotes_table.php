@@ -1,23 +1,26 @@
 <?php
 header('Content-Type: application/json');
 
-$start = $_POST['start'];
-$length = $_POST['length'];
-$search = $_POST['search']['value'];
-$sort_column_index = $_POST['order'][0]['column'];
-$sort_direction = $_POST['order'][0]['dir'];
+$start = isset($_POST['start']) ? (int)$_POST['start'] : 0;
+$length = isset($_POST['length']) ? (int)$_POST['length'] : 10;
+$search = isset($_POST['search']['value']) ? $_POST['search']['value'] : '';
+$sort_column_index = isset($_POST['order'][0]['column']) ? (int)$_POST['order'][0]['column'] : 0;
+$sort_direction = isset($_POST['order'][0]['dir']) ? $_POST['order'][0]['dir'] : 'asc';
 
 Conexion::abrir_conexion();
-$quotes = RepositorioRfq::getFulfillmentQuotes(Conexion::obtener_conexion(), $start, $length, $search, $sort_column_index, $sort_direction);
-$total_records = RepositorioRfq::getTotalFulfillmentQuotesCount(Conexion::obtener_conexion());
-$total_filtered_records = RepositorioRfq::getTotalFilteredFulfillmentQuotesCount(Conexion::obtener_conexion(), $search);
+$connection = Conexion::obtener_conexion();
+
+$quotes = RepositorioRfq::getFulfillmentQuotes($connection, $start, $length, $search, $sort_column_index, $sort_direction);
+$total_records = RepositorioRfq::getTotalFulfillmentQuotesCount($connection);
+$total_filtered_records = RepositorioRfq::getTotalFilteredFulfillmentQuotesCount($connection, $search);
+
 Conexion::cerrar_conexion();
 
-$response = array(
-  "draw" => $_POST['draw'],
+$response = [
+  "draw" => isset($_POST['draw']) ? (int)$_POST['draw'] : 0,
   "recordsTotal" => $total_records,
   "recordsFiltered" => $total_filtered_records,
   "data" => $quotes
-);
+];
 
 echo json_encode($response);

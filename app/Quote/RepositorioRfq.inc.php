@@ -107,7 +107,7 @@ class RepositorioRfq {
   public static function array_to_object($sentence) {
     $objects = [];
     while ($result = $sentence->fetch(PDO::FETCH_ASSOC)) {
-      $objects[] = new Rfq($result['id'], $result['id_usuario'], $result['usuario_designado'], $result['canal'], $result['email_code'], $result['type_of_bid'], $result['issue_date'], $result['end_date'], $result['status'], $result['completado'], $result['total_cost'], $result['total_price'], $result['comments'], $result['award'], $result['fecha_completado'], $result['fecha_submitted'], $result['fecha_award'], $result['payment_terms'], $result['address'], $result['ship_to'], $result['expiration_date'], $result['ship_via'], $result['taxes'], $result['profit'], $result['additional'], $result['shipping'], $result['shipping_cost'], $result['fullfillment'], $result['fulfillment_date'], $result['contract_number'], $result['fulfillment_profit'], $result['services_fulfillment_profit'], $result['total_fulfillment'], $result['total_services_fulfillment'], $result['invoice'], $result['invoice_date'], $result['multi_year_project'], $result['submitted_invoice'], $result['submitted_invoice_date'], $result['fulfillment_pending'], $result['fulfillment_shipping_cost'], $result['fulfillment_shipping'], $result['type_of_contract'], $result['net30_fulfillment'], $result['net30_shipping'], $result['sales_commission'], $result['sales_commission_comment'], $result['services_payment_term'], $result['city'], $result['zip_code'], $result['state'], $result['client'], $result['deleted'], $result['set_side'], $result['poc'], $result['co'], $result['estimated_delivery_date'], $result['shipping_address'], $result['special_requirements'], $result['file_document'], $result['accounting'], $result['gsa'], $result['client_payment_terms']);
+      $objects[] = new Rfq($result['id'], $result['id_usuario'], $result['usuario_designado'], $result['canal'], $result['email_code'], $result['type_of_bid'], $result['issue_date'], $result['end_date'], $result['status'], $result['completado'], $result['total_cost'], $result['total_price'], $result['comments'], $result['award'], $result['fecha_completado'], $result['fecha_submitted'], $result['fecha_award'], $result['payment_terms'], $result['address'], $result['ship_to'], $result['expiration_date'], $result['ship_via'], $result['taxes'], $result['profit'], $result['additional'], $result['shipping'], $result['shipping_cost'], $result['fullfillment'], $result['fulfillment_date'], $result['contract_number'], $result['fulfillment_profit'], $result['services_fulfillment_profit'], $result['total_fulfillment'], $result['total_services_fulfillment'], $result['invoice'], $result['invoice_date'], $result['multi_year_project'], $result['submitted_invoice'], $result['submitted_invoice_date'], $result['fulfillment_pending'], $result['fulfillment_shipping_cost'], $result['fulfillment_shipping'], $result['type_of_contract'], $result['net30_fulfillment'], $result['net30_shipping'], $result['sales_commission'], $result['sales_commission_comment'], $result['services_payment_term'], $result['city'], $result['zip_code'], $result['state'], $result['client'], $result['deleted'], $result['set_side'], $result['poc'], $result['co'], $result['estimated_delivery_date'], $result['shipping_address'], $result['special_requirements'], $result['file_document'], $result['accounting'], $result['gsa'], $result['client_payment_terms'], $result['net30_fulfillment_services'], $result['bpa']);
     }
 
     return $objects;
@@ -115,7 +115,7 @@ class RepositorioRfq {
 
   public static function single_result_to_object($sentence) {
     $result = $sentence->fetch(PDO::FETCH_ASSOC);
-    $object = new Rfq($result['id'], $result['id_usuario'], $result['usuario_designado'], $result['canal'], $result['email_code'], $result['type_of_bid'], $result['issue_date'], $result['end_date'], $result['status'], $result['completado'], $result['total_cost'], $result['total_price'], $result['comments'], $result['award'], $result['fecha_completado'], $result['fecha_submitted'], $result['fecha_award'], $result['payment_terms'], $result['address'], $result['ship_to'], $result['expiration_date'], $result['ship_via'], $result['taxes'], $result['profit'], $result['additional'], $result['shipping'], $result['shipping_cost'], $result['fullfillment'], $result['fulfillment_date'], $result['contract_number'], $result['fulfillment_profit'], $result['services_fulfillment_profit'], $result['total_fulfillment'], $result['total_services_fulfillment'], $result['invoice'], $result['invoice_date'], $result['multi_year_project'], $result['submitted_invoice'], $result['submitted_invoice_date'], $result['fulfillment_pending'], $result['fulfillment_shipping_cost'], $result['fulfillment_shipping'], $result['type_of_contract'], $result['net30_fulfillment'], $result['sales_commission'], $result['sales_commission_comment'], $result['services_payment_term'], $result['city'], $result['zip_code'], $result['state'], $result['client'], $result['deleted'], $result['set_side'], $result['poc'], $result['co'], $result['estimated_delivery_date'], $result['shipping_address'], $result['special_requirements'], $result['file_document'], $result['accounting'], $result['gsa'], $result['client_payment_terms']);
+    $object = new Rfq($result['id'], $result['id_usuario'], $result['usuario_designado'], $result['canal'], $result['email_code'], $result['type_of_bid'], $result['issue_date'], $result['end_date'], $result['status'], $result['completado'], $result['total_cost'], $result['total_price'], $result['comments'], $result['award'], $result['fecha_completado'], $result['fecha_submitted'], $result['fecha_award'], $result['payment_terms'], $result['address'], $result['ship_to'], $result['expiration_date'], $result['ship_via'], $result['taxes'], $result['profit'], $result['additional'], $result['shipping'], $result['shipping_cost'], $result['fullfillment'], $result['fulfillment_date'], $result['contract_number'], $result['fulfillment_profit'], $result['services_fulfillment_profit'], $result['total_fulfillment'], $result['total_services_fulfillment'], $result['invoice'], $result['invoice_date'], $result['multi_year_project'], $result['submitted_invoice'], $result['submitted_invoice_date'], $result['fulfillment_pending'], $result['fulfillment_shipping_cost'], $result['fulfillment_shipping'], $result['type_of_contract'], $result['net30_fulfillment'], $result['sales_commission'], $result['sales_commission_comment'], $result['services_payment_term'], $result['city'], $result['zip_code'], $result['state'], $result['client'], $result['deleted'], $result['set_side'], $result['poc'], $result['co'], $result['estimated_delivery_date'], $result['shipping_address'], $result['special_requirements'], $result['file_document'], $result['accounting'], $result['gsa'], $result['client_payment_terms'], $result['net30_fulfillment_services'], $result['bpa']);
 
     return $object;
   }
@@ -136,6 +136,35 @@ class RepositorioRfq {
       }
     }
     return $data;
+  }
+
+  public static function getInvoiceAcceptance($connection, $id) {
+    if (isset($connection)) {
+      try {
+        $sql = "SELECT invoice_acceptance FROM rfq WHERE id = :id";
+        $sentence = $connection->prepare($sql);
+        $sentence->bindValue(':id', $id, PDO::PARAM_STR);
+        $sentence->execute();
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+
+    return $sentence->fetchColumn();
+  }
+
+  public static function updateInvoiceAcceptance($connection, $id, $invoice_acceptance) {
+    if (isset($connection)) {
+      try {
+        $sql = 'UPDATE rfq SET invoice_acceptance = :invoice_acceptance WHERE id = :id';
+        $sentence = $connection->prepare($sql);
+        $sentence->bindValue(':id', $id, PDO::PARAM_STR);
+        $sentence->bindValue(':invoice_acceptance', $invoice_acceptance, PDO::PARAM_STR);
+        $sentence->execute();
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
   }
 
   public static function getCreatedQuotesByChannel($conexion, $start, $length, $search, $sort_column_index, $sort_direction, $canal) {
@@ -578,12 +607,19 @@ class RepositorioRfq {
     }
   }
 
-  public static function set_sales_commission($conexion, $sales_commission, $sales_commission_comment, $id_rfq) {
+  public static function set_sales_commission($conexion, $invoice_date, $sales_commission, $sales_commission_comment, $id_rfq) {
     if (isset($conexion)) {
       try {
-        $sql = 'UPDATE rfq SET sales_commission = :sales_commission, sales_commission_comment = :sales_commission_comment WHERE id = :id_rfq';
+        $sql = "
+        UPDATE rfq SET 
+        invoice_date = STR_TO_DATE(:invoice_date, '%m/%d/%Y'), 
+        sales_commission = :sales_commission, 
+        sales_commission_comment = :sales_commission_comment 
+        WHERE id = :id_rfq
+        ";
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia->bindValue(':invoice_date', $invoice_date, PDO::PARAM_STR);
         $sentencia->bindValue(':sales_commission', $sales_commission, PDO::PARAM_STR);
         $sentencia->bindValue(':sales_commission_comment', $sales_commission_comment, PDO::PARAM_STR);
         $sentencia->execute();
@@ -629,6 +665,7 @@ class RepositorioRfq {
     $special_requirements,
     $gsa,
     $client_payment_terms,
+    $bpa,
     $id_rfq
   ) {
     $cotizacion_editada = false;
@@ -647,13 +684,14 @@ class RepositorioRfq {
         set_side = :set_side, 
         poc = :poc, 
         co = :co, 
-        estimated_delivery_date = :estimated_delivery_date, 
+        estimated_delivery_date = STR_TO_DATE(:estimated_delivery_date, '%m/%d/%Y'), 
         file_document = :file_document,
         accounting = :accounting,
         shipping_address = :shipping_address,
         special_requirements = :special_requirements,
         gsa = :gsa,
-        client_payment_terms = :client_payment_terms
+        client_payment_terms = :client_payment_terms,
+        bpa = :bpa
         WHERE id = :id_rfq
         ";
         $sentencia = $conexion->prepare($sql);
@@ -676,6 +714,7 @@ class RepositorioRfq {
         $sentencia->bindValue(':special_requirements', $special_requirements, PDO::PARAM_STR);
         $sentencia->bindValue(':gsa', $gsa, PDO::PARAM_STR);
         $sentencia->bindValue(':client_payment_terms', $client_payment_terms, PDO::PARAM_STR);
+        $sentencia->bindValue(':bpa', $bpa, PDO::PARAM_STR);
         $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia->execute();
         if ($sentencia) {
@@ -708,8 +747,8 @@ class RepositorioRfq {
     if (isset($conexion)) {
       try {
         $sql = "UPDATE rfq SET 
-        expiration_date = :expiration_date, 
-        fecha_completado = :fecha_completado, 
+        expiration_date = STR_TO_DATE(:expiration_date, '%m/%d/%Y'),
+        fecha_completado = STR_TO_DATE(:fecha_completado, '%m/%d/%Y'),
         address = :address, 
         ship_via = :ship_via, 
         type_of_bid = :type_of_bid, 
@@ -719,7 +758,7 @@ class RepositorioRfq {
         email_code = :email_code, 
         canal = :canal, 
         ship_to = :ship_to, 
-        comments = :comments 
+        comments = :comments
         WHERE id = :id_rfq
         ";
         $sentencia = $conexion->prepare($sql);
@@ -775,7 +814,7 @@ class RepositorioRfq {
       $quote = self::obtener_cotizacion_por_id($connection, $id_rfq);
       $items = RepositorioItem::obtener_items_por_id_rfq($connection, $id_rfq);
       $net30_fulfillment = $quote->obtener_total_price() * 0.029 * $quote->obtener_net30_fulfillment();
-      $total_cost += array_sum(explode('|', $quote->obtener_fulfillment_shipping_cost()));
+      $total_cost += array_sum(explode('|', $quote->obtener_fulfillment_shipping_cost() ?? ''));
       foreach ($items as $i => $item) {
         $total_profit += $item->obtener_fulfillment_profit();
         $total_cost += FulfillmentItemRepository::get_total_cost($connection, $item->obtener_id());
@@ -821,11 +860,14 @@ class RepositorioRfq {
     if (isset($connection)) {
       $total_cost = 0;
       $total_profit = 0;
+      $quote = self::obtener_cotizacion_por_id($connection, $id_rfq);
       $services = ServiceRepository::get_services($connection, $id_rfq);
+      $net30_fulfillment = $quote->getTotalQuoteServices() * 0.029 * $quote->getNet30FulfillmentServices();
       foreach ($services as $i => $service) {
         $total_profit += $service->get_fulfillment_profit();
         $total_cost += FulfillmentServiceRepository::get_total_cost($connection, $service->get_id());
       }
+      $total_cost += $net30_fulfillment;
       try {
         $sql = 'UPDATE rfq SET services_fulfillment_profit = :services_fulfillment_profit, total_services_fulfillment = :total_services_fulfillment WHERE id = :id_rfq';
         $sentence = $connection->prepare($sql);
@@ -1481,7 +1523,7 @@ class RepositorioRfq {
               r.client,
               r.shipping_address,
               r.special_requirements,
-              COALESCE(SUM(COALESCE(s.total_price, 0) + COALESCE(r.total_price, 0)),0) AS total_price
+              COALESCE(SUM(COALESCE(s.total_price, 0)) + COALESCE(r.total_price, 0),0) AS total_price
             FROM rfq r
               LEFT JOIN usuarios u ON r.usuario_designado = u.id
               LEFT JOIN services s ON r.id = s.id_rfq
@@ -1818,11 +1860,11 @@ class RepositorioRfq {
     return $rfq_editado;
   }
 
-  public static function check_invoice_and_date($conexion, $id_rfq) {
+  public static function check_invoice($conexion, $id_rfq) {
     $rfq_editado = false;
     if (isset($conexion)) {
       try {
-        $sql = 'UPDATE rfq SET invoice = 1, invoice_date = NOW() WHERE id = :id_rfq';
+        $sql = 'UPDATE rfq SET invoice = 1 WHERE id = :id_rfq';
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia->execute();
@@ -2014,6 +2056,20 @@ class RepositorioRfq {
     }
   }
 
+  public static function save_net_30_services($conexion, $id_rfq, $value) {
+    if (isset($conexion)) {
+      try {
+        $sql = 'UPDATE rfq SET net30_fulfillment_services = :net30_fulfillment_services WHERE id = :id_rfq';
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia->bindValue(':net30_fulfillment_services', $value, PDO::PARAM_STR);
+        $sentencia->execute();
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+  }
+
   public static function get_all_providers_name($connection, $id_rfq) {
     $providers_name = [];
     $items = RepositorioItem::obtener_items_por_id_rfq($connection, $id_rfq);
@@ -2033,5 +2089,183 @@ class RepositorioRfq {
     $providers_name = array_unique($providers_name);
     return $providers_name;
   }
+
+  public static function copyRfq($conexion, $id_rfq) {
+    $cotizacion = RepositorioRfq::obtener_cotizacion_por_id($conexion, $id_rfq);
+
+    // Create a copy of the RFQ
+    $cotizacion_copia = new Rfq(
+      '',
+      $_SESSION['user']->obtener_id(),
+      $cotizacion->obtener_usuario_designado(),
+      $cotizacion->obtener_canal(),
+      $cotizacion->obtener_email_code() . '(copia)',
+      $cotizacion->obtener_type_of_bid(),
+      $cotizacion->obtener_issue_date(),
+      $cotizacion->obtener_end_date(),
+      0,
+      0,
+      $cotizacion->obtener_total_cost(),
+      $cotizacion->obtener_total_price(),
+      $cotizacion->obtener_comments(),
+      0,
+      null,
+      null,
+      null,
+      $cotizacion->obtener_payment_terms(),
+      $cotizacion->obtener_address(),
+      $cotizacion->obtener_ship_to(),
+      null,
+      $cotizacion->obtener_ship_via(),
+      $cotizacion->obtener_taxes(),
+      $cotizacion->obtener_profit(),
+      $cotizacion->obtener_additional(),
+      $cotizacion->obtener_shipping(),
+      $cotizacion->obtener_shipping_cost(),
+      0,
+      null,
+      $cotizacion->obtener_contract_number(),
+      null,
+      null,
+      0,
+      0,
+      0,
+      null,
+      $id_rfq,
+      0,
+      null,
+      0,
+      0,
+      null,
+      null,
+      null,
+      null,
+      null,
+      'Net 30',
+      $cotizacion->obtener_city(),
+      $cotizacion->obtener_zip_code(),
+      $cotizacion->obtener_state(),
+      $cotizacion->obtener_client(),
+      0,
+      $cotizacion->getSetSide(),
+      $cotizacion->getPoc(),
+      $cotizacion->getCo(),
+      $cotizacion->getEstimatedDeliveryDate(),
+      $cotizacion->getShippingAddress(),
+      $cotizacion->getSpecialRequirements(),
+      $cotizacion->getFileDocument(),
+      $cotizacion->getAccounting(),
+      $cotizacion->getGsa(),
+      $cotizacion->getClientPaymentTerms(),
+      'Net 30',
+      $cotizacion->getBpa()
+    );
+
+    // Insert the copied RFQ
+    list($cotizacion_insertada, $id_rfq_copia) = RepositorioRfq::insertar_cotizacion($conexion, $cotizacion_copia);
+
+    // Log the action in the audit trail
+    AuditTrailRepository::quote_status_audit_trail($conexion, 'Copied', $id_rfq_copia);
+
+    return $id_rfq_copia;
+  }
+
+  public static function copyRfqFiles($id_rfq, $id_rfq_copia) {
+    $rfq_directory = $_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $id_rfq;
+    $rfq_copia_directory = $_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $id_rfq_copia;
+    Input::copy_files($rfq_directory, $rfq_copia_directory);
+  }
+
+  public static function copyItems($conexion, $id_rfq, $id_rfq_copia) {
+    $items = RepositorioItem::obtener_items_por_id_rfq($conexion, $id_rfq);
+
+    if (count($items)) {
+      foreach ($items as $item) {
+        $item_copia = new Item(
+          '',
+          $id_rfq_copia,
+          $item->obtener_id_usuario(),
+          $item->obtener_provider_menor(),
+          $item->obtener_brand(),
+          $item->obtener_brand_project(),
+          $item->obtener_part_number(),
+          $item->obtener_part_number_project(),
+          $item->obtener_description(),
+          $item->obtener_description_project(),
+          $item->obtener_quantity(),
+          $item->obtener_unit_price(),
+          $item->obtener_total_price(),
+          $item->obtener_comments(),
+          $item->obtener_website(),
+          $item->obtener_additional(),
+          $item->obtener_fulfillment_profit(),
+          $item->getIdRoom()
+        );
+
+        $item_copia_id = RepositorioItem::insertar_item($conexion, $item_copia);
+
+        // Copy subitems
+        $subitems = RepositorioSubitem::obtener_subitems_por_id_item($conexion, $item->obtener_id());
+        foreach ($subitems as $subitem) {
+          $subitem_copia = new Subitem(
+            '',
+            $item_copia_id,
+            $subitem->obtener_provider_menor(),
+            $subitem->obtener_brand(),
+            $subitem->obtener_brand_project(),
+            $subitem->obtener_part_number(),
+            $subitem->obtener_part_number_project(),
+            $subitem->obtener_description(),
+            $subitem->obtener_description_project(),
+            $subitem->obtener_quantity(),
+            $subitem->obtener_unit_price(),
+            $subitem->obtener_total_price(),
+            $subitem->obtener_comments(),
+            $subitem->obtener_website(),
+            $subitem->obtener_additional(),
+            $subitem->obtener_fulfillment_profit(),
+            $subitem->getIdRoom()
+          );
+          $subitem_copia_id = RepositorioSubitem::insertar_subitem($conexion, $subitem_copia);
+
+          // Copy provider subitems
+          $providers_subitem = RepositorioProviderSubitem::obtener_providers_subitem_por_id_subitem($conexion, $subitem->obtener_id());
+          foreach ($providers_subitem as $provider_subitem) {
+            $provider_subitem_copia = new ProviderSubitem(
+              '',
+              $subitem_copia_id,
+              $provider_subitem->obtener_provider(),
+              $provider_subitem->obtener_price()
+            );
+            RepositorioProviderSubitem::insertar_provider_subitem($conexion, $provider_subitem_copia);
+          }
+        }
+
+        // Copy providers
+        $providers = RepositorioProvider::obtener_providers_por_id_item($conexion, $item->obtener_id());
+        foreach ($providers as $provider) {
+          $provider_copia = new Provider(
+            '',
+            $item_copia_id,
+            $provider->obtener_provider(),
+            $provider->obtener_price()
+          );
+          RepositorioProvider::insertar_provider($conexion, $provider_copia);
+        }
+      }
+    }
+  }
+
+  public static function copyRfqData($conexion, $id_rfq) {
+    $quote = RepositorioRfq::obtener_cotizacion_por_id($conexion, $id_rfq);
+    $id_rfq_copia = RepositorioRfq::copyRfq($conexion, $id_rfq);
+    RepositorioRfq::copyRfqFiles($id_rfq, $id_rfq_copia);
+    RepositorioRfq::copyItems($conexion, $id_rfq, $id_rfq_copia);
+  
+    if($quote->isServices()){
+      ServiceRepository::copyServices($conexion, $id_rfq, $id_rfq_copia);
+    }
+  
+    return $id_rfq_copia;
+  }
 }
-?>

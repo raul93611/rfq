@@ -84,6 +84,9 @@ include_once 'plantillas/services/modals/edit_service_modal.inc.php';
 include_once 'modals/type_of_contract_modal.inc.php';
 include_once 'modals/sales_commission_modal.inc.php';
 include_once 'modals/link_quote_modal.inc.php';
+include_once 'modals/rooms/add_room_modal.inc.php';
+include_once 'modals/rooms/edit_room_modal.inc.php';
 ?>
 <script src="<?php echo RUTA_JS; ?>services.js"></script>
 <script src="<?php echo RUTA_JS; ?>quote.js"></script>
+<script src="<?php echo RUTA_JS; ?>rooms.js"></script>

@@ -6,7 +6,7 @@ $(document).ready(function () {
 
     $('#tabla_busqueda').DataTable({
       "destroy": true,
-      "searching": false,
+      "searching": true,
       "processing": true,
       "serverSide": true,
       "pageLength": 10,

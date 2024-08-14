@@ -3,7 +3,7 @@ class RepositorioItem {
   public static function insertar_item($conexion, $item) {
     if (isset($conexion)) {
       try {
-        $sql = 'INSERT INTO item(id_rfq, id_usuario, provider_menor, brand, brand_project, part_number, part_number_project, description, description_project, quantity, unit_price, total_price, comments, website, additional) VALUES(:id_rfq, :id_usuario, :provider_menor, :brand, :brand_project, :part_number, :part_number_project, :description, :description_project, :quantity, :unit_price, :total_price, :comments, :website, :additional)';
+        $sql = 'INSERT INTO item(id_rfq, id_usuario, provider_menor, brand, brand_project, part_number, part_number_project, description, description_project, quantity, unit_price, total_price, comments, website, additional, id_room) VALUES(:id_rfq, :id_usuario, :provider_menor, :brand, :brand_project, :part_number, :part_number_project, :description, :description_project, :quantity, :unit_price, :total_price, :comments, :website, :additional, :id_room)';
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindValue(':id_rfq', $item->obtener_id_rfq(), PDO::PARAM_STR);
         $sentencia->bindValue(':id_usuario', $item->obtener_id_usuario(), PDO::PARAM_STR);
@@ -20,6 +20,7 @@ class RepositorioItem {
         $sentencia->bindValue(':comments', $item->obtener_comments(), PDO::PARAM_STR);
         $sentencia->bindValue(':website', $item->obtener_website(), PDO::PARAM_STR);
         $sentencia->bindValue(':additional', $item->obtener_additional(), PDO::PARAM_STR);
+        $sentencia->bindValue(':id_room', $item->getIdRoom(), PDO::PARAM_STR);
         $resultado = $sentencia->execute();
         $id = $conexion->lastInsertId();
       } catch (PDOException $ex) {
@@ -59,7 +60,29 @@ class RepositorioItem {
         $resultado = $sentencia->fetchall(PDO::FETCH_ASSOC);
         if (count($resultado)) {
           foreach ($resultado as $fila) {
-            $items[] = new Item($fila['id'], $fila['id_rfq'], $fila['id_usuario'], $fila['provider_menor'], $fila['brand'], $fila['brand_project'], $fila['part_number'], $fila['part_number_project'], $fila['description'], $fila['description_project'], $fila['quantity'], $fila['unit_price'], $fila['total_price'], $fila['comments'], $fila['website'], $fila['additional'], $fila['fulfillment_profit']);
+            $items[] = new Item($fila['id'], $fila['id_rfq'], $fila['id_usuario'], $fila['provider_menor'], $fila['brand'], $fila['brand_project'], $fila['part_number'], $fila['part_number_project'], $fila['description'], $fila['description_project'], $fila['quantity'], $fila['unit_price'], $fila['total_price'], $fila['comments'], $fila['website'], $fila['additional'], $fila['fulfillment_profit'], $fila['id_room']);
+          }
+        }
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $items;
+  }
+
+  public static function getItemsByRoomId($conexion, $id_rfq, $id_room) {
+    $items = [];
+    if (isset($conexion)) {
+      try {
+        $sql = 'SELECT * FROM item WHERE id_rfq = :id_rfq AND id_room = :id_room';
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia->bindValue(':id_room', $id_room, PDO::PARAM_STR);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchall(PDO::FETCH_ASSOC);
+        if (count($resultado)) {
+          foreach ($resultado as $fila) {
+            $items[] = new Item($fila['id'], $fila['id_rfq'], $fila['id_usuario'], $fila['provider_menor'], $fila['brand'], $fila['brand_project'], $fila['part_number'], $fila['part_number_project'], $fila['description'], $fila['description_project'], $fila['quantity'], $fila['unit_price'], $fila['total_price'], $fila['comments'], $fila['website'], $fila['additional'], $fila['fulfillment_profit'], $fila['id_room']);
           }
         }
       } catch (PDOException $ex) {
@@ -94,11 +117,12 @@ class RepositorioItem {
     }
     $j = $i;
     Conexion::abrir_conexion();
+    $room = $item->getIdRoom() ? RoomRepository::getById(Conexion::obtener_conexion(), $item->getIdRoom()) : null;
     $providers = RepositorioProvider::obtener_providers_por_id_item(Conexion::obtener_conexion(), $item->obtener_id());
     Conexion::cerrar_conexion();
     echo '<tr id="item' . $item->obtener_id() . '">';
     echo '<td><a href="' . ADD_PROVIDER . '/' . $item->obtener_id() . '" class="btn btn-warning btn-block"><i class="fa fa-plus-circle"></i> Add Provider</a><br><a href="' . EDIT_ITEM . '/' . $item->obtener_id() . '" class="btn btn-warning btn-block"><i class="fa fa-edit"></i> Edit item</a><br><a href="' . DELETE_ITEM . '/' . $item->obtener_id() . '" class="delete_item_button btn btn-warning btn-block"><i class="fa fa-trash"></i> Delete</a><br><a href="' . ADD_SUBITEM . '/' . $item->obtener_id() . '" class="btn btn-warning btn-block"><i class="fa fa-plus-circle"></i> Add subitem</a></td>';
-    echo '<td>' . $numeracion . '</td>';
+    echo '<td>' . ($item->getIdRoom() ? '<span class="mb-2 badge badge-primary" style="background-color: ' . $room->getColor() . ';">' . $room->getName() . '</span>' : '' ) . $numeracion . '</td>';
     if (strlen($item->obtener_description_project()) >= 100) {
       echo '<td><b>Brand:</b> ' . $item->obtener_brand_project() . '<br><b>Part #:</b> ' . $item->obtener_part_number_project() . '<br><b>Description:</b> ' . nl2br(mb_substr($item->obtener_description_project(), 0, 100)) . ' ...</td>';
     } else {
@@ -162,6 +186,7 @@ class RepositorioItem {
     $cotizacion = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
     $items = self::obtener_items_por_id_rfq(Conexion::obtener_conexion(), $id_rfq);
     $re_quote_exists = ReQuoteRepository::re_quote_exists(Conexion::obtener_conexion(), $id_rfq);
+    $rooms = RoomRepository::getAll(Conexion::obtener_conexion(), $id_rfq);
     Conexion::cerrar_conexion();
 ?>
     <br>
@@ -193,6 +218,11 @@ class RepositorioItem {
             <a class="dropdown-item" href="<?php echo PROPOSAL_GSA . '/' . $cotizacion->obtener_id(); ?>" target="_blank">GSA Proposal</a>
         <?php
           }
+        }
+        if(count($rooms)){
+          ?>
+            <a class="dropdown-item" href="<?php echo PROPOSAL_ROOM . '/' . $cotizacion->obtener_id(); ?>" target="_blank">Proposal by Room</a>
+          <?php
         }
         ?>
       </div>
@@ -339,7 +369,7 @@ class RepositorioItem {
         $sentencia->execute();
         $resultado = $sentencia->fetch();
         if (!empty($resultado)) {
-          $item = new Item($resultado['id'], $resultado['id_rfq'], $resultado['id_usuario'], $resultado['provider_menor'], $resultado['brand'], $resultado['brand_project'], $resultado['part_number'], $resultado['part_number_project'], $resultado['description'], $resultado['description_project'], $resultado['quantity'], $resultado['unit_price'], $resultado['total_price'], $resultado['comments'], $resultado['website'], $resultado['additional'], $resultado['fulfillment_profit']);
+          $item = new Item($resultado['id'], $resultado['id_rfq'], $resultado['id_usuario'], $resultado['provider_menor'], $resultado['brand'], $resultado['brand_project'], $resultado['part_number'], $resultado['part_number_project'], $resultado['description'], $resultado['description_project'], $resultado['quantity'], $resultado['unit_price'], $resultado['total_price'], $resultado['comments'], $resultado['website'], $resultado['additional'], $resultado['fulfillment_profit'], $resultado['id_room']);
         }
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
@@ -348,11 +378,11 @@ class RepositorioItem {
     return $item;
   }
 
-  public static function actualizar_item($conexion, $id_item, $brand, $brand_project, $part_number, $part_number_project, $description, $description_project, $quantity, $comments, $website) {
+  public static function actualizar_item($conexion, $id_item, $brand, $brand_project, $part_number, $part_number_project, $description, $description_project, $quantity, $comments, $website, $id_room) {
     $item_editado = false;
     if (isset($conexion)) {
       try {
-        $sql = 'UPDATE item SET brand = :brand, brand_project = :brand_project, part_number = :part_number, part_number_project = :part_number_project, description = :description, description_project = :description_project, quantity = :quantity, comments = :comments, website = :website WHERE id = :id_item';
+        $sql = 'UPDATE item SET brand = :brand, brand_project = :brand_project, part_number = :part_number, part_number_project = :part_number_project, description = :description, description_project = :description_project, quantity = :quantity, comments = :comments, website = :website, id_room = :id_room WHERE id = :id_item';
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindValue(':brand', $brand, PDO::PARAM_STR);
         $sentencia->bindValue(':brand_project', $brand_project, PDO::PARAM_STR);
@@ -364,6 +394,7 @@ class RepositorioItem {
         $sentencia->bindValue(':comments', $comments, PDO::PARAM_STR);
         $sentencia->bindValue(':website', $website, PDO::PARAM_STR);
         $sentencia->bindValue(':id_item', $id_item, PDO::PARAM_STR);
+        $sentencia->bindValue(':id_room', $id_room, PDO::PARAM_STR);
         $sentencia->execute();
         if ($sentencia) {
           $item_editado = true;

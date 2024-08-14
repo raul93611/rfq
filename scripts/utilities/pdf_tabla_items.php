@@ -1,27 +1,45 @@
 <?php
+// Open the database connection
 Conexion::abrir_conexion();
-$cotizacion = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
-$usuario_designado = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), $cotizacion->obtener_usuario_designado());
-$items = RepositorioItem::obtener_items_por_id_rfq(Conexion::obtener_conexion(), $id_rfq);
-Conexion::cerrar_conexion();
-$partes_fecha_completado = explode('-', $cotizacion->obtener_fecha_completado());
-$fecha_completado = $partes_fecha_completado[1] . '/' . $partes_fecha_completado[2] . '/' . $partes_fecha_completado[0];
-$partes_expiration_date = explode('-', $cotizacion->obtener_expiration_date());
-$expiration_date = $partes_expiration_date[1] . '/' . $partes_expiration_date[2] . '/' . $partes_expiration_date[0];
+$conexion = Conexion::obtener_conexion();
 
+try {
+  // Fetch necessary data
+  $cotizacion = RepositorioRfq::obtener_cotizacion_por_id($conexion, $id_rfq);
+  $usuario_designado = RepositorioUsuario::obtener_usuario_por_id($conexion, $cotizacion->obtener_usuario_designado());
+  $items = RepositorioItem::obtener_items_por_id_rfq($conexion, $id_rfq);
+} finally {
+  // Ensure the database connection is closed
+  Conexion::cerrar_conexion();
+}
+
+// Format dates
+$fecha_completado = date("m/d/Y", strtotime($cotizacion->obtener_fecha_completado()));
+$expiration_date = date("m/d/Y", strtotime($cotizacion->obtener_expiration_date()));
+
+// Initialize PDF generator
 $pdfGenerator = new PDFGenerator(true);
 
-ob_start();
+try {
+  // Start output buffering
+  ob_start();
 
-require_once 'herramientas/pdfTemplates/items_table.inc.php';
+  // Generate HTML content for the PDF
+  include 'herramientas/pdfTemplates/items_table.inc.php';
+  $html = ob_get_clean();
 
-$html = ob_get_clean();
+  // Set PDF footer
+  $pdfGenerator->setFooter('
+        <div class="color letra_chiquita" style="text-align:center;">
+        EIN: 51-0629765, DUNS: 786-965876, CAGE: 4QTF4<br>SBA 8(a) and HUBZone certified
+        </div>
+    ');
 
-$pdfGenerator->setFooter('
-  <div class="color letra_chiquita" style="text-align:center;">
-  EIN: 51-0629765, DUNS: 786-965876, CAGE:4QTF4<br>SBA 8(a) and HUBZone certified
-  </div>
-');
-
-$pdfGenerator->generatePDF($html);
-$pdfGenerator->display(preg_replace('/[^a-z0-9-_\-\.]/i', '_', $cotizacion->obtener_email_code()) . '(items_table).pdf');
+  // Generate and display the PDF
+  $pdfGenerator->generatePDF($html);
+  $pdfFileName = sprintf('%s(items_table).pdf', Input::sanitize_filename($cotizacion->obtener_email_code()));
+  $pdfGenerator->display($pdfFileName);
+} catch (Exception $e) {
+  // Handle PDF generation errors
+  echo 'Error generating PDF: ' . $e->getMessage();
+}

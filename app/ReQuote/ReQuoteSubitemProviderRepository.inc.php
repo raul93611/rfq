@@ -26,7 +26,7 @@ class ReQuoteSubitemProviderRepository{
         $result = $sentence-> fetchAll(PDO::FETCH_ASSOC);
         if(count($result)){
           foreach ($result as $key => $row) {
-            $re_quote_subitem_providers[] = new ReQuoteSubitemProvider($row['id'], $row['id_re_quote_item'], $row['provider'], $row['price']);
+            $re_quote_subitem_providers[] = new ReQuoteSubitemProvider($row['id'], $row['id_re_quote_subitem'], $row['provider'], $row['price']);
           }
         }
       }catch(PDOException $ex){

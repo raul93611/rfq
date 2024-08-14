@@ -235,6 +235,7 @@ $(document).ready(function () {
         $('<th>').text('PROVIDER').appendTo(headerRow);
         $('<th>').text('REAL COST').appendTo(headerRow);
         $('<th>').text('PAYMENT TERMS').appendTo(headerRow);
+        $('<th>').text('TRANSACTION DATE').appendTo(headerRow);
 
         columns = [
           {
@@ -249,7 +250,78 @@ $(document).ready(function () {
           },
           { "data": "provider" },
           { "data": "real_cost" },
-          { "data": "payment_term" }
+          { "data": "payment_term" },
+          { "data": "transaction_date" }
+        ];
+        break;
+      case 'sales-commission':
+        $table = $('<table>').attr('id', 'reportsTable').attr('class', 'table table-bordered table-hover');
+        $('#report_results_container').append($table);
+        headerRow = $('<tr>').appendTo($('<thead>').appendTo($table));
+        $('<th>').text('PROPOSAL').appendTo(headerRow);
+        $('<th>').text('INVOICE DATE').appendTo(headerRow);
+        $('<th>').text('CONTRACT NUMBER').appendTo(headerRow);
+        $('<th>').text('DESIGNATED USER').appendTo(headerRow);
+        $('<th>').text('STATE').appendTo(headerRow);
+        $('<th>').text('CLIENT').appendTo(headerRow);
+        $('<th>').attr('class', 'bg-primary').text('TOTAL COST').appendTo(headerRow);
+        $('<th>').attr('class', 'bg-primary').text('TOTAL PRICE').appendTo(headerRow);
+        $('<th>').attr('class', 'bg-primary').text('PROFIT').appendTo(headerRow);
+        $('<th>').attr('class', 'bg-warning').text('TOTAL COST').appendTo(headerRow);
+        $('<th>').attr('class', 'bg-warning').text('TOTAL PRICE').appendTo(headerRow);
+        $('<th>').attr('class', 'bg-warning').text('PROFIT RFQ').appendTo(headerRow);
+        $('<th>').attr('class', 'bg-warning').text('PROFIT RFP').appendTo(headerRow);
+        $('<th>').attr('class', 'bg-warning').text('PROFIT %').appendTo(headerRow);
+        $('<th>').attr('class', 'bg-danger').text('TOTAL COST').appendTo(headerRow);
+        $('<th>').attr('class', 'bg-danger').text('TOTAL PRICE').appendTo(headerRow);
+        $('<th>').attr('class', 'bg-danger').text('PROFIT RFQ').appendTo(headerRow);
+        $('<th>').attr('class', 'bg-danger').text('PROFIT RFP').appendTo(headerRow);
+        $('<th>').attr('class', 'bg-danger').text('PROFIT %').appendTo(headerRow);
+        $('<th>').text('TYPE OF CONTRACT').appendTo(headerRow);
+        $('<th>').text('SALES COMMISSION').appendTo(headerRow);
+        $('<th>').text('SALES COMMISSION ($)').appendTo(headerRow);
+
+        columns = [
+          {
+            "data": "id",
+            "render": function (data, type, row, meta) {
+              if (type === 'display') {
+                return '<a href="/rfq/perfil/quote/editar_cotizacion/' + data + '">' + data + '</a>';
+              } else {
+                return data;
+              }
+            }
+          },
+          { "data": "invoice_date" },
+          { "data": "contract_number" },
+          { "data": "nombre_usuario" },
+          { "data": "state" },
+          { "data": "client" },
+          {
+            "data": "total_cost",
+            "visible": false
+          },
+          {
+            "data": "total_price",
+            "visible": false
+          },
+          {
+            "data": "profit",
+            "visible": false
+          },
+          { "data": "total_cost_requote" },
+          { "data": "total_price_requote" },
+          { "data": "profit_equipment_requote" },
+          { "data": "profit_service_requote" },
+          { "data": "profit_requote_percentage" },
+          { "data": "total_cost_fulfillment" },
+          { "data": "total_price_fulfillment" },
+          { "data": "profit_equipment_fulfillment" },
+          { "data": "profit_service_fulfillment" },
+          { "data": "profit_fulfillment_percentage" },
+          { "data": "type_of_contract" },
+          { "data": "sales_commission" },
+          { "data": "sales_commission_amount" }
         ];
         break;
       default:

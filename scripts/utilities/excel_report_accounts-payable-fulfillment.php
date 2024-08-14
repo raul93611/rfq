@@ -1,36 +1,50 @@
 <?php
-use PhpOffice\PhpSpreadsheet\Helper\Sample;
-use PhpOffice\PhpSpreadsheet\IOFactory;
+require 'vendor/autoload.php';
+
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
-require_once 'vendor_excel/phpoffice/phpspreadsheet/src/Bootstrap.php';
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-$spreadsheet = new Spreadsheet();
-$spreadsheet->getProperties()->setCreator('E-logic.Inc')
-    ->setLastModifiedBy('E-logic')
-    ->setTitle('AccountsPayableFulfillmentReport')
-    ->setSubject('AccountsPayableFulfillmentReport')
-    ->setDescription('AccountsPayableFulfillmentReport')
-    ->setKeywords('AccountsPayableFulfillmentReport')
-    ->setCategory('AccountsPayableFulfillmentReport');
+function createSpreadsheet() {
+  $spreadsheet = new Spreadsheet();
+  $activeWorksheet = $spreadsheet->getActiveSheet();
 
-$spreadsheet->setActiveSheetIndex(0);
+  // Setup headers
+  $headers = ['A1' => 'PROPOSAL', 'B1' => 'PROVIDER', 'C1' => 'REAL COST', 'D1' => 'PAYMENT TERM', 'E1' => 'TRANSACTION DATE'];
+  foreach ($headers as $cell => $header) {
+    $activeWorksheet->setCellValue($cell, $header);
+  }
 
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('A1', 'PROPOSAL');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('B1', 'PROVIDER');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('C1', 'REAL COST');
-$spreadsheet->setActiveSheetIndex(0)->setCellValue('D1', 'PAYMENT TERM');
+  return $spreadsheet;
+}
 
-Conexion::abrir_conexion();
-ExcelRepository::accountsPayableFulfillmentReport(Conexion::obtener_conexion(), $_POST['type'], $_POST['quarter'], $_POST['month'], $_POST['year'], $spreadsheet);
-Conexion::cerrar_conexion();
+function fetchAndFillData($spreadsheet, $type, $quarter, $month, $year) {
+  try {
+    Conexion::abrir_conexion();
+    $conexion = Conexion::obtener_conexion();
 
-$spreadsheet->setActiveSheetIndex(0);
+    ExcelRepository::accountsPayableFulfillmentReport($conexion, $type, $quarter, $month, $year, $spreadsheet->getActiveSheet());
+  } catch (Exception $e) {
+    echo 'Error fetching data: ' . $e->getMessage();
+  } finally {
+    Conexion::cerrar_conexion();
+  }
+}
 
-header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-header('Content-Disposition: attachment;filename="AccountsPayableFulfillmentReport.xlsx"');
-header('Cache-Control: max-age=0');
+function outputSpreadsheet($spreadsheet) {
+  $writer = new Xlsx($spreadsheet);
 
-$writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
-$writer->save('php://output');
-exit;
-?>
+  header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+  header('Content-Disposition: attachment;filename="AccountsPayableFulfillmentReport.xlsx"');
+  header('Cache-Control: max-age=0');
+
+  $writer->save('php://output');
+}
+
+// Ensure required POST parameters are set
+if (isset($_POST['type'], $_POST['quarter'], $_POST['month'], $_POST['year'])) {
+  $spreadsheet = createSpreadsheet();
+  fetchAndFillData($spreadsheet, $_POST['type'], $_POST['quarter'], $_POST['month'], $_POST['year']);
+  outputSpreadsheet($spreadsheet);
+} else {
+  echo 'Error: Missing required POST parameters.';
+}

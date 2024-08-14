@@ -1,21 +1,30 @@
 <?php
 header('Content-Type: application/json');
+
 $path = $_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $id_rfq;
-if (is_dir($path)) {
-  $gestor = opendir($path);
-  $carpeta = @scandir($path);
-  if(count($carpeta) <= 2){
-  }
-  $archivos = [];
-  while (($archivo = readdir($gestor)) !== false) {
-    $ruta_completa = $path . "/" . $archivo;
-    if ($archivo != "." && $archivo != "..") {
-      $archivos[] = $archivo;
+$archivos = [];
+
+try {
+  if (is_dir($path)) {
+    if ($gestor = opendir($path)) {
+      while (($archivo = readdir($gestor)) !== false) {
+        if ($archivo !== "." && $archivo !== "..") {
+          $archivos[] = $archivo;
+        }
+      }
+      closedir($gestor);
+    } else {
+      throw new Exception("Failed to open directory: $path");
     }
+  } else {
+    throw new Exception("Directory does not exist: $path");
   }
-  closedir($gestor);
+} catch (Exception $e) {
+  // Print the exception message
+  print "Error: " . $e->getMessage();
+  exit;
 }
+
 echo json_encode(array(
   'files' => $archivos,
 ));
-?>

@@ -20,10 +20,10 @@ $printable_channel = Input::printable_channel($channel);
         <section class="col-12">
           <div class="card card-primary">
             <div class="card-header">
-              <h3 class="card-title"><?php echo $printable_channel; ?></h3>
+              <h3 class="card-title"><?= $printable_channel; ?></h3>
             </div>
             <div class="card-body">
-              <table id="completed_table" data-channel="<?php echo $channel; ?>" class="table table-bordered table-hover">
+              <table id="completed_table" data-channel="<?= $channel; ?>" class="table table-bordered table-hover">
                 <thead>
                   <tr>
                     <th>PROPOSAL</th>
