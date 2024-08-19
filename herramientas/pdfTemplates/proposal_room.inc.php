@@ -12,6 +12,11 @@
       background-color: #DEE8F2;
     }
 
+    .room{
+      color: #004A97;
+      background-color: #CFD9E3 !important;
+    }
+
     #tabla th,
     #tabla td {
       border: 1px solid #DEE8F2;
@@ -113,9 +118,10 @@
   </table>
   <br>
   <?php foreach ($rooms as $key => $room) : ?>
-    <span class="color letra_grande"><?= strtoupper($room->getName()) ?></span>
-    <br>
     <table id="tabla" style="width:100%">
+      <tr>
+        <th class="room" colspan="5"><?= strtoupper($room->getName()) ?></th>
+      </tr>
       <tr>
         <th class="quantity">#</th>
         <th>DESCRIPTION</th>
