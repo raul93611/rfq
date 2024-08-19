@@ -79,7 +79,8 @@ if (isset($_POST['registrar_cotizacion'])) {
       null,
       null,
       'Net 30',
-      null
+      null,
+      Input::test_input($_POST["reference_url"])
     );
     list($cotizacion_insertada, $id_rfq) = RepositorioRfq::insertar_cotizacion(Conexion::obtener_conexion(), $cotizacion);
     AuditTrailRepository::quote_status_audit_trail(Conexion::obtener_conexion(), 'Created', $id_rfq);

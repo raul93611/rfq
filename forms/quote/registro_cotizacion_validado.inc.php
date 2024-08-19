@@ -69,6 +69,10 @@
     </div>
   </div>
   <div class="form-group">
+    <label for="reference_url">Reference URL:</label>
+    <input type="text" class="form-control form-control-sm" id="reference_url" name="reference_url" placeholder="Reference URL">
+  </div>
+  <div class="form-group">
     <input type="file" id="archivos_crear" multiple name="documentos[]">
   </div>
 </div>

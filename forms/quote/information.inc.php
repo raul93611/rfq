@@ -61,6 +61,10 @@
         <input type="hidden" name="expiration_date_original" value="<?= $quote->obtener_expiration_date() ? RepositorioComment::mysql_date_to_english_format($quote->obtener_expiration_date()) : ''; ?>">
       </div>
       <div class="form-group">
+        <label for="reference_url">Reference URL:</label>
+        <input type="text" class="form-control form-control-sm" id="reference_url" name="reference_url" value="<?= $quote->getReferenceUrl(); ?>">
+      </div>
+      <div class="form-group">
         <label for="comments">Comments:</label>
         <select id="comments" class="form-control form-control-sm" name="comments">
           <option <?= $quote->obtener_comments() == 'No comments' ? 'selected' : ''; ?>>No comments</option>

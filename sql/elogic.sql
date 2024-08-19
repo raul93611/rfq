@@ -83,6 +83,7 @@ CREATE TABLE rfq(
   net30_fulfillment_services TINYINT,
   invoice_acceptance TEXT CHARACTER SET utf8,
   bpa TINYINT,
+  reference_url VARCHAR(255),
   PRIMARY KEY(id),
   FOREIGN KEY(id_usuario) REFERENCES usuarios(id) ON UPDATE CASCADE ON DELETE RESTRICT
 );

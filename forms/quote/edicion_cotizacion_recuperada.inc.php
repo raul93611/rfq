@@ -42,6 +42,14 @@
           <?= $cotizacion_recuperada->obtener_client(); ?>
         </div>
       </div>
+      <div class="row">
+        <div class="col-md-4">
+          <b>Reference URL:</b>
+        </div>
+        <div class="col-md-8">
+          <a target="_blank" href="<?= $cotizacion_recuperada->getReferenceUrl() ?>"><?= $cotizacion_recuperada->getReferenceUrl() ?></a>
+        </div>
+      </div>
     </div>
     <div class="col-md-6">
       <div class="row">
