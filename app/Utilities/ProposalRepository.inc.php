@@ -39,13 +39,15 @@ class ProposalRepository{
     Conexion::abrir_conexion();
     $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Conexion::obtener_conexion(), $item-> obtener_id());
     Conexion::cerrar_conexion();
+    $subitems_total = 0;
     if(count($subitems)){
       foreach ($subitems as $i => $subitem) {
         $html .= self::print_subitem($subitem, $limit);
+        $subitems_total += $subitem->obtener_total_price();
       }
     }
 
-    return $html;
+    return [$html, $subitems_total];
   }
 
   public static function print_subitem($subitem, $limit){
