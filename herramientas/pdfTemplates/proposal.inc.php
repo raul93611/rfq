@@ -140,7 +140,7 @@
     $limit = 400;
     if (count($items)) {
       foreach ($items as $i => $item) {
-        echo ProposalRepository::print_item($item, $limit, $a);
+        echo ProposalRepository::print_item($item, $limit, $a)[0];
         $a++;
       }
     }
