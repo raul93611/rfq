@@ -493,7 +493,10 @@ class RepositorioRfq {
         canal = :canal AND 
         completado = 1 AND 
         status = 1 AND 
-        award = 1 
+        award = 1 AND
+        rfq.fullfillment = 0 AND
+        rfq.invoice = 0 AND
+        rfq.submitted_invoice = 0
         AND (comments = "Working on it" OR comments = "No comments")';
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindValue(':canal', $canal, PDO::PARAM_STR);
@@ -516,7 +519,10 @@ class RepositorioRfq {
         canal = :canal AND 
         completado = 1 AND 
         rfq.status = 1 AND 
-        award = 1 
+        award = 1 AND
+        rfq.fullfillment = 0 AND
+        rfq.invoice = 0 AND
+        rfq.submitted_invoice = 0
         AND (comments = "Working on it" OR comments = "No comments") AND 
         (rfq.id LIKE :search OR nombre_usuario LIKE :search OR rfq.type_of_bid LIKE :search OR rfq.email_code LIKE :search)';
         $sentencia = $conexion->prepare($sql);
