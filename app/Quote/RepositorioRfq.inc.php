@@ -463,7 +463,10 @@ class RepositorioRfq {
         rfq.canal = :canal AND 
         rfq.completado = 1 AND 
         rfq.status = 1 AND 
-        rfq.award = 1 
+        rfq.award = 1 AND
+        rfq.fullfillment = 0 AND
+        rfq.invoice = 0 AND
+        rfq.submitted_invoice = 0
         AND (rfq.comments = 'Working on it' OR rfq.comments = 'No comments') AND 
         (rfq.id LIKE :search OR nombre_usuario LIKE :search OR rfq.type_of_bid LIKE :search OR rfq.email_code LIKE :search) 
         ORDER BY $sort_column $sort_direction LIMIT $start, $length";
