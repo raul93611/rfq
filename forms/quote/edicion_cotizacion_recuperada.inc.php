@@ -86,6 +86,9 @@
     <div class="col-md-12">
       <label>Documents:</label>
       <input type="file" id="archivos_ejemplo" multiple name="archivos_ejemplo[]">
+      <button id="download-all" class="mt-3 btn btn-success">
+        <i class="fa fa-download"></i> Download All
+      </button>
     </div>
   </div>
   <?php

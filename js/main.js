@@ -1,4 +1,5 @@
 $(document).ready(function () {
+  const idRfq = $('[name="id_rfq"]').val();
   /***********************************VARIABLES INICIALES PARA EL BORRADO*********************/
   var link_to_delete;
   var alert_delete_system = $('#alert_delete_system');
@@ -96,6 +97,34 @@ $(document).ready(function () {
       }
     });
   }
+
+  $("#download-all").on("click", function (e) {
+    e.preventDefault();
+    
+    // Send an AJAX request to the server to zip the files and return the download URL
+    $.ajax({
+      url: '/rfq/quote/download_all', // Server-side script to handle zipping
+      type: 'POST',
+      data: {
+        idRfq: idRfq // Send the unique folder ID to the server
+      },
+      success: function (response) {
+        // Check if the response contains an error message
+        if (response.error) {
+          console.error("Error:", response.error);
+        } else if (response.downloadUrl) {
+          // If no error, redirect to the download URL
+          window.location.href = response.downloadUrl;
+        } else {
+          console.error("Unexpected response from server.");
+        }
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        // Handle any AJAX errors
+        console.error("AJAX request failed:", textStatus, errorThrown);
+      }
+    });
+  });
   /*********************AUDIT TRAILS*********************************************/
   $('.audit_trail').click(function () {
     $('#audit_trails_modal').modal('hide');

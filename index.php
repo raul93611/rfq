@@ -282,6 +282,9 @@ switch ($partes_ruta[1] ?? null) {
         $archivo = $partes_ruta[4];
         $ruta_elegida = 'scripts/utilities/delete_document.php';
         break;
+      case 'download_all':
+        $ruta_elegida = 'scripts/utilities/download_all.php';
+        break;
       default:
         break;
     }
