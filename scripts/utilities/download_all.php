@@ -22,7 +22,7 @@ try {
 
   // Define the ZIP file name and path
   $zipFileName = 'files_' . $idRfq . '.zip';
-  $zipFilePath = $_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $idRfq . '/' . $zipFileName; // Path where the ZIP file will be saved
+  $zipFilePath = $_SERVER['DOCUMENT_ROOT'] . '/rfq/tmp/zips/' . $zipFileName; // Path where the ZIP file will be saved
 
   $zip = new ZipArchive();
 
@@ -47,7 +47,7 @@ try {
   $zip->close();
 
   // Set the download URL in the response
-  $response['downloadUrl'] = '/rfq/documentos/' . $idRfq . '/' . $zipFileName;
+  $response['downloadUrl'] = '/rfq/tmp/zips/' . $zipFileName;
 } catch (Exception $e) {
   // Handle any exceptions by returning an error message
   http_response_code(400); // Bad request
