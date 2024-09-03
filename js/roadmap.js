@@ -60,8 +60,8 @@ $(document).ready(function () {
         item: "top"
       },
     };
-    const groups = new vis.DataSet(res.personnel);
-    const items = new vis.DataSet(res.events);
+    const groups = new vis.DataSet(res.data.personnel);
+    const items = new vis.DataSet(res.data.events);
 
     const container = document.getElementById('roadmap');
     timeline = new vis.Timeline(container, null, options);
@@ -127,8 +127,8 @@ $(document).ready(function () {
       },
       type: 'POST',
       success: function (res) {
-        const groups = new vis.DataSet(res.personnel);
-        const items = new vis.DataSet(res.events);
+        const groups = new vis.DataSet(res.data.personnel);
+        const items = new vis.DataSet(res.data.events);
         timeline.setGroups(groups);
         timeline.setItems(items);
       }

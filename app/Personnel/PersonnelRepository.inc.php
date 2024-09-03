@@ -100,17 +100,29 @@ class PersonnelRepository {
   public static function save($connection, $personnel) {
     if (isset($connection)) {
       try {
-        $sql = 'INSERT INTO personnel(name, criteria, id_type_of_project) VALUES(:name, :criteria, :id_type_of_project)';
-        $sentence = $connection->prepare($sql);
-        $sentence->bindValue(':name', $personnel->getName(), PDO::PARAM_STR);
-        $sentence->bindValue(':criteria', $personnel->getCriteria(), PDO::PARAM_STR);
-        $sentence->bindValue(':id_type_of_project', $personnel->getIdTypeOfProject(), PDO::PARAM_STR);
-        $sentence->execute();
+        // Prepare the SQL statement
+        $sql = 'INSERT INTO personnel (name, criteria, id_type_of_project) 
+                    VALUES (:name, :criteria, :id_type_of_project)';
+        $statement = $connection->prepare($sql);
+
+        // Bind values to the SQL statement with appropriate data types
+        $statement->bindValue(':name', $personnel->getName(), PDO::PARAM_STR);
+        $statement->bindValue(':criteria', $personnel->getCriteria(), PDO::PARAM_STR);
+        $statement->bindValue(':id_type_of_project', $personnel->getIdTypeOfProject(), PDO::PARAM_INT);
+
+        // Execute the statement and return true if successful
+        return $statement->execute();
       } catch (PDOException $ex) {
-        print 'ERROR:' . $ex->getMessage() . '<br>';
+        // Print the error message and return false
+        print 'ERROR: ' . $ex->getMessage() . '<br>';
+        return false;
       }
     }
+
+    // Return false if the connection is not set
+    return false;
   }
+
 
   public static function getById($connection, $id) {
     $item = null;
@@ -129,33 +141,55 @@ class PersonnelRepository {
   }
 
   public static function update($connection, $name, $criteria, $id_type_of_project, $id) {
-    if (isset($connection)) {
-      try {
-        $sql = 'UPDATE personnel SET name = :name, criteria = :criteria, id_type_of_project = :id_type_of_project WHERE id = :id';
-        $sentence = $connection->prepare($sql);
-        $sentence->bindValue(':name', $name, PDO::PARAM_STR);
-        $sentence->bindValue(':criteria', $criteria, PDO::PARAM_STR);
-        $sentence->bindValue(':id_type_of_project', $id_type_of_project, PDO::PARAM_STR);
-        $sentence->bindValue(':id', $id, PDO::PARAM_STR);
-        $sentence->execute();
-      } catch (PDOException $ex) {
-        print 'ERROR:' . $ex->getMessage() . '<br>';
-      }
+    if (!isset($connection)) {
+      return false; // Connection is not set
+    }
+
+    try {
+      // Prepare the SQL statement
+      $sql = 'UPDATE personnel 
+                SET name = :name, criteria = :criteria, id_type_of_project = :id_type_of_project 
+                WHERE id = :id';
+      $statement = $connection->prepare($sql);
+
+      // Bind values to the SQL statement with appropriate data types
+      $statement->bindValue(':name', $name, PDO::PARAM_STR);
+      $statement->bindValue(':criteria', $criteria, PDO::PARAM_STR);
+      $statement->bindValue(':id_type_of_project', $id_type_of_project, PDO::PARAM_INT);
+      $statement->bindValue(':id', $id, PDO::PARAM_INT);
+
+      // Execute the statement and return true if successful
+      return $statement->execute();
+    } catch (PDOException $ex) {
+      // Handle exceptions by returning false
+      print 'ERROR: ' . $ex->getMessage() . '<br>';
+      return false;
     }
   }
+
 
   public static function delete($connection, $id) {
     if (isset($connection)) {
       try {
+        // Prepare the SQL statement
         $sql = 'DELETE FROM personnel WHERE id = :id';
-        $sentence = $connection->prepare($sql);
-        $sentence->bindValue(':id', $id, PDO::PARAM_STR);
-        $sentence->execute();
+        $statement = $connection->prepare($sql);
+
+        // Bind the value to the SQL statement
+        $statement->bindValue(':id', $id, PDO::PARAM_INT);
+
+        // Execute the statement and return true if successful
+        return $statement->execute();
       } catch (PDOException $ex) {
-        print 'ERROR:' . $ex->getMessage() . '<br>';
+        // Print the error message and return false
+        print 'ERROR: ' . $ex->getMessage() . '<br>';
+        return false;
       }
     }
+    // Return false if the connection is not set
+    return false;
   }
+
 
   public static function getAll($conexion) {
     $data = [];
