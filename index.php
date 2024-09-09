@@ -29,7 +29,7 @@ spl_autoload_register(function ($class) {
     'MonthlyProjection' => ['MonthlyProjection', 'MonthlyProjectionRepository'],
     'Room' => ['Room', 'RoomRepository']
   ];
- 
+
   foreach ($subfolder as $key => $array) {
     if (in_array($class, $array)) {
       include_once "app/{$key}/{$class}.inc.php";
