@@ -1249,7 +1249,6 @@ class ExcelRepository {
             FROM rfq r
               LEFT JOIN services s ON r.id = s.id_rfq
               LEFT JOIN re_quotes rq ON r.id = rq.id_rfq
-              LEFT JOIN re_quote_services rqs ON rq.id = rqs.id_re_quote
             WHERE deleted = 0
               AND invoice = 1
               AND r.fulfillment_pending = 0
