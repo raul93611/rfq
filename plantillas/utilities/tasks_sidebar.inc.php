@@ -1,5 +1,10 @@
-<li class="nav-item <?php echo ($partes_ruta[2] ?? null) == 'tasks' ? 'menu-open' : ''; ?>">
-  <a href="#" class="nav-link <?php echo ($partes_ruta[2] ?? null) == 'tasks' ? 'active' : ''; ?>">
+<?php
+$isTasksActive = ($partes_ruta[2] ?? null) == 'tasks';
+$subRoute = $partes_ruta[3] ?? null;
+?>
+
+<li class="nav-item <?= $isTasksActive ? 'menu-open' : ''; ?>">
+  <a href="#" class="nav-link <?= $isTasksActive ? 'active' : ''; ?>">
     <i class="nav-icon fas fa-thumbtack"></i>
     <p>
       Tasks
@@ -8,19 +13,19 @@
   </a>
   <ul class="nav nav-treeview">
     <li class="nav-item">
-      <a href="<?php echo ALL_TASKS; ?>" class="nav-link <?php echo ($partes_ruta[3] ?? null) == 'all_tasks' ? 'active' : ''; ?>">
+      <a href="<?= ALL_TASKS; ?>" class="nav-link <?= $subRoute == 'all_tasks' ? 'active' : ''; ?>">
         <i class="far fa-circle nav-icon"></i>
         <p>All Tasks</p>
       </a>
     </li>
     <li class="nav-item">
-      <a href="<?php echo MY_TASKS; ?>" class="nav-link <?php echo ($partes_ruta[3] ?? null) == 'my_tasks' ? 'active' : ''; ?>">
+      <a href="<?= MY_TASKS; ?>" class="nav-link <?= $subRoute == 'my_tasks' ? 'active' : ''; ?>">
         <i class="far fa-circle nav-icon"></i>
         <p>My Tasks</p>
       </a>
     </li>
     <li class="nav-item">
-      <a href="<?php echo TASKS_DONE; ?>" class="nav-link <?php echo ($partes_ruta[3] ?? null) == 'tasks_done' ? 'active' : ''; ?>">
+      <a href="<?= TASKS_DONE; ?>" class="nav-link <?= $subRoute == 'tasks_done' ? 'active' : ''; ?>">
         <i class="far fa-circle nav-icon"></i>
         <p>Tasks Done</p>
       </a>
