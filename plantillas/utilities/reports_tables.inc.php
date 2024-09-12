@@ -33,7 +33,7 @@
                 $types = ['monthly', 'quarterly', 'yearly'];
                 foreach ($types as $optionType):
                 ?>
-                  <label class="btn bg-olive <?= $type === $optionType ? 'active' : ''; ?>">
+                  <label id="<?= $optionType; ?>" class="btn bg-olive <?= $type === $optionType ? 'active' : ''; ?>">
                     <input type="radio" name="type" value="<?= $optionType; ?>" autocomplete="off" <?= $type === $optionType ? 'checked' : ''; ?>> <?= ucfirst($optionType); ?>
                   </label>
                 <?php endforeach; ?>
@@ -66,20 +66,16 @@
                   <div class="col-md-6">
                     <h4><i class="fas fa-calendar-alt"></i> Month(s)</h4>
                     <div class="form-group">
-                      <?php if ($type === 'monthly' || $type === 'quarterly'): ?>
-                        <select class="custom-select" name="month">
-                          <?php for ($i = 1; $i <= 12; $i++): ?>
-                            <option value="<?= $i; ?>" <?= $month == $i ? 'selected' : ''; ?>><?= date('F', mktime(0, 0, 0, $i, 1)); ?></option>
-                          <?php endfor; ?>
-                        </select>
-                        <?php if ($type === 'quarterly'): ?>
-                          <select class="custom-select mt-2" name="quarter">
-                            <?php for ($i = 1; $i <= 4; $i++): ?>
-                              <option value="<?= $i; ?>" <?= $quarter == $i ? 'selected' : ''; ?>>Q<?= $i; ?></option>
-                            <?php endfor; ?>
-                          </select>
-                        <?php endif; ?>
-                      <?php endif; ?>
+                      <select class="custom-select" name="month">
+                        <?php for ($i = 1; $i <= 12; $i++): ?>
+                          <option value="<?= $i; ?>" <?= $month == $i ? 'selected' : ''; ?>><?= date('F', mktime(0, 0, 0, $i, 1)); ?></option>
+                        <?php endfor; ?>
+                      </select>
+                      <select class="custom-select" name="quarter">
+                        <?php for ($i = 1; $i <= 4; $i++): ?>
+                          <option value="<?= $i; ?>" <?= $quarter == $i ? 'selected' : ''; ?>>Q<?= $i; ?></option>
+                        <?php endfor; ?>
+                      </select>
                     </div>
                   </div>
 
