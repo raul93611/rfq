@@ -92,7 +92,7 @@
                 <div class="row mt-4">
                   <div class="col-md-12">
                     <button type="submit" class="btn btn-primary" name="generate_excel_report"><i class="fas fa-file-excel"></i> Excel</button>
-                    <button type="submit" class="btn btn-primary" name="generate_report"><i class="fas fa-play"></i> Generate</button>
+                    <span class="btn btn-primary" data="generate_report"><i class="fas fa-play"></i> Generate</span>
                   </div>
                 </div>
               </form>
