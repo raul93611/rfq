@@ -61,7 +61,7 @@ function outputSpreadsheet($spreadsheet) {
 }
 
 // Ensure required POST parameters are set
-if (isset($_POST['type'], $_POST['quarter'], $_POST['month'], $_POST['year'])) {
+if (isset($_POST['type'], $_POST['year'])) {
   $spreadsheet = createSpreadsheet();
   fetchAndFillData($spreadsheet, $_POST['type'], $_POST['quarter'], $_POST['month'], $_POST['year']);
   outputSpreadsheet($spreadsheet);
