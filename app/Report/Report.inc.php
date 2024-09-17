@@ -676,8 +676,7 @@ class Report {
             $sql = "
             SELECT COUNT(r.id)
             FROM rfq r
-            LEFT JOIN services s ON r.id = s.id_rfq
-            JOIN usuarios u ON r.usuario_designado = u.id
+            LEFT JOIN usuarios u ON r.usuario_designado = u.id
             WHERE deleted = 0 AND
             r.status = 1 AND
             MONTH(fecha_submitted) = {$month} AND 
@@ -695,8 +694,7 @@ class Report {
             $sql = "
             SELECT COUNT(r.id)
             FROM rfq r
-            LEFT JOIN services s ON r.id = s.id_rfq
-            JOIN usuarios u ON r.usuario_designado = u.id
+            LEFT JOIN usuarios u ON r.usuario_designado = u.id
             WHERE deleted = 0 AND
             r.status = 1 AND
             QUARTER(fecha_submitted) = {$quarter} AND
@@ -714,8 +712,7 @@ class Report {
             $sql = "
             SELECT COUNT(r.id)
             FROM rfq r
-            LEFT JOIN services s ON r.id = s.id_rfq
-            JOIN usuarios u ON r.usuario_designado = u.id
+            LEFT JOIN usuarios u ON r.usuario_designado = u.id
             WHERE deleted = 0 AND
             r.status = 1 AND
             YEAR(fecha_submitted) = {$year} AND
