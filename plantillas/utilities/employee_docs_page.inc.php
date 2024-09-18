@@ -31,9 +31,8 @@
               } else {
                 echo '<div class="list-group">';
                 foreach ($files as $file) {
-                  $file_url = urlencode($file);
                   echo '<li class="list-group-item">' . $file .
-                    '<a download href="' . EMPLOYEE_DOCS . "$directoryName/$file_url" . '" class="close float-right"><i class="fas fa-file-download"></i></a></li>';
+                    '<a download href="' . EMPLOYEE_DOCS . "$directoryName/$file" . '" class="close float-right"><i class="fas fa-file-download"></i></a></li>';
                 }
                 echo '</div>';
               }
