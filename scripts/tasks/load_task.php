@@ -31,6 +31,7 @@ try {
           }
           ?>
         </div>
+        <small class="form-text text-muted">Select the current status of the task.</small>
       </div>
       <h4>Title: <?= htmlspecialchars($task->get_title()); ?></h4>
       <div class="form-group">
@@ -46,15 +47,18 @@ try {
               </option>
             <?php endforeach; ?>
           </select>
+          <small class="form-text text-muted">Assign the task to a specific user.</small>
         <?php endif; ?>
       </div>
       <div class="form-group">
         <label>Message:</label>
         <p><?= nl2br(htmlspecialchars($task->get_message())); ?></p>
+        <small class="form-text text-muted">This is the message or description associated with the task.</small>
       </div>
       <div class="form-group">
         <label for="task_comment">Comment:</label>
         <textarea id="task_comment" class="form-control form-control-sm" name="comment" rows="3" cols="80"></textarea>
+        <small class="form-text text-muted">Add your comment regarding this task.</small>
       </div>
       <div class="timeline">
         <div>
