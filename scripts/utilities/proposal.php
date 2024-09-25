@@ -23,8 +23,8 @@ try {
 }
 
 // Format dates
-$fecha_completado = date("m/d/Y", strtotime($cotizacion->obtener_fecha_completado()));
-$expiration_date = date("m/d/Y", strtotime($cotizacion->obtener_expiration_date()));
+$fecha_completado = date("m/d/Y", strtotime($cotizacion->obtener_fecha_completado() ?? ''));
+$expiration_date = date("m/d/Y", strtotime($cotizacion->obtener_expiration_date() ?? ''));
 
 // Determine logo based on channel
 $logo = ($cotizacion->obtener_canal() == 'Stars III') ? 'logoSinergy.png' : 'logo_proposal.jpg';

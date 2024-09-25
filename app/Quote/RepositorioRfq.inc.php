@@ -2192,9 +2192,33 @@ class RepositorioRfq {
 
   public static function copyItems($conexion, $id_rfq, $id_rfq_copia) {
     $items = RepositorioItem::obtener_items_por_id_rfq($conexion, $id_rfq);
+    $duplicated_rooms = RoomRepository::getAll($conexion, $id_rfq_copia);
 
-    if (count($items)) {
+    if (!empty($items)) {
       foreach ($items as $item) {
+        // Map room names to IDs for faster lookup
+        $room_map = [];
+        foreach ($duplicated_rooms as $duplicated_room) {
+          $room_map[$duplicated_room->getName()] = $duplicated_room->getId();
+        }
+
+        $roomId = $item->getIdRoom();
+        if (!empty($roomId)) {
+          $original_room = RoomRepository::getById($conexion, $roomId);
+
+          if ($original_room) {
+            $selected_duplicated_room_id = $room_map[$original_room->getName()] ?? null;
+          } else {
+            // Handle the case where the original room does not exist
+            $selected_duplicated_room_id = null; // Or handle this in another way (e.g., log an error)
+          }
+        } else {
+          // Handle the case where the room ID is null or empty
+          $selected_duplicated_room_id = null; // Or handle this in another way (e.g., log an error)
+        }
+
+
+        // Copy item
         $item_copia = new Item(
           '',
           $id_rfq_copia,
@@ -2213,72 +2237,82 @@ class RepositorioRfq {
           $item->obtener_website(),
           $item->obtener_additional(),
           $item->obtener_fulfillment_profit(),
-          $item->getIdRoom()
+          $selected_duplicated_room_id
         );
-
         $item_copia_id = RepositorioItem::insertar_item($conexion, $item_copia);
 
-        // Copy subitems
-        $subitems = RepositorioSubitem::obtener_subitems_por_id_item($conexion, $item->obtener_id());
-        foreach ($subitems as $subitem) {
-          $subitem_copia = new Subitem(
-            '',
-            $item_copia_id,
-            $subitem->obtener_provider_menor(),
-            $subitem->obtener_brand(),
-            $subitem->obtener_brand_project(),
-            $subitem->obtener_part_number(),
-            $subitem->obtener_part_number_project(),
-            $subitem->obtener_description(),
-            $subitem->obtener_description_project(),
-            $subitem->obtener_quantity(),
-            $subitem->obtener_unit_price(),
-            $subitem->obtener_total_price(),
-            $subitem->obtener_comments(),
-            $subitem->obtener_website(),
-            $subitem->obtener_additional(),
-            $subitem->obtener_fulfillment_profit()
-          );
-          $subitem_copia_id = RepositorioSubitem::insertar_subitem($conexion, $subitem_copia);
-
-          // Copy provider subitems
-          $providers_subitem = RepositorioProviderSubitem::obtener_providers_subitem_por_id_subitem($conexion, $subitem->obtener_id());
-          foreach ($providers_subitem as $provider_subitem) {
-            $provider_subitem_copia = new ProviderSubitem(
-              '',
-              $subitem_copia_id,
-              $provider_subitem->obtener_provider(),
-              $provider_subitem->obtener_price()
-            );
-            RepositorioProviderSubitem::insertar_provider_subitem($conexion, $provider_subitem_copia);
-          }
-        }
-
-        // Copy providers
-        $providers = RepositorioProvider::obtener_providers_por_id_item($conexion, $item->obtener_id());
-        foreach ($providers as $provider) {
-          $provider_copia = new Provider(
-            '',
-            $item_copia_id,
-            $provider->obtener_provider(),
-            $provider->obtener_price()
-          );
-          RepositorioProvider::insertar_provider($conexion, $provider_copia);
-        }
+        // Copy subitems and providers
+        self::copySubitems($conexion, $item, $item_copia_id);
+        self::copyProviders($conexion, $item, $item_copia_id);
       }
+    }
+  }
+
+  private static function copySubitems($conexion, $item, $item_copia_id) {
+    $subitems = RepositorioSubitem::obtener_subitems_por_id_item($conexion, $item->obtener_id());
+    foreach ($subitems as $subitem) {
+      $subitem_copia = new Subitem(
+        '',
+        $item_copia_id,
+        $subitem->obtener_provider_menor(),
+        $subitem->obtener_brand(),
+        $subitem->obtener_brand_project(),
+        $subitem->obtener_part_number(),
+        $subitem->obtener_part_number_project(),
+        $subitem->obtener_description(),
+        $subitem->obtener_description_project(),
+        $subitem->obtener_quantity(),
+        $subitem->obtener_unit_price(),
+        $subitem->obtener_total_price(),
+        $subitem->obtener_comments(),
+        $subitem->obtener_website(),
+        $subitem->obtener_additional(),
+        $subitem->obtener_fulfillment_profit()
+      );
+      $subitem_copia_id = RepositorioSubitem::insertar_subitem($conexion, $subitem_copia);
+
+      // Copy provider subitems
+      self::copyProviderSubitems($conexion, $subitem, $subitem_copia_id);
+    }
+  }
+
+  private static function copyProviders($conexion, $item, $item_copia_id) {
+    $providers = RepositorioProvider::obtener_providers_por_id_item($conexion, $item->obtener_id());
+    foreach ($providers as $provider) {
+      $provider_copia = new Provider(
+        '',
+        $item_copia_id,
+        $provider->obtener_provider(),
+        $provider->obtener_price()
+      );
+      RepositorioProvider::insertar_provider($conexion, $provider_copia);
+    }
+  }
+
+  private static function copyProviderSubitems($conexion, $subitem, $subitem_copia_id) {
+    $providers_subitem = RepositorioProviderSubitem::obtener_providers_subitem_por_id_subitem($conexion, $subitem->obtener_id());
+    foreach ($providers_subitem as $provider_subitem) {
+      $provider_subitem_copia = new ProviderSubitem(
+        '',
+        $subitem_copia_id,
+        $provider_subitem->obtener_provider(),
+        $provider_subitem->obtener_price()
+      );
+      RepositorioProviderSubitem::insertar_provider_subitem($conexion, $provider_subitem_copia);
     }
   }
 
   public static function copyRfqData($conexion, $id_rfq) {
     $quote = RepositorioRfq::obtener_cotizacion_por_id($conexion, $id_rfq);
     $id_rfq_copia = RepositorioRfq::copyRfq($conexion, $id_rfq);
+    RoomRepository::copyRooms($conexion, $id_rfq, $id_rfq_copia);
     RepositorioRfq::copyRfqFiles($id_rfq, $id_rfq_copia);
     RepositorioRfq::copyItems($conexion, $id_rfq, $id_rfq_copia);
-  
-    if($quote->isServices()){
+
+    if ($quote->isServices()) {
       ServiceRepository::copyServices($conexion, $id_rfq, $id_rfq_copia);
     }
-  
+
     return $id_rfq_copia;
   }
 }

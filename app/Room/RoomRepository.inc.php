@@ -94,4 +94,20 @@ class RoomRepository {
       }
     }
   }
+
+  public static function copyRooms($connection, $id_rfq, $id_rfq_copy) {
+    // Fetch all rooms associated with the original RFQ
+    $rooms = self::getAll($connection, $id_rfq);
+
+    // Check if there are any rooms to copy
+    if (!empty($rooms)) {
+      foreach ($rooms as $room) {
+        // Create a new Room object with the details from the original room
+        $duplicated_room = new Room('', $id_rfq_copy, $room->getName(), $room->getColor());
+
+        // Save the new duplicated room
+        self::save($connection, $duplicated_room);
+      }
+    }
+  }
 }

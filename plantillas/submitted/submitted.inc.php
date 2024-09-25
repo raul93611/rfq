@@ -9,8 +9,6 @@ $printable_channel = Input::printable_channel($channel);
         <div class="col-sm-6">
           <h1 class="m-0 text-dark">Submitted Quotes</h1>
         </div>
-        <div class="col-sm-6">
-        </div>
       </div>
     </div>
   </div>
@@ -20,22 +18,23 @@ $printable_channel = Input::printable_channel($channel);
         <section class="col-12">
           <div class="card card-primary">
             <div class="card-header">
-              <h3 class="card-title"><?= $printable_channel; ?></h3>
+              <h3 class="card-title"><?= htmlspecialchars($printable_channel); ?></h3>
             </div>
             <div class="card-body">
-              <table id="submitted_table" data-channel="<?= $channel; ?>" class="table table-bordered table-responsive-md">
+              <table id="submitted_table" data-channel="<?= htmlspecialchars($channel); ?>" class="table table-bordered table-responsive-md">
                 <thead>
                   <tr>
-                    <th>PROPOSAL</th>
-                    <th>DESIGNATED USER</th>
-                    <th>TYPE OF BID</th>
-                    <th>SUBMITTED DATE</th>
-                    <th>CODE</th>
-                    <th>RFP</th>
-                    <th>OPTIONS</th>
+                    <th scope="col">Proposal</th>
+                    <th scope="col">Designated User</th>
+                    <th scope="col">Type of Bid</th>
+                    <th scope="col">Submitted Date</th>
+                    <th scope="col">Code</th>
+                    <th scope="col">RFP</th>
+                    <th scope="col">Options</th>
                   </tr>
                 </thead>
                 <tbody>
+                  <!-- Dynamic content will be injected here -->
                 </tbody>
               </table>
             </div>
