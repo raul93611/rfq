@@ -200,6 +200,7 @@ $(document).ready(function () {
         $('<th>').attr('class', 'bg-warning').text('TOTAL PRICE').appendTo(headerRow);
         $('<th>').attr('class', 'bg-warning').text('PROFIT').appendTo(headerRow);
         $('<th>').text('TYPE OF CONTRACT').appendTo(headerRow);
+        $('<th>').text('SET ASIDE').appendTo(headerRow);
 
         columns = [
           {
@@ -224,7 +225,8 @@ $(document).ready(function () {
           { "data": "total_cost_requote" },
           { "data": "total_price_requote" },
           { "data": "profit_requote" },
-          { "data": "type_of_contract" }
+          { "data": "type_of_contract" },
+          { "data": "set_side" }
         ];
         break;
       case 'accounts-payable-fulfillment':
