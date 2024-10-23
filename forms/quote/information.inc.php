@@ -1,12 +1,16 @@
 <input type="hidden" name="id_rfq" value="<?= $id_rfq; ?>">
+
 <div class="card-body">
   <div class="row">
     <div class="col-md-12">
+
       <div class="form-group">
         <label for="email_code">Code:</label>
         <input type="text" class="form-control form-control-sm" id="email_code" name="email_code" value="<?= $quote->obtener_email_code(); ?>">
         <input type="hidden" name="email_code_original" value="<?= $quote->obtener_email_code(); ?>">
+        <small class="form-text text-muted">Enter the unique code for this email or quote.</small>
       </div>
+
       <div class="form-group">
         <label for="canal">Channel:</label>
         <select class="form-control form-control-sm" name="canal" id="canal">
@@ -20,10 +24,11 @@
           <option <?= $quote->obtener_canal() == 'Stars III' ? 'selected' : ''; ?>>Stars III</option>
         </select>
         <input type="hidden" name="canal_original" value="<?= $quote->obtener_canal(); ?>">
+        <small class="form-text text-muted">Select the channel through which this opportunity was received.</small>
       </div>
-      <?php
-      Input::print_designated_user($quote);
-      ?>
+
+      <?php Input::print_designated_user($quote); ?>
+
       <div class="form-group">
         <label for="type_of_bid">Type of bid:</label>
         <select class="form-control form-control-sm" name="type_of_bid" id="type_of_bid">
@@ -34,36 +39,49 @@
           foreach ($type_of_bids as $key => $type_of_bid) {
           ?>
             <option <?= $quote->obtener_type_of_bid() == $type_of_bid->get_type_of_bid() ? 'selected' : ''; ?>><?= $type_of_bid->get_type_of_bid(); ?></option>
-          <?php
-          }
-          ?>
+          <?php } ?>
         </select>
         <input type="hidden" name="type_of_bid_original" value="<?= $quote->obtener_type_of_bid(); ?>">
+        <small class="form-text text-muted">Select the bid type for this project or RFQ.</small>
       </div>
+
       <div class="form-group">
         <label for="issue_date">Issue date:</label>
         <input type="text" class="date form-control form-control-sm" id="issue_date" name="issue_date" value="<?= $quote->obtener_issue_date(); ?>">
         <input type="hidden" name="issue_date_original" value="<?= $quote->obtener_issue_date(); ?>">
+        <small class="form-text text-muted">Enter the issue date of the RFQ or RFP.</small>
       </div>
+
       <div class="form-group">
         <label for="end_date">End date:</label>
         <input type="text" class="form-control form-control-sm" id="end_date" name="end_date" value="<?= $quote->obtener_end_date(); ?>">
         <input type="hidden" name="end_date_original" value="<?= $quote->obtener_end_date(); ?>">
+        <small class="form-text text-muted">Specify the end or closing date for the bid.</small>
       </div>
       <div class="form-group">
         <label for="completed_date">Completed date:</label>
-        <input type="text" class="date form-control form-control-sm" id="completed_date" name="completed_date" value="<?= $quote->obtener_fecha_completado() ? RepositorioComment::mysql_date_to_english_format($quote->obtener_fecha_completado()) : ''; ?>">
-        <input type="hidden" name="completed_date_original" value="<?= $quote->obtener_fecha_completado() ? RepositorioComment::mysql_date_to_english_format($quote->obtener_fecha_completado()) : ''; ?>">
+        <input type="text" class="date form-control form-control-sm" id="completed_date" name="completed_date"
+          value="<?= $quote->obtener_fecha_completado() ? RepositorioComment::mysql_date_to_english_format($quote->obtener_fecha_completado()) : ''; ?>">
+        <input type="hidden" name="completed_date_original"
+          value="<?= $quote->obtener_fecha_completado() ? RepositorioComment::mysql_date_to_english_format($quote->obtener_fecha_completado()) : ''; ?>">
+        <small class="form-text text-muted">Specify the date when the project was completed.</small>
       </div>
+
       <div class="form-group">
         <label for="expiration_date">Expiration date:</label>
-        <input type="text" class="date form-control form-control-sm" id="expiration_date" name="expiration_date" value="<?= $quote->obtener_expiration_date() ? RepositorioComment::mysql_date_to_english_format($quote->obtener_expiration_date()) : ''; ?>">
-        <input type="hidden" name="expiration_date_original" value="<?= $quote->obtener_expiration_date() ? RepositorioComment::mysql_date_to_english_format($quote->obtener_expiration_date()) : ''; ?>">
+        <input type="text" class="date form-control form-control-sm" id="expiration_date" name="expiration_date"
+          value="<?= $quote->obtener_expiration_date() ? RepositorioComment::mysql_date_to_english_format($quote->obtener_expiration_date()) : ''; ?>">
+        <input type="hidden" name="expiration_date_original"
+          value="<?= $quote->obtener_expiration_date() ? RepositorioComment::mysql_date_to_english_format($quote->obtener_expiration_date()) : ''; ?>">
+        <small class="form-text text-muted">Enter the expiration date for the offer or project.</small>
       </div>
+
       <div class="form-group">
         <label for="reference_url">Reference URL:</label>
         <input type="text" class="form-control form-control-sm" id="reference_url" name="reference_url" value="<?= $quote->getReferenceUrl(); ?>">
+        <small class="form-text text-muted">Provide the reference URL related to this project or quote.</small>
       </div>
+
       <div class="form-group">
         <label for="comments">Comments:</label>
         <select id="comments" class="form-control form-control-sm" name="comments">
@@ -79,17 +97,23 @@
           <option <?= $quote->obtener_comments() == 'Working on it' ? 'selected' : ''; ?>>Working on it</option>
         </select>
         <input type="hidden" name="comments_original" value="<?= $quote->obtener_comments(); ?>">
+        <small class="form-text text-muted">Select a comment to describe the status or action taken on the bid.</small>
       </div>
+
       <div class="form-group">
         <label for="address">Address:</label>
         <textarea class="form-control form-control-sm" rows="5" placeholder="Enter address ..." id="address" name="address"><?= $quote->obtener_address(); ?></textarea>
         <input type="hidden" name="address_original" value="<?= $quote->obtener_address(); ?>">
+        <small class="form-text text-muted">Enter the address for correspondence or shipping.</small>
       </div>
+
       <div class="form-group">
         <label for="ship_to">Ship to:</label>
         <textarea class="form-control form-control-sm" rows="5" placeholder="Enter ship to ..." id="ship_to" name="ship_to"><?= $quote->obtener_ship_to(); ?></textarea>
         <input type="hidden" name="ship_to_original" value="<?= $quote->obtener_ship_to(); ?>">
+        <small class="form-text text-muted">Specify the address for shipping the goods or services.</small>
       </div>
+
       <div class="form-group">
         <label for="ship_via">Ship via:</label>
         <select id="ship_via" class="form-control form-control-sm" name="ship_via">
@@ -97,6 +121,7 @@
           <option <?= $quote->obtener_ship_via() == 'BEST WAY' ? 'selected' : ''; ?>>BEST WAY</option>
         </select>
         <input type="hidden" name="ship_via_original" value="<?= $quote->obtener_ship_via(); ?>">
+        <small class="form-text text-muted">Select the preferred shipping method for delivery.</small>
       </div>
     </div>
   </div>

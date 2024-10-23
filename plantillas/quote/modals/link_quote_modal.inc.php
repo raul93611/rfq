@@ -10,17 +10,20 @@
       <div class="modal-body">
         <form action="<?= LINK_QUOTE; ?>" id="link_quote_form" method="post">
           <div class="form-group">
-            <label for="quote_ids">Proposal:</label><br>
-            <select style="width: 100%" id="quote_ids" name="master">
-              <option>Select a proposal ID</option>
+            <label for="quote_ids">Proposal:</label>
+            <select id="quote_ids" name="master" class="form-control" style="width: 100%;" required>
+              <option value="" disabled selected>Select a proposal ID</option>
+              <!-- Options will be populated dynamically -->
             </select>
-            <input type="hidden" name="id_rfq" value="<?= $id_rfq; ?>">
+            <input type="hidden" name="id_rfq" value="<?= htmlspecialchars($id_rfq); ?>">
           </div>
-          <p><b>Note:</b> Type at least 4 characters.</p>
+          <small class="text-muted">Note: Type at least 4 characters.</small>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="submit" name="submit" form="link_quote_form" class="btn btn-success"><i class="fa fa-check"></i> Save</button>
+        <button type="submit" name="submit" form="link_quote_form" class="btn btn-success">
+          <i class="fa fa-check"></i> Save
+        </button>
       </div>
     </div>
   </div>

@@ -7,10 +7,12 @@
       <div class="form-group">
         <label for="email_code">Code:</label>
         <input type="text" class="form-control form-control-sm" id="email_code" name="email_code" placeholder="Code" autofocus required <?php $validador->mostrar_email_code(); ?>>
+        <small class="form-text text-muted">Enter the unique code for this bid or project.</small>
       </div>
       <div class="form-group">
         <label for="issue_date">Issue date:</label>
         <input type="text" class="date form-control form-control-sm" id="issue_date" name="issue_date" placeholder="Issue date" required <?php $validador->mostrar_issue_date(); ?>>
+        <small class="form-text text-muted">Specify the date when this bid was issued.</small>
       </div>
       <div class="form-group">
         <?php
@@ -25,6 +27,7 @@
               <option <?= $validador->obtener_usuario_designado() == $usuario->obtener_nombre_usuario() ? 'selected' : ''; ?>><?= $usuario->obtener_nombre_usuario(); ?></option>
             <?php endforeach; ?>
           </select>
+          <small class="form-text text-muted">Select the user responsible for managing this bid.</small>
         <?php
         }
         ?>
@@ -40,15 +43,17 @@
           Conexion::cerrar_conexion();
           foreach ($type_of_bids as $key => $type_of_bid) {
           ?>
-            <option <?= $validador->obtener_type_of_bid() == $type_of_bid->get_type_of_bid() ? 'selected' : ''; ?>><?php echo $type_of_bid->get_type_of_bid(); ?></option>
+            <option <?= $validador->obtener_type_of_bid() == $type_of_bid->get_type_of_bid() ? 'selected' : ''; ?>><?= $type_of_bid->get_type_of_bid(); ?></option>
           <?php
           }
           ?>
         </select>
+        <small class="form-text text-muted">Choose the type of bid (e.g., Open, Closed, Sealed).</small>
       </div>
       <div class="form-group">
         <label for="end_date">End date:</label>
         <input type="text" class="form-control form-control-sm" id="end_date" name="end_date" placeholder="End date" required <?php $validador->mostrar_end_date(); ?>>
+        <small class="form-text text-muted">Specify the end date for this bid or opportunity.</small>
         <?php $validador->mostrar_error_end_date(); ?>
       </div>
       <div class="form-group">
@@ -65,18 +70,21 @@
           <option <?= $validador->obtener_canal() == 'Ebay & Amazon' ? 'selected' : ''; ?>>Ebay & Amazon</option>
           <option <?= $validador->obtener_canal() == 'Stars III' ? 'selected' : ''; ?>>Stars III</option>
         </select>
+        <small class="form-text text-muted">Select the platform or channel through which this bid was received.</small>
       </div>
     </div>
   </div>
   <div class="form-group">
     <label for="reference_url">Reference URL:</label>
     <input type="text" class="form-control form-control-sm" id="reference_url" name="reference_url" placeholder="Reference URL">
+    <small class="form-text text-muted">Provide the URL to reference the bid or opportunity.</small>
   </div>
   <div class="form-group">
     <input type="file" id="archivos_crear" multiple name="documentos[]">
+    <small class="form-text text-muted">Upload relevant documents for this bid or project.</small>
   </div>
 </div>
 <div class="card-footer">
   <button type="submit" class="btn btn-success" name="registrar_cotizacion"><i class="fa fa-check"></i> Save</button>
-  <a href="<?php echo PERFIL; ?>" class="btn btn-danger"><i class="fa fa-times"></i> Cancel</a>
+  <a href="<?= PERFIL; ?>" class="btn btn-danger"><i class="fa fa-times"></i> Cancel</a>
 </div>

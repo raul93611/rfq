@@ -2,24 +2,29 @@
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Add comment</h5>
+        <h5 class="modal-title">Add Comment</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <form id="form_nuevo_comment" method="post" enctype="multipart/form-data" action="<?php echo GUARDAR_COMMENT; ?>">
+        <form id="form_nuevo_comment" method="post" enctype="multipart/form-data" action="<?= GUARDAR_COMMENT; ?>">
           <div class="form-group">
             <label for="comment_rfq">Comment:</label>
-            <textarea class="form-control form-control-sm" name="comment_rfq" rows="10" id="comment_rfq" autofocus></textarea>
+            <textarea class="form-control form-control-sm" name="comment_rfq" rows="10" id="comment_rfq" autofocus required></textarea>
+            <small class="form-text text-muted">Please enter your comment. Maximum length is 500 characters.</small>
           </div>
-          <input type="hidden" name="id_rfq" value="<?php echo $cotizacion_recuperada-> obtener_id(); ?>">
+          <input type="hidden" name="id_rfq" value="<?= htmlspecialchars($cotizacion_recuperada->obtener_id()); ?>">
           <input type="hidden" name="place" value="quote">
         </form>
       </div>
       <div class="modal-footer">
-        <button type="submit" name="guardar_comment" form="form_nuevo_comment" class="btn btn-success"><i class="fa fa-check"></i> Save</button>
-        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-ban"></i> Cancel</button>
+        <button type="submit" name="guardar_comment" form="form_nuevo_comment" class="btn btn-success">
+          <i class="fa fa-check"></i> Save
+        </button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">
+          <i class="fa fa-ban"></i> Cancel
+        </button>
       </div>
     </div>
   </div>

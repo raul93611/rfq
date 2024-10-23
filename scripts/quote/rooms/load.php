@@ -13,6 +13,7 @@ try {
       <div class="form-group">
         <label for="name">Name:</label>
         <input type="text" id="name" class="form-control form-control-sm" name="name" value="<?= $room ? $room->getName() : ''; ?>">
+        <small class="form-text text-muted">Enter the room name, e.g., "Conference Room A".</small>
       </div>
       <div class="form-group">
         <label for="color">Color:</label>
@@ -22,6 +23,7 @@ try {
             <span class="input-group-text" style="color: <?= $room ? htmlspecialchars($room->getColor(), ENT_QUOTES, 'UTF-8') : ''; ?>;"><i class="fas fa-square"></i></span>
           </div>
         </div>
+        <small class="form-text text-muted">Enter a valid hex color code, e.g., "#FF5733".</small>
       </div>
     </div>
   </div>

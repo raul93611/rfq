@@ -9,9 +9,16 @@
       </div>
       <div class="modal-body">
         <?php
+        // Open connection
         Conexion::abrir_conexion();
-        AuditTrailRepository::display_audit_trails(Conexion::obtener_conexion(), $cotizacion_recuperada-> obtener_id());
-        Conexion::cerrar_conexion();
+        $conexion = Conexion::obtener_conexion();
+        if ($conexion) {
+          AuditTrailRepository::display_audit_trails($conexion, $cotizacion_recuperada->obtener_id());
+          // Close connection
+          Conexion::cerrar_conexion();
+        } else {
+          echo "<p>Error: Unable to connect to the database.</p>";
+        }
         ?>
       </div>
     </div>
