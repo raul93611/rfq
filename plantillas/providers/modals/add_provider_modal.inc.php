@@ -2,27 +2,25 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Add</h5>
+        <h5 class="modal-title">Add Provider</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
         <form id="add_provider_form" method="post" action="">
-          <div class="row">
-            <div class="col-md-12">
-              <div class="form-group">
-                <label for="name">Name:</label>
-                <input type="text" id="name" class="form-control form-control-sm" name="name" value="" required>
-                <div class="error_message">
-                  Name cannot be empty and has to be different from existing ones.
-                </div>
-              </div>
-            </div>
+          <div class="form-group">
+            <label for="name">Provider Name:</label>
+            <input type="text" id="name" class="form-control form-control-sm" name="name" required>
+            <small class="form-text text-muted">Enter the provider's name. It cannot be empty and must be unique.</small>
+            <small class="text-danger error_message">
+              Name cannot be empty and must be unique.
+            </small>
           </div>
         </form>
       </div>
       <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
         <button type="submit" name="save" form="add_provider_form" class="btn btn-success">Save</button>
       </div>
     </div>

@@ -9,17 +9,15 @@ try {
     $partialInvoice = filter_var($_POST['partialInvoice'], FILTER_VALIDATE_BOOLEAN);
 
     // Get invoice acceptance based on partialInvoice flag
-    if ($partialInvoice) {
-      $invoiceAcceptance = InvoiceRepository::getInvoiceAcceptance(Conexion::obtener_conexion(), $id);
-    } else {
-      $invoiceAcceptance = RepositorioRfq::getInvoiceAcceptance(Conexion::obtener_conexion(), $id);
-    }
+    $invoiceAcceptance = $partialInvoice
+      ? InvoiceRepository::getInvoiceAcceptance(Conexion::obtener_conexion(), $id)
+      : RepositorioRfq::getInvoiceAcceptance(Conexion::obtener_conexion(), $id);
   } else {
-    throw new Exception("Invalid input");
+    throw new Exception("Invalid input.");
   }
 } catch (Exception $e) {
-  // Handle any errors
-  echo "Error: " . $e->getMessage();
+  // Handle errors gracefully
+  echo "<small class='text-danger'>Error: " . htmlspecialchars($e->getMessage()) . "</small>";
   $invoiceAcceptance = '';
 } finally {
   // Close database connection
@@ -32,12 +30,13 @@ try {
       <div class="form-group">
         <label for="invoice_acceptance">Invoice Acceptance:</label>
         <textarea name="invoice_acceptance" id="invoice_acceptance" rows="5" class="form-control form-control-sm"><?= htmlspecialchars($invoiceAcceptance ?? '') ?></textarea>
+        <small class="form-text text-muted">Provide detailed invoice acceptance notes if applicable.</small>
       </div>
     </div>
   </div>
 </div>
-<input type="hidden" name="id" value="<?= htmlspecialchars($_POST['id']) ?>">
-<input type="hidden" name="partial_invoice" value="<?= htmlspecialchars($_POST['partialInvoice']) ?>">
+<input type="hidden" name="id" value="<?= htmlspecialchars($id ?? '') ?>">
+<input type="hidden" name="partial_invoice" value="<?= htmlspecialchars($partialInvoice ?? '') ?>">
 <div class="modal-footer">
   <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Save</button>
   <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-ban"></i> Cancel</button>

@@ -6,11 +6,14 @@
           <h1 class="m-0 text-dark">Providers</h1>
         </div>
         <div class="col-sm-6">
-          <button id="add_provider" class="float-right btn btn-primary" type="button" name="button"><i class="fas fa-plus"></i></button>
+          <button id="add_provider" class="float-right btn btn-primary" type="button" name="button">
+            <i class="fas fa-plus"></i> Add Provider
+          </button>
         </div>
       </div>
     </div>
   </div>
+
   <section class="content">
     <div class="container-fluid">
       <div class="row">
@@ -23,10 +26,13 @@
               <table id="providers_table" class="table table-bordered table-hover">
                 <thead>
                   <tr>
-                    <th>PROVIDER</th>
-                    <th style="width:100px;">OPTIONS</th>
+                    <th>Provider</th>
+                    <th style="width: 100px;">Options</th>
                   </tr>
                 </thead>
+                <tbody>
+                  <!-- Data will be dynamically populated here -->
+                </tbody>
               </table>
             </div>
           </div>
@@ -35,8 +41,10 @@
     </div>
   </section>
 </div>
+
 <?php
 include_once 'modals/add_provider_modal.inc.php';
 include_once 'modals/edit_provider_modal.inc.php';
 ?>
-<script src="<?php echo RUTA_JS; ?>providers.js"></script>
+
+<script src="<?= RUTA_JS; ?>providers.js"></script>
