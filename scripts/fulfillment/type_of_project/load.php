@@ -25,7 +25,7 @@ try {
   // Ensure the database connection is closed in case of an error
   Conexion::cerrar_conexion();
 
-  // Display an error message to the user (this can be improved to show a user-friendly message)
+  // Display an error message to the user
   echo '<div class="alert alert-danger" role="alert">' . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8') . '</div>';
   exit;
 }
@@ -36,12 +36,15 @@ try {
     <div class="col-md-12">
       <div class="form-group">
         <label for="name">Name:</label>
-        <input type="text" id="name" name="name" class="form-control form-control-sm" value="<?= htmlspecialchars($typeOfProject->getName(), ENT_QUOTES, 'UTF-8'); ?>">
+        <input type="text" id="name" name="name" class="form-control form-control-sm"
+          value="<?= htmlspecialchars($typeOfProject->getName(), ENT_QUOTES, 'UTF-8'); ?>">
+        <small class="form-text text-muted">Enter the project type name. This name should be unique and descriptive.</small>
       </div>
     </div>
   </div>
 </div>
-<input type="hidden" name="id_type_of_project" value="<?= htmlspecialchars($typeOfProject->getId(), ENT_QUOTES, 'UTF-8'); ?>">
+<input type="hidden" name="id_type_of_project"
+  value="<?= htmlspecialchars($typeOfProject->getId(), ENT_QUOTES, 'UTF-8'); ?>">
 <div class="modal-footer">
   <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Save</button>
   <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-ban"></i> Cancel</button>

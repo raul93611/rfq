@@ -3,7 +3,8 @@
 Conexion::abrir_conexion();
 
 // Retrieve the invoice data based on the provided ID
-$invoice = InvoiceRepository::get_one(Conexion::obtener_conexion(), $_POST['id']);
+$conexion = Conexion::obtener_conexion();
+$invoice = InvoiceRepository::get_one($conexion, $_POST['id']);
 
 // Close the database connection
 Conexion::cerrar_conexion();
@@ -17,16 +18,22 @@ Conexion::cerrar_conexion();
     <div class="col-md-12">
       <div class="form-group">
         <label for="name">Name:</label>
-        <input type="text" id="name" class="form-control form-control-sm" name="name" value="<?= htmlspecialchars($invoice->get_name(), ENT_QUOTES, 'UTF-8'); ?>">
+        <input type="text" id="name" class="form-control form-control-sm" name="name"
+          value="<?= htmlspecialchars($invoice->get_name(), ENT_QUOTES, 'UTF-8'); ?>">
+        <small class="form-text text-muted">Enter the name of the invoice.</small>
       </div>
+
       <div class="form-group">
         <label for="created_at">Created At:</label>
-        <input type="text" id="created_at" readonly class="form-control form-control-sm" name="created_at" value="<?= date("m/d/Y", strtotime($invoice->get_created_at())); ?>">
+        <input type="text" id="created_at" readonly class="form-control form-control-sm" name="created_at"
+          value="<?= date("m/d/Y", strtotime($invoice->get_created_at())); ?>">
+        <small class="form-text text-muted">The date when the invoice was created. This field is read-only.</small>
       </div>
     </div>
   </div>
+
   <!-- Error message container -->
-  <div id="error"></div>
+  <div id="error" class="text-danger"></div>
 </div>
 
 <div class="modal-footer">

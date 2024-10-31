@@ -9,7 +9,7 @@
         'Channel' => $cotizacion_recuperada->print_channel(),
         'Designated User' => $usuario_designado->obtener_nombres() . ' ' . $usuario_designado->obtener_apellidos(),
         'Client' => $cotizacion_recuperada->obtener_client(),
-        'Reference URL' => '<a target="_blank" href="' . htmlspecialchars($cotizacion_recuperada->getReferenceUrl()) . '">' . htmlspecialchars($cotizacion_recuperada->getReferenceUrl()) . '</a>'
+        'Reference URL' => '<a target="_blank" href="' . htmlspecialchars($cotizacion_recuperada->getReferenceUrl() ?? '') . '">' . htmlspecialchars($cotizacion_recuperada->getReferenceUrl() ?? '') . '</a>'
       ];
 
       foreach ($fields as $label => $value): ?>

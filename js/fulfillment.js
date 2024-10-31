@@ -260,7 +260,7 @@ $(document).ready(function () {
   const auditTrailModalBody = $('#fulfillment_audit_trails_modal .modal-body');
 
   btnAuditTrail.click(function () {
-    auditTrailModalBody.load('/rfq/fulfillment/load_fulfillment_audit_trails', { id_rfq: $(this).attr('data') }, function () {
+    auditTrailModalBody.load('/rfq/fulfillment/load_fulfillment_audit_trails', { id_rfq: $(this).attr('data-id') }, function () {
       auditTrailModal.modal();
     });
   });
