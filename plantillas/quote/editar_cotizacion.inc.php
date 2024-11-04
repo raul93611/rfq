@@ -28,7 +28,11 @@ if (is_null($cotizacion_recuperada)) {
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-md-3">
-          <h1>Proposal # <?= $cotizacion_recuperada->obtener_id(); ?></h1>
+          <h1>Proposal # <?= htmlspecialchars($cotizacion_recuperada->obtener_id(), ENT_QUOTES, 'UTF-8'); ?></h1>
+          <p>
+            <strong><i class="fas fa-file-contract"></i> Contract Type:</strong>
+            <?= htmlspecialchars($cotizacion_recuperada->obtener_type_of_contract() ?? 'No contract type specified', ENT_QUOTES, 'UTF-8'); ?>
+          </p>
           <?php
           include 'templates/link_quote.inc.php';
           include 'templates/multi_year_project_dropdown.inc.php';
