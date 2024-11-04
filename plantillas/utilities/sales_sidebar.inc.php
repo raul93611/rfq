@@ -122,5 +122,11 @@
         <p>Cancelled</p>
       </a>
     </li>
+    <li class="nav-item">
+      <a href="<?= DELETED; ?>" class="nav-link <?= ($partes_ruta[3] ?? null) === 'deleted' ? 'active' : ''; ?>">
+        <i class="nav-icon fas fa-th"></i>
+        <p>Deleted</p>
+      </a>
+    </li>
   </ul>
 </li>
