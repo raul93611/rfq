@@ -3,7 +3,7 @@ header('Content-Type: application/json');
 Conexion::abrir_conexion();
 $conexion = Conexion::obtener_conexion();
 
-$fulfillment_subitem = !empty($id_fulfillment_subitem) ? FulfillmentSubitemRepository::get_one($conexion, $id_fulfillment_subitem) : null;
+$fulfillment_subitem = !empty($_POST["idFulfillmentSubitem"]) ? FulfillmentSubitemRepository::get_one($conexion, $_POST["idFulfillmentSubitem"]) : null;
 $providers_list = ProviderListRepository::get_all($conexion);
 $payment_terms = PaymentTermRepository::get_all($conexion);
 $invoices = InvoiceRepository::get_all_by_id_rfq($conexion, $_POST["idRfq"]);
@@ -96,7 +96,7 @@ Conexion::cerrar_conexion();
 </div>
 
 <input type="hidden" id="id_fulfillment_subitem" name="id_fulfillment_subitem" value="<?= htmlspecialchars($fulfillment_subitem?->get_id() ?? '', ENT_QUOTES, 'UTF-8'); ?>">
-<input type="hidden" id="id_subitem" name="id_subitem" value="<?= htmlspecialchars($_POST["idSubitem"] ?? $fulfillment_subitem?->get_id_subitem(), ENT_QUOTES, 'UTF-8'); ?>">
+<input type="hidden" id="id_subitem" name="id_subitem" value="<?= htmlspecialchars(empty($_POST["idSubitem"]) ? $fulfillment_subitem?->get_id_subitem() : $_POST["idSubitem"], ENT_QUOTES, 'UTF-8'); ?>">
 <input type="hidden" id="id_rfq" name="id_rfq" value="<?= htmlspecialchars($_POST["idRfq"], ENT_QUOTES, 'UTF-8'); ?>">
 
 <div class="modal-footer">

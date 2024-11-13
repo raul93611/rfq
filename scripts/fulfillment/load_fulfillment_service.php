@@ -2,7 +2,7 @@
 Conexion::abrir_conexion();
 try {
   $conexion = Conexion::obtener_conexion();
-  $fulfillment_service = $id_fulfillment_service ? FulfillmentServiceRepository::get_one($conexion, $id_fulfillment_service) : null;
+  $fulfillment_service = $_POST["idFulfillmentService"] ? FulfillmentServiceRepository::get_one($conexion, $_POST["idFulfillmentService"]) : null;
   $providers_list = ProviderListRepository::get_all($conexion);
   $payment_terms = PaymentTermRepository::get_all($conexion);
   $invoices = InvoiceRepository::get_all_by_id_rfq($conexion, $_POST["idRfq"]);
@@ -93,7 +93,7 @@ try {
 </div>
 
 <input type="hidden" id="id_fulfillment_service" name="id_fulfillment_service" value="<?= $fulfillment_service?->get_id(); ?>">
-<input type="hidden" id="id_service" name="id_service" value="<?= $_POST["idService"] ?? $fulfillment_service?->get_id_service(); ?>">
+<input type="hidden" id="id_service" name="id_service" value="<?= $_POST["idService"] ? $_POST["idService"] : $fulfillment_service?->get_id_service(); ?>">
 
 <div class="modal-footer">
   <button type="submit" name="save_edit_fulfillment_service_button" class="btn btn-success"><i class="fa fa-check"></i> Save</button>

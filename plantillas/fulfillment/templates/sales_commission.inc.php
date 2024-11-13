@@ -37,7 +37,7 @@ switch ($quote->obtener_sales_commission()) {
         <?= "Profit basis for commission ({$sales_commission[2]}): {$sales_commission[0]}"; ?>
         <button type="button" class="m-0 p-0 btn btn-link text-success"
           data-toggle="tooltip" data-html="true"
-          title="<?= htmlspecialchars($quote->obtener_sales_commission_comment(), ENT_QUOTES, 'UTF-8'); ?>">
+          title="<?= htmlspecialchars($quote->obtener_sales_commission_comment() ?? '', ENT_QUOTES, 'UTF-8'); ?>">
           <i class="fas fa-comment"></i>
         </button>
       </span>

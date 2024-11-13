@@ -11,7 +11,7 @@ $shippings = explode('|', $quote->obtener_fulfillment_shipping() ?? '');
         </button>
       </div>
       <input type="hidden" form="edit_fulfillment_shipping_form" name="id_rfq" value="<?= htmlspecialchars($quote->obtener_id()); ?>">
-      <form id="edit_fulfillment_shipping_form" method="post" data="<?= count($shippings) - 1; ?>" action="">
+      <form id="edit_fulfillment_shipping_form" method="post" data-counter="<?= count($shippings) - 1; ?>" action="">
       </form>
     </div>
   </div>

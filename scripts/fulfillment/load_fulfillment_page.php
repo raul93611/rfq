@@ -10,9 +10,7 @@ try {
   Conexion::cerrar_conexion();
 }
 
-if ($quote->obtener_invoice()) {
-  include_once 'plantillas/fulfillment/templates/sales_commission.inc.php';
-}
+include_once 'plantillas/fulfillment/templates/sales_commission.inc.php';
 ?>
 
 <div class="card card-primary">

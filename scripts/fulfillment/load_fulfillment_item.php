@@ -2,7 +2,7 @@
 Conexion::abrir_conexion();
 try {
   $conexion = Conexion::obtener_conexion();
-  $fulfillment_item = $id_fulfillment_item ? FulfillmentItemRepository::get_one($conexion, $id_fulfillment_item) : null;
+  $fulfillment_item = $_POST["idFulfillmentItem"] ? FulfillmentItemRepository::get_one($conexion, $_POST["idFulfillmentItem"]) : null;
   $providers_list = ProviderListRepository::get_all($conexion);
   $payment_terms = PaymentTermRepository::get_all($conexion);
   $invoices = InvoiceRepository::get_all_by_id_rfq($conexion, $_POST["idRfq"]);
@@ -104,7 +104,7 @@ try {
 
 <!-- Hidden Fields -->
 <input type="hidden" name="id_fulfillment_item" value="<?= htmlspecialchars($fulfillment_item?->get_id() ?? '', ENT_QUOTES, 'UTF-8'); ?>">
-<input type="hidden" name="id_item" value="<?= htmlspecialchars($_POST["idItem"] ?? $fulfillment_item?->get_id_item(), ENT_QUOTES, 'UTF-8'); ?>">
+<input type="hidden" name="id_item" value="<?= htmlspecialchars($_POST["idItem"] ? $_POST["idItem"] : $fulfillment_item?->get_id_item(), ENT_QUOTES, 'UTF-8'); ?>">
 
 <div class="modal-footer">
   <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Save</button>

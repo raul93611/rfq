@@ -1,6 +1,6 @@
 <div id="fulfillment_page" class="col-md-12">
   <!-- Include Sales Commission if invoice exists -->
-  <?php if ($quote->obtener_invoice()) include 'plantillas/fulfillment/templates/sales_commission.inc.php'; ?>
+  <?php include 'plantillas/fulfillment/templates/sales_commission.inc.php'; ?>
 
   <!-- RFQ Card -->
   <div class="card card-primary">
