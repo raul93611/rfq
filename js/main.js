@@ -197,14 +197,14 @@ $(document).ready(function () {
   function initializeDatePicker(selector, options = {}) {
     const defaultOptions = {
       singleDatePicker: true,
-      autoUpdateInput: false,
+      autoUpdateInput: selector === '.date' ? false : true,
       autoApply: true,
     };
-
+    
     $(selector).daterangepicker({ ...defaultOptions, ...options });
 
     $(selector).on('apply.daterangepicker', function (ev, picker) {
-      $(this).val(picker.startDate.format(options.format || 'MM/DD/YYYY'));
+      $(this).val(picker.startDate.format(options.locale?.format || 'MM/DD/YYYY'));
     });
 
     $(selector).on('cancel.daterangepicker', function () {
