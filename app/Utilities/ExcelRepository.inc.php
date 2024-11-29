@@ -481,89 +481,253 @@ class ExcelRepository {
         switch ($type) {
           case 'monthly':
             $sql = "
-            SELECT r.id, 
-            DATE_FORMAT(fulfillment_date, '%m/%d/%Y') as fulfillment_date, 
-            contract_number, 
-            email_code, 
-            u.nombre_usuario,
-            canal, 
-            type_of_bid, 
-            COALESCE(COALESCE(r.total_cost, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_cost,
-            COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_price,
-            COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(COALESCE(r.total_cost, 0) + SUM(COALESCE(s.total_price, 0)), 0) as profit, 
-            ((COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(COALESCE(r.total_cost, 0) + SUM(COALESCE(s.total_price, 0)), 0)) / NULLIF(COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0), 0)) * 100 AS profit_percentage,
-            COALESCE(COALESCE(rq.total_cost, 0) + SUM(COALESCE(rqs.total_price, 0)), 0) AS total_cost_requote,
-            COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_price_requote,
-            COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(COALESCE(rq.total_cost, 0) + SUM(COALESCE(rqs.total_price, 0)), 0) as profit_requote,
-            ((COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(COALESCE(rq.total_cost, 0) + SUM(COALESCE(rqs.total_price, 0)), 0)) / NULLIF(COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0), 0)) * 100 AS profit_percentage_requote,
-            type_of_contract 
-            FROM rfq r
-            LEFT JOIN services s ON r.id = s.id_rfq
-            LEFT JOIN usuarios u ON r.usuario_designado = u.id
-            LEFT JOIN re_quotes rq ON r.id = rq.id_rfq
-            LEFT JOIN re_quote_services rqs ON rq.id = rqs.id_re_quote
-            WHERE deleted = 0 AND
-            fullfillment = 1 AND
-            MONTH(fulfillment_date) = {$month} AND 
-            YEAR(fulfillment_date) = {$year} 
-            GROUP BY r.id";
+            SELECT
+              quotes.id,
+              quotes.fulfillment_date,
+              quotes.contract_number,
+              quotes.email_code,
+              quotes.nombre_usuario,
+              quotes.canal,
+              quotes.type_of_bid,
+              quotes.total_cost,
+              quotes.total_price,
+              quotes.profit,
+              requotes.total_cost_requote,
+              quotes.total_price AS total_price_requote,
+              quotes.profit_equipment_requote + quotes.total_service_price - requotes.total_requote_service AS profit_requote,
+              quotes.type_of_contract,
+              quotes.set_side
+            FROM
+              (
+                SELECT
+                  r.id,
+                  DATE_FORMAT(r.fulfillment_date, '%m/%d/%Y') as fulfillment_date,
+                  r.contract_number,
+                  r.email_code,
+                  u.nombre_usuario,
+                  r.canal,
+                  r.type_of_bid,
+                  SUM(COALESCE(s.total_price, 0)) AS total_service_price,
+                  COALESCE(
+                    COALESCE(r.total_cost, 0) + SUM(COALESCE(s.total_price, 0)),
+                    0
+                  ) AS total_cost,
+                  COALESCE(
+                    COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)),
+                    0
+                  ) AS total_price,
+                  COALESCE(
+                    COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)),
+                    0
+                  ) - COALESCE(
+                    COALESCE(r.total_cost, 0) + SUM(COALESCE(s.total_price, 0)),
+                    0
+                  ) as profit,
+                  COALESCE(r.total_price, 0) - COALESCE(rq.total_cost, 0) as profit_equipment_requote,
+                  r.type_of_contract,
+                  r.set_side
+                FROM
+                  rfq r
+                  LEFT JOIN services s ON r.id = s.id_rfq
+                  LEFT JOIN usuarios u ON r.usuario_designado = u.id
+                  LEFT JOIN re_quotes rq ON r.id = rq.id_rfq
+                WHERE
+                  deleted = 0
+                  AND fullfillment = 1
+                  AND MONTH(fulfillment_date) = {$month}
+                  AND YEAR(fulfillment_date) = {$year}
+                GROUP BY
+                  r.id
+                ORDER BY
+                  r.id ASC
+              ) as quotes
+              LEFT JOIN (
+                SELECT
+                  rq.id_rfq,
+                  COALESCE(
+                    COALESCE(rq.total_cost, 0) + SUM(COALESCE(rqs.total_price, 0)),
+                    0
+                  ) AS total_cost_requote,
+                  SUM(COALESCE(rqs.total_price, 0)) as total_requote_service
+                FROM
+                  re_quotes rq
+                  LEFT JOIN rfq r ON rq.id_rfq = r.id
+                  LEFT JOIN re_quote_services rqs ON rq.id = rqs.id_re_quote
+                WHERE
+                  r.deleted = 0
+                  AND r.fullfillment = 1
+                  AND MONTH(r.fulfillment_date) = {$month}
+                  AND YEAR(r.fulfillment_date) = {$year}
+                GROUP BY
+                  rq.id_rfq
+              ) AS requotes ON quotes.id = requotes.id_rfq
+            ";
             break;
           case 'quarterly':
             $sql = "
-            SELECT r.id, 
-            DATE_FORMAT(fulfillment_date, '%m/%d/%Y') as fulfillment_date,  
-            contract_number, 
-            email_code, 
-            u.nombre_usuario,
-            canal, 
-            type_of_bid, 
-            COALESCE(COALESCE(r.total_cost, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_cost,
-            COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_price,
-            COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(COALESCE(r.total_cost, 0) + SUM(COALESCE(s.total_price, 0)), 0) as profit, 
-            ((COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(COALESCE(r.total_cost, 0) + SUM(COALESCE(s.total_price, 0)), 0)) / NULLIF(COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0), 0)) * 100 AS profit_percentage,
-            COALESCE(COALESCE(rq.total_cost, 0) + SUM(COALESCE(rqs.total_price, 0)), 0) AS total_cost_requote,
-            COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_price_requote,
-            COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(COALESCE(rq.total_cost, 0) + SUM(COALESCE(rqs.total_price, 0)), 0) as profit_requote,
-            ((COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(COALESCE(rq.total_cost, 0) + SUM(COALESCE(rqs.total_price, 0)), 0)) / NULLIF(COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0), 0)) * 100 AS profit_percentage_requote, 
-            type_of_contract 
-            FROM rfq r
-            LEFT JOIN services s ON r.id = s.id_rfq
-            LEFT JOIN usuarios u ON r.usuario_designado = u.id
-            LEFT JOIN re_quotes rq ON r.id = rq.id_rfq
-            LEFT JOIN re_quote_services rqs ON rq.id = rqs.id_re_quote
-            WHERE deleted = 0 AND
-            fullfillment = 1 AND
-            QUARTER(fulfillment_date) = {$quarter} AND
-            YEAR(fulfillment_date) = {$year} 
-            GROUP BY r.id";
+            SELECT
+              quotes.id,
+              quotes.fulfillment_date,
+              quotes.contract_number,
+              quotes.email_code,
+              quotes.nombre_usuario,
+              quotes.canal,
+              quotes.type_of_bid,
+              quotes.total_cost,
+              quotes.total_price,
+              quotes.profit,
+              requotes.total_cost_requote,
+              quotes.total_price AS total_price_requote,
+              quotes.profit_equipment_requote + quotes.total_service_price - requotes.total_requote_service AS profit_requote,
+              quotes.type_of_contract,
+              quotes.set_side
+            FROM
+              (
+                SELECT
+                  r.id,
+                  DATE_FORMAT(r.fulfillment_date, '%m/%d/%Y') as fulfillment_date,
+                  r.contract_number,
+                  r.email_code,
+                  u.nombre_usuario,
+                  r.canal,
+                  r.type_of_bid,
+                  SUM(COALESCE(s.total_price, 0)) AS total_service_price,
+                  COALESCE(
+                    COALESCE(r.total_cost, 0) + SUM(COALESCE(s.total_price, 0)),
+                    0
+                  ) AS total_cost,
+                  COALESCE(
+                    COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)),
+                    0
+                  ) AS total_price,
+                  COALESCE(
+                    COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)),
+                    0
+                  ) - COALESCE(
+                    COALESCE(r.total_cost, 0) + SUM(COALESCE(s.total_price, 0)),
+                    0
+                  ) as profit,
+                  COALESCE(r.total_price, 0) - COALESCE(rq.total_cost, 0) as profit_equipment_requote,
+                  r.type_of_contract,
+                  r.set_side
+                FROM
+                  rfq r
+                  LEFT JOIN services s ON r.id = s.id_rfq
+                  LEFT JOIN usuarios u ON r.usuario_designado = u.id
+                  LEFT JOIN re_quotes rq ON r.id = rq.id_rfq
+                WHERE
+                  deleted = 0
+                  AND fullfillment = 1
+                  AND QUARTER(fulfillment_date) = {$quarter}
+                  AND YEAR(fulfillment_date) = {$year}
+                GROUP BY
+                  r.id
+                ORDER BY
+                  r.id ASC
+              ) as quotes
+              LEFT JOIN (
+                SELECT
+                  rq.id_rfq,
+                  COALESCE(
+                    COALESCE(rq.total_cost, 0) + SUM(COALESCE(rqs.total_price, 0)),
+                    0
+                  ) AS total_cost_requote,
+                  SUM(COALESCE(rqs.total_price, 0)) as total_requote_service
+                FROM
+                  re_quotes rq
+                  LEFT JOIN rfq r ON rq.id_rfq = r.id
+                  LEFT JOIN re_quote_services rqs ON rq.id = rqs.id_re_quote
+                WHERE
+                  r.deleted = 0
+                  AND r.fullfillment = 1
+                  AND QUARTER(r.fulfillment_date) = {$quarter}
+                  AND YEAR(r.fulfillment_date) = {$year}
+                GROUP BY
+                  rq.id_rfq
+              ) AS requotes ON quotes.id = requotes.id_rfq
+            ";
             break;
           case 'yearly':
             $sql = "
-            SELECT r.id, 
-            DATE_FORMAT(fulfillment_date, '%m/%d/%Y') as fulfillment_date,  
-            contract_number, 
-            email_code, 
-            u.nombre_usuario,
-            canal, 
-            type_of_bid, 
-            COALESCE(COALESCE(r.total_cost, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_cost,
-            COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_price,
-            COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(COALESCE(r.total_cost, 0) + SUM(COALESCE(s.total_price, 0)), 0) as profit, 
-            ((COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(COALESCE(r.total_cost, 0) + SUM(COALESCE(s.total_price, 0)), 0)) / NULLIF(COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0), 0)) * 100 AS profit_percentage,
-            COALESCE(COALESCE(rq.total_cost, 0) + SUM(COALESCE(rqs.total_price, 0)), 0) AS total_cost_requote,
-            COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_price_requote,
-            COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(COALESCE(rq.total_cost, 0) + SUM(COALESCE(rqs.total_price, 0)), 0) as profit_requote,
-            ((COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - COALESCE(COALESCE(rq.total_cost, 0) + SUM(COALESCE(rqs.total_price, 0)), 0)) / NULLIF(COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0), 0)) * 100 AS profit_percentage_requote, 
-            type_of_contract 
-            FROM rfq r
-            LEFT JOIN services s ON r.id = s.id_rfq
-            LEFT JOIN usuarios u ON r.usuario_designado = u.id
-            LEFT JOIN re_quotes rq ON r.id = rq.id_rfq
-            LEFT JOIN re_quote_services rqs ON rq.id = rqs.id_re_quote
-            WHERE deleted = 0 AND
-            fullfillment = 1 AND
-            YEAR(fulfillment_date) = {$year} 
-            GROUP BY r.id";
+            SELECT
+              quotes.id,
+              quotes.fulfillment_date,
+              quotes.contract_number,
+              quotes.email_code,
+              quotes.nombre_usuario,
+              quotes.canal,
+              quotes.type_of_bid,
+              quotes.total_cost,
+              quotes.total_price,
+              quotes.profit,
+              requotes.total_cost_requote,
+              quotes.total_price AS total_price_requote,
+              quotes.profit_equipment_requote + quotes.total_service_price - requotes.total_requote_service AS profit_requote,
+              quotes.type_of_contract,
+              quotes.set_side
+            FROM
+              (
+                SELECT
+                  r.id,
+                  DATE_FORMAT(r.fulfillment_date, '%m/%d/%Y') as fulfillment_date,
+                  r.contract_number,
+                  r.email_code,
+                  u.nombre_usuario,
+                  r.canal,
+                  r.type_of_bid,
+                  SUM(COALESCE(s.total_price, 0)) AS total_service_price,
+                  COALESCE(
+                    COALESCE(r.total_cost, 0) + SUM(COALESCE(s.total_price, 0)),
+                    0
+                  ) AS total_cost,
+                  COALESCE(
+                    COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)),
+                    0
+                  ) AS total_price,
+                  COALESCE(
+                    COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)),
+                    0
+                  ) - COALESCE(
+                    COALESCE(r.total_cost, 0) + SUM(COALESCE(s.total_price, 0)),
+                    0
+                  ) as profit,
+                  COALESCE(r.total_price, 0) - COALESCE(rq.total_cost, 0) as profit_equipment_requote,
+                  r.type_of_contract,
+                  r.set_side
+                FROM
+                  rfq r
+                  LEFT JOIN services s ON r.id = s.id_rfq
+                  LEFT JOIN usuarios u ON r.usuario_designado = u.id
+                  LEFT JOIN re_quotes rq ON r.id = rq.id_rfq
+                WHERE
+                  deleted = 0
+                  AND fullfillment = 1
+                  AND YEAR(fulfillment_date) = {$year}
+                GROUP BY
+                  r.id
+                ORDER BY
+                  r.id ASC
+              ) as quotes
+              LEFT JOIN (
+                SELECT
+                  rq.id_rfq,
+                  COALESCE(
+                    COALESCE(rq.total_cost, 0) + SUM(COALESCE(rqs.total_price, 0)),
+                    0
+                  ) AS total_cost_requote,
+                  SUM(COALESCE(rqs.total_price, 0)) as total_requote_service
+                FROM
+                  re_quotes rq
+                  LEFT JOIN rfq r ON rq.id_rfq = r.id
+                  LEFT JOIN re_quote_services rqs ON rq.id = rqs.id_re_quote
+                WHERE
+                  r.deleted = 0
+                  AND r.fullfillment = 1
+                  AND YEAR(r.fulfillment_date) = {$year}
+                GROUP BY
+                  rq.id_rfq
+              ) AS requotes ON quotes.id = requotes.id_rfq
+            ";
             break;
         }
         $sentence = $connection->prepare($sql);
@@ -611,7 +775,7 @@ class ExcelRepository {
       $x++;
       $activeWorksheet->setCellValue($x . $y, $quote['profit']);
       $x++;
-      $activeWorksheet->setCellValue($x . $y, number_format($quote['profit_percentage'], 2) . '%');
+      $activeWorksheet->setCellValue($x . $y, number_format($quote['profit_percentage'] ?? 0, 2) . '%');
       $x++;
       $activeWorksheet->setCellValue($x . $y, $quote['total_cost_requote']);
       $x++;
@@ -619,9 +783,11 @@ class ExcelRepository {
       $x++;
       $activeWorksheet->setCellValue($x . $y, $quote['profit_requote']);
       $x++;
-      $activeWorksheet->setCellValue($x . $y, number_format($quote['profit_percentage_requote'], 2) . '%');
+      $activeWorksheet->setCellValue($x . $y, number_format($quote['profit_percentage_requote'] ?? 0, 2) . '%');
       $x++;
       $activeWorksheet->setCellValue($x . $y, $quote['type_of_contract']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['set_side']);
       $y++;
     }
     $x = 'H';
@@ -1249,7 +1415,6 @@ class ExcelRepository {
             FROM rfq r
               LEFT JOIN services s ON r.id = s.id_rfq
               LEFT JOIN re_quotes rq ON r.id = rq.id_rfq
-              LEFT JOIN re_quote_services rqs ON rq.id = rqs.id_re_quote
             WHERE deleted = 0
               AND invoice = 1
               AND r.fulfillment_pending = 0

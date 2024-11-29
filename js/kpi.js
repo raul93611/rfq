@@ -1,142 +1,106 @@
 $(document).ready(function () {
   const idRfq = $('input[name="id_rfq"]').val();
+
+  // Helper function to create bar charts
+  function createBarChart(elementId, labels, datasets) {
+    const chartElement = $(elementId);
+    new Chart(chartElement, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: datasets
+      },
+      options: {
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        },
+        plugins: {
+          tooltip: {
+            filter: tooltipItem => tooltipItem.raw !== null
+          }
+        }
+      }
+    });
+  }
+
   $.ajax({
     url: `/rfq/kpi/${idRfq}`,
     dataType: 'json',
     contentType: "application/json; charset=utf-8",
     method: "GET",
     success: function (data) {
-      // General chart
-      const general = data.general;
-      let chartdata = {
-        labels: ['Total Price', 'Total Cost', 'Profit'],
-        datasets: [
+      // General Chart
+      createBarChart("#general-chart",
+        ['Total Price', 'Total Cost', 'Profit'],
+        [
           {
             label: 'Quote',
             backgroundColor: '#13A8F0',
             borderColor: '#13A8F0',
-            data: general.quote
+            data: data.general.quote
           },
           {
             label: 'Re-Quote',
             backgroundColor: '#ffc107',
             borderColor: '#ffc107',
-            data: general.reQuote
+            data: data.general.reQuote
           },
           {
             label: 'Fulfillment',
             backgroundColor: '#28a745',
             borderColor: '#28a745',
-            data: general.fulfillment
-          },
-        ]
-      };
-      let box = $("#general-chart");
-      var chart = new Chart(box, {
-        type: 'bar',
-        data: chartdata,
-        options: {
-          maintainAspectRatio: false,
-          skipNull: true,
-          scales: {
-            y: {
-              beginAtZero: true
-            }
-          },
-          plugins: {
-            tooltip: {
-              filter: function (tooltipItem) {
-                return tooltipItem.raw === null ? false : true; 
-              },
-            }
+            data: data.general.fulfillment
           }
-        },
-      });
+        ]
+      );
 
-      //RFQ chart
-      const rfq = data.rfq;
-      chartdata = {
-        labels: ['Total Price', 'Total Cost', 'Profit'],
-        datasets: [
+      // RFQ Chart
+      createBarChart("#rfq-chart",
+        ['Total Price', 'Total Cost', 'Profit'],
+        [
           {
             label: 'Quote',
             backgroundColor: '#13A8F0',
             borderColor: '#13A8F0',
-            data: rfq.quote
+            data: data.rfq.quote
           },
           {
             label: 'Re-Quote',
             backgroundColor: '#ffc107',
             borderColor: '#ffc107',
-            data: rfq.reQuote
+            data: data.rfq.reQuote
           },
           {
             label: 'Fulfillment',
             backgroundColor: '#28a745',
             borderColor: '#28a745',
-            data: rfq.fulfillment
-          },
-        ]
-      };
-      box = $("#rfq-chart");
-      var chart = new Chart(box, {
-        type: 'bar',
-        data: chartdata,
-        options: {
-          maintainAspectRatio: false,
-          skipNull: true,
-          scales: {
-            y: {
-              beginAtZero: true
-            }
-          },
-          plugins: {
-            tooltip: {
-              filter: function (tooltipItem) {
-                return tooltipItem.raw === null ? false : true; 
-              },
-            }
+            data: data.rfq.fulfillment
           }
-        },
-      });
+        ]
+      );
 
-      //RFP chart
-      const rfp = data.rfp;
-      chartdata = {
-        labels: ['Total Price', 'Total Cost', 'Profit'],
-        datasets: [
+      // RFP Chart
+      createBarChart("#rfp-chart",
+        ['Total Price', 'Total Cost', 'Profit'],
+        [
           {
             label: 'Services',
             backgroundColor: '#13A8F0',
             borderColor: '#13A8F0',
-            data: rfp
+            data: data.rfp
           }
         ]
-      };
-      box = $("#rfp-chart");
-      var chart = new Chart(box, {
-        type: 'bar',
-        data: chartdata,
-        options: {
-          maintainAspectRatio: false,
-          skipNull: true,
-          scales: {
-            y: {
-              beginAtZero: true
-            }
-          },
-          plugins: {
-            tooltip: {
-              filter: function (tooltipItem) {
-                return tooltipItem.raw === null ? false : true; 
-              },
-            }
-          }
-        },
-      });
+      );
     },
-    error: function (data) {
-      console.error(data);
+    error: function (xhr, status, error) {
+      console.error("Error fetching KPI data:", {
+        xhr: xhr,
+        status: status,
+        error: error
+      });
     }
   });
 });

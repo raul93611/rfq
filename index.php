@@ -282,6 +282,9 @@ switch ($partes_ruta[1] ?? null) {
         $archivo = $partes_ruta[4];
         $ruta_elegida = 'scripts/utilities/delete_document.php';
         break;
+      case 'download_all':
+        $ruta_elegida = 'scripts/utilities/download_all.php';
+        break;
       default:
         break;
     }
@@ -444,7 +447,6 @@ switch ($partes_ruta[1] ?? null) {
             $ruta_elegida = 'scripts/fulfillment/delete_fulfillment_item.php';
             break;
           case 'load_fulfillment_item':
-            $id_fulfillment_item = $partes_ruta[4] ?? null;
             $ruta_elegida = 'scripts/fulfillment/load_fulfillment_item.php';
             break;
           case 'save_fulfillment_subitem':
@@ -457,7 +459,6 @@ switch ($partes_ruta[1] ?? null) {
             $ruta_elegida = 'scripts/fulfillment/delete_fulfillment_subitem.php';
             break;
           case 'load_fulfillment_subitem':
-            $id_fulfillment_subitem = $partes_ruta[4] ?? null;
             $ruta_elegida = 'scripts/fulfillment/load_fulfillment_subitem.php';
             break;
           case 'mark_as_reviewed':
@@ -490,7 +491,6 @@ switch ($partes_ruta[1] ?? null) {
             $ruta_elegida = 'scripts/fulfillment/delete_fulfillment_service.php';
             break;
           case 'load_fulfillment_service':
-            $id_fulfillment_service = $partes_ruta[4] ?? null;
             $ruta_elegida = 'scripts/fulfillment/load_fulfillment_service.php';
             break;
           case 'save_net_30':

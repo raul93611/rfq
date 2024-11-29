@@ -2,7 +2,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Add</h5>
+        <h5 class="modal-title">Add Event</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -14,14 +14,17 @@
               <div class="form-group">
                 <label for="name">Name:</label>
                 <input type="text" id="name" class="form-control form-control-sm" name="name" value="">
+                <small class="form-text text-muted">Enter the name of the event.</small>
               </div>
               <div class="form-group">
                 <label for="start">Start:</label>
                 <input readonly type="text" id="start" class="form-control form-control-sm" name="start" value="">
+                <small class="form-text text-muted">Select the start date and time.</small>
               </div>
               <div class="form-group">
                 <label for="end">End:</label>
                 <input readonly type="text" id="end" class="form-control form-control-sm" name="end" value="">
+                <small class="form-text text-muted">Select the end date and time.</small>
               </div>
               <div class="form-group">
                 <label for="color">Color:</label>
@@ -31,6 +34,7 @@
                     <span class="input-group-text"><i class="fas fa-square"></i></span>
                   </div>
                 </div>
+                <small class="form-text text-muted">Choose a color for the event.</small>
               </div>
             </div>
             <input type="hidden" name="id_personnel">
@@ -38,8 +42,12 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="submit" form="add-event-form" class="btn btn-success"><i class="fa fa-check"></i> Save</button>
-        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-ban"></i> Cancel</button>
+        <button type="submit" form="add-event-form" class="btn btn-success">
+          <i class="fa fa-check"></i> Save
+        </button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">
+          <i class="fa fa-ban"></i> Cancel
+        </button>
       </div>
     </div>
   </div>

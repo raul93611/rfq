@@ -1,37 +1,44 @@
 <?php
-if($cotizacion_recuperada-> obtener_multi_year_project()){
-  ?>
+// Check if the project is a multi-year master or has slaves
+$multiYearProject = $cotizacion_recuperada->obtener_multi_year_project();
+$slavesQuotes = $cotizacion_recuperada->getSlavesQuotes();
+
+// Display master project if exists
+if ($multiYearProject) {
+?>
   <small>
-    <a class="btn btn-link" href="<?php echo EDITAR_COTIZACION . '/' . $cotizacion_recuperada-> obtener_multi_year_project(); ?>">Master: <?php echo $cotizacion_recuperada-> obtener_multi_year_project(); ?></a>
-    <form class="d-inline" action="<?php echo REMOVE_MASTER; ?>" method="post">
-      <input type="hidden" name="slave" value="<?php echo $cotizacion_recuperada-> obtener_id(); ?>">
-      <input class="border-0 p-0 m-0 bg-transparent text-danger" type="submit" name="send" value="&times;">
+    <a class="btn btn-link" href="<?= EDITAR_COTIZACION . '/' . $multiYearProject; ?>">
+      Master: <?= $multiYearProject; ?>
+    </a>
+    <form class="d-inline" action="<?= REMOVE_MASTER; ?>" method="post">
+      <input type="hidden" name="slave" value="<?= $cotizacion_recuperada->obtener_id(); ?>">
+      <input type="submit" name="send" class="border-0 p-0 m-0 bg-transparent text-danger" value="&times;">
     </form>
   </small>
-  <?php
-}else if($cotizacion_recuperada-> getSlavesQuotes()){
-  ?>
+<?php
+}
+// Display slave quotes if any
+elseif ($slavesQuotes) {
+?>
   <div class="btn-group">
     <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       Slaves
     </button>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-      <?php
-      foreach ($cotizacion_recuperada-> getSlavesQuotes() as $key => $slave_quote) {
-        ?>
+      <?php foreach ($slavesQuotes as $slaveQuote): ?>
         <li class="dropdown-item">
-          <a href="<?php echo EDITAR_COTIZACION . '/' . $slave_quote['id']; ?>"><?php echo $slave_quote['id']; ?></a>
-          <form class="float-right" action="<?php echo REMOVE_SLAVE; ?>" method="post">
-            <input type="hidden" name="master" value="<?php echo $cotizacion_recuperada-> obtener_id(); ?>">
-            <input type="hidden" name="slave" value="<?php echo $slave_quote['id']; ?>">
-            <input class="border-0 p-0 m-0 bg-transparent text-danger" type="submit" name="send" value="&times;">
+          <a href="<?= EDITAR_COTIZACION . '/' . $slaveQuote['id']; ?>">
+            <?= $slaveQuote['id']; ?>
+          </a>
+          <form class="float-right" action="<?= REMOVE_SLAVE; ?>" method="post">
+            <input type="hidden" name="master" value="<?= $cotizacion_recuperada->obtener_id(); ?>">
+            <input type="hidden" name="slave" value="<?= $slaveQuote['id']; ?>">
+            <input type="submit" name="send" class="border-0 p-0 m-0 bg-transparent text-danger" value="&times;">
           </form>
         </li>
-        <?php
-      }
-      ?>
+      <?php endforeach; ?>
     </div>
   </div>
-  <?php
+<?php
 }
 ?>

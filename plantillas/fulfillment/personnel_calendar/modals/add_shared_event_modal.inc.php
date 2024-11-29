@@ -13,32 +13,40 @@
             <div class="col-md-12">
               <div class="form-group">
                 <label for="name">Name:</label>
-                <input type="text" id="name" class="form-control form-control-sm" name="name" value="">
+                <input type="text" id="name" class="form-control form-control-sm" name="name" value="" required>
+                <small class="form-text text-muted">Enter the name of the shared event.</small>
               </div>
               <div class="form-group">
                 <label for="start">Start:</label>
-                <input readonly type="text" id="start" class="form-control form-control-sm" name="start" value="">
+                <input type="text" id="start" class="form-control form-control-sm" name="start" value="" readonly required>
+                <small class="form-text text-muted">Select the starting date and time for the event.</small>
               </div>
               <div class="form-group">
                 <label for="end">End:</label>
-                <input readonly type="text" id="end" class="form-control form-control-sm" name="end" value="">
+                <input type="text" id="end" class="form-control form-control-sm" name="end" value="" readonly required>
+                <small class="form-text text-muted">Select the ending date and time for the event.</small>
               </div>
               <div class="form-group">
                 <label for="color">Color:</label>
                 <div class="input-group">
-                  <input type="text" id="color" class="form-control form-control-sm" name="color" value="">
+                  <input type="text" id="color" class="form-control form-control-sm" name="color" value="" required>
                   <div class="input-group-append">
                     <span class="input-group-text"><i class="fas fa-square"></i></span>
                   </div>
                 </div>
+                <small class="form-text text-muted">Choose a color to represent the event in the calendar.</small>
               </div>
             </div>
           </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="submit" form="add-shared-event-form" class="btn btn-success"><i class="fa fa-check"></i> Save</button>
-        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-ban"></i> Cancel</button>
+        <button type="submit" form="add-shared-event-form" class="btn btn-success">
+          <i class="fa fa-check"></i> Save
+        </button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">
+          <i class="fa fa-ban"></i> Cancel
+        </button>
       </div>
     </div>
   </div>

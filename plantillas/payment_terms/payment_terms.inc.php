@@ -5,8 +5,10 @@
         <div class="col-sm-6">
           <h1 class="m-0 text-dark">Payment Terms</h1>
         </div>
-        <div class="col-sm-6">
-          <button id="add_payment_term" class="float-right btn btn-primary" type="button" name="button"><i class="fas fa-plus"></i></button>
+        <div class="col-sm-6 text-right">
+          <button id="add_payment_term" class="btn btn-primary" type="button">
+            <i class="fas fa-plus"></i> Add Payment Term
+          </button>
         </div>
       </div>
     </div>
@@ -16,17 +18,20 @@
       <div class="row">
         <section class="col-12">
           <div class="card">
-            <div class="card-header align-middle">
-              <h3 class="card-title">Payment Terms List</h3>
+            <div class="card-header">
+              <h3 class="card-title mb-0">Payment Terms List</h3>
             </div>
             <div class="card-body">
-              <table id="payment_terms_table" class="table table-bordered table-hover">
-                <thead>
+              <table id="payment_terms_table" class="table table-bordered table-hover mb-0">
+                <thead class="thead-light">
                   <tr>
-                    <th>PAYMENT TERMS</th>
-                    <th style="width:100px;">OPTIONS</th>
+                    <th>Payment Terms</th>
+                    <th class="text-center" style="width:100px;">Options</th>
                   </tr>
                 </thead>
+                <tbody>
+                  <!-- Dynamic content will be loaded here -->
+                </tbody>
               </table>
             </div>
           </div>
@@ -35,8 +40,9 @@
     </div>
   </section>
 </div>
+
 <?php
 include_once 'modals/add_payment_term_modal.inc.php';
 include_once 'modals/edit_payment_term_modal.inc.php';
 ?>
-<script src="<?php echo RUTA_JS; ?>payment_terms.js"></script>
+<script src="<?= RUTA_JS; ?>payment_terms.js"></script>

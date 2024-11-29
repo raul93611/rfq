@@ -1,210 +1,186 @@
 $(document).ready(function () {
+  // Initialize tooltips
   $('body').tooltip({
     selector: '[data-toggle="tooltip"]',
     trigger: 'click',
     placement: 'top',
   });
 
+  // Function to initialize DataTable
+  function initializeDataTable(selector, options) {
+    const defaultOptions = {
+      processing: true,
+      serverSide: true,
+      pageLength: 10,
+      searching: false,
+      order: [[1, 'asc']],
+    };
+
+    $(selector).DataTable($.extend(true, defaultOptions, options));
+  }
+
+  // DataTable for #month-table
   const monthTable = $('#month-table');
-  const monthDataTable = $('#month-table').DataTable({
-    "processing": true,
-    "serverSide": true,
-    "searching": false,
-    "pageLength": 10,
-    "order": [[1, "asc"]],
-    "ajax": {
-      "url": '/rfq/projection/month',
-      "type": "POST",
-      "data": {
-        "id": monthTable.data('id'),
-      }
+  initializeDataTable('#month-table', {
+    ajax: {
+      url: '/rfq/projection/month',
+      type: 'POST',
+      data: {
+        id: monthTable.data('id'),
+      },
     },
-    "columns": [
+    columns: [
+      { data: 'id_quote', visible: false },
+      { data: 'invoice_date' },
+      { data: 'id' },
+      { data: 'type_of_contract' },
+      { data: 'total_price' },
+      { data: 'total_cost', visible: false },
+      { data: 'profit', visible: false },
+      { data: 'profit_percentage', visible: false },
+      { data: 'sales_commission', visible: false },
+      { data: 'total_profit' },
+      { data: 'total_profit_percentage' },
       {
-        "data": "id_quote",
-        "visible": false
-      },
-      { "data": "invoice_date" },
-      { "data": "id" },
-      { "data": "type_of_contract" },
-      { "data": "total_price" },
-      {
-        "data": "total_cost",
-        "visible": false
-      },
-      {
-        "data": "profit",
-        "visible": false
-      },
-      {
-        "data": "profit_percentage",
-        "visible": false
-      },
-      {
-        "data": "sales_commission",
-        "visible": false
-      },
-      { "data": "total_profit" },
-      { "data": "total_profit_percentage" },
-      {
-        "data": "invoice_acceptance",
-        "orderable": false,
-        "render": function (data, type, row, meta) {
+        data: 'invoice_acceptance',
+        orderable: false,
+        render: function (data, type, row) {
           if (type === 'display') {
             return `
-            <button type="button" class="btn btn-link" data-toggle="tooltip" data-html="true" title="${data}">
-              <i class="fas fa-comment fa-2x"></i>
-            </button>
-            <button type="button" class="edit-invoice-acceptance-button btn btn-sm btn-warning" data-id="${row.id}" data-partial-invoice="${row.partial_invoice}">
-              <i class="fas fa-pencil-alt"></i>
-            </button>
-          `;
-          } else {
-            return data;
+              <button type="button" class="btn btn-link" data-toggle="tooltip" data-html="true" title="${data}">
+                <i class="fas fa-comment fa-2x"></i>
+              </button>
+              <button type="button" class="edit-invoice-acceptance-button btn btn-sm btn-warning" 
+                data-id="${row.id}" 
+                data-partial-invoice="${row.partial_invoice}">
+                <i class="fas fa-pencil-alt"></i>
+              </button>
+            `;
           }
-        }
+          return data;
+        },
       },
-      {
-        "data": "partial_invoice",
-        "visible": false
-      }
-    ]
+      { data: 'partial_invoice', visible: false },
+    ],
   });
 
   const editInvoiceAcceptanceModal = $('#edit-invoice-acceptance-modal');
   const editInvoiceAcceptanceForm = $('#edit-invoice-acceptance-form');
 
-  monthTable.on('click', '.edit-invoice-acceptance-button', function () {
-    editInvoiceAcceptanceForm.load(`/rfq/projection/invoice_acceptance`, {
-      id: $(this).data('id'),
-      partialInvoice: $(this).data('partial-invoice')
-    }, () => {
-      editInvoiceAcceptanceModal.modal();
+  // Event delegation for handling button click
+  $('#month-table').on('click', '.edit-invoice-acceptance-button', function () {
+    const id = $(this).data('id');
+    const partialInvoice = $(this).data('partial-invoice');
+
+    // Load form dynamically into the modal
+    editInvoiceAcceptanceForm.load('/rfq/projection/invoice_acceptance', { id, partialInvoice }, () => {
+      editInvoiceAcceptanceModal.modal('show');
     });
   });
 
+  // Form validation and submission
   editInvoiceAcceptanceForm.validate({
     rules: {
       invoice_acceptance: {
-        required: true
-      }
+        required: true,
+      },
     },
     submitHandler: function (form) {
+      // Submit form via AJAX
       $.ajax({
         url: '/rfq/projection/update_invoice_acceptance',
         type: 'POST',
         data: $(form).serialize(),
         success: function (response) {
+          // Hide modal, reload DataTable, and show success notification
           editInvoiceAcceptanceModal.modal('hide');
-          monthDataTable.ajax.reload(null, false);
-          toastr.success('Successfully saved', 'Success');
+          $('#month-table').DataTable().ajax.reload(null, false);
+          toastr.success('Invoice acceptance updated successfully!', 'Success');
         },
-        error: function (xhr, status, error) {
-          console.error(error);
-        }
+        error: function (xhr) {
+          // Log error for debugging
+          console.error('Error:', xhr.responseText || xhr.statusText);
+          toastr.error('Failed to update invoice acceptance. Please try again.', 'Error');
+        },
       });
-    }
+    },
   });
 
-  //totals
   const totalsContainer = $('#totals-container');
-  totalsContainer.load('/rfq/projection/get_month_totals', { id: totalsContainer.data('id') });
+  const totalsContainerId = totalsContainer.data('id');
 
-  //type of contracts charts
+  // Load totals dynamically
+  totalsContainer.load('/rfq/projection/get_month_totals', { id: totalsContainerId });
+
+  // Fetch and render charts for types of contracts
   $.ajax({
     url: "/rfq/projection/charts",
     type: "POST",
-    data: {
-      id: totalsContainer.data('id')
-    },
+    data: { id: totalsContainerId },
     success: function (json) {
-      const transformedData = {
+      if (!json || !json.typeOfContractData) {
+        console.warn("No data returned for contract charts.");
+        return;
+      }
+
+      // Transform the data for charts
+      const transformedData = json.typeOfContractData.reduce((acc, item) => {
+        acc.type_of_contract.push(item.type_of_contract);
+        acc.value.push(item.value);
+        acc.total_price.push(item.total_price);
+        acc.color.push(item.color);
+        return acc;
+      }, {
         type_of_contract: [],
         value: [],
         total_price: [],
         color: []
-      };
-
-      json.typeOfContractData.forEach(item => {
-        transformedData.type_of_contract.push(item.type_of_contract);
-        transformedData.value.push(item.value);
-        transformedData.total_price.push(item.total_price);
-        transformedData.color.push(item.color);
       });
 
+      // Log transformed data for debugging
       console.log(transformedData);
 
-      const contractCountsCanva = document.getElementById('contract-counts').getContext('2d');
-      const contractCountsChart = new Chart(contractCountsCanva, {
-        type: 'pie',
-        data: {
-          labels: transformedData.type_of_contract,
-          datasets: [{
-            label: 'Contract Counts',
-            data: transformedData.value,
-            backgroundColor: transformedData.color,
-            borderColor: transformedData.color,
-            borderWidth: 1
-          }]
-        },
-        options: {
-          maintainAspectRatio: false,
-          responsive: true,
-          plugins: {
-            legend: {
-              position: 'top',
-            },
-            tooltip: {
-              mode: 'index',
-              intersect: true,
-            }
-          }
-        }
-      });
-
-      const contractAmountsCanva = document.getElementById('contract-amounts').getContext('2d');
-      const contractAmountsChart = new Chart(contractAmountsCanva, {
-        type: 'pie',
-        data: {
-          labels: transformedData.type_of_contract,
-          datasets: [{
-            label: 'Contract Amounts',
-            data: transformedData.total_price,
-            backgroundColor: transformedData.color,
-            borderColor: transformedData.color,
-            borderWidth: 1
-          }]
-        },
-        options: {
-          maintainAspectRatio: false,
-          responsive: true,
-          plugins: {
-            legend: {
-              position: 'top',
-            },
-            tooltip: {
-              mode: 'index',
-              intersect: true,
-              callbacks: {
-                label: function (context) {
-                  let label = context.dataset.label || '';
-
-                  if (label) {
-                    label += ': ';
+      // Helper function to create a pie chart
+      const createPieChart = (elementId, label, data) => {
+        const context = document.getElementById(elementId).getContext('2d');
+        return new Chart(context, {
+          type: 'pie',
+          data: {
+            labels: transformedData.type_of_contract,
+            datasets: [{
+              label,
+              data,
+              backgroundColor: transformedData.color,
+              borderColor: transformedData.color,
+              borderWidth: 1
+            }]
+          },
+          options: {
+            maintainAspectRatio: false,
+            responsive: true,
+            plugins: {
+              legend: { position: 'top' },
+              tooltip: {
+                callbacks: {
+                  label: function (context) {
+                    const value = context.raw || 0;
+                    return `${context.label || ''}: $${value.toLocaleString()}`;
                   }
-                  if (context.parsed.y !== null) {
-                    label += '$' + context.parsed.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-                  }
-                  return label;
                 }
               }
             }
           }
-        }
-      });
+        });
+      };
+
+      // Create Contract Counts Chart
+      createPieChart('contract-counts', 'Contract Counts', transformedData.value);
+
+      // Create Contract Amounts Chart
+      createPieChart('contract-amounts', 'Contract Amounts', transformedData.total_price);
     },
-    error: function (xhr, status, error) {
-      console.error(xhr.responseText);
+    error: function (xhr) {
+      console.error("Failed to fetch chart data:", xhr.responseText);
     }
   });
 });

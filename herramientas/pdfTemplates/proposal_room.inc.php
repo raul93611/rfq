@@ -12,6 +12,11 @@
       background-color: #DEE8F2;
     }
 
+    .room {
+      color: #004A97;
+      background-color: #CFD9E3 !important;
+    }
+
     #tabla th,
     #tabla td {
       border: 1px solid #DEE8F2;
@@ -113,9 +118,11 @@
   </table>
   <br>
   <?php foreach ($rooms as $key => $room) : ?>
-    <span class="color letra_grande"><?= strtoupper($room->getName()) ?></span>
     <br>
     <table id="tabla" style="width:100%">
+      <tr>
+        <th class="room" colspan="5"><?= strtoupper($room->getName()) ?></th>
+      </tr>
       <tr>
         <th class="quantity">#</th>
         <th>DESCRIPTION</th>
@@ -126,36 +133,38 @@
       <?php
       $a = 1;
       $limit = 400;
+      $total_room = 0;
       if (count($items[$room->getName()])) {
         foreach ($items[$room->getName()] as $i => $item) {
-          echo ProposalRepository::print_item($item, $limit, $a);
+          list($html, $subitems_total) = ProposalRepository::print_item($item, $limit, $a);
+          echo $html;
+          $total_room += $subitems_total;
+          $total_room += $item->obtener_total_price();
           $a++;
         }
       }
       if (isset($services[$room->getName()])) {
         foreach ($services[$room->getName()] as $key => $service) {
           echo ProposalRepository::print_service($cotizacion->obtener_services_payment_term(), $service, $a);
+          $total_room += $service->get_total_price();
           $a++;
         }
       }
       ?>
       <tr>
-        <td style="border-bottom: 0;border-left: 0;border-right: 0;"></td>
-        <td style="border-bottom: 0;border-left: 0;border-right: 0;"></td>
-        <td style="border-bottom: 0;border-left: 0;border-right: 0;"></td>
-        <td style="border-bottom: 0;border-left: 0;border-right: 0;"></td>
-        <td style="border-bottom: 0;border-left: 0;border-right: 0;"></td>
+        <td colspan="4" style="font-size:12pt;">TOTAL:</td>
+        <td style="font-size:12pt;text-align:right;">$ <?= number_format($total_room, 2) ?></td>
       </tr>
     </table>
   <?php endforeach; ?>
   <br>
   <table id="tabla" style="width:100%">
     <tr>
-      <td colspan="6" style="font-size:10pt;"><?= nl2br($cotizacion->obtener_shipping()) ?></td>
+      <td style="font-size:10pt;"><?= nl2br($cotizacion->obtener_shipping()) ?></td>
       <td style="text-align:right;">$ <?= number_format($cotizacion->obtener_shipping_cost(), 2) ?></td>
     </tr>
     <tr>
-      <td colspan="6" style="font-size:12pt;">TOTAL:</td>
+      <td style="font-size:12pt;">TOTAL:</td>
       <td style="font-size:12pt;text-align:right;">$ <?= number_format($cotizacion->obtener_total_price() + $total_service, 2) ?></td>
     </tr>
   </table>

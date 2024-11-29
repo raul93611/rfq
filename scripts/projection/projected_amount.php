@@ -4,7 +4,7 @@ try {
   if (isset($_POST['id']) && is_numeric($_POST['id'])) {
     $id = intval($_POST['id']);
   } else {
-    throw new Exception("Invalid ID");
+    throw new Exception("Invalid ID provided.");
   }
 
   // Open database connection
@@ -18,11 +18,11 @@ try {
   Conexion::cerrar_conexion();
 
   if (!$monthly_projection) {
-    throw new Exception("No monthly projection found");
+    throw new Exception("No monthly projection found for the given ID.");
   }
 } catch (Exception $e) {
-  // Handle exceptions and display error message
-  echo "Error: " . $e->getMessage();
+  // Display error message
+  echo "<small class='text-danger'>Error: " . htmlspecialchars($e->getMessage()) . "</small>";
   exit();
 }
 ?>
@@ -30,8 +30,9 @@ try {
   <div class="row">
     <div class="col-md-12">
       <div class="form-group">
-        <label for="projected_amount">Criteria:</label>
+        <label for="projected_amount">Projected Amount:</label>
         <input type="number" class="form-control form-control-sm" name="projected_amount" min="0" step=".01" id="projected_amount" value="<?= htmlspecialchars($monthly_projection->getProjectedAmount(), ENT_QUOTES, 'UTF-8') ?>">
+        <small class="form-text text-muted">Enter the projected amount as a positive number with up to two decimal places.</small>
       </div>
     </div>
   </div>

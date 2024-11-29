@@ -10,9 +10,7 @@ try {
   Conexion::cerrar_conexion();
 }
 
-if ($quote->obtener_invoice()) {
-  include_once 'plantillas/fulfillment/templates/sales_commission.inc.php';
-}
+include_once 'plantillas/fulfillment/templates/sales_commission.inc.php';
 ?>
 
 <div class="card card-primary">
@@ -76,7 +74,7 @@ if ($quote->obtener_invoice()) {
               <td><?= htmlspecialchars($invoiceRetrieved['total_item_price'], ENT_QUOTES, 'UTF-8') ?></td>
               <td><?= htmlspecialchars($invoiceRetrieved['total_real_cost'], ENT_QUOTES, 'UTF-8') ?></td>
               <td><?= htmlspecialchars(is_null($invoiceRetrieved['sales_commission']) ? $invoiceRetrieved['total_profit'] : $invoiceRetrieved['total_profit'] - (float)str_replace(',', '', $sales_commission[1]), ENT_QUOTES, 'UTF-8') ?></td>
-              <td><b class="text-success"><?= htmlspecialchars($invoiceRetrieved['sales_commission'], ENT_QUOTES, 'UTF-8') ?></b></td>
+              <td><b class="text-success"><?= htmlspecialchars($invoiceRetrieved['sales_commission'] ?? '', ENT_QUOTES, 'UTF-8') ?></b></td>
               <td><button data-id="<?= htmlspecialchars($invoiceRetrieved['id_invoice'], ENT_QUOTES, 'UTF-8') ?>" class="attach-sales-commission-button btn btn-warning"><i class="fas fa-paperclip"></i></button></td>
             </tr>
           <?php endforeach; ?>

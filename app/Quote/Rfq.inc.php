@@ -64,6 +64,7 @@ class Rfq {
   private $client_payment_terms;
   private $net30_fulfillment_services;
   private $bpa;
+  private $reference_url;
 
   public function __construct(
     $id,
@@ -129,7 +130,8 @@ class Rfq {
     $gsa,
     $client_payment_terms,
     $net30_fulfillment_services,
-    $bpa
+    $bpa,
+    $reference_url
   ) {
     $this->id = $id;
     $this->id_usuario = $id_usuario;
@@ -195,6 +197,7 @@ class Rfq {
     $this->client_payment_terms = $client_payment_terms;
     $this->net30_fulfillment_services = $net30_fulfillment_services;
     $this->bpa = $bpa;
+    $this->reference_url = $reference_url;
   }
 
   public function obtener_id() {
@@ -644,5 +647,9 @@ class Rfq {
 
   public function getBpa() {
     return $this->bpa;
+  }
+
+  public function getReferenceUrl() {
+    return $this->reference_url;
   }
 }

@@ -9,7 +9,13 @@
       </div>
       <div class="modal-body">
         <?php
-        RepositorioComment::escribir_comments($cotizacion_recuperada-> obtener_id());
+        // Ensure cotizacion ID is valid before trying to display comments
+        $cotizacionId = $cotizacion_recuperada->obtener_id();
+        if ($cotizacionId) {
+          RepositorioComment::escribir_comments($cotizacionId);
+        } else {
+          echo "<p>Error: Unable to retrieve comments. Invalid quotation ID.</p>";
+        }
         ?>
       </div>
     </div>

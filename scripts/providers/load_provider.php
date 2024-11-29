@@ -19,16 +19,18 @@ try {
 } catch (Exception $e) {
   // Handle any errors
   Conexion::cerrar_conexion();
-  die("Error fetching provider details: " . $e->getMessage());
+  die("Error fetching provider details: " . htmlspecialchars($e->getMessage()));
 }
 ?>
+
 <input type="hidden" name="id_provider" value="<?= htmlspecialchars($id_provider); ?>">
 <div class="modal-body">
   <div class="row">
     <div class="col-md-12">
       <div class="form-group">
         <label for="name">Name:</label>
-        <input type="text" id="name" class="form-control form-control-sm" name="name" value="<?= $provider->get_company_name(); ?>" required>
+        <input type="text" id="name" class="form-control form-control-sm" name="name" value="<?= htmlspecialchars($provider->get_company_name()); ?>" required>
+        <small class="form-text text-muted">Enter the provider's name. It cannot be empty and must be unique.</small>
         <div class="error_message">
           Name cannot be empty and has to be different from existing ones.
         </div>

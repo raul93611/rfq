@@ -8,7 +8,7 @@ class FulfillmentRepository {
     if (count($items)) :
 ?>
       <div class="custom-control custom-checkbox mb-3">
-        <input type="checkbox" data="<?= $id_rfq; ?>" class="custom-control-input" id="net30_cc" <?= $quote->obtener_net30_fulfillment() ? 'checked' : ''; ?>>
+        <input type="checkbox" data-id="<?= $id_rfq; ?>" class="custom-control-input" id="net30_cc" <?= $quote->obtener_net30_fulfillment() ? 'checked' : ''; ?>>
         <label class="custom-control-label" for="net30_cc">Net30/CC</label>
       </div>
       <div class="table-responsive">
@@ -42,7 +42,7 @@ class FulfillmentRepository {
             ?>
             <tr>
               <td class="align-middle text-center">
-                <button type="button" id="edit_fulfillment_shipping" data="<?= $quote->obtener_id(); ?>" class="btn btn-warning" name=""><i class="fas fa-pen"></i></button>
+                <button type="button" id="edit_fulfillment_shipping" data-id="<?= $quote->obtener_id(); ?>" class="btn btn-warning" name=""><i class="fas fa-pen"></i></button>
               </td>
               <td colspan="4">Shipping (from Proposal): <?= $quote->obtener_shipping(); ?></td>
               <td>$ <?= $quote->obtener_shipping_cost(); ?></td>
@@ -105,8 +105,8 @@ class FulfillmentRepository {
       if (count($fulfillment_items)) {
       ?>
         <td class="item<?= $fulfillment_items[0]->get_id() . ($fulfillment_items[0]->get_reviewed() ? ' success-opacity' : ''); ?> align-middle text-center">
-          <a href="#" data="<?= $fulfillment_items[0]->get_id(); ?>" id_item="<?= $item->obtener_id(); ?>" class="delete_fulfillment_item_button mb-2 btn btn-warning"><i class="fas fa-trash"></i></a><br>
-          <a href="#" data="<?= $fulfillment_items[0]->get_id(); ?>" class="edit_fulfillment_item_button btn btn-warning"><i class="fas fa-pen"></i></a>
+          <a href="#" data-id="<?= $fulfillment_items[0]->get_id(); ?>" id_item="<?= $item->obtener_id(); ?>" class="delete_fulfillment_item_button mb-2 btn btn-warning"><i class="fas fa-trash"></i></a><br>
+          <a href="#" data-id="<?= $fulfillment_items[0]->get_id(); ?>" class="edit_fulfillment_item_button btn btn-warning"><i class="fas fa-pen"></i></a>
         </td>
         <td class="item<?= $fulfillment_items[0]->get_id() . ($fulfillment_items[0]->get_reviewed() ? ' success-opacity' : ''); ?>"><?= $fulfillment_items[0]->getInvoiceName(); ?></td>
         <td class="item<?= $fulfillment_items[0]->get_id() . ($fulfillment_items[0]->get_reviewed() ? ' success-opacity' : ''); ?>"><?= $fulfillment_items[0]->get_provider(); ?></td>
@@ -121,7 +121,7 @@ class FulfillmentRepository {
             <i class="fas fa-comment fa-2x"></i>
           </button>
           <br>
-          <button data="<?= $fulfillment_items[0]->get_id(); ?>" id_item="<?= $item->obtener_id(); ?>" type="button" class="reviewed_button text-success btn btn-link">
+          <button data-id="<?= $fulfillment_items[0]->get_id(); ?>" data-id_item="<?= $item->obtener_id(); ?>" type="button" class="reviewed_button text-success btn btn-link">
             <i class="fas fa-check-circle fa-2x"></i>
           </button>
         </td>
@@ -135,8 +135,8 @@ class FulfillmentRepository {
     ?>
       <tr class="item<?= $fulfillment_item->get_id(); ?>">
         <td class="align-middle text-center <?= $fulfillment_item->get_reviewed() ? 'success-opacity' : ''; ?>">
-          <a href="#" data="<?= $fulfillment_item->get_id(); ?>" id_item="<?= $item->obtener_id(); ?>" class="delete_fulfillment_item_button mb-2 btn btn-warning"><i class="fas fa-trash"></i></a><br>
-          <a href="#" data="<?= $fulfillment_item->get_id(); ?>" class="edit_fulfillment_item_button btn btn-warning"><i class="fas fa-pen"></i></a>
+          <a href="#" data-id="<?= $fulfillment_item->get_id(); ?>" id_item="<?= $item->obtener_id(); ?>" class="delete_fulfillment_item_button mb-2 btn btn-warning"><i class="fas fa-trash"></i></a><br>
+          <a href="#" data-id="<?= $fulfillment_item->get_id(); ?>" class="edit_fulfillment_item_button btn btn-warning"><i class="fas fa-pen"></i></a>
         </td>
         <td class="<?= $fulfillment_item->get_reviewed() ? 'success-opacity' : ''; ?>"><?= $fulfillment_item->getInvoiceName(); ?></td>
         <td class="<?= $fulfillment_item->get_reviewed() ? 'success-opacity' : ''; ?>"><?= $fulfillment_item->get_provider(); ?></td>
@@ -151,7 +151,7 @@ class FulfillmentRepository {
             <i class="fas fa-comment fa-2x"></i>
           </button>
           <br>
-          <button data="<?= $fulfillment_item->get_id(); ?>" id_item="<?= $item->obtener_id(); ?>" type="button" class="reviewed_button text-success btn btn-link">
+          <button data-id="<?= $fulfillment_item->get_id(); ?>" data-id_item="<?= $item->obtener_id(); ?>" type="button" class="reviewed_button text-success btn btn-link">
             <i class="fas fa-check-circle fa-2x"></i>
           </button>
         </td>
@@ -197,8 +197,8 @@ class FulfillmentRepository {
       if (count($fulfillment_subitems)) {
     ?>
       <td class="subitem<?= $fulfillment_subitems[0]->get_id() . ($fulfillment_subitems[0]->get_reviewed() ? ' success-opacity' : ''); ?> align-middle text-center">
-        <a href="#" data="<?= $fulfillment_subitems[0]->get_id(); ?>" id_rfq="<?= $id_rfq; ?>" id_subitem="<?= $subitem->obtener_id(); ?>" class="delete_fulfillment_subitem_button mb-2 btn btn-warning"><i class="fas fa-trash"></i></a><br>
-        <a href="#" data="<?= $fulfillment_subitems[0]->get_id(); ?>" class="edit_fulfillment_subitem_button btn btn-warning"><i class="fas fa-pen"></i></a>
+        <a href="#" data-id="<?= $fulfillment_subitems[0]->get_id(); ?>" id_rfq="<?= $id_rfq; ?>" id_subitem="<?= $subitem->obtener_id(); ?>" class="delete_fulfillment_subitem_button mb-2 btn btn-warning"><i class="fas fa-trash"></i></a><br>
+        <a href="#" data-id="<?= $fulfillment_subitems[0]->get_id(); ?>" class="edit_fulfillment_subitem_button btn btn-warning"><i class="fas fa-pen"></i></a>
       </td>
       <td class="subitem<?= $fulfillment_subitems[0]->get_id() . ($fulfillment_subitems[0]->get_reviewed() ? ' success-opacity' : ''); ?>"><?= $fulfillment_subitems[0]->getInvoiceName(); ?></td>
       <td class="subitem<?= $fulfillment_subitems[0]->get_id() . ($fulfillment_subitems[0]->get_reviewed() ? ' success-opacity' : ''); ?>"><?= $fulfillment_subitems[0]->get_provider(); ?></td>
@@ -213,7 +213,7 @@ class FulfillmentRepository {
           <i class="fas fa-comment fa-2x"></i>
         </button>
         <br>
-        <button data="<?= $fulfillment_subitems[0]->get_id(); ?>" id_rfq="<?= $id_rfq; ?>" id_subitem="<?= $subitem->obtener_id(); ?>" type="button" class="subitem_reviewed_button text-success btn btn-link">
+        <button data-id="<?= $fulfillment_subitems[0]->get_id(); ?>" data-id_rfq="<?= $id_rfq; ?>" data-id_subitem="<?= $subitem->obtener_id(); ?>" type="button" class="subitem_reviewed_button text-success btn btn-link">
           <i class="fas fa-check-circle fa-2x"></i>
         </button>
       </td>
@@ -227,8 +227,8 @@ class FulfillmentRepository {
   ?>
     <tr class="subitem<?= $fulfillment_subitem->get_id(); ?>">
       <td class="align-middle text-center <?= $fulfillment_subitem->get_reviewed() ? ' success-opacity' : ''; ?>">
-        <a href="#" data="<?= $fulfillment_subitem->get_id(); ?>" id_rfq="<?= $id_rfq; ?>" id_subitem="<?= $subitem->obtener_id(); ?>" class="delete_fulfillment_subitem_button mb-2 btn btn-warning"><i class="fas fa-trash"></i></a><br>
-        <a href="#" data="<?= $fulfillment_subitem->get_id(); ?>" class="edit_fulfillment_subitem_button btn btn-warning"><i class="fas fa-pen"></i></a>
+        <a href="#" data-id="<?= $fulfillment_subitem->get_id(); ?>" id_rfq="<?= $id_rfq; ?>" id_subitem="<?= $subitem->obtener_id(); ?>" class="delete_fulfillment_subitem_button mb-2 btn btn-warning"><i class="fas fa-trash"></i></a><br>
+        <a href="#" data-id="<?= $fulfillment_subitem->get_id(); ?>" class="edit_fulfillment_subitem_button btn btn-warning"><i class="fas fa-pen"></i></a>
       </td>
       <td class="<?= $fulfillment_subitem->get_reviewed() ? ' success-opacity' : ''; ?>"><?= $fulfillment_subitem->getInvoiceName(); ?></td>
       <td class="<?= $fulfillment_subitem->get_reviewed() ? ' success-opacity' : ''; ?>"><?= $fulfillment_subitem->get_provider(); ?></td>
@@ -243,7 +243,7 @@ class FulfillmentRepository {
           <i class="fas fa-comment fa-2x"></i>
         </button>
         <br>
-        <button data="<?= $fulfillment_subitem->get_id(); ?>" id_rfq="<?= $id_rfq; ?>" id_subitem="<?= $subitem->obtener_id(); ?>" type="button" class="subitem_reviewed_button text-success btn btn-link">
+        <button data-id="<?= $fulfillment_subitem->get_id(); ?>" data-id_rfq="<?= $id_rfq; ?>" data-id_subitem="<?= $subitem->obtener_id(); ?>" type="button" class="subitem_reviewed_button text-success btn btn-link">
           <i class="fas fa-check-circle fa-2x"></i>
         </button>
       </td>
@@ -261,7 +261,7 @@ class FulfillmentRepository {
       if (count($services)) :
   ?>
   <div class="custom-control custom-checkbox mb-3">
-    <input type="checkbox" data="<?= $id_rfq; ?>" class="custom-control-input" id="net30_cc_services" <?= $quote->getNet30FulfillmentServices() ? 'checked' : ''; ?>>
+    <input type="checkbox" data-id="<?= $id_rfq; ?>" class="custom-control-input" id="net30_cc_services" <?= $quote->getNet30FulfillmentServices() ? 'checked' : ''; ?>>
     <label class="custom-control-label" for="net30_cc_services">Net30/CC</label>
   </div>
   <div class="table-responsive">
@@ -333,8 +333,8 @@ class FulfillmentRepository {
       if (count($fulfillment_services)) {
   ?>
     <td class="service<?= $fulfillment_services[0]->get_id() . ($fulfillment_services[0]->get_reviewed() ? ' success-opacity' : ''); ?> align-middle text-center">
-      <a href="#" data="<?= $fulfillment_services[0]->get_id(); ?>" id_service="<?= $service->get_id(); ?>" class="delete_fulfillment_service_button mb-2 btn btn-warning"><i class="fas fa-trash"></i></a><br>
-      <a href="#" data="<?= $fulfillment_services[0]->get_id(); ?>" class="edit_fulfillment_service_button btn btn-warning"><i class="fas fa-pen"></i></a>
+      <a href="#" data-id="<?= $fulfillment_services[0]->get_id(); ?>" id_service="<?= $service->get_id(); ?>" class="delete_fulfillment_service_button mb-2 btn btn-warning"><i class="fas fa-trash"></i></a><br>
+      <a href="#" data-id="<?= $fulfillment_services[0]->get_id(); ?>" class="edit_fulfillment_service_button btn btn-warning"><i class="fas fa-pen"></i></a>
     </td>
     <td class="service<?= $fulfillment_services[0]->get_id() . ($fulfillment_services[0]->get_reviewed() ? ' success-opacity' : ''); ?>"><?= $fulfillment_services[0]->getInvoiceName(); ?></td>
     <td class="service<?= $fulfillment_services[0]->get_id() . ($fulfillment_services[0]->get_reviewed() ? ' success-opacity' : ''); ?>"><?= $fulfillment_services[0]->get_provider(); ?></td>
@@ -349,7 +349,7 @@ class FulfillmentRepository {
         <i class="fas fa-comment fa-2x"></i>
       </button>
       <br>
-      <button data="<?= $fulfillment_services[0]->get_id(); ?>" id_service="<?= $service->get_id(); ?>" type="button" class="reviewed_service_button text-success btn btn-link">
+      <button data-id="<?= $fulfillment_services[0]->get_id(); ?>" data-id_service="<?= $service->get_id(); ?>" type="button" class="reviewed_service_button text-success btn btn-link">
         <i class="fas fa-check-circle fa-2x"></i>
       </button>
     </td>
@@ -363,8 +363,8 @@ class FulfillmentRepository {
 ?>
   <tr class="service<?= $fulfillment_service->get_id(); ?>">
     <td class="align-middle text-center <?= $fulfillment_service->get_reviewed() ? 'success-opacity' : ''; ?>">
-      <a href="#" data="<?= $fulfillment_service->get_id(); ?>" id_service="<?= $service->get_id(); ?>" class="delete_fulfillment_service_button mb-2 btn btn-warning"><i class="fas fa-trash"></i></a><br>
-      <a href="#" data="<?= $fulfillment_service->get_id(); ?>" class="edit_fulfillment_service_button btn btn-warning"><i class="fas fa-pen"></i></a>
+      <a href="#" data-id="<?= $fulfillment_service->get_id(); ?>" id_service="<?= $service->get_id(); ?>" class="delete_fulfillment_service_button mb-2 btn btn-warning"><i class="fas fa-trash"></i></a><br>
+      <a href="#" data-id="<?= $fulfillment_service->get_id(); ?>" class="edit_fulfillment_service_button btn btn-warning"><i class="fas fa-pen"></i></a>
     </td>
     <td class="<?= $fulfillment_service->get_reviewed() ? 'success-opacity' : ''; ?>"><?= $fulfillment_service->getInvoiceName(); ?></td>
     <td class="<?= $fulfillment_service->get_reviewed() ? 'success-opacity' : ''; ?>"><?= $fulfillment_service->get_provider(); ?></td>
@@ -379,7 +379,7 @@ class FulfillmentRepository {
         <i class="fas fa-comment fa-2x"></i>
       </button>
       <br>
-      <button data="<?= $fulfillment_service->get_id(); ?>" id_service="<?= $service->get_id(); ?>" type="button" class="reviewed_service_button text-success btn btn-link">
+      <button data-id="<?= $fulfillment_service->get_id(); ?>" data-id_service="<?= $service->get_id(); ?>" type="button" class="reviewed_service_button text-success btn btn-link">
         <i class="fas fa-check-circle fa-2x"></i>
       </button>
     </td>

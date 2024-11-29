@@ -676,8 +676,7 @@ class Report {
             $sql = "
             SELECT COUNT(r.id)
             FROM rfq r
-            LEFT JOIN services s ON r.id = s.id_rfq
-            JOIN usuarios u ON r.usuario_designado = u.id
+            LEFT JOIN usuarios u ON r.usuario_designado = u.id
             WHERE deleted = 0 AND
             r.status = 1 AND
             MONTH(fecha_submitted) = {$month} AND 
@@ -695,8 +694,7 @@ class Report {
             $sql = "
             SELECT COUNT(r.id)
             FROM rfq r
-            LEFT JOIN services s ON r.id = s.id_rfq
-            JOIN usuarios u ON r.usuario_designado = u.id
+            LEFT JOIN usuarios u ON r.usuario_designado = u.id
             WHERE deleted = 0 AND
             r.status = 1 AND
             QUARTER(fecha_submitted) = {$quarter} AND
@@ -714,8 +712,7 @@ class Report {
             $sql = "
             SELECT COUNT(r.id)
             FROM rfq r
-            LEFT JOIN services s ON r.id = s.id_rfq
-            JOIN usuarios u ON r.usuario_designado = u.id
+            LEFT JOIN usuarios u ON r.usuario_designado = u.id
             WHERE deleted = 0 AND
             r.status = 1 AND
             YEAR(fecha_submitted) = {$year} AND
@@ -796,6 +793,9 @@ class Report {
       case 13:
         $sort_column = 'type_of_contract';
         break;
+      case 14:
+        $sort_column = 'set_side';
+        break;
       default:
         $sort_column = 'id';
         break;
@@ -819,7 +819,8 @@ class Report {
               requotes.total_cost_requote,
               quotes.total_price AS total_price_requote,
               quotes.profit_equipment_requote + quotes.total_service_price - requotes.total_requote_service AS profit_requote,
-              quotes.type_of_contract
+              quotes.type_of_contract,
+              quotes.set_side
             FROM
               (
                 SELECT
@@ -847,7 +848,8 @@ class Report {
                     0
                   ) as profit,
                   COALESCE(r.total_price, 0) - COALESCE(rq.total_cost, 0) as profit_equipment_requote,
-                  r.type_of_contract
+                  r.type_of_contract,
+                  r.set_side
                 FROM
                   rfq r
                   LEFT JOIN services s ON r.id = s.id_rfq
@@ -894,7 +896,8 @@ class Report {
                 OR type_of_bid LIKE :search
                 OR type_of_contract LIKE :search
               )
-            ORDER BY {$sort_column} {$sort_direction} LIMIT {$start}, {$length}";
+            ORDER BY {$sort_column} {$sort_direction} LIMIT {$start}, {$length}
+            ";
             break;
           case 'quarterly':
             $sql = "
@@ -912,7 +915,8 @@ class Report {
               requotes.total_cost_requote,
               quotes.total_price AS total_price_requote,
               quotes.profit_equipment_requote + quotes.total_service_price - requotes.total_requote_service AS profit_requote,
-              quotes.type_of_contract
+              quotes.type_of_contract,
+              quotes.set_side
             FROM
               (
                 SELECT
@@ -940,7 +944,8 @@ class Report {
                     0
                   ) as profit,
                   COALESCE(r.total_price, 0) - COALESCE(rq.total_cost, 0) as profit_equipment_requote,
-                  r.type_of_contract
+                  r.type_of_contract,
+                  r.set_side
                 FROM
                   rfq r
                   LEFT JOIN services s ON r.id = s.id_rfq
@@ -987,7 +992,8 @@ class Report {
                 OR type_of_bid LIKE :search
                 OR type_of_contract LIKE :search
               )
-            ORDER BY {$sort_column} {$sort_direction} LIMIT {$start}, {$length}";
+            ORDER BY {$sort_column} {$sort_direction} LIMIT {$start}, {$length}
+            ";
             break;
           case 'yearly':
             $sql = "
@@ -1005,7 +1011,8 @@ class Report {
               requotes.total_cost_requote,
               quotes.total_price AS total_price_requote,
               quotes.profit_equipment_requote + quotes.total_service_price - requotes.total_requote_service AS profit_requote,
-              quotes.type_of_contract
+              quotes.type_of_contract,
+              quotes.set_side
             FROM
               (
                 SELECT
@@ -1033,7 +1040,8 @@ class Report {
                     0
                   ) as profit,
                   COALESCE(r.total_price, 0) - COALESCE(rq.total_cost, 0) as profit_equipment_requote,
-                  r.type_of_contract
+                  r.type_of_contract,
+                  r.set_side
                 FROM
                   rfq r
                   LEFT JOIN services s ON r.id = s.id_rfq
@@ -1078,7 +1086,8 @@ class Report {
                 OR type_of_bid LIKE :search
                 OR type_of_contract LIKE :search
               )
-            ORDER BY {$sort_column} {$sort_direction} LIMIT {$start}, {$length}";
+            ORDER BY {$sort_column} {$sort_direction} LIMIT {$start}, {$length}
+            ";
             break;
         }
         $sentence = $connection->prepare($sql);

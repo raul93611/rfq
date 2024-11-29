@@ -33,14 +33,15 @@ try {
     <div class="col-md-12">
       <div class="form-group">
         <label for="name">Payment Term:</label>
-        <input type="text" id="name" class="form-control form-control-sm" name="name" value="<?= $payment_term->get_payment_term(); ?>" required>
-        <div class="error_message">
-          Name cannot be empty and has to be different from existing ones.
+        <input type="text" id="name" class="form-control form-control-sm" name="name" value="<?= htmlspecialchars($payment_term->get_payment_term(), ENT_QUOTES, 'UTF-8'); ?>" required>
+        <small class="form-text text-muted">Enter a unique payment term. It cannot be empty.</small>
+        <div class="error_message text-danger mt-1" style="display:none;">
+          Name cannot be empty and must be different from existing ones.
         </div>
       </div>
     </div>
   </div>
 </div>
 <div class="modal-footer">
-  <button type="submit" name="save" form="edit_payment_term_form" class="btn btn-success">Save</button>
+  <button type="submit" name="save" form="edit_payment_term_form" class="btn btn-success"><i class="fa fa-check"></i> Save</button>
 </div>

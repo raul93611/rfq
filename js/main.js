@@ -1,651 +1,653 @@
 $(document).ready(function () {
-  /***********************************VARIABLES INICIALES PARA EL BORRADO*********************/
-  var link_to_delete;
-  var alert_delete_system = $('#alert_delete_system');
-  var continue_button = $('#continue_button');
-  function habilitar_continue_button(boton) {
-    alert_delete_system.modal();
-    link_to_delete = boton.attr('href');
-    continue_button.attr('href', link_to_delete);
+  const idRfq = $('[name="id_rfq"]').val();
+
+  /**
+ * Enables the continue button in the deletion modal.
+ * @param {jQuery} button - The button triggering the delete action.
+ */
+  function enableContinueButton(button) {
+    const alertDeleteSystem = $('#alert_delete_system');
+    const continueButton = $('#continue_button');
+
+    alertDeleteSystem.modal();
+    const linkToDelete = button.attr('href');
+    continueButton.attr('href', linkToDelete);
   }
-  /**************************************FONT COLOR FOR TEXTAREAS***********/
+
+  /**
+   * Binds the delete button alert functionality to elements matching the selector.
+   * @param {string} selector - The jQuery selector for the delete buttons.
+   */
+  function bindDeleteButtonAlert(selector) {
+    $(selector).click(function () {
+      enableContinueButton($(this));
+      return false; // Prevent default navigation
+    });
+  }
+  /*********************************** ALERT BUTTONS FOR DELETION ***********************************/
+  bindDeleteButtonAlert('.delete_service_button');
+  bindDeleteButtonAlert('.delete_item_button');
+  bindDeleteButtonAlert('.delete_subitem_button');
+  bindDeleteButtonAlert('.delete_provider_item_button');
+  bindDeleteButtonAlert('.delete_provider_subitem_button');
+  bindDeleteButtonAlert('.delete_document_button');
+  bindDeleteButtonAlert('#copy_quote');
+
+  // Bind delete button alert functionality for quotes tables
+  $('#tabla_quotes, #no_bid_table, #not_submitted_table, #cancelled_table')
+    .on('click', '.delete_quote_button', function () {
+      enableContinueButton($(this));
+      return false; // Prevent default navigation
+    });
+  /************************************** FONT COLOR FOR TEXTAREAS ***********/
   $('.summernote_textarea').summernote({
     callbacks: {
       onPaste: function (e) {
-        var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('text/html');
+        let clipboardData = (e.originalEvent || e).clipboardData || window.clipboardData;
+        let bufferText = clipboardData.getData('text/html') || clipboardData.getData('text/plain');
         e.preventDefault();
-        bufferText = bufferText.replace(/<\/?[^>]+(>|$)/g, '');
-        setTimeout($(this).summernote('insertText', bufferText), 10);
+        // Remove all HTML tags from the pasted content
+        let plainText = bufferText.replace(/<\/?[^>]+(>|$)/g, '');
+        setTimeout(() => {
+          $(this).summernote('insertText', plainText);
+        }, 10);
       }
     },
     toolbar: [
-      ['color', ['color']],
-      ['insert', ['link']],
-    ]
+      ['style', ['bold', 'italic', 'underline', 'clear']],
+      ['color', ['color']],  // Add font color options
+      ['insert', ['link']],  // Add link insertion
+      ['para', ['ul', 'ol', 'paragraph']], // Add bullet and number lists
+      ['view', ['fullscreen', 'codeview']] // Optional view options
+    ],
+    placeholder: 'Start typing here...', // Adds a placeholder for empty text areas
+    height: 200 // Set a default height for the editor
   });
-  /***********************FILE INPUT*************************************/
+  /*********************** FILE INPUT INITIALIZATION ***********************/
   $('#archivos_crear').fileinput({
     theme: 'fa',
     initialPreviewAsData: true,
     showUpload: false,
     overwriteInitial: false,
-    fileActionSettings:
-    {
+    fileActionSettings: {
       showZoom: false,
       showUpload: false,
       showRemove: false
     }
   });
-
-  if ($('#archivos_ejemplo').length != 0) {
+  /*********************** FILE PREVIEW AND DELETION ***********************/
+  if ($('#archivos_ejemplo').length !== 0) {
     $.ajax({
-      url: '/rfq/quote/get_quote_files/' + $('[name="id_rfq"]').val(),
+      url: `/rfq/quote/get_quote_files/${idRfq}`,
       dataType: 'json',
       contentType: "application/json; charset=utf-8",
       method: "GET",
       success: function (data) {
-        var files = data.files;
-        var filesIcon = [];
-        var filesConfig = [];
-        files.forEach((file, i) => {
-          var icon = '<h1><i class="p-3 fas fa-file"></i></h1>';
-          filesIcon.push(icon);
-          filesConfig.push({
-            previewAsData: false,
-            caption: file,
-            url: '/rfq/quote/delete_document/' + $('input[name="id_rfq"]').val() + '/' + file,
-            downloadUrl: '/rfq/documentos/' + $('input[name="id_rfq"]').val() + '/' + file,
-            key: '/rfq/quote/delete_document/' + $('input[name="id_rfq"]').val() + '/' + file
-          });
-        });
+        const filesIcon = data.files.map(() => '<h1><i class="p-3 fas fa-file"></i></h1>');
+        const filesConfig = data.files.map(file => ({
+          previewAsData: false,
+          caption: file,
+          url: `/rfq/quote/delete_document/${idRfq}/${file}`,
+          downloadUrl: `/rfq/documentos/${idRfq}/${file}`,
+          key: `/rfq/quote/delete_document/${idRfq}/${file}`
+        }));
 
         $('#archivos_ejemplo').fileinput({
           theme: 'explorer-fa',
           mainClass: 'input-group-sm',
-          uploadUrl: '/rfq/quote/load_img/' + $('input[name="id_rfq"]').val(),
+          uploadUrl: `/rfq/quote/load_img/${idRfq}`,
           overwriteInitial: false,
           initialPreviewAsData: true,
           initialPreview: filesIcon,
           initialPreviewConfig: filesConfig,
           showRemove: false,
           showCancel: false,
-          fileActionSettings:
-          {
-            showZoom: false,
+          fileActionSettings: {
+            showZoom: false
           }
         });
 
-        $("#archivos_ejemplo").on('filepredelete', function (event, key, jqXHR, data) {
-          alert_delete_system.modal();
+        // Handle pre-delete events
+        $('#archivos_ejemplo').on('filepredelete', function (event, key) {
+          alert_delete_system.modal(); // Open delete confirmation modal
           continue_button.attr('href', key);
-          continue_button.on('click', function (e) {
+
+          continue_button.one('click', function (e) {
             e.preventDefault();
             $.ajax({
               url: key,
               type: 'POST',
-              success: function (res) {
-                location.reload();
+              success: function () {
+                location.reload(); // Reload the page on successful deletion
+              },
+              error: function (jqXHR, textStatus, errorThrown) {
+                console.error("Deletion failed:", textStatus, errorThrown);
               }
             });
           });
+
           return true;
         });
       },
-      error: function (data) {
-        console.log(data);
+      error: function (jqXHR, textStatus, errorThrown) {
+        console.error("Failed to load files:", textStatus, errorThrown);
       }
     });
   }
-  /*********************AUDIT TRAILS*********************************************/
-  $('.audit_trail').click(function () {
-    $('#audit_trails_modal').modal('hide');
-    var element = $(this).attr('href');
-    $(element).addClass('highlight');
-    setTimeout(function () {
-      $(element).removeClass('highlight');
-    }, 5000);
-  });
-  $('#audit_trails_button').click(function () {
-    $('#audit_trails_modal').modal();
-  });
-  /**************************************BOTON MOSTRAR COMENTARIOS************************/
-  $('#mostrar_comentarios').click(function () {
-    $('#todos_commentarios_quote').modal();
-  });
 
-  /*************************************NUEVO COMENTARIO***********************************/
-  if ($('#nuevo_comment').length != 0) {
-    $('#add_comment').click(function () {
-      $('#nuevo_comment').modal();
+  /*********************** DOWNLOAD ALL FILES ***********************/
+  $('#download-all').on('click', function (e) {
+    e.preventDefault();
+
+    $.ajax({
+      url: '/rfq/quote/download_all',
+      type: 'POST',
+      data: { idRfq }, // Use the existing `idRfq` variable
+      success: function (response) {
+        if (response.error) {
+          console.error("Error:", response.error);
+        } else if (response.downloadUrl) {
+          window.location.href = response.downloadUrl; // Redirect to download
+        } else {
+          console.error("Unexpected response from the server.");
+        }
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        console.error("AJAX request failed:", textStatus, errorThrown);
+      }
+    });
+  });
+  /********************* AUDIT TRAILS *********************************************/
+  $(document).ready(function () {
+    const HIGHLIGHT_DURATION = 5000; // Duration to keep the element highlighted
+
+    // Highlight an element when an audit trail link is clicked
+    $('.audit_trail').on('click', function (e) {
+      e.preventDefault(); // Prevent default anchor behavior
+      $('#audit_trails_modal').modal('hide'); // Close the modal
+
+      const targetElement = $($(this).attr('href')); // Get the target element by its href
+      targetElement.addClass('highlight');
+
+      setTimeout(() => {
+        targetElement.removeClass('highlight'); // Remove the highlight after the specified duration
+      }, HIGHLIGHT_DURATION);
+    });
+
+    // Show the audit trails modal when the button is clicked
+    $('#audit_trails_button').on('click', function () {
+      $('#audit_trails_modal').modal('show');
+    });
+  });
+  /************************************** SHOW COMMENTS BUTTON ************************/
+  $('#mostrar_comentarios').on('click', function () {
+    $('#todos_commentarios_quote').modal('show');
+  });
+  /************************************* ADD NEW COMMENT ***********************************/
+  if ($('#nuevo_comment').length) {
+    $('#add_comment').on('click', function () {
+      $('#nuevo_comment').modal('show');
     });
   }
-  /***********************************COPY ALERT******************/
-  $('#copy_quote').click(function () {
-    habilitar_continue_button($(this));
-    return false;
-  });
-  /***********************************ALERT EN BOTONES PARA BORRAR SERVICES******************/
-  $('.delete_service_button').click(function () {
-    habilitar_continue_button($(this));
-    return false;
-  });
-  /***********************************ALERT EN BOTONES PARA BORRAR ITEMS******************/
-  $('.delete_item_button').click(function () {
-    habilitar_continue_button($(this));
-    return false;
-  });
-  /**********************************ALERT EN BOTONES PARA BORRAR SUBITEMS******************/
-  $('.delete_subitem_button').click(function () {
-    habilitar_continue_button($(this));
-    return false;
-  });
-  /******************************ALERT EN BOTONES PARA BORRAR PROVIDER DE ITEMS**************/
-  $('.delete_provider_item_button').click(function () {
-    habilitar_continue_button($(this));
-    return false;
-  });
-  /******************************ALERT EN BOTONES PARA BORRAR PROVIDER SUBITEMS*************/
-  $('.delete_provider_subitem_button').click(function () {
-    habilitar_continue_button($(this));
-    return false;
-  });
-  /******************************ALERT EN BOTONES PARA BORRAR DOCUMENTOS********************/
-  $('.delete_document_button').click(function () {
-    habilitar_continue_button($(this));
-    return false;
-  });
-  /****************************ALERT EN BOTONES PARA BORRAR QUOTES**************************/
-  $('#tabla_quotes, #no_bid_table, #not_submitted_table, #cancelled_table').on('click', '.delete_quote_button', function () {
-    habilitar_continue_button($(this));
-    return false;
-  });
-  /************************************TOGGLE BUTTON PARA LA BARRA LATERAL*********************/
+  /************************************ TOGGLE SIDEBAR BUTTON *****************************/
   $('#sidebar_collapse').on('click', function () {
     $('#footer_item').toggleClass('footer_item1');
   });
-  /**************************************DATEPICKER PARA CAMPOS TIPO DATE*********************/
-  $('.date').daterangepicker({
-    singleDatePicker: true,
-    autoUpdateInput: false,
-    autoApply: true
-  });
+  /************************************** DATEPICKER FOR DATE FIELDS *********************/
+  function initializeDatePicker(selector, options = {}) {
+    const defaultOptions = {
+      singleDatePicker: true,
+      autoUpdateInput: selector === '.date' ? false : true,
+      autoApply: true,
+    };
+    
+    $(selector).daterangepicker({ ...defaultOptions, ...options });
 
-  $('.date').on('apply.daterangepicker', function (ev, picker) {
-    $(this).val(picker.startDate.format('MM/DD/YYYY'));
-  });
+    $(selector).on('apply.daterangepicker', function (ev, picker) {
+      $(this).val(picker.startDate.format(options.locale?.format || 'MM/DD/YYYY'));
+    });
 
-  $('.date').on('cancel.daterangepicker', function (ev, picker) {
-    $(this).val('');
-  });
+    $(selector).on('cancel.daterangepicker', function () {
+      $(this).val('');
+    });
+  }
 
-  $('#end_date').daterangepicker({
+  // Initialize standard date pickers
+  initializeDatePicker('.date');
+
+  // Initialize date picker with time picker for specific field
+  initializeDatePicker('#end_date', {
     timePicker: true,
-    singleDatePicker: true,
     timePicker24Hour: true,
     locale: {
       format: 'MM/DD/YYYY HH:mm'
     },
-    autoApply: true
   });
-  /************************************DATETABLES JQUERY PARA TABLAS**************************/
-  $('#tabla_quotes').DataTable({
-    "processing": true,
-    "serverSide": true,
-    "pageLength": 50,
-    "order": [[4, "desc"]],
-    "ajax": {
-      "url": '/rfq/quote/created_table',
-      "type": "POST",
-      "data": {
-        "channel": $('#tabla_quotes').data('channel'),
+  /************************************ DATATABLES JQUERY CONFIGURATION **************************/
+  function initializeDataTable(selector, options) {
+    const defaultOptions = {
+      processing: true,
+      serverSide: true,
+      pageLength: 50,
+      order: [[4, 'desc']],
+      ajax: {
+        url: '/rfq/quote/created_table', // Default URL for created table, can be overridden
+        type: 'POST',
+        data: {
+          channel: $(selector).data('channel'),
+        },
+      },
+      rowCallback: function (row, data) {
+        if (data.comments === 'Working on it') {
+          $(row).addClass('waiting_for');
+        }
+      },
+      columns: [
+        {
+          data: 'id',
+          render: function (data, type) {
+            return type === 'display'
+              ? `<a href="/rfq/perfil/quote/editar_cotizacion/${data}">${data}</a>`
+              : data;
+          },
+        },
+        { data: 'nombre_usuario' },
+        { data: 'type_of_bid' },
+        { data: 'issue_date' },
+        { data: 'end_date' },
+        { data: 'email_code' },
+        {
+          data: 'rfp',
+          orderable: false,
+          render: function (data, type) {
+            return type === 'display'
+              ? `<i class="fas fa-${data ? 'check text-success' : 'times text-danger'}"></i>`
+              : data;
+          },
+        },
+        {
+          data: 'options',
+          orderable: false,
+          render: function (data, type, row) {
+            return type === 'display'
+              ? `<a href="/rfq/quote/delete_quote/${row.id}" class="delete_quote_button btn btn-sm btn-danger">
+                  <i class="fas fa-trash"></i>
+                </a>`
+              : data;
+          },
+        },
+      ],
+    };
+
+    // Merge default options with the passed options
+    $(selector).DataTable({ ...defaultOptions, ...options });
+  }
+
+  // Initialize DataTable for #tabla_quotes
+  initializeDataTable('#tabla_quotes', {
+    ajax: {
+      url: '/rfq/quote/created_table',
+      type: 'POST',
+      data: {
+        channel: $('#tabla_quotes').data('channel'),
       }
     },
-    "rowCallback": function (row, data) {
-      if (data.comments == 'Working on it') {
-        $(row).addClass('waiting_for');
-      }
-    },
-    "columns": [
-      {
-        "data": "id",
-        "render": function (data, type, row, meta) {
-          if (type === 'display') {
-            return '<a href="/rfq/perfil/quote/editar_cotizacion/' + data + '">' + data + '</a>';
-          } else {
-            return data;
-          }
-        }
-      },
-      { "data": "nombre_usuario" },
-      { "data": "type_of_bid" },
-      { "data": "issue_date" },
-      { "data": "end_date" },
-      { "data": "email_code" },
-      {
-        "data": "rfp",
-        "orderable": false,
-        "render": function (data, type, row, meta) {
-          if (type === 'display') {
-            return data ? '<i class="text-success fas fa-check"></i>' : '<i class="text-danger fas fa-times"></i>';
-          } else {
-            return data;
-          }
-        }
-      },
-      {
-        "data": "options",
-        "orderable": false,
-        "render": function (data, type, row, meta) {
-          if (type === 'display') {
-            return '<a href="/rfq/quote/delete_quote/' + row.id + '" class="delete_quote_button btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>';
-          } else {
-            return data;
-          }
-        }
-      },
-    ]
+    order: [[4, 'desc']], // Default order for created table
   });
 
-  $('#completed_table').DataTable({
-    "processing": true,
-    "serverSide": true,
-    "pageLength": 50,
-    "order": [[3, "desc"]],
-    "ajax": {
-      "url": '/rfq/quote/completed_table',
-      "type": "POST",
-      "data": {
-        "channel": $('#completed_table').data('channel'),
+  // Initialize DataTable for #completed_table with custom settings
+  initializeDataTable('#completed_table', {
+    ajax: {
+      url: '/rfq/quote/completed_table', // Custom URL for completed table
+      type: 'POST',
+      data: {
+        channel: $('#completed_table').data('channel'),
       }
     },
-    "columns": [
+    order: [[3, 'desc']], // Custom order for completed table
+    columns: [
       {
-        "data": "id",
-        "render": function (data, type, row, meta) {
-          if (type === 'display') {
-            return '<a href="/rfq/perfil/quote/editar_cotizacion/' + data + '">' + data + '</a>';
-          } else {
-            return data;
-          }
-        }
+        data: 'id',
+        render: function (data, type) {
+          return type === 'display'
+            ? `<a href="/rfq/perfil/quote/editar_cotizacion/${data}">${data}</a>`
+            : data;
+        },
       },
-      { "data": "nombre_usuario" },
-      { "data": "type_of_bid" },
-      { "data": "fecha_completado" },
-      { "data": "email_code" },
+      { data: 'nombre_usuario' },
+      { data: 'type_of_bid' },
+      { data: 'fecha_completado' },
+      { data: 'email_code' },
       {
-        "data": "rfp",
-        "orderable": false,
-        "render": function (data, type, row, meta) {
-          if (type === 'display') {
-            return data ? '<i class="text-success fas fa-check"></i>' : '<i class="text-danger fas fa-times"></i>';
-          } else {
-            return data;
-          }
-        }
+        data: 'rfp',
+        orderable: false,
+        render: function (data, type) {
+          return type === 'display'
+            ? `<i class="text-success fas fa-check"></i>`
+            : `<i class="text-danger fas fa-times"></i>`;
+        },
       },
       {
-        "data": "options",
-        "orderable": false,
-        "render": function (data, type, row, meta) {
-          if (type === 'display') {
-            return `
+        data: 'options',
+        orderable: false,
+        render: function (data, type, row) {
+          return type === 'display'
+            ? `
               <a class="btn btn-sm calculate" href="/rfq/quote/proposal/${row.id}" target="_blank">
                 <i class="fa fa-copy"></i>
               </a>
               <a class="btn btn-primary btn-sm" href="/rfq/quote/proposal_gsa/${row.id}" target="_blank">
                 <i class="fa fa-copy"></i>
               </a>
-            `;
-          } else {
-            return data;
-          }
-        }
+            `
+            : data;
+        },
       },
-    ]
+    ],
   });
 
-  $('#submitted_table').DataTable({
-    "processing": true,
-    "serverSide": true,
-    "pageLength": 50,
-    "order": [[3, "desc"]],
-    "ajax": {
-      "url": '/rfq/quote/submitted_table',
-      "type": "POST",
-      "data": {
-        "channel": $('#submitted_table').data('channel'),
+  // Initialize DataTable for #submitted_table with custom settings
+  initializeDataTable('#submitted_table', {
+    ajax: {
+      url: '/rfq/quote/submitted_table', // Custom URL for submitted table
+      type: 'POST',
+      data: {
+        channel: $('#submitted_table').data('channel'),
       }
     },
-    "columns": [
+    order: [[3, 'desc']], // Custom order for submitted table
+    columns: [
       {
-        "data": "id",
-        "render": function (data, type, row, meta) {
-          if (type === 'display') {
-            return '<a href="/rfq/perfil/quote/editar_cotizacion/' + data + '">' + data + '</a>';
-          } else {
-            return data;
-          }
-        }
+        data: 'id',
+        render: function (data, type) {
+          return type === 'display'
+            ? `<a href="/rfq/perfil/quote/editar_cotizacion/${data}">${data}</a>`
+            : data;
+        },
       },
-      { "data": "nombre_usuario" },
-      { "data": "type_of_bid" },
-      { "data": "fecha_submitted" },
-      { "data": "email_code" },
+      { data: 'nombre_usuario' },
+      { data: 'type_of_bid' },
+      { data: 'fecha_submitted' },
+      { data: 'email_code' },
       {
-        "data": "rfp",
-        "orderable": false,
-        "render": function (data, type, row, meta) {
-          if (type === 'display') {
-            return data ? '<i class="text-success fas fa-check"></i>' : '<i class="text-danger fas fa-times"></i>';
-          } else {
-            return data;
-          }
-        }
+        data: 'rfp',
+        orderable: false,
+        render: function (data, type) {
+          return type === 'display'
+            ? `<i class="text-success fas fa-check"></i>`
+            : `<i class="text-danger fas fa-times"></i>`;
+        },
       },
       {
-        "data": "options",
-        "orderable": false,
-        "render": function (data, type, row, meta) {
-          if (type === 'display') {
-            return `
+        data: 'options',
+        orderable: false,
+        render: function (data, type, row) {
+          return type === 'display'
+            ? `
               <a class="btn btn-sm calculate" href="/rfq/quote/proposal/${row.id}" target="_blank">
                 <i class="fa fa-copy"></i>
               </a>
               <a class="btn btn-primary btn-sm" href="/rfq/quote/proposal_gsa/${row.id}" target="_blank">
                 <i class="fa fa-copy"></i>
               </a>
-            `;
-          } else {
-            return data;
-          }
-        }
+            `
+            : data;
+        },
       },
-    ]
+    ],
   });
 
-  $('#award_table').DataTable({
-    "processing": true,
-    "serverSide": true,
-    "pageLength": 50,
-    "order": [[3, "desc"]],
-    "ajax": {
-      "url": '/rfq/quote/award_table',
-      "type": "POST",
-      "data": {
-        "channel": $('#award_table').data('channel'),
+  // Initialize DataTable for #award_table with custom settings
+  initializeDataTable('#award_table', {
+    ajax: {
+      url: '/rfq/quote/award_table', // Custom URL for award table
+      type: 'POST',
+      data: {
+        channel: $('#award_table').data('channel'),
       }
     },
-    "columns": [
+    order: [[3, 'desc']], // Custom order for award table
+    columns: [
       {
-        "data": "id",
-        "render": function (data, type, row, meta) {
-          if (type === 'display') {
-            return '<a href="/rfq/perfil/quote/editar_cotizacion/' + data + '">' + data + '</a>';
-          } else {
-            return data;
-          }
-        }
+        data: 'id',
+        render: function (data, type) {
+          return type === 'display'
+            ? `<a href="/rfq/perfil/quote/editar_cotizacion/${data}">${data}</a>`
+            : data;
+        },
       },
-      { "data": "nombre_usuario" },
-      { "data": "type_of_bid" },
-      { "data": "fecha_award" },
-      { "data": "email_code" },
+      { data: 'nombre_usuario' },
+      { data: 'type_of_bid' },
+      { data: 'fecha_award' },
+      { data: 'email_code' },
       {
-        "data": "rfp",
-        "orderable": false,
-        "render": function (data, type, row, meta) {
-          if (type === 'display') {
-            return data ? '<i class="text-success fas fa-check"></i>' : '<i class="text-danger fas fa-times"></i>';
-          } else {
-            return data;
-          }
-        }
+        data: 'rfp',
+        orderable: false,
+        render: function (data, type) {
+          return type === 'display'
+            ? `<i class="text-success fas fa-check"></i>`
+            : `<i class="text-danger fas fa-times"></i>`;
+        },
       },
       {
-        "data": "options",
-        "orderable": false,
-        "render": function (data, type, row, meta) {
-          if (type === 'display') {
-            return `
+        data: 'options',
+        orderable: false,
+        render: function (data, type, row) {
+          return type === 'display'
+            ? `
               <a class="btn btn-sm calculate" href="/rfq/quote/proposal/${row.id}" target="_blank">
                 <i class="fa fa-copy"></i>
               </a>
               <a class="btn btn-primary btn-sm" href="/rfq/quote/proposal_gsa/${row.id}" target="_blank">
                 <i class="fa fa-copy"></i>
               </a>
-            `;
-          } else {
-            return data;
-          }
-        }
+            `
+            : data;
+        },
       },
-    ]
+    ],
   });
 
-  $('#no_bid_table').DataTable({
-    "processing": true,
-    "serverSide": true,
-    "pageLength": 50,
-    "ajax": {
-      "url": '/rfq/quote/no_bid_table',
-      "type": "POST"
+  // Initialize DataTable for #no_bid_table with custom settings
+  initializeDataTable('#no_bid_table', {
+    ajax: {
+      url: '/rfq/quote/no_bid_table', // Custom URL for no_bid table
+      type: 'POST'
     },
-    "columns": [
+    order: [[4, 'desc']], // Custom order for no_bid table
+    columns: [
       {
-        "data": "id",
-        "render": function (data, type, row, meta) {
-          if (type === 'display') {
-            return '<a href="/rfq/perfil/quote/editar_cotizacion/' + data + '">' + data + '</a>';
-          } else {
-            return data;
-          }
-        }
+        data: 'id',
+        render: function (data, type) {
+          return type === 'display'
+            ? `<a href="/rfq/perfil/quote/editar_cotizacion/${data}">${data}</a>`
+            : data;
+        },
       },
-      { "data": "nombre_usuario" },
-      { "data": "email_code" },
-      { "data": "type_of_bid" },
-      { "data": "comments" },
+      { data: 'nombre_usuario' },
+      { data: 'email_code' },
+      { data: 'type_of_bid' },
+      { data: 'comments' },
       {
-        "data": "options",
-        "orderable": false,
-        "render": function (data, type, row, meta) {
-          if (type === 'display') {
-            return '<a href="/rfq/quote/delete_quote/' + row.id + '" class="delete_quote_button text-danger"><i class="fa fa-times"></i> Delete</a>';
-          } else {
-            return data;
-          }
-        }
+        data: 'options',
+        orderable: false,
+        render: function (data, type, row) {
+          return type === 'display'
+            ? `<a href="/rfq/quote/delete_quote/${row.id}" class="delete_quote_button text-danger">
+                <i class="fa fa-times"></i> Delete
+              </a>`
+            : data;
+        },
       },
-    ]
+    ],
   });
 
-  $('#not_submitted_table').DataTable({
-    "processing": true,
-    "serverSide": true,
-    "pageLength": 50,
-    "ajax": {
-      "url": '/rfq/quote/not_submitted_table',
-      "type": "POST"
+  // Initialize DataTable for #not_submitted_table with custom settings
+  initializeDataTable('#not_submitted_table', {
+    ajax: {
+      url: '/rfq/quote/not_submitted_table', // Custom URL for not_submitted table
+      type: 'POST'
     },
-    "columns": [
+    order: [[4, 'desc']], // Custom order for not_submitted table
+    columns: [
       {
-        "data": "id",
-        "render": function (data, type, row, meta) {
-          if (type === 'display') {
-            return '<a href="/rfq/perfil/quote/editar_cotizacion/' + data + '">' + data + '</a>';
-          } else {
-            return data;
-          }
-        }
+        data: 'id',
+        render: function (data, type) {
+          return type === 'display'
+            ? `<a href="/rfq/perfil/quote/editar_cotizacion/${data}">${data}</a>`
+            : data;
+        },
       },
-      { "data": "nombre_usuario" },
-      { "data": "email_code" },
-      { "data": "type_of_bid" },
+      { data: 'nombre_usuario' },
+      { data: 'email_code' },
+      { data: 'type_of_bid' },
       {
-        "data": "options",
-        "orderable": false,
-        "render": function (data, type, row, meta) {
-          if (type === 'display') {
-            return '<a href="/rfq/quote/delete_quote/' + row.id + '" class="delete_quote_button text-danger"><i class="fa fa-times"></i> Delete</a>';
-          } else {
-            return data;
-          }
-        }
+        data: 'options',
+        orderable: false,
+        render: function (data, type, row) {
+          return type === 'display'
+            ? `<a href="/rfq/quote/delete_quote/${row.id}" class="delete_quote_button text-danger">
+                <i class="fa fa-times"></i> Delete
+              </a>`
+            : data;
+        },
       },
-    ]
+    ],
   });
 
-  $('#cancelled_table').DataTable({
-    "processing": true,
-    "serverSide": true,
-    "pageLength": 50,
-    "ajax": {
-      "url": '/rfq/quote/cancelled_table',
-      "type": "POST"
+  // Initialize DataTable for #cancelled_table with custom settings
+  initializeDataTable('#cancelled_table', {
+    ajax: {
+      url: '/rfq/quote/cancelled_table', // Custom URL for cancelled table
+      type: 'POST'
     },
-    "columns": [
+    order: [[4, 'desc']], // Custom order for cancelled table
+    columns: [
       {
-        "data": "id",
-        "render": function (data, type, row, meta) {
-          if (type === 'display') {
-            return '<a href="/rfq/perfil/quote/editar_cotizacion/' + data + '">' + data + '</a>';
-          } else {
-            return data;
-          }
-        }
+        data: 'id',
+        render: function (data, type) {
+          return type === 'display'
+            ? `<a href="/rfq/perfil/quote/editar_cotizacion/${data}">${data}</a>`
+            : data;
+        },
       },
-      { "data": "nombre_usuario" },
-      { "data": "email_code" },
-      { "data": "type_of_bid" },
+      { data: 'nombre_usuario' },
+      { data: 'email_code' },
+      { data: 'type_of_bid' },
       {
-        "data": "options",
-        "orderable": false,
-        "render": function (data, type, row, meta) {
-          if (type === 'display') {
-            return '<a href="/rfq/quote/delete_quote/' + row.id + '" class="delete_quote_button text-danger"><i class="fa fa-times"></i> Delete</a>';
-          } else {
-            return data;
-          }
-        }
+        data: 'options',
+        orderable: false,
+        render: function (data, type, row) {
+          return type === 'display'
+            ? `<a href="/rfq/quote/delete_quote/${row.id}" class="delete_quote_button text-danger">
+                <i class="fa fa-times"></i> Delete
+              </a>`
+            : data;
+        },
       },
-    ]
+    ],
   });
 
-  $('#deleted_table').DataTable({
-    "processing": true,
-    "serverSide": true,
-    "ajax": {
-      "url": '/rfq/quote/deleted_table',
-      "type": "POST"
+  // Initialize DataTable for #deleted_table with custom settings
+  initializeDataTable('#deleted_table', {
+    ajax: {
+      url: '/rfq/quote/deleted_table', // Custom URL for deleted table
+      type: 'POST'
     },
-    "columns": [
+    order: [[4, 'desc']], // Custom order for deleted table
+    columns: [
       {
-        "data": "id",
-        "render": function (data, type, row, meta) {
-          if (type === 'display') {
-            return '<a href="/rfq/perfil/quote/editar_cotizacion/' + data + '">' + data + '</a>';
-          } else {
-            return data;
-          }
-        }
+        data: 'id',
+        render: function (data, type) {
+          return type === 'display'
+            ? `<a href="/rfq/perfil/quote/editar_cotizacion/${data}">${data}</a>`
+            : data;
+        },
       },
-      { "data": "nombre_usuario" },
-      { "data": "email_code" },
-      { "data": "type_of_bid" },
+      { data: 'nombre_usuario' },
+      { data: 'email_code' },
+      { data: 'type_of_bid' },
       {
-        "data": "options",
-        "orderable": false,
-        "render": function (data, type, row, meta) {
-          if (type === 'display') {
-            return '<a href="/rfq/quote/restore_quote/' + row.id + '" class="btn btn-sm btn-success"><i class="fas fa-sync"></i></a>';
-          } else {
-            return data;
-          }
-        }
+        data: 'options',
+        orderable: false,
+        render: function (data, type, row) {
+          return type === 'display'
+            ? `<a href="/rfq/quote/restore_quote/${row.id}" class="btn btn-sm btn-success">
+                <i class="fas fa-sync"></i>
+              </a>`
+            : data;
+        },
       },
-    ]
+    ],
   });
 
-  $('#fulfillment_quotes_table').DataTable({
-    "processing": true,
-    "serverSide": true,
-    'order': [[3, "desc"]],
-    "pageLength": 50,
-    "ajax": {
-      "url": '/rfq/fulfillment/fulfillment_quotes_table',
-      "type": "POST"
+  // Initialize DataTable for #fulfillment_quotes_table with custom settings
+  initializeDataTable('#fulfillment_quotes_table', {
+    ajax: {
+      url: '/rfq/fulfillment/fulfillment_quotes_table', // Custom URL for fulfillment quotes table
+      type: 'POST'
     },
-    "columns": [
+    order: [[3, 'desc']], // Custom order for fulfillment quotes table
+    columns: [
       {
-        "data": "id",
-        "render": function (data, type, row, meta) {
-          if (type === 'display') {
-            return '<a href="/rfq/perfil/quote/editar_cotizacion/' + data + '">' + data + '</a>';
-          } else {
-            return data;
-          }
-        }
+        data: 'id',
+        render: function (data, type) {
+          return type === 'display'
+            ? `<a href="/rfq/perfil/quote/editar_cotizacion/${data}">${data}</a>`
+            : data;
+        },
       },
-      { "data": "email_code" },
-      { "data": "canal" },
-      { "data": "fulfillment_date" },
-      { "data": "fecha_award" },
-      { "data": "type_of_contract" }
-    ]
+      { data: 'email_code' },
+      { data: 'canal' },
+      { data: 'fulfillment_date' },
+      { data: 'fecha_award' },
+      { data: 'type_of_contract' },
+    ],
   });
 
-  $('#invoice_quotes_table').DataTable({
-    "processing": true,
-    "serverSide": true,
-    'order': [[3, "desc"]],
-    "pageLength": 50,
-    "ajax": {
-      "url": '/rfq/invoice/invoice_quotes_table',
-      "type": "POST"
+  // Initialize DataTable for #invoice_quotes_table with custom settings
+  initializeDataTable('#invoice_quotes_table', {
+    ajax: {
+      url: '/rfq/invoice/invoice_quotes_table', // Custom URL for invoice quotes table
+      type: 'POST'
     },
-    "columns": [
+    order: [[3, 'desc']], // Custom order for invoice quotes table
+    columns: [
       {
-        "data": "id",
-        "render": function (data, type, row, meta) {
-          if (type === 'display') {
-            return '<a href="/rfq/perfil/quote/editar_cotizacion/' + data + '">' + data + '</a>';
-          } else {
-            return data;
-          }
-        }
+        data: 'id',
+        render: function (data, type) {
+          return type === 'display'
+            ? `<a href="/rfq/perfil/quote/editar_cotizacion/${data}">${data}</a>`
+            : data;
+        },
       },
-      { "data": "email_code" },
-      { "data": "canal" },
-      { "data": "invoice_date" },
-      { "data": "type_of_contract" }
-    ]
+      { data: 'email_code' },
+      { data: 'canal' },
+      { data: 'invoice_date' },
+      { data: 'type_of_contract' },
+    ],
   });
 
-  $('#submitted_invoice_quotes_table').DataTable({
-    "processing": true,
-    "serverSide": true,
-    'order': [[3, "desc"]],
-    "pageLength": 50,
-    "ajax": {
-      "url": '/rfq/submitted_invoice/submitted_invoice_quotes_table',
-      "type": "POST"
+  // Initialize DataTable for #submitted_invoice_quotes_table
+  initializeDataTable('#submitted_invoice_quotes_table', {
+    ajax: {
+      url: '/rfq/submitted_invoice/submitted_invoice_quotes_table', // Custom URL
+      type: 'POST'
     },
-    "columns": [
+    order: [[3, 'desc']], // Custom order
+    columns: [
       {
-        "data": "id",
-        "render": function (data, type, row, meta) {
-          if (type === 'display') {
-            return '<a href="/rfq/perfil/quote/editar_cotizacion/' + data + '">' + data + '</a>';
-          } else {
-            return data;
-          }
-        }
+        data: 'id',
+        render: function (data, type) {
+          return type === 'display'
+            ? `<a href="/rfq/perfil/quote/editar_cotizacion/${data}">${data}</a>`
+            : data;
+        },
       },
-      { "data": "email_code" },
-      { "data": "canal" },
-      { "data": "submitted_invoice_date" },
-      { "data": "type_of_contract" }
-    ]
+      { data: 'email_code' },
+      { data: 'canal' },
+      { data: 'submitted_invoice_date' },
+      { data: 'type_of_contract' },
+    ],
   });
 });
