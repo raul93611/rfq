@@ -1,68 +1,87 @@
 $(document).ready(function () {
-  let providers_table = $('#providers_table').DataTable({
+  // Initialize Providers DataTable
+  const providersTable = $('#providers_table').DataTable({
     ajax: '/rfq/provider/load_providers_table/',
-    "columnDefs": [
-      { className: "text-center", "targets": [1] }
-    ]
+    columnDefs: [{ className: "text-center", targets: [1] }],
   });
 
-  $('#add_provider').click(function (){
-    $('#add_provider_modal').modal();
+  // Handle Add Provider Modal
+  const addProviderModal = $('#add_provider_modal');
+  const addProviderForm = $('#add_provider_form');
+
+  $('#add_provider').click(() => {
+    addProviderForm[0].reset(); // Clear the form
+    $('.error_message').hide(); // Hide error messages
+    addProviderModal.modal();
   });
 
-  $('#add_provider_form').submit(function(){
-    $.post('/rfq/provider/save_provider', $(this).serialize(), function(res){
-      if(res.result === false){
-        $('.error_message').show();
-      }else{
-        $('#add_provider_form')[0].reset();
-        $('#add_provider_modal').modal('hide');
-        $('.error_message').hide();
-        providers_table.ajax.reload(null, false);
-      }
+  addProviderForm.submit(function (e) {
+    e.preventDefault();
+    $.post('/rfq/provider/save_provider', $(this).serialize())
+      .done((res) => {
+        if (res.result === false) {
+          $('.error_message').show();
+        } else {
+          addProviderForm[0].reset();
+          addProviderModal.modal('hide');
+          $('.error_message').hide();
+          providersTable.ajax.reload(null, false); // Reload table without resetting pagination
+          toastr.success('Provider added successfully!', 'Success');
+        }
+      })
+      .fail(() => {
+        toastr.error('Failed to add provider. Please try again.', 'Error');
+      });
+  });
+
+  // Handle Edit Provider Modal
+  const editProviderModal = $('#edit_provider_modal');
+  const editProviderForm = $('#edit_provider_form');
+
+  $('#providers_table').on('click', '.edit_button', function () {
+    const providerId = $(this).attr('data');
+    editProviderForm.load(`/rfq/provider/load_provider/${providerId}`, () => {
+      $('.error_message').hide(); // Hide error messages
+      editProviderModal.modal();
     });
-
-    return false;
   });
 
-  $('#providers_table').on('click', '.edit_button', function(){
-    $('#edit_provider_modal form').load('/rfq/provider/load_provider/' + $(this).attr('data'), function(){
-      $('#edit_provider_modal').modal();
-    });
-    return false;
+  editProviderForm.submit(function (e) {
+    e.preventDefault();
+    $.post('/rfq/provider/update_provider', $(this).serialize())
+      .done((res) => {
+        if (res.result === false) {
+          $('.error_message').show();
+        } else {
+          editProviderForm[0].reset();
+          editProviderModal.modal('hide');
+          $('.error_message').hide();
+          providersTable.ajax.reload(null, false); // Reload table without resetting pagination
+          toastr.success('Provider updated successfully!', 'Success');
+        }
+      })
+      .fail(() => {
+        toastr.error('Failed to update provider. Please try again.', 'Error');
+      });
   });
 
-  $('#edit_provider_form').submit(function(){
-    $.post('/rfq/provider/update_provider', $(this).serialize(), function(res){
-      if(res.result === false){
-        $('.error_message').show();
-      }else{
-        $('#edit_provider_form')[0].reset();
-        $('#edit_provider_modal').modal('hide');
-        $('.error_message').hide();
-        providers_table.ajax.reload(null, false);
-      }
-    });
-    return false;
-  });
-
-  $('#providers_table').on('click', '.delete_button', function(){
-    $('#continue_button').attr('data', $(this).attr('data'));
+  // Handle Delete Provider Modal
+  $('#providers_table').on('click', '.delete_button', function () {
+    const providerId = $(this).attr('data');
+    $('#continue_button').data('id-provider', providerId); // Store ID for deletion
     $('#alert_delete_system').modal();
   });
 
-  $('#continue_button').click(function(){
-    $.ajax({
-      url: '/rfq/provider/delete_provider/',
-      data: {
-        id_provider: $(this).attr('data')
-      },
-      type: 'POST',
-      success: function(res){
-        providers_table.ajax.reload(null, false);
+  $('#continue_button').click(() => {
+    const providerId = $('#continue_button').data('id-provider');
+    $.post('/rfq/provider/delete_provider/', { id_provider: providerId })
+      .done(() => {
+        providersTable.ajax.reload(null, false); // Reload table without resetting pagination
         $('#alert_delete_system').modal('hide');
-      }
-    });
-    return false;
+        toastr.success('Provider deleted successfully!', 'Success');
+      })
+      .fail(() => {
+        toastr.error('Failed to delete provider. Please try again.', 'Error');
+      });
   });
 });

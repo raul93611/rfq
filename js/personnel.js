@@ -1,115 +1,108 @@
 $(document).ready(function () {
+  // Initialize DataTable
   const personnelTable = $('#personnel-table');
-  const personnelDataTable = $('#personnel-table').DataTable({
-    "processing": true,
-    "serverSide": true,
-    "pageLength": 10,
-    "order": [[1, "asc"]],
-    "ajax": {
-      "url": '/rfq/fulfillment/personnel/table',
-      "type": "POST"
+  const personnelDataTable = personnelTable.DataTable({
+    processing: true,
+    serverSide: true,
+    pageLength: 10,
+    order: [[1, "asc"]],
+    ajax: {
+      url: '/rfq/fulfillment/personnel/table',
+      type: 'POST',
     },
-    "columns": [
+    columns: [
+      { data: "id", visible: false },
+      { data: "name" },
+      { data: "criteria" },
+      { data: "type" },
       {
-        "data": "id",
-        "visible": false
-      },
-      { "data": "name" },
-      { "data": "criteria" },
-      { "data": "type" },
-      {
-        "data": "options",
-        "orderable": false,
-        "render": function (data, type, row, meta) {
+        data: "options",
+        orderable: false,
+        render: (data, type, row) => {
           if (type === 'display') {
             return `
-            <button data-id="${row.id}" class="edit-personnel-button btn btn-sm btn-warning">
-              <i class="fas fa-pen"></i>
-            </button>
-            <button data-id="${row.id}" class="delete-personnel-button btn btn-sm btn-danger">
-              <i class="fas fa-trash"></i>
-            </button>
+              <button data-id="${row.id}" class="edit-personnel-button btn btn-sm btn-warning">
+                <i class="fas fa-pen"></i>
+              </button>
+              <button data-id="${row.id}" class="delete-personnel-button btn btn-sm btn-danger">
+                <i class="fas fa-trash"></i>
+              </button>
             `;
-          } else {
-            return data;
           }
+          return data;
         }
       },
-    ]
+    ],
   });
 
-  const addPersonnelButton = $('#add-personnel-button');
+  // Add Personnel
   const addPersonnelModal = $('#add-personnel-modal');
   const addPersonnelForm = $('#add-personnel-form');
 
-  addPersonnelButton.click(() => {
+  $('#add-personnel-button').click(() => {
     addPersonnelForm[0].reset();
-    addPersonnelModal.modal();
+    addPersonnelModal.modal('show');
   });
 
   addPersonnelForm.validate({
     rules: {
-      name: {
-        required: true
-      }
+      name: { required: true },
     },
-    submitHandler: function (form) {
-      $.ajax({
-        url: '/rfq/fulfillment/personnel/save',
-        type: 'POST',
-        data: $(form).serialize(),
-        success: function (response) {
+    submitHandler: (form) => {
+      $.post('/rfq/fulfillment/personnel/save', $(form).serialize())
+        .done(() => {
           addPersonnelModal.modal('hide');
           personnelDataTable.ajax.reload(null, false);
-        },
-        error: function (xhr, status, error) {
-          console.error(error);
-        }
-      });
-    }
+          toastr.success('Personnel added successfully', 'Success');
+        })
+        .fail(() => {
+          toastr.error('Failed to add personnel', 'Error');
+        });
+    },
   });
 
+  // Edit Personnel
   const editPersonnelModal = $('#edit-personnel-modal');
   const editPersonnelForm = $('#edit-personnel-form');
 
   personnelTable.on('click', '.edit-personnel-button', function () {
-    editPersonnelForm.load(`/rfq/fulfillment/personnel/load`, { id: $(this).data('id') }, () => {
-      editPersonnelModal.modal();
+    const personnelId = $(this).data('id');
+    editPersonnelForm.load(`/rfq/fulfillment/personnel/load`, { id: personnelId }, () => {
+      editPersonnelModal.modal('show');
     });
   });
 
   editPersonnelForm.validate({
     rules: {
-      name: {
-        required: true
-      }
+      name: { required: true },
     },
-    submitHandler: function (form) {
-      $.ajax({
-        url: '/rfq/fulfillment/personnel/update',
-        type: 'POST',
-        data: $(form).serialize(),
-        success: function (response) {
+    submitHandler: (form) => {
+      $.post('/rfq/fulfillment/personnel/update', $(form).serialize())
+        .done(() => {
           editPersonnelModal.modal('hide');
           personnelDataTable.ajax.reload(null, false);
-        },
-        error: function (xhr, status, error) {
-          console.error(error);
-        }
-      });
-    }
+          toastr.success('Personnel updated successfully', 'Success');
+        })
+        .fail(() => {
+          toastr.error('Failed to update personnel', 'Error');
+        });
+    },
   });
 
-  personnelTable.on('click', '.delete-personnel-button', function (e) {
+  // Delete Personnel
+  personnelTable.on('click', '.delete-personnel-button', function () {
+    const personnelId = $(this).data('id');
     $.ajax({
       url: '/rfq/fulfillment/personnel/delete',
-      data: {
-        id: $(this).data('id'),
-      },
       type: 'POST',
-      success: function (res) {
+      data: { id: personnelId },
+      success: () => {
         personnelDataTable.ajax.reload(null, false);
-      }
+        toastr.success('Personnel deleted successfully', 'Success');
+      },
+      error: () => {
+        toastr.error('Failed to delete personnel', 'Error');
+      },
     });
   });
 });
