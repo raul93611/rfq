@@ -1,14 +1,13 @@
 $(document).ready(function () {
   const idRfq = $('[name="id_rfq"]').val();
+  const continueButton = $('#continue_button');
+  const alertDeleteSystem = $('#alert_delete_system');
 
   /**
  * Enables the continue button in the deletion modal.
  * @param {jQuery} button - The button triggering the delete action.
  */
   function enableContinueButton(button) {
-    const alertDeleteSystem = $('#alert_delete_system');
-    const continueButton = $('#continue_button');
-
     alertDeleteSystem.modal();
     const linkToDelete = button.attr('href');
     continueButton.attr('href', linkToDelete);
@@ -109,10 +108,10 @@ $(document).ready(function () {
 
         // Handle pre-delete events
         $('#archivos_ejemplo').on('filepredelete', function (event, key) {
-          alert_delete_system.modal(); // Open delete confirmation modal
-          continue_button.attr('href', key);
+          alertDeleteSystem.modal(); // Open delete confirmation modal
+          continueButton.attr('href', key);
 
-          continue_button.one('click', function (e) {
+          continueButton.one('click', function (e) {
             e.preventDefault();
             $.ajax({
               url: key,
