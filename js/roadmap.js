@@ -8,6 +8,7 @@ $(document).ready(function () {
   const addSharedEventForm = $('#add-shared-event-form');
   let timeline;
 
+  // Colorpicker options configuration
   const colorpickerOptions = {
     extensions: [
       {
@@ -37,182 +38,194 @@ $(document).ready(function () {
     ]
   };
 
-  $.ajax({
-    url: '/rfq/fulfillment/personnel/get_personnel_events',
-    data: {
-      id: $(this).data('id'),
-    },
-    type: 'POST',
-    success: setTimeline
-  });
+  // Fetch and initialize timeline events
+  function fetchTimelineEvents() {
+    const personnelId = $(this).data('id');
 
-  function setTimeline(res) {
-    const options = {
+    $.ajax({
+      url: '/rfq/fulfillment/personnel/get_personnel_events',
+      type: 'POST',
+      data: { id: personnelId },
+      success: setTimeline,
+      error: (xhr, status, error) => {
+        console.error('Failed to fetch timeline events:', error);
+      }
+    });
+  }
+
+  fetchTimelineEvents();
+
+  // Configure and set up the timeline
+  function setTimeline(response) {
+    const { personnel, events } = response.data;
+
+    const timelineOptions = {
       stack: true,
       maxHeight: 500,
       horizontalScroll: false,
       verticalScroll: true,
       zoomKey: "ctrlKey",
-      start: Date.now() - 1000 * 60 * 60 * 24 * 3,
-      end: Date.now() + 1000 * 60 * 60 * 24 * 21,
+      start: Date.now() - 3 * 24 * 60 * 60 * 1000, // 3 days before now
+      end: Date.now() + 21 * 24 * 60 * 60 * 1000, // 21 days after now
       orientation: {
         axis: "both",
         item: "top"
-      },
+      }
     };
-    const groups = new vis.DataSet(res.data.personnel);
-    const items = new vis.DataSet(res.data.events);
 
+    // Create dataset for groups and items
+    const groups = new vis.DataSet(personnel);
+    const items = new vis.DataSet(events);
+
+    // Initialize the timeline
     const container = document.getElementById('roadmap');
-    timeline = new vis.Timeline(container, null, options);
+    timeline = new vis.Timeline(container, null, timelineOptions);
     timeline.setGroups(groups);
     timeline.setItems(items);
+
+    // Bind event handlers
     timeline.on('doubleClick', loadAddModal);
     timeline.on('select', loadEditModal);
   }
 
+  // Utility to initialize color picker
+  function initColorPicker(element) {
+    element.colorpicker(colorpickerOptions);
+    element.on('colorpickerChange', function (event) {
+      $(this).parent().find('.fa-square').css('color', event.color.toString());
+    });
+  }
+
+  // Utility to initialize date range picker
+  function initDateRangePicker(startElement, endElement) {
+    startElement.daterangepicker({
+      singleDatePicker: true,
+      autoApply: true
+    });
+    endElement.daterangepicker({
+      singleDatePicker: true,
+      autoApply: true
+    });
+  }
+
+  // Load Add Event Modal
   function loadAddModal(e) {
-    if (e.what == 'background') {
+    if (e.what === 'background') {
       addEventForm[0].reset();
       addEventModal.modal();
+
       addEventModal.find('#start').val(moment(e.time).format('MM/DD/YYYY'));
       addEventModal.find('#end').val(moment(e.time).add(1, 'days').format('MM/DD/YYYY'));
       addEventModal.find('input[name="id_personnel"]').val(e.group);
-      addEventModal.find('#color').colorpicker(colorpickerOptions);
-      addEventModal.find('#color').on('colorpickerChange', function (event) {
-        $(this).parent().find('.fa-square').css('color', event.color.toString());
-      })
-      $('#start, #end').daterangepicker({
-        singleDatePicker: true,
-        autoApply: true
-      });
+
+      const colorPickerElement = addEventModal.find('#color');
+      initColorPicker(colorPickerElement);
+      initDateRangePicker(addEventModal.find('#start'), addEventModal.find('#end'));
     }
   }
 
+  // Load Edit Event Modal
   function loadEditModal(e) {
-    if (e.items.length == 0) return;
-    editEventForm.load(`/rfq/fulfillment/personnel_calendar/load`, { id: e.items[0] }, () => {
+    if (!e.items.length) return;
+
+    const eventId = e.items[0];
+    editEventForm.load(`/rfq/fulfillment/personnel_calendar/load`, { id: eventId }, () => {
       editEventModal.modal();
-      editEventForm.find('#color').colorpicker(colorpickerOptions);
-      editEventForm.find('#color').on('colorpickerChange', function (event) {
-        $(this).parent().find('.fa-square').css('color', event.color.toString());
-      })
-      $('#start, #end').daterangepicker({
-        singleDatePicker: true,
-        autoApply: true
-      });
+
+      const colorPickerElement = editEventForm.find('#color');
+      initColorPicker(colorPickerElement);
+      initDateRangePicker(editEventForm.find('#start'), editEventForm.find('#end'));
+
+      editEventForm.on('click', '.delete-event-button', deleteEvent);
     });
-    editEventForm.on('click', '.delete-event-button', deleteEvent);
   }
 
+  // Delete Event
   function deleteEvent(e) {
+    const eventId = $(e.target).data('id');
     $.ajax({
       url: '/rfq/fulfillment/personnel_calendar/delete',
-      data: {
-        id: $(e.target).data('id'),
-      },
       type: 'POST',
-      success: function (res) {
+      data: { id: eventId },
+      success: () => {
         editEventModal.modal('hide');
         reloadDatasets();
+      },
+      error: (xhr, status, error) => {
+        console.error('Failed to delete event:', error);
       }
     });
   }
 
+  // Reload Dataset
   function reloadDatasets() {
+    const personnelId = $(this).data('id');
     $.ajax({
       url: '/rfq/fulfillment/personnel/get_personnel_events',
-      data: {
-        id: $(this).data('id'),
-      },
       type: 'POST',
-      success: function (res) {
+      data: { id: personnelId },
+      success: (res) => {
         const groups = new vis.DataSet(res.data.personnel);
         const items = new vis.DataSet(res.data.events);
         timeline.setGroups(groups);
         timeline.setItems(items);
+      },
+      error: (xhr, status, error) => {
+        console.error('Failed to reload datasets:', error);
       }
     });
   }
 
-  addEventForm.validate({
-    rules: {
-      name: { required: true },
-      start: { required: true },
-      end: { required: true }
-    },
-    submitHandler: function (form) {
-      $.ajax({
-        url: '/rfq/fulfillment/personnel_calendar/save',
-        type: 'POST',
-        data: $(form).serialize(),
-        success: function (response) {
-          addEventModal.modal('hide');
-          reloadDatasets();
-        },
-        error: function (xhr, status, error) {
-          console.error(error);
-        }
-      });
-    }
+  // Form Validation and Submission Helper
+  function setupFormValidation(formElement, submitUrl, onSuccess) {
+    formElement.validate({
+      rules: {
+        name: { required: true },
+        start: { required: true },
+        end: { required: true }
+      },
+      submitHandler: (form) => {
+        $.ajax({
+          url: submitUrl,
+          type: 'POST',
+          data: $(form).serialize(),
+          success: onSuccess,
+          error: (xhr, status, error) => {
+            console.error('Form submission failed:', error);
+          }
+        });
+      }
+    });
+  }
+
+  // Initialize Add Event Form
+  setupFormValidation(addEventForm, '/rfq/fulfillment/personnel_calendar/save', () => {
+    addEventModal.modal('hide');
+    reloadDatasets();
   });
 
-  editEventForm.validate({
-    rules: {
-      name: { required: true },
-      start: { required: true },
-      end: { required: true }
-    },
-    submitHandler: function (form) {
-      $.ajax({
-        url: '/rfq/fulfillment/personnel_calendar/update',
-        type: 'POST',
-        data: $(form).serialize(),
-        success: function (response) {
-          editEventModal.modal('hide');
-          reloadDatasets();
-        },
-        error: function (xhr, status, error) {
-          console.error(error);
-        }
-      });
-    }
+  // Initialize Edit Event Form
+  setupFormValidation(editEventForm, '/rfq/fulfillment/personnel_calendar/update', () => {
+    editEventModal.modal('hide');
+    reloadDatasets();
   });
 
-  addSharedEventButton.click(function () {
+  // Add Shared Event Button Handler
+  addSharedEventButton.click(() => {
     addSharedEventForm[0].reset();
     addSharedEventModal.modal('show');
+
     addSharedEventModal.find('#start').val(moment().format('MM/DD/YYYY'));
     addSharedEventModal.find('#end').val(moment().add(1, 'days').format('MM/DD/YYYY'));
-    addSharedEventModal.find('#color').colorpicker(colorpickerOptions);
-    addSharedEventModal.find('#color').on('colorpickerChange', function (event) {
-      $(this).parent().find('.fa-square').css('color', event.color.toString());
-    })
-    addSharedEventModal.find('#start, #end').daterangepicker({
-      singleDatePicker: true,
-      autoApply: true
-    });
+
+    const colorPickerElement = addSharedEventModal.find('#color');
+    initColorPicker(colorPickerElement);
+    initDateRangePicker(addSharedEventModal.find('#start'), addSharedEventModal.find('#end'));
   });
 
-  addSharedEventForm.validate({
-    rules: {
-      name: { required: true },
-      start: { required: true },
-      end: { required: true }
-    },
-    submitHandler: function (form) {
-      $.ajax({
-        url: '/rfq/fulfillment/personnel_calendar/save_shared_event',
-        type: 'POST',
-        data: $(form).serialize(),
-        success: function (response) {
-          addSharedEventModal.modal('hide');
-          reloadDatasets();
-        },
-        error: function (xhr, status, error) {
-          console.error(error);
-        }
-      });
-    }
+  // Initialize Add Shared Event Form
+  setupFormValidation(addSharedEventForm, '/rfq/fulfillment/personnel_calendar/save_shared_event', () => {
+    addSharedEventModal.modal('hide');
+    reloadDatasets();
   });
 });

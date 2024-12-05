@@ -63,7 +63,7 @@ function createAndInsertQuote($validador, $usuario_designado) {
     null,
     null,
     null,
-    null,
+    0,
     null,
     null,
     0,

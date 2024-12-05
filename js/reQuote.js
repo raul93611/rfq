@@ -1,112 +1,101 @@
 $(document).ready(function () {
   /***************************************************************************************************/
-    if($('#requote_table').length != 0){
-      var time2 = setInterval(function(){
-        var payment_terms = 1;
-        var total_ganado = parseFloat($('#total_ganado').html().split(' ')[1]);
-        if ($('input:radio[name=payment_terms]:checked').val() === 'Net 30/CC') {
-          payment_terms = total_ganado*0.029;
-        } else {
-          payment_terms = 0;
-        }
-        var totales = [];
-        $('#re_quote_data tr').each(function(){
-          if (!isNaN($(this).find('td').eq(8).text().split(' ')[1])) {
-            totales.push($(this).find('td').eq(8).text().split(' ')[1]);
-          } else {
-            totales.push(0);
-          }
-        });
-        if(!isNaN($('#shipping_cost_rq').val()) && $('#shipping_cost_rq').val() != ''){
-          var shipping_cost_rq = $('#shipping_cost_rq').val();
-        }else{
-          var shipping_cost_rq = 0;
-        }
-        var total = 0;
+  if ($('#requote_table').length !== 0) {
+    const calculateTotals = () => {
+      const totalGanado = parseFloat($('#total_ganado').html().split(' ')[1]);
+      const paymentTermsMultiplier = $('input:radio[name=payment_terms]:checked').val() === 'Net 30/CC' ? 0.029 : 0;
+      const paymentTerms = totalGanado * paymentTermsMultiplier;
 
-        for (var i = 0; i < totales.length; i++) {
-          total = total + parseFloat(totales[i]);
-        }
+      const totales = $('#re_quote_data tr').map((_, row) => {
+        const value = parseFloat($(row).find('td').eq(8).text().split(' ')[1]);
+        return isNaN(value) ? 0 : value;
+      }).get();
 
-        total = total + payment_terms;
-        total = total + parseFloat(shipping_cost_rq);
+      const shippingCostRq = parseFloat($('#shipping_cost_rq').val()) || 0;
 
-        $('#total_re_quote').html('$ ' + total.toFixed(2));
-        $('#total_cost').val(total);
-        var profit_rq = (total_ganado - total).toFixed(2);
-        var percentage_profit_rq = ((profit_rq/total_ganado)*100).toFixed(2);
-        $('#profit_rq').html('$ ' + profit_rq + '<br>' + percentage_profit_rq + '%');
-      }, 100);
-    }
+      // Calculate total
+      const total = totales.reduce((acc, value) => acc + value, 0) + paymentTerms + shippingCostRq;
+
+      // Update totals
+      $('#total_re_quote').html(`$ ${total.toFixed(2)}`);
+      $('#total_cost').val(total);
+
+      // Calculate and update profit
+      const profitRq = (totalGanado - total).toFixed(2);
+      const percentageProfitRq = ((profitRq / totalGanado) * 100).toFixed(2);
+      $('#profit_rq').html(`$ ${profitRq}<br>${percentageProfitRq}%`);
+    };
+
+    // Periodically recalculate totals
+    const interval = setInterval(calculateTotals, 100);
+  }
 
   $('#re_quote_form').submit(function () {
-    var payment_terms = 1;
-    var total_ganado = parseFloat($('#total_ganado').html().split(' ')[1]);
-    if ($('input:radio[name=payment_terms]:checked').val() === 'Net 30/CC') {
-      payment_terms = total_ganado*0.029;
-    } else {
-      payment_terms = 0;
-    }
-    var totales = [];
-    $('#re_quote_data tr').each(function(){
-      if (!isNaN($(this).find('td').eq(8).text().split(' ')[1])) {
-        totales.push($(this).find('td').eq(8).text().split(' ')[1]);
-      } else {
-        totales.push(0);
-      }
-    });
-    if(!isNaN($('#shipping_cost_rq').val()) && $('#shipping_cost_rq').val() != ''){
-      var shipping_cost_rq = $('#shipping_cost_rq').val();
-    }else{
-      var shipping_cost_rq = 0;
-    }
-    var total = 0;
+    // Recalculate totals before submitting
+    const totalGanado = parseFloat($('#total_ganado').html().split(' ')[1]);
+    const paymentTermsMultiplier = $('input:radio[name=payment_terms]:checked').val() === 'Net 30/CC' ? 0.029 : 0;
+    const paymentTerms = totalGanado * paymentTermsMultiplier;
 
-    for (var i = 0; i < totales.length; i++) {
-      total = total + parseFloat(totales[i]);
-    }
+    const totales = $('#re_quote_data tr').map((_, row) => {
+      const value = parseFloat($(row).find('td').eq(8).text().split(' ')[1]);
+      return isNaN(value) ? 0 : value;
+    }).get();
 
-    total = total + payment_terms;
-    total = total + parseFloat(shipping_cost_rq);
+    const shippingCostRq = parseFloat($('#shipping_cost_rq').val()) || 0;
 
-    $('#total_re_quote').html('$ ' + total.toFixed(2));
+    // Calculate total
+    const total = totales.reduce((acc, value) => acc + value, 0) + paymentTerms + shippingCostRq;
+
+    // Update totals
+    $('#total_re_quote').html(`$ ${total.toFixed(2)}`);
     $('#total_cost').val(total);
 
-    var profit_rq = (total_ganado - total).toFixed(2);
-    var percentage_profit_rq = ((profit_rq/total_ganado)*100).toFixed(2);
-    $('#profit_rq').html('$ ' + profit_rq + '<br>' + percentage_profit_rq + '%');
+    // Calculate and update profit
+    const profitRq = (totalGanado - total).toFixed(2);
+    const percentageProfitRq = ((profitRq / totalGanado) * 100).toFixed(2);
+    $('#profit_rq').html(`$ ${profitRq}<br>${percentageProfitRq}%`);
   });
   /****************************SERVICES*******************************************/
   const unitPriceFields = [];
   const servicesQuantityFields = [];
+
+  // Cache unit prices and quantities
   $('#services_table tbody .service_item').each(function () {
-    unitPriceFields.push(+$(this).find('td').eq(4).text());
-    servicesQuantityFields.push(+$(this).find('td').eq(3).text());
+    unitPriceFields.push(parseFloat($(this).find('td').eq(4).text()) || 0);
+    servicesQuantityFields.push(parseFloat($(this).find('td').eq(3).text()) || 0);
   });
 
-  const calcServices = function () {
-    const paymentTerms = $('input:radio[name=services_payment_term]:checked').val() === 'Net 30/CC' ? 1.0299 : 1;
+  // Calculate service totals
+  const calcServices = () => {
+    const paymentTermsMultiplier = $('input:radio[name=services_payment_term]:checked').val() === 'Net 30/CC' ? 1.0299 : 1;
     let totalServices = 0;
 
-    $('#services_table tbody .service_item').each(function (i, element) {
-      const newUnitPrice = (unitPriceFields[i] * paymentTerms).toFixed(2);
+    $('#services_table tbody .service_item').each(function (i) {
+      const newUnitPrice = (unitPriceFields[i] * paymentTermsMultiplier).toFixed(2);
       const newTotalPrice = (newUnitPrice * servicesQuantityFields[i]).toFixed(2);
-      totalServices += +newTotalPrice;
+      totalServices += parseFloat(newTotalPrice);
 
+      // Update unit price and total price in the table
       $(this).find('td').eq(4).html(newUnitPrice);
       $(this).find('td').eq(5).html(newTotalPrice);
     });
 
-    $('#total_service').html('$ ' + totalServices.toFixed(2));
-  }
+    // Update total service amount
+    $('#total_service').html(`$ ${totalServices.toFixed(2)}`);
+  };
 
+  // Periodically recalculate service totals
   const servicesPaymentTerms = setInterval(calcServices, 100);
+
+  // Recalculate totals before submitting the form
   $('#form_edited_quote').submit(calcServices);
 
-  //edit service modal
-  $('#services_table').on('click', '.edit_service', function(){
-    $('#edit_service_modal form').load('/rfq/re_quote_sc/load_service/' + $(this).attr('data'), function(){
-      console.log($(this).attr('data'));
+  // Edit service modal logic
+  $('#services_table').on('click', '.edit_service', function () {
+    const serviceId = $(this).data('service-id'); // Use a descriptive data attribute name
+    const modalFormUrl = `/rfq/re_quote_sc/load_service/${serviceId}`;
+
+    $('#edit_service_modal form').load(modalFormUrl, function () {
       $('#edit_service_modal').modal();
     });
   });

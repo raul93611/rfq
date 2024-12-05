@@ -11,10 +11,10 @@
         <form id="edit_service_form" action="<?= UPDATE_SERVICE_RE_QUOTE; ?>" method="post">
           <!-- Add form fields here -->
         </form>
-        <input type="hidden" name="id_rfq" value="<?= $id_rfq; ?>">
+        <input type="hidden" form="edit_service_form" name="id_rfq" value="<?= $id_rfq; ?>">
       </div>
       <div class="modal-footer">
-        <button type="submit" form="edit_service_form" class="btn btn-success">
+        <button type="submit" name="edit_service_button" form="edit_service_form" class="btn btn-success">
           <i class="fa fa-check"></i> Save
         </button>
         <button type="button" class="btn btn-danger" data-dismiss="modal">

@@ -1,4 +1,5 @@
 $(document).ready(function () {
+  // DOM Elements
   const quarterSelect = $('select[name="quarter"]');
   const monthSelect = $('select[name="month"]');
   const yearSelect = $('select[name="year"]');
@@ -8,350 +9,297 @@ $(document).ready(function () {
   const reportSelect = $('#report_select');
   const typeInput = $('input[name="type"]');
 
-  function checkFulfillmentReport() {
-    let isSelected = false;
-    if (reportSelect.find('[value="fulfillment_pending"]').is(':selected')) {
-      monthSelect.attr('disabled', true);
-      yearSelect.attr('disabled', true);
-      quarterSelect.attr('disabled', true);
-      monthSelect.show();
-      quarterSelect.hide();
-      isSelected = true;
+  // Helper to toggle visibility and enable/disable attributes
+  const toggleSelectOptions = (monthVisible, quarterVisible, yearEnabled) => {
+    monthSelect.toggle(monthVisible).attr('disabled', !monthVisible);
+    quarterSelect.toggle(quarterVisible).attr('disabled', !quarterVisible);
+    yearSelect.attr('disabled', !yearEnabled);
+  };
+
+  // Check if "fulfillment_pending" report is selected
+  const isFulfillmentPendingSelected = () => {
+    const isSelected = reportSelect.find('[value="fulfillment_pending"]').is(':selected');
+    if (isSelected) {
+      toggleSelectOptions(true, false, false);
     }
     return isSelected;
-  }
+  };
 
-  function monthly() {
-    monthSelect.attr('disabled', false);
-    quarterSelect.attr('disabled', false);
-    yearSelect.attr('disabled', false);
-    monthSelect.show();
-    quarterSelect.hide();
+  // Handlers for each report type
+  const setMonthly = () => {
+    toggleSelectOptions(true, false, true);
     typeInput.val('monthly');
-  }
+  };
 
-  function quarterly() {
-    monthSelect.attr('disabled', false);
-    quarterSelect.attr('disabled', false);
-    yearSelect.attr('disabled', false);
-    monthSelect.hide();
-    quarterSelect.show();
+  const setQuarterly = () => {
+    toggleSelectOptions(false, true, true);
     typeInput.val('quarterly');
-  }
+  };
 
-  function yearly() {
-    monthSelect.attr('disabled', true);
-    quarterSelect.attr('disabled', true);
-    yearSelect.attr('disabled', false);
-    monthSelect.show();
-    quarterSelect.hide();
+  const setYearly = () => {
+    toggleSelectOptions(false, false, true);
     typeInput.val('yearly');
-  }
+  };
 
-  function checkReportType() {
-    let isSelected = checkFulfillmentReport();
-    if (!isSelected) {
-      if (monthlyOption.hasClass('active')) {
-        monthly();
-      } else if (quarterlyOption.hasClass('active')) {
-        quarterly();
-      } else if (yearlyOption.hasClass('active')) {
-        yearly();
-      }
+  // Check and update based on report type
+  const updateReportType = () => {
+    if (!isFulfillmentPendingSelected()) {
+      if (monthlyOption.hasClass('active')) setMonthly();
+      else if (quarterlyOption.hasClass('active')) setQuarterly();
+      else if (yearlyOption.hasClass('active')) setYearly();
     }
-  }
+  };
 
-  checkReportType();
+  // Initial check
+  updateReportType();
 
-  monthlyOption.click(function () {
-    let isSelected = checkFulfillmentReport();
-    if (!isSelected) {
-      monthly();
-    }
+  // Event Handlers
+  monthlyOption.click(() => {
+    if (!isFulfillmentPendingSelected()) setMonthly();
   });
 
-  quarterlyOption.click(function () {
-    let isSelected = checkFulfillmentReport();
-    if (!isSelected) {
-      quarterly();
-    }
+  quarterlyOption.click(() => {
+    if (!isFulfillmentPendingSelected()) setQuarterly();
   });
 
-  yearlyOption.click(function () {
-    let isSelected = checkFulfillmentReport();
-    if (!isSelected) {
-      yearly();
-    }
+  yearlyOption.click(() => {
+    if (!isFulfillmentPendingSelected()) setYearly();
   });
 
-  reportSelect.change(function () {
-    checkReportType();
-  });
-
+  reportSelect.change(updateReportType);
 
   const generateButton = $('span[data="generate_report"]');
   const reportsForm = $('#reports_form');
 
+  /**
+   * Helper function to create table headers dynamically.
+   * @param {Array} headers - Array of header names.
+   * @param {Object} table - The table element.
+   */
+  function createTableHeaders(headers, table) {
+    const headerRow = $('<tr>').appendTo($('<thead>').appendTo(table));
+    headers.forEach(header => {
+      const th = $('<th>').text(header.text);
+      if (header.class) th.addClass(header.class);
+      th.appendTo(headerRow);
+    });
+  }
+
+  /**
+   * Helper function to define column mappings for each report type.
+   * @param {String} reportType - The type of the report.
+   * @returns {Array} Array of column configurations.
+   */
+  function getColumnMappings(reportType) {
+    const defaultColumns = [
+      {
+        data: "id",
+        render: (data, type) =>
+          type === 'display' ? `<a href="/rfq/perfil/quote/editar_cotizacion/${data}">${data}</a>` : data,
+      }
+    ];
+
+    const mappings = {
+      award: [
+        ...defaultColumns,
+        { data: "fecha_award" },
+        { data: "contract_number" },
+        { data: "email_code" },
+        { data: "nombre_usuario" },
+        { data: "canal" },
+        { data: "type_of_bid" },
+        { data: "total_cost" },
+        { data: "total_price" },
+        { data: "profit" },
+        { data: "type_of_contract" },
+      ],
+      submitted: [
+        ...defaultColumns,
+        { data: "fecha_submitted" },
+        { data: "email_code" },
+        { data: "nombre_usuario" },
+        { data: "canal" },
+        { data: "type_of_bid" },
+        { data: "total_cost" },
+        { data: "total_price" },
+        { data: "profit" },
+        { data: "type_of_contract" },
+      ],
+      fulfillment: [
+        ...defaultColumns,
+        { data: "fulfillment_date" },
+        { data: "contract_number" },
+        { data: "email_code" },
+        { data: "nombre_usuario" },
+        { data: "canal" },
+        { data: "type_of_bid" },
+        { data: "total_cost" },
+        { data: "total_price" },
+        { data: "profit" },
+        { data: "total_cost_requote" },
+        { data: "total_price_requote" },
+        { data: "profit_requote" },
+        { data: "type_of_contract" },
+        { data: "set_side" },
+      ],
+      'accounts-payable-fulfillment': [
+        ...defaultColumns,
+        { data: "provider" },
+        { data: "real_cost" },
+        { data: "payment_term" },
+        { data: "transaction_date" },
+      ],
+      'sales-commission': [
+        ...defaultColumns,
+        { data: "invoice_date" },
+        { data: "contract_number" },
+        { data: "nombre_usuario" },
+        { data: "state" },
+        { data: "client" },
+        { data: "total_cost", visible: false },
+        { data: "total_price", visible: false },
+        { data: "profit", visible: false },
+        { data: "total_cost_requote" },
+        { data: "total_price_requote" },
+        { data: "profit_equipment_requote" },
+        { data: "profit_service_requote" },
+        { data: "profit_requote_percentage" },
+        { data: "total_cost_fulfillment" },
+        { data: "total_price_fulfillment" },
+        { data: "profit_equipment_fulfillment" },
+        { data: "profit_service_fulfillment" },
+        { data: "profit_fulfillment_percentage" },
+        { data: "type_of_contract" },
+        { data: "sales_commission" },
+        { data: "sales_commission_amount" },
+      ],
+    };
+
+    return mappings[reportType] || [];
+  }
+
+  /**
+   * Generate report based on the selected type.
+   */
   generateButton.click(function (e) {
+    e.preventDefault();
     $('#reportsTable_wrapper').remove();
 
     const formData = reportsForm.serializeArray();
-    const jsonData = {};
+    const jsonData = formData.reduce((acc, obj) => ({ ...acc, [obj.name]: obj.value }), {});
 
-    $(formData).each(function (index, obj) {
-      jsonData[obj.name] = obj.value;
-    });
+    const reportType = jsonData.report;
+    const columnMappings = getColumnMappings(reportType);
 
-    let $table;
-    let columns;
-    let headerRow;
-    switch (jsonData.report) {
-      case 'award':
-        $table = $('<table>').attr('id', 'reportsTable').attr('class', 'table table-bordered table-hover');
-        $('#report_results_container').append($table);
-        headerRow = $('<tr>').appendTo($('<thead>').appendTo($table));
-        $('<th>').text('PROPOSAL').appendTo(headerRow);
-        $('<th>').text('AWARD DATE').appendTo(headerRow);
-        $('<th>').text('CONTRACT NUMBER').appendTo(headerRow);
-        $('<th>').text('CODE').appendTo(headerRow);
-        $('<th>').text('DESIGNATED USER').appendTo(headerRow);
-        $('<th>').text('CHANNEL').appendTo(headerRow);
-        $('<th>').text('TYPE OF BID').appendTo(headerRow);
-        $('<th>').attr('class', 'bg-primary').text('TOTAL COST').appendTo(headerRow);
-        $('<th>').attr('class', 'bg-primary').text('TOTAL PRICE').appendTo(headerRow);
-        $('<th>').attr('class', 'bg-primary').text('PROFIT').appendTo(headerRow);
-        $('<th>').text('TYPE OF CONTRACT').appendTo(headerRow);
-
-        columns = [
-          {
-            "data": "id",
-            "render": function (data, type, row, meta) {
-              if (type === 'display') {
-                return '<a href="/rfq/perfil/quote/editar_cotizacion/' + data + '">' + data + '</a>';
-              } else {
-                return data;
-              }
-            }
-          },
-          { "data": "fecha_award" },
-          { "data": "contract_number" },
-          { "data": "email_code" },
-          { "data": "nombre_usuario" },
-          { "data": "canal" },
-          { "data": "type_of_bid" },
-          { "data": "total_cost" },
-          { "data": "total_price" },
-          { "data": "profit" },
-          { "data": "type_of_contract" }
-        ];
-        break;
-      case 'submitted':
-        $table = $('<table>').attr('id', 'reportsTable').attr('class', 'table table-bordered table-hover');
-        $('#report_results_container').append($table);
-        headerRow = $('<tr>').appendTo($('<thead>').appendTo($table));
-        $('<th>').text('PROPOSAL').appendTo(headerRow);
-        $('<th>').text('SUBMITTED DATE').appendTo(headerRow);
-        $('<th>').text('CODE').appendTo(headerRow);
-        $('<th>').text('DESIGNATED USER').appendTo(headerRow);
-        $('<th>').text('CHANNEL').appendTo(headerRow);
-        $('<th>').text('TYPE OF BID').appendTo(headerRow);
-        $('<th>').attr('class', 'bg-primary').text('TOTAL COST').appendTo(headerRow);
-        $('<th>').attr('class', 'bg-primary').text('TOTAL PRICE').appendTo(headerRow);
-        $('<th>').attr('class', 'bg-primary').text('PROFIT').appendTo(headerRow);
-        $('<th>').text('TYPE OF CONTRACT').appendTo(headerRow);
-
-        columns = [
-          {
-            "data": "id",
-            "render": function (data, type, row, meta) {
-              if (type === 'display') {
-                return '<a href="/rfq/perfil/quote/editar_cotizacion/' + data + '">' + data + '</a>';
-              } else {
-                return data;
-              }
-            }
-          },
-          { "data": "fecha_submitted" },
-          { "data": "email_code" },
-          { "data": "nombre_usuario" },
-          { "data": "canal" },
-          { "data": "type_of_bid" },
-          { "data": "total_cost" },
-          { "data": "total_price" },
-          { "data": "profit" },
-          { "data": "type_of_contract" }
-        ];
-        break;
-      case 'fulfillment':
-        $table = $('<table>').attr('id', 'reportsTable').attr('class', 'table table-bordered table-hover');
-        $('#report_results_container').append($table);
-        headerRow = $('<tr>').appendTo($('<thead>').appendTo($table));
-        $('<th>').text('PROPOSAL').appendTo(headerRow);
-        $('<th>').text('FULFILLMENT DATE').appendTo(headerRow);
-        $('<th>').text('CONTRACT NUMBER').appendTo(headerRow);
-        $('<th>').text('CODE').appendTo(headerRow);
-        $('<th>').text('DESIGNATED USER').appendTo(headerRow);
-        $('<th>').text('CHANNEL').appendTo(headerRow);
-        $('<th>').text('TYPE OF BID').appendTo(headerRow);
-        $('<th>').attr('class', 'bg-primary').text('TOTAL COST').appendTo(headerRow);
-        $('<th>').attr('class', 'bg-primary').text('TOTAL PRICE').appendTo(headerRow);
-        $('<th>').attr('class', 'bg-primary').text('PROFIT').appendTo(headerRow);
-        $('<th>').attr('class', 'bg-warning').text('TOTAL COST').appendTo(headerRow);
-        $('<th>').attr('class', 'bg-warning').text('TOTAL PRICE').appendTo(headerRow);
-        $('<th>').attr('class', 'bg-warning').text('PROFIT').appendTo(headerRow);
-        $('<th>').text('TYPE OF CONTRACT').appendTo(headerRow);
-        $('<th>').text('SET ASIDE').appendTo(headerRow);
-
-        columns = [
-          {
-            "data": "id",
-            "render": function (data, type, row, meta) {
-              if (type === 'display') {
-                return '<a href="/rfq/perfil/quote/editar_cotizacion/' + data + '">' + data + '</a>';
-              } else {
-                return data;
-              }
-            }
-          },
-          { "data": "fulfillment_date" },
-          { "data": "contract_number" },
-          { "data": "email_code" },
-          { "data": "nombre_usuario" },
-          { "data": "canal" },
-          { "data": "type_of_bid" },
-          { "data": "total_cost" },
-          { "data": "total_price" },
-          { "data": "profit" },
-          { "data": "total_cost_requote" },
-          { "data": "total_price_requote" },
-          { "data": "profit_requote" },
-          { "data": "type_of_contract" },
-          { "data": "set_side" }
-        ];
-        break;
-      case 'accounts-payable-fulfillment':
-        $table = $('<table>').attr('id', 'reportsTable').attr('class', 'table table-bordered table-hover');
-        $('#report_results_container').append($table);
-        headerRow = $('<tr>').appendTo($('<thead>').appendTo($table));
-        $('<th>').text('PROPOSAL').appendTo(headerRow);
-        $('<th>').text('PROVIDER').appendTo(headerRow);
-        $('<th>').text('REAL COST').appendTo(headerRow);
-        $('<th>').text('PAYMENT TERMS').appendTo(headerRow);
-        $('<th>').text('TRANSACTION DATE').appendTo(headerRow);
-
-        columns = [
-          {
-            "data": "id",
-            "render": function (data, type, row, meta) {
-              if (type === 'display') {
-                return '<a href="/rfq/perfil/quote/editar_cotizacion/' + data + '">' + data + '</a>';
-              } else {
-                return data;
-              }
-            }
-          },
-          { "data": "provider" },
-          { "data": "real_cost" },
-          { "data": "payment_term" },
-          { "data": "transaction_date" }
-        ];
-        break;
-      case 'sales-commission':
-        $table = $('<table>').attr('id', 'reportsTable').attr('class', 'table table-bordered table-hover');
-        $('#report_results_container').append($table);
-        headerRow = $('<tr>').appendTo($('<thead>').appendTo($table));
-        $('<th>').text('PROPOSAL').appendTo(headerRow);
-        $('<th>').text('INVOICE DATE').appendTo(headerRow);
-        $('<th>').text('CONTRACT NUMBER').appendTo(headerRow);
-        $('<th>').text('DESIGNATED USER').appendTo(headerRow);
-        $('<th>').text('STATE').appendTo(headerRow);
-        $('<th>').text('CLIENT').appendTo(headerRow);
-        $('<th>').attr('class', 'bg-primary').text('TOTAL COST').appendTo(headerRow);
-        $('<th>').attr('class', 'bg-primary').text('TOTAL PRICE').appendTo(headerRow);
-        $('<th>').attr('class', 'bg-primary').text('PROFIT').appendTo(headerRow);
-        $('<th>').attr('class', 'bg-warning').text('TOTAL COST').appendTo(headerRow);
-        $('<th>').attr('class', 'bg-warning').text('TOTAL PRICE').appendTo(headerRow);
-        $('<th>').attr('class', 'bg-warning').text('PROFIT RFQ').appendTo(headerRow);
-        $('<th>').attr('class', 'bg-warning').text('PROFIT RFP').appendTo(headerRow);
-        $('<th>').attr('class', 'bg-warning').text('PROFIT %').appendTo(headerRow);
-        $('<th>').attr('class', 'bg-danger').text('TOTAL COST').appendTo(headerRow);
-        $('<th>').attr('class', 'bg-danger').text('TOTAL PRICE').appendTo(headerRow);
-        $('<th>').attr('class', 'bg-danger').text('PROFIT RFQ').appendTo(headerRow);
-        $('<th>').attr('class', 'bg-danger').text('PROFIT RFP').appendTo(headerRow);
-        $('<th>').attr('class', 'bg-danger').text('PROFIT %').appendTo(headerRow);
-        $('<th>').text('TYPE OF CONTRACT').appendTo(headerRow);
-        $('<th>').text('SALES COMMISSION').appendTo(headerRow);
-        $('<th>').text('SALES COMMISSION ($)').appendTo(headerRow);
-
-        columns = [
-          {
-            "data": "id",
-            "render": function (data, type, row, meta) {
-              if (type === 'display') {
-                return '<a href="/rfq/perfil/quote/editar_cotizacion/' + data + '">' + data + '</a>';
-              } else {
-                return data;
-              }
-            }
-          },
-          { "data": "invoice_date" },
-          { "data": "contract_number" },
-          { "data": "nombre_usuario" },
-          { "data": "state" },
-          { "data": "client" },
-          {
-            "data": "total_cost",
-            "visible": false
-          },
-          {
-            "data": "total_price",
-            "visible": false
-          },
-          {
-            "data": "profit",
-            "visible": false
-          },
-          { "data": "total_cost_requote" },
-          { "data": "total_price_requote" },
-          { "data": "profit_equipment_requote" },
-          { "data": "profit_service_requote" },
-          { "data": "profit_requote_percentage" },
-          { "data": "total_cost_fulfillment" },
-          { "data": "total_price_fulfillment" },
-          { "data": "profit_equipment_fulfillment" },
-          { "data": "profit_service_fulfillment" },
-          { "data": "profit_fulfillment_percentage" },
-          { "data": "type_of_contract" },
-          { "data": "sales_commission" },
-          { "data": "sales_commission_amount" }
-        ];
-        break;
-      default:
-        break;
+    if (!columnMappings.length) {
+      console.error("Invalid report type:", reportType);
+      return;
     }
 
-    table = $table.DataTable({
-      "responsive": true,
-      "processing": true,
-      "serverSide": true,
-      "ajax": {
-        "url": '/rfq/quote/reports',
-        "type": "POST",
-        "data": jsonData
+    const table = $('<table>')
+      .attr({ id: 'reportsTable', class: 'table table-bordered table-hover' })
+      .appendTo($('#report_results_container'));
+
+    const headers = {
+      award: [
+        { text: 'PROPOSAL' },
+        { text: 'AWARD DATE' },
+        { text: 'CONTRACT NUMBER' },
+        { text: 'CODE' },
+        { text: 'DESIGNATED USER' },
+        { text: 'CHANNEL' },
+        { text: 'TYPE OF BID' },
+        { text: 'TOTAL COST', class: 'bg-primary' },
+        { text: 'TOTAL PRICE', class: 'bg-primary' },
+        { text: 'PROFIT', class: 'bg-primary' },
+        { text: 'TYPE OF CONTRACT' }
+      ],
+      submitted: [
+        { text: 'PROPOSAL' },
+        { text: 'SUBMITTED DATE' },
+        { text: 'CODE' },
+        { text: 'DESIGNATED USER' },
+        { text: 'CHANNEL' },
+        { text: 'TYPE OF BID' },
+        { text: 'TOTAL COST', class: 'bg-primary' },
+        { text: 'TOTAL PRICE', class: 'bg-primary' },
+        { text: 'PROFIT', class: 'bg-primary' },
+        { text: 'TYPE OF CONTRACT' }
+      ],
+      fulfillment: [
+        { text: 'PROPOSAL' },
+        { text: 'FULFILLMENT DATE' },
+        { text: 'CONTRACT NUMBER' },
+        { text: 'CODE' },
+        { text: 'DESIGNATED USER' },
+        { text: 'CHANNEL' },
+        { text: 'TYPE OF BID' },
+        { text: 'TOTAL COST', class: 'bg-primary' },
+        { text: 'TOTAL PRICE', class: 'bg-primary' },
+        { text: 'PROFIT', class: 'bg-primary' },
+        { text: 'TOTAL COST', class: 'bg-warning' },
+        { text: 'TOTAL PRICE', class: 'bg-warning' },
+        { text: 'PROFIT', class: 'bg-warning' },
+        { text: 'TYPE OF CONTRACT' },
+        { text: 'SET ASIDE' }
+      ],
+      'accounts-payable-fulfillment': [
+        { text: 'PROPOSAL' },
+        { text: 'PROVIDER' },
+        { text: 'REAL COST' },
+        { text: 'PAYMENT TERMS' },
+        { text: 'TRANSACTION DATE' }
+      ],
+      'sales-commission': [
+        { text: 'PROPOSAL' },
+        { text: 'INVOICE DATE' },
+        { text: 'CONTRACT NUMBER' },
+        { text: 'DESIGNATED USER' },
+        { text: 'STATE' },
+        { text: 'CLIENT' },
+        { text: 'TOTAL COST', class: 'bg-primary' },
+        { text: 'TOTAL PRICE', class: 'bg-primary' },
+        { text: 'PROFIT', class: 'bg-primary' },
+        { text: 'TOTAL COST', class: 'bg-warning' },
+        { text: 'TOTAL PRICE', class: 'bg-warning' },
+        { text: 'PROFIT RFQ', class: 'bg-warning' },
+        { text: 'PROFIT RFP', class: 'bg-warning' },
+        { text: 'PROFIT %', class: 'bg-warning' },
+        { text: 'TOTAL COST', class: 'bg-danger' },
+        { text: 'TOTAL PRICE', class: 'bg-danger' },
+        { text: 'PROFIT RFQ', class: 'bg-danger' },
+        { text: 'PROFIT RFP', class: 'bg-danger' },
+        { text: 'PROFIT %', class: 'bg-danger' },
+        { text: 'TYPE OF CONTRACT' },
+        { text: 'SALES COMMISSION' },
+        { text: 'SALES COMMISSION ($)' }
+      ],
+    };
+
+    createTableHeaders(headers[reportType] || [], table);
+
+    table.DataTable({
+      responsive: true,
+      processing: true,
+      serverSide: true,
+      ajax: {
+        url: '/rfq/quote/reports',
+        type: 'POST',
+        data: jsonData,
       },
-      "columns": columns,
-      "initComplete": function (settings, json) {
-        $('#report_results_container > div > div').eq(1).addClass('table-responsive');
+      columns: columnMappings,
+      initComplete: function () {
+        $('#report_results_container > div > div')
+          .eq(1)
+          .addClass('table-responsive');
         $('#report_results_container #reportsTable_wrapper').prepend(`
         <div class="my-3">
           <i class="fas fa-square text-primary"></i> Quote <br>
           <i class="fas fa-square text-warning"></i> Re-Quote <br>
           <i class="fas fa-square text-danger"></i> Fulfillment
         </div>
-        `);
-      }
+      `);
+      },
     });
-
-    return false;
   });
 });

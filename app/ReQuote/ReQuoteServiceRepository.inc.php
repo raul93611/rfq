@@ -81,7 +81,7 @@ class ReQuoteServiceRepository
     <tr class="service_item" id="service<?php echo $service->get_id(); ?>">
       <td>
         <div class="btn-group-vertical">
-          <button type="button" class="btn btn-warning edit_service" data="<?php echo $service->get_id(); ?>"><i class="fas fa-pen"></i></button>
+          <button type="button" class="btn btn-warning edit_service" data-service-id="<?php echo $service->get_id(); ?>"><i class="fas fa-pen"></i></button>
         </div>
       </td>
       <td><?php echo $key + 1; ?></td>
