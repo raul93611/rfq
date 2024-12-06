@@ -1,114 +1,104 @@
 $(document).ready(function () {
   const typeOfProjectTable = $('#type-of-project-table');
-  const typeOfProjectDataTable = $('#type-of-project-table').DataTable({
-    "processing": true,
-    "serverSide": true,
-    "pageLength": 10,
-    "order": [[1, "asc"]],
-    "ajax": {
-      "url": '/rfq/fulfillment/type_of_project/table',
-      "type": "POST"
+  const typeOfProjectDataTable = typeOfProjectTable.DataTable({
+    processing: true,
+    serverSide: true,
+    pageLength: 10,
+    order: [[1, 'asc']],
+    ajax: {
+      url: '/rfq/fulfillment/type_of_project/table',
+      type: 'POST',
     },
-    "columns": [
+    columns: [
+      { data: 'id', visible: false },
+      { data: 'name' },
       {
-        "data": "id",
-        "visible": false
-      },
-      { "data": "name" },
-      {
-        "data": "options",
-        "orderable": false,
-        "render": function (data, type, row, meta) {
+        data: 'options',
+        orderable: false,
+        render: (data, type, row) => {
           if (type === 'display') {
             return `
-            <button data-id="${row.id}" class="edit-type-of-project-button btn btn-sm btn-warning">
-              <i class="fas fa-pen"></i>
-            </button>
-            <button data-id="${row.id}" class="delete-type-of-project-button btn btn-sm btn-danger">
-              <i class="fas fa-trash"></i>
-            </button>
+              <button data-id="${row.id}" class="edit-type-of-project-button btn btn-sm btn-warning">
+                <i class="fas fa-pen"></i>
+              </button>
+              <button data-id="${row.id}" class="delete-type-of-project-button btn btn-sm btn-danger">
+                <i class="fas fa-trash"></i>
+              </button>
             `;
-          } else {
-            return data;
           }
-        }
-      },
-    ]
-  });
-
-  const addTypeOfProjectButton = $('#add-type-of-project-button');
-  const addTypeOfProjectModal = $('#add-type-of-project-modal');
-  const addTyepOfProjectForm = $('#add-type-of-project-form');
-
-  addTypeOfProjectButton.click(() => {
-    addTyepOfProjectForm[0].reset();
-    addTypeOfProjectModal.modal();
-  });
-
-  addTyepOfProjectForm.validate({
-    rules: {
-      name: {
-        required: true
-      }
-    },
-    submitHandler: function (form) {
-      $.ajax({
-        url: '/rfq/fulfillment/type_of_project/save',
-        type: 'POST',
-        data: $(form).serialize(),
-        success: function (response) {
-          addTypeOfProjectModal.modal('hide');
-          typeOfProjectDataTable.ajax.reload(null, false);
+          return data;
         },
-        error: function (xhr, status, error) {
-          console.error(error);
-        }
-      });
-    }
+      },
+    ],
   });
 
+  // Utility function to reset and open a modal
+  function openModal(modal, form = null) {
+    if (form) form[0].reset();
+    modal.modal('show');
+  }
+
+  // Utility function for AJAX form submission
+  function handleFormSubmission(form, url, onSuccess) {
+    form.validate({
+      rules: {
+        name: {
+          required: true,
+        },
+      },
+      submitHandler: (validatedForm) => {
+        $.ajax({
+          url,
+          type: 'POST',
+          data: $(validatedForm).serialize(),
+          success: onSuccess,
+          error: (xhr, status, error) => {
+            console.error(error);
+          },
+        });
+      },
+    });
+  }
+
+  // Add Type of Project
+  const addTypeOfProjectModal = $('#add-type-of-project-modal');
+  const addTypeOfProjectForm = $('#add-type-of-project-form');
+  $('#add-type-of-project-button').click(() => openModal(addTypeOfProjectModal, addTypeOfProjectForm));
+
+  handleFormSubmission(addTypeOfProjectForm, '/rfq/fulfillment/type_of_project/save', () => {
+    addTypeOfProjectModal.modal('hide');
+    typeOfProjectDataTable.ajax.reload(null, false);
+  });
+
+  // Edit Type of Project
   const editTypeOfProjectModal = $('#edit-type-of-project-modal');
   const editTypeOfProjectForm = $('#edit-type-of-project-form');
 
   typeOfProjectTable.on('click', '.edit-type-of-project-button', function () {
-    console.log('asdfasdf');
-    editTypeOfProjectForm.load(`/rfq/fulfillment/type_of_project/load`, { id: $(this).data('id') }, () => {
-      editTypeOfProjectModal.modal();
+    const typeId = $(this).data('id');
+    editTypeOfProjectForm.load(`/rfq/fulfillment/type_of_project/load`, { id: typeId }, () => {
+      editTypeOfProjectModal.modal('show');
     });
   });
 
-  editTypeOfProjectForm.validate({
-    rules: {
-      name: {
-        required: true
-      }
-    },
-    submitHandler: function (form) {
-      $.ajax({
-        url: '/rfq/fulfillment/type_of_project/update',
-        type: 'POST',
-        data: $(form).serialize(),
-        success: function (response) {
-          editTypeOfProjectModal.modal('hide');
-          typeOfProjectDataTable.ajax.reload(null, false);
-        },
-        error: function (xhr, status, error) {
-          console.error(error);
-        }
-      });
-    }
+  handleFormSubmission(editTypeOfProjectForm, '/rfq/fulfillment/type_of_project/update', () => {
+    editTypeOfProjectModal.modal('hide');
+    typeOfProjectDataTable.ajax.reload(null, false);
   });
 
-  typeOfProjectTable.on('click', '.delete-type-of-project-button', function (e) {
+  // Delete Type of Project
+  typeOfProjectTable.on('click', '.delete-type-of-project-button', function () {
+    const typeId = $(this).data('id');
     $.ajax({
       url: '/rfq/fulfillment/type_of_project/delete',
-      data: {
-        id: $(this).data('id'),
-      },
       type: 'POST',
-      success: function (res) {
+      data: { id: typeId },
+      success: () => {
         typeOfProjectDataTable.ajax.reload(null, false);
-      }
+      },
+      error: (xhr, status, error) => {
+        console.error(error);
+      },
     });
   });
 });

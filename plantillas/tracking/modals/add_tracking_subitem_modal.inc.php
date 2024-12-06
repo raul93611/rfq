@@ -20,14 +20,14 @@
           <!-- Delivery Date -->
           <div class="form-group">
             <label for="delivery_date">Delivery Date:</label>
-            <input type="date" id="delivery_date_subitem" class="form-control form-control-sm" name="delivery_date" aria-describedby="deliveryHelp">
+            <input type="text" id="delivery_date_subitem" class="form-control form-control-sm" name="delivery_date" aria-describedby="deliveryHelp">
             <small id="deliveryHelp" class="form-text text-muted">Select the delivery date.</small>
           </div>
 
           <!-- Due Date -->
           <div class="form-group">
             <label for="due_date">Due Date:</label>
-            <input type="date" id="due_date" class="form-control form-control-sm" name="due_date" aria-describedby="dueDateHelp">
+            <input type="text" id="due_date" class="form-control form-control-sm" name="due_date" aria-describedby="dueDateHelp">
             <small id="dueDateHelp" class="form-text text-muted">Select the due date.</small>
           </div>
 

@@ -31,7 +31,7 @@ function renderTaskCard($tasks, $status) {
         <div class="card card-primary card-outline">
           <div class="card-header">
             <h5 class="card-title">
-              <a class="edit_task_button" data="<?= $task->get_id(); ?>" href="#"><?= $task->get_title(); ?></a>
+              <a class="edit_task_button" data-id="<?= $task->get_id(); ?>" href="#"><?= $task->get_title(); ?></a>
             </h5>
           </div>
           <div class="card-body">

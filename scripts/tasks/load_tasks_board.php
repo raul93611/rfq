@@ -19,7 +19,7 @@ function render_tasks($tasks, $status) {
   foreach ($tasks as $task) {
     echo '<div class="card card-primary card-outline">';
     echo '<div class="card-header">';
-    echo '<h5 class="card-title"><a class="edit_task_button" data="' . htmlspecialchars($task->get_id()) . '" href="#">' . htmlspecialchars($task->get_title()) . '</a></h5>';
+    echo '<h5 class="card-title"><a class="edit_task_button" data-id="' . htmlspecialchars($task->get_id()) . '" href="#">' . htmlspecialchars($task->get_title()) . '</a></h5>';
     echo '</div>';
     echo '<div class="card-body">';
     echo '<span class="text-info"><i class="fas fa-user"></i> Created by:</span> ' . htmlspecialchars($task->get_id_user_name()) . '<br>';

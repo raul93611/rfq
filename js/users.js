@@ -1,118 +1,131 @@
 $(document).ready(function () {
   const usersTable = $('#tabla_usuarios').DataTable({
-    "processing": true,
-    "serverSide": true,
-    "ajax": {
-      "url": '/rfq/user/users',
-      "type": "POST"
+    processing: true,
+    serverSide: true,
+    ajax: {
+      url: '/rfq/user/users',
+      type: 'POST',
     },
-    "columns": [
-      { "data": "id" },
-      { "data": "role_names" },
-      { "data": "nombres" },
-      { "data": "apellidos" },
-      { "data": "nombre_usuario" },
+    columns: [
+      { data: 'id' },
+      { data: 'role_names' },
+      { data: 'nombres' },
+      { data: 'apellidos' },
+      { data: 'nombre_usuario' },
       {
-        "data": "status",
-        "render": function (data, type, row, meta) {
+        data: 'status',
+        render: (data, type) => {
           if (type === 'display') {
-            return `<span class="text-${data == 'Enabled' ? 'success' : 'danger'}">${data}</span>`;
-          } else {
-            return data;
+            const statusClass = data === 'Enabled' ? 'success' : 'danger';
+            return `<span class="text-${statusClass}">${data}</span>`;
           }
-        }
+          return data;
+        },
       },
       {
-        "data": "options",
-        "orderable": false,
-        "render": function (data, type, row, meta) {
+        data: 'options',
+        orderable: false,
+        render: (data, type, row) => {
           if (type === 'display') {
-            let column = `
-            <a class="btn btn-sm btn-info" href="/rfq/perfil/user/edit_user/${row.id}">
-              <i class="fas fa-highlighter"></i>
-            </a>
-            <a class="btn btn-sm btn-warning" href="/rfq/perfil/user/update_password/${row.id}">
-              <i class="fas fa-key"></i>
-            </a>
+            const isEnabled = row.status === 'Enabled';
+            const statusToggle = isEnabled ? 'disable' : 'enable';
+            const buttonClass = isEnabled ? 'danger' : 'success';
+            const iconClass = isEnabled ? 'ban' : 'check';
+
+            return `
+              <a class="btn btn-sm btn-info" href="/rfq/perfil/user/edit_user/${row.id}">
+                <i class="fas fa-highlighter"></i>
+              </a>
+              <a class="btn btn-sm btn-warning" href="/rfq/perfil/user/update_password/${row.id}">
+                <i class="fas fa-key"></i>
+              </a>
+              <a href="/rfq/user/${statusToggle}_user" 
+                 data-type="${statusToggle}" 
+                 data-id="${row.id}" 
+                 class="enable-disable-user btn btn-sm btn-${buttonClass}">
+                <i class="fa fa-${iconClass}"></i>
+              </a>
             `;
-            column += `
-            <a href="/rfq/user/${row.status == 'Enabled' ? 'disable' : 'enable'}_user" data-type="${row.status == 'Enabled' ? 'disable' : 'enable'}" data-id="${row.id}" class="enable-disable-user btn btn-sm btn-${row.status == 'Enabled' ? 'danger' : 'success'}">
-              <i class="fa fa-${row.status == 'Enabled' ? 'ban' : 'check'}"></i>
-            </a>
-            `;
-            return column;
-          } else {
-            return data;
           }
-        }
-      }
-    ]
+          return data;
+        },
+      },
+    ],
   });
 
+  // Handle Enable/Disable User Button Click
   $('#tabla_usuarios').on('click', '.enable-disable-user', function (e) {
     e.preventDefault();
+
+    const actionType = $(this).data('type');
+    const userId = $(this).data('id');
+
     $.ajax({
-      url: `/rfq/user/${$(this).data('type')}_user`,
+      url: `/rfq/user/${actionType}_user`,
       method: 'POST',
-      data: {
-        id: `${$(this).data('id')}`,
+      data: { id: userId },
+      success: () => {
+        usersTable.ajax.reload(null, false); // Refresh without resetting pagination
       },
-      success: function (response) {
-        usersTable.ajax.reload(null, false);
-      },
-      error: function (xhr, status, error) {
-        console.log(error);
+      error: (xhr, status, error) => {
+        console.error(`Error during ${actionType} action:`, error);
       }
     });
-  })
+  });
 
-  $.validator.addMethod('checkboxGroup', function (value, element) {
-    var checkboxes = $(element).closest('form').find('input[name="' + $(element).attr('name') + '"]');
-    return checkboxes.filter(':checked').length > 0;
-  }, 'Please select at least one checkbox.');
+  // Custom Validator for Checkbox Group
+  $.validator.addMethod(
+    'checkboxGroup',
+    function (value, element) {
+      const checkboxes = $(element)
+        .closest('form')
+        .find(`input[name="${$(element).attr('name')}"]`);
+      return checkboxes.filter(':checked').length > 0;
+    },
+    'Please select at least one checkbox.'
+  );
 
+  // Edit User Form Validation and Submission
   $('#edit-user-form').validate({
     rules: {
       username: {
         required: true,
-        pattern: /^[a-zA-Z0-9_-]+$/
+        pattern: /^[a-zA-Z0-9_-]+$/,
       },
       nombres: {
-        required: true
+        required: true,
       },
       apellidos: {
-        required: true
+        required: true,
       },
       email: {
         required: true,
-        email: true
+        email: true,
       },
       'cargo[]': {
-        checkboxGroup: true
-      }
+        checkboxGroup: true,
+      },
     },
     messages: {
       username: {
-        pattern: 'Only letters, numbers, hyphens, and underscores are allowed'
-      }
+        pattern: 'Only letters, numbers, hyphens, and underscores are allowed.',
+      },
     },
     submitHandler: function (form) {
       $.ajax({
         url: '/rfq/user/update',
         type: 'POST',
         data: $(form).serialize(),
-        success: function (response) {
-          let message = '';
-          if (response.errors) {
-            message = $(`<label class="error">${response.errors}</label>`);
-          } else {
-            message = $(`<label class="text-success">User updated correctly</label>`);
-          }
-          $('form #errors').html(message);
+        success: (response) => {
+          const message = response.errors
+            ? `<label class="error">${response.errors}</label>`
+            : `<label class="text-success">User updated successfully</label>`;
+
+          $('#errors').html(message);
         },
-        error: function (xhr, status, error) {
-          console.error(error);
-        }
+        error: (xhr, status, error) => {
+          console.error('Error updating user:', error);
+        },
       });
     },
     errorPlacement: function (error, element) {
@@ -121,89 +134,87 @@ $(document).ready(function () {
       } else {
         error.insertAfter(element);
       }
-    }
+    },
   });
 
+  // Update Password Form Validation and Submission
   $('#update-password-form').validate({
     rules: {
       password: {
         required: true,
-        minlength: 6
+        minlength: 6,
       },
       'password-confirmation': {
         required: true,
-        equalTo: '#password'
-      }
+        equalTo: '#password',
+      },
     },
     submitHandler: function (form) {
       $.ajax({
         url: '/rfq/user/update_password',
         type: 'POST',
         data: $(form).serialize(),
-        success: function (response) {
-          let message = '';
-          if (!response.errors) {
-            message = $(`<label class="text-success">Password updated correctly</label>`);
-          }
-          $('form #errors').html(message);
+        success: (response) => {
+          const message = response.errors
+            ? `<label class="error">${response.errors}</label>`
+            : `<label class="text-success">Password updated successfully</label>`;
+          $('#errors').html(message);
         },
-        error: function (xhr, status, error) {
-          console.error(error);
-        }
+        error: (xhr, status, error) => {
+          console.error('Error updating password:', error);
+        },
       });
-    }
+    },
   });
 
+  // Add User Form Validation and Submission
   $('#add-user-form').validate({
     rules: {
       username: {
         required: true,
-        pattern: /^[a-zA-Z0-9_-]+$/
+        pattern: /^[a-zA-Z0-9_-]+$/,
       },
       nombres: {
-        required: true
+        required: true,
       },
       apellidos: {
-        required: true
+        required: true,
       },
       email: {
         required: true,
-        email: true
+        email: true,
       },
       password: {
         required: true,
-        minlength: 6
+        minlength: 6,
       },
       'password-confirmation': {
         required: true,
-        equalTo: '#password'
+        equalTo: '#password',
       },
       'cargo[]': {
-        checkboxGroup: true
-      }
+        checkboxGroup: true,
+      },
     },
     messages: {
       username: {
-        pattern: 'Only letters, numbers, hyphens, and underscores are allowed'
-      }
+        pattern: 'Only letters, numbers, hyphens, and underscores are allowed.',
+      },
     },
     submitHandler: function (form) {
       $.ajax({
         url: '/rfq/user/create',
         type: 'POST',
         data: $(form).serialize(),
-        success: function (response) {
-          let message = '';
-          if (response.errors) {
-            message = $(`<label class="error">${response.errors}</label>`);
-          } else {
-            message = $(`<label class="text-success">User created correctly</label>`);
-          }
-          $('form #errors').html(message);
+        success: (response) => {
+          const message = response.errors
+            ? `<label class="error">${response.errors}</label>`
+            : `<label class="text-success">User created successfully</label>`;
+          $('#errors').html(message);
         },
-        error: function (xhr, status, error) {
-          console.error(error);
-        }
+        error: (xhr, status, error) => {
+          console.error('Error creating user:', error);
+        },
       });
     },
     errorPlacement: function (error, element) {
@@ -212,6 +223,6 @@ $(document).ready(function () {
       } else {
         error.insertAfter(element);
       }
-    }
+    },
   });
 });
