@@ -4,7 +4,7 @@
 <head>
   <style>
     body {
-      font-family: roboto;
+      font-family: Roboto, sans-serif;
     }
 
     th {
@@ -12,21 +12,16 @@
       background-color: #DEE8F2;
     }
 
+    #tabla {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
     #tabla th,
     #tabla td {
       border: 1px solid #DEE8F2;
-
-      padding-left: 10px;
-      padding-right: 10px;
-      padding-top: 5px;
-      padding-bottom: 5px;
+      padding: 10px;
       font-size: 9pt;
-    }
-
-    table,
-    th,
-    td {
-      border-collapse: collapse;
     }
 
     td {
@@ -35,14 +30,17 @@
 
     .quantity {
       width: 20px;
-    }
-
-    .total_ancho {
-      width: 130px;
+      text-align: center;
     }
 
     .unit_price {
       width: 100px;
+      text-align: right;
+    }
+
+    .total_ancho {
+      width: 130px;
+      text-align: right;
     }
 
     .letra_chiquita {
@@ -55,15 +53,16 @@
 
     .letra_grande {
       font-size: 25pt;
+      text-align: center;
     }
   </style>
 </head>
 
 <body>
-  <table border=0 width="100%">
+  <table border="0" style="width:100%;">
     <tr>
-      <td width="400">
-        <img style="width:350px;height:130px;" src="img/<?= $logo ?>">
+      <td style="width:400px;">
+        <img style="width:350px;height:130px;" src="img/<?= htmlspecialchars($logo) ?>" alt="Company Logo">
       </td>
       <td align="right">
         <span class="color letra_grande">PROPOSAL</span>
@@ -75,27 +74,27 @@
             <th>EXPIRATION DATE</th>
           </tr>
           <tr>
-            <td style="text-align:center;"><?= $cotizacion->obtener_id() ?></td>
-            <td style="text-align:center;"><?= $fecha_completado ?></td>
-            <td style="text-align:center;"><?= $expiration_date ?></td>
+            <td><?= htmlspecialchars($cotizacion->obtener_id()) ?></td>
+            <td><?= htmlspecialchars($fecha_completado) ?></td>
+            <td><?= htmlspecialchars($expiration_date) ?></td>
           </tr>
         </table>
       </td>
     </tr>
   </table>
   <br>
-  <table id="tabla" style="width:100%">
+  <table id="tabla">
     <tr>
-      <th style="width:50%">ADDRESS</th>
-      <th style="width:50%">SHIP TO</th>
+      <th>ADDRESS</th>
+      <th>SHIP TO</th>
     </tr>
     <tr>
-      <td><?= nl2br($cotizacion->obtener_address()) ?></td>
-      <td><?= nl2br($cotizacion->obtener_ship_to()) ?></td>
+      <td><?= nl2br(htmlspecialchars($cotizacion->obtener_address())) ?></td>
+      <td><?= nl2br(htmlspecialchars($cotizacion->obtener_ship_to())) ?></td>
     </tr>
   </table>
   <br>
-  <table id="tabla" style="width:100%">
+  <table id="tabla">
     <tr>
       <th>SHIP VIA</th>
       <th>CONTRACT NUMBER</th>
@@ -104,15 +103,15 @@
       <th>PAYMENT TERMS</th>
     </tr>
     <tr>
-      <td style="text-align:center;"><?= $cotizacion->obtener_ship_via() ?></td>
-      <td style="text-align:center;"><?= $cotizacion->obtener_email_code() ?></td>
-      <td style="text-align:center;"><?= $usuario_designado->obtener_nombres() . ' ' . $usuario_designado->obtener_apellidos() ?></td>
-      <td style="text-align:center;"><?= $usuario_designado->obtener_email() ?></td>
-      <td style="text-align:center;"><?= $payment_terms ?></td>
+      <td><?= htmlspecialchars($cotizacion->obtener_ship_via()) ?></td>
+      <td><?= htmlspecialchars($cotizacion->obtener_email_code()) ?></td>
+      <td><?= htmlspecialchars($usuario_designado->obtener_nombres() . ' ' . $usuario_designado->obtener_apellidos()) ?></td>
+      <td><?= htmlspecialchars($usuario_designado->obtener_email()) ?></td>
+      <td><?= htmlspecialchars($payment_terms) ?></td>
     </tr>
   </table>
   <br>
-  <table id="tabla" style="width:100%">
+  <table id="tabla">
     <tr>
       <th class="quantity">#</th>
       <th>DESCRIPTION</th>
@@ -123,50 +122,49 @@
     <?php if ($encabezado) : ?>
       <tr>
         <td></td>
-        <td>
-          OPEN MARKET PRICING PROPOSAL<br><br>
-          E-Logic is an SBA 8(a) and HUBZONE Certified SB<br><br>
-          SBA 8(a) Case Number: C0069X<br><br>
-          SBA 8(a) Entrance Date: 09/30/2016<br><br>
+        <td colspan="4">
+          OPEN MARKET PRICING PROPOSAL<br>
+          E-Logic is an SBA 8(a) and HUBZONE Certified SB<br>
+          SBA 8(a) Case Number: C0069X<br>
+          SBA 8(a) Entrance Date: 09/30/2016<br>
           SBA 8(a) Exit Date: 09/30/2026
         </td>
-        <td></td>
-        <td></td>
-        <td></td>
       </tr>
     <?php endif; ?>
     <?php
     $a = 1;
     $limit = 400;
-    if (count($items)) {
-      foreach ($items as $i => $item) {
+
+    if (!empty($items)) {
+      foreach ($items as $item) {
         echo ProposalRepository::print_item($item, $limit, $a)[0];
         $a++;
       }
     }
+
     if (isset($services)) {
-      foreach ($services as $key => $service) {
+      foreach ($services as $service) {
         echo ProposalRepository::print_service($cotizacion->obtener_services_payment_term(), $service, $a);
         $a++;
       }
     }
     ?>
     <tr>
-      <td style="border-bottom:0;border-left:0;"></td>
-      <td colspan="3" style="font-size:10pt;"><?= nl2br($cotizacion->obtener_shipping()) ?></td>
-      <td style="text-align:right;">$ <?= number_format($cotizacion->obtener_shipping_cost(), 2) ?></td>
+      <td colspan="4" style="text-align:right;">Shipping Cost:</td>
+      <td>$ <?= number_format($cotizacion->obtener_shipping_cost(), 2) ?></td>
     </tr>
     <tr>
-      <td style="border:none;"></td>
-      <td style="border:none;"></td>
-      <td style="border:none;"></td>
-      <td style="font-size:12pt;">TOTAL:</td>
-      <td style="font-size:12pt;text-align:right;">$ <?= number_format($cotizacion->obtener_total_price() + $total_service, 2) ?></td>
+      <td colspan="4" style="font-size:12pt; text-align:right;">TOTAL:</td>
+      <td style="font-size:12pt;">$ <?= number_format($cotizacion->obtener_total_price() + $total_service, 2) ?></td>
     </tr>
   </table>
-  <?php if ($payment_terms == 'Net 30') : ?>
+  <?php if ($payment_terms === 'Net 30') : ?>
     <br>
-    <div class="color letra_chiquita"><b>PAYMENT TERMS</b><br><b>NET TERMS: </b>30 Days<br><b>CREDIT CARD PAYMENT: </b>Please add an additional 3% to process credit card payments.</div>
+    <div class="color letra_chiquita">
+      <b>PAYMENT TERMS</b><br>
+      NET TERMS: 30 Days<br>
+      CREDIT CARD PAYMENT: Please add an additional 3% to process credit card payments.
+    </div>
   <?php endif; ?>
 </body>
 
