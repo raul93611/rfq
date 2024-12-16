@@ -151,7 +151,7 @@
     ?>
     <tr>
       <td colspan="4" style="text-align:right;">Shipping Cost:</td>
-      <td>$ <?= number_format($cotizacion->obtener_shipping_cost(), 2) ?></td>
+      <td style="text-align:right>$ <?= number_format($cotizacion->obtener_shipping_cost(), 2) ?></td>
     </tr>
     <tr>
       <td colspan="4" style="font-size:12pt; text-align:right;">TOTAL:</td>
