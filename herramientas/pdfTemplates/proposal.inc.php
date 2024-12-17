@@ -155,7 +155,7 @@
     </tr>
     <tr>
       <td colspan="4" style="font-size:12pt; text-align:right;">TOTAL:</td>
-      <td style="font-size:12pt;">$ <?= number_format($cotizacion->obtener_total_price() + $total_service, 2) ?></td>
+      <td style="font-size:12pt;text-align:right;">$ <?= number_format($cotizacion->obtener_total_price() + $total_service, 2) ?></td>
     </tr>
   </table>
   <?php if ($payment_terms === 'Net 30') : ?>
