@@ -86,9 +86,9 @@
             <th>EXPIRATION DATE</th>
           </tr>
           <tr>
-            <td><?= $cotizacion->obtener_id() ?></td>
-            <td><?= $fecha_completado ?></td>
-            <td><?= $expiration_date ?></td>
+            <td style="text-align:center"><?= $cotizacion->obtener_id() ?></td>
+            <td style="text-align:center"><?= $fecha_completado ?></td>
+            <td style="text-align:center"><?= $expiration_date ?></td>
           </tr>
         </table>
       </td>
@@ -119,11 +119,11 @@
       <th>PAYMENT TERMS</th>
     </tr>
     <tr>
-      <td><?= $cotizacion->obtener_ship_via() ?></td>
-      <td><?= $cotizacion->obtener_email_code() ?></td>
-      <td><?= $usuario_designado->obtener_nombres() . ' ' . $usuario_designado->obtener_apellidos() ?></td>
-      <td><?= $usuario_designado->obtener_email() ?></td>
-      <td><?= $payment_terms ?></td>
+      <td style="text-align:center"><?= $cotizacion->obtener_ship_via() ?></td>
+      <td style="text-align:center"><?= $cotizacion->obtener_email_code() ?></td>
+      <td style="text-align:center"><?= $usuario_designado->obtener_nombres() . ' ' . $usuario_designado->obtener_apellidos() ?></td>
+      <td style="text-align:center"><?= $usuario_designado->obtener_email() ?></td>
+      <td style="text-align:center"><?= $payment_terms ?></td>
     </tr>
   </table>
 
