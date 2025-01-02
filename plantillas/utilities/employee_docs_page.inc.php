@@ -5,12 +5,19 @@
         <div class="col-sm-6">
           <h1 class="m-0 text-dark">Hi, <?= $_SESSION['user']->obtener_nombre_usuario(); ?></h1>
         </div>
-        <div class="col-sm-6"></div>
+        <div class="col-sm-6 text-right">
+          <?php
+          // Check if the user is an admin before displaying the button
+          if (isset($_SESSION['user']) && $_SESSION['user']->is_admin()) {
+            echo '<button class="btn btn-primary" id="add-employee-doc-button"><i class="fa fa-plus"></i></button>';
+          }
+          ?>
+        </div>
       </div>
     </div>
   </div>
 
-  <section class="content">
+  <section class="content" id="employee-docs-container">
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-6">
@@ -31,8 +38,17 @@
               } else {
                 echo '<div class="list-group">';
                 foreach ($files as $file) {
-                  echo '<li class="list-group-item">' . $file .
-                    '<a download href="' . EMPLOYEE_DOCS . "$directoryName/$file" . '" class="close float-right"><i class="fas fa-file-download"></i></a></li>';
+                  echo '<li class="list-group-item d-flex justify-content-between align-items-center">' . $file .
+                    '<div class="btn-group" role="group">' .
+                    '<a download href="' . EMPLOYEE_DOCS . "$directoryName/$file" . '" class="close btn btn-link"><i class="fas fa-file-download"></i></a>';
+
+                  // Check if the user is an admin before showing the delete button
+                  if (isset($_SESSION['user']) && $_SESSION['user']->is_admin()) {
+                    echo '<button data-path="' . "$directoryName/$file" . '" class="delete-employee-doc-button close btn btn-link text-danger"><i class="fa fa-trash"></i></button>';
+                  }
+
+                  echo '</div>' .
+                    '</li>';
                 }
                 echo '</div>';
               }
@@ -61,3 +77,9 @@
     </div>
   </section>
 </div>
+
+<?php
+include_once 'modals/add_employee_doc_modal.inc.php';
+?>
+
+<script src="<?= RUTA_JS; ?>employee_docs.js"></script>

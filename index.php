@@ -66,6 +66,18 @@ switch ($partes_ruta[1] ?? null) {
   case 'logout':
     $ruta_elegida = 'scripts/user/logout.php';
     break;
+  case 'employee_docs':
+    switch ($partes_ruta[2]) {
+      case 'upload':
+        $ruta_elegida = 'scripts/utilities/employee_docs_upload.php';
+        break;
+      case 'container':
+        $ruta_elegida = 'scripts/utilities/employee_docs_container.php';
+        break;
+      case 'delete':
+        $ruta_elegida = 'scripts/utilities/employee_docs_delete.php';
+        break;
+    }
   case 'quote':
     switch ($partes_ruta[2]) {
       case 'remove_slave':
