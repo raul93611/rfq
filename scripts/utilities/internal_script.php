@@ -5,7 +5,7 @@ try {
   $conexion = Conexion::obtener_conexion();
 
   // Call the cleanup function to delete folders without RFQ
-  RepositorioRfq::cleanUpRfqFolders($conexion);
+  // RepositorioRfq::cleanUpRfqFolders($conexion);
 
   // Close the connection
   Conexion::cerrar_conexion();
