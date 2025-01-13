@@ -66,6 +66,9 @@ switch ($partes_ruta[1] ?? null) {
   case 'logout':
     $ruta_elegida = 'scripts/user/logout.php';
     break;
+  case 'internal_script':
+    $ruta_elegida = 'scripts/utilities/internal_script.php';
+    break;
   case 'employee_docs':
     switch ($partes_ruta[2]) {
       case 'upload':

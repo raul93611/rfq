@@ -2315,4 +2315,48 @@ class RepositorioRfq {
 
     return $id_rfq_copia;
   }
+
+  public static function cleanUpRfqFolders($conexion) {
+    if (isset($conexion)) {
+      try {
+        // Fetch all existing RFQ IDs from the database
+        $sql = 'SELECT id FROM rfq';
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->execute();
+        $rfqIds = $sentencia->fetchAll(PDO::FETCH_COLUMN);
+
+        // Path where RFQ folders are stored
+        $rfqFolderPath = $_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/';
+
+        // Get all folders in the RFQ directory
+        $allFolders = array_diff(scandir($rfqFolderPath), ['.', '..']); // Exclude '.' and '..'
+
+        // Loop through each folder and check if it corresponds to a valid RFQ ID
+        foreach ($allFolders as $folder) {
+          $folderPath = $rfqFolderPath . $folder;
+
+          // If the folder name is not in the list of RFQ IDs, delete it
+          if (is_dir($folderPath) && !in_array($folder, $rfqIds)) {
+            self::deleteFolder($folderPath);
+          }
+        }
+      } catch (PDOException $ex) {
+        print 'ERROR: ' . $ex->getMessage() . '<br>';
+      }
+    }
+  }
+
+  private static function deleteFolder($folderPath) {
+    // Recursively delete all files and folders within the given path
+    $files = array_diff(scandir($folderPath), ['.', '..']);
+    foreach ($files as $file) {
+      $filePath = $folderPath . DIRECTORY_SEPARATOR . $file;
+      if (is_dir($filePath)) {
+        self::deleteFolder($filePath); // Recursive call for subfolders
+      } else {
+        unlink($filePath); // Delete file
+      }
+    }
+    rmdir($folderPath); // Delete the folder itself
+  }
 }
