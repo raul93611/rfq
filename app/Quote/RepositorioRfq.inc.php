@@ -1951,6 +1951,52 @@ class RepositorioRfq {
     }
   }
 
+  public static function destroyQuote($conexion, $id_rfq) {
+    if (isset($conexion)) {
+      try {
+        $conexion->beginTransaction(); // Start transaction
+
+        // Delete audit trails and comments
+        RepositorioCuestionario::delete_cuestionario_por_id_rfq($conexion, $id_rfq);
+        AuditTrailRepository::delete_audit_trails($conexion, $id_rfq);
+        RepositorioComment::delete_all_comments($conexion, $id_rfq);
+
+        // Fetch items related to the RFQ
+        $items = RepositorioItem::obtener_items_por_id_rfq($conexion, $id_rfq);
+        if (count($items)) {
+          foreach ($items as $item) {
+            // Fetch and delete subitems
+            $subitems = RepositorioSubitem::obtener_subitems_por_id_item($conexion, $item->obtener_id());
+            if (count($subitems)) {
+              foreach ($subitems as $subitem) {
+                RepositorioSubitem::delete_subitem($conexion, $subitem->obtener_id());
+              }
+            }
+            // Delete the item
+            RepositorioItem::delete_item($conexion, $item->obtener_id());
+          }
+        }
+
+        // Delete the RFQ
+        $sql = 'DELETE FROM rfq WHERE id = :id_rfq';
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_INT);
+        $sentencia->execute();
+
+        // Path where RFQ folders are stored
+        $folderPath = $_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $id_rfq;
+        if (file_exists($folderPath)) {
+          self::deleteFolder($folderPath);
+        }
+
+        $conexion->commit(); // Commit transaction
+      } catch (PDOException $ex) {
+        $conexion->rollBack(); // Rollback on error
+        throw new Exception("Error deleting RFQ: " . $ex->getMessage());
+      }
+    }
+  }
+
   public static function restore_quote($conexion, $id_rfq) {
     if (isset($conexion)) {
       try {

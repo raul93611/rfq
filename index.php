@@ -256,6 +256,10 @@ switch ($partes_ruta[1] ?? null) {
         $id_rfq = $partes_ruta[3];
         $ruta_elegida = 'scripts/quote/delete_quote.php';
         break;
+      case 'destroy_quote':
+        $id_rfq = $partes_ruta[3];
+        $ruta_elegida = 'scripts/quote/destroy_quote.php';
+        break;
       case 'restore_quote':
         $id_rfq = $partes_ruta[3];
         $ruta_elegida = 'scripts/quote/restore_quote.php';

@@ -199,7 +199,7 @@ $(document).ready(function () {
       autoUpdateInput: selector === '.date' ? false : true,
       autoApply: true,
     };
-    
+
     $(selector).daterangepicker({ ...defaultOptions, ...options });
 
     $(selector).on('apply.daterangepicker', function (ev, picker) {
@@ -573,7 +573,11 @@ $(document).ready(function () {
           return type === 'display'
             ? `<a href="/rfq/quote/restore_quote/${row.id}" class="btn btn-sm btn-success">
                 <i class="fas fa-sync"></i>
-              </a>`
+              </a>
+              <a href="/rfq/quote/destroy_quote/${row.id}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to permanently delete this quote?');">
+                <i class="fas fa-skull-crossbones"></i>
+              </a>
+              `
             : data;
         },
       },

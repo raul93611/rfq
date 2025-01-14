@@ -1,5 +1,5 @@
 <?php
-class RepositorioSubitem{
+class RepositorioSubitem {
   public static function insertar_subitem($conexion, $subitem) {
     if (isset($conexion)) {
       try {
@@ -28,34 +28,34 @@ class RepositorioSubitem{
     return $id;
   }
 
-  public static function delete_subitem($conexion, $id_subitem){
-    if(isset($conexion)){
-      try{
-        $conexion -> beginTransaction();
+  public static function delete_subitem($conexion, $id_subitem) {
+    if (isset($conexion)) {
+      try {
+        // Delete related provider_subitems
         $sql1 = "DELETE FROM provider_subitems WHERE id_subitem = :id_subitem";
-        $sentencia1 = $conexion-> prepare($sql1);
-        $sentencia1-> bindValue(':id_subitem', $id_subitem, PDO::PARAM_STR);
-        $sentencia1-> execute();
+        $sentencia1 = $conexion->prepare($sql1);
+        $sentencia1->bindValue(':id_subitem', $id_subitem, PDO::PARAM_STR);
+        $sentencia1->execute();
+
+        // Delete the subitem itself
         $sql2 = "DELETE FROM subitems WHERE id = :id_subitem";
-        $sentencia2 = $conexion-> prepare($sql2);
-        $sentencia2-> bindValue(':id_subitem', $id_subitem, PDO::PARAM_STR);
-        $sentencia2-> execute();
-        $conexion-> commit();
+        $sentencia2 = $conexion->prepare($sql2);
+        $sentencia2->bindValue(':id_subitem', $id_subitem, PDO::PARAM_STR);
+        $sentencia2->execute();
       } catch (PDOException $ex) {
-        print "ERROR:" . $ex->getMessage() . "<br>";
-        $conexion-> rollBack();
+        throw new Exception("Error deleting subitem: " . $ex->getMessage());
       }
     }
   }
 
-  public static function actualizar_provider_menor_subitem($conexion, $provider_menor, $id_subitem){
-    if(isset($conexion)){
-      try{
+  public static function actualizar_provider_menor_subitem($conexion, $provider_menor, $id_subitem) {
+    if (isset($conexion)) {
+      try {
         $sql = 'UPDATE subitems SET provider_menor = :provider_menor WHERE id = :id_subitem';
-        $sentencia = $conexion-> prepare($sql);
-        $sentencia-> bindValue(':provider_menor', $provider_menor, PDO::PARAM_STR);
-        $sentencia-> bindValue(':id_subitem', $id_subitem, PDO::PARAM_STR);
-        $sentencia-> execute();
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindValue(':provider_menor', $provider_menor, PDO::PARAM_STR);
+        $sentencia->bindValue(':id_subitem', $id_subitem, PDO::PARAM_STR);
+        $sentencia->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
@@ -133,26 +133,26 @@ class RepositorioSubitem{
     $providers_subitem = RepositorioProviderSubitem::obtener_providers_subitem_por_id_subitem(Conexion::obtener_conexion(), $subitem->obtener_id());
     Conexion::cerrar_conexion();
     echo '<tr id="subitem' . $subitem->obtener_id() .  '" class="fila_subitem">';
-    echo '<td><a href="' . ADD_PROVIDER_SUBITEM . '/' . $subitem->obtener_id() . '" class="btn btn-warning btn-block subitem"><i class="fa fa-plus-circle"></i> Add Provider</a><br><a href="' . EDIT_SUBITEM . '/' . $subitem->obtener_id() . '" class="btn btn-warning btn-block subitem"><i class="fa fa-edit"></i> Edit subitem</a><br><a href="' . DELETE_SUBITEM . '/' . $subitem-> obtener_id() . '" class="delete_subitem_button btn btn-warning btn-block subitem"><i class="fa fa-trash"></i> Delete</a></td>';
+    echo '<td><a href="' . ADD_PROVIDER_SUBITEM . '/' . $subitem->obtener_id() . '" class="btn btn-warning btn-block subitem"><i class="fa fa-plus-circle"></i> Add Provider</a><br><a href="' . EDIT_SUBITEM . '/' . $subitem->obtener_id() . '" class="btn btn-warning btn-block subitem"><i class="fa fa-edit"></i> Edit subitem</a><br><a href="' . DELETE_SUBITEM . '/' . $subitem->obtener_id() . '" class="delete_subitem_button btn btn-warning btn-block subitem"><i class="fa fa-trash"></i> Delete</a></td>';
     echo '<td></td>';
-    if(strlen($subitem-> obtener_description_project()) >= 100){
+    if (strlen($subitem->obtener_description_project()) >= 100) {
       echo '<td><b>Brand:</b> ' . $subitem->obtener_brand_project() . '<br><b>Part #:</b> ' . $subitem->obtener_part_number_project() . '<br><b>Description:</b> ' . nl2br(mb_substr($subitem->obtener_description_project(), 0, 100)) . ' ...</td>';
-    }else{
+    } else {
       echo '<td><b>Brand:</b> ' . $subitem->obtener_brand_project() . '<br><b>Part #:</b> ' . $subitem->obtener_part_number_project() . '<br><b>Description:</b> ' . nl2br($subitem->obtener_description_project()) . '</td>';
     }
-    if(strlen($subitem-> obtener_description()) >= 100){
+    if (strlen($subitem->obtener_description()) >= 100) {
       echo '<td><b>Brand:</b> ' . $subitem->obtener_brand() . '<br><b>Part #:</b> ' . $subitem->obtener_part_number() . '<br><b>Description:</b> ' . nl2br(mb_substr($subitem->obtener_description(), 0, 100)) . ' ...</td>';
-    }else{
+    } else {
       echo '<td><b>Brand:</b> ' . $subitem->obtener_brand() . '<br><b>Part #:</b> ' . $subitem->obtener_part_number() . '<br><b>Description:</b> ' . nl2br($subitem->obtener_description()) . '</td>';
     }
-    echo '<td class="estrechar"><a target="_blank" href="'. $subitem-> obtener_website() .'">'. $subitem-> obtener_website() .'</a></td>';
+    echo '<td class="estrechar"><a target="_blank" href="' . $subitem->obtener_website() . '">' . $subitem->obtener_website() . '</a></td>';
     echo '<td>' . $subitem->obtener_quantity() . '</td>';
     echo '<td><div class="row"><div class="col-6">';
     for ($i = 0; $i < count($providers_subitem); $i++) {
       $provider_subitem = $providers_subitem[$i];
-      if(strlen($provider_subitem-> obtener_provider()) >= 10){
+      if (strlen($provider_subitem->obtener_provider()) >= 10) {
         echo '<a href="' . EDIT_PROVIDER_SUBITEM . '/' . $provider_subitem->obtener_id() . '"><b>' . mb_substr($provider_subitem->obtener_provider(), 0, 10) . '... :</b></a><br>';
-      }else{
+      } else {
         echo '<a href="' . EDIT_PROVIDER_SUBITEM . '/' . $provider_subitem->obtener_id() . '"><b>' . $provider_subitem->obtener_provider() . ':</b></a><br>';
       }
     }
@@ -162,10 +162,10 @@ class RepositorioSubitem{
       echo '$ ' . $provider_subitem->obtener_price() . '<br>';
     }
     echo '</div></div></td>';
-    if($subitem-> obtener_additional() != 0){
-      echo '<td><input type="text" class="form-control form-control-sm" id="add_cost'.$j.'" size="10" value="'.$subitem-> obtener_additional().'"></td>';
-    }else{
-      echo '<td><input type="text" class="form-control form-control-sm" id="add_cost'.$j.'" size="10" value="0"></td>';
+    if ($subitem->obtener_additional() != 0) {
+      echo '<td><input type="text" class="form-control form-control-sm" id="add_cost' . $j . '" size="10" value="' . $subitem->obtener_additional() . '"></td>';
+    } else {
+      echo '<td><input type="text" class="form-control form-control-sm" id="add_cost' . $j . '" size="10" value="0"></td>';
     }
     echo '<td>';
     for ($i = 0; $i < count($providers_subitem); $i++) {
@@ -174,10 +174,10 @@ class RepositorioSubitem{
     }
     if (!empty($precios_subitem)) {
       $best_unit_price = min($precios_subitem);
-      for($i = 0;$i < count($precios_subitem); $i++){
-        if($best_unit_price == $precios_subitem[$i]){
+      for ($i = 0; $i < count($precios_subitem); $i++) {
+        if ($best_unit_price == $precios_subitem[$i]) {
           Conexion::abrir_conexion();
-          self::actualizar_provider_menor_subitem(Conexion::obtener_conexion(), $providers_subitem[$i]->obtener_id(), $subitem-> obtener_id());
+          self::actualizar_provider_menor_subitem(Conexion::obtener_conexion(), $providers_subitem[$i]->obtener_id(), $subitem->obtener_id());
           Conexion::cerrar_conexion();
         }
       }
@@ -206,34 +206,33 @@ class RepositorioSubitem{
     return $j;
   }
 
-  public static function insertar_calculos($conexion, $unit_price_subitem, $total_price_subitem, $additional_subitem, $id_subitem){
-    if(isset($conexion)){
-      try{
+  public static function insertar_calculos($conexion, $unit_price_subitem, $total_price_subitem, $additional_subitem, $id_subitem) {
+    if (isset($conexion)) {
+      try {
         $sql = 'UPDATE subitems SET unit_price = :unit_price, total_price = :total_price, additional = :additional WHERE id = :id_subitem';
-        $sentencia = $conexion-> prepare($sql);
-        $sentencia-> bindValue(':unit_price', $unit_price_subitem, PDO::PARAM_STR);
-        $sentencia-> bindValue(':total_price', $total_price_subitem, PDO::PARAM_STR);
-        $sentencia-> bindValue(':additional', $additional_subitem, PDO::PARAM_STR);
-        $sentencia-> bindValue(':id_subitem', $id_subitem, PDO::PARAM_STR);
-        $sentencia-> execute();
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindValue(':unit_price', $unit_price_subitem, PDO::PARAM_STR);
+        $sentencia->bindValue(':total_price', $total_price_subitem, PDO::PARAM_STR);
+        $sentencia->bindValue(':additional', $additional_subitem, PDO::PARAM_STR);
+        $sentencia->bindValue(':id_subitem', $id_subitem, PDO::PARAM_STR);
+        $sentencia->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
   }
 
-  public static function set_fulfillment_profit($conexion, $fulfillment_profit, $id_subitem){
-    if(isset($conexion)){
-      try{
+  public static function set_fulfillment_profit($conexion, $fulfillment_profit, $id_subitem) {
+    if (isset($conexion)) {
+      try {
         $sql = 'UPDATE subitems SET fulfillment_profit = :fulfillment_profit WHERE id = :id_subitem';
-        $sentencia = $conexion-> prepare($sql);
-        $sentencia-> bindValue(':fulfillment_profit', $fulfillment_profit, PDO::PARAM_STR);
-        $sentencia-> bindValue(':id_subitem', $id_subitem, PDO::PARAM_STR);
-        $sentencia-> execute();
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindValue(':fulfillment_profit', $fulfillment_profit, PDO::PARAM_STR);
+        $sentencia->bindValue(':id_subitem', $id_subitem, PDO::PARAM_STR);
+        $sentencia->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
   }
 }
-?>
