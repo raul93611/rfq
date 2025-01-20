@@ -260,8 +260,8 @@ class RepositorioItem {
         </div>
       </div>
       <br>
-      <div class="table-responsive">
-        <table id="tabla_items" class="table table-bordered table-hover">
+      <div id="table_items_container" class="table-responsive">
+        <table id="tabla_items" class="table table-hover">
           <thead>
             <tr>
               <th class="options">Options</th>
@@ -288,7 +288,7 @@ class RepositorioItem {
             }
             ?>
           </tbody>
-          <thead>
+          <tfoot>
             <tr>
               <th colspan="5" class="display-4"><b>
                   <h4>TOTAL:</h4>
@@ -302,7 +302,7 @@ class RepositorioItem {
               <th id="total2"></th>
               <th id="dif_total"></th>
             </tr>
-          </thead>
+          </tfoot>
         </table>
       </div>
       <?php
