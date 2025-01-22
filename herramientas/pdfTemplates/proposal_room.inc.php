@@ -17,18 +17,16 @@
       background-color: #CFD9E3 !important;
     }
 
-    table,
-    th,
-    td {
+    #tabla {
+      width: 100%;
       border-collapse: collapse;
     }
 
-    th,
-    td {
+    #tabla th,
+    #tabla td {
       border: 1px solid #DEE8F2;
-      padding: 5px 10px;
+      padding: 10px;
       font-size: 9pt;
-      text-align: center;
     }
 
     td {
@@ -59,11 +57,6 @@
       font-size: 25pt;
     }
 
-    img {
-      max-width: 100%;
-      height: auto;
-    }
-
     .proposal-header {
       text-align: right;
     }
@@ -74,7 +67,7 @@
   <table border="0" width="100%">
     <tr>
       <td width="400">
-        <img src="img/<?= $logo ?>" alt="Company Logo" />
+        <img style="width:350px;height:130px;" src="img/<?= $logo ?>" alt="Company Logo" />
       </td>
       <td class="proposal-header">
         <span class="color letra_grande">PROPOSAL</span>
