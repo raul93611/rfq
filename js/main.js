@@ -64,7 +64,8 @@ $(document).ready(function () {
   });
   /*********************** FILE INPUT INITIALIZATION ***********************/
   $('#archivos_crear').fileinput({
-    theme: 'fa',
+    theme: 'explorer-fa',
+    mainClass: 'input-group-sm',
     initialPreviewAsData: true,
     showUpload: false,
     overwriteInitial: false,
