@@ -1276,6 +1276,7 @@ class YearlyProjectionRepository {
           COUNT(id_quote) AS value,
           type_of_contract,
           SUM(COALESCE(total_price, 0)) AS total_price,
+          SUM(COALESCE(total_profit, 0)) AS total_profit,
           CONCAT(
             'rgba(',
             FLOOR(RAND() * 256), ', ',
@@ -1285,26 +1286,27 @@ class YearlyProjectionRepository {
         FROM
         (
           (
-            SELECT r.id AS id_quote,
+            SELECT 
+              r.id AS id_quote,
               r.type_of_contract,
-              COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_price
+              COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_price,
+              (COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - 
+               (COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0)) -
+               CASE r.sales_commission
+                 WHEN 'Other commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(r.total_fulfillment, 0)) * 0.03, 2)
+                 WHEN 'Same commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(rq.total_cost, 0)) * 0.03, 2)
+                 WHEN 'No commission' THEN 0
+               END) AS total_profit
             FROM rfq r
               LEFT JOIN services s ON r.id = s.id_rfq
               LEFT JOIN re_quotes rq ON r.id = rq.id_rfq
             WHERE deleted = 0
               AND invoice = 1
               AND r.fulfillment_pending = 0
-              AND MONTH(invoice_date) = (
-                SELECT m.month
-                FROM monthly_projections as m
-                WHERE m.id = {$id}
-              )
-              AND YEAR(invoice_date) = (
-                SELECT y.year
-                FROM monthly_projections as m
-                  LEFT JOIN yearly_projections y ON m.yearly_projection_id = y.id
-                WHERE m.id = {$id}
-              )
+              AND MONTH(invoice_date) = (SELECT m.month FROM monthly_projections m WHERE m.id = {$id})
+              AND YEAR(invoice_date) = (SELECT y.year FROM monthly_projections m 
+                                       LEFT JOIN yearly_projections y ON m.yearly_projection_id = y.id 
+                                       WHERE m.id = {$id})
             GROUP BY r.id
           )
           UNION
@@ -1312,20 +1314,27 @@ class YearlyProjectionRepository {
             SELECT 
               invoices_result_with_sales_commission.id_quote,
               invoices_result_with_sales_commission.type_of_contract,
-              invoices_result_with_sales_commission.total_price
+              invoices_result_with_sales_commission.total_price,
+              (invoices_result_with_sales_commission.profit -
+               CASE 
+                 WHEN invoices_result_with_sales_commission.attached_sales_commission = 1 THEN
+                   CASE r.sales_commission
+                     WHEN 'Other commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(r.total_fulfillment, 0)) * 0.03, 2)
+                     WHEN 'Same commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(rq.total_cost, 0)) * 0.03, 2)
+                     WHEN 'No commission' THEN 0
+                   END
+                 ELSE 0
+               END) AS total_profit
             FROM (
-              SELECT r.id as id_quote,
-                DATE_FORMAT(i.created_at, '%m/%d/%Y') as invoice_date,
+              SELECT 
+                r.id as id_quote,
                 i.name AS id,
-                r.type_of_contract as type_of_contract,
+                r.type_of_contract,
                 SUM(invoices_result.item_total_price) AS total_price,
-                SUM(invoices_result.sum_real_cost) AS total_cost,
                 SUM(invoices_result.profit) AS profit,
-                100 * ((SUM(invoices_result.profit)) / (SUM(invoices_result.item_total_price))) as profit_percentage,
-                i.sales_commission AS attached_sales_commission,
-                i.invoice_acceptance
+                i.sales_commission AS attached_sales_commission
               FROM (
-                  (
+                    (
                     SELECT fi.id_invoice,
                       i.total_price AS item_total_price,
                       SUM(fi.real_cost) AS sum_real_cost,
@@ -1385,17 +1394,10 @@ class YearlyProjectionRepository {
                 ) AS invoices_result
                 RIGHT JOIN invoices i ON invoices_result.id_invoice = i.id
                 RIGHT JOIN rfq r ON r.id = i.id_rfq
-              WHERE MONTH(i.created_at) = (
-                  SELECT m.month
-                  FROM monthly_projections as m
-                  WHERE m.id = {$id}
-                )
-                AND YEAR(i.created_at) = (
-                  SELECT y.year
-                  FROM monthly_projections as m
-                    LEFT JOIN yearly_projections y ON m.yearly_projection_id = y.id
-                  WHERE m.id = {$id}
-                )
+              WHERE MONTH(i.created_at) = (SELECT m.month FROM monthly_projections m WHERE m.id = {$id})
+                AND YEAR(i.created_at) = (SELECT y.year FROM monthly_projections m 
+                                         LEFT JOIN yearly_projections y ON m.yearly_projection_id = y.id 
+                                         WHERE m.id = {$id})
               GROUP BY invoices_result.id_invoice, i.name
             ) as invoices_result_with_sales_commission
             LEFT JOIN rfq r ON r.id = invoices_result_with_sales_commission.id_quote

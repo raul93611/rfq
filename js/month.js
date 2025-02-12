@@ -128,12 +128,14 @@ $(document).ready(function () {
         acc.type_of_contract.push(item.type_of_contract);
         acc.value.push(item.value);
         acc.total_price.push(item.total_price);
+        acc.total_profit.push(item.total_profit);
         acc.color.push(item.color);
         return acc;
       }, {
         type_of_contract: [],
         value: [],
         total_price: [],
+        total_profit: [],
         color: []
       });
 
@@ -164,7 +166,14 @@ $(document).ready(function () {
                 callbacks: {
                   label: function (context) {
                     const value = context.raw || 0;
-                    return `${context.label || ''}: $${value.toLocaleString()}`;
+                    const isContractCounts = context.dataset.label === 'Contract Counts';
+
+                    // Format numbers based on chart type
+                    const formattedValue = isContractCounts
+                      ? value.toLocaleString('en-US') // Just add commas for counts
+                      : `$${value.toLocaleString('en-US', { maximumFractionDigits: 2 })}`; // Currency format for amounts
+
+                    return `${context.label || ''}: ${formattedValue}`;
                   }
                 }
               }
@@ -178,6 +187,9 @@ $(document).ready(function () {
 
       // Create Contract Amounts Chart
       createPieChart('contract-amounts', 'Contract Amounts', transformedData.total_price);
+
+      // Create Contract Total Profit Chart
+      createPieChart('contract-total-profit-amount', 'Contract Total Profit', transformedData.total_profit);
     },
     error: function (xhr) {
       console.error("Failed to fetch chart data:", xhr.responseText);

@@ -92,6 +92,16 @@ Conexion::cerrar_conexion();
             </div>
           </div>
         </section>
+        <section class="col-md-6">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Type of Contract: Total Profit Value</h3>
+            </div>
+            <div class="card-body">
+              <canvas id="contract-total-profit-amount" height="400"></canvas>
+            </div>
+          </div>
+        </section>
       </div>
     </div>
   </section>
