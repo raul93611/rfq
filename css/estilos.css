@@ -333,11 +333,30 @@ table {
 .footer_item {
   position: fixed !important;
   bottom: 0 !important;
-  z-index: 2;
+  z-index: 20;
   width: auto;
   background-color: #E7E9EB;
   border: 1px solid rgba(0, 0, 0, 0.125);
   border-radius: 0.25rem;
+}
+
+.footer_totals {
+  position: fixed !important;
+  bottom: 0 !important;
+  right: 0 !important;
+  z-index: 20;
+  background-color: #f1f3f7 !important;
+  border: 1px solid rgba(37, 15, 15, 0.125) !important;
+  border-radius: 0.25rem !important;
+  white-space: nowrap;
+  /* Remove all width constraints */
+  min-width: auto !important;
+  max-width: none !important;
+}
+
+/* Add right-to-left expansion */
+.footer_totals .d-flex > div {
+  flex-shrink: 0;
 }
 
 .card-documents {

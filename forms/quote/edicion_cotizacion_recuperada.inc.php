@@ -91,3 +91,25 @@
   <?php include_once 'forms/quote/templates/rooms_button.inc.php'; ?>
   <?php include_once 'forms/quote/templates/actions_button.inc.php'; ?>
 </div>
+<div class="px-2 py-2 card-footer footer_totals d-inline-flex" id="footer_lg">
+  <div class="d-flex flex-nowrap align-items-center">
+    <div class="px-4">
+      <h5 class="mb-0">
+        <small class="text-info">Total Price:</small><br>
+        <span>$<?= number_format($cotizacion_recuperada->obtener_quote_total_price(), 2); ?></span>
+      </h5>
+    </div>
+    <div class="px-4 border-left">
+      <h5 class="mb-0">
+        <small class="text-info">Total Profit:</small><br>
+        <span>$<?= number_format($cotizacion_recuperada->obtener_quote_profit(), 2); ?></span>
+      </h5>
+    </div>
+    <div class="px-4 border-left">
+      <h5 class="mb-0">
+        <small class="text-info">Profit (%):</small><br>
+        <span><?= number_format($cotizacion_recuperada->obtener_quote_profit_percentage(), 2); ?>%</span>
+      </h5>
+    </div>
+  </div>
+</div>
