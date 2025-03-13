@@ -18,20 +18,34 @@ if ($canal == 'Chemonics' && !$cotizacion_recuperada->obtener_award()) {
                 <input type="checkbox" class="custom-control-input" name="submitted_invoice" value="si" ' . $submittedInvoiceChecked . ' id="submitted_invoice">
                 <label class="custom-control-label" for="submitted_invoice">Submitted Invoice</label>
               </div>';
-  } elseif ($cotizacion_recuperada->isEnabledToInvoice()) {
+  } elseif ($cotizacion_recuperada->isEnabledToInvoice() === true) {
     echo '<div class="custom-control custom-checkbox">
                 <input type="checkbox" class="custom-control-input" name="invoice" value="si" ' . $invoiceChecked . ' id="invoice">
                 <label class="custom-control-label" for="invoice">Invoice</label>
               </div>';
   } elseif ($cotizacion_recuperada->obtener_fullfillment()) {
-    echo '<div class="text-danger">Fill out the required information!</div>';
-  } elseif ($cotizacion_recuperada->isEnabledToFulfillment()) {
+    $invoiceCheck = $cotizacion_recuperada->isEnabledToInvoice();
+    // If there are errors, display them
+    echo '<div class="mb-0 alert alert-warning alert-dismissible">
+    <h5><i class="icon fas fa-exclamation-triangle"></i> Alert!</h5><ul>';
+    foreach ($invoiceCheck as $error) {
+      echo '<li>' . $error . '</li>';
+    }
+    echo '</ul></div>';
+  } elseif ($cotizacion_recuperada->isEnabledToFulfillment() === true) {
     echo '<div id="id1" class="custom-control custom-checkbox">
                 <input type="checkbox" class="custom-control-input" name="fulfillment" value="si" ' . $fulfillmentChecked . ' id="fulfillment">
                 <label class="custom-control-label" for="fulfillment">Fulfillment</label>
               </div>';
   } elseif ($cotizacion_recuperada->obtener_award()) {
-    echo '<div class="text-danger">Fill out the required information!</div>';
+    $fulfillmentCheck = $cotizacion_recuperada->isEnabledToFulfillment();
+    // If there are errors, display them
+    echo '<div class="mb-0 alert alert-warning alert-dismissible">
+    <h5><i class="icon fas fa-exclamation-triangle"></i> Alert!</h5><ul>';
+    foreach ($fulfillmentCheck as $error) {
+      echo '<li>' . $error . '</li>';
+    }
+    echo '</ul></div>';
   } elseif ($cotizacion_recuperada->obtener_status() && !$cotizacion_recuperada->obtener_award()) {
     echo '<div class="custom-control custom-checkbox">
                 <input type="checkbox" class="custom-control-input" name="award" value="si" ' . $awardChecked . ' id="award">

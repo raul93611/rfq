@@ -542,39 +542,125 @@ class Rfq {
   }
 
   public function isEnabledToInvoice() {
+    $errors = [];
+
     Conexion::abrir_conexion();
     $re_quote_exists = ReQuoteRepository::re_quote_exists(Conexion::obtener_conexion(), $this->id);
     Conexion::cerrar_conexion();
-    return $this->obtener_fullfillment() &&
-      (!is_null($this->obtener_fulfillment_profit()) || !is_null($this->obtener_services_fulfillment_profit())) &&
-      $re_quote_exists &&
-      strlen($this->city ?? '') &&
-      strlen($this->zip_code) &&
-      strlen($this->client) &&
-      strlen($this->set_side) &&
-      strlen($this->poc) &&
-      strlen($this->co) &&
-      strlen($this->estimated_delivery_date) &&
-      strlen($this->file_document);
+
+    if (!$this->obtener_fullfillment()) {
+      $errors[] = "Fulfillment is not set.";
+    }
+
+    if (is_null($this->obtener_fulfillment_profit()) && is_null($this->obtener_services_fulfillment_profit())) {
+      $errors[] = "Fulfillment profit or services fulfillment profit is not set.";
+    }
+
+    if (!$re_quote_exists) {
+      $errors[] = "Re-quote does not exist.";
+    }
+
+    if (strlen($this->city ?? '') == 0) {
+      $errors[] = "City is not set.";
+    }
+
+    if (strlen($this->zip_code) == 0) {
+      $errors[] = "Zip code is not set.";
+    }
+
+    if (strlen($this->client) == 0) {
+      $errors[] = "Client is not set.";
+    }
+
+    if (strlen($this->set_side) == 0) {
+      $errors[] = "Set side is not set.";
+    }
+
+    if (strlen($this->poc) == 0) {
+      $errors[] = "POC is not set.";
+    }
+
+    if (strlen($this->co) == 0) {
+      $errors[] = "CO is not set.";
+    }
+
+    if (strlen($this->estimated_delivery_date) == 0) {
+      $errors[] = "Estimated delivery date is not set.";
+    }
+
+    if (strlen($this->file_document) == 0) {
+      $errors[] = "File document is not set.";
+    }
+
+    // If there are no errors, return true. Otherwise, return the list of errors.
+    return empty($errors) ? true : $errors;
   }
 
   public function isEnabledToFulfillment() {
-    if ($this->getBpa() && $this->obtener_completado() && $this->obtener_status() && $this->obtener_award()) return true;
+    $errors = [];
 
+    // Check initial conditions
+    if (!$this->getBpa()) {
+      $errors[] = "BPA is not set.";
+    }
+    if (!$this->obtener_completado()) {
+      $errors[] = "Completed status is not set.";
+    }
+    if (!$this->obtener_status()) {
+      $errors[] = "Status is not set.";
+    }
+    if (!$this->obtener_award()) {
+      $errors[] = "Award is not set.";
+    }
+
+    // If any of the initial conditions fail, skip the rest and return errors
+    if (!empty($errors)) {
+      return $errors;
+    }
+
+    // Check re-quote existence
     Conexion::abrir_conexion();
     $re_quote_exists = ReQuoteRepository::re_quote_exists(Conexion::obtener_conexion(), $this->id);
     Conexion::cerrar_conexion();
-    return !$this->fullfillment &&
-      $this->award &&
-      $re_quote_exists &&
-      strlen($this->city ?? '') &&
-      strlen($this->zip_code) &&
-      strlen($this->client) &&
-      strlen($this->set_side) &&
-      strlen($this->poc) &&
-      strlen($this->co) &&
-      strlen($this->estimated_delivery_date) &&
-      strlen($this->file_document);
+
+    if (!$re_quote_exists) {
+      $errors[] = "Re-quote does not exist.";
+    }
+
+    // Check other conditions
+    if ($this->fullfillment) {
+      $errors[] = "Fulfillment is already set.";
+    }
+    if (!$this->award) {
+      $errors[] = "Award is not set.";
+    }
+    if (strlen($this->city ?? '') == 0) {
+      $errors[] = "City is not set.";
+    }
+    if (strlen($this->zip_code) == 0) {
+      $errors[] = "Zip code is not set.";
+    }
+    if (strlen($this->client) == 0) {
+      $errors[] = "Client is not set.";
+    }
+    if (strlen($this->set_side) == 0) {
+      $errors[] = "Set side is not set.";
+    }
+    if (strlen($this->poc) == 0) {
+      $errors[] = "POC is not set.";
+    }
+    if (strlen($this->co) == 0) {
+      $errors[] = "CO is not set.";
+    }
+    if (strlen($this->estimated_delivery_date) == 0) {
+      $errors[] = "Estimated delivery date is not set.";
+    }
+    if (strlen($this->file_document) == 0) {
+      $errors[] = "File document is not set.";
+    }
+
+    // Return true if no errors, otherwise return the list of errors
+    return empty($errors) ? true : $errors;
   }
 
   public function obtener_services_payment_term() {

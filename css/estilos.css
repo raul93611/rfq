@@ -355,7 +355,7 @@ table {
 }
 
 /* Add right-to-left expansion */
-.footer_totals .d-flex > div {
+.footer_totals .d-flex>div {
   flex-shrink: 0;
 }
 
@@ -421,6 +421,7 @@ label.error {
   margin: auto;
   overflow: auto;
   max-height: 700px;
+  border-radius: 10px;
 }
 
 #table_items_container table {
@@ -438,16 +439,15 @@ label.error {
   position: relative;
 }
 
-#table_items_container th,
 #table_items_container td {
   padding: 5px 10px;
-  border: 1px solid #9e9e9e;
+  border: 1px solid #e0e0e0;
   background: #fff;
   vertical-align: top;
 }
 
 #table_items_container thead th {
-  background: #494848;
+  background: #39485A;
   color: #fff;
   position: -webkit-sticky;
   position: sticky;
@@ -461,7 +461,7 @@ label.error {
   position: -webkit-sticky;
   position: sticky;
   bottom: 0;
-  background: #494848;
+  background: #39485A;
   color: #fff;
   z-index: 1;
 }
@@ -471,7 +471,6 @@ th:first-child {
   position: sticky;
   left: 0;
   z-index: 2;
-  background: #ccc;
 }
 
 thead th:first-child,
@@ -481,6 +480,7 @@ tfoot th:first-child {
 
 /* Apply these styles only for screens wider than 992px (desktop) */
 @media (min-width: 992px) {
+
   /* Reduce the height of the file preview container */
   .file-preview {
     height: auto !important;
@@ -542,7 +542,7 @@ tfoot th:first-child {
     padding-top: 25px !important;
   }
 
-  .file-thumb-progress{
+  .file-thumb-progress {
     display: none !important;
   }
 }

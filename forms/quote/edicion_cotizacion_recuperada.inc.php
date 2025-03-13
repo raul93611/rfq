@@ -75,10 +75,10 @@
   // Close database connection
   Conexion::cerrar_conexion();
   ?>
-
-  <?php include_once 'forms/quote/templates/status_checkbox.inc.php'; ?>
+  <div class="mt-5 mb-0">
+    <?php include_once 'forms/quote/templates/status_checkbox.inc.php'; ?>
+  </div>
 </div>
-
 <div class="card-footer footer_item" id="footer_lg">
   <?php include_once 'forms/quote/templates/go_back_button.inc.php'; ?>
   <button type="submit" class="btn btn-success" name="guardar_cambios_cotizacion">
