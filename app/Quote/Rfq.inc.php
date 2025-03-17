@@ -600,9 +600,6 @@ class Rfq {
     $errors = [];
 
     // Check initial conditions
-    if (!$this->getBpa()) {
-      $errors[] = "BPA is not set.";
-    }
     if (!$this->obtener_completado()) {
       $errors[] = "Completed status is not set.";
     }
