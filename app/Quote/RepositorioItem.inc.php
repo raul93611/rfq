@@ -206,21 +206,19 @@ class RepositorioItem {
           if ($re_quote_exists) {
           ?>
             <a target="_blank" href="<?php echo EXCEL_ITEMS_TABLE . $id_rfq; ?>" class="dropdown-item">EXCEL - Quote&Re-quote</a>
-          <?php
+        <?php
           }
         }
-        if ($cotizacion->obtener_canal() != 'FedBid') {
-          ?>
-          <a class="dropdown-item" href="<?php echo PROPOSAL . '/' . $cotizacion->obtener_id(); ?>" target="_blank">Proposal</a>
-          <?php
-          if ($cotizacion->obtener_canal() == 'GSA-Buy') {
-          ?>
-            <a class="dropdown-item" href="<?php echo PROPOSAL_GSA . '/' . $cotizacion->obtener_id(); ?>" target="_blank">GSA Proposal</a>
-          <?php
-          }
+        ?>
+        <a class="dropdown-item" href="<?php echo PROPOSAL . '/' . $cotizacion->obtener_id(); ?>" target="_blank">Proposal</a>
+        <?php
+        if ($cotizacion->obtener_canal() == 'GSA-Buy') {
+        ?>
+          <a class="dropdown-item" href="<?php echo PROPOSAL_GSA . '/' . $cotizacion->obtener_id(); ?>" target="_blank">GSA Proposal</a>
+        <?php
         }
         if (count($rooms)) {
-          ?>
+        ?>
           <a class="dropdown-item" href="<?php echo PROPOSAL_ROOM . '/' . $cotizacion->obtener_id(); ?>" target="_blank">Proposal by Room</a>
         <?php
         }
