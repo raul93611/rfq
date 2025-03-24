@@ -15,5 +15,6 @@
       <a class="dropdown-item" href="<?= FULFILLMENT . $cotizacion_recuperada->obtener_id(); ?>">Fulfillment</a>
       <a class="dropdown-item" href="<?= KPI . $cotizacion_recuperada->obtener_id(); ?>">KPI</a>
     <?php endif; ?>
+    <a id="import-items-modal-button" class="dropdown-item" href="#">Import items</a>
   </div>
 </div>

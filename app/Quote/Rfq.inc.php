@@ -564,31 +564,31 @@ class Rfq {
       $errors[] = "City is not set.";
     }
 
-    if (strlen($this->zip_code) == 0) {
+    if (strlen($this->zip_code ?? '') == 0) {
       $errors[] = "Zip code is not set.";
     }
 
-    if (strlen($this->client) == 0) {
+    if (strlen($this->client ?? '') == 0) {
       $errors[] = "Client is not set.";
     }
 
-    if (strlen($this->set_side) == 0) {
+    if (strlen($this->set_side ?? '') == 0) {
       $errors[] = "Set side is not set.";
     }
 
-    if (strlen($this->poc) == 0) {
+    if (strlen($this->poc ?? '') == 0) {
       $errors[] = "POC is not set.";
     }
 
-    if (strlen($this->co) == 0) {
+    if (strlen($this->co ?? '') == 0) {
       $errors[] = "CO is not set.";
     }
 
-    if (strlen($this->estimated_delivery_date) == 0) {
+    if (strlen($this->estimated_delivery_date ?? '') == 0) {
       $errors[] = "Estimated delivery date is not set.";
     }
 
-    if (strlen($this->file_document) == 0) {
+    if (strlen($this->file_document ?? '') == 0) {
       $errors[] = "File document is not set.";
     }
 

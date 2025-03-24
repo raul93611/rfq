@@ -197,4 +197,13 @@ $(document).ready(function () {
     e.preventDefault();
     $linkQuoteModal.modal('show');
   });
+  /************************* IMPORT ITEMS MODAL *************************/
+  const importItemsButton = $('#import-items-modal-button');
+  const importItemsModal = $('#import-items-modal');
+
+  // Open modal when the link quote button is clicked
+  importItemsButton.on('click', function (e) {    
+    e.preventDefault();
+    importItemsModal.modal('show');
+  });
 });

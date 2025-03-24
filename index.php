@@ -131,6 +131,9 @@ switch ($partes_ruta[1] ?? null) {
       case 'link_quote':
         $ruta_elegida = 'scripts/quote/link_quote.php';
         break;
+      case 'import_items':
+        $ruta_elegida = 'scripts/quote/import_items.php';
+        break;
       case 'service':
         switch ($partes_ruta[3]) {
           case 'add_service':

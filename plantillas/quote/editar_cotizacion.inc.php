@@ -84,6 +84,7 @@ include_once 'modals/sales_commission_modal.inc.php';
 include_once 'modals/link_quote_modal.inc.php';
 include_once 'modals/rooms/add_room_modal.inc.php';
 include_once 'modals/rooms/edit_room_modal.inc.php';
+include_once 'modals/import_items_modal.inc.php';
 ?>
 
 <!-- Scripts -->

@@ -25,6 +25,7 @@ define('SAVE_CHECKLIST', QUOTE_SC . 'save_checklist/');
 define('SAVE_INFORMATION', QUOTE_SC . 'save_information/');
 define('GENERATE_CHECKLIST_PDF', QUOTE_SC . 'generate_checklist_pdf/');
 define('LINK_QUOTE', QUOTE_SC . 'link_quote/');
+define('IMPORT_ITEMS', QUOTE_SC . 'import_items/');
 /********************************SERVICE SCRIPTS*****************************************/
 define('SERVICE_SC', QUOTE_SC . 'service/');
 define('ADD_SERVICE', SERVICE_SC . 'add_service');
