@@ -496,7 +496,8 @@ class ExcelRepository {
               quotes.total_price AS total_price_requote,
               quotes.profit_equipment_requote + quotes.total_service_price - requotes.total_requote_service AS profit_requote,
               quotes.type_of_contract,
-              quotes.set_side
+              quotes.set_side, 
+              quotes.state
             FROM
               (
                 SELECT
@@ -525,7 +526,8 @@ class ExcelRepository {
                   ) as profit,
                   COALESCE(r.total_price, 0) - COALESCE(rq.total_cost, 0) as profit_equipment_requote,
                   r.type_of_contract,
-                  r.set_side
+                  r.set_side, 
+                  r.state
                 FROM
                   rfq r
                   LEFT JOIN services s ON r.id = s.id_rfq
@@ -788,6 +790,8 @@ class ExcelRepository {
       $activeWorksheet->setCellValue($x . $y, $quote['type_of_contract']);
       $x++;
       $activeWorksheet->setCellValue($x . $y, $quote['set_side']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['state']);
       $y++;
     }
     $x = 'H';
