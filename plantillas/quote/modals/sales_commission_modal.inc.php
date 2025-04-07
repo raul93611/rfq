@@ -49,7 +49,7 @@ if ($isReQuoteCreated) {
           <p><b>Note:</b> Reload the page to dismiss the modal.</p>
         </div>
         <div class="modal-footer">
-          <button type="submit" name="guardar_cambios_cotizacion" form="form_edited_quote" class="btn btn-success">
+          <button type="submit" name="guardar_cambios_cotizacion" form="form_edited_quote" class="btn btn-secondary">
             <i class="fa fa-check"></i> Save
           </button>
         </div>

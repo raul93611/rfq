@@ -43,7 +43,7 @@ if (is_null($cotizacion_recuperada)) {
           include 'plantillas/quote/templates/copy_quote_button.inc.php';
           include 'plantillas/quote/templates/comments_button.inc.php';
           ?>
-          <button id="audit_trails_button" type="button" class="btn btn-info">Audit Trails</button>
+          <button id="audit_trails_button" type="button" class="btn btn-secondary">Audit Trails</button>
         </div>
         <div class="col-md-2">
           <?php include 'plantillas/quote/templates/status_title.inc.php'; ?>

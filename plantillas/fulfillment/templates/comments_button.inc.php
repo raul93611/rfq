@@ -10,6 +10,6 @@ Conexion::cerrar_conexion();
 ?>
 
 <!-- Button to display comments -->
-<a href="#" id="mostrar_comentarios" class="btn btn-info">
+<a href="#" id="mostrar_comentarios" class="btn btn-secondary">
   <i class="fas fa-comment"></i> Comments (<?= htmlspecialchars($cantidad_de_comentarios, ENT_QUOTES, 'UTF-8'); ?>)
 </a>

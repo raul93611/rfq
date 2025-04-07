@@ -58,7 +58,7 @@ Conexion::cerrar_conexion();
               </table>
             </div>
             <div class="card-footer text-right">
-              <a class="btn btn-primary" id="go_back" href="<?= htmlspecialchars(PROJECTION . $monthly_projection->getYearlyProjectionId()) ?>">
+              <a class="btn btn-secondary" id="go_back" href="<?= htmlspecialchars(PROJECTION . $monthly_projection->getYearlyProjectionId()) ?>">
                 <i class="fa fa-reply"></i> Back
               </a>
             </div>

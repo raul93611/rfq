@@ -33,10 +33,10 @@
 
   <div class="row mb-2">
     <div class="col-md-12">
-      <a href="<?= CHECKLIST . htmlspecialchars($cotizacion_recuperada->obtener_id()); ?>" class="btn btn-primary">
+      <a href="<?= CHECKLIST . htmlspecialchars($cotizacion_recuperada->obtener_id()); ?>" class="btn btn-secondary">
         <i class="fas fa-clipboard-list"></i> Checklist
       </a>
-      <a href="<?= INFORMATION . htmlspecialchars($cotizacion_recuperada->obtener_id()); ?>" class="btn btn-primary">
+      <a href="<?= INFORMATION . htmlspecialchars($cotizacion_recuperada->obtener_id()); ?>" class="btn btn-secondary">
         <i class="fas fa-clipboard-list"></i> Information
       </a>
     </div>
@@ -46,7 +46,7 @@
     <div class="col-md-12">
       <label>Documents:</label>
       <input type="file" id="archivos_ejemplo" multiple name="archivos_ejemplo[]">
-      <button id="download-all" class="mt-3 btn btn-success">
+      <button id="download-all" class="mt-3 btn btn-secondary">
         <i class="fa fa-download"></i> Download All
       </button>
     </div>
@@ -81,11 +81,11 @@
 </div>
 <div class="card-footer footer_item" id="footer_lg">
   <?php include_once 'forms/quote/templates/go_back_button.inc.php'; ?>
-  <button type="submit" class="btn btn-success" name="guardar_cambios_cotizacion">
+  <button type="submit" class="btn btn-primary" name="guardar_cambios_cotizacion">
     <i class="fa fa-check"></i> Save
   </button>
   <?php include_once 'forms/quote/templates/add_item.inc.php'; ?>
-  <a href="#" id="add_comment" class="btn btn-primary add_item_charter">
+  <a href="#" id="add_comment" class="btn btn-secondary">
     <i class="fas fa-plus"></i> Add comment
   </a>
   <?php include_once 'forms/quote/templates/rooms_button.inc.php'; ?>

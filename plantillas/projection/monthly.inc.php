@@ -42,7 +42,7 @@
               </table>
             </div>
             <div class="card-footer text-right">
-              <a class="btn btn-primary" id="go_back" href="<?= htmlspecialchars(DAILY) ?>">
+              <a class="btn btn-secondary" id="go_back" href="<?= htmlspecialchars(DAILY) ?>">
                 <i class="fa fa-reply"></i> Back
               </a>
             </div>

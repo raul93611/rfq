@@ -78,71 +78,28 @@ body {
 /***********************************buttons****************************************************/
 .btn-primary {
   color: #ffffff;
-  background-color: #13A8F0 !important;
-  border-color: #13A8F0 !important;
+  background-color: rgb(19, 168, 240) !important;
+  border-color: rgb(19, 168, 240) !important;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
-}
-
-.calculate {
-  color: #ffffff !important;
-  background-color: #007AFF !important;
-  border-color: #007AFF !important;
-}
-
-.calculate:hover {
-  background-color: #3395FF !important;
-  border-color: #3395FF !important;
 }
 
 .btn-primary:hover {
   color: #ffffff;
-  background-color: #40B7EE !important;
-  border-color: #40B7EE !important;
-}
-
-#new_quote {
-  padding-left: 13px !important;
-  background-color: white !important;
-  color: #39485A !important;
-}
-
-.btn-success {
-  color: #ffffff;
-  background-color: #01D3AA !important;
-  border-color: #01D3AA !important;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
-}
-
-.btn-success:hover {
-  color: #ffffff;
-  background-color: #34DCBB !important;
-  border-color: #34DCBB !important;
-}
-
-.btn-danger {
-  color: #ffffff;
-  background-color: #DD355F !important;
-  border-color: #DD355F !important;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
-}
-
-.btn-danger:hover {
-  color: #ffffff;
-  background-color: #E45D7F !important;
-  border-color: #E45D7F !important;
+  background-color: rgb(15, 150, 220) !important;
+  border-color: rgb(15, 150, 220) !important;
 }
 
 .btn-secondary {
-  color: #39485A !important;
-  background-color: #E7E9EB !important;
-  border-color: #E7E9EB !important;
+  color: rgb(255, 255, 255) !important;
+  background-color: rgb(57, 72, 90) !important;
+  border-color: rgb(57, 72, 90) !important;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
 }
 
 .btn-secondary:hover {
   color: #ffffff !important;
-  background-color: #5a6268 !important;
-  border-color: #545b62 !important;
+  background-color: rgb(70, 85, 105) !important;
+  border-color: rgb(70, 85, 105) !important;
 }
 
 .btn-warning {
@@ -165,23 +122,6 @@ body {
 
 #go_back {
   border-radius: 25px !important;
-  background-color: #B0B6BD !important;
-  border-color: #B0B6BD !important;
-}
-
-#go_back:hover {
-  background-color: #C0C5CA !important;
-  border-color: #C0C5CA !important;
-}
-
-.add_item_charter {
-  background-color: #40B7EE !important;
-  border-color: #40B7EE !important;
-}
-
-.add_item_charter:hover {
-  background-color: #66C5F1 !important;
-  border-color: #66C5F1 !important;
 }
 
 .btn_home {
@@ -414,7 +354,7 @@ label.error {
   color: red;
 }
 
-#table_items_container {
+#table_items_container, #services_table {
   position: relative;
   width: 100%;
   z-index: 1;
@@ -424,29 +364,25 @@ label.error {
   border-radius: 10px;
 }
 
-#table_items_container table {
+#table_items_container table, #services_table table {
   width: 100%;
   margin: auto;
   border-collapse: separate;
   border-spacing: 0;
 }
 
-#table_items_container tbody {
+#table_items_container tbody, #services_table tbody {
   border-collapse: collapse !important;
 }
 
-.table-wrap {
-  position: relative;
-}
-
-#table_items_container td {
+#table_items_container td, #services_table td {
   padding: 5px 10px;
   border: 1px solid #e0e0e0;
   background: #fff;
   vertical-align: top;
 }
 
-#table_items_container thead th {
+#table_items_container thead th, #services_table thead th {
   background: #39485A;
   color: #fff;
   position: -webkit-sticky;
@@ -454,10 +390,12 @@ label.error {
   top: 0;
 }
 
-/* safari and ios need the tfoot itself to be position:sticky also */
 #table_items_container tfoot,
 #table_items_container tfoot th,
-#table_items_container tfoot td {
+#table_items_container tfoot td, 
+#services_table tfoot,
+#services_table tfoot th,
+#services_table tfoot td {
   position: -webkit-sticky;
   position: sticky;
   bottom: 0;

@@ -25,7 +25,7 @@ try {
           <h1>Re-quote</h1>
         </div>
         <div class="col-sm-10 text-center">
-          <button type="button" class="btn btn-info" id="audit_trails_button">Audit Trails</button>
+          <button type="button" class="btn btn-secondary" id="audit_trails_button">Audit Trails</button>
           <a href="<?= htmlspecialchars(RELOAD_REQUOTE . $id_rfq); ?>" class="btn btn-primary">Reload</a>
         </div>
       </div>
@@ -78,7 +78,7 @@ try {
             </div>
 
             <div class="card-footer footer_item">
-              <a class="btn btn-primary" id="go_back" href="<?= htmlspecialchars(EDITAR_COTIZACION . '/' . $re_quote->get_id_rfq()); ?>">
+              <a class="btn btn-secondary" id="go_back" href="<?= htmlspecialchars(EDITAR_COTIZACION . '/' . $re_quote->get_id_rfq()); ?>">
                 <i class="fa fa-reply"></i> Go Back
               </a>
               <button type="submit" class="btn btn-success" name="save_re_quote">

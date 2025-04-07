@@ -115,7 +115,7 @@
 
 <div class="card-footer">
   <a
-    class="btn btn-primary"
+    class="btn btn-secondary"
     id="go_back"
     href="<?= USERS; ?>"
     title="Go back to the user list">

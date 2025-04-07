@@ -33,7 +33,7 @@
 </div>
 
 <div class="card-footer">
-  <a class="btn btn-primary" id="go_back" href="<?php echo USERS; ?>">
+  <a class="btn btn-secondary" id="go_back" href="<?php echo USERS; ?>">
     <i class="fa fa-reply"></i> Back
   </a>
   <button

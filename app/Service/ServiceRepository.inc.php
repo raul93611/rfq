@@ -115,13 +115,15 @@ class ServiceRepository {
               self::display_service($service, $key);
             }
             ?>
+          </tbody>
+          <tfoot>
             <tr>
               <td colspan="5" class="display-4"><b>
                   <h4>TOTAL:</h4>
                 </b></td>
               <td id="total_service">$ <?= $total_service; ?></td>
             </tr>
-          </tbody>
+          </tfoot>
         </table>
       </div>
     <?php
