@@ -142,9 +142,9 @@ class ServiceRepository {
     <tr class="service_item" id="service<?= $service->get_id(); ?>">
       <td>
         <div class="btn-group-vertical">
-          <button type="button" class="btn btn-warning edit_service" data="<?= $service->get_id(); ?>"><i class="fas fa-pen"></i></button>
-          <a href="<?= DELETE_SERVICE . $service->get_id(); ?>" class="delete_service_button btn btn-warning"><i class="fas fa-trash"></i></a>
-          <a href="<?= DUPLICATE_SERVICE . $service->get_id(); ?>" class="btn btn-warning"><i class="fas fa-copy"></i></a>
+          <button type="button" class="btn btn-item edit_service" data="<?= $service->get_id(); ?>"><i class="fas fa-pen"></i></button>
+          <a href="<?= DELETE_SERVICE . $service->get_id(); ?>" class="delete_service_button btn btn-item"><i class="fas fa-trash"></i></a>
+          <a href="<?= DUPLICATE_SERVICE . $service->get_id(); ?>" class="btn btn-item"><i class="fas fa-copy"></i></a>
         </div>
       </td>
       <td><?= $service->getIdRoom() ? '<span class="mb-2 badge badge-primary" style="background-color: ' . $room->getColor() . ';">' . $room->getName() . '</span>' : '' ?><?= $key + 1; ?></td>

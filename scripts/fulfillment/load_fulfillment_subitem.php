@@ -100,6 +100,6 @@ Conexion::cerrar_conexion();
 <input type="hidden" id="id_rfq" name="id_rfq" value="<?= htmlspecialchars($_POST["idRfq"], ENT_QUOTES, 'UTF-8'); ?>">
 
 <div class="modal-footer">
-  <button type="submit" name="save_edit_fulfillment_subitem_button" class="btn btn-success"><i class="fa fa-check"></i> Save</button>
-  <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-ban"></i> Cancel</button>
+  <button type="submit" name="save_edit_fulfillment_subitem_button" class="btn btn-primary"><i class="fa fa-check"></i> Save</button>
+  <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-ban"></i> Cancel</button>
 </div>

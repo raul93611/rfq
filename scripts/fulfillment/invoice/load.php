@@ -37,13 +37,13 @@ Conexion::cerrar_conexion();
 </div>
 
 <div class="modal-footer">
-  <button type="submit" class="btn btn-success">
+  <button type="submit" class="btn btn-primary">
     <i class="fa fa-check"></i> Save
   </button>
-  <button type="button" data-id="<?= htmlspecialchars($invoice->get_id(), ENT_QUOTES, 'UTF-8'); ?>" class="delete-invoice-button btn btn-danger">
+  <button type="button" data-id="<?= htmlspecialchars($invoice->get_id(), ENT_QUOTES, 'UTF-8'); ?>" class="delete-invoice-button btn btn-secondary">
     <i class="fa fa-trash"></i> Delete
   </button>
-  <button type="button" class="btn btn-danger" data-dismiss="modal">
+  <button type="button" class="btn btn-secondary" data-dismiss="modal">
     <i class="fa fa-ban"></i> Cancel
   </button>
 </div>

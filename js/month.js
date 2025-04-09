@@ -50,7 +50,7 @@ $(document).ready(function () {
               <button type="button" class="btn btn-link" data-toggle="tooltip" data-html="true" title="${data}">
                 <i class="fas fa-comment fa-2x"></i>
               </button>
-              <button type="button" class="edit-invoice-acceptance-button btn btn-sm btn-warning" 
+              <button type="button" class="edit-invoice-acceptance-button btn btn-sm btn-secondary" 
                 data-id="${row.id}" 
                 data-partial-invoice="${row.partial_invoice}">
                 <i class="fas fa-pencil-alt"></i>

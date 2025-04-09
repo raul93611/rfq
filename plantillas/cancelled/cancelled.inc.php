@@ -19,7 +19,7 @@
       <div class="row">
         <section class="col-12">
           <div class="card">
-            <div class="card-header bg-warning">
+            <div class="card-header">
               <h3 class="card-title text-dark">Cancelled</h3>
               <!-- Optional: Card tools or filter options here -->
             </div>

@@ -21,7 +21,7 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="submit" name="submit" form="link_quote_form" class="btn btn-success">
+        <button type="submit" name="submit" form="link_quote_form" class="btn btn-primary">
           <i class="fa fa-check"></i> Save
         </button>
       </div>

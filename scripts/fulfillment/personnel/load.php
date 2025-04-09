@@ -60,6 +60,6 @@ try {
 </div>
 
 <div class="modal-footer">
-  <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Save</button>
-  <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-ban"></i> Cancel</button>
+  <button type="submit" class="btn btn-primary"><i class="fa fa-check"></i> Save</button>
+  <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-ban"></i> Cancel</button>
 </div>

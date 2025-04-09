@@ -27,13 +27,13 @@ Conexion::cerrar_conexion();
   </div>
 </div>
 <div class="card-footer">
-  <button type="submit" class="btn btn-success" name="save_edit_re_quote_provider">
+  <button type="submit" class="btn btn-primary" name="save_edit_re_quote_provider">
     <i class="fa fa-check"></i> Save
   </button>
-  <a href="<?= RE_QUOTE . $re_quote->get_id_rfq(); ?>" class="btn btn-info">
+  <a href="<?= RE_QUOTE . $re_quote->get_id_rfq(); ?>" class="btn btn-secondary">
     <i class="fa fa-times"></i> Cancel
   </a>
-  <a href="<?= DELETE_RE_QUOTE_PROVIDER . $id_re_quote_provider; ?>" class="delete_provider_item_button btn btn-danger">
+  <a href="<?= DELETE_RE_QUOTE_PROVIDER . $id_re_quote_provider; ?>" class="delete_provider_item_button btn btn-secondary">
     <i class="fa fa-trash"></i> Delete
   </a>
 </div>

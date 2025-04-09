@@ -110,7 +110,7 @@
   </a>
   <button
     type="submit"
-    class="btn btn-success"
+    class="btn btn-primary"
     name="edit_user"
     title="Save the user details">
     <i class="fa fa-check"></i> Save

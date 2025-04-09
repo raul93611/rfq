@@ -49,6 +49,6 @@ $due_date = date("m/d/Y", strtotime($tracking_subitem->get_due_date()));
   </div>
 </div>
 <div class="modal-footer">
-  <button type="submit" name="save_tracking_subitem" class="btn btn-success"><i class="fa fa-check"></i> Save</button>
-  <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-ban"></i> Cancel</button>
+  <button type="submit" name="save_tracking_subitem" class="btn btn-primary"><i class="fa fa-check"></i> Save</button>
+  <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-ban"></i> Cancel</button>
 </div>

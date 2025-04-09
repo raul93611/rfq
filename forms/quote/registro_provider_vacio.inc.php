@@ -24,6 +24,6 @@ Conexion::cerrar_conexion();
   </div>
 </div>
 <div class="card-footer">
-  <button type="submit" class="btn btn-success" name="guardar_provider"><i class="fa fa-check"></i> Save</button>
-  <a href="<?= EDITAR_COTIZACION . '/' . $item->obtener_id_rfq(); ?>" class="btn btn-danger"><i class="fa fa-times"></i> Cancel</a>
+  <button type="submit" class="btn btn-primary" name="guardar_provider"><i class="fa fa-check"></i> Save</button>
+  <a href="<?= EDITAR_COTIZACION . '/' . $item->obtener_id_rfq(); ?>" class="btn btn-secondary"><i class="fa fa-times"></i> Cancel</a>
 </div>

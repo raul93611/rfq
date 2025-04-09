@@ -36,7 +36,7 @@ $(document).ready(function () {
               <a class="btn btn-sm btn-info" href="/rfq/perfil/user/edit_user/${row.id}">
                 <i class="fas fa-highlighter"></i>
               </a>
-              <a class="btn btn-sm btn-warning" href="/rfq/perfil/user/update_password/${row.id}">
+              <a class="btn btn-sm btn-secondary" href="/rfq/perfil/user/update_password/${row.id}">
                 <i class="fas fa-key"></i>
               </a>
               <a href="/rfq/user/${statusToggle}_user" 

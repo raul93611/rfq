@@ -30,7 +30,7 @@ Conexion::cerrar_conexion();
           include_once 'plantillas/fulfillment/templates/comments_button.inc.php';
           include_once 'plantillas/fulfillment/templates/pending_button.inc.php';
           ?>
-          <button type="button" class="btn btn-info" id="fulfillment_audit_trails_button" data-id="<?= htmlspecialchars($id_rfq, ENT_QUOTES, 'UTF-8') ?>">Audit Trails</button>
+          <button type="button" class="btn btn-secondary" id="fulfillment_audit_trails_button" data-id="<?= htmlspecialchars($id_rfq, ENT_QUOTES, 'UTF-8') ?>">Audit Trails</button>
         </div>
         <div class="col-sm-4 text-right">
           <?php include_once 'templates/pending_status.inc.php'; ?>

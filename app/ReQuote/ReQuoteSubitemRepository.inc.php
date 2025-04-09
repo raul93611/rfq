@@ -75,15 +75,15 @@ class ReQuoteSubitemRepository{
     ?>
     <tr id="<?php echo 'subitem' . $re_quote_subitem-> get_id(); ?>" class="fila_subitem">
       <td>
-        <a href="<?php echo ADD_RE_QUOTE_SUBITEM_PROVIDER . $re_quote_subitem-> get_id(); ?>" class="btn btn-warning btn-block subitem">
+        <a href="<?php echo ADD_RE_QUOTE_SUBITEM_PROVIDER . $re_quote_subitem-> get_id(); ?>" class="btn btn-subitem btn-block">
           <i class="fa fa-plus-circle"></i> Add Provider
         </a>
         <br>
-        <a href="<?php echo EDIT_RE_QUOTE_SUBITEM . $re_quote_subitem-> get_id(); ?>" class="btn btn-warning btn-block subitem">
+        <a href="<?php echo EDIT_RE_QUOTE_SUBITEM . $re_quote_subitem-> get_id(); ?>" class="btn btn-subitem btn-block">
           <i class="fa fa-edit"></i> Edit subitem
         </a>
         <br>
-        <!-- <a href="<?php echo DELETE_RE_QUOTE_SUBITEM . $re_quote_subitem-> get_id(); ?>" class="delete_subitem_button btn btn-warning btn-block subitem">
+        <!-- <a href="<?php echo DELETE_RE_QUOTE_SUBITEM . $re_quote_subitem-> get_id(); ?>" class="delete_subitem_button btn btn-subitem btn-block">
           <i class="fa fa-trash"></i> Delete
         </a> -->
       </td>

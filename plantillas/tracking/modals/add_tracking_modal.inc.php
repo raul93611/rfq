@@ -64,10 +64,10 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="submit" name="save_tracking" form="add_tracking_form" class="btn btn-success">
+        <button type="submit" name="save_tracking" form="add_tracking_form" class="btn btn-primary">
           <i class="fa fa-check"></i> Save
         </button>
-        <button type="button" class="btn btn-danger" data-dismiss="modal">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
           <i class="fa fa-ban"></i> Cancel
         </button>
       </div>

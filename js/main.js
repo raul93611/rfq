@@ -270,7 +270,7 @@ $(document).ready(function () {
           orderable: false,
           render: function (data, type, row) {
             return type === 'display'
-              ? `<a href="/rfq/quote/delete_quote/${row.id}" class="delete_quote_button btn btn-sm btn-danger">
+              ? `<a href="/rfq/quote/delete_quote/${row.id}" class="delete_quote_button btn btn-sm btn-secondary">
                   <i class="fas fa-trash"></i>
                 </a>`
               : data;
@@ -333,10 +333,10 @@ $(document).ready(function () {
         render: function (data, type, row) {
           return type === 'display'
             ? `
-              <a class="btn btn-sm calculate" href="/rfq/quote/proposal/${row.id}" target="_blank">
+              <a class="btn btn-sm btn-secondary" href="/rfq/quote/proposal/${row.id}" target="_blank">
                 <i class="fa fa-copy"></i>
               </a>
-              <a class="btn btn-primary btn-sm" href="/rfq/quote/proposal_gsa/${row.id}" target="_blank">
+              <a class="btn btn-secondary btn-sm" href="/rfq/quote/proposal_gsa/${row.id}" target="_blank">
                 <i class="fa fa-copy"></i>
               </a>
             `
@@ -384,10 +384,10 @@ $(document).ready(function () {
         render: function (data, type, row) {
           return type === 'display'
             ? `
-              <a class="btn btn-sm calculate" href="/rfq/quote/proposal/${row.id}" target="_blank">
+              <a class="btn btn-sm btn-secondary" href="/rfq/quote/proposal/${row.id}" target="_blank">
                 <i class="fa fa-copy"></i>
               </a>
-              <a class="btn btn-primary btn-sm" href="/rfq/quote/proposal_gsa/${row.id}" target="_blank">
+              <a class="btn btn-secondary btn-sm" href="/rfq/quote/proposal_gsa/${row.id}" target="_blank">
                 <i class="fa fa-copy"></i>
               </a>
             `
@@ -435,10 +435,10 @@ $(document).ready(function () {
         render: function (data, type, row) {
           return type === 'display'
             ? `
-              <a class="btn btn-sm calculate" href="/rfq/quote/proposal/${row.id}" target="_blank">
+              <a class="btn btn-sm btn-secondary" href="/rfq/quote/proposal/${row.id}" target="_blank">
                 <i class="fa fa-copy"></i>
               </a>
-              <a class="btn btn-primary btn-sm" href="/rfq/quote/proposal_gsa/${row.id}" target="_blank">
+              <a class="btn btn-secondary btn-sm" href="/rfq/quote/proposal_gsa/${row.id}" target="_blank">
                 <i class="fa fa-copy"></i>
               </a>
             `
@@ -473,8 +473,8 @@ $(document).ready(function () {
         orderable: false,
         render: function (data, type, row) {
           return type === 'display'
-            ? `<a href="/rfq/quote/delete_quote/${row.id}" class="delete_quote_button text-danger">
-                <i class="fa fa-times"></i> Delete
+            ? `<a href="/rfq/quote/delete_quote/${row.id}" class="delete_quote_button btn btn-sm btn-secondary">
+                <i class="fas fa-trash"></i>
               </a>`
             : data;
         },
@@ -506,8 +506,8 @@ $(document).ready(function () {
         orderable: false,
         render: function (data, type, row) {
           return type === 'display'
-            ? `<a href="/rfq/quote/delete_quote/${row.id}" class="delete_quote_button text-danger">
-                <i class="fa fa-times"></i> Delete
+            ? `<a href="/rfq/quote/delete_quote/${row.id}" class="delete_quote_button btn btn-sm btn-secondary">
+                <i class="fas fa-trash"></i>
               </a>`
             : data;
         },
@@ -539,8 +539,8 @@ $(document).ready(function () {
         orderable: false,
         render: function (data, type, row) {
           return type === 'display'
-            ? `<a href="/rfq/quote/delete_quote/${row.id}" class="delete_quote_button text-danger">
-                <i class="fa fa-times"></i> Delete
+            ? `<a href="/rfq/quote/delete_quote/${row.id}" class="delete_quote_button btn btn-sm btn-secondary">
+                <i class="fas fa-trash"></i>
               </a>`
             : data;
         },
@@ -572,10 +572,10 @@ $(document).ready(function () {
         orderable: false,
         render: function (data, type, row) {
           return type === 'display'
-            ? `<a href="/rfq/quote/restore_quote/${row.id}" class="btn btn-sm btn-success">
+            ? `<a href="/rfq/quote/restore_quote/${row.id}" class="btn btn-sm btn-primary">
                 <i class="fas fa-sync"></i>
               </a>
-              <a href="/rfq/quote/destroy_quote/${row.id}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to permanently delete this quote?');">
+              <a href="/rfq/quote/destroy_quote/${row.id}" class="btn btn-sm btn-secondary" onclick="return confirm('Are you sure you want to permanently delete this quote?');">
                 <i class="fas fa-skull-crossbones"></i>
               </a>
               `

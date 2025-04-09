@@ -21,7 +21,7 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button form="import-items-form" class="btn btn-success" type="submit">Upload File</button>
+        <button form="import-items-form" class="btn btn-primary" type="submit">Upload File</button>
         </button>
       </div>
     </div>

@@ -38,7 +38,7 @@
   </a>
   <button
     type="submit"
-    class="btn btn-success"
+    class="btn btn-primary"
     name="update_password">
     <i class="fa fa-check"></i> Save
   </button>

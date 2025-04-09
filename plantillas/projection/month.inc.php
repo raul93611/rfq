@@ -16,7 +16,7 @@ Conexion::cerrar_conexion();
           </h1>
         </div>
         <div class="col-sm-6 text-right">
-          <a href="<?= htmlspecialchars(MONTH_EXCEL . $id_month) ?>" target="_blank" class="btn btn-success">
+          <a href="<?= htmlspecialchars(MONTH_EXCEL . $id_month) ?>" target="_blank" class="btn btn-primary">
             <i class="fas fa-file-excel"></i> Export
           </a>
         </div>

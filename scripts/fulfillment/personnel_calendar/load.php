@@ -64,13 +64,13 @@ try {
 </div>
 <input type="hidden" name="id_event" value="<?= htmlspecialchars($event->getId(), ENT_QUOTES, 'UTF-8'); ?>">
 <div class="modal-footer">
-  <button type="submit" class="btn btn-success">
+  <button type="submit" class="btn btn-primary">
     <i class="fa fa-check"></i> Save
   </button>
-  <button type="button" data-id="<?= htmlspecialchars($event->getId(), ENT_QUOTES, 'UTF-8'); ?>" class="delete-event-button btn btn-danger">
+  <button type="button" data-id="<?= htmlspecialchars($event->getId(), ENT_QUOTES, 'UTF-8'); ?>" class="delete-event-button btn btn-secondary">
     <i class="fa fa-trash"></i> Delete
   </button>
-  <button type="button" class="btn btn-info" data-dismiss="modal">
+  <button type="button" class="btn btn-secondary" data-dismiss="modal">
     <i class="fa fa-ban"></i> Cancel
   </button>
 </div>

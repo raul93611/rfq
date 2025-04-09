@@ -31,9 +31,9 @@ try {
 <input type="hidden" id="id_rfq" name="id_rfq" value="<?= $_POST["idRfq"] ?? '' ?>">
 <input type="hidden" id="id_room" name="id_room" value="<?= htmlspecialchars($room?->getId() ?? '', ENT_QUOTES, 'UTF-8'); ?>">
 <div class="modal-footer">
-  <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Save</button>
+  <button type="submit" class="btn btn-primary"><i class="fa fa-check"></i> Save</button>
   <?php if (isset($_POST["idRoom"])) : ?>
-    <button type="submit" id="delete-room-button" data-id="<?= $_POST["idRoom"] ?>" class="btn btn-danger"><i class="fa fa-times"></i> Delete</button>
+    <button type="submit" id="delete-room-button" data-id="<?= $_POST["idRoom"] ?>" class="btn btn-secondary"><i class="fa fa-times"></i> Delete</button>
   <?php endif; ?>
-  <button type="button" class="btn btn-info" data-dismiss="modal"><i class="fa fa-ban"></i> Cancel</button>
+  <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-ban"></i> Cancel</button>
 </div>

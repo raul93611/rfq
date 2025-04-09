@@ -92,5 +92,5 @@ try {
   </div>
 </div>
 <div class="modal-footer">
-  <button type="submit" name="save" form="edit_task_form" class="btn btn-success">Save</button>
+  <button type="submit" name="save" form="edit_task_form" class="btn btn-primary">Save</button>
 </div>

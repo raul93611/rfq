@@ -102,22 +102,33 @@ body {
   border-color: rgb(70, 85, 105) !important;
 }
 
-.btn-warning {
-  color: #1F2D3D;
-  background-color: #F0E714 !important;
-  border-color: #F0E714 !important;
+.btn-item {
+  color: rgb(255, 255, 255);
+  background-color: rgb(80, 140, 200) !important;
+  border-color: rgb(80, 140, 200) !important;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+
+.btn-item:hover {
+  color: #1F2D3D;
+  background-color: rgb(65, 125, 180) !important;
+  border-color: rgb(65, 125, 180) !important;
+}
+
+.btn-subitem {
+  color: rgb(255, 255, 255);
+  background-color: rgb(90, 105, 120) !important;
+  border-color: rgb(90, 105, 120) !important;
+}
+
+.btn-subitem:hover {
+  background-color: rgb(105, 120, 135) !important;
+  border-color: rgb(105, 120, 135) !important;
 }
 
 .bg-warning {
   background-color: #F0E714 !important;
   border-color: #F0E714 !important;
-}
-
-.btn-warning:hover {
-  color: #1F2D3D;
-  background-color: #F3EC43 !important;
-  border-color: #F3EC43 !important;
 }
 
 #go_back {
@@ -131,16 +142,6 @@ body {
 
 .btn_home:hover {
   background-color: #4f5359 !important;
-}
-
-.subitem {
-  background-color: #acce33 !important;
-  border-color: #acce33 !important;
-}
-
-.subitem:hover {
-  background-color: #d0e585 !important;
-  border-color: #d0e585 !important;
 }
 
 /*******************************table buttons************************/

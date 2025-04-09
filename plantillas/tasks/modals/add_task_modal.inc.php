@@ -37,7 +37,7 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="submit" form="add_task_form" class="btn btn-success">Save</button>
+        <button type="submit" form="add_task_form" class="btn btn-primary">Save</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>

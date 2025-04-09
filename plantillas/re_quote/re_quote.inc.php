@@ -81,7 +81,7 @@ try {
               <a class="btn btn-secondary" id="go_back" href="<?= htmlspecialchars(EDITAR_COTIZACION . '/' . $re_quote->get_id_rfq()); ?>">
                 <i class="fa fa-reply"></i> Go Back
               </a>
-              <button type="submit" class="btn btn-success" name="save_re_quote">
+              <button type="submit" class="btn btn-primary" name="save_re_quote">
                 <i class="fas fa-check"></i> Save
               </button>
             </div>

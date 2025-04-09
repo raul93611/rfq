@@ -206,5 +206,5 @@
 </div>
 <div class="card-footer footer_item">
   <a class="btn btn-secondary" id="go_back" href="<?= EDITAR_COTIZACION . '/' . $quote->obtener_id(); ?>"><i class="fa fa-reply"></i></a>
-  <button type="submit" class="btn btn-success" form="checklist_form" name="save_checklist"><i class="fa fa-check"></i> Save</button>
+  <button type="submit" class="btn btn-primary" form="checklist_form" name="save_checklist"><i class="fa fa-check"></i> Save</button>
 </div>

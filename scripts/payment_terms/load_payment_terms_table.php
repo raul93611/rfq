@@ -19,8 +19,8 @@ try {
   foreach ($payment_terms as $payment_term) {
     $row = [
       htmlspecialchars($payment_term->get_payment_term(), ENT_QUOTES, 'UTF-8'),
-      '<button type="button" data-id="' . htmlspecialchars($payment_term->get_id(), ENT_QUOTES, 'UTF-8') . '" class="edit_button btn btn-info btn-sm"><i class="fas fa-pen"></i></button>
-       <button type="button" data-id="' . htmlspecialchars($payment_term->get_id(), ENT_QUOTES, 'UTF-8') . '" class="delete_button btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>'
+      '<button type="button" data-id="' . htmlspecialchars($payment_term->get_id(), ENT_QUOTES, 'UTF-8') . '" class="edit_button btn btn-secondary btn-sm"><i class="fas fa-pen"></i></button>
+       <button type="button" data-id="' . htmlspecialchars($payment_term->get_id(), ENT_QUOTES, 'UTF-8') . '" class="delete_button btn btn-secondary btn-sm"><i class="fas fa-trash"></i></button>'
     ];
     $json[] = $row;
   }

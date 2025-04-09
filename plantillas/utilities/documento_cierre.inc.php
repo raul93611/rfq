@@ -12,7 +12,7 @@
         <h4 class="text-center text-danger">Do you want to continue the action?</h4>
       </div>
       <div class="modal-footer">
-        <a href="#" class="btn btn-success" id="continue_button"><i class="fas fa-check"></i> Continue</a>
+        <a href="#" class="btn btn-primary" id="continue_button"><i class="fas fa-check"></i> Continue</a>
       </div>
     </div>
   </div>

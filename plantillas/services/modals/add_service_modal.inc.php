@@ -17,10 +17,10 @@
 
       <!-- Modal Footer -->
       <div class="modal-footer">
-        <button type="submit" form="add_service_form" name="add_service_button" class="btn btn-success">
+        <button type="submit" form="add_service_form" name="add_service_button" class="btn btn-primary">
           <i class="fa fa-check"></i> Save
         </button>
-        <button type="button" class="btn btn-danger" data-dismiss="modal">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
           <i class="fa fa-ban"></i> Cancel
         </button>
       </div>

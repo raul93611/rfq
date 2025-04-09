@@ -85,6 +85,6 @@
   </div>
 </div>
 <div class="card-footer">
-  <button type="submit" class="btn btn-success" name="registrar_cotizacion"><i class="fa fa-check"></i> Save</button>
-  <a href="<?= PERFIL; ?>" class="btn btn-danger"><i class="fa fa-times"></i> Cancel</a>
+  <button type="submit" class="btn btn-primary" name="registrar_cotizacion"><i class="fa fa-check"></i> Save</button>
+  <a href="<?= PERFIL; ?>" class="btn btn-secondary"><i class="fa fa-times"></i> Cancel</a>
 </div>

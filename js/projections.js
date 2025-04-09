@@ -19,7 +19,7 @@ $(document).ready(function () {
         render: (data, type, row) => {
           if (type === 'display') {
             return `
-              <a href="/rfq/perfil/projection/${row.id}" class="btn btn-sm btn-warning" title="View Projection Details">
+              <a href="/rfq/perfil/projection/${row.id}" class="btn btn-sm btn-secondary" title="View Projection Details">
                 <i class="fas fa-info-circle"></i>
               </a>
             `;

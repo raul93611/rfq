@@ -24,7 +24,7 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="submit" name="save" form="add_payment_term_form" class="btn btn-success">Save</button>
+        <button type="submit" name="save" form="add_payment_term_form" class="btn btn-primary">Save</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
       </div>
     </div>

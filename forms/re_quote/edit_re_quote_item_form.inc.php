@@ -70,10 +70,10 @@ Conexion::cerrar_conexion();
   </div>
 </div>
 <div class="card-footer">
-  <button type="submit" class="btn btn-success" name="save_edit_re_quote_item">
+  <button type="submit" class="btn btn-primary" name="save_edit_re_quote_item">
     <i class="fa fa-check"></i> Save
   </button>
-  <a href="<?= RE_QUOTE . $re_quote->get_id_rfq(); ?>" class="btn btn-danger">
+  <a href="<?= RE_QUOTE . $re_quote->get_id_rfq(); ?>" class="btn btn-secondary">
     <i class="fa fa-times"></i> Cancel
   </a>
 </div>

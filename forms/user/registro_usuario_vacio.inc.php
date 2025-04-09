@@ -123,7 +123,7 @@
   </a>
   <button
     type="submit"
-    class="btn btn-success"
+    class="btn btn-primary"
     name="registrar_usuario"
     title="Save the user details">
     <i class="fa fa-check"></i> Save

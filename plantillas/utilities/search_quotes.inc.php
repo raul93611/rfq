@@ -25,7 +25,7 @@
                 <div class="form-group">
                   <input type="search" name="termino_busqueda" class="form-control" placeholder="Search ..." required autofocus>
                 </div>
-                <button type="submit" class="btn btn-primary btn-block" name="buscar">Search</button>
+                <button type="submit" class="btn btn-secondary btn-block" name="buscar">Search</button>
               </form>
             </div>
           </div>

@@ -21,10 +21,10 @@ $(document).ready(function () {
         render: (data, type, row) => {
           if (type === 'display') {
             return `
-              <button data-id="${row.id}" class="edit-personnel-button btn btn-sm btn-warning">
+              <button data-id="${row.id}" class="edit-personnel-button btn btn-sm btn-secondary">
                 <i class="fas fa-pen"></i>
               </button>
-              <button data-id="${row.id}" class="delete-personnel-button btn btn-sm btn-danger">
+              <button data-id="${row.id}" class="delete-personnel-button btn btn-sm btn-secondary">
                 <i class="fas fa-trash"></i>
               </button>
             `;

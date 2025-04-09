@@ -40,14 +40,14 @@ $(document).ready(function () {
             return `
               <button 
                 data-id="${row.id}" 
-                class="edit-projected-amount-button btn btn-sm btn-warning"
+                class="edit-projected-amount-button btn btn-sm btn-secondary"
                 title="Edit Projected Amount"
               >
                 <i class="fas fa-pencil-alt"></i>
               </button>
               <a 
                 href="/rfq/perfil/projection/month/${row.id}" 
-                class="btn btn-sm btn-warning"
+                class="btn btn-sm btn-secondary"
                 title="View Projection Details"
               >
                 <i class="fas fa-info-circle"></i>

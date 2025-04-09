@@ -128,7 +128,7 @@
 <div class="card-footer">
   <button
     type="submit"
-    class="btn btn-success"
+    class="btn btn-primary"
     name="registrar_usuario">
     <i class="fa fa-check"></i> Sign in
   </button>

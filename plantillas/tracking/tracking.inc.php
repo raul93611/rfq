@@ -30,7 +30,7 @@ Conexion::cerrar_conexion();
               <?php $quote_id = htmlspecialchars($quote->obtener_id()); ?>
               <a class="btn btn-secondary" id="go_back" href="<?= EDITAR_COTIZACION . '/' . $quote_id; ?>"><i class="fa fa-reply"></i></a>
               <a href="<?= TRACKING_PDF . $quote_id; ?>" target="_blank" class="btn btn-primary"><i class="fas fa-file"></i></a>
-              <a href="<?= TRACKING_EXCEL . $quote_id; ?>" target="_blank" class="btn btn-success"><i class="fas fa-file-excel"></i></a>
+              <a href="<?= TRACKING_EXCEL . $quote_id; ?>" target="_blank" class="btn btn-primary"><i class="fas fa-file-excel"></i></a>
             </div>
           </div>
         </div>

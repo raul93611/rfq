@@ -32,13 +32,13 @@ Conexion::cerrar_conexion();
 </div>
 
 <div class="card-footer">
-  <button type="submit" class="btn btn-success" name="guardar_cambios_provider">
+  <button type="submit" class="btn btn-primary" name="guardar_cambios_provider">
     <i class="fa fa-check"></i> Save
   </button>
-  <a href="<?= EDITAR_COTIZACION . '/' . htmlspecialchars($item->obtener_id_rfq()); ?>" class="btn btn-info">
+  <a href="<?= EDITAR_COTIZACION . '/' . htmlspecialchars($item->obtener_id_rfq()); ?>" class="btn btn-secondary">
     <i class="fa fa-times"></i> Cancel
   </a>
-  <a href="<?= DELETE_PROVIDER . '/' . htmlspecialchars($id_provider); ?>" class="delete_provider_item_button btn btn-danger">
+  <a href="<?= DELETE_PROVIDER . '/' . htmlspecialchars($id_provider); ?>" class="delete_provider_item_button btn btn-secondary">
     <i class="fa fa-trash"></i> Delete
   </a>
 </div>

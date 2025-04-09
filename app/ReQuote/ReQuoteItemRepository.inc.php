@@ -158,19 +158,19 @@ class ReQuoteItemRepository {
     ?>
     <tr id="<?= 'item' . $re_quote_item->get_id(); ?>">
       <td>
-        <a href="<?= ADD_RE_QUOTE_PROVIDER . $re_quote_item->get_id(); ?>" class="btn btn-warning btn-block">
+        <a href="<?= ADD_RE_QUOTE_PROVIDER . $re_quote_item->get_id(); ?>" class="btn btn-item btn-block">
           <i class="fa fa-plus-circle"></i> Add Provider
         </a>
         <br>
-        <a href="<?= EDIT_RE_QUOTE_ITEM . $re_quote_item->get_id(); ?>" class="btn btn-warning btn-block">
+        <a href="<?= EDIT_RE_QUOTE_ITEM . $re_quote_item->get_id(); ?>" class="btn btn-item btn-block">
           <i class="fa fa-edit"></i> Edit item
         </a>
         <br>
-        <!-- <a href="<?= DELETE_RE_QUOTE_ITEM . $re_quote_item->get_id(); ?>" class="delete_item_button btn btn-warning btn-block">
+        <!-- <a href="<?= DELETE_RE_QUOTE_ITEM . $re_quote_item->get_id(); ?>" class="delete_item_button btn btn-item btn-block">
           <i class="fa fa-trash"></i> Delete
         </a> -->
         <br>
-        <!-- <a href="<?= ADD_RE_QUOTE_SUBITEM . $re_quote_item->get_id(); ?>" class="btn btn-warning btn-block">
+        <!-- <a href="<?= ADD_RE_QUOTE_SUBITEM . $re_quote_item->get_id(); ?>" class="btn btn-item btn-block">
           <i class="fa fa-plus-circle"></i> Add subitem
         </a> -->
         <br>
