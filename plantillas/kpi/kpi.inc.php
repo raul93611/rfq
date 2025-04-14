@@ -62,7 +62,7 @@
         <div class="col-md-12">
           <div class="card-footer footer_item text-right">
             <a class="btn btn-secondary" id="go_back" href="<?= EDITAR_COTIZACION . '/' . htmlspecialchars($id_rfq, ENT_QUOTES, 'UTF-8'); ?>">
-              <i class="fa fa-reply"></i> Go Back
+              <i class="fa fa-reply"></i>
             </a>
           </div>
         </div>

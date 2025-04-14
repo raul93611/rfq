@@ -1,8 +1,6 @@
 <?php
-class ReQuoteServiceRepository
-{
-  public static function array_to_object($sentence)
-  {
+class ReQuoteServiceRepository {
+  public static function array_to_object($sentence) {
     $objects = [];
     while ($row = $sentence->fetch(PDO::FETCH_ASSOC)) {
       $objects[] = new ReQuoteService($row['id'], $row['id_re_quote'], $row['description'], $row['quantity'], $row['unit_price'], $row['total_price']);
@@ -11,16 +9,14 @@ class ReQuoteServiceRepository
     return $objects;
   }
 
-  public static function single_result_to_object($sentence)
-  {
+  public static function single_result_to_object($sentence) {
     $row = $sentence->fetch(PDO::FETCH_ASSOC);
     $object = new ReQuoteService($row['id'], $row['id_re_quote'], $row['description'], $row['quantity'], $row['unit_price'], $row['total_price']);
 
     return $object;
   }
 
-  public static function display_services($connection, $re_quote)
-  {
+  public static function display_services($connection, $re_quote) {
     $services = self::get_services($connection, $re_quote->get_id());
     $total_service = self::get_total($connection, $re_quote->get_id());
     if (count($services)) {
@@ -58,12 +54,14 @@ class ReQuoteServiceRepository
               self::display_service($service, $key);
             }
             ?>
+          <tfoot>
             <tr>
               <td colspan="5" class="display-4"><b>
                   <h4>TOTAL:</h4>
                 </b></td>
               <td id="total_service">$ <?php echo $total_service; ?></td>
             </tr>
+          </tfoot>
           </tbody>
         </table>
       </div>
@@ -75,8 +73,7 @@ class ReQuoteServiceRepository
     }
   }
 
-  public static function display_service($service, $key)
-  {
+  public static function display_service($service, $key) {
     ?>
     <tr class="service_item" id="service<?php echo $service->get_id(); ?>">
       <td>
@@ -93,8 +90,7 @@ class ReQuoteServiceRepository
 <?php
   }
 
-  public static function get_services($connection, $id_re_quote)
-  {
+  public static function get_services($connection, $id_re_quote) {
     $services = [];
     if (isset($connection)) {
       try {
@@ -110,8 +106,7 @@ class ReQuoteServiceRepository
     return $services;
   }
 
-  public static function get_total($connection, $id_re_quote)
-  {
+  public static function get_total($connection, $id_re_quote) {
     $total_service = 0;
     if (isset($connection)) {
       try {
@@ -130,38 +125,37 @@ class ReQuoteServiceRepository
     return $total_service;
   }
 
-  public static function insert($connection, $re_quote_service){
-    if(isset($connection)){
-      try{
+  public static function insert($connection, $re_quote_service) {
+    if (isset($connection)) {
+      try {
         $sql = 'INSERT INTO re_quote_services(id_re_quote, description, quantity, unit_price, total_price) VALUES(:id_re_quote, :description, :quantity, :unit_price, :total_price)';
-        $sentence = $connection-> prepare($sql);
-        $sentence-> bindValue(':id_re_quote', $re_quote_service-> get_id_re_quote(), PDO::PARAM_STR);
-        $sentence-> bindValue(':description', $re_quote_service-> get_description(), PDO::PARAM_STR);
-        $sentence-> bindValue(':quantity', $re_quote_service-> get_quantity(), PDO::PARAM_STR);
-        $sentence-> bindValue(':unit_price', $re_quote_service-> get_unit_price(), PDO::PARAM_STR);
-        $sentence-> bindValue(':total_price', $re_quote_service-> get_total_price(), PDO::PARAM_STR);
-        $sentence-> execute();
-      }catch(PDOException $ex){
+        $sentence = $connection->prepare($sql);
+        $sentence->bindValue(':id_re_quote', $re_quote_service->get_id_re_quote(), PDO::PARAM_STR);
+        $sentence->bindValue(':description', $re_quote_service->get_description(), PDO::PARAM_STR);
+        $sentence->bindValue(':quantity', $re_quote_service->get_quantity(), PDO::PARAM_STR);
+        $sentence->bindValue(':unit_price', $re_quote_service->get_unit_price(), PDO::PARAM_STR);
+        $sentence->bindValue(':total_price', $re_quote_service->get_total_price(), PDO::PARAM_STR);
+        $sentence->execute();
+      } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
   }
 
-  public static function delete_by_id_re_quote($connection, $id_re_quote){
-    if(isset($connection)){
-      try{
+  public static function delete_by_id_re_quote($connection, $id_re_quote) {
+    if (isset($connection)) {
+      try {
         $sql = 'DELETE FROM re_quote_services WHERE id_re_quote = :id_re_quote';
-        $sentence = $connection-> prepare($sql);
-        $sentence-> bindValue(':id_re_quote', $id_re_quote, PDO::PARAM_STR);
-        $sentence-> execute();
-      }catch(PDOException $ex){
+        $sentence = $connection->prepare($sql);
+        $sentence->bindValue(':id_re_quote', $id_re_quote, PDO::PARAM_STR);
+        $sentence->execute();
+      } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
   }
 
-  public static function get_service($connection, $id_service)
-  {
+  public static function get_service($connection, $id_service) {
     $service = null;
     if (isset($connection)) {
       try {
@@ -177,8 +171,7 @@ class ReQuoteServiceRepository
     return $service;
   }
 
-  public static function edit_service($connection, $id, $description, $quantity, $unit_price, $total_price)
-  {
+  public static function edit_service($connection, $id, $description, $quantity, $unit_price, $total_price) {
     if (isset($connection)) {
       try {
         $sql = 'UPDATE re_quote_services SET description = :description, quantity = :quantity, unit_price = :unit_price, total_price = :total_price WHERE id = :id_service';
@@ -195,7 +188,7 @@ class ReQuoteServiceRepository
     }
   }
 
-  public static function calc_items_with_CC($connection, $payment_term, $id_re_quote){
+  public static function calc_items_with_CC($connection, $payment_term, $id_re_quote) {
     $payment_term = $payment_term == 'Net 30/CC' ? 1.03 : 1;
     if (isset($connection)) {
       try {

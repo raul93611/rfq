@@ -5,7 +5,7 @@ $quote = RepositorioRfq::obtener_cotizacion_por_id($conexion, $id_rfq);
 Conexion::cerrar_conexion();
 
 $shippings = explode('|', $quote->obtener_fulfillment_shipping() ?? '');
-$costs = explode('|', $quote->obtener_fulfillment_shipping_cost());
+$costs = explode('|', $quote->obtener_fulfillment_shipping_cost() ?? '');
 ?>
 
 <div class="modal-body">
@@ -34,8 +34,8 @@ $costs = explode('|', $quote->obtener_fulfillment_shipping_cost());
   </div>
 
   <input type="hidden" name="shipping_counter" value="<?= count($shippings) - 1; ?>">
-  <button type="button" class="add_shipping btn btn-warning"><i class="fas fa-plus"></i> Add</button>
-  <button type="button" class="remove_shipping btn btn-warning"><i class="fas fa-minus"></i> Remove</button>
+  <button type="button" class="add_shipping btn btn-secondary"><i class="fas fa-plus"></i> Add</button>
+  <button type="button" class="remove_shipping btn btn-secondary"><i class="fas fa-minus"></i> Remove</button>
 </div>
 
 <div class="modal-footer">

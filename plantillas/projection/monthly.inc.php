@@ -43,7 +43,7 @@
             </div>
             <div class="card-footer text-right">
               <a class="btn btn-secondary" id="go_back" href="<?= htmlspecialchars(DAILY) ?>">
-                <i class="fa fa-reply"></i> Back
+                <i class="fa fa-reply"></i>
               </a>
             </div>
           </div>

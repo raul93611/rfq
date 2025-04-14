@@ -48,8 +48,8 @@ Conexion::cerrar_conexion();
       <div class="row">
         <?php include_once 'plantillas/fulfillment/templates/fulfillment_table.inc.php'; ?>
         <div class="card-footer footer_item d-flex justify-content-between">
-          <a class="btn btn-secondary" id="go_back" href="<?= EDITAR_COTIZACION . '/' . htmlspecialchars($quote->obtener_id(), ENT_QUOTES, 'UTF-8') ?>">
-            <i class="fa fa-reply"></i> Go Back
+          <a class="btn btn-secondary mr-2" id="go_back" href="<?= EDITAR_COTIZACION . '/' . htmlspecialchars($quote->obtener_id(), ENT_QUOTES, 'UTF-8') ?>">
+            <i class="fa fa-reply"></i>
           </a>
           <a href="#" id="add_comment" class="btn btn-secondary">
             <i class="fas fa-plus"></i> Add Comment

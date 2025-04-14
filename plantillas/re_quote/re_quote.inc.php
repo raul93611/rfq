@@ -26,7 +26,7 @@ try {
         </div>
         <div class="col-sm-10 text-center">
           <button type="button" class="btn btn-secondary" id="audit_trails_button">Audit Trails</button>
-          <a href="<?= htmlspecialchars(RELOAD_REQUOTE . $id_rfq); ?>" class="btn btn-primary">Reload</a>
+          <a href="<?= htmlspecialchars(RELOAD_REQUOTE . $id_rfq); ?>" class="btn btn-secondary">Reload</a>
         </div>
       </div>
     </div>
@@ -58,32 +58,35 @@ try {
               </div>
             </div>
 
-            <div class="card card-primary">
-              <div class="card-header">
-                <h3 class="card-title"><i class="fas fa-dollar-sign"></i> Total</h3>
-              </div>
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-md-4">
-                    <h3 class="text-info text-center">Total Price: $ <?= number_format($quote->obtener_quote_total_price(), 2); ?></h3>
-                  </div>
-                  <div class="col-md-4">
-                    <h3 class="text-info text-center">Total Profit: $ <?= number_format($quote->obtener_re_quote_profit(), 2); ?></h3>
-                  </div>
-                  <div class="col-md-4">
-                    <h3 class="text-info text-center">Total Profit (%): <?= number_format($quote->obtener_re_quote_profit_percentage(), 2); ?></h3>
-                  </div>
-                </div>
-              </div>
-            </div>
-
             <div class="card-footer footer_item">
               <a class="btn btn-secondary" id="go_back" href="<?= htmlspecialchars(EDITAR_COTIZACION . '/' . $re_quote->get_id_rfq()); ?>">
-                <i class="fa fa-reply"></i> Go Back
+                <i class="fa fa-reply"></i>
               </a>
               <button type="submit" class="btn btn-primary" name="save_re_quote">
                 <i class="fas fa-check"></i> Save
               </button>
+            </div>
+            <div class="px-2 py-2 card-footer footer_totals d-inline-flex">
+              <div class="d-flex flex-nowrap align-items-center">
+                <div class="px-4">
+                  <h5 class="mb-0">
+                    <small class="text-info">Total Price:</small><br>
+                    <span>$<?= number_format($quote->obtener_quote_total_price(), 2); ?></span>
+                  </h5>
+                </div>
+                <div class="px-4 border-left">
+                  <h5 class="mb-0">
+                    <small class="text-info">Total Profit:</small><br>
+                    <span>$<?= number_format($quote->obtener_re_quote_profit(), 2); ?></span>
+                  </h5>
+                </div>
+                <div class="px-4 border-left">
+                  <h5 class="mb-0">
+                    <small class="text-info">Profit (%):</small><br>
+                    <span><?= number_format($quote->obtener_re_quote_profit_percentage(), 2); ?>%</span>
+                  </h5>
+                </div>
+              </div>
             </div>
           </form>
         </div>

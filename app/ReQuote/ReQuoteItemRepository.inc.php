@@ -41,7 +41,7 @@ class ReQuoteItemRepository {
           <i class="fas fa-exclamation-triangle"></i> Attention: The quantity of items in the initial quote has been modified, leading to an outdated RFQ Re Quote. Please review and <b>RELOAD</b> to ensure accuracy.
         </div>
       <?php endif; ?>
-      <a target="_blank" href="<?= PDF_RE_QUOTE . $re_quote->get_id_rfq(); ?>" class="btn btn-primary float-right"><i class="fa fa-file"></i> PDF</a>
+      <a target="_blank" href="<?= PDF_RE_QUOTE . $re_quote->get_id_rfq(); ?>" class="btn btn-secondary float-right"><i class="fa fa-file"></i> PDF</a>
       <h2>Items:</h2>
       <div class="p-3">
         <div class="custom-control custom-radio">
@@ -54,8 +54,8 @@ class ReQuoteItemRepository {
         </div>
         <input type="hidden" name="payment_terms_original" value="<?= $re_quote->get_payment_terms(); ?>">
       </div>
-      <div class="table-responsive">
-        <table id="requote_table" class="table table-bordered table-hover">
+      <div id="requote_table" class="table-responsive">
+        <table class="table table-bordered table-hover">
           <thead>
             <tr>
               <th class="options">Options</th>
@@ -80,16 +80,20 @@ class ReQuoteItemRepository {
               $k = self::print_re_quote_item($re_quote_item, $item, $k, $key + 1);
             }
             ?>
-            <td colspan="5" class="display-4"><b>
-                <h4>TOTAL:</h4>
-              </b></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td id="total_re_quote"></td>
-            <td></td>
-            <td id="total_ganado"><?= '$ ' . $quote->obtener_total_price(); ?></td>
-            <td id="profit_rq"></td>
+          <tfoot>
+            <tr>
+              <td colspan="5" class="display-4"><b>
+                  <h4>TOTAL:</h4>
+                </b></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td id="total_re_quote"></td>
+              <td></td>
+              <td id="total_ganado"><?= '$ ' . $quote->obtener_total_price(); ?></td>
+              <td id="profit_rq"></td>
+            </tr>
+          </tfoot>
           </tbody>
         </table>
       </div>
@@ -110,7 +114,7 @@ class ReQuoteItemRepository {
       $id_subitems = implode(',', $id_subitems);
       ?>
       <input type="hidden" id="total_cost" name="total_cost" value="">
-      <div class="row">
+      <div class="mt-4 row">
         <div class="col-md-6">
           <h5>Shipping Re-Quote</h5>
         </div>

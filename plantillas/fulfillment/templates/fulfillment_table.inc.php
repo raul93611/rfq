@@ -76,22 +76,25 @@
     </div>
   <?php endif; ?>
 
-  <!-- Total Summary Card -->
-  <div class="card card-primary">
-    <div class="card-header">
-      <h3 class="card-title"><i class="fas fa-dollar-sign"></i> Total</h3>
-    </div>
-    <div class="card-body">
-      <div class="row text-info text-center">
-        <div class="col-md-4">
-          <h3>Total Price: $ <?= number_format($quote->obtener_quote_total_price(), 2); ?></h3>
-        </div>
-        <div class="col-md-4">
-          <h3>Total Profit: $ <?= number_format($quote->obtener_real_fulfillment_profit(), 2); ?></h3>
-        </div>
-        <div class="col-md-4">
-          <h3>Total Profit (%): <?= number_format($quote->obtener_real_fulfillment_profit_percentage(), 2); ?>%</h3>
-        </div>
+  <div class="px-2 py-2 card-footer footer_totals d-inline-flex">
+    <div class="d-flex flex-nowrap align-items-center">
+      <div class="px-4">
+        <h5 class="mb-0">
+          <small class="text-info">Total Price:</small><br>
+          <span>$<?= number_format($quote->obtener_quote_total_price(), 2); ?></span>
+        </h5>
+      </div>
+      <div class="px-4 border-left">
+        <h5 class="mb-0">
+          <small class="text-info">Total Profit:</small><br>
+          <span>$<?= number_format($quote->obtener_real_fulfillment_profit(), 2); ?></span>
+        </h5>
+      </div>
+      <div class="px-4 border-left">
+        <h5 class="mb-0">
+          <small class="text-info">Profit (%):</small><br>
+          <span><?= number_format($quote->obtener_real_fulfillment_profit_percentage(), 2); ?>%</span>
+        </h5>
       </div>
     </div>
   </div>

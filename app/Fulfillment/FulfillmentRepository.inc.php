@@ -42,7 +42,7 @@ class FulfillmentRepository {
             ?>
             <tr>
               <td class="align-middle text-center">
-                <button type="button" id="edit_fulfillment_shipping" data-id="<?= $quote->obtener_id(); ?>" class="btn btn-warning" name=""><i class="fas fa-pen"></i></button>
+                <button type="button" id="edit_fulfillment_shipping" data-id="<?= $quote->obtener_id(); ?>" class="btn btn-item" name=""><i class="fas fa-pen"></i></button>
               </td>
               <td colspan="4">Shipping (from Proposal): <?= $quote->obtener_shipping(); ?></td>
               <td>$ <?= $quote->obtener_shipping_cost(); ?></td>
@@ -88,7 +88,7 @@ class FulfillmentRepository {
     ?>
     <tr>
       <td class="align-middle text-center" rowspan="<?= $fulfillment_items_quantity; ?>">
-        <button type="button" class="add_fulfillment_item_button btn btn-warning" name="<?= $item->obtener_id(); ?>"><i class="fas fa-plus"></i></button>
+        <button type="button" class="add_fulfillment_item_button btn btn-item" name="<?= $item->obtener_id(); ?>"><i class="fas fa-plus"></i></button>
       </td>
       <td rowspan="<?= $fulfillment_items_quantity; ?>"><?= $i + 1; ?></td>
       <td rowspan="<?= $fulfillment_items_quantity; ?>">
@@ -105,8 +105,8 @@ class FulfillmentRepository {
       if (count($fulfillment_items)) {
       ?>
         <td class="item<?= $fulfillment_items[0]->get_id() . ($fulfillment_items[0]->get_reviewed() ? ' success-opacity' : ''); ?> align-middle text-center">
-          <a href="#" data-id="<?= $fulfillment_items[0]->get_id(); ?>" id_item="<?= $item->obtener_id(); ?>" class="delete_fulfillment_item_button mb-2 btn btn-warning"><i class="fas fa-trash"></i></a><br>
-          <a href="#" data-id="<?= $fulfillment_items[0]->get_id(); ?>" class="edit_fulfillment_item_button btn btn-warning"><i class="fas fa-pen"></i></a>
+          <a href="#" data-id="<?= $fulfillment_items[0]->get_id(); ?>" id_item="<?= $item->obtener_id(); ?>" class="delete_fulfillment_item_button mb-2 btn btn-item"><i class="fas fa-trash"></i></a><br>
+          <a href="#" data-id="<?= $fulfillment_items[0]->get_id(); ?>" class="edit_fulfillment_item_button btn btn-item"><i class="fas fa-pen"></i></a>
         </td>
         <td class="item<?= $fulfillment_items[0]->get_id() . ($fulfillment_items[0]->get_reviewed() ? ' success-opacity' : ''); ?>"><?= $fulfillment_items[0]->getInvoiceName(); ?></td>
         <td class="item<?= $fulfillment_items[0]->get_id() . ($fulfillment_items[0]->get_reviewed() ? ' success-opacity' : ''); ?>"><?= $fulfillment_items[0]->get_provider(); ?></td>
@@ -135,8 +135,8 @@ class FulfillmentRepository {
     ?>
       <tr class="item<?= $fulfillment_item->get_id(); ?>">
         <td class="align-middle text-center <?= $fulfillment_item->get_reviewed() ? 'success-opacity' : ''; ?>">
-          <a href="#" data-id="<?= $fulfillment_item->get_id(); ?>" id_item="<?= $item->obtener_id(); ?>" class="delete_fulfillment_item_button mb-2 btn btn-warning"><i class="fas fa-trash"></i></a><br>
-          <a href="#" data-id="<?= $fulfillment_item->get_id(); ?>" class="edit_fulfillment_item_button btn btn-warning"><i class="fas fa-pen"></i></a>
+          <a href="#" data-id="<?= $fulfillment_item->get_id(); ?>" id_item="<?= $item->obtener_id(); ?>" class="delete_fulfillment_item_button mb-2 btn btn-item"><i class="fas fa-trash"></i></a><br>
+          <a href="#" data-id="<?= $fulfillment_item->get_id(); ?>" class="edit_fulfillment_item_button btn btn-item"><i class="fas fa-pen"></i></a>
         </td>
         <td class="<?= $fulfillment_item->get_reviewed() ? 'success-opacity' : ''; ?>"><?= $fulfillment_item->getInvoiceName(); ?></td>
         <td class="<?= $fulfillment_item->get_reviewed() ? 'success-opacity' : ''; ?>"><?= $fulfillment_item->get_provider(); ?></td>
@@ -180,7 +180,7 @@ class FulfillmentRepository {
   ?>
   <tr>
     <td class="align-middle text-center" rowspan="<?= $fulfillment_subitems_quantity; ?>">
-      <button type="button" class="add_fulfillment_subitem_button btn btn-warning" name="<?= $subitem->obtener_id(); ?>"><i class="fas fa-plus"></i></button>
+      <button type="button" class="add_fulfillment_subitem_button btn btn-subitem" name="<?= $subitem->obtener_id(); ?>"><i class="fas fa-plus"></i></button>
     </td>
     <td rowspan="<?= $fulfillment_subitems_quantity; ?>"></td>
     <td rowspan="<?= $fulfillment_subitems_quantity; ?>">
@@ -197,8 +197,8 @@ class FulfillmentRepository {
       if (count($fulfillment_subitems)) {
     ?>
       <td class="subitem<?= $fulfillment_subitems[0]->get_id() . ($fulfillment_subitems[0]->get_reviewed() ? ' success-opacity' : ''); ?> align-middle text-center">
-        <a href="#" data-id="<?= $fulfillment_subitems[0]->get_id(); ?>" id_rfq="<?= $id_rfq; ?>" id_subitem="<?= $subitem->obtener_id(); ?>" class="delete_fulfillment_subitem_button mb-2 btn btn-warning"><i class="fas fa-trash"></i></a><br>
-        <a href="#" data-id="<?= $fulfillment_subitems[0]->get_id(); ?>" class="edit_fulfillment_subitem_button btn btn-warning"><i class="fas fa-pen"></i></a>
+        <a href="#" data-id="<?= $fulfillment_subitems[0]->get_id(); ?>" id_rfq="<?= $id_rfq; ?>" id_subitem="<?= $subitem->obtener_id(); ?>" class="delete_fulfillment_subitem_button mb-2 btn btn-subitem"><i class="fas fa-trash"></i></a><br>
+        <a href="#" data-id="<?= $fulfillment_subitems[0]->get_id(); ?>" class="edit_fulfillment_subitem_button btn btn-subitem"><i class="fas fa-pen"></i></a>
       </td>
       <td class="subitem<?= $fulfillment_subitems[0]->get_id() . ($fulfillment_subitems[0]->get_reviewed() ? ' success-opacity' : ''); ?>"><?= $fulfillment_subitems[0]->getInvoiceName(); ?></td>
       <td class="subitem<?= $fulfillment_subitems[0]->get_id() . ($fulfillment_subitems[0]->get_reviewed() ? ' success-opacity' : ''); ?>"><?= $fulfillment_subitems[0]->get_provider(); ?></td>
@@ -227,8 +227,8 @@ class FulfillmentRepository {
   ?>
     <tr class="subitem<?= $fulfillment_subitem->get_id(); ?>">
       <td class="align-middle text-center <?= $fulfillment_subitem->get_reviewed() ? ' success-opacity' : ''; ?>">
-        <a href="#" data-id="<?= $fulfillment_subitem->get_id(); ?>" id_rfq="<?= $id_rfq; ?>" id_subitem="<?= $subitem->obtener_id(); ?>" class="delete_fulfillment_subitem_button mb-2 btn btn-warning"><i class="fas fa-trash"></i></a><br>
-        <a href="#" data-id="<?= $fulfillment_subitem->get_id(); ?>" class="edit_fulfillment_subitem_button btn btn-warning"><i class="fas fa-pen"></i></a>
+        <a href="#" data-id="<?= $fulfillment_subitem->get_id(); ?>" id_rfq="<?= $id_rfq; ?>" id_subitem="<?= $subitem->obtener_id(); ?>" class="delete_fulfillment_subitem_button mb-2 btn btn-subitem"><i class="fas fa-trash"></i></a><br>
+        <a href="#" data-id="<?= $fulfillment_subitem->get_id(); ?>" class="edit_fulfillment_subitem_button btn btn-subitem"><i class="fas fa-pen"></i></a>
       </td>
       <td class="<?= $fulfillment_subitem->get_reviewed() ? ' success-opacity' : ''; ?>"><?= $fulfillment_subitem->getInvoiceName(); ?></td>
       <td class="<?= $fulfillment_subitem->get_reviewed() ? ' success-opacity' : ''; ?>"><?= $fulfillment_subitem->get_provider(); ?></td>
@@ -322,7 +322,7 @@ class FulfillmentRepository {
 ?>
 <tr>
   <td class="align-middle text-center" rowspan="<?= $fulfillment_services_quantity; ?>">
-    <button type="button" class="add_fulfillment_service_button btn btn-warning" name="<?= $service->get_id(); ?>"><i class="fas fa-plus"></i></button>
+    <button type="button" class="add_fulfillment_service_button btn btn-item" name="<?= $service->get_id(); ?>"><i class="fas fa-plus"></i></button>
   </td>
   <td rowspan="<?= $fulfillment_services_quantity; ?>"><?= $i + 1; ?></td>
   <td rowspan="<?= $fulfillment_services_quantity; ?>"><?= mb_substr($service->get_description(), 0, 100) . ' ...'; ?></td>
@@ -333,8 +333,8 @@ class FulfillmentRepository {
       if (count($fulfillment_services)) {
   ?>
     <td class="service<?= $fulfillment_services[0]->get_id() . ($fulfillment_services[0]->get_reviewed() ? ' success-opacity' : ''); ?> align-middle text-center">
-      <a href="#" data-id="<?= $fulfillment_services[0]->get_id(); ?>" id_service="<?= $service->get_id(); ?>" class="delete_fulfillment_service_button mb-2 btn btn-warning"><i class="fas fa-trash"></i></a><br>
-      <a href="#" data-id="<?= $fulfillment_services[0]->get_id(); ?>" class="edit_fulfillment_service_button btn btn-warning"><i class="fas fa-pen"></i></a>
+      <a href="#" data-id="<?= $fulfillment_services[0]->get_id(); ?>" id_service="<?= $service->get_id(); ?>" class="delete_fulfillment_service_button mb-2 btn btn-item"><i class="fas fa-trash"></i></a><br>
+      <a href="#" data-id="<?= $fulfillment_services[0]->get_id(); ?>" class="edit_fulfillment_service_button btn btn-item"><i class="fas fa-pen"></i></a>
     </td>
     <td class="service<?= $fulfillment_services[0]->get_id() . ($fulfillment_services[0]->get_reviewed() ? ' success-opacity' : ''); ?>"><?= $fulfillment_services[0]->getInvoiceName(); ?></td>
     <td class="service<?= $fulfillment_services[0]->get_id() . ($fulfillment_services[0]->get_reviewed() ? ' success-opacity' : ''); ?>"><?= $fulfillment_services[0]->get_provider(); ?></td>
@@ -363,8 +363,8 @@ class FulfillmentRepository {
 ?>
   <tr class="service<?= $fulfillment_service->get_id(); ?>">
     <td class="align-middle text-center <?= $fulfillment_service->get_reviewed() ? 'success-opacity' : ''; ?>">
-      <a href="#" data-id="<?= $fulfillment_service->get_id(); ?>" id_service="<?= $service->get_id(); ?>" class="delete_fulfillment_service_button mb-2 btn btn-warning"><i class="fas fa-trash"></i></a><br>
-      <a href="#" data-id="<?= $fulfillment_service->get_id(); ?>" class="edit_fulfillment_service_button btn btn-warning"><i class="fas fa-pen"></i></a>
+      <a href="#" data-id="<?= $fulfillment_service->get_id(); ?>" id_service="<?= $service->get_id(); ?>" class="delete_fulfillment_service_button mb-2 btn btn-item"><i class="fas fa-trash"></i></a><br>
+      <a href="#" data-id="<?= $fulfillment_service->get_id(); ?>" class="edit_fulfillment_service_button btn btn-item"><i class="fas fa-pen"></i></a>
     </td>
     <td class="<?= $fulfillment_service->get_reviewed() ? 'success-opacity' : ''; ?>"><?= $fulfillment_service->getInvoiceName(); ?></td>
     <td class="<?= $fulfillment_service->get_reviewed() ? 'success-opacity' : ''; ?>"><?= $fulfillment_service->get_provider(); ?></td>
