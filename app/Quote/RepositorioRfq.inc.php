@@ -827,7 +827,7 @@ class RepositorioRfq {
       $quote = self::obtener_cotizacion_por_id($connection, $id_rfq);
       $items = RepositorioItem::obtener_items_por_id_rfq($connection, $id_rfq);
       $net30_fulfillment = $quote->obtener_total_price() * 0.029 * $quote->obtener_net30_fulfillment();
-      $total_cost += array_sum(explode('|', $quote->obtener_fulfillment_shipping_cost() ?? 0));
+      $total_cost += array_sum(explode('|', empty($quote->obtener_fulfillment_shipping_cost()) ? 0 : $quote->obtener_fulfillment_shipping_cost()));
       foreach ($items as $i => $item) {
         $total_profit += $item->obtener_fulfillment_profit();
         $total_cost += FulfillmentItemRepository::get_total_cost($connection, $item->obtener_id());
@@ -849,24 +849,6 @@ class RepositorioRfq {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
-  }
-
-  public static function get_fulfillment_total_from_to($connection, $id_rfq, $from, $to) {
-    if (isset($connection)) {
-      $total_cost = 0;
-      $quote = self::obtener_cotizacion_por_id($connection, $id_rfq);
-      $items = RepositorioItem::obtener_items_por_id_rfq($connection, $id_rfq);
-      $net30_fulfillment = $quote->obtener_total_price() * 0.029 * $quote->obtener_net30_fulfillment();
-      // $total_cost += array_sum(explode('|', $quote-> obtener_fulfillment_shipping_cost()));
-      foreach ($items as $i => $item) {
-        $total_cost += FulfillmentItemRepository::get_total_cost_from_to($connection, $item->obtener_id(), $from, $to);
-        $subitems = RepositorioSubitem::obtener_subitems_por_id_item($connection, $item->obtener_id());
-        foreach ($subitems as $j => $subitem) {
-          $total_cost += FulfillmentSubitemRepository::get_total_cost_from_to($connection, $subitem->obtener_id(), $from, $to);
-        }
-      }
-    }
-    return $total_cost;
   }
 
   public static function set_services_fulfillment_profit_and_total($connection, $id_rfq) {
