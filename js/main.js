@@ -1,4 +1,12 @@
 $(document).ready(function () {
+  const tooltipOptions = {
+    selector: '[data-toggle="tooltip"]',
+    trigger: 'hover',
+    placement: 'top'
+  };
+
+  $('body').tooltip(tooltipOptions);
+
   const idRfq = $('[name="id_rfq"]').val();
   const continueButton = $('#continue_button');
   const alertDeleteSystem = $('#alert_delete_system');
@@ -333,11 +341,11 @@ $(document).ready(function () {
         render: function (data, type, row) {
           return type === 'display'
             ? `
-              <a class="btn btn-sm btn-secondary" href="/rfq/quote/proposal/${row.id}" target="_blank">
-                <i class="fa fa-copy"></i>
+              <a class="btn btn-sm btn-secondary" data-toggle="tooltip" data-original-title="Proposal" href="/rfq/quote/proposal/${row.id}" target="_blank">
+                <i class="fa fa-file"></i>
               </a>
-              <a class="btn btn-secondary btn-sm" href="/rfq/quote/proposal_gsa/${row.id}" target="_blank">
-                <i class="fa fa-copy"></i>
+              <a class="btn btn-secondary btn-sm" data-toggle="tooltip" data-original-title="GSA Proposal" href="/rfq/quote/proposal_gsa/${row.id}" target="_blank">
+                <i class="fa fa-balance-scale"></i>
               </a>
             `
             : data;
@@ -384,11 +392,11 @@ $(document).ready(function () {
         render: function (data, type, row) {
           return type === 'display'
             ? `
-              <a class="btn btn-sm btn-secondary" href="/rfq/quote/proposal/${row.id}" target="_blank">
-                <i class="fa fa-copy"></i>
+              <a class="btn btn-sm btn-secondary" data-toggle="tooltip" data-original-title="Proposal" href="/rfq/quote/proposal/${row.id}" target="_blank">
+                <i class="fa fa-file"></i>
               </a>
-              <a class="btn btn-secondary btn-sm" href="/rfq/quote/proposal_gsa/${row.id}" target="_blank">
-                <i class="fa fa-copy"></i>
+              <a class="btn btn-secondary btn-sm" data-toggle="tooltip" data-original-title="GSA Proposal" href="/rfq/quote/proposal_gsa/${row.id}" target="_blank">
+                <i class="fa fa-balance-scale"></i>
               </a>
             `
             : data;
@@ -435,11 +443,11 @@ $(document).ready(function () {
         render: function (data, type, row) {
           return type === 'display'
             ? `
-              <a class="btn btn-sm btn-secondary" href="/rfq/quote/proposal/${row.id}" target="_blank">
-                <i class="fa fa-copy"></i>
+              <a class="btn btn-sm btn-secondary" data-toggle="tooltip" data-original-title="Proposal" href="/rfq/quote/proposal/${row.id}" target="_blank">
+                <i class="fa fa-file"></i>
               </a>
-              <a class="btn btn-secondary btn-sm" href="/rfq/quote/proposal_gsa/${row.id}" target="_blank">
-                <i class="fa fa-copy"></i>
+              <a class="btn btn-secondary btn-sm" data-toggle="tooltip" data-original-title="GSA Proposal" href="/rfq/quote/proposal_gsa/${row.id}" target="_blank">
+                <i class="fa fa-balance-scale"></i>
               </a>
             `
             : data;

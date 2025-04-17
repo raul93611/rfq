@@ -35,13 +35,13 @@ $(document).ready(function () {
           render: function (data, type, row) {
             if (type === 'display') {
               return `
-                <a class="btn btn-sm btn-secondary" href="/rfq/quote/proposal/${row.id}" target="_blank">
+                <a class="btn btn-sm btn-secondary" data-toggle="tooltip" data-original-title="Proposal" href="/rfq/quote/proposal/${row.id}" target="_blank">
                   <i class="fa fa-file"></i>
                 </a>
-                <a class="btn btn-secondary btn-sm" href="/rfq/quote/proposal_gsa/${row.id}" target="_blank">
+                <a class="btn btn-secondary btn-sm" data-toggle="tooltip" data-original-title="GSA Proposal" href="/rfq/quote/proposal_gsa/${row.id}" target="_blank">
                   <i class="fa fa-balance-scale"></i>
                 </a>
-                <a class="btn btn-secondary btn-sm" href="/rfq/quote/proposal_room/${row.id}" target="_blank">
+                <a class="btn btn-secondary btn-sm" data-toggle="tooltip" data-original-title="Rooms" href="/rfq/quote/proposal_room/${row.id}" target="_blank">
                   <i class="fa fa-th"></i>
                 </a>
               `;

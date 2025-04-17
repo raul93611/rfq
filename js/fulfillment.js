@@ -21,15 +21,6 @@ $(document).ready(function () {
       $(this).val('');
     });
   }
-  /***********************************TOOLTIP INITIALIZATION******************/
-  // Initialize tooltips with custom configuration on elements with [data-toggle="tooltip"]
-  const tooltipOptions = {
-    selector: '[data-toggle="tooltip"]',
-    trigger: 'click',
-    placement: 'top'
-  };
-
-  $('body').tooltip(tooltipOptions);
   /***************************************Invoices*************************************/
   // Selectors for elements on the fulfillment page
   const fulfillmentPage = $('#fulfillment_page');
