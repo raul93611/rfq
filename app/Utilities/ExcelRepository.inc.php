@@ -580,9 +580,11 @@ class ExcelRepository {
               quotes.total_cost,
               quotes.total_price,
               quotes.profit,
+              quotes.profit / quotes.total_price * 100 AS profit_percentage,
               requotes.total_cost_requote,
               quotes.total_price AS total_price_requote,
               quotes.profit_equipment_requote + quotes.total_service_price - requotes.total_requote_service AS profit_requote,
+              (quotes.profit_equipment_requote + quotes.total_service_price - requotes.total_requote_service) / (quotes.total_price) * 100 AS profit_percentage_requote,
               quotes.type_of_contract,
               quotes.set_side
             FROM
@@ -664,9 +666,11 @@ class ExcelRepository {
               quotes.total_cost,
               quotes.total_price,
               quotes.profit,
+              quotes.profit / quotes.total_price * 100 AS profit_percentage,
               requotes.total_cost_requote,
               quotes.total_price AS total_price_requote,
               quotes.profit_equipment_requote + quotes.total_service_price - requotes.total_requote_service AS profit_requote,
+              (quotes.profit_equipment_requote + quotes.total_service_price - requotes.total_requote_service) / (quotes.total_price) * 100 AS profit_percentage_requote,
               quotes.type_of_contract,
               quotes.set_side
             FROM
