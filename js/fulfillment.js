@@ -364,7 +364,8 @@ $(document).ready(function () {
   });
 
   // Open modal and load form for editing a fulfillment service
-  fulfillmentPage.on('click', '.edit_fulfillment_service_button', function () {
+  fulfillmentPage.on('click', '.edit_fulfillment_service_button', function (e) {
+    e.preventDefault();
     const idFulfillmentService = $(this).data('id');
     loadFulfillmentServiceForm(editFulfillmentServiceModal, idFulfillmentService, null);
   });

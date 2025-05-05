@@ -180,7 +180,7 @@ class TrackingRepository {
     ?>
     <tr>
       <td class="align-middle text-center" rowspan="<?php echo $trackings_quantity; ?>">
-        <button type="button" class="add_tracking_button btn btn-warning" name="<?php echo $item->obtener_id(); ?>"><i class="fas fa-plus"></i></button>
+        <button type="button" class="add_tracking_button btn btn-item" name="<?php echo $item->obtener_id(); ?>"><i class="fas fa-plus"></i></button>
       </td>
       <td rowspan="<?php echo $trackings_quantity; ?>"><?php echo $i + 1; ?></td>
       <td rowspan="<?php echo $trackings_quantity; ?>">
@@ -195,8 +195,8 @@ class TrackingRepository {
       if (count($trackings)) {
       ?>
         <td class="align-middle text-center">
-          <a href="<?php echo DELETE_TRACKING . $trackings[0]->get_id(); ?>" class="mb-2 btn btn-warning"><i class="fas fa-trash"></i></a><br>
-          <a href="#" data="<?php echo $trackings[0]->get_id(); ?>" class="edit_tracking btn btn-warning"><i class="fas fa-pen"></i></a>
+          <a href="<?php echo DELETE_TRACKING . $trackings[0]->get_id(); ?>" class="mb-2 btn btn-item"><i class="fas fa-trash"></i></a><br>
+          <a href="#" data="<?php echo $trackings[0]->get_id(); ?>" class="edit_tracking btn btn-item"><i class="fas fa-pen"></i></a>
         </td>
         <td><?php echo $trackings[0]->get_quantity(); ?></td>
         <td><?php echo $trackings[0]->get_carrier(); ?></td>
@@ -218,8 +218,8 @@ class TrackingRepository {
     ?>
       <tr>
         <td class="align-middle text-center">
-          <a href="<?php echo DELETE_TRACKING . $tracking->get_id(); ?>" class="mb-2 btn btn-warning"><i class="fas fa-trash"></i></a><br>
-          <a href="#" data="<?php echo $tracking->get_id(); ?>" class="edit_tracking btn btn-warning"><i class="fas fa-pen"></i></a>
+          <a href="<?php echo DELETE_TRACKING . $tracking->get_id(); ?>" class="mb-2 btn btn-item"><i class="fas fa-trash"></i></a><br>
+          <a href="#" data="<?php echo $tracking->get_id(); ?>" class="edit_tracking btn btn-item"><i class="fas fa-pen"></i></a>
         </td>
         <td><?php echo $tracking->get_quantity(); ?></td>
         <td><?php echo $tracking->get_carrier(); ?></td>
@@ -261,7 +261,7 @@ class TrackingRepository {
   ?>
   <tr>
     <td class="align-middle text-center" rowspan="<?php echo $trackings_quantity; ?>">
-      <button type="button" class="add_tracking_subitem_button btn btn-warning" name="<?php echo $subitem->obtener_id(); ?>"><i class="fas fa-plus"></i></button>
+      <button type="button" class="add_tracking_subitem_button btn btn-subitem" name="<?php echo $subitem->obtener_id(); ?>"><i class="fas fa-plus"></i></button>
     </td>
     <td rowspan="<?php echo $trackings_quantity; ?>"></td>
     <td rowspan="<?php echo $trackings_quantity; ?>">
@@ -276,8 +276,8 @@ class TrackingRepository {
       if (count($trackings_subitems)) {
     ?>
       <td class="align-middle text-center">
-        <a href="<?php echo DELETE_TRACKING_SUBITEM . $trackings_subitems[0]->get_id(); ?>" class="mb-2 btn btn-warning"><i class="fas fa-trash"></i></a><br>
-        <a href="#" data="<?php echo $trackings_subitems[0]->get_id(); ?>" class="edit_tracking_subitem btn btn-warning"><i class="fas fa-pen"></i></a>
+        <a href="<?php echo DELETE_TRACKING_SUBITEM . $trackings_subitems[0]->get_id(); ?>" class="mb-2 btn btn-subitem"><i class="fas fa-trash"></i></a><br>
+        <a href="#" data="<?php echo $trackings_subitems[0]->get_id(); ?>" class="edit_tracking_subitem btn btn-subitem"><i class="fas fa-pen"></i></a>
       </td>
       <td><?php echo $trackings_subitems[0]->get_quantity(); ?></td>
       <td><?php echo $trackings_subitems[0]->get_carrier(); ?></td>
@@ -299,8 +299,8 @@ class TrackingRepository {
   ?>
     <tr>
       <td class="align-middle text-center">
-        <a href="<?php echo DELETE_TRACKING_SUBITEM . $tracking->get_id(); ?>" class="mb-2 btn btn-warning"><i class="fas fa-trash"></i></a><br>
-        <a href="#" data="<?php echo $tracking->get_id(); ?>" class="edit_tracking_subitem btn btn-warning"><i class="fas fa-pen"></i></a>
+        <a href="<?php echo DELETE_TRACKING_SUBITEM . $tracking->get_id(); ?>" class="mb-2 btn btn-subitem"><i class="fas fa-trash"></i></a><br>
+        <a href="#" data="<?php echo $tracking->get_id(); ?>" class="edit_tracking_subitem btn btn-subitem"><i class="fas fa-pen"></i></a>
       </td>
       <td><?php echo $tracking->get_quantity(); ?></td>
       <td><?php echo $tracking->get_carrier(); ?></td>

@@ -15,11 +15,11 @@ try {
   <div class="row">
     <div class="col-md-12">
       <div class="form-group">
-        <label for="provider">Provider:</label>
+        <label for="provider">Provider: </label>
         <select name="provider" id="provider" class="custom-select">
           <?php foreach ($providers_list as $provider) : ?>
             <option <?= $provider->get_company_name() == $fulfillment_service?->get_provider() ? 'selected' : ''; ?>>
-              <?= htmlspecialchars($provider->get_company_name(), ENT_QUOTES, 'UTF-8'); ?>
+              <?= $provider->get_company_name(); ?>
             </option>
           <?php endforeach; ?>
         </select>
