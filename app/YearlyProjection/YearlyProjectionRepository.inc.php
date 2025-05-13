@@ -922,9 +922,12 @@ class YearlyProjectionRepository {
             GROUP BY invoices_result_with_sales_commission.id
           )
         ) AS final_result
+        WHERE 
+        (id LIKE :search) 
         ORDER BY {$sort_column} {$sort_direction} LIMIT {$start}, {$length}
         ";
         $sentence = $connection->prepare($sql);
+        $sentence->bindValue(':search', $search, PDO::PARAM_STR);
         $sentence->execute();
         while ($row = $sentence->fetch(PDO::FETCH_ASSOC)) {
           $data[] = $row;
@@ -1257,8 +1260,11 @@ class YearlyProjectionRepository {
             GROUP BY invoices_result_with_sales_commission.id
           )
         ) AS final_result
+         WHERE 
+        (id LIKE :search) 
         ";
         $sentence = $connection->prepare($sql);
+        $sentence->bindValue(':search', $search, PDO::PARAM_STR);
         $sentence->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';

@@ -12,7 +12,7 @@ $(document).ready(function () {
       processing: true,
       serverSide: true,
       pageLength: 10,
-      searching: false,
+      searching: true,
       order: [[1, 'asc']],
     };
 
