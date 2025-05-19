@@ -41,7 +41,7 @@
                 </tbody>
               </table>
             </div>
-            <div class="card-footer text-right">
+            <div class="card-footer footer_item">
               <a class="btn btn-secondary" id="go_back" href="<?= htmlspecialchars(DAILY) ?>">
                 <i class="fa fa-reply"></i>
               </a>
