@@ -18,9 +18,9 @@ try {
       <div class="form-group">
         <label for="color">Color:</label>
         <div class="input-group">
-          <input type="text" id="color" class="form-control form-control-sm" name="color" value="<?= $room ? htmlspecialchars($room->getColor(), ENT_QUOTES, 'UTF-8') : ''; ?>">
+          <input type="text" id="color" class="form-control form-control-sm" name="color" value="<?= $room ? $room->getColor() : ''; ?>">
           <div class="input-group-append">
-            <span class="input-group-text" style="color: <?= $room ? htmlspecialchars($room->getColor(), ENT_QUOTES, 'UTF-8') : ''; ?>;"><i class="fas fa-square"></i></span>
+            <span class="input-group-text" style="color: <?= $room ? $room->getColor() : ''; ?>;"><i class="fas fa-square"></i></span>
           </div>
         </div>
         <small class="form-text text-muted">Enter a valid hex color code, e.g., "#FF5733".</small>

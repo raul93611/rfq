@@ -24,7 +24,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $rows = processExcel($file_tmp_path);
       }
 
+      $roomMap = []; // Tracks normalized room names => IDs
+
+      Conexion::abrir_conexion();
+
+      // Phase 1: Identify unique rooms and create them
+      $roomsToCreate = [];
+
       foreach ($rows as $row) {
+        if (empty($row['room'])) continue; // Skip items without rooms
+
+        $normalizedRoom = strtolower(trim($row['room']));
+        if (!isset($roomMap[$normalizedRoom])) {
+          $roomsToCreate[$normalizedRoom] = $row['room']; // Store original name
+        }
+      }
+
+      // Batch-create rooms (efficient for large imports)
+      foreach ($roomsToCreate as $normalized => $originalName) {
+        $newRoom = new Room('', $_POST['id_rfq'], $originalName, null);
+        $roomId = RoomRepository::save(Conexion::obtener_conexion(), $newRoom);
+        $roomMap[$normalized] = $roomId;
+      }
+
+      foreach ($rows as $row) {
+        $roomId = null;
+
+        if (!empty($row['room'])) {
+          $normalizedRoom = strtolower(trim($row['room']));
+          $roomId = $roomMap[$normalizedRoom]; // Get pre-created room ID
+        }
+
         // Copy item
         $item = new Item(
           '',
@@ -44,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           $row['website'] ?? '',
           0,
           0,
-          null
+          $roomId
         );
         Conexion::abrir_conexion();
         RepositorioItem::insertar_item(Conexion::obtener_conexion(), $item);
@@ -65,6 +95,7 @@ function processCsv($filePath) {
     $header = fgetcsv($handle, 1000, ",");
 
     while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+      $room = isset($data[9]) ? trim($data[9]) : null;
       $rows[] = [
         'brand' => $data[0],
         'part_number' => $data[1],
@@ -74,7 +105,8 @@ function processCsv($filePath) {
         'proposal_description' => $data[5],
         'quantity' => $data[6],
         'comments' => $data[7],
-        'website' => $data[8]
+        'website' => $data[8],
+        'room' => !empty($room) ? $room : null
       ];
     }
     fclose($handle);
@@ -92,6 +124,7 @@ function processExcel($filePath) {
   array_shift($rows);
 
   foreach ($rows as $row) {
+    $room = isset($row[9]) ? trim($row[9]) : null;
     $processed[] = [
       'brand' => $row[0],
       'part_number' => $row[1],
@@ -101,7 +134,8 @@ function processExcel($filePath) {
       'proposal_description' => $row[5],
       'quantity' => $row[6],
       'comments' => $row[7],
-      'website' => $row[8]
+      'website' => $row[8],
+      'room' => !empty($room) ? $room : null
     ];
   }
   return $processed;
