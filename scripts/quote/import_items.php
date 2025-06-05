@@ -95,6 +95,11 @@ function processCsv($filePath) {
     $header = fgetcsv($handle, 1000, ",");
 
     while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+      // Skip if row is entirely empty (null or whitespace)
+      if (empty(array_filter($data, fn($cell) => $cell !== null && trim($cell) !== ''))) {
+        continue;
+      }
+
       $room = isset($data[9]) ? trim($data[9]) : null;
       $rows[] = [
         'brand' => $data[0],
@@ -124,6 +129,11 @@ function processExcel($filePath) {
   array_shift($rows);
 
   foreach ($rows as $row) {
+    // Skip if row is entirely empty (null or whitespace)
+    if (empty(array_filter($row, fn($cell) => $cell !== null && trim($cell) !== ''))) {
+      continue;
+    }
+
     $room = isset($row[9]) ? trim($row[9]) : null;
     $processed[] = [
       'brand' => $row[0],
