@@ -17,6 +17,7 @@
               <option value="letter_of_authorization">Letter of Authorization</option>
               <option value="accounting">Accounting</option>
               <option value="tax_exemption">Tax Exemption</option>
+              <option value="policies">Policies</option>
             </select>
           </div>
           <div class="form-group">

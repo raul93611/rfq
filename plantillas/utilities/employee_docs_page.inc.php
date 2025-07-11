@@ -71,6 +71,7 @@
           // Render the cards for the other sections
           renderCard('Accounting', 'accounting');
           renderCard('Tax Exemption', 'tax_exemption');
+          renderCard('Policies', 'policies');
           ?>
         </div>
       </div>
