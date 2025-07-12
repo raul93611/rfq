@@ -52,7 +52,8 @@
                       'award' => 'Award',
                       'fulfillment' => 'Fulfillment',
                       'accounts-payable-fulfillment' => 'Accounts Payable Fulfillment',
-                      'sales-commission' => 'Sales Commission'
+                      'sales-commission' => 'Sales Commission',
+                      'no-bid' => 'No Bid'
                     ];
                     foreach ($reports as $value => $label):
                     ?>

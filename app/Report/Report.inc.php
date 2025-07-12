@@ -2221,4 +2221,318 @@ class Report {
     }
     return $sentence->fetchColumn();
   }
+
+  public static function getNoBidReport(
+    $connection,
+    $start,
+    $length,
+    $search,
+    $sort_column_index,
+    $sort_direction,
+    $type,
+    $quarter,
+    $month,
+    $year
+  ) {
+    $data = [];
+    $search = '%' . $search . '%';
+    switch ($sort_column_index) {
+      case 0:
+        $sort_column = 'rfq.id';
+        break;
+      case 1:
+        $sort_column = 'nombre_usuario';
+        break;
+      case 2:
+        $sort_column = 'email_code';
+        break;
+      case 3:
+        $sort_column = 'type_of_bid';
+        break;
+      case 4:
+        $sort_column = 'comments';
+        break;
+      default:
+        $sort_column = 'id';
+        break;
+    }
+    if (isset($connection)) {
+      try {
+        switch ($type) {
+          case 'monthly':
+            $sql = "
+            SELECT
+              rfq.id,
+              usuarios.nombre_usuario,
+              rfq.email_code,
+              rfq.type_of_bid,
+              rfq.comments,
+              rfq.issue_date
+            FROM rfq
+            LEFT JOIN usuarios ON rfq.usuario_designado = usuarios.id
+            WHERE
+              rfq.deleted = 0
+              AND MONTH(STR_TO_DATE(issue_date, '%m/%d/%Y')) = {$month}
+              AND YEAR(STR_TO_DATE(issue_date, '%m/%d/%Y')) = {$year}
+              AND 
+              (
+                comments = 'No Bid' 
+                OR comments = 'Manufacturer in the Bid' 
+                OR comments = 'Expired due date' 
+                OR comments = 'Supplier did not provide a quote' 
+                OR comments = 'Others'
+              ) 
+              AND
+              (
+                rfq.id LIKE :search
+                OR issue_date LIKE :search
+                OR email_code LIKE :search
+                OR type_of_bid LIKE :search
+                OR comments LIKE :search
+              )
+            ORDER BY {$sort_column} {$sort_direction} LIMIT {$start}, {$length}
+            ";
+            break;
+          case 'quarterly':
+            $sql = "
+            SELECT
+              rfq.id,
+              usuarios.nombre_usuario,
+              rfq.email_code,
+              rfq.type_of_bid,
+              rfq.comments,
+              rfq.issue_date
+            FROM rfq
+            LEFT JOIN usuarios ON rfq.usuario_designado = usuarios.id
+            WHERE
+              rfq.deleted = 0
+              AND QUARTER(STR_TO_DATE(issue_date, '%m/%d/%Y')) = {$quarter}
+              AND YEAR(STR_TO_DATE(issue_date, '%m/%d/%Y')) = {$year}
+              AND 
+              (
+                comments = 'No Bid' 
+                OR comments = 'Manufacturer in the Bid' 
+                OR comments = 'Expired due date' 
+                OR comments = 'Supplier did not provide a quote' 
+                OR comments = 'Others'
+              ) 
+              AND
+              (
+                rfq.id LIKE :search
+                OR issue_date LIKE :search
+                OR email_code LIKE :search
+                OR type_of_bid LIKE :search
+                OR comments LIKE :search
+              )
+            ORDER BY {$sort_column} {$sort_direction} LIMIT {$start}, {$length}
+            ";
+            break;
+          case 'yearly':
+            $sql = "
+            SELECT
+              rfq.id,
+              usuarios.nombre_usuario,
+              rfq.email_code,
+              rfq.type_of_bid,
+              rfq.comments,
+              rfq.issue_date
+            FROM rfq
+            LEFT JOIN usuarios ON rfq.usuario_designado = usuarios.id
+            WHERE
+              rfq.deleted = 0
+              AND YEAR(STR_TO_DATE(issue_date, '%m/%d/%Y')) = {$year}
+              AND 
+              (
+                comments = 'No Bid' 
+                OR comments = 'Manufacturer in the Bid' 
+                OR comments = 'Expired due date' 
+                OR comments = 'Supplier did not provide a quote' 
+                OR comments = 'Others'
+              ) 
+              AND
+              (
+                rfq.id LIKE :search
+                OR issue_date LIKE :search
+                OR email_code LIKE :search
+                OR type_of_bid LIKE :search
+                OR comments LIKE :search
+              )
+            ORDER BY {$sort_column} {$sort_direction} LIMIT {$start}, {$length}
+            ";
+            break;
+        }
+        $sentence = $connection->prepare($sql);
+        $sentence->bindValue(':search', $search, PDO::PARAM_STR);
+        $sentence->execute();
+        while ($row = $sentence->fetch(PDO::FETCH_ASSOC)) {
+          $data[] = $row;
+        }
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $data;
+  }
+
+  public static function getNoBidReportCount($connection, $type, $quarter, $month, $year) {
+    $month = (int)$month;
+    $year = (int)$year;
+    if (isset($connection)) {
+      try {
+        switch ($type) {
+          case 'monthly':
+            $sql = "
+            SELECT COUNT(r.id)
+            FROM rfq r
+            JOIN usuarios u ON r.usuario_designado = u.id
+            WHERE deleted = 0 
+            AND MONTH(STR_TO_DATE(issue_date, '%m/%d/%Y')) = {$month} 
+            AND YEAR(STR_TO_DATE(issue_date, '%m/%d/%Y')) = {$year}
+            AND 
+              (
+                comments = 'No Bid' 
+                OR comments = 'Manufacturer in the Bid' 
+                OR comments = 'Expired due date' 
+                OR comments = 'Supplier did not provide a quote' 
+                OR comments = 'Others'
+              ) 
+            ";
+            break;
+          case 'quarterly':
+            $sql = "
+            SELECT COUNT(r.id)
+            FROM rfq r
+            JOIN usuarios u ON r.usuario_designado = u.id
+            WHERE deleted = 0 
+            AND QUARTER(STR_TO_DATE(issue_date, '%m/%d/%Y')) = {$quarter} 
+            AND YEAR(STR_TO_DATE(issue_date, '%m/%d/%Y')) = {$year}
+            AND 
+              (
+                comments = 'No Bid' 
+                OR comments = 'Manufacturer in the Bid' 
+                OR comments = 'Expired due date' 
+                OR comments = 'Supplier did not provide a quote' 
+                OR comments = 'Others'
+              ) 
+            ";
+            break;
+          case 'yearly':
+            $sql = "
+            SELECT COUNT(r.id)
+            FROM rfq r
+            JOIN usuarios u ON r.usuario_designado = u.id
+            WHERE deleted = 0 
+            AND YEAR(STR_TO_DATE(issue_date, '%m/%d/%Y')) = {$year}
+            AND 
+              (
+                comments = 'No Bid' 
+                OR comments = 'Manufacturer in the Bid' 
+                OR comments = 'Expired due date' 
+                OR comments = 'Supplier did not provide a quote' 
+                OR comments = 'Others'
+              ) 
+            ";
+            break;
+        }
+        $sentencia = $connection->prepare($sql);
+        $sentencia->execute();
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $sentencia->fetchColumn();
+  }
+
+  public static function getFilteredNoBidReportCount($connection, $search, $type, $quarter, $month, $year) {
+    $search = '%' . $search . '%';
+    if (isset($connection)) {
+      try {
+        switch ($type) {
+          case 'monthly':
+            $sql = "
+            SELECT COUNT(r.id)
+            FROM rfq r
+            JOIN usuarios u ON r.usuario_designado = u.id
+            WHERE deleted = 0 
+            AND MONTH(STR_TO_DATE(issue_date, '%m/%d/%Y')) = {$month} 
+            AND YEAR(STR_TO_DATE(issue_date, '%m/%d/%Y')) = {$year}
+            AND 
+              (
+                comments = 'No Bid' 
+                OR comments = 'Manufacturer in the Bid' 
+                OR comments = 'Expired due date' 
+                OR comments = 'Supplier did not provide a quote' 
+                OR comments = 'Others'
+              ) 
+            AND
+              (
+                r.id LIKE :search
+                OR issue_date LIKE :search
+                OR email_code LIKE :search
+                OR type_of_bid LIKE :search
+                OR comments LIKE :search
+              )
+            ";
+            break;
+          case 'quarterly':
+            $sql = "
+            SELECT COUNT(r.id)
+            FROM rfq r
+            JOIN usuarios u ON r.usuario_designado = u.id
+            WHERE deleted = 0 
+            AND QUARTER(STR_TO_DATE(issue_date, '%m/%d/%Y')) = {$quarter} 
+            AND YEAR(STR_TO_DATE(issue_date, '%m/%d/%Y')) = {$year}
+            AND 
+              (
+                comments = 'No Bid' 
+                OR comments = 'Manufacturer in the Bid' 
+                OR comments = 'Expired due date' 
+                OR comments = 'Supplier did not provide a quote' 
+                OR comments = 'Others'
+              ) 
+            AND
+              (
+                r.id LIKE :search
+                OR issue_date LIKE :search
+                OR email_code LIKE :search
+                OR type_of_bid LIKE :search
+                OR comments LIKE :search
+              )
+            ";
+            break;
+          case 'yearly':
+            $sql = "
+            SELECT COUNT(r.id)
+            FROM rfq r
+            JOIN usuarios u ON r.usuario_designado = u.id
+            WHERE deleted = 0 
+            AND YEAR(STR_TO_DATE(issue_date, '%m/%d/%Y')) = {$year}
+            AND 
+              (
+                comments = 'No Bid' 
+                OR comments = 'Manufacturer in the Bid' 
+                OR comments = 'Expired due date' 
+                OR comments = 'Supplier did not provide a quote' 
+                OR comments = 'Others'
+              ) 
+            AND
+              (
+                r.id LIKE :search
+                OR issue_date LIKE :search
+                OR email_code LIKE :search
+                OR type_of_bid LIKE :search
+                OR comments LIKE :search
+              )
+            ";
+            break;
+        }
+        $sentence = $connection->prepare($sql);
+        $sentence->bindValue(':search', $search, PDO::PARAM_STR);
+        $sentence->execute();
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $sentence->fetchColumn();
+  }
 }

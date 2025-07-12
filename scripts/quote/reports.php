@@ -52,6 +52,11 @@ try {
       'getReport' => 'getSalesCommissionReport',
       'getTotalCount' => 'getSalesCommissionReportCount',
       'getFilteredCount' => 'getFilteredSalesCommissionReportCount'
+    ],
+    'no-bid' => [
+      'getReport' => 'getNoBidReport',
+      'getTotalCount' => 'getNoBidReportCount',
+      'getFilteredCount' => 'getFilteredNoBidReportCount'
     ]
   ];
 

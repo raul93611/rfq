@@ -173,6 +173,14 @@ $(document).ready(function () {
         { data: "sales_commission" },
         { data: "sales_commission_amount" },
       ],
+      'no-bid': [
+        ...defaultColumns,
+        { data: "nombre_usuario" },
+        { data: "email_code" },
+        { data: "type_of_bid" },
+        { data: "comments" },
+        { data: "issue_date" }
+      ]
     };
 
     return mappings[reportType] || [];
@@ -274,6 +282,14 @@ $(document).ready(function () {
         { text: 'SALES COMMISSION' },
         { text: 'SALES COMMISSION ($)' }
       ],
+      'no-bid': [
+        { text: 'PROPOSAL' },
+        { text: 'DESIGNATED USER' },
+        { text: 'CODE' },
+        { text: 'TYPE OF BID' },
+        { text: 'COMMENTS' },
+        { text: 'ISSUE DATE' }
+      ]
     };
 
     createTableHeaders(headers[reportType] || [], table);
