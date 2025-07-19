@@ -180,6 +180,14 @@ $(document).ready(function () {
         { data: "type_of_bid" },
         { data: "comments" },
         { data: "issue_date" }
+      ],
+      'not-submitted': [
+        ...defaultColumns,
+        { data: "nombre_usuario" },
+        { data: "email_code" },
+        { data: "type_of_bid" },
+        { data: "comments" },
+        { data: "issue_date" }
       ]
     };
 
@@ -283,6 +291,14 @@ $(document).ready(function () {
         { text: 'SALES COMMISSION ($)' }
       ],
       'no-bid': [
+        { text: 'PROPOSAL' },
+        { text: 'DESIGNATED USER' },
+        { text: 'CODE' },
+        { text: 'TYPE OF BID' },
+        { text: 'COMMENTS' },
+        { text: 'ISSUE DATE' }
+      ],
+      'not-submitted': [
         { text: 'PROPOSAL' },
         { text: 'DESIGNATED USER' },
         { text: 'CODE' },

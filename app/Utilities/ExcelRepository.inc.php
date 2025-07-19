@@ -1725,4 +1725,103 @@ class ExcelRepository {
       $y++;
     }
   }
+
+  public static function getNotSubmittedReport(
+    $connection,
+    $type,
+    $quarter,
+    $month,
+    $year
+  ) {
+    $data = [];
+    if (isset($connection)) {
+      try {
+        switch ($type) {
+          case 'monthly':
+            $sql = "
+            SELECT
+              rfq.id,
+              usuarios.nombre_usuario,
+              rfq.email_code,
+              rfq.type_of_bid,
+              rfq.comments,
+              rfq.issue_date
+            FROM rfq
+            LEFT JOIN usuarios ON rfq.usuario_designado = usuarios.id
+            WHERE
+              rfq.deleted = 0
+              AND MONTH(STR_TO_DATE(issue_date, '%m/%d/%Y')) = {$month}
+              AND YEAR(STR_TO_DATE(issue_date, '%m/%d/%Y')) = {$year}
+              AND comments = 'Not submitted' 
+            ";
+            break;
+          case 'quarterly':
+            $sql = "
+            SELECT
+              rfq.id,
+              usuarios.nombre_usuario,
+              rfq.email_code,
+              rfq.type_of_bid,
+              rfq.comments,
+              rfq.issue_date
+            FROM rfq
+            LEFT JOIN usuarios ON rfq.usuario_designado = usuarios.id
+            WHERE
+              rfq.deleted = 0
+              AND QUARTER(STR_TO_DATE(issue_date, '%m/%d/%Y')) = {$quarter}
+              AND YEAR(STR_TO_DATE(issue_date, '%m/%d/%Y')) = {$year}
+              AND comments = 'Not submitted' 
+            ";
+            break;
+          case 'yearly':
+            $sql = "
+            SELECT
+              rfq.id,
+              usuarios.nombre_usuario,
+              rfq.email_code,
+              rfq.type_of_bid,
+              rfq.comments,
+              rfq.issue_date
+            FROM rfq
+            LEFT JOIN usuarios ON rfq.usuario_designado = usuarios.id
+            WHERE
+              rfq.deleted = 0
+              AND YEAR(STR_TO_DATE(issue_date, '%m/%d/%Y')) = {$year}
+              AND comments = 'Not submitted' 
+            ";
+            break;
+        }
+        $sentence = $connection->prepare($sql);
+        $sentence->execute();
+        while ($row = $sentence->fetch(PDO::FETCH_ASSOC)) {
+          $data[] = $row;
+        }
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $data;
+  }
+
+  public static function notSubmittedReport($connection, $type, $quarter, $month, $year, $activeWorksheet) {
+    $quotes = self::getNotSubmittedReport($connection, $type, $quarter, $month, $year);
+
+    $y = 2;
+    foreach ($quotes as $key => $quote) {
+      $x = 'A';
+
+      $activeWorksheet->setCellValue($x . $y, $quote['id']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['nombre_usuario']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['email_code']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['type_of_bid']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['comments']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['issue_date']);
+      $y++;
+    }
+  }
 }

@@ -53,7 +53,8 @@
                       'fulfillment' => 'Fulfillment',
                       'accounts-payable-fulfillment' => 'Accounts Payable Fulfillment',
                       'sales-commission' => 'Sales Commission',
-                      'no-bid' => 'No Bid'
+                      'no-bid' => 'No Bid',
+                      'not-submitted' => 'Not Submitted'
                     ];
                     foreach ($reports as $value => $label):
                     ?>
