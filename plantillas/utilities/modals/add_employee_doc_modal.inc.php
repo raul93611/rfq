@@ -18,6 +18,7 @@
               <option value="accounting">Accounting</option>
               <option value="tax_exemption">Tax Exemption</option>
               <option value="policies">Policies</option>
+              <option value="company_compliance_documents">Company Compliance Documents</option>
             </select>
           </div>
           <div class="form-group">

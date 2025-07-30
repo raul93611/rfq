@@ -43,6 +43,7 @@
       renderCard('Administration', 'administration');
       renderCard('Branding', 'brand');
       renderCard('Letter of Authorization', 'letter_of_authorization');
+      renderCard('Company Compliance Documents', 'company_compliance_documents');
       ?>
     </div>
 
