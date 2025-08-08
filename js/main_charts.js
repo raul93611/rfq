@@ -75,8 +75,10 @@ $(document).ready(function () {
           ],
           {
             callback: function (value) {
-              if (value >= 1000) {
-                return `$${value / 1000}k`;
+              if (value >= 1_000_000) {
+                return `$${(value / 1_000_000).toFixed(1)}M`; // Show in millions
+              } else if (value >= 1000) {
+                return `$${(value / 1000).toFixed(1)}k`; // Fallback to thousands
               }
               return `$${value}`;
             }
