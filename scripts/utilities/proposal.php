@@ -43,7 +43,7 @@ try {
     // Set PDF footer
     $pdfGenerator->setFooter('
         <div class="color letra_chiquita" style="text-align:center;">
-        EIN: 51-0629765, DUNS: 786-965876, CAGE: 4QTF4<br>SBA 8(a) and HUBZone certified
+        FEIN: 51-0629765, DUNS: 786-965876, CAGE: 4QTF4, SAM UEI: G8SNQ1CZGNX5<br>SBA 8(a) and HUBZone certified
         </div>
     ');
 
