@@ -66,7 +66,17 @@ class FulfillmentRepository {
               <td><?= $quote->obtener_total_fulfillment(); ?></td>
               <td></td>
               <td></td>
-              <td><?= $quote->getRfqFulfillmentProfit(); ?></td>
+              <td>
+                <?php
+                $profit = $quote->getRfqFulfillmentProfit();
+                $proposalPrice = $quote->obtener_total_price();
+
+                // Avoid division by zero
+                $profitPercentage = $proposalPrice != 0 ? ($profit / $proposalPrice) * 100 : 0;
+
+                echo $profit . ' (' . number_format($profitPercentage, 2) . '%)';
+                ?>
+              </td>
             </tr>
           </tbody>
         </table>
