@@ -3,7 +3,7 @@ header('Content-Type: application/json');
 
 // Function to sanitize input data
 function sanitize($data) {
-  return htmlspecialchars(strip_tags(trim($data)));
+  return strip_tags(trim($data));
 }
 
 // Sanitize POST inputs
@@ -39,7 +39,8 @@ try {
     "draw" => $draw,
     "recordsTotal" => $total_records,
     "recordsFiltered" => $total_filtered_records,
-    "data" => $quotes
+    "data" => $quotes,
+    "search" => $search
   );
 
   // Send JSON response

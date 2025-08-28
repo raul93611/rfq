@@ -3,7 +3,7 @@ header('Content-Type: application/json');
 
 // Function to sanitize input data
 function sanitize($data) {
-  return htmlspecialchars(strip_tags(trim($data)));
+  return strip_tags(trim($data));
 }
 
 // Sanitize POST inputs
