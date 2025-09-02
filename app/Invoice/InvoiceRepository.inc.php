@@ -271,8 +271,8 @@ class InvoiceRepository {
             )
           ) AS combined
           JOIN invoices i ON combined.id_invoice = i.id
-        GROUP BY combined.id_invoice,
-          i.name;
+        GROUP BY combined.id_invoice, i.name
+        ORDER BY i.created_at ASC;
         ";
         $sentencia = $connection->prepare($sql);
         $sentencia->execute();
