@@ -20,7 +20,7 @@ try {
 }
 
 // Define logo path
-$logo = 'logo_proposal.jpg';
+$logo = 'logo_proposal.png';
 
 // Initialize PDF generator
 $pdfGenerator = new PDFGenerator();

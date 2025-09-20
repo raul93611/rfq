@@ -67,7 +67,7 @@
   <table border="0" width="100%">
     <tr>
       <td width="400">
-        <img style="width:350px;height:130px;" src="img/<?= $logo ?>" alt="Company Logo" />
+        <img style="width:350px;height:200px;" src="img/<?= $logo ?>" alt="Company Logo" />
       </td>
       <td class="proposal-header">
         <span class="color letra_grande">PROPOSAL</span>
