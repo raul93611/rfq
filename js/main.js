@@ -265,6 +265,26 @@ $(document).ready(function () {
         { data: 'end_date' },
         { data: 'email_code' },
         {
+          data: 'priority',
+          render: function (data, type) {
+            if (type !== 'display') {
+              return data; // for sorting/filtering, return raw value
+            }
+
+            // Map priorities to colors and labels
+            const priorityMap = {
+              1: { color: 'text-danger', label: 'Urgent' },
+              2: { color: 'text-warning', label: 'High' },
+              3: { color: 'text-primary', label: 'Normal' },
+              4: { color: 'text-success', label: 'Low' }
+            };
+
+            const priority = priorityMap[data] || { color: 'text-muted', label: 'Unknown' };
+
+            return `<i class="fas fa-flag ${priority.color}" title="${priority.label}"></i>`;
+          }
+        },
+        {
           data: 'rfp',
           orderable: false,
           render: function (data, type) {
@@ -327,6 +347,26 @@ $(document).ready(function () {
       { data: 'fecha_completado' },
       { data: 'email_code' },
       {
+        data: 'priority',
+        render: function (data, type) {
+          if (type !== 'display') {
+            return data; // for sorting/filtering, return raw value
+          }
+
+          // Map priorities to colors and labels
+          const priorityMap = {
+            1: { color: 'text-danger', label: 'Urgent' },
+            2: { color: 'text-warning', label: 'High' },
+            3: { color: 'text-primary', label: 'Normal' },
+            4: { color: 'text-success', label: 'Low' }
+          };
+
+          const priority = priorityMap[data] || { color: 'text-muted', label: 'Unknown' };
+
+          return `<i class="fas fa-flag ${priority.color}" title="${priority.label}"></i>`;
+        }
+      },
+      {
         data: 'rfp',
         orderable: false,
         render: function (data, type) {
@@ -378,6 +418,26 @@ $(document).ready(function () {
       { data: 'fecha_submitted' },
       { data: 'email_code' },
       {
+        data: 'priority',
+        render: function (data, type) {
+          if (type !== 'display') {
+            return data; // for sorting/filtering, return raw value
+          }
+
+          // Map priorities to colors and labels
+          const priorityMap = {
+            1: { color: 'text-danger', label: 'Urgent' },
+            2: { color: 'text-warning', label: 'High' },
+            3: { color: 'text-primary', label: 'Normal' },
+            4: { color: 'text-success', label: 'Low' }
+          };
+
+          const priority = priorityMap[data] || { color: 'text-muted', label: 'Unknown' };
+
+          return `<i class="fas fa-flag ${priority.color}" title="${priority.label}"></i>`;
+        }
+      },
+      {
         data: 'rfp',
         orderable: false,
         render: function (data, type) {
@@ -428,6 +488,26 @@ $(document).ready(function () {
       { data: 'type_of_bid' },
       { data: 'fecha_award' },
       { data: 'email_code' },
+      {
+        data: 'priority',
+        render: function (data, type) {
+          if (type !== 'display') {
+            return data; // for sorting/filtering, return raw value
+          }
+
+          // Map priorities to colors and labels
+          const priorityMap = {
+            1: { color: 'text-danger', label: 'Urgent' },
+            2: { color: 'text-warning', label: 'High' },
+            3: { color: 'text-primary', label: 'Normal' },
+            4: { color: 'text-success', label: 'Low' }
+          };
+
+          const priority = priorityMap[data] || { color: 'text-muted', label: 'Unknown' };
+
+          return `<i class="fas fa-flag ${priority.color}" title="${priority.label}"></i>`;
+        }
+      },
       {
         data: 'rfp',
         orderable: false,

@@ -28,7 +28,8 @@ spl_autoload_register(function ($class) {
     'TypeOfProject' => ['TypeOfProject', 'TypeOfProjectRepository'],
     'YearlyProjection' => ['YearlyProjection', 'YearlyProjectionRepository'],
     'MonthlyProjection' => ['MonthlyProjection', 'MonthlyProjectionRepository'],
-    'Room' => ['Room', 'RoomRepository']
+    'Room' => ['Room', 'RoomRepository'],
+    'PriorityLevel' => ['PriorityLevel', 'PriorityLevelRepository']
   ];
 
   foreach ($subfolder as $key => $array) {

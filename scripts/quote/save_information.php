@@ -27,6 +27,7 @@ if (isset($_POST['save_information'])) {
       htmlspecialchars($_POST['ship_to']),
       $_POST['comments'],
       $_POST["reference_url"],
+      htmlspecialchars($_POST['priority_level']),
       $_POST['id_rfq']
     );
 

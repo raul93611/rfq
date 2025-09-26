@@ -93,7 +93,8 @@ function createAndInsertQuote($validador, $usuario_designado) {
     null,
     'Net 30',
     null,
-    Input::test_input($_POST["reference_url"]) // Sanitize the input
+    Input::test_input($_POST["reference_url"]), 
+    isset($_POST['priority_level']) ? $_POST['priority_level'] : null // New priority field
   );
 
   // Insert quote and retrieve ID

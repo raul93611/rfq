@@ -72,10 +72,32 @@
       </div>
     </div>
   </div>
-  <div class="form-group">
-    <label for="reference_url">Reference URL:</label>
-    <input type="text" class="form-control form-control-sm" id="reference_url" name="reference_url" placeholder="Reference URL">
-    <small class="form-text text-muted">Provide the URL to reference the bid or opportunity.</small>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <label for="reference_url">Reference URL:</label>
+        <input type="text" class="form-control form-control-sm" id="reference_url" name="reference_url" placeholder="Reference URL">
+        <small class="form-text text-muted">Provide the URL to reference the bid or opportunity.</small>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label for="priority_level">Priority level:</label>
+        <select class="form-control form-control-sm" name="priority_level" id="priority_level">
+          <?php
+          Conexion::abrir_conexion();
+          $priority_levels = PriorityLevelRepository::getAll(Conexion::obtener_conexion());
+          Conexion::cerrar_conexion();
+          foreach ($priority_levels as $key => $priority_level) {
+          ?>
+            <option value="<?= $priority_level->getWeight(); ?>"><?= $priority_level->getName(); ?></option>
+          <?php
+          }
+          ?>
+        </select>
+        <small class="form-text text-muted">Set the priority level for this bid (e.g., High, Medium, Low).</small>
+      </div>
+    </div>
   </div>
   <div class="form-group">
     <label for="documents">Upload documents:</label><br>

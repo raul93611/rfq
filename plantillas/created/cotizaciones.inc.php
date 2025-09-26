@@ -38,6 +38,7 @@ $printable_channel = Input::printable_channel($channel);
                     <th>Issue Date</th>
                     <th>End Date</th>
                     <th>Code</th>
+                    <th>Priority</th>
                     <th>RFP</th>
                     <th>Options</th>
                   </tr>

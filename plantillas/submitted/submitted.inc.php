@@ -29,6 +29,7 @@ $printable_channel = Input::printable_channel($channel);
                     <th scope="col">Type of Bid</th>
                     <th scope="col">Submitted Date</th>
                     <th scope="col">Code</th>
+                    <th scope="col">Priority</th>
                     <th scope="col">RFP</th>
                     <th scope="col">Options</th>
                   </tr>

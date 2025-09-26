@@ -84,6 +84,7 @@ CREATE TABLE rfq(
   invoice_acceptance TEXT CHARACTER SET utf8,
   bpa TINYINT,
   reference_url VARCHAR(255),
+  priority INT DEFAULT 4,
   PRIMARY KEY(id),
   FOREIGN KEY(id_usuario) REFERENCES usuarios(id) ON UPDATE CASCADE ON DELETE RESTRICT
 );
@@ -475,5 +476,10 @@ CREATE TABLE rooms(
   name VARCHAR(255) NOT NULL,
   color VARCHAR(255),
   PRIMARY KEY(id)
+);
+CREATE TABLE priority_levels(
+  id INT NOT NULL AUTO_INCREMENT UNIQUE,
+  name VARCHAR(255) NOT NULL,
+  weight INT,
 );
 ALTER TABLE rfq AUTO_INCREMENT = 300;

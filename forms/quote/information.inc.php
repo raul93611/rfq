@@ -12,6 +12,23 @@
       </div>
 
       <div class="form-group">
+        <label for="priority_level">Priority level:</label>
+        <select class="form-control form-control-sm" name="priority_level" id="priority_level">
+          <?php
+          Conexion::abrir_conexion();
+          $priority_levels = PriorityLevelRepository::getAll(Conexion::obtener_conexion());
+          Conexion::cerrar_conexion();
+
+          foreach ($priority_levels as $priority_level) {
+            $selected = ($priority_level->getWeight() == $quote->getPriority()) ? 'selected' : '';
+            echo "<option value=\"{$priority_level->getWeight()}\" $selected>{$priority_level->getName()}</option>";
+          }
+          ?>
+        </select>
+        <small class="form-text text-muted">Set the priority level for this bid (e.g., Urgent, High, Normal, Low).</small>
+      </div>
+
+      <div class="form-group">
         <label for="canal">Channel:</label>
         <select class="form-control form-control-sm" name="canal" id="canal">
           <option <?= $quote->obtener_canal() == 'GSA-Buy' ? 'selected' : ''; ?>>GSA-Buy</option>
