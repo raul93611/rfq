@@ -77,7 +77,10 @@ class FulfillmentServiceRepository {
           NOW(), 
           :comments,
           :id_invoice,
-          STR_TO_DATE(:transaction_date, '%m/%d/%Y')
+          transaction_date = CASE
+            WHEN :transaction_date = '' THEN NULL
+            ELSE STR_TO_DATE(:transaction_date, '%m/%d/%Y')
+          END
         )
         ";
         $sentence = $connection->prepare($sql);
@@ -125,7 +128,10 @@ class FulfillmentServiceRepository {
         payment_term = :payment_term, 
         comments = :comments,
         id_invoice = :id_invoice,
-        transaction_date = STR_TO_DATE(:transaction_date, '%m/%d/%Y')
+        transaction_date = CASE
+          WHEN :transaction_date = '' THEN NULL
+          ELSE STR_TO_DATE(:transaction_date, '%m/%d/%Y')
+        END
         WHERE id = :id_fulfillment_service
         ";
         $sentence = $connection->prepare($sql);
