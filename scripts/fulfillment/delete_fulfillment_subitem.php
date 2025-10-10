@@ -28,8 +28,9 @@ try {
 
   FulfillmentAuditTrailRepository::create_audit_trail_item_deleted(
     $connection,
-    $fulfillment_subitem->get_provider(),
-    'Provider',
+    $fulfillment_subitem,
+    'subitem',
+    $id_subitem,
     $id_rfq
   );
 

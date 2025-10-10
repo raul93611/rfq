@@ -269,9 +269,9 @@ $(document).ready(function () {
   // Highlight selected audit trail item
   auditTrailModal.on('click', '.audit_trail_link', function () {
     auditTrailModal.modal('hide');
-    const $targetElement = $($(this).data('target'));
-    console.log($(this).data('target'));
-    
+    const $targetElement = $($(this).attr('href'));
+    console.log($(this).attr('href'));
+
     if ($targetElement.length) {
       $targetElement.addClass('highlight');
       setTimeout(() => $targetElement.removeClass('highlight'), 5000);

@@ -96,7 +96,7 @@ class FulfillmentRepository {
       $fulfillment_items_quantity = count($fulfillment_items);
     }
     ?>
-    <tr>
+    <tr id="item<?= $item->obtener_id(); ?>">
       <td class="align-middle text-center" rowspan="<?= $fulfillment_items_quantity; ?>">
         <button type="button" class="add_fulfillment_item_button btn btn-item" name="<?= $item->obtener_id(); ?>"><i class="fas fa-plus"></i></button>
       </td>
@@ -188,7 +188,7 @@ class FulfillmentRepository {
         $fulfillment_subitems_quantity = count($fulfillment_subitems);
       }
   ?>
-  <tr>
+  <tr id="subitem<?= $subitem->obtener_id(); ?>">
     <td class="align-middle text-center" rowspan="<?= $fulfillment_subitems_quantity; ?>">
       <button type="button" class="add_fulfillment_subitem_button btn btn-subitem" name="<?= $subitem->obtener_id(); ?>"><i class="fas fa-plus"></i></button>
     </td>
@@ -330,7 +330,7 @@ class FulfillmentRepository {
         $fulfillment_services_quantity = count($fulfillment_services);
       }
 ?>
-<tr>
+<tr id="service<?= $service->get_id(); ?>">
   <td class="align-middle text-center" rowspan="<?= $fulfillment_services_quantity; ?>">
     <button type="button" class="add_fulfillment_service_button btn btn-item" name="<?= $service->get_id(); ?>"><i class="fas fa-plus"></i></button>
   </td>

@@ -29,11 +29,12 @@ try {
 
   $id_rfq = $item->obtener_id_rfq();
   RepositorioRfq::set_fulfillment_profit_and_total($connection, $id_rfq);
-
+  
   FulfillmentAuditTrailRepository::create_audit_trail_item_deleted(
     $connection,
-    $fulfillment_item->get_provider(),
-    'Provider',
+    $fulfillment_item,
+    'item',
+    $id_item,
     $id_rfq
   );
 
