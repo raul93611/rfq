@@ -277,6 +277,46 @@ $(document).ready(function () {
       setTimeout(() => $targetElement.removeClass('highlight'), 5000);
     }
   });
+
+  // Handle restore button clicks
+  auditTrailModal.on('click', '.restore-item-btn', function () {
+    const $btn = $(this);
+    const itemType = $btn.data('item-type');
+    const objectData = $btn.data('object-data');
+    const parentId = $btn.data('parent-id');
+    const rfqId = $btn.data('rfq-id');
+
+    // Disable button to prevent multiple clicks
+    $btn.prop('disabled', true).text('Restoring...');
+
+    // Send AJAX request to restore the item
+    $.ajax({
+      url: '/rfq/fulfillment/restore_item',
+      type: 'POST',
+      data: {
+        item_type: itemType,
+        object_data: objectData,
+        parent_id: parentId,
+        rfq_id: rfqId
+      },
+      success: function (response) {
+        if (response.success) {
+          toastr.success(itemType + ' restored successfully!', 'Success');
+          $btn.replaceWith('<span class="text-success">✓ Restored</span>');
+          fulfillmentPage.load(`/rfq/fulfillment/load_fulfillment_page/${rfqId}`);
+          auditTrailModal.modal('hide');
+
+        } else {
+          toastr.error('Error restoring ' + itemType + ': ' + response.error, 'Error');
+          $btn.prop('disabled', false).text('Restore');
+        }
+      },
+      error: function () {
+        toastr.error('Error restoring ' + itemType + '. Please try again.', 'Error');
+        $btn.prop('disabled', false).text('Restore');
+      }
+    });
+  });
   /***********************************FULFILLMENT SHIPPING******************/
   let counterShipping = +$('#edit_fulfillment_shipping_modal form').data('counter') || 0;
   const editFulfillmentShippingModal = $('#edit_fulfillment_shipping_modal');

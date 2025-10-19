@@ -617,6 +617,9 @@ switch ($partes_ruta[1] ?? null) {
             break;
         }
         break;
+      case 'restore_item':
+        $ruta_elegida = 'scripts/fulfillment/restore_item.php';
+        break;
       case 'fulfillment_quotes_table':
         $ruta_elegida = 'scripts/fulfillment/fulfillment_quotes_table.php';
         break;

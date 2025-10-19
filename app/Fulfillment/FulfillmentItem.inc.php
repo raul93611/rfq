@@ -100,6 +100,16 @@ class FulfillmentItem {
   }
 
   public function getTransactionDate() {
-    return $this->transaction_date == '0000-00-00' || !$this->transaction_date ? '' : $this->transaction_date;
+    if ($this->transaction_date == '0000-00-00' || !$this->transaction_date || $this->transaction_date == '') {
+      return null; // Return null instead of empty string for database
+    }
+
+    // Convert from Y-m-d to m/d/Y format for database insertion
+    if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $this->transaction_date)) {
+      $date = DateTime::createFromFormat('Y-m-d', $this->transaction_date);
+      return $date->format('m/d/Y');
+    }
+
+    return $this->transaction_date;
   }
 }

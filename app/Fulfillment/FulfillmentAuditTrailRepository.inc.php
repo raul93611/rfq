@@ -199,7 +199,19 @@ class FulfillmentAuditTrailRepository {
 
   public static function create_audit_trail_item_deleted($connection, $item_object, $item_type, $parent_id, $id_rfq) {
     $object_details = self::formatObjectTerminalStyle($item_object);
-    $message = '<b>Provider deleted from <a class="audit_trail_link" href="#' . $item_type . $parent_id . '">here</a></b><br><br><b>Full details:</b><br>' . $object_details;
+
+    // Serialize and base64 encode the object for restoration
+    $serialized_object = base64_encode(serialize($item_object));
+
+    $message = '<b>Provider deleted from <a class="audit_trail_link" href="#' . $item_type . $parent_id . '">here</a></b><br>' .
+      '<button class="btn btn-sm btn-primary restore-item-btn" ' .
+      'data-item-type="' . $item_type . '" ' .
+      'data-object-data="' . $serialized_object . '" ' .  
+      'data-parent-id="' . $parent_id . '" ' .
+      'data-rfq-id="' . $id_rfq . '" ' .
+      '>Restore</button>' .
+      '<br><br><b>Full details:</b><br>' . $object_details;
+
     $audit_trail = new AuditTrail('', $id_rfq, $_SESSION['user']->obtener_nombre_usuario(), $message, '');
     self::insert_audit_trail($connection, $audit_trail);
   }
