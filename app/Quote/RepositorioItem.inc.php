@@ -198,16 +198,12 @@ class RepositorioItem {
         Downloads
       </button>
       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a target="_blank" href="<?php echo PDF_TABLA_ITEMS . $id_rfq; ?>" class="dropdown-item">PDF - Items table</a>
         <?php
-        if (count($items)) {
+        if ($re_quote_exists) {
         ?>
-          <a target="_blank" href="<?php echo PDF_TABLA_ITEMS . $id_rfq; ?>" class="dropdown-item">PDF - Items table</a>
-          <?php
-          if ($re_quote_exists) {
-          ?>
-            <a target="_blank" href="<?php echo EXCEL_ITEMS_TABLE . $id_rfq; ?>" class="dropdown-item">EXCEL - Quote&Re-quote</a>
+          <a target="_blank" href="<?php echo EXCEL_ITEMS_TABLE . $id_rfq; ?>" class="dropdown-item">EXCEL - Quote&Re-quote</a>
         <?php
-          }
         }
         ?>
         <a class="dropdown-item" href="<?php echo PROPOSAL . '/' . $cotizacion->obtener_id(); ?>" target="_blank">Proposal</a>

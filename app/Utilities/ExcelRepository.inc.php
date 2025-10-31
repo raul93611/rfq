@@ -109,6 +109,122 @@ class ExcelRepository {
     }
   }
 
+  public static function print_services($connection, $activeWorksheet, $re_quote, $id_rfq, $i) {
+    $i++;
+    $quote = RepositorioRfq::obtener_cotizacion_por_id($connection, $id_rfq);
+    $services = ServiceRepository::get_services($connection, $id_rfq);
+    $re_quote_services = ReQuoteServiceRepository::get_services($connection, $re_quote->get_id());
+    $total_service = ServiceRepository::get_total($connection, $quote->obtener_id());
+    $re_quote_total_service = ReQuoteServiceRepository::get_total($connection, $re_quote->get_id());
+
+    if (count($services)) {
+      $i++;
+
+      // Define header styles with background colors
+      $headerStyle = [
+        'fill' => [
+          'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+          'startColor' => ['rgb' => '4F81BD'] // Blue color
+        ],
+        'font' => [
+          'bold' => true,
+          'color' => ['rgb' => 'FFFFFF'] // White text
+        ],
+        'alignment' => [
+          'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+        ]
+      ];
+
+      $sectionHeaderStyle = [
+        'fill' => [
+          'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+          'startColor' => ['rgb' => 'D9E1F2'] // Light blue color
+        ],
+        'font' => [
+          'bold' => true,
+          'size' => 12
+        ]
+      ];
+
+      // Section headers for both original and re-quote services
+      $activeWorksheet->setCellValue('A' . $i, 'Services');
+      $activeWorksheet->mergeCells('A' . $i . ':E' . $i);
+      $activeWorksheet->setCellValue('F' . $i, 'Re-quote Services');
+      $activeWorksheet->mergeCells('F' . $i . ':H' . $i);
+      $activeWorksheet->getStyle('A' . $i . ':H' . $i)->applyFromArray($sectionHeaderStyle);
+      $i++;
+
+      // Column headers for original services
+      $headers = ['#', 'Description', 'Unit Price', 'Quantity', 'Total Price'];
+      $x = 'A';
+      foreach ($headers as $header) {
+        $activeWorksheet->setCellValue($x . $i, $header);
+        $x++;
+      }
+
+      // Column headers for re-quote services
+      $headers = ['Unit Price', 'Quantity', 'Total Cost'];
+      $x = 'F';
+      foreach ($headers as $header) {
+        $activeWorksheet->setCellValue($x . $i, $header);
+        $x++;
+      }
+
+      // Apply header style to all columns
+      $activeWorksheet->getStyle('A' . $i . ':H' . $i)->applyFromArray($headerStyle);
+
+      $i++;
+
+      // Data rows - display services and re-quote services side by side
+      foreach ($services as $key => $service) {
+        $re_quote_service = isset($re_quote_services[$key]) ? $re_quote_services[$key] : null;
+
+        // Original services (columns A-E)
+        $x = 'A';
+        $activeWorksheet->setCellValue($x . $i, $key + 1);
+        $x++;
+        $activeWorksheet->setCellValue($x . $i, $service->get_description());
+        $x++;
+        $activeWorksheet->setCellValue($x . $i, $service->get_unit_price());
+        $x++;
+        $activeWorksheet->setCellValue($x . $i, $service->get_quantity());
+        $x++;
+        $activeWorksheet->setCellValue($x . $i, $service->get_total_price());
+
+        // Re-quote services (columns F-J)
+        $x = 'F';
+        if ($re_quote_service) {
+          $activeWorksheet->setCellValue($x . $i, $re_quote_service->get_unit_price());
+          $x++;
+          $activeWorksheet->setCellValue($x . $i, $re_quote_service->get_quantity());
+          $x++;
+          $activeWorksheet->setCellValue($x . $i, $re_quote_service->get_total_price());
+        } else {
+          // If no re-quote service exists, leave cells empty
+          $x++;
+          $activeWorksheet->setCellValue($x . $i, '');
+          $x++;
+          $activeWorksheet->setCellValue($x . $i, '');
+          $x++;
+          $activeWorksheet->setCellValue($x . $i, '');
+          $x++;
+          $activeWorksheet->setCellValue($x . $i, '');
+        }
+
+        $i++;
+      }
+
+      // Total row
+      $activeWorksheet->setCellValue('A' . $i, 'Total:');
+      $activeWorksheet->mergeCells('A' . $i . ':D' . $i);
+      $activeWorksheet->setCellValue('E' . $i, $total_service);
+      $activeWorksheet->mergeCells('F' . $i . ':G' . $i);
+      $activeWorksheet->setCellValue('H' . $i, $re_quote_total_service);
+    }
+
+    return $i; // Return the current row index for continuation
+  }
+
   public static function print_items($connection, $activeWorksheet, $providers_name, $requote_providers_name, $requote, $id_rfq) {
     $i = 3;
     $j = 1;
@@ -157,6 +273,7 @@ class ExcelRepository {
     $x++;
     $activeWorksheet->setCellValue($x . $i, $quote->obtener_total_price());
     $x++;
+    return $i;
   }
 
   public static function print_item($i, $j, $x, $item, $providers_name, $providers, $requote_providers_name, $requote_providers, $activeWorksheet) {
@@ -452,7 +569,7 @@ class ExcelRepository {
       $x++;
       $activeWorksheet->setCellValue($x . $y, $quote['profit']);
       $x++;
-      $activeWorksheet->setCellValue($x . $y, number_format($quote['profit_percentage']?? 0, 2) . '%');
+      $activeWorksheet->setCellValue($x . $y, number_format($quote['profit_percentage'] ?? 0, 2) . '%');
       $x++;
       $activeWorksheet->setCellValue($x . $y, $quote['type_of_contract']);
       $y++;
