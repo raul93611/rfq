@@ -62,6 +62,11 @@ try {
       'getReport' => 'getNotSubmittedReport',
       'getTotalCount' => 'getNotSubmittedReportCount',
       'getFilteredCount' => 'getFilteredNotSubmittedReportCount'
+    ],
+    'cancelled' => [
+      'getReport' => 'getCancelledReport',
+      'getTotalCount' => 'getCancelledReportCount',
+      'getFilteredCount' => 'getFilteredCancelledReportCount'
     ]
   ];
 
