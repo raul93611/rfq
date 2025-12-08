@@ -9,6 +9,9 @@
           <button id="add_provider" class="float-right btn btn-primary" type="button" name="button">
             <i class="fas fa-plus"></i> Add Provider
           </button>
+          <a href="<?= PROVIDER_EXPORT_TO_EXCEL ?>" class="mr-2 float-right btn btn-secondary">
+            <i class="fas fa-file-excel"></i>
+          </a>
         </div>
       </div>
     </div>

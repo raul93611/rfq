@@ -728,6 +728,9 @@ switch ($partes_ruta[1] ?? null) {
         $id_provider = $partes_ruta[3];
         $ruta_elegida = 'scripts/providers/load_provider.php';
         break;
+      case 'export_to_excel':
+        $ruta_elegida = 'scripts/providers/export_to_excel.php';
+        break;
       default:
         break;
     }
