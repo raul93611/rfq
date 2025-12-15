@@ -30,23 +30,27 @@ try {
   Conexion::cerrar_conexion();
 }
 ?>
-<table class="table table-bordered">
-  <thead>
+<table class="table table-bordered table-hover">
+  <thead class="thead-dark">
     <tr>
-      <th></th>
+      <th style="width: 200px; min-width: 200px;"></th>
       <th>MONTHLY GOAL</th>
       <th>MONTHLY GOAL RESULT</th>
       <th>TOTAL MONTHLY INVOICE</th>
-      <th>TOTAL REAL PROFIT</th>
+      <th style="border-right: none;">TOTAL REAL PROFIT</th>
+      <th style="width: 150px; min-width: 150px; border-left: none;"></th>
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <td style="width: 200px;">TOTALS</td>
-      <td><?= htmlspecialchars($totals[0]['total_projected_amount']) ?></td>
-      <td><?= htmlspecialchars($totals[0]['total_projected_result']) ?></td>
-      <td><?= htmlspecialchars($totals[0]['total_total_price']) ?></td>
-      <td><?= htmlspecialchars($totals[0]['total_profit']) ?></td>
+    <tr class="font-weight-bold" style="background-color: #f8f9fa; font-size: 1.1em;">
+      <td style="background-color: #e9ecef; font-weight: 700;">TOTALS</td>
+      <td class="text-right font-weight-bold">$<?= $totals[0]['total_projected_amount'] ?></td>
+      <td class="text-right font-weight-bold">$<?= $totals[0]['total_projected_result'] ?></td>
+      <td class="text-right font-weight-bold text-primary">$<?= $totals[0]['total_total_price'] ?></td>
+      <td style="border-right: none;" class="text-right font-weight-bold <?= ($totals[0]['total_profit'] >= 0) ? 'text-success' : 'text-danger' ?>">
+        $<?= $totals[0]['total_profit'] ?>
+      </td>
+      <td style="border-left: none;"></td>
     </tr>
   </tbody>
 </table>

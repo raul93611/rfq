@@ -37,6 +37,19 @@
     $invoicesRetrieved = InvoiceRepository::listInvoices(Conexion::obtener_conexion(), $id_rfq);
     $isSalesCommissionAttached = InvoiceRepository::isSalesCommissionAttached(Conexion::obtener_conexion(), $id_rfq);
     Conexion::cerrar_conexion();
+
+    // Calculate totals
+    $totalInvoicePrice = 0;
+    $totalRealCost = 0;
+    $totalProfit = 0;
+    $totalSalesCommission = 0;
+
+    foreach ($invoicesRetrieved as $invoice) {
+      $totalInvoicePrice += (float)$invoice['total_item_price'];
+      $totalRealCost += (float)$invoice['total_real_cost'];
+      $totalProfit += (float)$invoice['total_profit'] - (float)str_replace(',', '', $sales_commission[1] ?? 0);
+      $totalSalesCommission += (float)str_replace(',', '', $invoice['sales_commission'] ?? 0);
+    }
     ?>
     <div class="card card-primary">
       <div class="card-header">
@@ -70,6 +83,15 @@
                 <td><button data-id="<?= $invoice['id_invoice']; ?>" class="attach-sales-commission-button btn btn-warning"><i class="fas fa-paperclip"></i></button></td>
               </tr>
             <?php endforeach; ?>
+            <!-- Total Row -->
+            <tr class="table-active font-weight-bold" style="font-size: 1.1em;">
+              <td colspan="2" class="text-left"><strong>TOTAL:</strong></td>
+              <td><?= number_format($totalInvoicePrice, 2); ?></td>
+              <td><?= number_format($totalRealCost, 2); ?></td>
+              <td><?= number_format($totalProfit, 2); ?></td>
+              <td class="text-success"><?= number_format($totalSalesCommission, 2); ?></td>
+              <td></td>
+            </tr>
           </tbody>
         </table>
       </div>
