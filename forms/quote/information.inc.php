@@ -112,6 +112,7 @@
           <option <?= $quote->obtener_comments() == 'Not submitted' ? 'selected' : ''; ?>>Not submitted</option>
           <option <?= $quote->obtener_comments() == 'Cancelled' ? 'selected' : ''; ?>>Cancelled</option>
           <option <?= $quote->obtener_comments() == 'Working on it' ? 'selected' : ''; ?>>Working on it</option>
+          <option <?= $quote->obtener_comments() == 'Out of our scope' ? 'selected' : ''; ?>>Out of our scope</option>
         </select>
         <input type="hidden" name="comments_original" value="<?= $quote->obtener_comments(); ?>">
         <small class="form-text text-muted">Select a comment to describe the status or action taken on the bid.</small>
