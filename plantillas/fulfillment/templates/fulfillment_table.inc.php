@@ -52,7 +52,7 @@
     ?>
     <div class="card card-primary">
       <div class="card-header">
-        <h3 class="card-title"><i class="fas fa-dollar-sign"></i> Invoices</h3>
+        <h3 class="card-title"><i class="fas fa-dollar-sign"></i> Invoices <?= $salesCommissionFlag ?></h3>
       </div>
       <div class="card-body">
         <?php if (!$isSalesCommissionAttached) : ?>
