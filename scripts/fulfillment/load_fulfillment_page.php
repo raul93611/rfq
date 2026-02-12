@@ -40,70 +40,71 @@ include_once 'plantillas/fulfillment/templates/sales_commission.inc.php';
 </div>
 
 <!-- Invoices Card (if pending fulfillment) -->
-  <?php if ($quote->obtener_fulfillment_pending()) : ?>
-    <?php
-    Conexion::abrir_conexion();
-    $invoicesRetrieved = InvoiceRepository::listInvoices(Conexion::obtener_conexion(), $id_rfq);
-    $isSalesCommissionAttached = InvoiceRepository::isSalesCommissionAttached(Conexion::obtener_conexion(), $id_rfq);
-    Conexion::cerrar_conexion();
+<?php if ($quote->obtener_fulfillment_pending()) : ?>
+  <?php
+  Conexion::abrir_conexion();
+  $invoicesRetrieved = InvoiceRepository::listInvoices(Conexion::obtener_conexion(), $id_rfq);
+  $isSalesCommissionAttached = InvoiceRepository::isSalesCommissionAttached(Conexion::obtener_conexion(), $id_rfq);
+  Conexion::cerrar_conexion();
 
-    // Calculate totals
-    $totalInvoicePrice = 0;
-    $totalRealCost = 0;
-    $totalProfit = 0;
+  // Calculate totals
+  $totalInvoicePrice = 0;
+  $totalRealCost = 0;
+  $totalProfit = 0;
 
-    foreach ($invoicesRetrieved as $invoice) {
-      $totalInvoicePrice += (float)$invoice['total_item_price'];
-      $totalRealCost += (float)$invoice['total_real_cost'];
-      $totalProfit += (float)$invoice['total_profit'] - (float)str_replace(',', '', $sales_commission[1] ?? 0);
-    }
-    ?>
-    <div class="card card-primary">
-      <div class="card-header">
-        <h3 class="card-title"><i class="fas fa-dollar-sign"></i> Invoices</h3>
-      </div>
-      <div class="card-body">
-        <?php if (!$isSalesCommissionAttached) : ?>
-          <div class="mb-3 text-danger font-weight-bold">Sales Commission is not attached!</div>
-        <?php endif; ?>
-        <table class="table table-bordered table-hover">
-          <thead>
-            <tr>
-              <th>INVOICE</th>
-              <th>INVOICE DATE</th>
-              <th>TOTAL PRICE</th>
-              <th>REAL COST</th>
-              <th>PROFIT</th>
-              <th>SALES COMMISSION</th>
-              <th>OPTIONS</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php foreach ($invoicesRetrieved as $invoice) : ?>
-              <tr>
-                <td><?= htmlspecialchars($invoice['invoice_name'], ENT_QUOTES, 'UTF-8'); ?></td>
-                <td><?= htmlspecialchars($invoice['invoice_date'], ENT_QUOTES, 'UTF-8'); ?></td>
-                <td><?= number_format($invoice['total_item_price'], 2); ?></td>
-                <td><?= number_format($invoice['total_real_cost'], 2); ?></td>
-                <td><?= $invoice['sales_commission'] == 'Attached' ? number_format($invoice['total_profit'] - (float)str_replace(',', '', $sales_commission[1] ?? 0), 2) : number_format($invoice['total_profit'], 2); ?></td>
-                <td><b class="text-success"><?= htmlspecialchars($invoice['sales_commission'] ?? '', ENT_QUOTES, 'UTF-8'); ?></b></td>
-                <td><button data-id="<?= $invoice['id_invoice']; ?>" class="attach-sales-commission-button btn btn-warning"><i class="fas fa-paperclip"></i></button></td>
-              </tr>
-            <?php endforeach; ?>
-            <!-- Total Row -->
-            <tr class="table-active font-weight-bold" style="font-size: 1.1em;">
-              <td colspan="2" class="text-left"><strong>TOTAL:</strong></td>
-              <td><?= number_format($totalInvoicePrice, 2); ?></td>
-              <td><?= number_format($totalRealCost, 2); ?></td>
-              <td><?= number_format($totalProfit, 2); ?></td>
-              <td class="text-success"></td>
-              <td></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+  foreach ($invoicesRetrieved as $invoice) {
+    $totalInvoicePrice += (float)$invoice['total_item_price'];
+    $totalRealCost += (float)$invoice['total_real_cost'];
+    $totalProfit += (float)$invoice['total_profit'] - (float)str_replace(',', '', $sales_commission[1] ?? 0);
+  }
+  $totalProfit = $totalProfit - (float)str_replace(',', '', $sales_commission[1] ?? 0);
+  ?>
+  <div class="card card-primary">
+    <div class="card-header">
+      <h3 class="card-title"><i class="fas fa-dollar-sign"></i> Invoices</h3>
     </div>
-  <?php endif; ?>
+    <div class="card-body">
+      <?php if (!$isSalesCommissionAttached) : ?>
+        <div class="mb-3 text-danger font-weight-bold">Sales Commission is not attached!</div>
+      <?php endif; ?>
+      <table class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>INVOICE</th>
+            <th>INVOICE DATE</th>
+            <th>TOTAL PRICE</th>
+            <th>REAL COST</th>
+            <th>PROFIT</th>
+            <th>SALES COMMISSION</th>
+            <th>OPTIONS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach ($invoicesRetrieved as $invoice) : ?>
+            <tr>
+              <td><?= htmlspecialchars($invoice['invoice_name'], ENT_QUOTES, 'UTF-8'); ?></td>
+              <td><?= htmlspecialchars($invoice['invoice_date'], ENT_QUOTES, 'UTF-8'); ?></td>
+              <td><?= number_format($invoice['total_item_price'], 2); ?></td>
+              <td><?= number_format($invoice['total_real_cost'], 2); ?></td>
+              <td><?= $invoice['sales_commission'] == 'Attached' ? number_format($invoice['total_profit'] - (float)str_replace(',', '', $sales_commission[1] ?? 0), 2) : number_format($invoice['total_profit'], 2); ?></td>
+              <td><b class="text-success"><?= htmlspecialchars($invoice['sales_commission'] ?? '', ENT_QUOTES, 'UTF-8'); ?></b></td>
+              <td><button data-id="<?= $invoice['id_invoice']; ?>" class="attach-sales-commission-button btn btn-warning"><i class="fas fa-paperclip"></i></button></td>
+            </tr>
+          <?php endforeach; ?>
+          <!-- Total Row -->
+          <tr class="table-active font-weight-bold" style="font-size: 1.1em;">
+            <td colspan="2" class="text-left"><strong>TOTAL:</strong></td>
+            <td><?= number_format($totalInvoicePrice, 2); ?></td>
+            <td><?= number_format($totalRealCost, 2); ?></td>
+            <td><?= number_format($totalProfit, 2); ?></td>
+            <td class="text-success"></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<?php endif; ?>
 
 <div class="px-2 py-2 card-footer footer_totals d-inline-flex">
   <div class="d-flex flex-nowrap align-items-center">

@@ -46,9 +46,9 @@
     foreach ($invoicesRetrieved as $invoice) {
       $totalInvoicePrice += (float)$invoice['total_item_price'];
       $totalRealCost += (float)$invoice['total_real_cost'];
-      $totalProfit += (float)$invoice['total_profit'] - (float)str_replace(',', '', $sales_commission[1] ?? 0);
-      $salesCommissionFlag = $invoice['sales_commission'] == 'Attached' ? true : false;
+      $totalProfit += (float)$invoice['total_profit'];
     }
+    $totalProfit = $totalProfit - (float)str_replace(',', '', $sales_commission[1] ?? 0);
     ?>
     <div class="card card-primary">
       <div class="card-header">
