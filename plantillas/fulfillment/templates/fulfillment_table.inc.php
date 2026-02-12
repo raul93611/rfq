@@ -42,13 +42,12 @@
     $totalInvoicePrice = 0;
     $totalRealCost = 0;
     $totalProfit = 0;
-    $totalSalesCommission = 0;
 
     foreach ($invoicesRetrieved as $invoice) {
       $totalInvoicePrice += (float)$invoice['total_item_price'];
       $totalRealCost += (float)$invoice['total_real_cost'];
       $totalProfit += (float)$invoice['total_profit'] - (float)str_replace(',', '', $sales_commission[1] ?? 0);
-      $totalSalesCommission += (float)str_replace(',', '', $invoice['sales_commission'] ?? 0);
+      $salesCommissionFlag = $invoice['sales_commission'] == 'Attached' ? true : false;
     }
     ?>
     <div class="card card-primary">
@@ -78,7 +77,7 @@
                 <td><?= htmlspecialchars($invoice['invoice_date'], ENT_QUOTES, 'UTF-8'); ?></td>
                 <td><?= number_format($invoice['total_item_price'], 2); ?></td>
                 <td><?= number_format($invoice['total_real_cost'], 2); ?></td>
-                <td><?= number_format($invoice['total_profit'] - (float)str_replace(',', '', $sales_commission[1] ?? 0), 2); ?></td>
+                <td><?= $salesCommissionFlag ? number_format($invoice['total_profit'] - (float)str_replace(',', '', $sales_commission[1] ?? 0), 2) : number_format($invoice['total_profit'], 2); ?></td>
                 <td><b class="text-success"><?= htmlspecialchars($invoice['sales_commission'] ?? '', ENT_QUOTES, 'UTF-8'); ?></b></td>
                 <td><button data-id="<?= $invoice['id_invoice']; ?>" class="attach-sales-commission-button btn btn-warning"><i class="fas fa-paperclip"></i></button></td>
               </tr>
@@ -89,7 +88,7 @@
               <td><?= number_format($totalInvoicePrice, 2); ?></td>
               <td><?= number_format($totalRealCost, 2); ?></td>
               <td><?= number_format($totalProfit, 2); ?></td>
-              <td class="text-success"><?= number_format($totalSalesCommission, 2); ?></td>
+              <td class="text-success"></td>
               <td></td>
             </tr>
           </tbody>
