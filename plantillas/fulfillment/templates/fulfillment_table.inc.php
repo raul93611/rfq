@@ -47,13 +47,12 @@
       $totalInvoicePrice += (float)$invoice['total_item_price'];
       $totalRealCost += (float)$invoice['total_real_cost'];
       $totalProfit += (float)$invoice['total_profit'] - (float)str_replace(',', '', $sales_commission[1] ?? 0);
-      // $salesCommissionFlag = $invoice['sales_commission'] == 'Attached' ? true : false;
-      $salesCommissionFlag = 'sadfsadfsdfsdaf';
+      $salesCommissionFlag = $invoice['sales_commission'] == 'Attached' ? true : false;
     }
     ?>
     <div class="card card-primary">
       <div class="card-header">
-        <h3 class="card-title"><i class="fas fa-dollar-sign"></i> Invoices <?= $salesCommissionFlag ?></h3>
+        <h3 class="card-title"><i class="fas fa-dollar-sign"></i> Invoices</h3>
       </div>
       <div class="card-body">
         <?php if (!$isSalesCommissionAttached) : ?>
@@ -78,7 +77,7 @@
                 <td><?= htmlspecialchars($invoice['invoice_date'], ENT_QUOTES, 'UTF-8'); ?></td>
                 <td><?= number_format($invoice['total_item_price'], 2); ?></td>
                 <td><?= number_format($invoice['total_real_cost'], 2); ?></td>
-                <td><?= $salesCommissionFlag ? number_format($invoice['total_profit'] - (float)str_replace(',', '', $sales_commission[1] ?? 0), 2) : number_format($invoice['total_profit'], 2); ?></td>
+                <td><?= $invoice['sales_commission'] == 'Attached' ? number_format($invoice['total_profit'] - (float)str_replace(',', '', $sales_commission[1] ?? 0), 2) : number_format($invoice['total_profit'], 2); ?></td>
                 <td><b class="text-success"><?= htmlspecialchars($invoice['sales_commission'] ?? '', ENT_QUOTES, 'UTF-8'); ?></b></td>
                 <td><button data-id="<?= $invoice['id_invoice']; ?>" class="attach-sales-commission-button btn btn-warning"><i class="fas fa-paperclip"></i></button></td>
               </tr>
