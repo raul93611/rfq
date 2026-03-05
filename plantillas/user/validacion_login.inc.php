@@ -2,7 +2,7 @@
 if (isset($_POST['iniciar_sesion'])) {
   // Sanitize user inputs
   $nombre_usuario = trim(htmlspecialchars($_POST['nombre_usuario'], ENT_QUOTES, 'UTF-8'));
-  $password = trim(htmlspecialchars($_POST['password'], ENT_QUOTES, 'UTF-8'));
+  $password = $_POST['password'];
 
   try {
     // Open connection

@@ -67,140 +67,73 @@ class Rfq {
   private $reference_url;
   private $priority;
 
-  public function __construct(
-    $id,
-    $id_usuario,
-    $usuario_designado,
-    $canal,
-    $email_code,
-    $type_of_bid,
-    $issue_date,
-    $end_date,
-    $status,
-    $completado,
-    $total_cost,
-    $total_price,
-    $comments,
-    $award,
-    $fecha_completado,
-    $fecha_submitted,
-    $fecha_award,
-    $payment_terms,
-    $address,
-    $ship_to,
-    $expiration_date,
-    $ship_via,
-    $taxes,
-    $profit,
-    $additional,
-    $shipping,
-    $shipping_cost,
-    $fullfillment,
-    $fulfillment_date,
-    $contract_number,
-    $fulfillment_profit,
-    $services_fulfillment_profit,
-    $total_fulfillment,
-    $total_services_fulfillment,
-    $invoice,
-    $invoice_date,
-    $multi_year_project,
-    $submitted_invoice,
-    $submitted_invoice_date,
-    $fulfillment_pending,
-    $fulfillment_shipping_cost,
-    $fulfillment_shipping,
-    $type_of_contract,
-    $net30_fulfillment,
-    $sales_commission,
-    $sales_commission_comment,
-    $services_payment_term,
-    $city,
-    $zip_code,
-    $state,
-    $client,
-    $deleted,
-    $set_side,
-    $poc,
-    $co,
-    $estimated_delivery_date,
-    $shipping_address,
-    $special_requirements,
-    $file_document,
-    $accounting,
-    $gsa,
-    $client_payment_terms,
-    $net30_fulfillment_services,
-    $bpa,
-    $reference_url,
-    $priority = null
-  ) {
-    $this->id = $id;
-    $this->id_usuario = $id_usuario;
-    $this->usuario_designado = $usuario_designado;
-    $this->canal = $canal;
-    $this->email_code = $email_code;
-    $this->type_of_bid = $type_of_bid;
-    $this->issue_date = $issue_date;
-    $this->end_date = $end_date;
-    $this->status = $status;
-    $this->completado = $completado;
-    $this->total_cost = $total_cost;
-    $this->total_price = $total_price;
-    $this->comments = $comments;
-    $this->award = $award;
-    $this->fecha_completado = $fecha_completado;
-    $this->fecha_submitted = $fecha_submitted;
-    $this->fecha_award = $fecha_award;
-    $this->payment_terms = $payment_terms;
-    $this->address = $address;
-    $this->ship_to = $ship_to;
-    $this->expiration_date = $expiration_date;
-    $this->ship_via = $ship_via;
-    $this->taxes = $taxes;
-    $this->profit = $profit;
-    $this->additional = $additional;
-    $this->shipping = $shipping;
-    $this->shipping_cost = $shipping_cost;
-    $this->fullfillment = $fullfillment;
-    $this->fulfillment_date = $fulfillment_date;
-    $this->contract_number = $contract_number;
-    $this->fulfillment_profit = $fulfillment_profit;
-    $this->services_fulfillment_profit = $services_fulfillment_profit;
-    $this->total_fulfillment = $total_fulfillment;
-    $this->total_services_fulfillment = $total_services_fulfillment;
-    $this->invoice = $invoice;
-    $this->invoice_date = $invoice_date;
-    $this->multi_year_project = $multi_year_project;
-    $this->submitted_invoice = $submitted_invoice;
-    $this->submitted_invoice_date = $submitted_invoice_date;
-    $this->fulfillment_pending = $fulfillment_pending;
-    $this->fulfillment_shipping_cost = $fulfillment_shipping_cost;
-    $this->fulfillment_shipping = $fulfillment_shipping;
-    $this->type_of_contract = $type_of_contract;
-    $this->net30_fulfillment = $net30_fulfillment;
-    $this->sales_commission = $sales_commission;
-    $this->sales_commission_comment = $sales_commission_comment;
-    $this->services_payment_term = $services_payment_term;
-    $this->city = $city;
-    $this->zip_code = $zip_code;
-    $this->state = $state;
-    $this->client = $client;
-    $this->deleted = $deleted;
-    $this->set_side = $set_side;
-    $this->poc = $poc;
-    $this->co = $co;
-    $this->estimated_delivery_date = $estimated_delivery_date;
-    $this->shipping_address = $shipping_address;
-    $this->special_requirements = $special_requirements;
-    $this->file_document = $file_document;
-    $this->accounting = $accounting;
-    $this->gsa = $gsa;
-    $this->client_payment_terms = $client_payment_terms;
-    $this->net30_fulfillment_services = $net30_fulfillment_services;
-    $this->bpa = $bpa;
-    $this->reference_url = $reference_url;
-    $this->priority = $priority;
+  public function __construct(array $row) {
+    $this->id = $row['id'] ?? null;
+    $this->id_usuario = $row['id_usuario'] ?? null;
+    $this->usuario_designado = $row['usuario_designado'] ?? null;
+    $this->canal = $row['canal'] ?? null;
+    $this->email_code = $row['email_code'] ?? null;
+    $this->type_of_bid = $row['type_of_bid'] ?? null;
+    $this->issue_date = $row['issue_date'] ?? null;
+    $this->end_date = $row['end_date'] ?? null;
+    $this->status = $row['status'] ?? null;
+    $this->completado = $row['completado'] ?? null;
+    $this->total_cost = $row['total_cost'] ?? null;
+    $this->total_price = $row['total_price'] ?? null;
+    $this->comments = $row['comments'] ?? null;
+    $this->award = $row['award'] ?? null;
+    $this->fecha_completado = $row['fecha_completado'] ?? null;
+    $this->fecha_submitted = $row['fecha_submitted'] ?? null;
+    $this->fecha_award = $row['fecha_award'] ?? null;
+    $this->payment_terms = $row['payment_terms'] ?? null;
+    $this->address = $row['address'] ?? null;
+    $this->ship_to = $row['ship_to'] ?? null;
+    $this->expiration_date = $row['expiration_date'] ?? null;
+    $this->ship_via = $row['ship_via'] ?? null;
+    $this->taxes = $row['taxes'] ?? null;
+    $this->profit = $row['profit'] ?? null;
+    $this->additional = $row['additional'] ?? null;
+    $this->shipping = $row['shipping'] ?? null;
+    $this->shipping_cost = $row['shipping_cost'] ?? null;
+    $this->fullfillment = $row['fullfillment'] ?? null;
+    $this->fulfillment_date = $row['fulfillment_date'] ?? null;
+    $this->contract_number = $row['contract_number'] ?? null;
+    $this->fulfillment_profit = $row['fulfillment_profit'] ?? null;
+    $this->services_fulfillment_profit = $row['services_fulfillment_profit'] ?? null;
+    $this->total_fulfillment = $row['total_fulfillment'] ?? null;
+    $this->total_services_fulfillment = $row['total_services_fulfillment'] ?? null;
+    $this->invoice = $row['invoice'] ?? null;
+    $this->invoice_date = $row['invoice_date'] ?? null;
+    $this->multi_year_project = $row['multi_year_project'] ?? null;
+    $this->submitted_invoice = $row['submitted_invoice'] ?? null;
+    $this->submitted_invoice_date = $row['submitted_invoice_date'] ?? null;
+    $this->fulfillment_pending = $row['fulfillment_pending'] ?? null;
+    $this->fulfillment_shipping_cost = $row['fulfillment_shipping_cost'] ?? null;
+    $this->fulfillment_shipping = $row['fulfillment_shipping'] ?? null;
+    $this->type_of_contract = $row['type_of_contract'] ?? null;
+    $this->net30_fulfillment = $row['net30_fulfillment'] ?? null;
+    $this->sales_commission = $row['sales_commission'] ?? null;
+    $this->sales_commission_comment = $row['sales_commission_comment'] ?? null;
+    $this->services_payment_term = $row['services_payment_term'] ?? null;
+    $this->city = $row['city'] ?? null;
+    $this->zip_code = $row['zip_code'] ?? null;
+    $this->state = $row['state'] ?? null;
+    $this->client = $row['client'] ?? null;
+    $this->deleted = $row['deleted'] ?? null;
+    $this->set_side = $row['set_side'] ?? null;
+    $this->poc = $row['poc'] ?? null;
+    $this->co = $row['co'] ?? null;
+    $this->estimated_delivery_date = $row['estimated_delivery_date'] ?? null;
+    $this->shipping_address = $row['shipping_address'] ?? null;
+    $this->special_requirements = $row['special_requirements'] ?? null;
+    $this->file_document = $row['file_document'] ?? null;
+    $this->accounting = $row['accounting'] ?? null;
+    $this->gsa = $row['gsa'] ?? null;
+    $this->client_payment_terms = $row['client_payment_terms'] ?? null;
+    $this->net30_fulfillment_services = $row['net30_fulfillment_services'] ?? null;
+    $this->bpa = $row['bpa'] ?? null;
+    $this->reference_url = $row['reference_url'] ?? null;
+    $this->priority = $row['priority'] ?? null;
   }
 
   public function obtener_id() {
