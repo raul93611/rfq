@@ -83,6 +83,7 @@ switch ($partes_ruta[1] ?? null) {
         $ruta_elegida = 'scripts/utilities/employee_docs_delete.php';
         break;
     }
+    break;
   case 'quote':
     switch ($partes_ruta[2]) {
       case 'remove_slave':
