@@ -1,7 +1,7 @@
-<aside class="main-sidebar sidebar-dark-primary elevation-4">
+<aside class="main-sidebar sidebar-dark-primary">
   <a href="<?= PERFIL ?>" class="brand-link">
-    <img src="<?= RUTA_IMG ?>eP_perfil.png" alt="E-logic" class="brand-image img-thumbnail elevation-3" style="width:35px;height:35px;opacity:.8">
-    <span class="brand-text font-weight-light">E-logic</span>
+    <img src="<?= RUTA_IMG ?>eP_perfil.png" alt="E-logic" style="width:32px;height:32px;border-radius:6px;opacity:0.85;margin-right:0.75rem;flex-shrink:0;">
+    <span class="brand-text">E-logic</span>
   </a>
   <div class="sidebar">
     <div class="user-panel mt-3 pb-3 mb-3 d-flex">

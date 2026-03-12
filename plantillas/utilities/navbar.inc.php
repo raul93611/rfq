@@ -1,4 +1,4 @@
-<nav class="main-header navbar navbar-expand navbar-light bg-white border-bottom">
+<nav class="main-header navbar navbar-expand navbar-dark">
   <ul class="navbar-nav">
     <li class="nav-item">
       <a class="nav-link" id="sidebar_collapse" data-widget="pushmenu" href="#" aria-label="Toggle Sidebar">
