@@ -4,54 +4,61 @@ try {
   $conexion = Conexion::obtener_conexion();
 
   $tasks = [
-    'todo' => TaskRepository::get_todo($conexion),
+    'todo'        => TaskRepository::get_todo($conexion),
     'in_progress' => TaskRepository::get_in_progress($conexion),
-    'done' => TaskRepository::get_done($conexion),
+    'done'        => TaskRepository::get_done($conexion),
   ];
 } catch (Exception $e) {
-  // Handle exceptions (e.g., log the error, display a message to the user)
   die("Error fetching tasks: " . $e->getMessage());
 } finally {
   Conexion::cerrar_conexion();
 }
 
-function render_tasks($tasks, $status) {
+function render_task_cards(array $tasks): void
+{
+  if (empty($tasks)) {
+    echo '<div class="kanban-empty"><i class="far fa-check-circle"></i>No tasks here</div>';
+    return;
+  }
   foreach ($tasks as $task) {
-    echo '<div class="card card-primary card-outline">';
-    echo '<div class="card-header">';
-    echo '<h5 class="card-title"><a class="edit_task_button" data-id="' . htmlspecialchars($task->get_id()) . '" href="#">' . htmlspecialchars($task->get_title()) . '</a></h5>';
-    echo '</div>';
-    echo '<div class="card-body">';
-    echo '<span class="text-info"><i class="fas fa-user"></i> Created by:</span> ' . htmlspecialchars($task->get_id_user_name()) . '<br>';
-    echo '<span class="text-info"><i class="fas fa-user"></i> Assigned to:</span> ' . htmlspecialchars($task->get_assigned_user_name());
-    echo '</div>';
-    echo '</div>';
+    $id    = htmlspecialchars($task->get_id());
+    $title = htmlspecialchars($task->get_title());
+    $by    = htmlspecialchars($task->get_id_user_name());
+    $to    = htmlspecialchars($task->get_assigned_user_name());
+    echo <<<HTML
+    <div class="task-card">
+      <a class="task-card-title edit_task_button" data-id="{$id}" href="#">{$title}</a>
+      <div class="task-card-meta">
+        <span><i class="fas fa-pencil-alt"></i> {$by}</span>
+        <span><i class="fas fa-user"></i> {$to}</span>
+      </div>
+    </div>
+    HTML;
   }
 }
 
+$columns = [
+  'todo'        => ['label' => 'To Do',       'css' => 'col-todo'],
+  'in_progress' => ['label' => 'In Progress',  'css' => 'col-progress'],
+  'done'        => ['label' => 'Done',         'css' => 'col-done'],
+];
 ?>
-<div class="container-fluid h-100">
-  <?php
-  $statuses = [
-    'todo' => ['title' => 'To Do', 'class' => 'primary'],
-    'in_progress' => ['title' => 'In Progress', 'class' => 'info'],
-    'done' => ['title' => 'Done', 'class' => 'success']
-  ];
-
-  foreach ($statuses as $status => $info) {
-    echo '<div class="card card-row card-' . $info['class'] . '">';
-    echo '<div class="card-header bg-' . $info['class'] . '">';
-    echo '<h3 class="card-title">' . $info['title'] . '</h3>';
-    echo '</div>';
-    echo '<div class="card-body">';
-    render_tasks($tasks[$status], $status);
-    if ($status === 'done') {
-      echo '<div class="text-center">';
-      echo '<a href="' . TASKS_DONE . '" class="btn btn-link">View all</a>';
-      echo '</div>';
-    }
-    echo '</div>';
-    echo '</div>';
-  }
-  ?>
+<div class="kanban-board">
+  <?php foreach ($columns as $key => $col) : ?>
+    <?php $count = count($tasks[$key]); ?>
+    <div class="kanban-col <?= $col['css'] ?>">
+      <div class="kanban-col-header">
+        <span class="kanban-col-title"><?= $col['label'] ?></span>
+        <span class="kanban-col-count"><?= $count ?></span>
+      </div>
+      <div class="kanban-col-body">
+        <?php render_task_cards($tasks[$key]); ?>
+      </div>
+      <?php if ($key === 'done') : ?>
+        <div class="kanban-col-view-all">
+          <a href="<?= TASKS_DONE ?>"><i class="fas fa-list mr-1"></i>View all done</a>
+        </div>
+      <?php endif; ?>
+    </div>
+  <?php endforeach; ?>
 </div>

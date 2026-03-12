@@ -1,29 +1,22 @@
-<div class="content-wrapper kanban">
-  <div class="content-header">
-    <div class="container-fluid">
-      <div class="row mb-2">
-        <div class="col-md-6">
-          <h1 class="m-0 text-dark">Tasks</h1>
-        </div>
-        <div class="col-md-6 text-right">
-          <button id="add_task_button" class="btn btn-primary" aria-label="Add New Task">
-            <i class="fas fa-plus"></i> Add Task
-          </button>
-        </div>
-      </div>
+<div class="content-wrapper">
+  <div class="content-header page-header-bar">
+    <div>
+      <h1 class="page-title">My Tasks</h1>
+      <p class="page-subtitle">Tasks assigned to you</p>
     </div>
+    <button id="add_task_button" class="btn btn-primary btn-sm" type="button">
+      <i class="fas fa-plus mr-1"></i> Add Task
+    </button>
   </div>
 
-  <section id="my_tasks_board" class="content pb-3">
-    <!-- Task board content will be dynamically inserted here -->
+  <section id="my_tasks_board" class="content">
+    <!-- Task board loaded via AJAX -->
   </section>
 </div>
 
 <?php
-// Include modals for task management
 include_once 'modals/add_task_modal.inc.php';
 include_once 'modals/edit_task_modal.inc.php';
 ?>
 
-<!-- JavaScript for handling tasks -->
 <script src="<?= RUTA_JS; ?>tasks.js"></script>
