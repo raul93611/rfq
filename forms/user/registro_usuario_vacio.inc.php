@@ -1,131 +1,83 @@
-<div class="card-body">
-  <div id="errors"></div>
+<div class="card-body user-form">
+  <div id="errors" class="mb-3"></div>
 
+  <!-- Username -->
   <div class="form-group">
-    <label for="username">Username:</label>
-    <input
-      type="text"
-      class="form-control form-control-sm"
-      id="username"
-      name="username"
-      placeholder="Enter username"
-      autofocus>
-    <small class="form-text text-muted">Choose a unique username for the user.</small>
+    <label for="username">Username</label>
+    <input type="text" class="form-control" id="username" name="username" placeholder="e.g. jsmith" autofocus>
   </div>
 
-  <div class="form-group">
-    <label for="nombres">First Names:</label>
-    <input
-      type="text"
-      class="form-control form-control-sm"
-      id="nombres"
-      name="nombres"
-      placeholder="Enter first names">
-    <small class="form-text text-muted">Provide the user's given names.</small>
-  </div>
-
-  <div class="form-group">
-    <label for="apellidos">Last Names:</label>
-    <input
-      type="text"
-      class="form-control form-control-sm"
-      id="apellidos"
-      name="apellidos"
-      placeholder="Enter last names">
-    <small class="form-text text-muted">Provide the user's family names or surnames.</small>
-  </div>
-
-  <div class="form-group">
-    <label for="email">E-mail:</label>
-    <input
-      type="email"
-      class="form-control form-control-sm"
-      id="email"
-      name="email"
-      placeholder="Enter email address">
-    <small class="form-text text-muted">Use a valid email address for correspondence.</small>
-  </div>
-
-  <div class="form-group">
-    <label for="password">Password:</label>
-    <input
-      type="password"
-      class="form-control form-control-sm"
-      id="password"
-      name="password"
-      placeholder="Enter password">
-    <small class="form-text text-muted">Create a strong password for the account.</small>
-  </div>
-
-  <div class="form-group">
-    <label for="password-confirmation">Confirm Password:</label>
-    <input
-      type="password"
-      class="form-control form-control-sm"
-      id="password-confirmation"
-      name="password-confirmation"
-      placeholder="Confirm the password">
-    <small class="form-text text-muted">Re-enter the password to confirm.</small>
-  </div>
-
-  <div class="form-group">
-    <label for="cargo">Roles:</label>
-    <div class="custom-control custom-checkbox">
-      <input
-        type="checkbox"
-        name="cargo[]"
-        value="1"
-        class="custom-control-input"
-        id="admin">
-      <label class="custom-control-label" for="admin">Admin</label>
-      <small class="form-text text-muted">Grants full administrative privileges.</small>
+  <!-- First name + Last name -->
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="nombres">First Name</label>
+      <input type="text" class="form-control" id="nombres" name="nombres" placeholder="First name">
     </div>
-    <div class="custom-control custom-checkbox">
-      <input
-        type="checkbox"
-        name="cargo[]"
-        value="3"
-        class="custom-control-input"
-        id="rfq">
-      <label class="custom-control-label" for="rfq">RFQ</label>
-      <small class="form-text text-muted">Allows managing Request for Quotations (RFQ).</small>
+    <div class="form-group col-md-6">
+      <label for="apellidos">Last Name</label>
+      <input type="text" class="form-control" id="apellidos" name="apellidos" placeholder="Last name">
     </div>
-    <div class="custom-control custom-checkbox">
-      <input
-        type="checkbox"
-        name="cargo[]"
-        value="2"
-        class="custom-control-input"
-        id="fulfillment">
-      <label class="custom-control-label" for="fulfillment">Fulfillment</label>
-      <small class="form-text text-muted">Handles fulfillment-related tasks.</small>
+  </div>
+
+  <!-- Email -->
+  <div class="form-group">
+    <label for="email">Email</label>
+    <input type="email" class="form-control" id="email" name="email" placeholder="user@example.com">
+  </div>
+
+  <!-- Password + Confirm -->
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="password">Password</label>
+      <input type="password" class="form-control" id="password" name="password" placeholder="Min. 6 characters">
     </div>
-    <div class="custom-control custom-checkbox">
-      <input
-        type="checkbox"
-        name="cargo[]"
-        value="4"
-        class="custom-control-input"
-        id="accounting">
-      <label class="custom-control-label" for="accounting">Accounting</label>
-      <small class="form-text text-muted">Manages accounting-related activities.</small>
+    <div class="form-group col-md-6">
+      <label for="password-confirmation">Confirm Password</label>
+      <input type="password" class="form-control" id="password-confirmation" name="password-confirmation" placeholder="Repeat password">
+    </div>
+  </div>
+
+  <!-- Roles -->
+  <div class="form-group mb-0">
+    <label>Roles</label>
+    <div class="role-grid">
+      <label class="role-card">
+        <input type="checkbox" name="cargo[]" value="1" id="admin">
+        <span class="role-card-inner">
+          <i class="fas fa-shield-alt"></i>
+          <span>Admin</span>
+        </span>
+      </label>
+      <label class="role-card">
+        <input type="checkbox" name="cargo[]" value="3" id="rfq">
+        <span class="role-card-inner">
+          <i class="fas fa-file-alt"></i>
+          <span>RFQ</span>
+        </span>
+      </label>
+      <label class="role-card">
+        <input type="checkbox" name="cargo[]" value="2" id="fulfillment">
+        <span class="role-card-inner">
+          <i class="fas fa-boxes"></i>
+          <span>Fulfillment</span>
+        </span>
+      </label>
+      <label class="role-card">
+        <input type="checkbox" name="cargo[]" value="4" id="accounting">
+        <span class="role-card-inner">
+          <i class="fas fa-calculator"></i>
+          <span>Accounting</span>
+        </span>
+      </label>
     </div>
   </div>
 </div>
 
-<div class="card-footer">
-  <a
-    class="btn btn-secondary"
-    id="go_back"
-    href="<?= USERS; ?>"
-    title="Go back to the user list">
-    <i class="fa fa-reply"></i>
+<div class="card-footer d-flex justify-content-end" style="background:transparent;border-top:1px solid #f0f2f5;gap:8px;">
+  <a class="btn btn-secondary btn-sm" href="<?= USERS; ?>">
+    <i class="fas fa-times mr-1"></i> Cancel
   </a>
-  <button
-    type="submit"
-    class="btn btn-primary"
-    name="registrar_usuario"
-    title="Save the user details">
-    <i class="fa fa-check"></i> Save
+  <button type="submit" class="btn btn-primary btn-sm" name="registrar_usuario">
+    <i class="fas fa-check mr-1"></i> Save User
   </button>
 </div>

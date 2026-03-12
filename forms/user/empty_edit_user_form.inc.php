@@ -1,118 +1,77 @@
 <input type="hidden" name="id_user" value="<?= $id_user; ?>">
-<div class="card-body">
-  <div id="errors"></div>
 
+<div class="card-body user-form">
+  <div id="errors" class="mb-3"></div>
+
+  <!-- Username -->
   <div class="form-group">
-    <label for="username">Username:</label>
-    <input
-      type="text"
-      class="form-control form-control-sm"
-      id="username"
-      name="username"
-      placeholder="Username ..."
-      autofocus
-      value="<?= $user->obtener_nombre_usuario(); ?>">
-    <small class="form-text text-muted">Enter the user's unique username.</small>
+    <label for="username">Username</label>
+    <input type="text" class="form-control" id="username" name="username" autofocus
+      value="<?= htmlspecialchars($user->obtener_nombre_usuario(), ENT_QUOTES, 'UTF-8'); ?>">
   </div>
 
-  <div class="form-group">
-    <label for="nombres">First Names:</label>
-    <input
-      type="text"
-      class="form-control form-control-sm"
-      id="nombres"
-      name="nombres"
-      placeholder="First names ..."
-      value="<?= $user->obtener_nombres(); ?>">
-    <small class="form-text text-muted">Provide the user's first names.</small>
-  </div>
-
-  <div class="form-group">
-    <label for="apellidos">Last Names:</label>
-    <input
-      type="text"
-      class="form-control form-control-sm"
-      id="apellidos"
-      name="apellidos"
-      placeholder="Last names ..."
-      value="<?= $user->obtener_apellidos(); ?>">
-    <small class="form-text text-muted">Provide the user's last names.</small>
-  </div>
-
-  <div class="form-group">
-    <label for="email">Email:</label>
-    <input
-      type="email"
-      class="form-control form-control-sm"
-      id="email"
-      name="email"
-      placeholder="Email ..."
-      value="<?= $user->obtener_email(); ?>">
-    <small class="form-text text-muted">Enter a valid email address.</small>
-  </div>
-
-  <div class="form-group">
-    <label for="cargo">Roles:</label>
-    <div class="custom-control custom-checkbox">
-      <input
-        type="checkbox"
-        name="cargo[]"
-        value="1"
-        class="custom-control-input"
-        id="admin"
-        <?= $user->is_admin() ? 'checked' : ''; ?>>
-      <label class="custom-control-label" for="admin">Admin</label>
-      <small class="form-text text-muted">Grants full administrative privileges.</small>
+  <!-- First name + Last name -->
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="nombres">First Name</label>
+      <input type="text" class="form-control" id="nombres" name="nombres"
+        value="<?= htmlspecialchars($user->obtener_nombres(), ENT_QUOTES, 'UTF-8'); ?>">
     </div>
-    <div class="custom-control custom-checkbox">
-      <input
-        type="checkbox"
-        name="cargo[]"
-        value="3"
-        class="custom-control-input"
-        id="rfq"
-        <?= $user->is_rfq() ? 'checked' : ''; ?>>
-      <label class="custom-control-label" for="rfq">RFQ</label>
-      <small class="form-text text-muted">Allows managing Request for Quotations (RFQ).</small>
+    <div class="form-group col-md-6">
+      <label for="apellidos">Last Name</label>
+      <input type="text" class="form-control" id="apellidos" name="apellidos"
+        value="<?= htmlspecialchars($user->obtener_apellidos(), ENT_QUOTES, 'UTF-8'); ?>">
     </div>
-    <div class="custom-control custom-checkbox">
-      <input
-        type="checkbox"
-        name="cargo[]"
-        value="2"
-        class="custom-control-input"
-        id="fulfillment"
-        <?= $user->is_fulfillment() ? 'checked' : ''; ?>>
-      <label class="custom-control-label" for="fulfillment">Fulfillment</label>
-      <small class="form-text text-muted">Handles fulfillment-related tasks.</small>
-    </div>
-    <div class="custom-control custom-checkbox">
-      <input
-        type="checkbox"
-        name="cargo[]"
-        value="4"
-        class="custom-control-input"
-        id="accounting"
-        <?= $user->is_accounting() ? 'checked' : ''; ?>>
-      <label class="custom-control-label" for="accounting">Accounting</label>
-      <small class="form-text text-muted">Manages accounting-related activities.</small>
+  </div>
+
+  <!-- Email -->
+  <div class="form-group">
+    <label for="email">Email</label>
+    <input type="email" class="form-control" id="email" name="email"
+      value="<?= htmlspecialchars($user->obtener_email(), ENT_QUOTES, 'UTF-8'); ?>">
+  </div>
+
+  <!-- Roles -->
+  <div class="form-group mb-0">
+    <label>Roles</label>
+    <div class="role-grid">
+      <label class="role-card">
+        <input type="checkbox" name="cargo[]" value="1" id="admin" <?= $user->is_admin() ? 'checked' : ''; ?>>
+        <span class="role-card-inner">
+          <i class="fas fa-shield-alt"></i>
+          <span>Admin</span>
+        </span>
+      </label>
+      <label class="role-card">
+        <input type="checkbox" name="cargo[]" value="3" id="rfq" <?= $user->is_rfq() ? 'checked' : ''; ?>>
+        <span class="role-card-inner">
+          <i class="fas fa-file-alt"></i>
+          <span>RFQ</span>
+        </span>
+      </label>
+      <label class="role-card">
+        <input type="checkbox" name="cargo[]" value="2" id="fulfillment" <?= $user->is_fulfillment() ? 'checked' : ''; ?>>
+        <span class="role-card-inner">
+          <i class="fas fa-boxes"></i>
+          <span>Fulfillment</span>
+        </span>
+      </label>
+      <label class="role-card">
+        <input type="checkbox" name="cargo[]" value="4" id="accounting" <?= $user->is_accounting() ? 'checked' : ''; ?>>
+        <span class="role-card-inner">
+          <i class="fas fa-calculator"></i>
+          <span>Accounting</span>
+        </span>
+      </label>
     </div>
   </div>
 </div>
 
-<div class="card-footer">
-  <a
-    class="btn btn-secondary"
-    id="go_back"
-    href="<?= USERS; ?>"
-    title="Go back to the user list">
-    <i class="fa fa-reply"></i>
+<div class="card-footer d-flex justify-content-end" style="background:transparent;border-top:1px solid #f0f2f5;gap:8px;">
+  <a class="btn btn-secondary btn-sm" href="<?= USERS; ?>">
+    <i class="fas fa-times mr-1"></i> Cancel
   </a>
-  <button
-    type="submit"
-    class="btn btn-primary"
-    name="edit_user"
-    title="Save the user details">
-    <i class="fa fa-check"></i> Save
+  <button type="submit" class="btn btn-primary btn-sm" name="edit_user">
+    <i class="fas fa-check mr-1"></i> Save User
   </button>
 </div>

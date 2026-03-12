@@ -1,38 +1,29 @@
 <div class="content-wrapper">
-  <section class="content-header">
-    <div class="container-fluid">
-      <div class="row mb-2">
-        <div class="col-sm-6">
-          <h1>Users</h1>
-        </div>
-        <div class="col-sm-6">
-          <!-- Future content or buttons can go here -->
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <section class="content">
+  <div class="content-header page-header-bar">
+    <div>
+      <h1 class="page-title">Add User</h1>
+      <p class="page-subtitle">Create a new account and assign roles</p>
+    </div>
+    <a href="<?= USERS ?>" class="btn btn-secondary btn-sm">
+      <i class="fas fa-arrow-left mr-1"></i> Back to Users
+    </a>
+  </div>
+
+  <section class="content" style="padding-top:20px;">
     <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="card card-primary">
-            <div class="card-header">
-              <h3 class="card-title">
-                <i class="fa fa-user-plus" aria-hidden="true"></i> Sign in
-              </h3>
-            </div>
+      <div class="row justify-content-center">
+        <div class="col-lg-7 col-md-10">
+          <div class="card chart-card">
             <form id="add-user-form" role="form" method="post" action="<?= htmlspecialchars($_SERVER['PHP_SELF']); ?>">
-              <?php
-              include_once 'forms/user/registro_usuario_vacio.inc.php';
-              ?>
+              <?php include_once 'forms/user/registro_usuario_vacio.inc.php'; ?>
             </form>
           </div>
         </div>
       </div>
     </div>
   </section>
+
 </div>
 
-<!-- External JS file -->
 <script src="<?= RUTA_JS; ?>users.js"></script>

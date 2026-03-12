@@ -20,7 +20,11 @@ switch ($partes_ruta[2] ?? null) {
         }
         break;
       case 'users':
-        include_once 'plantillas/user/users.inc.php';
+        if ($_SESSION['user']->is_admin()) {
+          include_once 'plantillas/user/users.inc.php';
+        } else {
+          include_once 'plantillas/utilities/muro.inc.php';
+        }
         break;
       case 'edit_user':
         $id_user = $partes_ruta[4];

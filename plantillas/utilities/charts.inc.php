@@ -1,79 +1,86 @@
 <div class="content-wrapper">
-  <div class="content-header">
-    <div class="container-fluid">
-      <div class="row mb-2">
-        <div class="col-sm-12">
-          <h1 class="m-0 text-dark">Home</h1>
-        </div>
-      </div>
+
+  <div class="content-header page-header-bar">
+    <div>
+      <h1 class="page-title">Dashboard</h1>
+      <p class="page-subtitle">Overview of your team's activity</p>
     </div>
   </div>
 
-  <section class="content">
+  <section class="content" style="padding-top:20px;">
     <div class="container-fluid">
       <div id="graficas" class="row">
 
         <!-- Left Column -->
-        <section class="col-lg-6 connectedSortable">
+        <div class="col-lg-6">
+
           <!-- Completed Chart Card -->
-          <div class="card">
-            <div class="card-header no-border">
-              <h3 class="card-title">Completed</h3>
-            </div>
+          <div class="card chart-card">
             <div class="card-body">
-              <div class="position-relative mb-4">
-                <canvas id="completados-chart" height="250"></canvas>
-              </div>
+              <p class="chart-card-label">Completed</p>
+              <div style="position:relative;height:220px;"><canvas id="completados-chart"></canvas></div>
             </div>
           </div>
 
           <!-- Annual Awards by Amount Card -->
-          <div id="annual_awards_amounts" class="card">
-            <div class="card-header no-border">
-              <h3 class="card-title">Annual Awards (by Amount)</h3>
-            </div>
+          <div id="annual_awards_amounts" class="card chart-card">
             <div class="card-body">
-              <div class="position-relative mb-4">
-                <canvas id="monto_ganados_anual_chart" height="250"></canvas>
+              <p class="chart-card-label">Annual Awards <span class="chart-card-label-sub">by Amount</span></p>
+              <div style="position:relative;height:220px;"><canvas id="monto_ganados_anual_chart"></canvas></div>
+              <div class="chart-legend mt-3">
+                <div class="chart-legend-item">
+                  <span class="chart-legend-dot" style="background:#13A8F0"></span>
+                  <span class="chart-legend-text">Current year</span>
+                  <span class="chart-legend-value current"></span>
+                </div>
+                <div class="chart-legend-item">
+                  <span class="chart-legend-dot" style="background:#39485a"></span>
+                  <span class="chart-legend-text">Past year</span>
+                  <span class="chart-legend-value past"></span>
+                </div>
               </div>
-              <i class="fas fa-square text-primary"></i> Total: <span class="current"></span><br>
-              <i class="fas fa-square text-dark"></i> Total: <span class="past"></span>
             </div>
           </div>
-        </section>
+
+        </div>
 
         <!-- Right Column -->
-        <section class="col-lg-6 connectedSortable">
+        <div class="col-lg-6">
+
           <!-- Awards Chart Card -->
-          <div class="card">
-            <div class="card-header no-border">
-              <h3 class="card-title">Awards</h3>
-            </div>
+          <div class="card chart-card">
             <div class="card-body">
-              <div class="position-relative mb-4">
-                <canvas id="ganadas-chart" height="250"></canvas>
-              </div>
+              <p class="chart-card-label">Awards</p>
+              <div style="position:relative;height:220px;"><canvas id="ganadas-chart"></canvas></div>
             </div>
           </div>
 
           <!-- Annual Awards Card -->
-          <div id="annual_awards" class="card">
-            <div class="card-header no-border">
-              <h3 class="card-title">Annual Awards</h3>
-            </div>
+          <div id="annual_awards" class="card chart-card">
             <div class="card-body">
-              <div class="position-relative mb-4">
-                <canvas id="ganados_anuales_chart" height="250"></canvas>
+              <p class="chart-card-label">Annual Awards <span class="chart-card-label-sub">by Count</span></p>
+              <div style="position:relative;height:220px;"><canvas id="ganados_anuales_chart"></canvas></div>
+              <div class="chart-legend mt-3">
+                <div class="chart-legend-item">
+                  <span class="chart-legend-dot" style="background:#13A8F0"></span>
+                  <span class="chart-legend-text">Current year</span>
+                  <span class="chart-legend-value current"></span>
+                </div>
+                <div class="chart-legend-item">
+                  <span class="chart-legend-dot" style="background:#39485a"></span>
+                  <span class="chart-legend-text">Past year</span>
+                  <span class="chart-legend-value past"></span>
+                </div>
               </div>
-              <i class="fas fa-square text-primary"></i> Total: <span class="current"></span><br>
-              <i class="fas fa-square text-dark"></i> Total: <span class="past"></span>
             </div>
           </div>
-        </section>
+
+        </div>
 
       </div>
     </div>
   </section>
+
 </div>
 
 <script src="<?= RUTA_JS ?>main_charts.js"></script>

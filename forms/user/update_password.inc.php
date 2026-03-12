@@ -1,45 +1,25 @@
-<input type="hidden" name="id_user" value="<?php echo $id_user; ?>">
+<input type="hidden" name="id_user" value="<?= $id_user; ?>">
 
-<div class="card-body">
-  <div id="errors"></div>
+<div class="card-body user-form">
+  <div id="errors" class="mb-3"></div>
 
-  <div class="form-group">
-    <label for="password">Password:</label>
-    <input
-      type="password"
-      class="form-control form-control-sm"
-      id="password"
-      name="password"
-      placeholder="Enter new password"
-      required>
-    <small class="form-text text-muted">
-      Choose a strong password with at least 8 characters, including letters and numbers.
-    </small>
-  </div>
-
-  <div class="form-group">
-    <label for="password-confirmation">Password Confirmation:</label>
-    <input
-      type="password"
-      class="form-control form-control-sm"
-      id="password-confirmation"
-      name="password-confirmation"
-      placeholder="Confirm new password"
-      required>
-    <small class="form-text text-muted">
-      Re-enter your password to confirm it matches.
-    </small>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="password">New Password</label>
+      <input type="password" class="form-control" id="password" name="password" placeholder="Min. 6 characters" required>
+    </div>
+    <div class="form-group col-md-6">
+      <label for="password-confirmation">Confirm Password</label>
+      <input type="password" class="form-control" id="password-confirmation" name="password-confirmation" placeholder="Repeat password" required>
+    </div>
   </div>
 </div>
 
-<div class="card-footer">
-  <a class="btn btn-secondary" id="go_back" href="<?php echo USERS; ?>">
-    <i class="fa fa-reply"></i> Back
+<div class="card-footer d-flex justify-content-end" style="background:transparent;border-top:1px solid #f0f2f5;gap:8px;">
+  <a class="btn btn-secondary btn-sm" href="<?= USERS; ?>">
+    <i class="fas fa-times mr-1"></i> Cancel
   </a>
-  <button
-    type="submit"
-    class="btn btn-primary"
-    name="update_password">
-    <i class="fa fa-check"></i> Save
+  <button type="submit" class="btn btn-primary btn-sm" name="update_password">
+    <i class="fas fa-check mr-1"></i> Update Password
   </button>
 </div>
