@@ -25,5 +25,5 @@ if (isset($_POST['iniciar_sesion'])) {
 
   // If validation passed, start session and redirect
   ControlSesion::iniciar_sesion($validador->obtener_usuario());
-  Redireccion::redirigir1(ALL_TASKS);
+  Redireccion::redirigir1(CHARTS);
 }

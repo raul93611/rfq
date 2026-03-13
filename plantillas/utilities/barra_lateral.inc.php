@@ -16,7 +16,6 @@
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
         <?php
         $sidebar_sections = [
-          'tasks_sidebar.inc.php',
           'charts_sidebar.inc.php',
           'search_quotes_sidebar.inc.php',
           'users_sidebar.inc.php',

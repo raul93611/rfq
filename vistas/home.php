@@ -1,5 +1,5 @@
 <?php
-if (ControlSesion::sesion_iniciada()) Redireccion::redirigir(ALL_TASKS);
+if (ControlSesion::sesion_iniciada()) Redireccion::redirigir(CHARTS);
 include_once 'plantillas/user/validacion_login.inc.php';
 ?>
 <!DOCTYPE html>
