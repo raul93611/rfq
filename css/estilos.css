@@ -1050,7 +1050,17 @@ tfoot th:first-child {
 }
 
 #tabla_busqueda thead th,
-#tabla_usuarios thead th {
+#tabla_usuarios thead th,
+#tabla_quotes thead th,
+#completed_table thead th,
+#submitted_table thead th,
+#award_table thead th,
+#no_bid_table thead th,
+#not_submitted_table thead th,
+#cancelled_table thead th,
+#deleted_table thead th,
+#fulfillment_quotes_table thead th,
+#personnel-table thead th {
   background: #39485a;
   color: #fff;
   border-color: #4a5a6e;
@@ -1130,4 +1140,22 @@ tfoot th:first-child {
   font-size: 12px;
   font-weight: 600;
   color: #39485a;
+}
+
+/******************************************************************************/
+/********************************* no-bid badge ********************************/
+.no-bid-badge {
+  display: inline-block;
+  background: #e67e22;
+  color: #fff;
+  font-family: 'Manrope', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  vertical-align: middle;
+  margin-right: 6px;
+  line-height: 1.6;
 }

@@ -8,7 +8,7 @@ include_once 'plantillas/utilities/navbar.inc.php';
 include_once 'plantillas/utilities/barra_lateral.inc.php';
 switch ($partes_ruta[2] ?? null) {
   case '':
-    include_once 'plantillas/utilities/muro.inc.php';
+    include_once 'plantillas/utilities/charts.inc.php';
     break;
   case 'user':
     switch ($partes_ruta[3] ?? null) {

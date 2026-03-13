@@ -14,20 +14,6 @@
         <p>Fulfillment</p>
       </a>
     </li>
-    <!-- Personnel Calendar -->
-    <li class="nav-item">
-      <a href="<?= PERSONNEL_CALENDAR; ?>" class="nav-link <?= ($partes_ruta[3] ?? '') === 'personnel_calendar' ? 'active' : ''; ?>">
-        <i class="nav-icon fas fa-calendar"></i>
-        <p>Personnel Calendar</p>
-      </a>
-    </li>
-    <!-- Personnel -->
-    <li class="nav-item">
-      <a href="<?= PERSONNEL; ?>" class="nav-link <?= ($partes_ruta[3] ?? '') === 'personnel' ? 'active' : ''; ?>">
-        <i class="nav-icon fas fa-address-book"></i>
-        <p>Personnel</p>
-      </a>
-    </li>
     <!-- Types of Projects -->
     <li class="nav-item">
       <a href="<?= TYPE_OF_PROJECT; ?>" class="nav-link <?= ($partes_ruta[3] ?? '') === 'type_of_project' ? 'active' : ''; ?>">

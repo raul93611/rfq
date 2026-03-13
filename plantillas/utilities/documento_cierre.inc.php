@@ -1,34 +1,45 @@
-<!--*************************************************ALERT MODAL***************************************************************-->
-<div class="modal fade" id="alert_delete_system" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+<!-- Confirmation modal -->
+<div class="modal fade" id="alert_delete_system" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-dialog-centered">
     <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title text-danger"><i class="fa fa-exclamation-triangle"></i> ALERT</h4>
+      <div class="modal-header" style="background:#c0392b;">
+        <h5 class="modal-title"><i class="fas fa-exclamation-triangle mr-2"></i>Confirm Action</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body" id="alert_delete_body">
-        <h4 class="text-center text-danger">Do you want to continue the action?</h4>
+      <div class="modal-body text-center py-4" id="alert_delete_body">
+        <p class="mb-0" style="font-size:14px;color:#39485a;">Do you want to continue this action?</p>
       </div>
-      <div class="modal-footer">
-        <a href="#" class="btn btn-primary" id="continue_button"><i class="fas fa-check"></i> Continue</a>
+      <div class="modal-footer" style="justify-content:center;gap:8px;">
+        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">
+          <i class="fas fa-times mr-1"></i>Cancel
+        </button>
+        <a href="#" class="btn btn-danger btn-sm" id="continue_button">
+          <i class="fas fa-check mr-1"></i>Continue
+        </a>
       </div>
     </div>
   </div>
 </div>
 
-<div class="modal modal-danger fade" id="error_alert">
-  <div class="modal-dialog">
+<!-- Error alert modal -->
+<div class="modal fade" id="error_alert" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-dialog-centered">
     <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title text-danger"><i class="fa fa-exclamation-triangle"></i> ALERT</h4>
+      <div class="modal-header" style="background:#c0392b;">
+        <h5 class="modal-title"><i class="fas fa-exclamation-circle mr-2"></i>Error</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body" id="form_uncompleted_body">
-        <h4 class="text-center text-danger">Code must be fill out</h4>
+      <div class="modal-body text-center py-4" id="form_uncompleted_body">
+        <p class="mb-0" style="font-size:14px;color:#39485a;">Code must be filled out.</p>
+      </div>
+      <div class="modal-footer" style="justify-content:center;">
+        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">
+          <i class="fas fa-times mr-1"></i>Close
+        </button>
       </div>
     </div>
   </div>
