@@ -1,46 +1,36 @@
 <div class="content-wrapper">
-  <div class="content-header">
-    <div class="container-fluid">
-      <div class="row mb-2">
-        <div class="col-sm-6">
-          <h1 class="m-0 text-dark">Daily</h1>
-        </div>
-        <div class="col-sm-6 text-right">
-          <button id="add-projection-button" class="btn btn-primary">
-            <i class="fas fa-plus"></i> Add Projection
-          </button>
-        </div>
-      </div>
+
+  <div class="content-header page-header-bar">
+    <div>
+      <h1 class="page-title">Projections</h1>
+      <p class="page-subtitle">Yearly projection records</p>
     </div>
+    <button id="add-projection-button" class="btn btn-primary btn-sm" type="button">
+      <i class="fas fa-plus mr-1"></i>Add Projection
+    </button>
   </div>
 
-  <section class="content">
+  <section class="content" style="padding-top:20px;">
     <div class="container-fluid">
-      <div class="row">
-        <section class="col-12">
-          <div class="card">
-            <div class="card-header">
-              <h3 class="card-title">Projections</h3>
-            </div>
-            <div class="card-body">
-              <table id="projections-table" class="table table-bordered table-hover">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Year</th>
-                    <th>Options</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <!-- Table rows to be populated dynamically -->
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </section>
+      <div class="card chart-card">
+        <div class="card-body">
+          <table id="projections-table" class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Year</th>
+                <th class="text-center" style="width:100px;">Options</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Populated dynamically -->
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </section>
+
 </div>
 
 <script src="<?= htmlspecialchars(RUTA_JS . 'projections.js') ?>"></script>

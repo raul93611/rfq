@@ -1,48 +1,40 @@
 <div class="content-wrapper">
-  <div class="content-header">
-    <div class="container-fluid">
-      <div class="row mb-2">
-        <div class="col-sm-6">
-          <h1 class="m-0 text-dark">Providers</h1>
-        </div>
-        <div class="col-sm-6">
-          <button id="add_provider" class="float-right btn btn-primary" type="button" name="button">
-            <i class="fas fa-plus"></i> Add Provider
-          </button>
-          <a href="<?= PROVIDER_EXPORT_TO_EXCEL ?>" class="mr-2 float-right btn btn-secondary">
-            <i class="fas fa-file-excel"></i>
-          </a>
-        </div>
-      </div>
+
+  <div class="content-header page-header-bar">
+    <div>
+      <h1 class="page-title">Providers</h1>
+      <p class="page-subtitle">Manage vendor and provider records</p>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <a href="<?= PROVIDER_EXPORT_TO_EXCEL ?>" class="btn btn-secondary btn-sm">
+        <i class="fas fa-file-excel mr-1"></i>Export
+      </a>
+      <button id="add_provider" class="btn btn-primary btn-sm" type="button">
+        <i class="fas fa-plus mr-1"></i>Add Provider
+      </button>
     </div>
   </div>
 
-  <section class="content">
+  <section class="content" style="padding-top:20px;">
     <div class="container-fluid">
-      <div class="row">
-        <section class="col-12">
-          <div class="card">
-            <div class="card-header align-middle">
-              <h3 class="card-title">Providers List</h3>
-            </div>
-            <div class="card-body">
-              <table id="providers_table" class="table table-bordered table-hover">
-                <thead>
-                  <tr>
-                    <th>Provider</th>
-                    <th style="width: 100px;">Options</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <!-- Data will be dynamically populated here -->
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </section>
+      <div class="card chart-card">
+        <div class="card-body">
+          <table id="providers_table" class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <th>Provider</th>
+                <th style="width:100px;">Options</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Populated dynamically -->
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </section>
+
 </div>
 
 <?php

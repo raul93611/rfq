@@ -30,27 +30,28 @@ try {
   Conexion::cerrar_conexion();
 }
 ?>
-<table class="table table-bordered table-hover">
-  <thead class="thead-dark">
-    <tr>
-      <th style="width: 200px; min-width: 200px;"></th>
-      <th>MONTHLY GOAL</th>
-      <th>MONTHLY GOAL RESULT</th>
-      <th>TOTAL MONTHLY INVOICE</th>
-      <th style="border-right: none;">TOTAL REAL PROFIT</th>
-      <th style="width: 150px; min-width: 150px; border-left: none;"></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr class="font-weight-bold" style="background-color: #f8f9fa; font-size: 1.1em;">
-      <td style="background-color: #e9ecef; font-weight: 700;">TOTALS</td>
-      <td class="text-right font-weight-bold">$<?= $totals[0]['total_projected_amount'] ?></td>
-      <td class="text-right font-weight-bold">$<?= $totals[0]['total_projected_result'] ?></td>
-      <td class="text-right font-weight-bold text-primary">$<?= $totals[0]['total_total_price'] ?></td>
-      <td style="border-right: none;" class="text-right font-weight-bold <?= ($totals[0]['total_profit'] >= 0) ? 'text-success' : 'text-danger' ?>">
-        $<?= $totals[0]['total_profit'] ?>
-      </td>
-      <td style="border-left: none;"></td>
-    </tr>
-  </tbody>
-</table>
+<div class="projection-totals-bar">
+  <div class="projection-total-item">
+    <span class="projection-total-label">Monthly Goal</span>
+    <span class="projection-total-value"><?= '$' . $totals[0]['total_projected_amount'] ?></span>
+  </div>
+  <div class="projection-totals-divider"></div>
+  <div class="projection-total-item">
+    <span class="projection-total-label">Monthly Goal Result</span>
+    <span class="projection-total-value <?= ($totals[0]['total_projected_result'] >= 0) ? 'text-success' : 'text-danger' ?>">
+      <?= '$' . $totals[0]['total_projected_result'] ?>
+    </span>
+  </div>
+  <div class="projection-totals-divider"></div>
+  <div class="projection-total-item">
+    <span class="projection-total-label">Total Monthly Invoice</span>
+    <span class="projection-total-value" style="color:var(--color-primary);"><?= '$' . $totals[0]['total_total_price'] ?></span>
+  </div>
+  <div class="projection-totals-divider"></div>
+  <div class="projection-total-item">
+    <span class="projection-total-label">Total Real Profit</span>
+    <span class="projection-total-value <?= ($totals[0]['total_profit'] >= 0) ? 'text-success' : 'text-danger' ?>">
+      <?= '$' . $totals[0]['total_profit'] ?>
+    </span>
+  </div>
+</div>

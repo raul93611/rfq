@@ -1060,7 +1060,15 @@ tfoot th:first-child {
 #cancelled_table thead th,
 #deleted_table thead th,
 #fulfillment_quotes_table thead th,
-#personnel-table thead th {
+#personnel-table thead th,
+#type-of-project-table thead th,
+#providers_table thead th,
+#payment_terms_table thead th,
+#invoice_quotes_table thead th,
+#submitted_invoice_quotes_table thead th,
+#projections-table thead th,
+#monthly-table thead th,
+#month-table thead th {
   background: #39485a;
   color: #fff;
   border-color: #4a5a6e;
@@ -1068,6 +1076,46 @@ tfoot th:first-child {
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.3px;
+}
+
+/******************************************************************************/
+/******************************* Projection Totals Bar ************************/
+.projection-totals-bar {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex-wrap: wrap;
+}
+.projection-total-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 12px 32px 12px 0;
+  flex: 1;
+  min-width: 160px;
+}
+.projection-total-label {
+  font-family: 'Manrope', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: #8896a5;
+  margin-bottom: 4px;
+}
+.projection-total-value {
+  font-family: 'Manrope', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #141e30;
+  line-height: 1.2;
+}
+.projection-totals-divider {
+  width: 1px;
+  height: 48px;
+  background: #e3e8ee;
+  margin: 0 32px 0 0;
+  flex-shrink: 0;
 }
 
 /******************************************************************************/
