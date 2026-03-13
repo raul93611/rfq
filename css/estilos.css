@@ -1061,6 +1061,14 @@ tfoot th:first-child {
 }
 
 /******************************************************************************/
+/******************************* bootstrap-fileinput overrides *****************/
+/* Allow the preview area to grow and show all selected files */
+.file-preview {
+  height: auto !important;
+  min-height: 60px;
+}
+
+/******************************************************************************/
 /********************************* chart cards *********************************/
 .chart-card {
   border: none;
