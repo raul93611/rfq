@@ -1066,6 +1066,7 @@ tfoot th:first-child {
 #payment_terms_table thead th,
 #invoice_quotes_table thead th,
 #submitted_invoice_quotes_table thead th,
+#reportsTable thead th,
 #projections-table thead th,
 #monthly-table thead th,
 #month-table thead th {
@@ -1137,6 +1138,34 @@ tfoot th:first-child {
 
 .chart-card .card-body {
   padding: 18px 20px 14px;
+}
+
+.chart-card-header {
+  background: var(--color-dark);
+  color: #fff;
+  padding: 12px 18px;
+  font-family: 'Manrope', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 10px 10px 0 0;
+  letter-spacing: 0.2px;
+}
+
+/* Reports page — period type toggle */
+.report-type-btn {
+  background: #f4f6f9;
+  border: 1px solid #dee2e6;
+  color: #495057;
+  font-family: 'Manrope', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  transition: background 0.15s, color 0.15s;
+}
+.report-type-btn.active,
+.report-type-btn:hover {
+  background: var(--color-dark) !important;
+  border-color: var(--color-dark) !important;
+  color: #fff !important;
 }
 
 .chart-card-label {

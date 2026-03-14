@@ -337,9 +337,6 @@ $(document).ready(function () {
       },
       columns: columnMappings,
       initComplete: function () {
-        $('#report_results_container > div > div')
-          .eq(1)
-          .addClass('table-responsive');
         $('#report_results_container #reportsTable_wrapper').prepend(`
         <div class="my-3">
           <i class="fas fa-square text-primary"></i> Quote <br>
