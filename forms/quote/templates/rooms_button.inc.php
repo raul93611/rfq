@@ -6,8 +6,8 @@ Conexion::cerrar_conexion();
 ?>
 
 <div class="btn-group dropup">
-  <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    <i class="fas fa-hotel"></i> Rooms
+  <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <i class="fas fa-hotel mr-1"></i> Rooms
   </button>
   <div class="dropdown-menu">
     <button class="dropdown-item" id="add-room-button"><i class="fa fa-plus"></i> Add</button>

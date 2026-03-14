@@ -1067,6 +1067,7 @@ tfoot th:first-child {
 #invoice_quotes_table thead th,
 #submitted_invoice_quotes_table thead th,
 #reportsTable thead th,
+#tabla_items thead th,
 #projections-table thead th,
 #monthly-table thead th,
 #month-table thead th {
@@ -1124,7 +1125,12 @@ tfoot th:first-child {
 /* Allow the preview area to grow and show all selected files */
 .file-preview {
   height: auto !important;
-  min-height: 60px;
+  min-height: 20px !important;
+}
+
+#archivos_ejemplo + .kv-fileinput-caption,
+.file-input {
+  width: 100% !important;
 }
 
 /******************************************************************************/
@@ -1235,4 +1241,260 @@ tfoot th:first-child {
   vertical-align: middle;
   margin-right: 6px;
   line-height: 1.6;
+}
+/* Quote detail — main info grid */
+.quote-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  padding: 18px;
+  border: 1px solid #e9ecef;
+}
+
+.quote-info-cell {
+  background: #fff;
+  border-radius: 8px;
+  padding: 12px 14px;
+  border: 1px solid #e9ecef;
+  min-width: 0;
+}
+
+.quote-info-label {
+  font-family: 'Manrope', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #8896a5;
+  margin-bottom: 5px;
+}
+
+.quote-info-label .fas {
+  font-size: 10px;
+  opacity: 0.7;
+}
+
+.quote-info-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #212529;
+  word-break: break-word;
+  font-family: 'Manrope', sans-serif;
+}
+
+.quote-info-value a {
+  color: var(--color-primary);
+  word-break: break-all;
+  font-weight: 500;
+  font-size: 13px;
+}
+
+/* Primary info row — 4 fixed columns, more prominent */
+.quote-info-primary {
+  grid-template-columns: repeat(4, 1fr);
+  background: transparent;
+  border: none;
+  padding: 0;
+  gap: 10px;
+}
+
+.quote-info-cell--primary {
+  border-top: 3px solid var(--color-primary);
+  padding: 14px 16px;
+}
+
+.quote-info-cell--primary .quote-info-value {
+  font-size: 15px;
+}
+
+/* Secondary info row — smaller, muted */
+.quote-info-secondary {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  background: transparent;
+  border: none;
+  padding: 0;
+  gap: 10px;
+}
+
+.quote-info-value--secondary {
+  font-size: 13px;
+  font-weight: 500;
+  color: #495057;
+}
+
+/* Checklist page — section headers */
+.checklist-section {
+  border-left: 3px solid var(--color-primary);
+  padding-left: 14px;
+}
+
+.checklist-section-title {
+  font-family: 'Manrope', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: #8896a5;
+  margin-bottom: 12px;
+}
+
+/* Checklist page — checkbox groups */
+.checklist-group {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 14px 16px;
+  border: 1px solid #e9ecef;
+}
+
+.checklist-group-title {
+  font-family: 'Manrope', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: #8896a5;
+  margin-bottom: 10px;
+}
+
+.checklist-item {
+  margin-bottom: 6px;
+}
+
+.checklist-item .custom-control-label {
+  font-size: 13px;
+  color: #495057;
+}
+
+/* Quote edit page — items & services section headers */
+.quote-section-header,
+h2#caja_items {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 28px 0 4px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #e9ecef;
+}
+
+h2#caja_items {
+  font-family: 'Manrope', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #8896a5;
+}
+
+.quote-section-header-title {
+  font-family: 'Manrope', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #8896a5;
+}
+
+/* Items section wrapper */
+.items-section-wrapper {
+  margin-top: 8px;
+}
+
+/* Empty state for items and services */
+.section-empty-state {
+  text-align: center;
+  padding: 28px 20px;
+  color: #adb5bd;
+}
+
+.section-empty-state i {
+  font-size: 32px;
+  display: block;
+  margin-bottom: 8px;
+  opacity: 0.4;
+}
+
+.section-empty-state p {
+  font-size: 13px;
+  margin: 0;
+  font-family: 'Manrope', sans-serif;
+}
+
+/* Style the "No Services to display!" message from ServiceRepository */
+h3.text-info.text-center {
+  font-size: 13px !important;
+  font-family: 'Manrope', sans-serif;
+  color: #adb5bd !important;
+  font-weight: 500;
+  padding: 28px 0;
+}
+
+h3.text-info.text-center .fa-exclamation-circle {
+  font-size: 28px;
+  display: block;
+  margin-bottom: 8px;
+  opacity: 0.4;
+}
+
+/* Single sticky bar: Back | Totals | Actions */
+.quote-action-bar {
+  position: sticky;
+  bottom: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 20px;
+  background: #fff;
+  border-top: 2px solid var(--color-primary);
+  box-shadow: 0 -4px 16px rgba(0,0,0,0.1);
+  border-radius: 0 0 10px 10px;
+}
+
+.quote-action-bar__left,
+.quote-action-bar__right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+/* Totals inline in the center */
+.quote-action-bar__totals {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex: 1;
+  justify-content: center;
+}
+
+.quote-action-total {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 20px;
+  border-right: 1px solid #e9ecef;
+}
+
+.quote-action-total:last-child {
+  border-right: none;
+}
+
+.quote-action-total__label {
+  font-family: 'Manrope', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #8896a5;
+}
+
+.quote-action-total__value {
+  font-family: 'Manrope', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-dark);
+  line-height: 1.2;
 }

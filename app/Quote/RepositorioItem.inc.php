@@ -189,36 +189,27 @@ class RepositorioItem {
     $rooms = RoomRepository::getAll(Conexion::obtener_conexion(), $id_rfq);
     Conexion::cerrar_conexion();
 ?>
-    <br>
-    <h2 id="caja_items">Items:</h2>
-
-    <br>
-    <div class="dropdown">
-      <button class="float-right btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Downloads
-      </button>
-      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <a target="_blank" href="<?php echo PDF_TABLA_ITEMS . $id_rfq; ?>" class="dropdown-item">PDF - Items table</a>
-        <?php
-        if ($re_quote_exists) {
-        ?>
-          <a target="_blank" href="<?php echo EXCEL_ITEMS_TABLE . $id_rfq; ?>" class="dropdown-item">EXCEL - Quote&Re-quote</a>
-        <?php
-        }
-        ?>
-        <a class="dropdown-item" href="<?php echo PROPOSAL . '/' . $cotizacion->obtener_id(); ?>" target="_blank">Proposal</a>
-        <?php
-        if ($cotizacion->obtener_canal() == 'GSA-Buy') {
-        ?>
-          <a class="dropdown-item" href="<?php echo PROPOSAL_GSA . '/' . $cotizacion->obtener_id(); ?>" target="_blank">GSA Proposal</a>
-        <?php
-        }
-        if (count($rooms)) {
-        ?>
-          <a class="dropdown-item" href="<?php echo PROPOSAL_ROOM . '/' . $cotizacion->obtener_id(); ?>" target="_blank">Proposal by Room</a>
-        <?php
-        }
-        ?>
+    <div class="quote-section-header">
+      <div class="quote-section-header-title">
+        <i class="fas fa-boxes mr-1"></i> Items
+      </div>
+      <div class="dropdown dropleft">
+        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fas fa-download mr-1"></i> Downloads
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a target="_blank" href="<?php echo PDF_TABLA_ITEMS . $id_rfq; ?>" class="dropdown-item">PDF - Items table</a>
+          <?php if ($re_quote_exists): ?>
+            <a target="_blank" href="<?php echo EXCEL_ITEMS_TABLE . $id_rfq; ?>" class="dropdown-item">EXCEL - Quote &amp; Re-quote</a>
+          <?php endif; ?>
+          <a class="dropdown-item" href="<?php echo PROPOSAL . '/' . $cotizacion->obtener_id(); ?>" target="_blank">Proposal</a>
+          <?php if ($cotizacion->obtener_canal() == 'GSA-Buy'): ?>
+            <a class="dropdown-item" href="<?php echo PROPOSAL_GSA . '/' . $cotizacion->obtener_id(); ?>" target="_blank">GSA Proposal</a>
+          <?php endif; ?>
+          <?php if (count($rooms)): ?>
+            <a class="dropdown-item" href="<?php echo PROPOSAL_ROOM . '/' . $cotizacion->obtener_id(); ?>" target="_blank">Proposal by Room</a>
+          <?php endif; ?>
+        </div>
       </div>
     </div>
     <?php

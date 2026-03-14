@@ -1,6 +1,6 @@
 <div class="btn-group dropup">
-  <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    Actions
+  <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <i class="fas fa-ellipsis-h mr-1"></i> Actions
   </button>
   <div class="dropdown-menu">
     <?php if ($cotizacion_recuperada->obtener_fullfillment() && $re_quote_exists): ?>
