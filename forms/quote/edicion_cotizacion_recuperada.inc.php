@@ -30,7 +30,7 @@
     <?php
     $secondaryFields = [
       ['label' => 'Client',   'value' => $cotizacion_recuperada->obtener_client(),                                    'icon' => 'fa-building'],
-      ['label' => 'Address',  'value' => nl2br(htmlspecialchars($cotizacion_recuperada->obtener_address())),          'icon' => 'fa-map-marker-alt'],
+      ['label' => 'Bill To',  'value' => nl2br(htmlspecialchars($cotizacion_recuperada->obtener_address())),          'icon' => 'fa-map-marker-alt'],
       ['label' => 'Ship To',  'value' => nl2br(htmlspecialchars($cotizacion_recuperada->obtener_ship_to())),          'icon' => 'fa-shipping-fast'],
     ];
     $refUrl = $cotizacion_recuperada->getReferenceUrl();

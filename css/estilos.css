@@ -1498,3 +1498,46 @@ h3.text-info.text-center .fa-exclamation-circle {
   color: var(--color-dark);
   line-height: 1.2;
 }
+
+/* =============================================
+   ADD ITEM — Comparison panel layout
+   ============================================= */
+.item-comparison-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  border: 1px solid #e8ecf0;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.item-panel-header {
+  padding: 10px 16px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #fff;
+}
+
+.item-panel--project .item-panel-header {
+  background: #39485a;
+}
+
+.item-panel--proposal .item-panel-header {
+  background: var(--color-primary);
+}
+
+.item-panel--project {
+  border-right: 1px solid #e8ecf0;
+}
+
+.item-panel-body {
+  padding: 16px;
+  background: #fafbfc;
+}
+
+.item-extra-fields {
+  padding-top: 4px;
+}

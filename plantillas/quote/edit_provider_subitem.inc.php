@@ -1,39 +1,33 @@
 <?php
-// Check if the session is active, otherwise redirect to the home page
 if (!ControlSesion::sesion_iniciada()) {
   Redireccion::redirigir1(SERVIDOR);
 }
+Conexion::abrir_conexion();
+$_hdr_ps   = RepositorioProviderSubitem::obtener_provider_subitem_por_id(Conexion::obtener_conexion(), $id_provider_subitem);
+$_hdr_sub  = RepositorioSubitem::obtener_subitem_por_id(Conexion::obtener_conexion(), $_hdr_ps->obtener_id_subitem());
+$_hdr_item = RepositorioItem::obtener_item_por_id(Conexion::obtener_conexion(), $_hdr_sub->obtener_id_item());
+$_hdr_rfq  = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $_hdr_item->obtener_id_rfq());
+Conexion::cerrar_conexion();
+$_hdr_back = EDITAR_COTIZACION . '/' . $_hdr_item->obtener_id_rfq();
 ?>
 <div class="content-wrapper">
-  <!-- Content Header -->
-  <section class="content-header">
-    <div class="container-fluid">
-      <div class="row mb-2">
-        <div class="col-md-6">
-          <h1>Edit Provider Subitem</h1>
-        </div>
-        <div class="col-md-6 text-right">
-          <!-- Reserved space for future buttons or options, if needed -->
-        </div>
-      </div>
+  <div class="content-header page-header-bar">
+    <div>
+      <h1 class="page-title">Edit Provider Subitem</h1>
+      <p class="page-subtitle">Proposal #<?= htmlspecialchars($_hdr_item->obtener_id_rfq()); ?> &mdash; <?= htmlspecialchars($_hdr_rfq->obtener_email_code()); ?></p>
     </div>
-  </section>
+    <a href="<?= $_hdr_back; ?>" class="btn btn-secondary btn-sm">
+      <i class="fas fa-arrow-left mr-1"></i> Back to Quote
+    </a>
+  </div>
 
-  <!-- Main Content Section -->
-  <section class="content">
+  <section class="content" style="padding-top:20px;">
     <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="card card-primary">
-            <div class="card-header">
-              <h3 class="card-title"><i class="fas fa-highlighter"></i> Enter the data</h3>
-            </div>
-            <!-- Form to edit the provider subitem -->
+      <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+          <div class="chart-card">
             <form role="form" method="post" action="<?= htmlspecialchars(GUARDAR_EDIT_PROVIDER_SUBITEM . $id_provider_subitem); ?>">
-              <?php
-              // Include the form for editing the provider subitem
-              include_once 'forms/quote/edicion_provider_subitem_vacio.inc.php';
-              ?>
+              <?php include_once 'forms/quote/edicion_provider_subitem_vacio.inc.php'; ?>
             </form>
           </div>
         </div>

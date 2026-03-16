@@ -1,39 +1,32 @@
 <?php
-// Ensure the user session is active, otherwise redirect
 if (!ControlSesion::sesion_iniciada()) {
   Redireccion::redirigir1(SERVIDOR);
 }
+Conexion::abrir_conexion();
+$_hdr_provider = RepositorioProvider::obtener_provider_por_id(Conexion::obtener_conexion(), $id_provider);
+$_hdr_item     = RepositorioItem::obtener_item_por_id(Conexion::obtener_conexion(), $_hdr_provider->obtener_id_item());
+$_hdr_rfq      = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $_hdr_item->obtener_id_rfq());
+Conexion::cerrar_conexion();
+$_hdr_back     = EDITAR_COTIZACION . '/' . $_hdr_item->obtener_id_rfq();
 ?>
 <div class="content-wrapper">
-  <!-- Content Header -->
-  <section class="content-header">
-    <div class="container-fluid">
-      <div class="row mb-2">
-        <div class="col-md-6">
-          <h1>Edit Provider</h1>
-        </div>
-        <div class="col-md-6 text-right">
-          <!-- Reserved space for additional actions if necessary -->
-        </div>
-      </div>
+  <div class="content-header page-header-bar">
+    <div>
+      <h1 class="page-title">Edit Provider</h1>
+      <p class="page-subtitle">Proposal #<?= htmlspecialchars($_hdr_item->obtener_id_rfq()); ?> &mdash; <?= htmlspecialchars($_hdr_rfq->obtener_email_code()); ?></p>
     </div>
-  </section>
+    <a href="<?= $_hdr_back; ?>" class="btn btn-secondary btn-sm">
+      <i class="fas fa-arrow-left mr-1"></i> Back to Quote
+    </a>
+  </div>
 
-  <!-- Main Content -->
-  <section class="content">
+  <section class="content" style="padding-top:20px;">
     <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="card card-primary">
-            <div class="card-header">
-              <h3 class="card-title"><i class="fas fa-highlighter"></i> Enter the data</h3>
-            </div>
-            <!-- Form to edit provider -->
+      <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+          <div class="chart-card">
             <form role="form" method="post" action="<?= htmlspecialchars(GUARDAR_EDIT_PROVIDER . $id_provider); ?>">
-              <?php
-              // Include form for provider editing
-              include_once 'forms/quote/edicion_provider_vacio.inc.php';
-              ?>
+              <?php include_once 'forms/quote/edicion_provider_vacio.inc.php'; ?>
             </form>
           </div>
         </div>

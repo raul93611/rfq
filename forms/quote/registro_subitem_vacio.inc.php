@@ -1,66 +1,66 @@
 <input type="hidden" name="id_item" value="<?= $id_item; ?>">
-<?php
-Conexion::abrir_conexion();
-$item = RepositorioItem::obtener_item_por_id(Conexion::obtener_conexion(), $id_item);
-$cotizacion_recuperada = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $item->obtener_id_rfq());
-Conexion::cerrar_conexion();
-?>
-<div class="card-body">
-  <div class="row">
-    <div class="col-md-6">
-      <h2>Project Specifications</h2>
-      <div class="form-group">
-        <label for="brand_project">Brand:</label>
-        <input type="text" class="form-control form-control-sm" id="brand_project" name="brand_project" placeholder="Brand ..." autofocus>
-        <small class="form-text text-muted">Enter the brand name for the project.</small>
-      </div>
-      <div class="form-group">
-        <label for="part_number_project">Part #:</label>
-        <input type="text" class="form-control form-control-sm" id="part_number_project" name="part_number_project" placeholder="Part # ...">
-        <small class="form-text text-muted">Provide the part number associated with the project.</small>
-      </div>
-      <div class="form-group">
-        <label for="description_project">Description:</label>
-        <textarea class="form-control form-control-sm" rows="5" placeholder="Enter description ..." id="description_project" name="description_project"></textarea>
-        <small class="form-text text-muted">Enter a brief description of the project.</small>
+<div class="card-body user-form">
+
+  <div class="item-comparison-grid">
+    <div class="item-panel item-panel--project">
+      <div class="item-panel-header"><i class="fas fa-file-alt mr-2"></i> Project Specifications</div>
+      <div class="item-panel-body">
+        <div class="form-group">
+          <label for="brand_project">Brand</label>
+          <input type="text" class="form-control form-control-sm" id="brand_project" name="brand_project" placeholder="Brand ..." autofocus>
+        </div>
+        <div class="form-group">
+          <label for="part_number_project">Part #</label>
+          <input type="text" class="form-control form-control-sm" id="part_number_project" name="part_number_project" placeholder="Part number ...">
+        </div>
+        <div class="form-group mb-0">
+          <label for="description_project">Description</label>
+          <textarea class="form-control form-control-sm" rows="5" placeholder="Enter description ..." id="description_project" name="description_project"></textarea>
+        </div>
       </div>
     </div>
-    <div class="col-md-6">
-      <h2>E-logic Proposal</h2>
-      <div class="form-group">
-        <label for="brand">Brand:</label>
-        <input type="text" class="form-control form-control-sm" id="brand" name="brand" placeholder="Brand ...">
-        <small class="form-text text-muted">Enter the brand name for the E-logic proposal.</small>
-      </div>
-      <div class="form-group">
-        <label for="part_number">Part #:</label>
-        <input type="text" class="form-control form-control-sm" id="part_number" name="part_number" placeholder="Part # ...">
-        <small class="form-text text-muted">Provide the part number for the E-logic proposal.</small>
-      </div>
-      <div class="form-group">
-        <label for="description">Description:</label>
-        <textarea class="form-control form-control-sm" rows="5" placeholder="Enter description ..." id="description" name="description"></textarea>
-        <small class="form-text text-muted">Enter a description for the E-logic proposal.</small>
+    <div class="item-panel item-panel--proposal">
+      <div class="item-panel-header"><i class="fas fa-lightbulb mr-2"></i> E-logic Proposal</div>
+      <div class="item-panel-body">
+        <div class="form-group">
+          <label for="brand">Brand</label>
+          <input type="text" class="form-control form-control-sm" id="brand" name="brand" placeholder="Brand ...">
+        </div>
+        <div class="form-group">
+          <label for="part_number">Part #</label>
+          <input type="text" class="form-control form-control-sm" id="part_number" name="part_number" placeholder="Part number ...">
+        </div>
+        <div class="form-group mb-0">
+          <label for="description">Description</label>
+          <textarea class="form-control form-control-sm" rows="5" placeholder="Enter description ..." id="description" name="description"></textarea>
+        </div>
       </div>
     </div>
   </div>
-  <div class="form-group">
-    <label for="quantity">Quantity:</label>
-    <input type="number" class="form-control form-control-sm" id="quantity" name="quantity">
-    <small class="form-text text-muted">Specify the quantity of items.</small>
+
+  <div class="item-extra-fields">
+    <div class="form-row">
+      <div class="form-group col-md-4">
+        <label for="quantity">Quantity</label>
+        <input type="number" class="form-control form-control-sm" id="quantity" name="quantity" min="0">
+      </div>
+      <div class="form-group col-md-8">
+        <label for="website">Website</label>
+        <input type="text" class="form-control form-control-sm" id="website" name="website" placeholder="https://...">
+      </div>
+    </div>
+    <div class="form-group mb-0">
+      <label for="comments">Comments</label>
+      <textarea class="summernote_textarea form-control form-control-sm" rows="4" placeholder="Additional comments ..." id="comments" name="comments"></textarea>
+    </div>
   </div>
-  <div class="form-group">
-    <label for="comments">Comments:</label>
-    <textarea class="summernote_textarea form-control form-control-sm" rows="5" placeholder="Enter comments ..." id="comments" name="comments"></textarea>
-    <small class="form-text text-muted">Add any additional comments here.</small>
-  </div>
-  <div class="form-group">
-    <label for="website">Website:</label>
-    <input type="text" class="form-control form-control-sm" id="website" name="website" placeholder="Website ...">
-    <small class="form-text text-muted">Enter the website URL related to this item.</small>
-  </div>
+
 </div>
-<div class="card-footer">
-  <button type="submit" class="btn btn-primary" name="guardar_subitem"><i class="fa fa-check"></i> Save</button>
-  <a href="<?= EDITAR_COTIZACION . '/' . $item->obtener_id_rfq(); ?>" class="btn btn-secondary"><i class="fa fa-times"></i> Cancel</a>
+<div class="card-footer d-flex justify-content-end" style="gap:8px;">
+  <a href="<?= EDITAR_COTIZACION . '/' . $_hdr_item->obtener_id_rfq(); ?>" class="btn btn-secondary btn-sm">
+    <i class="fa fa-times mr-1"></i> Cancel
+  </a>
+  <button type="submit" class="btn btn-primary btn-sm" name="guardar_subitem">
+    <i class="fa fa-check mr-1"></i> Save Subitem
+  </button>
 </div>

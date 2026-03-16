@@ -11,37 +11,24 @@ Conexion::cerrar_conexion();
 ?>
 
 <div class="content-wrapper">
-  <!-- Content Header -->
-  <section class="content-header">
-    <div class="container-fluid">
-      <div class="row mb-2">
-        <div class="col-md-6">
-          <h1>Add Item</h1>
-        </div>
-        <div class="col-md-6">
-          <!-- Additional content like buttons or breadcrumb navigation can be added here -->
-        </div>
-      </div>
+  <div class="content-header page-header-bar">
+    <div>
+      <h1 class="page-title">Add Item</h1>
+      <p class="page-subtitle">Proposal #<?= htmlspecialchars($cotizacion_recuperada->obtener_id()); ?> &mdash; <?= htmlspecialchars($cotizacion_recuperada->obtener_email_code()); ?></p>
     </div>
-  </section>
+    <a href="<?= EDITAR_COTIZACION . '/' . $id_rfq; ?>" class="btn btn-secondary btn-sm">
+      <i class="fas fa-arrow-left mr-1"></i> Back to Quote
+    </a>
+  </div>
 
-  <!-- Main Content -->
-  <section class="content">
+  <section class="content" style="padding-top:20px;">
     <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="card card-primary">
-            <div class="card-header">
-              <h3 class="card-title"><i class="fas fa-highlighter"></i> Enter the Data</h3>
-            </div>
-            <!-- Form Start -->
+      <div class="row justify-content-center">
+        <div class="col-lg-10 col-md-12">
+          <div class="chart-card">
             <form role="form" method="post" action="<?= htmlspecialchars(GUARDAR_ADD_ITEM . $id_rfq); ?>">
-              <?php
-              // Include the form for entering new item details
-              include_once 'forms/quote/registro_item_vacio.inc.php';
-              ?>
+              <?php include_once 'forms/quote/registro_item_vacio.inc.php'; ?>
             </form>
-            <!-- Form End -->
           </div>
         </div>
       </div>
