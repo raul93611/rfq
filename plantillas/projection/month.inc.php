@@ -31,30 +31,28 @@ Conexion::cerrar_conexion();
       <!-- Main Table Card -->
       <div class="card chart-card">
         <div class="card-body">
-          <div class="table-responsive">
-            <table id="month-table" data-id="<?= htmlspecialchars($id_month) ?>" class="table table-bordered table-hover">
-              <thead>
-                <tr>
-                  <th>RFQ ID</th>
-                  <th>Invoice Date</th>
-                  <th>Invoice</th>
-                  <th>Type of Contract</th>
-                  <th>Invoice Amount</th>
-                  <th>Total Cost</th>
-                  <th>Profit ($)</th>
-                  <th>Profit (%)</th>
-                  <th>Sales Commission ($)</th>
-                  <th>Total Profit ($)</th>
-                  <th>Total Profit (%)</th>
-                  <th>Invoice Acceptance</th>
-                  <th>Partial Invoice</th>
-                </tr>
-              </thead>
-              <tbody>
-                <!-- Data will be dynamically loaded -->
-              </tbody>
-            </table>
-          </div>
+          <table id="month-table" data-id="<?= htmlspecialchars($id_month) ?>" class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <th>RFQ ID</th>
+                <th>Invoice Date</th>
+                <th>Invoice</th>
+                <th>Type of Contract</th>
+                <th>Invoice Amount</th>
+                <th>Total Cost</th>
+                <th>Profit ($)</th>
+                <th>Profit (%)</th>
+                <th>Sales Commission ($)</th>
+                <th>Total Profit ($)</th>
+                <th>Total Profit (%)</th>
+                <th>Invoice Acceptance</th>
+                <th>Partial Invoice</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Data will be dynamically loaded -->
+            </tbody>
+          </table>
         </div>
       </div>
 
