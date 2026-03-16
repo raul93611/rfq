@@ -39,6 +39,7 @@
               <tr>
                 <th>Proposal</th>
                 <th>Code</th>
+                <th>Contract Number</th>
                 <th>Designated User</th>
                 <th>Type of Bid</th>
                 <th>Comments</th>

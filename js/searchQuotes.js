@@ -25,6 +25,7 @@ $(document).ready(function () {
           },
         },
         { data: 'email_code' },
+        { data: 'contract_number', defaultContent: '—' },
         { data: 'nombre_usuario' },
         { data: 'type_of_bid' },
         { data: 'comments' },

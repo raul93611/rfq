@@ -1540,13 +1540,22 @@ class RepositorioRfq {
         $sort_column = 'sq.id';
         break;
       case 1:
-        $sort_column = 'sq.nombre_usuario';
+        $sort_column = 'sq.email_code';
         break;
       case 2:
-        $sort_column = 'sq.type_of_bid';
+        $sort_column = 'sq.contract_number';
         break;
       case 3:
+        $sort_column = 'sq.nombre_usuario';
+        break;
+      case 4:
+        $sort_column = 'sq.type_of_bid';
+        break;
+      case 5:
         $sort_column = 'sq.comments';
+        break;
+      case 6:
+        $sort_column = 'sq.total_price';
         break;
       default:
         $sort_column = 'sq.id';
@@ -1557,6 +1566,7 @@ class RepositorioRfq {
         $sql = "
         SELECT sq.id,
           sq.email_code,
+          sq.contract_number,
           sq.nombre_usuario,
           sq.type_of_bid,
           sq.comments,
