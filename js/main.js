@@ -211,7 +211,8 @@ $(document).ready(function () {
   });
   /************************************* ADD NEW COMMENT ***********************************/
   if ($('#nuevo_comment').length) {
-    $('#add_comment').on('click', function () {
+    $('#add_comment').on('click', function (e) {
+      e.preventDefault();
       $('#nuevo_comment').modal('show');
     });
   }
