@@ -268,9 +268,35 @@ body.layout-navbar-fixed .wrapper .content-wrapper {
 }
 
 .btn-item:hover {
-  color: #1F2D3D;
+  color: #fff;
   background-color: rgb(65, 125, 180) !important;
   border-color: rgb(65, 125, 180) !important;
+}
+
+.btn-item-sec {
+  color: #fff;
+  background-color: rgb(80, 140, 200) !important;
+  border-color: rgb(80, 140, 200) !important;
+  opacity: 0.75;
+}
+
+.btn-item-sec:hover {
+  color: #fff;
+  opacity: 1;
+  background-color: rgb(65, 125, 180) !important;
+  border-color: rgb(65, 125, 180) !important;
+}
+
+.btn-item-del {
+  color: #fff !important;
+  background-color: #c0392b !important;
+  border-color: #c0392b !important;
+}
+
+.btn-item-del:hover {
+  color: #fff !important;
+  background-color: #a93226 !important;
+  border-color: #a93226 !important;
 }
 
 .btn-subitem {
@@ -280,8 +306,43 @@ body.layout-navbar-fixed .wrapper .content-wrapper {
 }
 
 .btn-subitem:hover {
+  color: #fff;
   background-color: rgb(105, 120, 135) !important;
   border-color: rgb(105, 120, 135) !important;
+}
+
+/* Compact action button column inside items table */
+.item-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 90px;
+}
+
+.item-action-btn {
+  font-size: 10px !important;
+  padding: 3px 6px !important;
+  line-height: 1.4 !important;
+  border-radius: 4px !important;
+  white-space: nowrap;
+}
+
+/* Items controls bar (Taxes / Profit / Additional / Payment Terms) */
+.items-controls-bar {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+}
+
+.items-controls-bar label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: #8896a5;
+  margin-bottom: 4px;
 }
 
 .bg-warning {
@@ -497,7 +558,7 @@ label.error {
   margin: auto;
   overflow: auto;
   max-height: 700px;
-  border-radius: 10px;
+  border-radius: 4px;
 }
 
 #table_items_container table, #services_table table, #requote_table table {
@@ -529,19 +590,42 @@ label.error {
 
 #table_items_container tfoot,
 #table_items_container tfoot th,
-#table_items_container tfoot td, 
+#table_items_container tfoot td,
 #services_table tfoot,
 #services_table tfoot th,
-#services_table tfoot td, 
+#services_table tfoot td,
 #requote_table tfoot,
 #requote_table tfoot th,
 #requote_table tfoot td {
   position: -webkit-sticky;
   position: sticky;
   bottom: 0;
-  background: #39485A;
-  color: #fff;
+  background: #f0f7ff;
+  color: #39485a;
   z-index: 1;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 10px !important;
+  border-top: 2px solid #13A8F0 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+#table_items_container tfoot #total1,
+#table_items_container tfoot #total2 {
+  color: #13A8F0;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+#table_items_container tfoot #dif_total {
+  color: #27ae60;
+  font-size: 13px;
+}
+
+#table_items_container tfoot #total_quantity,
+#table_items_container tfoot #total_additional {
+  color: #39485a;
 }
 
 th:first-child {

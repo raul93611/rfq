@@ -121,7 +121,7 @@ class RepositorioItem {
     $providers = RepositorioProvider::obtener_providers_por_id_item(Conexion::obtener_conexion(), $item->obtener_id());
     Conexion::cerrar_conexion();
     echo '<tr id="item' . $item->obtener_id() . '">';
-    echo '<td><a href="' . ADD_PROVIDER . '/' . $item->obtener_id() . '" class="btn btn-item btn-block"><i class="fa fa-plus-circle"></i> Add Provider</a><br><a href="' . EDIT_ITEM . '/' . $item->obtener_id() . '" class="btn btn-item btn-block"><i class="fa fa-edit"></i> Edit item</a><br><a href="' . DELETE_ITEM . '/' . $item->obtener_id() . '" class="delete_item_button btn btn-item btn-block"><i class="fa fa-trash"></i> Delete</a><br><a href="' . ADD_SUBITEM . '/' . $item->obtener_id() . '" class="btn btn-item btn-block"><i class="fa fa-plus-circle"></i> Add subitem</a></td>';
+    echo '<td><div class="item-actions"><a href="' . EDIT_ITEM . '/' . $item->obtener_id() . '" class="btn btn-item btn-xs item-action-btn"><i class="fa fa-edit"></i> Edit</a><a href="' . DELETE_ITEM . '/' . $item->obtener_id() . '" class="delete_item_button btn btn-item-del btn-xs item-action-btn"><i class="fa fa-trash"></i> Delete</a><a href="' . ADD_PROVIDER . '/' . $item->obtener_id() . '" class="btn btn-item-sec btn-xs item-action-btn"><i class="fa fa-plus-circle"></i> Provider</a><a href="' . ADD_SUBITEM . '/' . $item->obtener_id() . '" class="btn btn-item-sec btn-xs item-action-btn"><i class="fa fa-plus-circle"></i> Subitem</a></div></td>';
     echo '<td>' . ($item->getIdRoom() ? '<span class="mb-2 badge badge-primary" style="background-color: ' . $room->getColor() . ';">' . $room->getName() . '</span>' : '') . $numeracion . '</td>';
     if (strlen($item->obtener_description_project()) >= 100) {
       echo '<td><b>Brand:</b> ' . $item->obtener_brand_project() . '<br><b>Part #:</b> ' . $item->obtener_part_number_project() . '<br><b>Description:</b> ' . nl2br(mb_substr($item->obtener_description_project(), 0, 100)) . ' ...</td>';
@@ -215,36 +215,39 @@ class RepositorioItem {
     <?php
     if (count($items)) {
     ?>
-      <div class="row">
-        <div class="col-md-3">
-          <label>Taxes (%):</label>
-          <input type="hidden" name="taxes_original" value="<?php echo $cotizacion->obtener_taxes(); ?>">
-          <input type="number" step=".01" name="taxes" id="taxes" class="form-control form-control-sm" value="<?php echo $cotizacion->obtener_taxes(); ?>">
-        </div>
-        <div class="col-md-3">
-          <label>Profit (%):</label>
-          <input type="hidden" name="profit_original" value="<?php echo $cotizacion->obtener_profit(); ?>">
-          <input type="number" step=".01" name="profit" id="profit" class="form-control form-control-sm" value="<?php echo $cotizacion->obtener_profit(); ?>">
-        </div>
-        <div class="col-md-3">
-          <label>Additional general ($):</label>
-          <input type="hidden" name="additional_general_original" value="<?php echo $cotizacion->obtener_additional(); ?>">
-          <input type="number" step=".01" name="additional_general" id="additional_general" class="form-control form-control-sm" value="<?php echo $cotizacion->obtener_additional(); ?>">
-        </div>
-        <div class="col-md-3">
-          <label>Payment terms:</label>
-          <div class="custom-control custom-radio">
-            <input type="radio" id="net_30" name="payment_terms" class="custom-control-input" value="Net 30" <?php echo $cotizacion->obtener_payment_terms() == 'Net 30' ? 'checked' : ''; ?>>
-            <label class="custom-control-label" for="net_30">Net 30</label>
+      <div class="items-controls-bar user-form">
+        <div class="row">
+          <div class="col-md-3">
+            <label>Taxes (%)</label>
+            <input type="hidden" name="taxes_original" value="<?php echo $cotizacion->obtener_taxes(); ?>">
+            <input type="number" step=".01" name="taxes" id="taxes" class="form-control form-control-sm" value="<?php echo $cotizacion->obtener_taxes(); ?>">
           </div>
-          <div class="custom-control custom-radio">
-            <input type="radio" id="net_30cc" name="payment_terms" class="custom-control-input" value="Net 30/CC" <?php echo $cotizacion->obtener_payment_terms() == 'Net 30/CC' ? 'checked' : ''; ?>>
-            <label class="custom-control-label" for="net_30cc">Net 30/CC</label>
+          <div class="col-md-3">
+            <label>Profit (%)</label>
+            <input type="hidden" name="profit_original" value="<?php echo $cotizacion->obtener_profit(); ?>">
+            <input type="number" step=".01" name="profit" id="profit" class="form-control form-control-sm" value="<?php echo $cotizacion->obtener_profit(); ?>">
           </div>
-          <input type="hidden" name="payment_terms_original" value="<?php echo $cotizacion->obtener_payment_terms(); ?>">
+          <div class="col-md-3">
+            <label>Additional General ($)</label>
+            <input type="hidden" name="additional_general_original" value="<?php echo $cotizacion->obtener_additional(); ?>">
+            <input type="number" step=".01" name="additional_general" id="additional_general" class="form-control form-control-sm" value="<?php echo $cotizacion->obtener_additional(); ?>">
+          </div>
+          <div class="col-md-3">
+            <label>Payment Terms</label>
+            <div class="d-flex gap-3" style="gap:16px;">
+              <div class="custom-control custom-radio">
+                <input type="radio" id="net_30" name="payment_terms" class="custom-control-input" value="Net 30" <?php echo $cotizacion->obtener_payment_terms() == 'Net 30' ? 'checked' : ''; ?>>
+                <label class="custom-control-label" for="net_30">Net 30</label>
+              </div>
+              <div class="custom-control custom-radio">
+                <input type="radio" id="net_30cc" name="payment_terms" class="custom-control-input" value="Net 30/CC" <?php echo $cotizacion->obtener_payment_terms() == 'Net 30/CC' ? 'checked' : ''; ?>>
+                <label class="custom-control-label" for="net_30cc">Net 30/CC</label>
+              </div>
+            </div>
+            <input type="hidden" name="payment_terms_original" value="<?php echo $cotizacion->obtener_payment_terms(); ?>">
+          </div>
         </div>
       </div>
-      <br>
       <div id="table_items_container" class="table-responsive">
         <table id="tabla_items" class="table table-hover">
           <thead>
@@ -275,9 +278,7 @@ class RepositorioItem {
           </tbody>
           <tfoot>
             <tr>
-              <th colspan="5" class="display-4"><b>
-                  <h4>TOTAL:</h4>
-                </b></th>
+              <th colspan="5" style="font-size:13px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;">TOTAL</th>
               <th id="total_quantity"></th>
               <th></th>
               <th id="total_additional"></th>
