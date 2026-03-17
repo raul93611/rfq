@@ -82,23 +82,25 @@ class ServiceRepository {
     $total_service = self::get_total($connection, $quote->obtener_id());
     if (count($services)) {
 ?>
-      <div class="container-fluid my-2">
+      <div class="items-controls-bar user-form">
         <div class="row">
-          <div class="col-md-6">
-            <label>Payment terms:</label>
-            <div class="custom-control custom-radio">
-              <input type="radio" id="net_30Services" name="services_payment_term" class="custom-control-input" value="Net 30" <?= $quote->obtener_services_payment_term() == 'Net 30' ? 'checked' : ''; ?>>
-              <label class="custom-control-label" for="net_30Services">Net 30</label>
-            </div>
-            <div class="custom-control custom-radio">
-              <input type="radio" id="net_30ccServices" name="services_payment_term" class="custom-control-input" value="Net 30/CC" <?= $quote->obtener_services_payment_term() == 'Net 30/CC' ? 'checked' : ''; ?>>
-              <label class="custom-control-label" for="net_30ccServices">Net 30/CC</label>
+          <div class="col-md-4">
+            <label>Payment Terms</label>
+            <div class="d-flex" style="gap:16px;">
+              <div class="custom-control custom-radio">
+                <input type="radio" id="net_30Services" name="services_payment_term" class="custom-control-input" value="Net 30" <?= $quote->obtener_services_payment_term() == 'Net 30' ? 'checked' : ''; ?>>
+                <label class="custom-control-label" for="net_30Services">Net 30</label>
+              </div>
+              <div class="custom-control custom-radio">
+                <input type="radio" id="net_30ccServices" name="services_payment_term" class="custom-control-input" value="Net 30/CC" <?= $quote->obtener_services_payment_term() == 'Net 30/CC' ? 'checked' : ''; ?>>
+                <label class="custom-control-label" for="net_30ccServices">Net 30/CC</label>
+              </div>
             </div>
           </div>
         </div>
       </div>
       <div class="table-responsive" id="services_table">
-        <table class="table table-bordered table-hover">
+        <table class="table table-hover">
           <thead>
             <tr>
               <th style="width: 50px;">Options</th>
@@ -118,9 +120,7 @@ class ServiceRepository {
           </tbody>
           <tfoot>
             <tr>
-              <td colspan="5" class="display-4"><b>
-                  <h4>TOTAL:</h4>
-                </b></td>
+              <td colspan="5" style="font-size:13px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;">TOTAL</td>
               <td id="total_service">$ <?= $total_service; ?></td>
             </tr>
           </tfoot>
@@ -129,7 +129,10 @@ class ServiceRepository {
     <?php
     } else {
     ?>
-      <h3 class="text-info text-center"><i class="fas fa-exclamation-circle"></i> No Services to display!</h3>
+      <div class="section-empty-state">
+        <i class="fas fa-concierge-bell"></i>
+        <p>No services added yet</p>
+      </div>
     <?php
     }
   }
@@ -141,10 +144,10 @@ class ServiceRepository {
     ?>
     <tr class="service_item" id="service<?= $service->get_id(); ?>">
       <td>
-        <div class="btn-group-vertical">
-          <button type="button" class="btn btn-item edit_service" data="<?= $service->get_id(); ?>"><i class="fas fa-pen"></i></button>
-          <a href="<?= DELETE_SERVICE . $service->get_id(); ?>" class="delete_service_button btn btn-item"><i class="fas fa-trash"></i></a>
-          <a href="<?= DUPLICATE_SERVICE . $service->get_id(); ?>" class="btn btn-item"><i class="fas fa-copy"></i></a>
+        <div class="item-actions">
+          <button type="button" class="btn btn-item btn-xs item-action-btn edit_service" data="<?= $service->get_id(); ?>"><i class="fas fa-pen mr-1"></i> Edit</button>
+          <a href="<?= DELETE_SERVICE . $service->get_id(); ?>" class="delete_service_button btn btn-item-del btn-xs item-action-btn"><i class="fas fa-trash mr-1"></i> Delete</a>
+          <a href="<?= DUPLICATE_SERVICE . $service->get_id(); ?>" class="btn btn-item-sec btn-xs item-action-btn"><i class="fas fa-copy mr-1"></i> Duplicate</a>
         </div>
       </td>
       <td><?= $service->getIdRoom() ? '<span class="mb-2 badge badge-primary" style="background-color: ' . $room->getColor() . ';">' . $room->getName() . '</span>' : '' ?><?= $key + 1; ?></td>

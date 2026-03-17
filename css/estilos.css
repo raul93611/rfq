@@ -551,13 +551,22 @@ label.error {
   color: red;
 }
 
-#table_items_container, #services_table, #requote_table {
+#table_items_container, #requote_table {
   position: relative;
   width: 100%;
   z-index: 1;
   margin: auto;
   overflow: auto;
   max-height: 700px;
+  border-radius: 4px;
+}
+
+#services_table {
+  position: relative;
+  width: 100%;
+  z-index: 1;
+  margin: auto;
+  overflow: hidden;
   border-radius: 4px;
 }
 
@@ -612,7 +621,8 @@ label.error {
 }
 
 #table_items_container tfoot #total1,
-#table_items_container tfoot #total2 {
+#table_items_container tfoot #total2,
+#services_table tfoot #total_service {
   color: #13A8F0;
   font-size: 14px;
   font-weight: 700;
@@ -626,6 +636,17 @@ label.error {
 #table_items_container tfoot #total_quantity,
 #table_items_container tfoot #total_additional {
   color: #39485a;
+}
+
+/* Remove cell borders inside tfoot rows */
+#table_items_container tfoot td,
+#table_items_container tfoot th,
+#services_table tfoot td,
+#services_table tfoot th,
+#requote_table tfoot td,
+#requote_table tfoot th {
+  border: none !important;
+  border-top: 2px solid #13A8F0 !important;
 }
 
 th:first-child {
