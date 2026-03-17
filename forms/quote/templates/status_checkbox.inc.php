@@ -25,11 +25,11 @@ if ($canal == 'Chemonics' && !$cotizacion_recuperada->obtener_award()) {
               </div>';
   } elseif ($cotizacion_recuperada->obtener_fullfillment()) {
     $invoiceCheck = $cotizacion_recuperada->isEnabledToInvoice();
-    // If there are errors, display them
-    echo '<div class="mb-0 alert alert-warning alert-dismissible">
-    <h5><i class="icon fas fa-exclamation-triangle"></i> Alert!</h5><ul>';
+    echo '<div class="next-step-requirements">';
+    echo '<div class="next-step-req-label"><i class="fas fa-lock mr-1"></i> To enable Invoice, complete:</div>';
+    echo '<ul class="next-step-req-list">';
     foreach ($invoiceCheck as $error) {
-      echo '<li>' . $error . '</li>';
+      echo '<li><i class="fas fa-times-circle mr-1"></i>' . $error . '</li>';
     }
     echo '</ul></div>';
   } elseif ($cotizacion_recuperada->isEnabledToFulfillment() === true) {
@@ -39,11 +39,11 @@ if ($canal == 'Chemonics' && !$cotizacion_recuperada->obtener_award()) {
               </div>';
   } elseif ($cotizacion_recuperada->obtener_award()) {
     $fulfillmentCheck = $cotizacion_recuperada->isEnabledToFulfillment();
-    // If there are errors, display them
-    echo '<div class="mb-0 alert alert-warning alert-dismissible">
-    <h5><i class="icon fas fa-exclamation-triangle"></i> Alert!</h5><ul>';
+    echo '<div class="next-step-requirements">';
+    echo '<div class="next-step-req-label"><i class="fas fa-lock mr-1"></i> To enable Fulfillment, complete:</div>';
+    echo '<ul class="next-step-req-list">';
     foreach ($fulfillmentCheck as $error) {
-      echo '<li>' . $error . '</li>';
+      echo '<li><i class="fas fa-times-circle mr-1"></i>' . $error . '</li>';
     }
     echo '</ul></div>';
   } elseif ($cotizacion_recuperada->obtener_status() && !$cotizacion_recuperada->obtener_award()) {

@@ -1646,3 +1646,36 @@ h3.text-info.text-center .fa-exclamation-circle {
 .item-extra-fields {
   padding-top: 4px;
 }
+
+/* Next Step requirements panel */
+.next-step-requirements {
+  background: #fffbf0;
+  border-left: 3px solid #f39c12;
+  border-radius: 6px;
+  padding: 10px 14px;
+}
+
+.next-step-req-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: #8896a5;
+  margin-bottom: 6px;
+}
+
+.next-step-req-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.next-step-req-list li {
+  font-size: 12px;
+  color: #39485a;
+  padding: 2px 0;
+}
+
+.next-step-req-list li .fa-times-circle {
+  color: #e67e22;
+}
