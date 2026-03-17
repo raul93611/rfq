@@ -115,70 +115,104 @@ class RepositorioItem {
     if (!isset($item)) {
       return;
     }
+
     $j = $i;
+    $itemId = $item->obtener_id();
+
+    // Load related data
     Conexion::abrir_conexion();
-    $room = $item->getIdRoom() ? RoomRepository::getById(Conexion::obtener_conexion(), $item->getIdRoom()) : null;
-    $providers = RepositorioProvider::obtener_providers_por_id_item(Conexion::obtener_conexion(), $item->obtener_id());
+    $room      = $item->getIdRoom() ? RoomRepository::getById(Conexion::obtener_conexion(), $item->getIdRoom()) : null;
+    $providers = RepositorioProvider::obtener_providers_por_id_item(Conexion::obtener_conexion(), $itemId);
     Conexion::cerrar_conexion();
-    echo '<tr id="item' . $item->obtener_id() . '">';
-    echo '<td><div class="item-actions"><a href="' . EDIT_ITEM . '/' . $item->obtener_id() . '" class="btn btn-item btn-xs item-action-btn"><i class="fa fa-edit"></i> Edit</a><a href="' . DELETE_ITEM . '/' . $item->obtener_id() . '" class="delete_item_button btn btn-item-del btn-xs item-action-btn"><i class="fa fa-trash"></i> Delete</a><a href="' . ADD_PROVIDER . '/' . $item->obtener_id() . '" class="btn btn-item-sec btn-xs item-action-btn"><i class="fa fa-plus-circle"></i> Provider</a><a href="' . ADD_SUBITEM . '/' . $item->obtener_id() . '" class="btn btn-item-sec btn-xs item-action-btn"><i class="fa fa-plus-circle"></i> Subitem</a></div></td>';
-    echo '<td>' . ($item->getIdRoom() ? '<span class="mb-2 badge badge-primary" style="background-color: ' . $room->getColor() . ';">' . $room->getName() . '</span>' : '') . $numeracion . '</td>';
-    if (strlen($item->obtener_description_project()) >= 100) {
-      echo '<td><b>Brand:</b> ' . $item->obtener_brand_project() . '<br><b>Part #:</b> ' . $item->obtener_part_number_project() . '<br><b>Description:</b> ' . nl2br(mb_substr($item->obtener_description_project(), 0, 100)) . ' ...</td>';
-    } else {
-      echo '<td><b>Brand:</b> ' . $item->obtener_brand_project() . '<br><b>Part #:</b> ' . $item->obtener_part_number_project() . '<br><b>Description:</b> ' . nl2br($item->obtener_description_project()) . '</td>';
+
+    // --- Options column ---
+    $optionsCell = '
+      <div class="item-actions">
+        <a href="' . EDIT_ITEM   . '/' . $itemId . '" class="btn btn-item     btn-xs item-action-btn"><i class="fa fa-edit"></i> Edit</a>
+        <a href="' . DELETE_ITEM . '/' . $itemId . '" class="delete_item_button btn btn-item-del btn-xs item-action-btn"><i class="fa fa-trash"></i> Delete</a>
+        <a href="' . ADD_PROVIDER . '/' . $itemId . '" class="btn btn-item-sec btn-xs item-action-btn"><i class="fa fa-plus-circle"></i> Provider</a>
+        <a href="' . ADD_SUBITEM  . '/' . $itemId . '" class="btn btn-item-sec btn-xs item-action-btn"><i class="fa fa-plus-circle"></i> Subitem</a>
+      </div>';
+
+    // --- # column (with optional room badge) ---
+    $roomBadge   = $room ? '<span class="mb-2 badge badge-primary" style="background-color: ' . $room->getColor() . ';">' . $room->getName() . '</span>' : '';
+    $numberCell  = $roomBadge . $numeracion;
+
+    // --- Description columns (truncate at 100 chars) ---
+    $projectDesc = self::formatDescription(
+      $item->obtener_brand_project(),
+      $item->obtener_part_number_project(),
+      $item->obtener_description_project()
+    );
+    $elogicDesc  = self::formatDescription(
+      $item->obtener_brand(),
+      $item->obtener_part_number(),
+      $item->obtener_description()
+    );
+
+    // --- Providers column (name | price in two sub-columns) ---
+    $providerNames  = '';
+    $providerPrices = '';
+    $precios        = [];
+    foreach ($providers as $idx => $provider) {
+      $name           = $provider->obtener_provider();
+      $label          = strlen($name) >= 10 ? mb_substr($name, 0, 10) . '...' : $name;
+      $providerNames  .= '<a href="' . EDIT_PROVIDER . '/' . $provider->obtener_id() . '"><b>' . $label . ':</b></a><br>';
+      $providerPrices .= '$ ' . $provider->obtener_price() . '<br>';
+      $precios[$idx]   = $provider->obtener_price();
     }
-    if (strlen($item->obtener_description()) >= 100) {
-      echo '<td><b>Brand:</b> ' . $item->obtener_brand() . '<br><b>Part #:</b> ' . $item->obtener_part_number() . '<br><b>Description:</b> ' . nl2br(mb_substr($item->obtener_description(), 0, 100)) . ' ...</td>';
-    } else {
-      echo '<td><b>Brand:</b> ' . $item->obtener_brand() . '<br><b>Part #:</b> ' . $item->obtener_part_number() . '<br><b>Description:</b> ' . nl2br($item->obtener_description()) . '</td>';
-    }
-    echo '<td class="estrechar"><a target="_blank" href="' . $item->obtener_website() . '">' . $item->obtener_website() . '</a></td>';
-    echo '<td>' . $item->obtener_quantity() . '</td>';
-    echo '<td><div class="row"><div class="col-6">';
-    for ($i = 0; $i < count($providers); $i++) {
-      $provider = $providers[$i];
-      if (strlen($provider->obtener_provider()) >= 10) {
-        echo '<a href="' . EDIT_PROVIDER . '/' . $provider->obtener_id() . '"><b>' . mb_substr($provider->obtener_provider(), 0, 10) . '... :</b></a><br>';
-      } else {
-        echo '<a href="' . EDIT_PROVIDER . '/' . $provider->obtener_id() . '"><b>' . $provider->obtener_provider() . ':</b></a><br>';
-      }
-    }
-    echo '</div><div class="col-6">';
-    for ($i = 0; $i < count($providers); $i++) {
-      $provider = $providers[$i];
-      echo '$ ' . $provider->obtener_price() . '<br>';
-    }
-    echo '</div></div></td>';
-    if ($item->obtener_additional() != 0) {
-      echo '<td><input type="number" step=".01" class="form-control form-control-sm" id="add_cost' . $j . '" size="10" value="' . $item->obtener_additional() . '"></td>';
-    } else {
-      echo '<td><input type="number" step=".01" class="form-control form-control-sm" id="add_cost' . $j . '" size="10" value="0"></td>';
-    }
-    echo '<td>';
-    for ($i = 0; $i < count($providers); $i++) {
-      $provider = $providers[$i];
-      $precios[$i] = $provider->obtener_price();
-    }
+    $providersCell = '
+      <div class="row">
+        <div class="col-6">' . $providerNames  . '</div>
+        <div class="col-6">' . $providerPrices . '</div>
+      </div>';
+
+    // --- Additional cost column ---
+    $additionalValue = $item->obtener_additional() != 0 ? $item->obtener_additional() : 0;
+    $additionalCell  = '<input type="number" step=".01" class="form-control form-control-sm" id="add_cost' . $j . '" size="10" value="' . $additionalValue . '">';
+
+    // --- Best unit cost column (also updates provider_menor) ---
+    $bestUnitCostCell = '';
     if (!empty($precios)) {
       $best_unit_price = min($precios);
-      for ($i = 0; $i < count($precios); $i++) {
-        if ($best_unit_price == $precios[$i]) {
+      foreach ($precios as $idx => $price) {
+        if ($best_unit_price == $price) {
           Conexion::abrir_conexion();
-          self::actualizar_provider_menor_item(Conexion::obtener_conexion(), $providers[$i]->obtener_id(), $item->obtener_id());
+          self::actualizar_provider_menor_item(Conexion::obtener_conexion(), $providers[$idx]->obtener_id(), $itemId);
           Conexion::cerrar_conexion();
         }
       }
-      echo '$ ' . $best_unit_price;
+      $bestUnitCostCell = '$ ' . $best_unit_price;
     }
-    echo '</td>';
-    echo '<td></td>';
-    echo '<td></td>';
-    echo '<td></td>';
+
+    // --- Render row ---
+    echo '<tr id="item' . $itemId . '">';
+    echo '<td>' . $optionsCell . '</td>';
+    echo '<td>' . $numberCell  . '</td>';
+    echo '<td>' . $projectDesc . '</td>';
+    echo '<td>' . $elogicDesc  . '</td>';
+    echo '<td class="estrechar"><a target="_blank" href="' . $item->obtener_website() . '">' . $item->obtener_website() . '</a></td>';
+    echo '<td>' . $item->obtener_quantity() . '</td>';
+    echo '<td>' . $providersCell . '</td>';
+    echo '<td>' . $additionalCell . '</td>';
+    echo '<td>' . $bestUnitCostCell . '</td>';
+    echo '<td></td>'; // Total cost  (calculated by JS)
+    echo '<td></td>'; // Price for client (calculated by JS)
+    echo '<td></td>'; // Total price (calculated by JS)
     echo '<td class="estrechar">' . nl2br($item->obtener_comments()) . '</td>';
     echo '</tr>';
-    $j = RepositorioSubitem::escribir_subitems($item->obtener_id(), $j);
+
+    $j = RepositorioSubitem::escribir_subitems($itemId, $j);
     return $j;
+  }
+
+  private static function formatDescription($brand, $partNumber, $description) {
+    $truncated = strlen($description) >= 100
+      ? nl2br(mb_substr($description, 0, 100)) . ' ...'
+      : nl2br($description);
+    return '<b>Brand:</b> ' . $brand . '<br>'
+         . '<b>Part #:</b> ' . $partNumber . '<br>'
+         . '<b>Description:</b> ' . $truncated;
   }
 
   public static function escribir_items($id_rfq) {
