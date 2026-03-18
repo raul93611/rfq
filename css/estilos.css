@@ -622,13 +622,16 @@ label.error {
 
 #table_items_container tfoot #total1,
 #table_items_container tfoot #total2,
-#services_table tfoot #total_service {
+#services_table tfoot #total_service,
+#requote_table tfoot #total_re_quote,
+#requote_table tfoot #total_ganado {
   color: #13A8F0;
   font-size: 14px;
   font-weight: 700;
 }
 
-#table_items_container tfoot #dif_total {
+#table_items_container tfoot #dif_total,
+#requote_table tfoot #profit_rq {
   color: #27ae60;
   font-size: 13px;
 }
@@ -1549,7 +1552,6 @@ h3.text-info.text-center .fa-exclamation-circle {
   z-index: 50;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 12px;
   padding: 10px 20px;
   background: #fff;
@@ -1566,13 +1568,12 @@ h3.text-info.text-center .fa-exclamation-circle {
   flex-shrink: 0;
 }
 
-/* Totals inline in the center */
+/* Totals pinned to the right */
 .quote-action-bar__totals {
   display: flex;
   align-items: center;
   gap: 0;
-  flex: 1;
-  justify-content: center;
+  margin-left: auto;
 }
 
 .quote-action-total {

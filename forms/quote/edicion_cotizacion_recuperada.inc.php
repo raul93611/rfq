@@ -126,6 +126,18 @@
     <?php include_once 'forms/quote/templates/go_back_button.inc.php'; ?>
   </div>
 
+  <div class="quote-action-bar__right">
+    <button type="submit" class="btn btn-primary btn-sm" name="guardar_cambios_cotizacion">
+      <i class="fa fa-check mr-1"></i> Save
+    </button>
+    <?php include_once 'forms/quote/templates/add_item.inc.php'; ?>
+    <a href="#" id="add_comment" class="btn btn-secondary btn-sm">
+      <i class="fas fa-plus mr-1"></i> Add Comment
+    </a>
+    <?php include_once 'forms/quote/templates/rooms_button.inc.php'; ?>
+    <?php include_once 'forms/quote/templates/actions_button.inc.php'; ?>
+  </div>
+
   <div class="quote-action-bar__totals">
     <div class="quote-action-total">
       <span class="quote-action-total__label">Total Price</span>
@@ -139,18 +151,6 @@
       <span class="quote-action-total__label">Profit %</span>
       <span class="quote-action-total__value"><?= number_format($cotizacion_recuperada->obtener_quote_profit_percentage(), 2); ?>%</span>
     </div>
-  </div>
-
-  <div class="quote-action-bar__right">
-    <button type="submit" class="btn btn-primary btn-sm" name="guardar_cambios_cotizacion">
-      <i class="fa fa-check mr-1"></i> Save
-    </button>
-    <?php include_once 'forms/quote/templates/add_item.inc.php'; ?>
-    <a href="#" id="add_comment" class="btn btn-secondary btn-sm">
-      <i class="fas fa-plus mr-1"></i> Add Comment
-    </a>
-    <?php include_once 'forms/quote/templates/rooms_button.inc.php'; ?>
-    <?php include_once 'forms/quote/templates/actions_button.inc.php'; ?>
   </div>
 
 </div>

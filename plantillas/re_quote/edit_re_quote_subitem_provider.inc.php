@@ -1,32 +1,27 @@
+<?php
+Conexion::abrir_conexion();
+$_rq_sub_prov = ReQuoteSubitemProviderRepository::get_re_quote_subitem_provider_by_id(Conexion::obtener_conexion(), $id_re_quote_subitem_provider);
+$_rq_sub      = ReQuoteSubitemRepository::get_re_quote_subitem_by_id(Conexion::obtener_conexion(), $_rq_sub_prov->get_id_re_quote_subitem());
+$_rq_item     = ReQuoteItemRepository::get_re_quote_item_by_id(Conexion::obtener_conexion(), $_rq_sub->get_id_re_quote_item());
+$_rq          = ReQuoteRepository::get_re_quote_by_id(Conexion::obtener_conexion(), $_rq_item->get_id_re_quote());
+$_rfq_id      = $_rq->get_id_rfq();
+Conexion::cerrar_conexion();
+?>
 <div class="content-wrapper">
-  <!-- Content Header -->
-  <section class="content-header">
-    <div class="container-fluid">
-      <div class="row mb-2">
-        <div class="col-md-6">
-          <h1>Edit Provider Subitem</h1>
-        </div>
-        <div class="col-md-6">
-          <!-- Placeholder for additional controls or breadcrumbs -->
-        </div>
-      </div>
+  <div class="content-header page-header-bar">
+    <div>
+      <h1 class="page-title">Edit Provider</h1>
+      <p class="page-subtitle">Proposal #<?= htmlspecialchars($_rfq_id); ?> &mdash; Subitem</p>
     </div>
-  </section>
-
-  <!-- Main Content -->
-  <section class="content">
+    <a href="<?= RE_QUOTE . $_rfq_id; ?>" class="btn btn-secondary btn-sm">
+      <i class="fas fa-arrow-left mr-1"></i> Back to Re-Quote
+    </a>
+  </div>
+  <section class="content" style="padding-top:20px;">
     <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="card card-primary">
-            <!-- Card Header -->
-            <div class="card-header">
-              <h3 class="card-title">
-                <i class="fas fa-edit"></i> Update Subitem Details
-              </h3>
-            </div>
-
-            <!-- Form Section -->
+      <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+          <div class="chart-card">
             <form role="form" method="post" action="<?= SAVE_EDIT_RE_QUOTE_SUBITEM_PROVIDER; ?>">
               <?php include_once 'forms/re_quote/edit_re_quote_subitem_provider_form.inc.php'; ?>
             </form>

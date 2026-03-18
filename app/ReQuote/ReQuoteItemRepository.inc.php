@@ -29,126 +29,128 @@ class ReQuoteItemRepository {
 
   public static function print_re_quote_items($id_re_quote) {
     Conexion::abrir_conexion();
-    $re_quote = ReQuoteRepository::get_re_quote_by_id(Conexion::obtener_conexion(), $id_re_quote);
-    $quote = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $re_quote->get_id_rfq());
+    $re_quote       = ReQuoteRepository::get_re_quote_by_id(Conexion::obtener_conexion(), $id_re_quote);
+    $quote          = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $re_quote->get_id_rfq());
     $re_quote_items = self::get_re_quote_items_by_id_re_quote(Conexion::obtener_conexion(), $id_re_quote);
-    $items = RepositorioItem::obtener_items_por_id_rfq(Conexion::obtener_conexion(), $re_quote->get_id_rfq());
+    $items          = RepositorioItem::obtener_items_por_id_rfq(Conexion::obtener_conexion(), $re_quote->get_id_rfq());
     Conexion::cerrar_conexion();
-    if (count($re_quote_items)) {
-      if (count($items) != count($re_quote_items)) :
-?>
-        <div class="alert alert-danger" role="alert">
-          <i class="fas fa-exclamation-triangle"></i> Attention: The quantity of items in the initial quote has been modified, leading to an outdated RFQ Re Quote. Please review and <b>RELOAD</b> to ensure accuracy.
-        </div>
-      <?php endif; ?>
-      <a target="_blank" href="<?= PDF_RE_QUOTE . $re_quote->get_id_rfq(); ?>" class="btn btn-secondary float-right"><i class="fa fa-file"></i> PDF</a>
-      <h2>Items:</h2>
-      <div class="p-3">
-        <div class="custom-control custom-radio">
-          <input type="radio" id="net_30" name="payment_terms" class="custom-control-input" value="Net 30" <?= $re_quote->get_payment_terms() == 'Net 30' ? 'checked' : ''; ?>>
-          <label class="custom-control-label" for="net_30">Net 30</label>
-        </div>
-        <div class="custom-control custom-radio">
-          <input type="radio" id="net_30_cc" name="payment_terms" class="custom-control-input" value="Net 30/CC" <?= $re_quote->get_payment_terms() == 'Net 30/CC' ? 'checked' : ''; ?>>
-          <label class="custom-control-label" for="net_30_cc">Net 30/CC</label>
-        </div>
-        <input type="hidden" name="payment_terms_original" value="<?= $re_quote->get_payment_terms(); ?>">
-      </div>
-      <div id="requote_table" class="table-responsive">
-        <table class="table table-bordered table-hover">
-          <thead>
-            <tr>
-              <th class="options">Options</th>
-              <th id="numeracion">#</th>
-              <th class="description">PROJECT SPECIFICATIONS</th>
-              <th class="description">E-LOGIC PROPOSAL</th>
-              <th class="options">WEBSITE</th>
-              <th class="qty">QTY</th>
-              <th style="width: 200px;">PROVIDERS</th>
-              <th style="width: 100px;">BEST UNIT COST</th>
-              <th style="width: 100px;">TOTAL COST</th>
-              <th style="width: 100px;">PRICE FOR CLIENT</th>
-              <th style="width: 100px;">TOTAL PRICE</th>
-              <th style="width: 100px;">COMMENTS</th>
-            </tr>
-          </thead>
-          <tbody id="re_quote_data">
-            <?php
-            $k = 1;
-            foreach ($items as $key => $item) {
-              $re_quote_item = $re_quote_items[$key];
-              $k = self::print_re_quote_item($re_quote_item, $item, $k, $key + 1);
-            }
-            ?>
-          <tfoot>
-            <tr>
-              <td colspan="5" class="display-4"><b>
-                  <h4>TOTAL:</h4>
-                </b></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td id="total_re_quote"></td>
-              <td></td>
-              <td id="total_ganado"><?= '$ ' . $quote->obtener_total_price(); ?></td>
-              <td id="profit_rq"></td>
-            </tr>
-          </tfoot>
-          </tbody>
-        </table>
-      </div>
-      <?php
-      $id_items = [];
-      $id_subitems = [];
-      $contador_subitems = 0;
-      foreach ($re_quote_items as $key => $re_quote_item) {
-        $id_items[] = $re_quote_item->get_id();
-        Conexion::abrir_conexion();
-        $re_quote_subitems = ReQuoteSubitemRepository::get_re_quote_subitems_by_id_re_quote_item(Conexion::obtener_conexion(), $re_quote_item->get_id());
-        Conexion::cerrar_conexion();
-        foreach ($re_quote_subitems as $key => $re_quote_subitem) {
-          $id_subitems[] = $re_quote_subitem->get_id();
-        }
-      }
-      $id_items = implode(',', $id_items);
-      $id_subitems = implode(',', $id_subitems);
-      ?>
-      <input type="hidden" id="total_cost" name="total_cost" value="">
-      <div class="mt-4 row">
-        <div class="col-md-6">
-          <h5>Shipping Re-Quote</h5>
-        </div>
-        <div class="col-md-6">
-          <h5>Shipping Quote</h5>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-3">
-          <div class="form-group">
-            <textarea class="form-control form-control-sm" rows="1" name="shipping" id="shipping_rq" placeholder="Enter shipping ..."><?= $re_quote->get_shipping(); ?></textarea>
-            <input type="hidden" name="shipping_original" value="<?= $re_quote->get_shipping(); ?>">
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="form-group">
-            <input type="number" step=".01" class="form-control form-control-sm" id="shipping_cost_rq" name="shipping_cost" value="<?= $re_quote->get_shipping_cost(); ?>">
-            <input type="hidden" name="shipping_cost_original" value="<?= $re_quote->get_shipping_cost(); ?>">
-          </div>
-        </div>
 
-        <div class="col-md-3">
-          <div class="form-group">
-            <textarea class="form-control form-control-sm" rows="1" name="shipping" id="shipping" disabled placeholder="Enter shipping ..."><?= $quote->obtener_shipping(); ?></textarea>
+    if (!count($re_quote_items)) {
+      return;
+    }
+
+    // Stale items warning
+    if (count($items) != count($re_quote_items)): ?>
+      <div class="alert alert-danger mb-3" role="alert">
+        <i class="fas fa-exclamation-triangle mr-1"></i>
+        Items in the original quote have changed. Please <strong>Reload</strong> to update this re-quote.
+      </div>
+    <?php endif; ?>
+
+    <!-- Section header: Items label + Payment Terms + PDF -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+      <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#8896a5;">
+        <i class="fas fa-list mr-1"></i> Items
+      </span>
+      <div style="display:flex;align-items:center;gap:16px;">
+        <div style="display:flex;align-items:center;gap:12px;font-size:13px;">
+          <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="net_30" name="payment_terms" class="custom-control-input" value="Net 30" <?= $re_quote->get_payment_terms() == 'Net 30' ? 'checked' : ''; ?>>
+            <label class="custom-control-label" for="net_30">Net 30</label>
           </div>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="net_30_cc" name="payment_terms" class="custom-control-input" value="Net 30/CC" <?= $re_quote->get_payment_terms() == 'Net 30/CC' ? 'checked' : ''; ?>>
+            <label class="custom-control-label" for="net_30_cc">Net 30/CC</label>
+          </div>
+          <input type="hidden" name="payment_terms_original" value="<?= $re_quote->get_payment_terms(); ?>">
         </div>
-        <div class="col-md-3">
-          <div class="form-group">
-            <input type="number" step=".01" class="form-control form-control-sm" id="shipping_cost" disabled name="shipping_cost" value="<?= $quote->obtener_shipping_cost(); ?>">
-          </div>
+        <a target="_blank" href="<?= PDF_RE_QUOTE . $re_quote->get_id_rfq(); ?>" class="btn btn-outline-secondary btn-sm">
+          <i class="fa fa-file mr-1"></i> PDF
+        </a>
+      </div>
+    </div>
+
+    <!-- Items table -->
+    <div id="requote_table">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Options</th>
+            <th>#</th>
+            <th>Project Specifications</th>
+            <th>E-Logic Proposal</th>
+            <th>Website</th>
+            <th>QTY</th>
+            <th>Providers</th>
+            <th>Best Unit Cost</th>
+            <th>Total Cost</th>
+            <th>Price for Client</th>
+            <th>Total Price</th>
+            <th>Comments</th>
+          </tr>
+        </thead>
+        <tbody id="re_quote_data">
+          <?php
+          $k = 1;
+          foreach ($items as $key => $item) {
+            $re_quote_item = $re_quote_items[$key];
+            $k = self::print_re_quote_item($re_quote_item, $item, $k, $key + 1);
+          }
+          ?>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="5">TOTAL</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td id="total_re_quote"></td>
+            <td></td>
+            <td id="total_ganado"><?= '$ ' . $quote->obtener_total_price(); ?></td>
+            <td id="profit_rq"></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <?php
+    // Collect IDs for JS
+    $id_items    = [];
+    $id_subitems = [];
+    foreach ($re_quote_items as $re_quote_item) {
+      $id_items[] = $re_quote_item->get_id();
+      Conexion::abrir_conexion();
+      $re_quote_subitems = ReQuoteSubitemRepository::get_re_quote_subitems_by_id_re_quote_item(Conexion::obtener_conexion(), $re_quote_item->get_id());
+      Conexion::cerrar_conexion();
+      foreach ($re_quote_subitems as $re_quote_subitem) {
+        $id_subitems[] = $re_quote_subitem->get_id();
+      }
+    }
+    $id_items    = implode(',', $id_items);
+    $id_subitems = implode(',', $id_subitems);
+    ?>
+    <input type="hidden" id="total_cost" name="total_cost" value="">
+
+    <!-- Shipping row -->
+    <div class="mt-4 mb-2" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <div>
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.4px;color:#8896a5;margin-bottom:6px;">Shipping Re-Quote</div>
+        <div style="display:flex;gap:8px;">
+          <textarea class="form-control form-control-sm" rows="1" name="shipping" id="shipping_rq" placeholder="Enter shipping ..."><?= $re_quote->get_shipping(); ?></textarea>
+          <input type="hidden" name="shipping_original" value="<?= $re_quote->get_shipping(); ?>">
+          <input type="number" step=".01" class="form-control form-control-sm" id="shipping_cost_rq" name="shipping_cost" value="<?= $re_quote->get_shipping_cost(); ?>" style="max-width:120px;">
+          <input type="hidden" name="shipping_cost_original" value="<?= $re_quote->get_shipping_cost(); ?>">
         </div>
       </div>
-    <?php
-    }
+      <div>
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.4px;color:#8896a5;margin-bottom:6px;">Shipping Quote</div>
+        <div style="display:flex;gap:8px;">
+          <textarea class="form-control form-control-sm" rows="1" id="shipping" disabled placeholder="Enter shipping ..."><?= $quote->obtener_shipping(); ?></textarea>
+          <input type="number" step=".01" class="form-control form-control-sm" id="shipping_cost" disabled value="<?= $quote->obtener_shipping_cost(); ?>" style="max-width:120px;">
+        </div>
+      </div>
+    </div>
+  <?php
   }
 
   public static function print_re_quote_item($re_quote_item, $item, $i, $number) {
@@ -162,22 +164,14 @@ class ReQuoteItemRepository {
     ?>
     <tr id="<?= 'item' . $re_quote_item->get_id(); ?>">
       <td>
-        <a href="<?= ADD_RE_QUOTE_PROVIDER . $re_quote_item->get_id(); ?>" class="btn btn-item btn-block">
-          <i class="fa fa-plus-circle"></i> Add Provider
-        </a>
-        <br>
-        <a href="<?= EDIT_RE_QUOTE_ITEM . $re_quote_item->get_id(); ?>" class="btn btn-item btn-block">
-          <i class="fa fa-edit"></i> Edit item
-        </a>
-        <br>
-        <!-- <a href="<?= DELETE_RE_QUOTE_ITEM . $re_quote_item->get_id(); ?>" class="delete_item_button btn btn-item btn-block">
-          <i class="fa fa-trash"></i> Delete
-        </a> -->
-        <br>
-        <!-- <a href="<?= ADD_RE_QUOTE_SUBITEM . $re_quote_item->get_id(); ?>" class="btn btn-item btn-block">
-          <i class="fa fa-plus-circle"></i> Add subitem
-        </a> -->
-        <br>
+        <div class="item-actions">
+          <a href="<?= ADD_RE_QUOTE_PROVIDER . $re_quote_item->get_id(); ?>" class="btn btn-xs item-action-btn btn-item">
+            <i class="fa fa-plus-circle mr-1"></i> Provider
+          </a>
+          <a href="<?= EDIT_RE_QUOTE_ITEM . $re_quote_item->get_id(); ?>" class="btn btn-xs item-action-btn btn-item">
+            <i class="fa fa-edit mr-1"></i> Edit
+          </a>
+        </div>
       </td>
       <td><?= $number; ?></td>
       <?php

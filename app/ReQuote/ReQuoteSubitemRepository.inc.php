@@ -69,126 +69,76 @@ class ReQuoteSubitemRepository{
       return;
     }
     $j = $i;
+
     Conexion::abrir_conexion();
-    $re_quote_subitem_providers = ReQuoteSubitemProviderRepository::get_re_quote_subitem_providers_by_id_re_quote_subitem(Conexion::obtener_conexion(), $re_quote_subitem-> get_id());
+    $re_quote_subitem_providers = ReQuoteSubitemProviderRepository::get_re_quote_subitem_providers_by_id_re_quote_subitem(Conexion::obtener_conexion(), $re_quote_subitem->get_id());
     Conexion::cerrar_conexion();
-    ?>
-    <tr id="<?php echo 'subitem' . $re_quote_subitem-> get_id(); ?>" class="fila_subitem">
-      <td>
-        <a href="<?php echo ADD_RE_QUOTE_SUBITEM_PROVIDER . $re_quote_subitem-> get_id(); ?>" class="btn btn-subitem btn-block">
-          <i class="fa fa-plus-circle"></i> Add Provider
-        </a>
-        <br>
-        <a href="<?php echo EDIT_RE_QUOTE_SUBITEM . $re_quote_subitem-> get_id(); ?>" class="btn btn-subitem btn-block">
-          <i class="fa fa-edit"></i> Edit subitem
-        </a>
-        <br>
-        <!-- <a href="<?php echo DELETE_RE_QUOTE_SUBITEM . $re_quote_subitem-> get_id(); ?>" class="delete_subitem_button btn btn-subitem btn-block">
-          <i class="fa fa-trash"></i> Delete
-        </a> -->
-      </td>
-      <td></td>
-    <?php
-    if(strlen($re_quote_subitem-> get_description_project()) >= 100){
-      ?>
-      <td>
-        <b>Brand:</b> <?php echo $re_quote_subitem-> get_brand_project(); ?>
-        <br>
-        <b>Part #:</b> <?php echo $re_quote_subitem-> get_part_number_project(); ?>
-        <br>
-        <b>Description:</b> <?php echo nl2br(mb_substr($re_quote_subitem-> get_description_project(), 0, 100)); ?> ...
-      </td>
-      <?php
-    }else{
-      ?>
-      <td>
-        <b>Brand:</b> <?php echo $re_quote_subitem-> get_brand_project(); ?>
-        <br>
-        <b>Part #:</b> <?php echo $re_quote_subitem-> get_part_number_project(); ?>
-        <br>
-        <b>Description:</b> <?php echo nl2br($re_quote_subitem-> get_description_project()); ?>
-      </td>
-      <?php
-    }
-    if(strlen($re_quote_subitem-> get_description()) >= 100){
-      ?>
-      <td>
-        <b>Brand:</b> <?php echo $re_quote_subitem-> get_brand(); ?>
-        <br>
-        <b>Part #:</b> <?php echo $re_quote_subitem-> get_part_number(); ?>
-        <br>
-        <b>Description:</b> <?php echo nl2br(mb_substr($re_quote_subitem-> get_description(), 0, 100)); ?> ...
-      </td>
-      <?php
-    }else{
-      ?>
-      <td>
-        <b>Brand:</b> <?php echo $re_quote_subitem-> get_brand(); ?>
-        <br>
-        <b>Part #:</b> <?php echo $re_quote_subitem-> get_part_number(); ?>
-        <br>
-        <b>Description:</b> <?php echo nl2br($re_quote_subitem-> get_description()); ?>
-      </td>
-      <?php
-    }
-    ?>
-      <td class="estrechar">
-        <a target="_blank" href="<?php echo $re_quote_subitem-> get_website(); ?>"><?php echo $re_quote_subitem-> get_website(); ?></a>
-      </td>
-      <td><?php echo $re_quote_subitem-> get_quantity(); ?></td>
-      <td>
-        <div class="row">
-          <div class="col-6">
-            <?php
-            if(count($re_quote_subitem_providers)){
-              foreach ($re_quote_subitem_providers as $key => $re_quote_subitem_provider) {
-                if(strlen($re_quote_subitem_provider-> get_provider()) >= 10){
-                  ?>
-                  <a href="<?php echo EDIT_RE_QUOTE_SUBITEM_PROVIDER . $re_quote_subitem_provider-> get_id(); ?>">
-                    <b><?php echo mb_substr($re_quote_subitem_provider-> get_provider(), 0, 10); ?>... :</b>
-                  </a>
-                  <br>
-                  <?php
-                }else{
-                  ?>
-                  <a href="<?php echo EDIT_RE_QUOTE_SUBITEM_PROVIDER . $re_quote_subitem_provider-> get_id(); ?>">
-                    <b><?php echo $re_quote_subitem_provider-> get_provider(); ?>:</b>
-                  </a>
-                  <br>
-                  <?php
-                }
-              }
-            }
-            ?>
-          </div>
-          <div class="col-6">
-            <?php
-            if(count($re_quote_subitem_providers)){
-              foreach ($re_quote_subitem_providers as $key => $re_quote_subitem_provider) {
-                echo '$ ' . $re_quote_subitem_provider-> get_price() . '<br>';
-              }
-            }
-            ?>
-          </div>
-        </div>
-      </td>
-    <?php
-    echo '<td>';
-    if(count($re_quote_subitem_providers)){
-      foreach ($re_quote_subitem_providers as $key => $re_quote_subitem_provider) {
-        $subitem_prices[$key] = $re_quote_subitem_provider-> get_price();
-      }
+
+    // Collect prices for best-unit calculation
+    $subitem_prices  = [];
+    $best_unit_price = 0;
+    foreach ($re_quote_subitem_providers as $p) {
+      $subitem_prices[] = $p->get_price();
     }
     if (!empty($subitem_prices)) {
       $best_unit_price = min($subitem_prices);
-      echo '$ ' . $best_unit_price;
     }
-    echo '</td>';
-    echo '<td>$ ' . $best_unit_price * $re_quote_subitem-> get_quantity() . '</td>';
-    if(!is_null($subitem)){echo '<td>$ ' . $subitem-> obtener_unit_price() . '</td>';}else{echo '<td></td>';}
-    if(!is_null($subitem)){echo '<td>$ ' . $subitem-> obtener_total_price() . '</td>';}else{echo '<td></td>';}
-    echo '<td>' . nl2br($re_quote_subitem-> get_comments()) . '</td>';
-    echo '</tr>';
+
+    // Truncate long descriptions
+    $desc_proj = $re_quote_subitem->get_description_project();
+    $desc      = $re_quote_subitem->get_description();
+    $desc_proj_display = strlen($desc_proj) >= 100 ? nl2br(mb_substr($desc_proj, 0, 100)) . ' ...' : nl2br($desc_proj);
+    $desc_display      = strlen($desc)      >= 100 ? nl2br(mb_substr($desc,      0, 100)) . ' ...' : nl2br($desc);
+    ?>
+    <tr id="<?= 'subitem' . $re_quote_subitem->get_id(); ?>" class="fila_subitem">
+      <td>
+        <div class="item-actions">
+          <a href="<?= ADD_RE_QUOTE_SUBITEM_PROVIDER . $re_quote_subitem->get_id(); ?>" class="btn btn-xs item-action-btn btn-subitem">
+            <i class="fa fa-plus-circle mr-1"></i> Provider
+          </a>
+          <a href="<?= EDIT_RE_QUOTE_SUBITEM . $re_quote_subitem->get_id(); ?>" class="btn btn-xs item-action-btn btn-subitem">
+            <i class="fa fa-edit mr-1"></i> Edit
+          </a>
+        </div>
+      </td>
+      <td></td>
+      <td>
+        <b>Brand:</b> <?= $re_quote_subitem->get_brand_project(); ?><br>
+        <b>Part #:</b> <?= $re_quote_subitem->get_part_number_project(); ?><br>
+        <b>Description:</b> <?= $desc_proj_display; ?>
+      </td>
+      <td>
+        <b>Brand:</b> <?= $re_quote_subitem->get_brand(); ?><br>
+        <b>Part #:</b> <?= $re_quote_subitem->get_part_number(); ?><br>
+        <b>Description:</b> <?= $desc_display; ?>
+      </td>
+      <td class="estrechar">
+        <a target="_blank" href="<?= $re_quote_subitem->get_website(); ?>"><?= $re_quote_subitem->get_website(); ?></a>
+      </td>
+      <td><?= $re_quote_subitem->get_quantity(); ?></td>
+      <td>
+        <div class="row">
+          <div class="col-6">
+            <?php foreach ($re_quote_subitem_providers as $p): ?>
+              <a href="<?= EDIT_RE_QUOTE_SUBITEM_PROVIDER . $p->get_id(); ?>">
+                <b><?= strlen($p->get_provider()) >= 10 ? mb_substr($p->get_provider(), 0, 10) . '...' : $p->get_provider(); ?>:</b>
+              </a><br>
+            <?php endforeach; ?>
+          </div>
+          <div class="col-6">
+            <?php foreach ($re_quote_subitem_providers as $p): ?>
+              $ <?= $p->get_price(); ?><br>
+            <?php endforeach; ?>
+          </div>
+        </div>
+      </td>
+      <td><?= !empty($subitem_prices) ? '$ ' . $best_unit_price : ''; ?></td>
+      <td>$ <?= $best_unit_price * $re_quote_subitem->get_quantity(); ?></td>
+      <td><?= !is_null($subitem) ? '$ ' . $subitem->obtener_unit_price()  : ''; ?></td>
+      <td><?= !is_null($subitem) ? '$ ' . $subitem->obtener_total_price() : ''; ?></td>
+      <td><?= nl2br($re_quote_subitem->get_comments()); ?></td>
+    </tr>
+    <?php
   }
 
   public static function get_re_quote_subitem_by_id($connection, $id_re_quote_subitem){

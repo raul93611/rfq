@@ -17,77 +17,74 @@ class ReQuoteServiceRepository {
   }
 
   public static function display_services($connection, $re_quote) {
-    $services = self::get_services($connection, $re_quote->get_id());
+    $services      = self::get_services($connection, $re_quote->get_id());
     $total_service = self::get_total($connection, $re_quote->get_id());
-    if (count($services)) {
-?>
-      <div class="container-fluid my-2">
-        <div class="row">
-          <div class="col-md-6">
-            <label>Payment terms:</label>
-            <div class="custom-control custom-radio">
-              <input type="radio" id="net_30Services" name="services_payment_term" class="custom-control-input" value="Net 30" <?php echo $re_quote->get_services_payment_term() == 'Net 30' ? 'checked' : ''; ?>>
-              <label class="custom-control-label" for="net_30Services">Net 30</label>
-            </div>
-            <div class="custom-control custom-radio">
-              <input type="radio" id="net_30ccServices" name="services_payment_term" class="custom-control-input" value="Net 30/CC" <?php echo $re_quote->get_services_payment_term() == 'Net 30/CC' ? 'checked' : ''; ?>>
-              <label class="custom-control-label" for="net_30ccServices">Net 30/CC</label>
-            </div>
-          </div>
-        </div>
+
+    if (!count($services)): ?>
+      <div class="section-empty-state">
+        <i class="fas fa-concierge-bell"></i>
+        <p>No services to display</p>
       </div>
-      <div class="table-responsive" id="services_table">
-        <table class="table table-bordered table-hover">
-          <thead>
-            <tr>
-              <th style="width: 50px;">Options</th>
-              <th style="width: 30px;">#</th>
-              <th>DESCRIPTION</th>
-              <th style="width: 30px;">QTY</th>
-              <th style="width: 100px;">UNIT PRICE</th>
-              <th style="width: 100px;">TOTAL PRICE</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php
-            foreach ($services as $key => $service) {
-              self::display_service($service, $key);
-            }
-            ?>
-          <tfoot>
-            <tr>
-              <td colspan="5" class="display-4"><b>
-                  <h4>TOTAL:</h4>
-                </b></td>
-              <td id="total_service">$ <?php echo $total_service; ?></td>
-            </tr>
-          </tfoot>
-          </tbody>
-        </table>
+    <?php return; endif; ?>
+
+    <!-- Payment terms -->
+    <div style="display:flex;align-items:center;gap:16px;margin-bottom:12px;font-size:13px;">
+      <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.4px;color:#8896a5;">Payment Terms</span>
+      <div class="custom-control custom-radio custom-control-inline">
+        <input type="radio" id="net_30Services" name="services_payment_term" class="custom-control-input" value="Net 30" <?= $re_quote->get_services_payment_term() == 'Net 30' ? 'checked' : ''; ?>>
+        <label class="custom-control-label" for="net_30Services">Net 30</label>
       </div>
-    <?php
-    } else {
-    ?>
-      <h3 class="text-info text-center"><i class="fas fa-exclamation-circle"></i> No Services to display!</h3>
-    <?php
-    }
+      <div class="custom-control custom-radio custom-control-inline">
+        <input type="radio" id="net_30ccServices" name="services_payment_term" class="custom-control-input" value="Net 30/CC" <?= $re_quote->get_services_payment_term() == 'Net 30/CC' ? 'checked' : ''; ?>>
+        <label class="custom-control-label" for="net_30ccServices">Net 30/CC</label>
+      </div>
+    </div>
+
+    <!-- Services table -->
+    <div id="services_table">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th style="width:130px;">Options</th>
+            <th style="width:30px;">#</th>
+            <th>Description</th>
+            <th>QTY</th>
+            <th>Unit Price</th>
+            <th>Total Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach ($services as $key => $service): ?>
+            <?php self::display_service($service, $key); ?>
+          <?php endforeach; ?>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="5">TOTAL</td>
+            <td id="total_service">$ <?= $total_service; ?></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  <?php
   }
 
-  public static function display_service($service, $key) {
-    ?>
-    <tr class="service_item" id="service<?php echo $service->get_id(); ?>">
+  public static function display_service($service, $key) { ?>
+    <tr class="service_item" id="service<?= $service->get_id(); ?>">
       <td>
-        <div class="btn-group-vertical">
-          <button type="button" class="btn btn-item edit_service" data-service-id="<?php echo $service->get_id(); ?>"><i class="fas fa-pen"></i></button>
+        <div class="item-actions">
+          <button type="button" class="btn btn-xs item-action-btn btn-item edit_service" data-service-id="<?= $service->get_id(); ?>">
+            <i class="fas fa-pen mr-1"></i> Edit
+          </button>
         </div>
       </td>
-      <td><?php echo $key + 1; ?></td>
-      <td><?php echo nl2br($service->get_description()); ?></td>
-      <td><?php echo $service->get_quantity(); ?></td>
-      <td><?php echo $service->get_unit_price(); ?></td>
-      <td><?php echo $service->get_total_price(); ?></td>
+      <td><?= $key + 1; ?></td>
+      <td><?= nl2br($service->get_description()); ?></td>
+      <td><?= $service->get_quantity(); ?></td>
+      <td><?= $service->get_unit_price(); ?></td>
+      <td><?= $service->get_total_price(); ?></td>
     </tr>
-<?php
+  <?php
   }
 
   public static function get_services($connection, $id_re_quote) {
