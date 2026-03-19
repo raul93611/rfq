@@ -551,7 +551,7 @@ label.error {
   color: red;
 }
 
-#table_items_container, #requote_table {
+#table_items_container, #requote_table, #tracking_table_container {
   position: relative;
   width: 100%;
   z-index: 1;
@@ -570,25 +570,25 @@ label.error {
   border-radius: 4px;
 }
 
-#table_items_container table, #services_table table, #requote_table table {
+#table_items_container table, #services_table table, #requote_table table, #tracking_table_container table {
   width: 100%;
   margin: auto;
   border-collapse: separate;
   border-spacing: 0;
 }
 
-#table_items_container tbody, #services_table tbody, #requote_table tbody {
+#table_items_container tbody, #services_table tbody, #requote_table tbody, #tracking_table_container tbody {
   border-collapse: collapse !important;
 }
 
-#table_items_container td, #services_table td, #requote_table td {
+#table_items_container td, #services_table td, #requote_table td, #tracking_table_container td {
   padding: 5px 10px;
   border: 1px solid #e0e0e0;
   background: #fff;
   vertical-align: top;
 }
 
-#table_items_container thead th, #services_table thead th, #requote_table thead th {
+#table_items_container thead th, #services_table thead th, #requote_table thead th, #tracking_table_container thead th {
   background: #39485A;
   color: #fff;
   position: -webkit-sticky;
