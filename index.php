@@ -631,6 +631,10 @@ switch ($partes_ruta[1] ?? null) {
         $id_rfq = $partes_ruta[3];
         $ruta_elegida = 'scripts/fulfillment/load_fulfillment_page.php';
         break;
+      case 'load_fulfillment_totals':
+        $id_rfq = $partes_ruta[3];
+        $ruta_elegida = 'scripts/fulfillment/load_fulfillment_totals.php';
+        break;
       case 'mark_as_pending':
         $id_rfq = $partes_ruta[3];
         $ruta_elegida = 'scripts/fulfillment/mark_as_pending.php';

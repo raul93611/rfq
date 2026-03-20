@@ -102,12 +102,4 @@
     </div>
   <?php endif; ?>
 
-  <?php if ($quote->obtener_invoice()) : ?>
-    <div class="mt-3 px-3 py-2" style="background:#f0f7ff; border-left:4px solid #13A8F0; border-radius:4px;">
-      <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.4px; color:#8896a5;">Total Profit — Real Sales Commission</div>
-      <div style="font-size:16px; font-weight:700; color:#13A8F0;">
-        $<?= number_format($quote->obtener_real_fulfillment_profit() - (float)str_replace(',', '', $sales_commission[1] ?? 0), 2); ?>
-      </div>
-    </div>
-  <?php endif; ?>
 </div>

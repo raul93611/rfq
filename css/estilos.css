@@ -588,6 +588,11 @@ label.error {
   vertical-align: top;
 }
 
+#fulfillment_items_table_container td.success-opacity,
+#fulfillment_services_table_container td.success-opacity {
+  background-color: #d0fac7;
+}
+
 #table_items_container thead th, #services_table thead th, #requote_table thead th, #tracking_table_container thead th, #fulfillment_items_table_container thead th, #fulfillment_services_table_container thead th, #fulfillment_invoices_table_container thead th {
   background: #39485A;
   color: #fff;

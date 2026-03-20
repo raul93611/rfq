@@ -51,20 +51,7 @@ Conexion::cerrar_conexion();
               <i class="fas fa-plus mr-1"></i> Add Comment
             </a>
           </div>
-          <div class="quote-action-bar__totals">
-            <div class="quote-action-total">
-              <span class="quote-action-total__label">Total Price</span>
-              <span class="quote-action-total__value">$<?= number_format($quote->obtener_quote_total_price(), 2); ?></span>
-            </div>
-            <div class="quote-action-total">
-              <span class="quote-action-total__label">Total Profit</span>
-              <span class="quote-action-total__value">$<?= number_format($quote->obtener_real_fulfillment_profit(), 2); ?></span>
-            </div>
-            <div class="quote-action-total">
-              <span class="quote-action-total__label">Profit %</span>
-              <span class="quote-action-total__value"><?= number_format($quote->obtener_real_fulfillment_profit_percentage(), 2); ?>%</span>
-            </div>
-          </div>
+          <div class="quote-action-bar__totals" id="fulfillment_action_totals"></div>
         </div>
       </div>
     </div>

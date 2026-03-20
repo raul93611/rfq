@@ -40,6 +40,17 @@ $(document).ready(function () {
     invoiceDropdown.load('/rfq/fulfillment/invoice/load_dropdown', { id: idRfq });
   }
 
+  function loadFulfillmentTotals() {
+    $('#fulfillment_action_totals').load(`/rfq/fulfillment/load_fulfillment_totals/${idRfq}`);
+  }
+
+  function reloadFulfillmentPage(rfqId) {
+    fulfillmentPage.load(`/rfq/fulfillment/load_fulfillment_page/${rfqId}`, loadFulfillmentTotals);
+  }
+
+  // Initial load of totals
+  loadFulfillmentTotals();
+
   // Event listener to open the Add Invoice modal and initialize date picker
   invoiceDropdown.on('click', '#add_invoice', function (e) {
     e.preventDefault();
@@ -135,7 +146,7 @@ $(document).ready(function () {
           } else {
             editInvoiceModal.modal('hide');
             loadInvoiceDropdown(idRfq);
-            fulfillmentPage.load(`/rfq/fulfillment/load_fulfillment_page/${idRfq}`);
+            reloadFulfillmentPage(idRfq);
           }
         },
         error: function (xhr, status, error) {
@@ -164,7 +175,7 @@ $(document).ready(function () {
     performAjaxRequest('/rfq/fulfillment/invoice/delete', 'POST', { id: invoiceId }, function (response) {
       editInvoiceModal.modal('hide');
       loadInvoiceDropdown(idRfq);
-      fulfillmentPage.load(`/rfq/fulfillment/load_fulfillment_page/${idRfq}`);
+      reloadFulfillmentPage(idRfq);
     });
   }
 
@@ -172,7 +183,7 @@ $(document).ready(function () {
   fulfillmentPage.on('click', '.attach-sales-commission-button', function () {
     const invoiceId = $(this).data('id');
     performAjaxRequest('/rfq/fulfillment/invoice/attach_sales_commission', 'POST', { id: invoiceId, idRfq: idRfq }, function (res) {
-      fulfillmentPage.load(`/rfq/fulfillment/load_fulfillment_page/${res.id_rfq}`);
+      reloadFulfillmentPage(res.id_rfq);
     });
   });
 
@@ -203,7 +214,7 @@ $(document).ready(function () {
       id_item: $(this).data('id_item')
     };
     performAjaxRequest('/rfq/fulfillment/equipment/mark_as_reviewed/', 'POST', data, function (res) {
-      fulfillmentPage.load(`/rfq/fulfillment/load_fulfillment_page/${res.id_rfq}`);
+      reloadFulfillmentPage(res.id_rfq);
     });
     return false;
   });
@@ -216,7 +227,7 @@ $(document).ready(function () {
       id_rfq: $(this).data('id_rfq')
     };
     performAjaxRequest('/rfq/fulfillment/equipment/mark_subitem_as_reviewed/', 'POST', data, function (res) {
-      fulfillmentPage.load(`/rfq/fulfillment/load_fulfillment_page/${res.id_rfq}`);
+      reloadFulfillmentPage(res.id_rfq);
     });
     return false;
   });
@@ -229,7 +240,7 @@ $(document).ready(function () {
     };
 
     performAjaxRequest('/rfq/fulfillment/service/mark_as_reviewed_service/', 'POST', data, function (res) {
-      fulfillmentPage.load(`/rfq/fulfillment/load_fulfillment_page/${res.id_rfq}`);
+      reloadFulfillmentPage(res.id_rfq);
     });
 
     return false;
@@ -245,7 +256,7 @@ $(document).ready(function () {
       };
 
       performAjaxRequest(url, 'POST', data, function (res) {
-        fulfillmentPage.load(`/rfq/fulfillment/load_fulfillment_page/${res.id_rfq}`);
+        reloadFulfillmentPage(res.id_rfq);
       });
     });
   }
@@ -303,7 +314,7 @@ $(document).ready(function () {
         if (response.success) {
           toastr.success(itemType + ' restored successfully!', 'Success');
           $btn.replaceWith('<span class="text-success">✓ Restored</span>');
-          fulfillmentPage.load(`/rfq/fulfillment/load_fulfillment_page/${rfqId}`);
+          reloadFulfillmentPage(rfqId);
           auditTrailModal.modal('hide');
 
         } else {
@@ -337,7 +348,7 @@ $(document).ready(function () {
     $.post('/rfq/fulfillment/equipment/update_fulfillment_shipping', $(this).serialize(), function (res) {
       editFulfillmentShippingForm[0].reset();
       editFulfillmentShippingModal.modal('hide');
-      fulfillmentPage.load(`/rfq/fulfillment/load_fulfillment_page/${res.id_rfq}`);
+      reloadFulfillmentPage(res.id_rfq);
     });
   });
 
@@ -454,7 +465,7 @@ $(document).ready(function () {
     $.post(url, form.serialize(), function (res) {
       form[0].reset();
       modal.modal('hide');
-      fulfillmentPage.load(`/rfq/fulfillment/load_fulfillment_page/${res.id_rfq}`);
+      reloadFulfillmentPage(res.id_rfq);
     });
   }
 
@@ -463,7 +474,7 @@ $(document).ready(function () {
    */
   function deleteFulfillmentService(idFulfillmentService, idService) {
     $.post('/rfq/fulfillment/service/delete_fulfillment_service/', { id_fulfillment_service: idFulfillmentService, id_service: idService }, function (res) {
-      fulfillmentPage.load(`/rfq/fulfillment/load_fulfillment_page/${res.id_rfq}`);
+      reloadFulfillmentPage(res.id_rfq);
     });
   }
   /***********************************FULFILLMENT***************************/
@@ -528,7 +539,7 @@ $(document).ready(function () {
     $.post(url, form.serialize(), function (res) {
       form[0].reset();
       modal.modal('hide');
-      fulfillmentPage.load(`/rfq/fulfillment/load_fulfillment_page/${res.id_rfq}`);
+      reloadFulfillmentPage(res.id_rfq);
     });
   }
 
@@ -537,7 +548,7 @@ $(document).ready(function () {
    */
   function deleteFulfillmentItem(idFulfillmentItem, idItem) {
     $.post('/rfq/fulfillment/equipment/delete_fulfillment_item/', { id_fulfillment_item: idFulfillmentItem, id_item: idItem }, function (res) {
-      fulfillmentPage.load(`/rfq/fulfillment/load_fulfillment_page/${res.id_rfq}`);
+      reloadFulfillmentPage(res.id_rfq);
     });
   }
 
@@ -607,7 +618,7 @@ $(document).ready(function () {
     $.post(url, form.serialize(), function (res) {
       form[0].reset();
       modal.modal('hide');
-      fulfillmentPage.load(`/rfq/fulfillment/load_fulfillment_page/${res.id_rfq}`);
+      reloadFulfillmentPage(res.id_rfq);
     });
   }
 
@@ -616,7 +627,7 @@ $(document).ready(function () {
    */
   function deleteFulfillmentSubitem(idFulfillmentSubitem, idSubitem, idRfq) {
     $.post('/rfq/fulfillment/equipment/delete_fulfillment_subitem/', { id_fulfillment_subitem: idFulfillmentSubitem, id_subitem: idSubitem, id_rfq: idRfq }, function (res) {
-      fulfillmentPage.load(`/rfq/fulfillment/load_fulfillment_page/${res.id_rfq}`);
+      reloadFulfillmentPage(res.id_rfq);
     });
   }
 });
