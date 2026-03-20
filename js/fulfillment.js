@@ -371,16 +371,25 @@ $(document).ready(function () {
   // Helper function to create shipping fields
   function createShippingFields(counter) {
     return `
-    <div class="shipping${counter}">
-      <div class="form-group">
-        <label for="fulfillment_shipping${counter}">Description:</label>
-        <input type="hidden" name="fulfillment_shipping_original${counter}" value="">
-        <input type="text" class="form-control form-control-sm" id="fulfillment_shipping${counter}" name="fulfillment_shipping${counter}" value="">
-      </div>
-      <div class="form-group">
-        <label for="amount${counter}">Amount:</label>
-        <input type="hidden" name="amount_original${counter}" value="">
-        <input type="number" step="0.01" id="amount${counter}" class="form-control form-control-sm" name="amount${counter}" value="">
+    <div class="shipping${counter} mb-3">
+      <div class="form-row">
+        <div class="col-md-8">
+          <div class="form-group mb-0">
+            <label>Description</label>
+            <input type="hidden" name="fulfillment_shipping_original${counter}" value="">
+            <input type="text" class="form-control form-control-sm" id="fulfillment_shipping${counter}" name="fulfillment_shipping${counter}" value="">
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group mb-0">
+            <label>Amount</label>
+            <input type="hidden" name="amount_original${counter}" value="">
+            <div class="input-group input-group">
+              <div class="input-group-prepend"><span class="input-group-text">$</span></div>
+              <input type="number" step="0.01" id="amount${counter}" class="form-control" name="amount${counter}" value="">
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   `;
