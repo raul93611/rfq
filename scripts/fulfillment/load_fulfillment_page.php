@@ -57,7 +57,7 @@ include_once 'plantillas/fulfillment/templates/sales_commission.inc.php';
   foreach ($invoicesRetrieved as $invoice) {
     $totalInvoicePrice += (float)$invoice['total_item_price'];
     $totalRealCost += (float)$invoice['total_real_cost'];
-    $totalProfit += (float)$invoice['total_profit'] - (float)str_replace(',', '', $sales_commission[1] ?? 0);
+    $totalProfit += (float)$invoice['total_profit'];
   }
   $totalProfit = $totalProfit - (float)str_replace(',', '', $sales_commission[1] ?? 0);
   ?>

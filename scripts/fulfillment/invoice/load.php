@@ -20,14 +20,12 @@ Conexion::cerrar_conexion();
         <label for="name">Name:</label>
         <input type="text" id="name" class="form-control form-control-sm" name="name"
           value="<?= htmlspecialchars($invoice->get_name(), ENT_QUOTES, 'UTF-8'); ?>">
-        <small class="form-text text-muted">Enter the name of the invoice.</small>
       </div>
 
       <div class="form-group">
         <label for="created_at">Created At:</label>
         <input type="text" id="created_at" readonly class="form-control form-control-sm" name="created_at"
           value="<?= date("m/d/Y", strtotime($invoice->get_created_at())); ?>">
-        <small class="form-text text-muted">The date when the invoice was created. This field is read-only.</small>
       </div>
     </div>
   </div>
@@ -37,13 +35,13 @@ Conexion::cerrar_conexion();
 </div>
 
 <div class="modal-footer">
-  <button type="submit" class="btn btn-primary">
+  <button type="submit" class="btn btn-primary btn-sm">
     <i class="fa fa-check"></i> Save
   </button>
-  <button type="button" data-id="<?= htmlspecialchars($invoice->get_id(), ENT_QUOTES, 'UTF-8'); ?>" class="delete-invoice-button btn btn-secondary">
+  <button type="button" data-id="<?= htmlspecialchars($invoice->get_id(), ENT_QUOTES, 'UTF-8'); ?>" class="delete-invoice-button btn btn-secondary btn-sm">
     <i class="fa fa-trash"></i> Delete
   </button>
-  <button type="button" class="btn btn-secondary" data-dismiss="modal">
+  <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">
     <i class="fa fa-ban"></i> Cancel
   </button>
 </div>

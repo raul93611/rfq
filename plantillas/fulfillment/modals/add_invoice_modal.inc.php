@@ -12,12 +12,10 @@
           <div class="form-group">
             <label for="name">Invoice Name:</label>
             <input type="text" id="name" class="form-control form-control-sm" name="name" value="<?= htmlspecialchars($id_rfq . '-'); ?>" required>
-            <small class="form-text text-muted">Enter a unique name for the invoice (e.g., RFQ number).</small>
           </div>
           <div class="form-group">
             <label for="created_at">Created At:</label>
             <input type="text" id="created_at" readonly class="form-control form-control-sm" name="created_at" value="">
-            <small class="form-text text-muted">This field shows the current date and time.</small>
           </div>
           <div id="error"></div>
           <input type="hidden" name="id_rfq" value="<?= htmlspecialchars($id_rfq); ?>">

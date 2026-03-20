@@ -21,23 +21,19 @@ Conexion::cerrar_conexion();
   <!-- Content Header -->
   <div class="content-header page-header-bar">
     <div>
-      <h1 class="page-title">Fulfillment</h1>
+      <h1 class="page-title">
+        Fulfillment
+        <?php include_once 'templates/pending_status.inc.php'; ?>
+      </h1>
       <p class="page-subtitle"><?= htmlspecialchars($quote->obtener_contract_number(), ENT_QUOTES, 'UTF-8') ?></p>
     </div>
     <div class="d-flex align-items-center" style="gap:8px;">
-      <?php
-      include_once 'plantillas/fulfillment/templates/comments_button.inc.php';
-      ?>
+      <div id="invoice-dropdown"></div>
+      <?php include_once 'plantillas/fulfillment/templates/comments_button.inc.php'; ?>
       <?php include_once 'plantillas/fulfillment/templates/pending_button.inc.php'; ?>
       <button type="button" class="btn btn-secondary btn-sm" id="fulfillment_audit_trails_button" data-id="<?= htmlspecialchars($id_rfq, ENT_QUOTES, 'UTF-8') ?>">
         <i class="fas fa-history mr-1"></i> Audit Trails
       </button>
-    </div>
-  </div>
-  <div class="container-fluid" style="padding-bottom:8px;">
-    <div class="row">
-      <div class="col-md-12" id="invoice-dropdown"></div>
-      <?php include_once 'templates/pending_status.inc.php'; ?>
     </div>
   </div>
 
