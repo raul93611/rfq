@@ -13,33 +13,37 @@ try {
 include_once 'plantillas/fulfillment/templates/sales_commission.inc.php';
 ?>
 
-<div class="card card-primary">
-  <div class="card-header">
-    <h3 class="card-title"><i class="fas fa-highlighter"></i> RFQ</h3>
-  </div>
-  <div id="fulfillment_box" class="card-body">
-    <?php if ($items_exists) : ?>
-      <?php FulfillmentRepository::items_list($id_rfq); ?>
-    <?php else : ?>
-      <h3 class="text-info text-center"><i class="fas fa-exclamation-circle"></i> No Items to display!</h3>
-    <?php endif; ?>
-  </div>
+<!-- RFQ Section -->
+<div class="quote-section-header">
+  <div class="quote-section-header-title"><i class="fas fa-boxes mr-1"></i> RFQ</div>
+</div>
+<div id="fulfillment_box">
+  <?php if ($items_exists) : ?>
+    <?php FulfillmentRepository::items_list($id_rfq); ?>
+  <?php else : ?>
+    <div class="section-empty-state">
+      <i class="fas fa-box-open"></i>
+      <p>No items to display</p>
+    </div>
+  <?php endif; ?>
 </div>
 
-<div class="card card-primary">
-  <div class="card-header">
-    <h3 class="card-title"><i class="fas fa-highlighter"></i> RFP</h3>
-  </div>
-  <div id="fulfillment_services_box" class="card-body">
-    <?php if ($quote->isServices()) : ?>
-      <?php FulfillmentRepository::services_list($id_rfq); ?>
-    <?php else : ?>
-      <h3 class="text-info text-center"><i class="fas fa-exclamation-circle"></i> No Services to display!</h3>
-    <?php endif; ?>
-  </div>
+<!-- RFP Section -->
+<div class="quote-section-header">
+  <div class="quote-section-header-title"><i class="fas fa-concierge-bell mr-1"></i> RFP</div>
+</div>
+<div id="fulfillment_services_box">
+  <?php if ($quote->isServices()) : ?>
+    <?php FulfillmentRepository::services_list($id_rfq); ?>
+  <?php else : ?>
+    <div class="section-empty-state">
+      <i class="fas fa-clipboard-list"></i>
+      <p>No services to display</p>
+    </div>
+  <?php endif; ?>
 </div>
 
-<!-- Invoices Card (if pending fulfillment) -->
+<!-- Invoices Section (if pending fulfillment) -->
 <?php if ($quote->obtener_fulfillment_pending()) : ?>
   <?php
   Conexion::abrir_conexion();
@@ -47,11 +51,9 @@ include_once 'plantillas/fulfillment/templates/sales_commission.inc.php';
   $isSalesCommissionAttached = InvoiceRepository::isSalesCommissionAttached(Conexion::obtener_conexion(), $id_rfq);
   Conexion::cerrar_conexion();
 
-  // Calculate totals
   $totalInvoicePrice = 0;
   $totalRealCost = 0;
   $totalProfit = 0;
-
   foreach ($invoicesRetrieved as $invoice) {
     $totalInvoicePrice += (float)$invoice['total_item_price'];
     $totalRealCost += (float)$invoice['total_real_cost'];
@@ -59,15 +61,17 @@ include_once 'plantillas/fulfillment/templates/sales_commission.inc.php';
   }
   $totalProfit = $totalProfit - (float)str_replace(',', '', $sales_commission[1] ?? 0);
   ?>
-  <div class="card card-primary">
-    <div class="card-header">
-      <h3 class="card-title"><i class="fas fa-dollar-sign"></i> Invoices</h3>
-    </div>
-    <div class="card-body">
-      <?php if (!$isSalesCommissionAttached) : ?>
-        <div class="mb-3 text-danger font-weight-bold">Sales Commission is not attached!</div>
-      <?php endif; ?>
-      <table class="table table-bordered table-hover">
+  <div class="quote-section-header">
+    <div class="quote-section-header-title"><i class="fas fa-file-invoice-dollar mr-1"></i> Invoices</div>
+  </div>
+  <div id="fulfillment_invoices_box">
+    <?php if (!$isSalesCommissionAttached) : ?>
+      <div class="mb-3" style="color:#e74c3c; font-weight:600; font-size:13px;">
+        <i class="fas fa-exclamation-triangle mr-1"></i> Sales Commission is not attached!
+      </div>
+    <?php endif; ?>
+    <div id="fulfillment_invoices_table_container">
+      <table class="table table-hover">
         <thead>
           <tr>
             <th>INVOICE</th>
@@ -88,58 +92,30 @@ include_once 'plantillas/fulfillment/templates/sales_commission.inc.php';
               <td><?= number_format($invoice['total_real_cost'], 2); ?></td>
               <td><?= $invoice['sales_commission'] == 'Attached' ? number_format($invoice['total_profit'] - (float)str_replace(',', '', $sales_commission[1] ?? 0), 2) : number_format($invoice['total_profit'], 2); ?></td>
               <td><b class="text-success"><?= htmlspecialchars($invoice['sales_commission'] ?? '', ENT_QUOTES, 'UTF-8'); ?></b></td>
-              <td><button data-id="<?= $invoice['id_invoice']; ?>" class="attach-sales-commission-button btn btn-warning"><i class="fas fa-paperclip"></i></button></td>
+              <td><button data-id="<?= $invoice['id_invoice']; ?>" class="attach-sales-commission-button btn btn-warning btn-sm"><i class="fas fa-paperclip"></i></button></td>
             </tr>
           <?php endforeach; ?>
-          <!-- Total Row -->
-          <tr class="table-active font-weight-bold" style="font-size: 1.1em;">
-            <td colspan="2" class="text-left"><strong>TOTAL:</strong></td>
-            <td><?= number_format($totalInvoicePrice, 2); ?></td>
-            <td><?= number_format($totalRealCost, 2); ?></td>
-            <td><?= number_format($totalProfit, 2); ?></td>
-            <td class="text-success"></td>
-            <td></td>
-          </tr>
         </tbody>
+        <tfoot>
+          <tr>
+            <th colspan="2">TOTAL</th>
+            <th id="fulfillment_invoice_total_price"><?= number_format($totalInvoicePrice, 2); ?></th>
+            <th id="fulfillment_invoice_real_cost"><?= number_format($totalRealCost, 2); ?></th>
+            <th id="fulfillment_invoice_profit"><?= number_format($totalProfit, 2); ?></th>
+            <th></th>
+            <th></th>
+          </tr>
+        </tfoot>
       </table>
     </div>
   </div>
 <?php endif; ?>
 
-<div class="px-2 py-2 card-footer footer_totals d-inline-flex">
-  <div class="d-flex flex-nowrap align-items-center">
-    <div class="px-4">
-      <h5 class="mb-0">
-        <small class="text-info">Total Price:</small><br>
-        <span>$<?= number_format($quote->obtener_quote_total_price(), 2); ?></span>
-      </h5>
-    </div>
-    <div class="px-4 border-left">
-      <h5 class="mb-0">
-        <small class="text-info">Total Profit:</small><br>
-        <span>$<?= number_format($quote->obtener_real_fulfillment_profit(), 2); ?></span>
-      </h5>
-    </div>
-    <div class="px-4 border-left">
-      <h5 class="mb-0">
-        <small class="text-info">Profit (%):</small><br>
-        <span><?= number_format($quote->obtener_real_fulfillment_profit_percentage(), 2); ?>%</span>
-      </h5>
-    </div>
-  </div>
-</div>
-
 <?php if ($quote->obtener_invoice()) : ?>
-  <div class="card card-primary">
-    <div class="card-header">
-      <h3 class="card-title"><i class="fas fa-dollar-sign"></i> Total Profit - Real Sales Commission</h3>
-    </div>
-    <div class="card-body">
-      <div class="row">
-        <div class="col-md-12">
-          <h3 class="text-info text-center">Total Profit - Real Sales Commission: $ <?= number_format($quote->obtener_real_fulfillment_profit() - (float)str_replace(',', '', $sales_commission[1]), 2); ?></h3>
-        </div>
-      </div>
+  <div class="mt-3 px-3 py-2" style="background:#f0f7ff; border-left:4px solid #13A8F0; border-radius:4px;">
+    <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.4px; color:#8896a5;">Total Profit — Real Sales Commission</div>
+    <div style="font-size:16px; font-weight:700; color:#13A8F0;">
+      $<?= number_format($quote->obtener_real_fulfillment_profit() - (float)str_replace(',', '', $sales_commission[1] ?? 0), 2); ?>
     </div>
   </div>
 <?php endif; ?>

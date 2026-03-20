@@ -551,7 +551,7 @@ label.error {
   color: red;
 }
 
-#table_items_container, #requote_table, #tracking_table_container {
+#table_items_container, #requote_table, #tracking_table_container, #fulfillment_items_table_container, #fulfillment_services_table_container, #fulfillment_invoices_table_container {
   position: relative;
   width: 100%;
   z-index: 1;
@@ -570,25 +570,25 @@ label.error {
   border-radius: 4px;
 }
 
-#table_items_container table, #services_table table, #requote_table table, #tracking_table_container table {
+#table_items_container table, #services_table table, #requote_table table, #tracking_table_container table, #fulfillment_items_table_container table, #fulfillment_services_table_container table, #fulfillment_invoices_table_container table {
   width: 100%;
   margin: auto;
   border-collapse: separate;
   border-spacing: 0;
 }
 
-#table_items_container tbody, #services_table tbody, #requote_table tbody, #tracking_table_container tbody {
+#table_items_container tbody, #services_table tbody, #requote_table tbody, #tracking_table_container tbody, #fulfillment_items_table_container tbody, #fulfillment_services_table_container tbody, #fulfillment_invoices_table_container tbody {
   border-collapse: collapse !important;
 }
 
-#table_items_container td, #services_table td, #requote_table td, #tracking_table_container td {
+#table_items_container td, #services_table td, #requote_table td, #tracking_table_container td, #fulfillment_items_table_container td, #fulfillment_services_table_container td, #fulfillment_invoices_table_container td {
   padding: 5px 10px;
   border: 1px solid #e0e0e0;
   background: #fff;
   vertical-align: top;
 }
 
-#table_items_container thead th, #services_table thead th, #requote_table thead th, #tracking_table_container thead th {
+#table_items_container thead th, #services_table thead th, #requote_table thead th, #tracking_table_container thead th, #fulfillment_items_table_container thead th, #fulfillment_services_table_container thead th, #fulfillment_invoices_table_container thead th {
   background: #39485A;
   color: #fff;
   position: -webkit-sticky;
@@ -605,7 +605,16 @@ label.error {
 #services_table tfoot td,
 #requote_table tfoot,
 #requote_table tfoot th,
-#requote_table tfoot td {
+#requote_table tfoot td,
+#fulfillment_items_table_container tfoot,
+#fulfillment_items_table_container tfoot th,
+#fulfillment_items_table_container tfoot td,
+#fulfillment_services_table_container tfoot,
+#fulfillment_services_table_container tfoot th,
+#fulfillment_services_table_container tfoot td,
+#fulfillment_invoices_table_container tfoot,
+#fulfillment_invoices_table_container tfoot th,
+#fulfillment_invoices_table_container tfoot td {
   position: -webkit-sticky;
   position: sticky;
   bottom: 0;
@@ -647,9 +656,42 @@ label.error {
 #services_table tfoot td,
 #services_table tfoot th,
 #requote_table tfoot td,
-#requote_table tfoot th {
+#requote_table tfoot th,
+#fulfillment_items_table_container tfoot td,
+#fulfillment_items_table_container tfoot th,
+#fulfillment_services_table_container tfoot td,
+#fulfillment_services_table_container tfoot th,
+#fulfillment_invoices_table_container tfoot td,
+#fulfillment_invoices_table_container tfoot th {
   border: none !important;
   border-top: 2px solid #13A8F0 !important;
+}
+
+#fulfillment_invoices_table_container tfoot #fulfillment_invoice_total_price,
+#fulfillment_invoices_table_container tfoot #fulfillment_invoice_real_cost {
+  color: #13A8F0;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+#fulfillment_invoices_table_container tfoot #fulfillment_invoice_profit {
+  color: #27ae60;
+  font-size: 13px;
+}
+
+#fulfillment_items_table_container tfoot #fulfillment_rfq_total_price,
+#fulfillment_items_table_container tfoot #fulfillment_rfq_real_cost,
+#fulfillment_services_table_container tfoot #fulfillment_rfp_total_price,
+#fulfillment_services_table_container tfoot #fulfillment_rfp_real_cost {
+  color: #13A8F0;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+#fulfillment_items_table_container tfoot #fulfillment_rfq_profit,
+#fulfillment_services_table_container tfoot #fulfillment_rfp_profit {
+  color: #27ae60;
+  font-size: 13px;
 }
 
 th:first-child {

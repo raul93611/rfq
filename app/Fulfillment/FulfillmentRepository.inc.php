@@ -7,27 +7,30 @@ class FulfillmentRepository {
     Conexion::cerrar_conexion();
     if (count($items)) :
 ?>
-      <div class="custom-control custom-checkbox mb-3">
-        <input type="checkbox" data-id="<?= $id_rfq; ?>" class="custom-control-input" id="net30_cc" <?= $quote->obtener_net30_fulfillment() ? 'checked' : ''; ?>>
-        <label class="custom-control-label" for="net30_cc">Net30/CC</label>
+      <div class="items-controls-bar user-form">
+        <label>Payment Terms:</label>
+        <div class="custom-control custom-checkbox" style="padding-left:32px;">
+          <input type="checkbox" data-id="<?= $id_rfq; ?>" class="custom-control-input" id="net30_cc" <?= $quote->obtener_net30_fulfillment() ? 'checked' : ''; ?>>
+          <label class="custom-control-label" for="net30_cc">Net30/CC</label>
+        </div>
       </div>
-      <div class="table-responsive">
-        <table id="fulfillment_items_table" class="table table-bordered table-hover">
+      <div id="fulfillment_items_table_container">
+        <table id="fulfillment_items_table" class="table table-hover">
           <thead>
             <tr>
-              <th class="thin">OPTIONS</th>
-              <th class="thin">#</th>
-              <th class="description">E-LOGIC PROPOSAL</th>
-              <th class="thin">QTY</th>
-              <th class="thin">UNIT PRICE</th>
-              <th class="thin">TOTAL PRICE</th>
-              <th class="thin">OPTIONS</th>
-              <th class="thin">INVOICE</th>
-              <th class="thin">PROVIDER</th>
-              <th class="thin">TRANSACTION DATE</th>
-              <th class="thin">QTY</th>
-              <th class="thin">UNIT COST</th>
-              <th class="thin">OTHER COST</th>
+              <th>OPTIONS</th>
+              <th>#</th>
+              <th>E-LOGIC PROPOSAL</th>
+              <th>QTY</th>
+              <th>UNIT PRICE</th>
+              <th>TOTAL PRICE</th>
+              <th>OPTIONS</th>
+              <th>INVOICE</th>
+              <th>PROVIDER</th>
+              <th>TRANSACTION DATE</th>
+              <th>QTY</th>
+              <th>UNIT COST</th>
+              <th>OTHER COST</th>
               <th>REAL COST</th>
               <th>PAYMENT TERM</th>
               <th>COMMENT</th>
@@ -35,11 +38,7 @@ class FulfillmentRepository {
             </tr>
           </thead>
           <tbody>
-            <?php
-            foreach ($items as $i => $item) {
-              self::item_list($item, $i, $id_rfq);
-            }
-            ?>
+            <?php foreach ($items as $i => $item) { self::item_list($item, $i, $id_rfq); } ?>
             <tr>
               <td class="align-middle text-center">
                 <button type="button" id="edit_fulfillment_shipping" data-id="<?= $quote->obtener_id(); ?>" class="btn btn-item" name=""><i class="fas fa-pen"></i></button>
@@ -48,37 +47,31 @@ class FulfillmentRepository {
               <td>$ <?= $quote->obtener_shipping_cost(); ?></td>
               <td></td>
               <td></td>
-              <td colspan="5">
-                <?= str_replace('|', '<br>', $quote->obtener_fulfillment_shipping() ?? ''); ?>
-              </td>
-              <td>
-                <?= str_replace('|', '<br>', $quote->obtener_fulfillment_shipping_cost() ?? ''); ?>
-              </td>
+              <td colspan="5"><?= str_replace('|', '<br>', $quote->obtener_fulfillment_shipping() ?? ''); ?></td>
+              <td><?= str_replace('|', '<br>', $quote->obtener_fulfillment_shipping_cost() ?? ''); ?></td>
               <td></td>
               <td></td>
               <td></td>
             </tr>
+          </tbody>
+          <tfoot>
             <tr>
-              <td></td>
-              <td colspan="4">Total RFQ (from Proposal):</td>
-              <td><?= $quote->obtener_total_price(); ?></td>
-              <td colspan="7"></td>
-              <td><?= $quote->obtener_total_fulfillment(); ?></td>
-              <td></td>
-              <td></td>
-              <td>
+              <th colspan="5">TOTAL RFQ</th>
+              <th id="fulfillment_rfq_total_price"><?= $quote->obtener_total_price(); ?></th>
+              <th colspan="7"></th>
+              <th id="fulfillment_rfq_real_cost"><?= $quote->obtener_total_fulfillment(); ?></th>
+              <th></th>
+              <th></th>
+              <th id="fulfillment_rfq_profit">
                 <?php
                 $profit = $quote->getRfqFulfillmentProfit();
                 $proposalPrice = $quote->obtener_total_price();
-
-                // Avoid division by zero
                 $profitPercentage = $proposalPrice != 0 ? ($profit / $proposalPrice) * 100 : 0;
-
                 echo $profit . ' (' . number_format($profitPercentage, 2) . '%)';
                 ?>
-              </td>
+              </th>
             </tr>
-          </tbody>
+          </tfoot>
         </table>
       </div>
     <?php
@@ -270,27 +263,29 @@ class FulfillmentRepository {
       Conexion::cerrar_conexion();
       if (count($services)) :
   ?>
-  <div class="custom-control custom-checkbox mb-3">
-    <input type="checkbox" data-id="<?= $id_rfq; ?>" class="custom-control-input" id="net30_cc_services" <?= $quote->getNet30FulfillmentServices() ? 'checked' : ''; ?>>
-    <label class="custom-control-label" for="net30_cc_services">Net30/CC</label>
+  <div class="items-controls-bar user-form">
+    <div class="custom-control custom-checkbox" style="padding-left:32px;">
+      <input type="checkbox" data-id="<?= $id_rfq; ?>" class="custom-control-input" id="net30_cc_services" <?= $quote->getNet30FulfillmentServices() ? 'checked' : ''; ?>>
+      <label class="custom-control-label" for="net30_cc_services">Net30/CC</label>
+    </div>
   </div>
-  <div class="table-responsive">
-    <table id="fulfillment_services_table" class="table table-bordered table-hover">
+  <div id="fulfillment_services_table_container">
+    <table id="fulfillment_services_table" class="table table-hover">
       <thead>
         <tr>
-          <th class="thin">OPTIONS</th>
-          <th class="thin">#</th>
-          <th class="description">PROJECT SPECIFICATIONS</th>
-          <th class="thin">QTY</th>
-          <th class="thin">UNIT PRICE</th>
-          <th class="thin">TOTAL PRICE</th>
-          <th class="thin">OPTIONS</th>
-          <th class="thin">INVOICE</th>
-          <th class="thin">PROVIDER</th>
-          <th class="thin">TRANSACTION DATE</th>
-          <th class="thin">QTY</th>
-          <th class="thin">UNIT COST</th>
-          <th class="thin">OTHER COST</th>
+          <th>OPTIONS</th>
+          <th>#</th>
+          <th>PROJECT SPECIFICATIONS</th>
+          <th>QTY</th>
+          <th>UNIT PRICE</th>
+          <th>TOTAL PRICE</th>
+          <th>OPTIONS</th>
+          <th>INVOICE</th>
+          <th>PROVIDER</th>
+          <th>TRANSACTION DATE</th>
+          <th>QTY</th>
+          <th>UNIT COST</th>
+          <th>OTHER COST</th>
           <th>REAL COST</th>
           <th>PAYMENT TERM</th>
           <th>COMMENTS</th>
@@ -298,21 +293,21 @@ class FulfillmentRepository {
         </tr>
       </thead>
       <tbody>
-        <?php
-        foreach ($services as $i => $service) {
+        <?php foreach ($services as $i => $service) {
           self::service_list($service, $i, $quote->obtener_services_payment_term());
-        }
-        ?>
-        <tr>
-          <td colspan="5">Total RFP (from Proposal):</td>
-          <td><?= $quote->getTotalQuoteServices(); ?></td>
-          <td colspan="7"></td>
-          <td><?= $quote->obtener_total_services_fulfillment(); ?></td>
-          <td></td>
-          <td></td>
-          <td><?= $quote->getRfpFulfillmentProfit(); ?></td>
-        </tr>
+        } ?>
       </tbody>
+      <tfoot>
+        <tr>
+          <th colspan="5">TOTAL RFP</th>
+          <th id="fulfillment_rfp_total_price"><?= $quote->getTotalQuoteServices(); ?></th>
+          <th colspan="7"></th>
+          <th id="fulfillment_rfp_real_cost"><?= $quote->obtener_total_services_fulfillment(); ?></th>
+          <th></th>
+          <th></th>
+          <th id="fulfillment_rfp_profit"><?= $quote->getRfpFulfillmentProfit(); ?></th>
+        </tr>
+      </tfoot>
     </table>
   </div>
 <?php endif;

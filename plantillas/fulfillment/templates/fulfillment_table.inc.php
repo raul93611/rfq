@@ -2,32 +2,34 @@
   <!-- Include Sales Commission if invoice exists -->
   <?php include 'plantillas/fulfillment/templates/sales_commission.inc.php'; ?>
 
-  <!-- RFQ Card -->
-  <div class="card card-primary">
-    <div class="card-header">
-      <h3 class="card-title"><i class="fas fa-highlighter"></i> RFQ</h3>
-    </div>
-    <div id="fulfillment_box" class="card-body">
-      <?php if ($items_exists) : ?>
-        <?= FulfillmentRepository::items_list($id_rfq); ?>
-      <?php else : ?>
-        <h3 class="text-info text-center"><i class="fas fa-exclamation-circle"></i> No Items to display!</h3>
-      <?php endif; ?>
-    </div>
+  <!-- RFQ Section -->
+  <div class="quote-section-header">
+    <div class="quote-section-header-title"><i class="fas fa-boxes mr-1"></i> RFQ</div>
+  </div>
+  <div id="fulfillment_box">
+    <?php if ($items_exists) : ?>
+      <?= FulfillmentRepository::items_list($id_rfq); ?>
+    <?php else : ?>
+      <div class="section-empty-state">
+        <i class="fas fa-box-open"></i>
+        <p>No items to display</p>
+      </div>
+    <?php endif; ?>
   </div>
 
-  <!-- RFP Card -->
-  <div class="card card-primary">
-    <div class="card-header">
-      <h3 class="card-title"><i class="fas fa-highlighter"></i> RFP</h3>
-    </div>
-    <div id="fulfillment_services_box" class="card-body">
-      <?php if ($quote->isServices()) : ?>
-        <?= FulfillmentRepository::services_list($id_rfq); ?>
-      <?php else : ?>
-        <h3 class="text-info text-center"><i class="fas fa-exclamation-circle"></i> No Services to display!</h3>
-      <?php endif; ?>
-    </div>
+  <!-- RFP Section -->
+  <div class="quote-section-header">
+    <div class="quote-section-header-title"><i class="fas fa-concierge-bell mr-1"></i> RFP</div>
+  </div>
+  <div id="fulfillment_services_box">
+    <?php if ($quote->isServices()) : ?>
+      <?= FulfillmentRepository::services_list($id_rfq); ?>
+    <?php else : ?>
+      <div class="section-empty-state">
+        <i class="fas fa-clipboard-list"></i>
+        <p>No services to display</p>
+      </div>
+    <?php endif; ?>
   </div>
 
   <!-- Invoices Card (if pending fulfillment) -->
@@ -96,29 +98,6 @@
       </div>
     </div>
   <?php endif; ?>
-
-  <div class="px-2 py-2 card-footer footer_totals d-inline-flex">
-    <div class="d-flex flex-nowrap align-items-center">
-      <div class="px-4">
-        <h5 class="mb-0">
-          <small class="text-info">Total Price:</small><br>
-          <span>$<?= number_format($quote->obtener_quote_total_price(), 2); ?></span>
-        </h5>
-      </div>
-      <div class="px-4 border-left">
-        <h5 class="mb-0">
-          <small class="text-info">Total Profit:</small><br>
-          <span>$<?= number_format($quote->obtener_real_fulfillment_profit(), 2); ?></span>
-        </h5>
-      </div>
-      <div class="px-4 border-left">
-        <h5 class="mb-0">
-          <small class="text-info">Profit (%):</small><br>
-          <span><?= number_format($quote->obtener_real_fulfillment_profit_percentage(), 2); ?>%</span>
-        </h5>
-      </div>
-    </div>
-  </div>
 
   <!-- Total Profit - Real Sales Commission Card (if invoice exists) -->
   <?php if ($quote->obtener_invoice()) : ?>
