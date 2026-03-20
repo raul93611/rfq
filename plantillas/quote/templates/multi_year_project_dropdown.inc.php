@@ -12,7 +12,7 @@ if ($multiYearProject) : ?>
     </a>
     <form class="d-inline m-0" action="<?= REMOVE_MASTER; ?>" method="post">
       <input type="hidden" name="slave" value="<?= htmlspecialchars($cotizacion_recuperada->obtener_id(), ENT_QUOTES, 'UTF-8'); ?>">
-      <button type="submit" class="btn btn-link p-0 m-0" style="font-size:14px;color:#e74c3c;line-height:1;vertical-align:middle;">&times;</button>
+      <button type="submit" name="send" class="btn btn-link p-0 m-0" style="font-size:18px;color:#e74c3c;line-height:1;vertical-align:middle;">&times;</button>
     </form>
   </div>
 
@@ -32,7 +32,7 @@ if ($multiYearProject) : ?>
           <form class="d-inline m-0" action="<?= REMOVE_SLAVE; ?>" method="post">
             <input type="hidden" name="master" value="<?= htmlspecialchars($cotizacion_recuperada->obtener_id(), ENT_QUOTES, 'UTF-8'); ?>">
             <input type="hidden" name="slave" value="<?= htmlspecialchars($slaveQuote['id'], ENT_QUOTES, 'UTF-8'); ?>">
-            <button type="submit" class="btn btn-link p-0 m-0" style="font-size:14px;color:#e74c3c;line-height:1;">&times;</button>
+            <button type="submit" name="send" class="btn btn-link p-0 m-0" style="font-size:18px;color:#e74c3c;line-height:1;">&times;</button>
           </form>
         </div>
       <?php endforeach; ?>
