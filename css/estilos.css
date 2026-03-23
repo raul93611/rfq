@@ -1564,7 +1564,7 @@ h2#caja_items {
 }
 
 .section-empty-state i {
-  font-size: 32px;
+  font-size: 20px;
   display: block;
   margin-bottom: 8px;
   opacity: 0.4;
