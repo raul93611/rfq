@@ -1850,6 +1850,50 @@ class RepositorioRfq {
     return $sentence->fetchColumn();
   }
 
+  public static function getAnnualAwardsDataByMonthBothYears($connection, $current_year, $past_year) {
+    $empty_month = ['total_quotes' => 0, 'total_price' => 0];
+    $result = [
+      'current_by_month' => array_fill(0, 12, $empty_month),
+      'past_by_month'    => array_fill(0, 12, $empty_month),
+    ];
+    if (!isset($connection)) return $result;
+    try {
+      $past_start = "{$past_year}-01-01";
+      $curr_end   = ($current_year + 1) . "-01-01";
+      $sql = "
+      SELECT
+        MONTH(r.fecha_award) AS month,
+        YEAR(r.fecha_award)  AS year,
+        COUNT(r.id)          AS total_quotes,
+        SUM(COALESCE(s_totals.services_total, 0) + COALESCE(r.total_price, 0)) AS total_price
+      FROM rfq r
+      LEFT JOIN (
+        SELECT id_rfq, SUM(COALESCE(total_price, 0)) AS services_total
+        FROM services
+        GROUP BY id_rfq
+      ) s_totals ON r.id = s_totals.id_rfq
+      WHERE r.award = 1
+        AND r.deleted = 0
+        AND r.fecha_award >= ?
+        AND r.fecha_award < ?
+      GROUP BY YEAR(r.fecha_award), MONTH(r.fecha_award)
+      ";
+      $sentence = $connection->prepare($sql);
+      $sentence->execute([$past_start, $curr_end]);
+      while ($row = $sentence->fetch(PDO::FETCH_ASSOC)) {
+        $idx = (int)$row['month'] - 1;
+        $key = (int)$row['year'] === (int)$current_year ? 'current_by_month' : 'past_by_month';
+        $result[$key][$idx] = [
+          'total_quotes' => (int)$row['total_quotes'],
+          'total_price'  => (float)$row['total_price'],
+        ];
+      }
+    } catch (PDOException $ex) {
+      print 'ERROR:' . $ex->getMessage() . '<br>';
+    }
+    return $result;
+  }
+
   public static function actualizar_fecha_y_submitted($conexion, $id_rfq) {
     $rfq_editado = false;
     if (isset($conexion)) {
