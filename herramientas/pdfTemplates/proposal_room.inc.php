@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <style>
     body {
@@ -108,6 +109,7 @@
       letter-spacing: 0.6px;
       padding: 9px 10px;
       border: none;
+      text-align: center;
     }
 
     .items-table tbody td {
@@ -132,10 +134,25 @@
       padding: 8px 10px;
     }
 
-    .num-col   { width: 22px; text-align: center; }
-    .qty-col   { width: 30px; text-align: center; }
-    .price-col { width: 82px; text-align: right; }
-    .total-col { width: 92px; text-align: right; }
+    .num-col {
+      width: 22px;
+      text-align: center;
+    }
+
+    .qty-col {
+      width: 30px;
+      text-align: center;
+    }
+
+    .price-col {
+      width: 100px;
+      text-align: right;
+    }
+
+    .total-col {
+      width: 100px;
+      text-align: right;
+    }
 
     /* ── Grand total table ── */
     .grand-total-table {
@@ -189,18 +206,18 @@
   <div style="background:#004A97; height:5px; margin-bottom:18px;"></div>
 
   <!-- ── Header: Logo left · PROPOSAL + meta right ── -->
-  <table style="width:100%; border-collapse:collapse; margin-bottom:18px;" cellspacing="0" cellpadding="0">
+  <table style="width:100%; border-collapse:collapse; margin-bottom:0px;" cellspacing="0" cellpadding="0">
     <tr>
-      <td style="vertical-align:middle;">
-        <img src="img/<?= htmlspecialchars($logo) ?>" style="max-width:320px;" alt="Logo">
+      <td style="vertical-align:top;">
+        <img src="img/<?= htmlspecialchars($logo) ?>" style="height:190px; width:auto;" alt="Logo">
       </td>
-      <td style="vertical-align:bottom; text-align:right;">
-        <div style="font-size:28pt; font-weight:700; color:#004A97; letter-spacing:5px; line-height:1; margin-bottom:10px;">PROPOSAL</div>
+      <td style="vertical-align:top; text-align:right;">
+        <div style="font-size:30pt; font-weight:700; color:#004A97; letter-spacing:5px; line-height:1; margin-bottom:10px;">PROPOSAL</div>
         <table style="border-collapse:collapse; margin-left:auto;" cellspacing="0" cellpadding="0">
           <tr>
-            <td style="padding:5px 14px; background:#004A97; color:#fff; font-size:7pt; font-weight:700; text-transform:uppercase; letter-spacing:0.6px; border-right:1px solid #2d6bbf;">Proposal #</td>
-            <td style="padding:5px 14px; background:#004A97; color:#fff; font-size:7pt; font-weight:700; text-transform:uppercase; letter-spacing:0.6px; border-right:1px solid #2d6bbf;">Date</td>
-            <td style="padding:5px 14px; background:#004A97; color:#fff; font-size:7pt; font-weight:700; text-transform:uppercase; letter-spacing:0.6px;">Expiration</td>
+            <td style="padding:5px 14px; background:#004A97; color:#fff; font-size:7pt; font-weight:700; text-transform:uppercase; letter-spacing:0.6px; border-right:1px solid #2d6bbf; text-align:center;">Proposal #</td>
+            <td style="padding:5px 14px; background:#004A97; color:#fff; font-size:7pt; font-weight:700; text-transform:uppercase; letter-spacing:0.6px; border-right:1px solid #2d6bbf; text-align:center;">Date</td>
+            <td style="padding:5px 14px; background:#004A97; color:#fff; font-size:7pt; font-weight:700; text-transform:uppercase; letter-spacing:0.6px; text-align:center;">Expiration</td>
           </tr>
           <tr>
             <td style="padding:6px 14px; border:1px solid #dce8f5; font-size:10pt; font-weight:700; text-align:center; color:#004A97;"><?= htmlspecialchars($cotizacion->obtener_id()) ?></td>
@@ -304,11 +321,11 @@
   <table class="grand-total-table" cellspacing="0" cellpadding="0">
     <tr class="shipping-row">
       <td><?= nl2br(htmlspecialchars($cotizacion->obtener_shipping())) ?></td>
-      <td style="text-align:right; width:92px;">$ <?= number_format($cotizacion->obtener_shipping_cost(), 2) ?></td>
+      <td style="text-align:right; width:150px;">$ <?= number_format($cotizacion->obtener_shipping_cost(), 2) ?></td>
     </tr>
     <tr class="total-row">
       <td style="text-align:right;">TOTAL</td>
-      <td style="text-align:right; width:92px;">$ <?= number_format($cotizacion->obtener_total_price() + $total_service, 2) ?></td>
+      <td style="text-align:right; width:150px;">$ <?= number_format($cotizacion->obtener_total_price() + $total_service, 2) ?></td>
     </tr>
   </table>
 
@@ -321,4 +338,5 @@
   <?php endif; ?>
 
 </body>
+
 </html>
