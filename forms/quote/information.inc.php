@@ -166,7 +166,7 @@
   </div>
 </div>
 
-<div class="card-footer d-flex justify-content-between align-items-center">
+<div class="quote-action-bar">
   <a class="btn btn-secondary btn-sm" href="<?= EDITAR_COTIZACION . '/' . $quote->obtener_id(); ?>">
     <i class="fa fa-reply mr-1"></i> Back
   </a>

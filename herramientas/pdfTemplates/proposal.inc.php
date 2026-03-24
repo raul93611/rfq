@@ -141,8 +141,8 @@
 
     .num-col   { width: 22px; text-align: center; }
     .qty-col   { width: 30px; text-align: center; }
-    .price-col { width: 82px; text-align: right; }
-    .total-col { width: 92px; text-align: right; }
+    .price-col { width: 100px; text-align: right; }
+    .total-col { width: 100px; text-align: right; }
 
     /* ── Payment note ── */
     .payment-note {
@@ -173,8 +173,8 @@
       <td style="vertical-align:middle;">
         <img src="img/<?= htmlspecialchars($logo) ?>" style="max-width:320px;" alt="Logo">
       </td>
-      <td style="vertical-align:bottom; text-align:right;">
-        <div style="font-size:28pt; font-weight:700; color:#004A97; letter-spacing:5px; line-height:1; margin-bottom:10px;">PROPOSAL</div>
+      <td style="vertical-align:top; text-align:right;">
+        <div style="font-size:40pt; font-weight:700; color:#004A97; letter-spacing:5px; line-height:1; margin-bottom:10px;">PROPOSAL</div>
         <table style="border-collapse:collapse; margin-left:auto;" cellspacing="0" cellpadding="0">
           <tr>
             <td style="padding:5px 14px; background:#004A97; color:#fff; font-size:7pt; font-weight:700; text-transform:uppercase; letter-spacing:0.6px; border-right:1px solid #2d6bbf;">Proposal #</td>
@@ -284,8 +284,8 @@
       </tr>
 
       <tr class="total-row">
-        <td colspan="4" style="text-align:right;">TOTAL</td>
-        <td class="total-col">$ <?= number_format($cotizacion->obtener_total_price() + $total_service, 2) ?></td>
+        <td colspan="3" style="text-align:right;">TOTAL</td>
+        <td colspan="2" style="text-align:right;">$ <?= number_format($cotizacion->obtener_total_price() + $total_service, 2) ?></td>
       </tr>
 
     </tbody>
