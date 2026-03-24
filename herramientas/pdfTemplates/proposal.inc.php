@@ -102,6 +102,7 @@
       letter-spacing: 0.6px;
       padding: 9px 10px;
       border: none;
+      text-align: center;
     }
 
     .items-table tbody td {
@@ -168,18 +169,18 @@
   <div class="top-bar"></div>
 
   <!-- ── Header: Logo left · PROPOSAL + meta right ── -->
-  <table style="width:100%; border-collapse:collapse; margin-bottom:18px;" cellspacing="0" cellpadding="0">
+  <table style="width:100%; border-collapse:collapse; margin-bottom:0px;" cellspacing="0" cellpadding="0">
     <tr>
-      <td style="vertical-align:middle;">
-        <img src="img/<?= htmlspecialchars($logo) ?>" style="max-width:320px;" alt="Logo">
+      <td style="vertical-align:top;">
+        <img src="img/<?= htmlspecialchars($logo) ?>" style="height:220px; width:auto;" alt="Logo">
       </td>
       <td style="vertical-align:top; text-align:right;">
-        <div style="font-size:40pt; font-weight:700; color:#004A97; letter-spacing:5px; line-height:1; margin-bottom:10px;">PROPOSAL</div>
+        <div style="font-size:30pt; font-weight:700; color:#004A97; letter-spacing:5px; line-height:1; margin-bottom:10px;">PROPOSAL</div>
         <table style="border-collapse:collapse; margin-left:auto;" cellspacing="0" cellpadding="0">
           <tr>
-            <td style="padding:5px 14px; background:#004A97; color:#fff; font-size:7pt; font-weight:700; text-transform:uppercase; letter-spacing:0.6px; border-right:1px solid #2d6bbf;">Proposal #</td>
-            <td style="padding:5px 14px; background:#004A97; color:#fff; font-size:7pt; font-weight:700; text-transform:uppercase; letter-spacing:0.6px; border-right:1px solid #2d6bbf;">Date</td>
-            <td style="padding:5px 14px; background:#004A97; color:#fff; font-size:7pt; font-weight:700; text-transform:uppercase; letter-spacing:0.6px;">Expiration</td>
+            <td style="padding:5px 14px; background:#004A97; color:#fff; font-size:7pt; font-weight:700; text-transform:uppercase; letter-spacing:0.6px; border-right:1px solid #2d6bbf; text-align:center;">Proposal #</td>
+            <td style="padding:5px 14px; background:#004A97; color:#fff; font-size:7pt; font-weight:700; text-transform:uppercase; letter-spacing:0.6px; border-right:1px solid #2d6bbf; text-align:center;">Date</td>
+            <td style="padding:5px 14px; background:#004A97; color:#fff; font-size:7pt; font-weight:700; text-transform:uppercase; letter-spacing:0.6px; text-align:center;">Expiration</td>
           </tr>
           <tr>
             <td style="padding:6px 14px; border:1px solid #dce8f5; font-size:10pt; font-weight:700; text-align:center; color:#004A97;"><?= htmlspecialchars($cotizacion->obtener_id()) ?></td>
