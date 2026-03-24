@@ -209,7 +209,7 @@
   <table style="width:100%; border-collapse:collapse; margin-bottom:0px;" cellspacing="0" cellpadding="0">
     <tr>
       <td style="vertical-align:top;">
-        <img src="img/<?= htmlspecialchars($logo) ?>" style="height:190px; width:auto;" alt="Logo">
+        <img src="img/<?= htmlspecialchars($logo) ?>" style="height:150px; width:auto;" alt="Logo">
       </td>
       <td style="vertical-align:top; text-align:right;">
         <div style="font-size:30pt; font-weight:700; color:#004A97; letter-spacing:5px; line-height:1; margin-bottom:10px;">PROPOSAL</div>
@@ -228,8 +228,6 @@
       </td>
     </tr>
   </table>
-
-  <hr class="rule">
 
   <!-- ── Address / Ship To ── -->
   <table class="addr-table" cellspacing="0" cellpadding="0">
