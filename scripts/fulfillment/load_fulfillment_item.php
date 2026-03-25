@@ -102,6 +102,6 @@ try {
 <input type="hidden" name="id_item" value="<?= htmlspecialchars($_POST["idItem"] ? $_POST["idItem"] : $fulfillment_item?->get_id_item(), ENT_QUOTES, 'UTF-8'); ?>">
 
 <div class="modal-footer d-flex justify-content-end" style="gap:8px;">
-  <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa fa-ban mr-1"></i> Cancel</button>
   <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check mr-1"></i> Save</button>
+  <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa fa-ban mr-1"></i> Cancel</button>
 </div>

@@ -48,6 +48,6 @@ $costs = explode('|', $quote->obtener_fulfillment_shipping_cost() ?? '');
 </div>
 
 <div class="modal-footer d-flex justify-content-end" style="gap:8px;">
-  <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa fa-ban mr-1"></i> Cancel</button>
   <button type="submit" name="update_fulfillment_shipping_button" class="btn btn-primary btn-sm"><i class="fa fa-check mr-1"></i> Save</button>
+  <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa fa-ban mr-1"></i> Cancel</button>
 </div>
