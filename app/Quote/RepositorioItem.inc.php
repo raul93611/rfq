@@ -191,7 +191,16 @@ class RepositorioItem {
     echo '<td>' . $numberCell  . '</td>';
     echo '<td>' . $projectDesc . '</td>';
     echo '<td>' . $elogicDesc  . '</td>';
-    echo '<td class="estrechar"><a target="_blank" href="' . $item->obtener_website() . '">' . $item->obtener_website() . '</a></td>';
+    $website = $item->obtener_website();
+    if (filter_var($website, FILTER_VALIDATE_URL)) {
+      $host = preg_replace('/^www\./i', '', parse_url($website, PHP_URL_HOST));
+      $websiteCell = '<a target="_blank" href="' . htmlspecialchars($website) . '" title="' . htmlspecialchars($website) . '">' . htmlspecialchars($host) . '</a>';
+    } elseif ($website !== '' && $website !== null) {
+      $websiteCell = htmlspecialchars($website);
+    } else {
+      $websiteCell = '—';
+    }
+    echo '<td class="estrechar">' . $websiteCell . '</td>';
     echo '<td>' . $item->obtener_quantity() . '</td>';
     echo '<td>' . $providersCell . '</td>';
     echo '<td>' . $additionalCell . '</td>';

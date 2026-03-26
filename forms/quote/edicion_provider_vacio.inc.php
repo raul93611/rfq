@@ -31,12 +31,12 @@ Conexion::cerrar_conexion();
   <a href="<?= DELETE_PROVIDER . '/' . htmlspecialchars($id_provider); ?>" class="delete_provider_item_button btn btn-danger btn-sm">
     <i class="fa fa-trash mr-1"></i> Delete
   </a>
+  <button type="submit" class="btn btn-primary btn-sm" name="guardar_cambios_provider">
+      <i class="fa fa-check mr-1"></i> Save Changes
+    </button>
   <div style="display:flex;gap:8px;">
     <a href="<?= EDITAR_COTIZACION . '/' . htmlspecialchars($item->obtener_id_rfq()); ?>" class="btn btn-secondary btn-sm">
       <i class="fa fa-times mr-1"></i> Cancel
     </a>
-    <button type="submit" class="btn btn-primary btn-sm" name="guardar_cambios_provider">
-      <i class="fa fa-check mr-1"></i> Save Changes
-    </button>
   </div>
 </div>

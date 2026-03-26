@@ -29,7 +29,7 @@ Conexion::cerrar_conexion();
 <div class="card-footer d-flex align-items-center" style="gap:8px;background:transparent;border-top:1px solid #f0f0f0;">
   <a href="<?php echo DELETE_RE_QUOTE_SUBITEM_PROVIDER . $re_quote_subitem_provider->get_id(); ?>" class="delete_provider_subitem_button btn btn-danger btn-sm"><i class="fa fa-trash mr-1"></i> Delete</a>
   <div class="ml-auto d-flex" style="gap:8px;">
-    <a href="<?php echo RE_QUOTE . $re_quote->get_id_rfq(); ?>" class="btn btn-secondary btn-sm"><i class="fa fa-times mr-1"></i> Cancel</a>
     <button type="submit" class="btn btn-primary btn-sm" name="save_edit_re_quote_subitem_provider"><i class="fa fa-check mr-1"></i> Save</button>
+    <a href="<?php echo RE_QUOTE . $re_quote->get_id_rfq(); ?>" class="btn btn-secondary btn-sm"><i class="fa fa-times mr-1"></i> Cancel</a>
   </div>
 </div>

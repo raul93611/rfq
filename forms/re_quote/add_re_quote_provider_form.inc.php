@@ -23,6 +23,6 @@ Conexion::cerrar_conexion();
   </div>
 </div>
 <div class="card-footer d-flex justify-content-end" style="gap:8px;background:transparent;border-top:1px solid #f0f0f0;">
-  <a href="<?= RE_QUOTE . $re_quote->get_id_rfq();  ?>" class="btn btn-secondary btn-sm"><i class="fa fa-times mr-1"></i> Cancel</a>
   <button type="submit" class="btn btn-primary btn-sm" name="save_re_quote_provider"><i class="fa fa-check mr-1"></i> Save</button>
+  <a href="<?= RE_QUOTE . $re_quote->get_id_rfq();  ?>" class="btn btn-secondary btn-sm"><i class="fa fa-times mr-1"></i> Cancel</a>
 </div>

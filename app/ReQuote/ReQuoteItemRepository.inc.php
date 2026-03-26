@@ -219,7 +219,17 @@ class ReQuoteItemRepository {
       }
       ?>
       <td class="estrechar">
-        <a target="_blank" href="<?= $re_quote_item->get_website(); ?>"><?= $re_quote_item->get_website(); ?></a>
+        <?php
+        $rq_website = $re_quote_item->get_website();
+        if (filter_var($rq_website, FILTER_VALIDATE_URL)) {
+          $rq_host = preg_replace('/^www\./i', '', parse_url($rq_website, PHP_URL_HOST));
+          echo '<a target="_blank" href="' . htmlspecialchars($rq_website) . '" title="' . htmlspecialchars($rq_website) . '">' . htmlspecialchars($rq_host) . '</a>';
+        } elseif ($rq_website !== '' && $rq_website !== null) {
+          echo htmlspecialchars($rq_website);
+        } else {
+          echo '—';
+        }
+        ?>
       </td>
       <td><?= $re_quote_item->get_quantity(); ?></td>
       <td>

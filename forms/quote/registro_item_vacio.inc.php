@@ -82,10 +82,10 @@ Conexion::cerrar_conexion();
 
 </div>
 <div class="card-footer d-flex justify-content-end" style="gap:8px;">
-  <a href="<?= EDITAR_COTIZACION . '/' . $id_rfq; ?>" class="btn btn-secondary btn-sm">
-    <i class="fa fa-times mr-1"></i> Cancel
-  </a>
   <button type="submit" class="btn btn-primary btn-sm" name="guardar_item">
     <i class="fa fa-check mr-1"></i> Save Item
   </button>
+  <a href="<?= EDITAR_COTIZACION . '/' . $id_rfq; ?>" class="btn btn-secondary btn-sm">
+    <i class="fa fa-times mr-1"></i> Cancel
+  </a>
 </div>

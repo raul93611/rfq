@@ -57,10 +57,10 @@
 
 </div>
 <div class="card-footer d-flex justify-content-end" style="gap:8px;">
-  <a href="<?= EDITAR_COTIZACION . '/' . $_hdr_item->obtener_id_rfq(); ?>" class="btn btn-secondary btn-sm">
-    <i class="fa fa-times mr-1"></i> Cancel
-  </a>
   <button type="submit" class="btn btn-primary btn-sm" name="guardar_subitem">
     <i class="fa fa-check mr-1"></i> Save Subitem
   </button>
+  <a href="<?= EDITAR_COTIZACION . '/' . $_hdr_item->obtener_id_rfq(); ?>" class="btn btn-secondary btn-sm">
+    <i class="fa fa-times mr-1"></i> Cancel
+  </a>
 </div>
