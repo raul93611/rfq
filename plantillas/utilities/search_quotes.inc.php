@@ -17,13 +17,12 @@
             <div class="card-body">
               <form id="search_quotes" role="form" method="post" action="">
                 <div class="input-group">
-                  <input type="search" name="termino_busqueda" class="form-control search-input" placeholder="Type a keyword and press Search..." required autofocus>
-                  <div class="input-group-append">
-                    <button type="submit" class="btn btn-primary" name="buscar">
-                      <i class="fas fa-search mr-1"></i> Search
-                    </button>
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fas fa-search"></i></span>
                   </div>
+                  <input type="search" name="termino_busqueda" class="form-control search-input" placeholder="Type at least 3 characters to search..." autofocus>
                 </div>
+                <small class="form-text text-muted mt-1">Results appear automatically after 3 characters.</small>
               </form>
             </div>
           </div>

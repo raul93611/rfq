@@ -1592,7 +1592,9 @@ class RepositorioRfq {
             WHERE r.deleted = 0
             GROUP BY r.id
           ) as sq
-        WHERE sq.email_code LIKE :search_term
+        WHERE (
+          sq.nombre_usuario LIKE :search_term
+          OR sq.email_code LIKE :search_term
           OR sq.type_of_bid LIKE :search_term
           OR sq.comments LIKE :search_term
           OR sq.total_price LIKE :search_term
@@ -1604,36 +1606,40 @@ class RepositorioRfq {
           OR sq.shipping_address LIKE :search_term
           OR sq.special_requirements LIKE :search_term
           OR sq.id LIKE :search_term
-          OR sq.id IN (
-            SELECT i.id_rfq
+          OR EXISTS (
+            SELECT 1
             FROM item i
-            WHERE i.provider_menor LIKE :search_term
-              OR i.brand LIKE :search_term
-              OR i.brand_project LIKE :search_term
-              OR i.part_number LIKE :search_term
-              OR i.part_number_project LIKE :search_term
-              OR i.description LIKE :search_term
-              OR i.description_project LIKE :search_term
-              OR i.comments LIKE :search_term
+            WHERE i.id_rfq = sq.id
+              AND (i.provider_menor LIKE :search_term
+                OR i.brand LIKE :search_term
+                OR i.brand_project LIKE :search_term
+                OR i.part_number LIKE :search_term
+                OR i.part_number_project LIKE :search_term
+                OR i.description LIKE :search_term
+                OR i.description_project LIKE :search_term
+                OR i.comments LIKE :search_term)
           )
-          OR sq.id IN (
-            SELECT s.id_rfq
-            FROM services s
-            WHERE s.description LIKE :search_term
+          OR EXISTS (
+            SELECT 1
+            FROM services svc
+            WHERE svc.id_rfq = sq.id
+              AND svc.description LIKE :search_term
           )
-          OR sq.id IN (
-            SELECT i.id_rfq
+          OR EXISTS (
+            SELECT 1
             FROM subitems si
               JOIN item i ON si.id_item = i.id
-            WHERE si.provider_menor LIKE :search_term
-              OR si.brand LIKE :search_term
-              OR si.brand_project LIKE :search_term
-              OR si.part_number LIKE :search_term
-              OR si.part_number_project LIKE :search_term
-              OR si.description LIKE :search_term
-              OR si.description_project LIKE :search_term
-              OR si.comments LIKE :search_term
+            WHERE i.id_rfq = sq.id
+              AND (si.provider_menor LIKE :search_term
+                OR si.brand LIKE :search_term
+                OR si.brand_project LIKE :search_term
+                OR si.part_number LIKE :search_term
+                OR si.part_number_project LIKE :search_term
+                OR si.description LIKE :search_term
+                OR si.description_project LIKE :search_term
+                OR si.comments LIKE :search_term)
           )
+        )
         ORDER BY {$sort_column} {$sort_direction} LIMIT {$start}, {$length}
         ";
         $sentencia = $conexion->prepare($sql);
@@ -1657,47 +1663,53 @@ class RepositorioRfq {
         SELECT COUNT(r.id)
         FROM rfq r
         LEFT JOIN usuarios u ON r.usuario_designado = u.id
-        WHERE r.deleted = 0 
-          AND r.email_code LIKE :search_term
-          OR r.type_of_bid LIKE :search_term
-          OR r.comments LIKE :search_term
-          OR r.contract_number LIKE :search_term
-          OR r.city LIKE :search_term
-          OR r.zip_code LIKE :search_term
-          OR r.state LIKE :search_term
-          OR r.client LIKE :search_term
-          OR r.shipping_address LIKE :search_term
-          OR r.special_requirements LIKE :search_term
-          OR r.id LIKE :search_term
-          OR r.id IN (
-            SELECT i.id_rfq
-            FROM item i
-            WHERE i.provider_menor LIKE :search_term
-              OR i.brand LIKE :search_term
-              OR i.brand_project LIKE :search_term
-              OR i.part_number LIKE :search_term
-              OR i.part_number_project LIKE :search_term
-              OR i.description LIKE :search_term
-              OR i.description_project LIKE :search_term
-              OR i.comments LIKE :search_term
-          )
-          OR r.id IN (
-            SELECT s.id_rfq
-            FROM services s
-            WHERE s.description LIKE :search_term
-          )
-          OR r.id IN (
-            SELECT i.id_rfq
-            FROM subitems si
-              JOIN item i ON si.id_item = i.id
-            WHERE si.provider_menor LIKE :search_term
-              OR si.brand LIKE :search_term
-              OR si.brand_project LIKE :search_term
-              OR si.part_number LIKE :search_term
-              OR si.part_number_project LIKE :search_term
-              OR si.description LIKE :search_term
-              OR si.description_project LIKE :search_term
-              OR si.comments LIKE :search_term
+        WHERE r.deleted = 0
+          AND (
+            u.nombre_usuario LIKE :search_term
+            OR r.email_code LIKE :search_term
+            OR r.type_of_bid LIKE :search_term
+            OR r.comments LIKE :search_term
+            OR r.contract_number LIKE :search_term
+            OR r.city LIKE :search_term
+            OR r.zip_code LIKE :search_term
+            OR r.state LIKE :search_term
+            OR r.client LIKE :search_term
+            OR r.shipping_address LIKE :search_term
+            OR r.special_requirements LIKE :search_term
+            OR r.id LIKE :search_term
+            OR EXISTS (
+              SELECT 1
+              FROM item i
+              WHERE i.id_rfq = r.id
+                AND (i.provider_menor LIKE :search_term
+                  OR i.brand LIKE :search_term
+                  OR i.brand_project LIKE :search_term
+                  OR i.part_number LIKE :search_term
+                  OR i.part_number_project LIKE :search_term
+                  OR i.description LIKE :search_term
+                  OR i.description_project LIKE :search_term
+                  OR i.comments LIKE :search_term)
+            )
+            OR EXISTS (
+              SELECT 1
+              FROM services s
+              WHERE s.id_rfq = r.id
+                AND s.description LIKE :search_term
+            )
+            OR EXISTS (
+              SELECT 1
+              FROM subitems si
+                JOIN item i ON si.id_item = i.id
+              WHERE i.id_rfq = r.id
+                AND (si.provider_menor LIKE :search_term
+                  OR si.brand LIKE :search_term
+                  OR si.brand_project LIKE :search_term
+                  OR si.part_number LIKE :search_term
+                  OR si.part_number_project LIKE :search_term
+                  OR si.description LIKE :search_term
+                  OR si.description_project LIKE :search_term
+                  OR si.comments LIKE :search_term)
+            )
           )
         ";
         $sentencia = $conexion->prepare($sql);

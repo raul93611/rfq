@@ -1,11 +1,16 @@
 $(document).ready(function () {
-  const searchQuotesForm = $('#search_quotes');
+  const $input = $('input[name="termino_busqueda"]');
+  const MIN_CHARS = 3;
+  const DEBOUNCE_MS = 350;
+  let debounceTimer = null;
+  let dataTable = null;
 
-  // Initialize DataTable
   function initializeDataTable(searchTerm) {
-    $('#tabla_busqueda').DataTable({
-      destroy: true, // Allows reinitialization
-      searching: true,
+    if (dataTable) {
+      dataTable.destroy();
+    }
+    dataTable = $('#tabla_busqueda').DataTable({
+      searching: false,
       processing: true,
       serverSide: true,
       pageLength: 10,
@@ -54,10 +59,23 @@ $(document).ready(function () {
     });
   }
 
-  // Form submission handler
-  searchQuotesForm.on('submit', (e) => {
+  function triggerSearch() {
+    const term = $input.val().trim();
+    if (term.length >= MIN_CHARS) {
+      initializeDataTable(term);
+    }
+  }
+
+  // Live search with debounce
+  $input.on('input', function () {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(triggerSearch, DEBOUNCE_MS);
+  });
+
+  // Keep Enter key / button click working
+  $('#search_quotes').on('submit', function (e) {
     e.preventDefault();
-    const searchTerm = $('input[name="termino_busqueda"]').val();
-    initializeDataTable(searchTerm);
+    clearTimeout(debounceTimer);
+    triggerSearch();
   });
 });
