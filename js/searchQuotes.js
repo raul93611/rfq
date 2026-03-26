@@ -4,6 +4,50 @@ $(document).ready(function () {
   const DEBOUNCE_MS = 350;
   let debounceTimer = null;
   let dataTable = null;
+  let invoicesTable = null;
+
+  function initializeInvoicesTable(searchTerm) {
+    if (invoicesTable) {
+      invoicesTable.destroy();
+    }
+    invoicesTable = $('#tabla_invoices').DataTable({
+      searching: false,
+      processing: true,
+      serverSide: true,
+      pageLength: 10,
+      order: [[1, 'desc']],
+      ajax: {
+        url: '/rfq/utilities/search_invoices',
+        type: 'POST',
+        data: { searchTerm },
+      },
+      columns: [
+        {
+          data: 'invoice_name',
+          render: function (data, type) {
+            if (type === 'display') {
+              return `<span class="badge badge-info" style="font-size:13px; font-weight:600;">${data}</span>`;
+            }
+            return data;
+          },
+        },
+        { data: 'invoice_date' },
+        {
+          data: 'quote_id',
+          render: function (data, type) {
+            if (type === 'display') {
+              return `<a href="/rfq/perfil/quote/editar_cotizacion/${data}">${data}</a>`;
+            }
+            return data;
+          },
+        },
+        { data: 'nombre_usuario' },
+      ],
+      createdRow: function (row) {
+        $(row).addClass('table-info');
+      },
+    });
+  }
 
   function initializeDataTable(searchTerm) {
     if (dataTable) {
@@ -63,6 +107,7 @@ $(document).ready(function () {
     const term = $input.val().trim();
     if (term.length >= MIN_CHARS) {
       initializeDataTable(term);
+      initializeInvoicesTable(term);
     }
   }
 

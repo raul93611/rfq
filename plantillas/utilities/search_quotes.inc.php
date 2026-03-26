@@ -29,10 +29,10 @@
         </div>
       </div>
 
-      <!-- Results table -->
-      <div class="card chart-card">
+      <!-- Quotes results table -->
+      <div class="card chart-card mb-4">
         <div class="card-body">
-          <p class="chart-card-label">Results</p>
+          <p class="chart-card-label">Quotes</p>
           <table id="tabla_busqueda" class="table table-bordered table-hover">
             <thead>
               <tr>
@@ -46,9 +46,25 @@
                 <th>Options</th>
               </tr>
             </thead>
-            <tbody>
-              <!-- Data gets dynamically populated here -->
-            </tbody>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Partial invoices results table -->
+      <div class="card chart-card">
+        <div class="card-body">
+          <p class="chart-card-label"><i class="fas fa-file-invoice-dollar mr-1"></i> Partial Invoices</p>
+          <table id="tabla_invoices" class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <th>Invoice Name</th>
+                <th>Invoice Date</th>
+                <th>Parent Quote</th>
+                <th>Designated User</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
           </table>
         </div>
       </div>

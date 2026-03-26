@@ -796,6 +796,9 @@ switch ($partes_ruta[1] ?? null) {
       case 'search_quotes':
         $ruta_elegida = 'scripts/utilities/search_quotes.php';
         break;
+      case 'search_invoices':
+        $ruta_elegida = 'scripts/utilities/search_invoices.php';
+        break;
       default:
         break;
     }

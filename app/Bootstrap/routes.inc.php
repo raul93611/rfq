@@ -205,6 +205,7 @@ define('REPORTS_CHARTS', REPORTS . 'reports_charts');
 /********************************OTHER VIEWS*****************************************/
 define('CHARTS', PERFIL . 'charts');
 define('SEARCH_QUOTES', PERFIL . 'search_quotes');
+define('SEARCH_INVOICES_SC', SERVIDOR . 'utilities/search_invoices');
 define('TRACKING', PERFIL . 'tracking/');
 define('KPI', PERFIL . 'kpi/');
 define('EMPLOYEE_DOCS_PAGE', PERFIL . 'employee_docs_page/');
