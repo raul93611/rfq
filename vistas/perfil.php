@@ -1,5 +1,6 @@
 <?php
 if (!ControlSesion::sesion_iniciada()) {
+  $_SESSION['redirect_after_login'] = $_SERVER['REQUEST_URI'];
   Redireccion::redirigir1(SERVIDOR);
 }
 $titulo = 'Profile';
