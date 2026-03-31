@@ -15,39 +15,109 @@ class TeamsIntegration {
       ];
     }
 
+    $bodyItems = [
+      [
+        "type" => "Container",
+        "style" => "emphasis",
+        "items" => [
+          [
+            "type" => "ColumnSet",
+            "columns" => [
+              [
+                "type" => "Column",
+                "width" => "auto",
+                "items" => [[
+                  "type" => "Icon",
+                  "name" => "Document",
+                  "style" => "filled",
+                  "size" => "Large",
+                  "color" => "Accent"
+                ]]
+              ],
+              [
+                "type" => "Column",
+                "width" => "stretch",
+                "items" => [
+                  [
+                    "type" => "TextBlock",
+                    "text" => $title,
+                    "weight" => "Bolder",
+                    "size" => "Large",
+                    "color" => "Accent"
+                  ],
+                  [
+                    "type" => "TextBlock",
+                    "text" => "E-Logic Portal",
+                    "isSubtle" => true,
+                    "spacing" => "None"
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ]
+      ],
+      [
+        "type" => "Container",
+        "items" => [[
+          "type" => "TextBlock",
+          "text" => $message,
+          "wrap" => true
+        ]]
+      ]
+    ];
+
+    if (!empty($mentions)) {
+      $bodyItems[] = [
+        "type" => "Container",
+        "spacing" => "Medium",
+        "items" => [[
+          "type" => "ColumnSet",
+          "columns" => [
+            [
+              "type" => "Column",
+              "width" => "auto",
+              "items" => [[
+                "type" => "Icon",
+                "name" => "Person",
+                "style" => "filled",
+                "size" => "Small",
+                "color" => "Default"
+              ]]
+            ],
+            [
+              "type" => "Column",
+              "width" => "stretch",
+              "items" => [[
+                "type" => "TextBlock",
+                "text" => implode(', ', $mentions),
+                "wrap" => true,
+                "spacing" => "None"
+              ]]
+            ]
+          ]
+        ]]
+      ];
+    }
+
     $payload = [
       "type" => "message",
       "attachments" => [
         [
           "contentType" => "application/vnd.microsoft.card.adaptive",
           "content" => [
+            '$schema' => "http://adaptivecards.io/schemas/adaptive-card.json",
             "type" => "AdaptiveCard",
-            "body" => [
-              [
-                "type" => "TextBlock",
-                "size" => "Medium",
-                "weight" => "Bolder",
-                "text" => $title
-              ],
-              [
-                "type" => "TextBlock",
-                "text" => $message
-              ],
-              [
-                "type" => "TextBlock",
-                "text" => implode(',', $mentions),
-                "wrap" => true
-              ]
-            ],
-            'actions' => [
+            "version" => "1.5",
+            "body" => $bodyItems,
+            "actions" => [
               [
                 "type" => "Action.OpenUrl",
                 "title" => $button_name,
+                "iconUrl" => "icon:Document,filled",
                 "url" => $url
               ]
             ],
-            '$schema' => "http://adaptivecards.io/schemas/adaptive-card.json",
-            "version" => "1.0",
             "msteams" => [
               "entities" => $entities
             ]
@@ -61,17 +131,21 @@ class TeamsIntegration {
     curl_setopt($curl, CURLOPT_HTTPHEADER, array(
       "Content-Type: application/json",
     ));
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
     $response = curl_exec($curl);
     curl_close($curl);
   }
 
-  public static function notifyQuoteAward($quote_id, $user){
+  public static function notifyQuoteAward($quote_id, $user, $total_price){
     $users = [$user];
-    self::sendMessage('Status Award', 'Quote ID: ' . $quote_id, $users, EDITAR_COTIZACION . "/{$quote_id}", 'Open quote', WEBHOOK_AWARD);
+    $amount = '$' . number_format((float)$total_price, 2);
+    $message = "📋 Quote #: **{$quote_id}**\n💰 Amount: **{$amount}**\n🏆 Status: **Award**";
+    self::sendMessage('Quote Award', $message, $users, EDITAR_COTIZACION . "/{$quote_id}", 'Open Quote', WEBHOOK_AWARD);
   }
 
-  public static function notifyQuoteFulfillment($quote_id, $type_of_contract, $users){
-    $message = "Quote ID:  {$quote_id} \n Type of Contract: {$type_of_contract}";
-    self::sendMessage('Status Fulfillment', $message, $users, EDITAR_COTIZACION . "/{$quote_id}", 'Open quote', WEBHOOK_FULFILLMENT);
+  public static function notifyQuoteFulfillment($quote_id, $type_of_contract, $total_price, $users){
+    $amount = '$' . number_format((float)$total_price, 2);
+    $message = "📋 Quote #: **{$quote_id}**\n💰 Amount: **{$amount}**\n📄 Contract: **{$type_of_contract}**\n🔄 Status: **Fulfillment**";
+    self::sendMessage('Quote Fulfillment', $message, $users, EDITAR_COTIZACION . "/{$quote_id}", 'Open Quote', WEBHOOK_FULFILLMENT);
   }
 }
