@@ -13,11 +13,11 @@
         <?php include_once 'forms/service/add_service_form.inc.php'; ?>
       </div>
       <div class="modal-footer" style="border-top:1px solid #f0f2f5;padding:12px 20px;justify-content:flex-end;gap:8px;">
-        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">
-          <i class="fa fa-times mr-1"></i> Cancel
-        </button>
         <button type="submit" form="add_service_form" name="add_service_button" class="btn btn-primary btn-sm">
           <i class="fa fa-check mr-1"></i> Add Service
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">
+          <i class="fa fa-times mr-1"></i> Cancel
         </button>
       </div>
     </div>
