@@ -21,11 +21,11 @@ if (isset($_POST['registrar_cotizacion'])) {
 
   if ($validador->registro_cotizacion_valida()) {
     // Proceed to create and insert the quote
-    createAndInsertQuote($validador, $usuario_designado);
+    createAndInsertQuote($validador, $usuario_designado, $usuario);
   }
 }
 
-function createAndInsertQuote($validador, $usuario_designado) {
+function createAndInsertQuote($validador, $usuario_designado, $designated_user) {
   Conexion::abrir_conexion();
 
   $cotizacion = new Rfq([
@@ -108,6 +108,20 @@ function createAndInsertQuote($validador, $usuario_designado) {
   if ($cotizacion_insertada) {
     // Save uploaded files
     saveUploadedFiles($id_rfq);
+
+    // Notify the designated user via Teams direct message
+    $created_by = $_SESSION['user']->obtener_nombres() . ' ' . $_SESSION['user']->obtener_apellidos();
+    TeamsIntegration::notifyQuoteCreated(
+      $id_rfq,
+      $designated_user,
+      $cotizacion->obtener_canal(),
+      $validador->obtener_email_code(),
+      $cotizacion->obtener_type_of_bid(),
+      $validador->obtener_issue_date(),
+      $validador->obtener_end_date(),
+      $created_by
+    );
+
     Redireccion::redirigir1(CHANNEL . $cotizacion->obtener_canal());
   }
 }
