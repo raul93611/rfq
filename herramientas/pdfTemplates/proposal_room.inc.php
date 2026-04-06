@@ -274,7 +274,7 @@
     <table class="items-table" cellspacing="0" cellpadding="0">
       <tbody>
         <tr class="room-header">
-          <td colspan="5"><?= htmlspecialchars(strtoupper($room->getName())) ?></td>
+          <td style="text-align:center;" colspan="5"><?= htmlspecialchars(strtoupper($room->getName())) ?></td>
         </tr>
       </tbody>
       <thead>

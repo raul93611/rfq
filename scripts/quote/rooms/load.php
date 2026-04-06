@@ -33,11 +33,11 @@ try {
     </button>
   <?php endif; ?>
   <div style="display:flex;gap:8px;">
-    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">
-      <i class="fa fa-times mr-1"></i> Cancel
-    </button>
     <button type="submit" class="btn btn-primary btn-sm">
       <i class="fa fa-check mr-1"></i> <?= isset($_POST["idRoom"]) ? 'Save Changes' : 'Add Room'; ?>
+    </button>
+    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">
+      <i class="fa fa-times mr-1"></i> Cancel
     </button>
   </div>
 </div>

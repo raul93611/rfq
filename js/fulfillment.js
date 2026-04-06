@@ -45,7 +45,24 @@ $(document).ready(function () {
   }
 
   function reloadFulfillmentPage(rfqId) {
-    fulfillmentPage.load(`/rfq/fulfillment/load_fulfillment_page/${rfqId}`, loadFulfillmentTotals);
+    const scrollableContainers = ['#fulfillment_items_table_container', '#fulfillment_services_table_container', '#fulfillment_invoices_table_container'];
+    const scrollPositions = {};
+    scrollableContainers.forEach(function (selector) {
+      const el = document.querySelector(selector);
+      if (el) scrollPositions[selector] = { top: el.scrollTop, left: el.scrollLeft };
+    });
+    fulfillmentPage.load(`/rfq/fulfillment/load_fulfillment_page/${rfqId}`, function () {
+      scrollableContainers.forEach(function (selector) {
+        if (scrollPositions[selector]) {
+          const el = document.querySelector(selector);
+          if (el) {
+            el.scrollTop = scrollPositions[selector].top;
+            el.scrollLeft = scrollPositions[selector].left;
+          }
+        }
+      });
+      loadFulfillmentTotals();
+    });
   }
 
   // Initial load of totals
@@ -208,7 +225,8 @@ $(document).ready(function () {
   loadInvoiceDropdown(idRfq);
   /****************************************REVIEWED CHECK************************************/
   // Event listener for marking main items as reviewed
-  fulfillmentPage.on('click', '.reviewed_button', function () {
+  fulfillmentPage.on('click', '.reviewed_button', function (e) {
+    e.preventDefault();
     const data = {
       id_fulfillment_item: $(this).data('id'),
       id_item: $(this).data('id_item')
@@ -220,7 +238,8 @@ $(document).ready(function () {
   });
 
   // Event listener for marking subitems as reviewed
-  fulfillmentPage.on('click', '.subitem_reviewed_button', function () {
+  fulfillmentPage.on('click', '.subitem_reviewed_button', function (e) {
+    e.preventDefault();
     const data = {
       id_fulfillment_subitem: $(this).data('id'),
       id_subitem: $(this).data('id_subitem'),
@@ -233,7 +252,8 @@ $(document).ready(function () {
   });
   /****************************************REVIEWED SERVICE CHECK************************************/
   // Event listener for marking services as reviewed
-  fulfillmentPage.on('click', '.reviewed_service_button', function () {
+  fulfillmentPage.on('click', '.reviewed_service_button', function (e) {
+    e.preventDefault();
     const data = {
       id_fulfillment_service: $(this).data('id'),
       id_service: $(this).data('id_service')

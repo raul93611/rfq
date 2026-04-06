@@ -57,6 +57,20 @@ if (isset($_POST['save_checklist'])) {
     // Close database connection
     Conexion::cerrar_conexion();
 
+    // Notify new designated user if they changed and they are not the one making the change
+    $designated_user_changed = $_POST['usuario_designado'] !== $_POST['designated_user_original'];
+    $recipient_is_not_self   = $usuario->obtener_id() !== $_SESSION['user']->obtener_id();
+    if ($designated_user_changed && $recipient_is_not_self) {
+      $changed_by = $_SESSION['user']->obtener_nombres() . ' ' . $_SESSION['user']->obtener_apellidos();
+      TeamsIntegration::notifyDesignatedUserChanged(
+        $_POST['id_rfq'],
+        $_POST['email_code'],
+        $_POST['canal'],
+        $usuario,
+        $changed_by
+      );
+    }
+
     // Redirect to checklist
     Redireccion::redirigir(CHECKLIST . $_POST['id_rfq']);
   } catch (Exception $e) {
