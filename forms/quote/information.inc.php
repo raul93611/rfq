@@ -148,7 +148,7 @@
         </div>
         <div class="form-row">
           <div class="form-group col-md-6">
-            <label for="address">Address</label>
+            <label for="address">Bill To</label>
             <textarea class="form-control form-control-sm" rows="4" placeholder="Enter address..."
                       id="address" name="address"><?= $quote->obtener_address(); ?></textarea>
             <input type="hidden" name="address_original" value="<?= $quote->obtener_address(); ?>">
