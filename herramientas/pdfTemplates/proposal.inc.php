@@ -116,8 +116,10 @@
 
     .items-table .sba-row td {
       background: #eef4fb !important;
-      font-size: 8pt;
+      font-size: 9.5pt;
       color: #4a6080;
+      font-style: italic;
+      text-align: center;
     }
 
     .items-table .shipping-row td {
@@ -249,10 +251,10 @@
         <tr class="sba-row">
           <td></td>
           <td colspan="4">
-            <b>Open Market Pricing Proposal</b> &nbsp;·&nbsp;
-            E-Logic is an SBA 8(a) and HUBZone Certified SB &nbsp;·&nbsp;
-            SBA 8(a) Case No: C0069X &nbsp;·&nbsp;
-            Entrance: 09/30/2016 &nbsp;·&nbsp; Exit: 09/30/2026
+            <b>Open Market Pricing Proposal</b><br>
+            E-Logic is an SBA 8(a) and HUBZone Certified SB<br>
+            <b>SBA 8(a) Case No:</b> C0069X<br>
+            <b>Entrance:</b> 09/30/2016 &nbsp;·&nbsp; <b>Exit:</b> 09/30/2026
           </td>
         </tr>
       <?php endif; ?>
