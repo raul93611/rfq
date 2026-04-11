@@ -858,6 +858,8 @@ class Report {
                 WHERE
                   deleted = 0
                   AND fullfillment = 1
+                  AND invoice = 0
+                  AND submitted_invoice = 0
                   AND MONTH(fulfillment_date) = {$month}
                   AND YEAR(fulfillment_date) = {$year}
                 GROUP BY
@@ -880,6 +882,8 @@ class Report {
                 WHERE
                   r.deleted = 0
                   AND r.fullfillment = 1
+                  AND r.invoice = 0
+                  AND r.submitted_invoice = 0
                   AND MONTH(r.fulfillment_date) = {$month}
                   AND YEAR(r.fulfillment_date) = {$year}
                 GROUP BY
@@ -954,6 +958,8 @@ class Report {
                 WHERE
                   deleted = 0
                   AND fullfillment = 1
+                  AND invoice = 0
+                  AND submitted_invoice = 0
                   AND QUARTER(fulfillment_date) = {$quarter}
                   AND YEAR(fulfillment_date) = {$year}
                 GROUP BY
@@ -976,6 +982,8 @@ class Report {
                 WHERE
                   r.deleted = 0
                   AND r.fullfillment = 1
+                  AND r.invoice = 0
+                  AND r.submitted_invoice = 0
                   AND QUARTER(r.fulfillment_date) = {$quarter}
                   AND YEAR(r.fulfillment_date) = {$year}
                 GROUP BY
@@ -1050,6 +1058,8 @@ class Report {
                 WHERE
                   deleted = 0
                   AND fullfillment = 1
+                  AND invoice = 0
+                  AND submitted_invoice = 0
                   AND YEAR(fulfillment_date) = {$year}
                 GROUP BY
                   r.id
@@ -1071,6 +1081,8 @@ class Report {
                 WHERE
                   r.deleted = 0
                   AND r.fullfillment = 1
+                  AND r.invoice = 0
+                  AND r.submitted_invoice = 0
                   AND YEAR(r.fulfillment_date) = {$year}
                 GROUP BY
                   rq.id_rfq
@@ -1114,10 +1126,12 @@ class Report {
             SELECT COUNT(r.id)
             FROM rfq r
             JOIN usuarios u ON r.usuario_designado = u.id
-            WHERE deleted = 0 AND 
-            MONTH(fulfillment_date) = {$month} AND 
+            WHERE deleted = 0 AND
+            MONTH(fulfillment_date) = {$month} AND
             YEAR(fulfillment_date) = {$year} AND
-            fullfillment = 1  
+            fullfillment = 1 AND
+            invoice = 0 AND
+            submitted_invoice = 0
             ";
             break;
           case 'quarterly':
@@ -1127,6 +1141,8 @@ class Report {
             JOIN usuarios u ON r.usuario_designado = u.id
             WHERE deleted = 0 AND
             fullfillment = 1 AND
+            invoice = 0 AND
+            submitted_invoice = 0 AND
             QUARTER(fulfillment_date) = {$quarter} AND
             YEAR(fulfillment_date) = {$year}";
             break;
@@ -1137,6 +1153,8 @@ class Report {
             JOIN usuarios u ON r.usuario_designado = u.id
             WHERE deleted = 0 AND
             fullfillment = 1 AND
+            invoice = 0 AND
+            submitted_invoice = 0 AND
             YEAR(fulfillment_date) = {$year}";
             break;
         }
@@ -1161,8 +1179,10 @@ class Report {
             JOIN usuarios u ON r.usuario_designado = u.id
             WHERE deleted = 0 AND
             fullfillment = 1 AND
-            MONTH(fulfillment_date) = {$month} AND 
-            YEAR(fulfillment_date) = {$year} AND 
+            invoice = 0 AND
+            submitted_invoice = 0 AND
+            MONTH(fulfillment_date) = {$month} AND
+            YEAR(fulfillment_date) = {$year} AND
             (r.id LIKE :search OR 
             DATE_FORMAT(fulfillment_date, '%m/%d/%Y') LIKE :search OR
             contract_number LIKE :search OR
@@ -1180,6 +1200,8 @@ class Report {
             JOIN usuarios u ON r.usuario_designado = u.id
             WHERE deleted = 0 AND
             fullfillment = 1 AND
+            invoice = 0 AND
+            submitted_invoice = 0 AND
             QUARTER(fulfillment_date) = {$quarter} AND
             YEAR(fulfillment_date) = {$year} AND
             (r.id LIKE :search OR 
@@ -1199,6 +1221,8 @@ class Report {
             JOIN usuarios u ON r.usuario_designado = u.id
             WHERE deleted = 0 AND
             fullfillment = 1 AND
+            invoice = 0 AND
+            submitted_invoice = 0 AND
             YEAR(fulfillment_date) = {$year} AND
             (r.id LIKE :search OR 
             DATE_FORMAT(fulfillment_date, '%m/%d/%Y') LIKE :search OR
