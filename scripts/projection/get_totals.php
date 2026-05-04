@@ -30,23 +30,28 @@ try {
   Conexion::cerrar_conexion();
 }
 ?>
-<table class="table table-bordered">
-  <thead>
-    <tr>
-      <th></th>
-      <th>MONTHLY GOAL</th>
-      <th>MONTHLY GOAL RESULT</th>
-      <th>TOTAL MONTHLY INVOICE</th>
-      <th>TOTAL REAL PROFIT</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="width: 200px;">TOTALS</td>
-      <td><?= htmlspecialchars($totals[0]['total_projected_amount']) ?></td>
-      <td><?= htmlspecialchars($totals[0]['total_projected_result']) ?></td>
-      <td><?= htmlspecialchars($totals[0]['total_total_price']) ?></td>
-      <td><?= htmlspecialchars($totals[0]['total_profit']) ?></td>
-    </tr>
-  </tbody>
-</table>
+<div class="projection-totals-bar">
+  <div class="projection-total-item">
+    <span class="projection-total-label">Monthly Goal</span>
+    <span class="projection-total-value"><?= '$' . $totals[0]['total_projected_amount'] ?></span>
+  </div>
+  <div class="projection-totals-divider"></div>
+  <div class="projection-total-item">
+    <span class="projection-total-label">Monthly Goal Result</span>
+    <span class="projection-total-value <?= ($totals[0]['total_projected_result'] >= 0) ? 'text-success' : 'text-danger' ?>">
+      <?= '$' . $totals[0]['total_projected_result'] ?>
+    </span>
+  </div>
+  <div class="projection-totals-divider"></div>
+  <div class="projection-total-item">
+    <span class="projection-total-label">Total Monthly Invoice</span>
+    <span class="projection-total-value" style="color:var(--color-primary);"><?= '$' . $totals[0]['total_total_price'] ?></span>
+  </div>
+  <div class="projection-totals-divider"></div>
+  <div class="projection-total-item">
+    <span class="projection-total-label">Total Real Profit</span>
+    <span class="projection-total-value <?= ($totals[0]['total_profit'] >= 0) ? 'text-success' : 'text-danger' ?>">
+      <?= '$' . $totals[0]['total_profit'] ?>
+    </span>
+  </div>
+</div>

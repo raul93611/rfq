@@ -1,43 +1,36 @@
 <div class="content-wrapper">
-  <div class="content-header">
-    <div class="container-fluid">
-      <div class="row mb-2">
-        <div class="col-sm-6">
-          <h1 class="m-0 text-dark">Quotes</h1>
-        </div>
-        <div class="col-sm-6 text-right">
-          <!-- Placeholder for any future action buttons -->
-        </div>
-      </div>
+
+  <div class="content-header page-header-bar">
+    <div>
+      <h1 class="page-title">
+        <span class="no-bid-badge" style="background:#8896a5;">Not Submitted</span>
+        Quotes
+      </h1>
+      <p class="page-subtitle">Quotes that were completed but not submitted</p>
     </div>
   </div>
-  <section class="content">
+
+  <section class="content" style="padding-top:20px;">
     <div class="container-fluid">
-      <div class="row">
-        <section class="col-12">
-          <div class="card">
-            <div class="card-header">
-              <h3 class="card-title">Submitted Quotes</h3>
-            </div>
-            <div class="card-body">
-              <table id="not_submitted_table" class="table table-bordered table-hover table-responsive-md">
-                <thead>
-                  <tr>
-                    <th scope="col">Proposal</th>
-                    <th scope="col">Designated User</th>
-                    <th scope="col">Code</th>
-                    <th scope="col">Type of Bid</th>
-                    <th scope="col">Options</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <!-- Data will be populated here -->
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </section>
+      <div class="card chart-card" style="border-left:4px solid #8896a5;">
+        <div class="card-body">
+          <table id="not_submitted_table" class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <th>Proposal</th>
+                <th>Designated User</th>
+                <th>Code</th>
+                <th>Type of Bid</th>
+                <th>Options</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Populated dynamically -->
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </section>
+
 </div>

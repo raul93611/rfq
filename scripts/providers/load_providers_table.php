@@ -16,8 +16,8 @@ try {
   $json = array_map(function ($provider) {
     return [
       htmlspecialchars($provider->get_company_name()),
-      '<button type="button" data="' . htmlspecialchars($provider->get_id()) . '" class="edit_button btn btn-info btn-sm" name=""><i class="fas fa-pen"></i></button>
-       <button type="button" data="' . htmlspecialchars($provider->get_id()) . '" class="delete_button btn btn-danger btn-sm" name=""><i class="fas fa-trash"></i></button>'
+      '<button type="button" data="' . htmlspecialchars($provider->get_id()) . '" class="edit_button btn btn-secondary btn-sm" name=""><i class="fas fa-pen"></i></button>
+       <button type="button" data="' . htmlspecialchars($provider->get_id()) . '" class="delete_button btn btn-secondary btn-sm" name=""><i class="fas fa-trash"></i></button>'
     ];
   }, $providers);
 

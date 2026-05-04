@@ -1,72 +1,87 @@
 $(document).ready(function () {
-  // if(window.location.href.indexOf('#edit_task_modal') != -1 && window.location.href.indexOf('#id') != -1) {
-  //   $('#edit_task_modal form').load('/rfq/task/load_task/' + window.location.href.substring(window.location.href.indexOf('#id')+4), function(){
-  //     $('#edit_task_modal').modal();
-  //   });
-  // }
+  const tasksBoard = $('#tasks_board');
+  const myTasksBoard = $('#my_tasks_board');
+  const addTaskModal = $('#add_task_modal');
+  const addTaskForm = $('#add_task_form');
+  const editTaskModal = $('#edit_task_modal');
+  const editTaskForm = $('#edit_task_form');
+  const doneTasksTable = $('#tasks_done_table');
 
-  $('#tasks_board').load('/rfq/task/load_tasks_board/');
+  // Load task boards
+  function loadTaskBoards() {
+    tasksBoard.load('/rfq/task/load_tasks_board/');
+    myTasksBoard.load('/rfq/task/load_my_tasks_board/');
+  }
 
-  $('#my_tasks_board').load('/rfq/task/load_my_tasks_board/');
-
-  let doneTasksTable = $('#tasks_done_table').DataTable({
-    "processing": true,
-    "serverSide": true,
-    "order": [[1, "desc"]],
-    "ajax": {
-      "url": '/rfq/task/load_tasks_done_table',
-      "type": "POST"
+  // Initialize tasks done table
+  const tasksDoneTable = doneTasksTable.DataTable({
+    processing: true,
+    serverSide: true,
+    order: [[1, "desc"]],
+    ajax: {
+      url: '/rfq/task/load_tasks_done_table',
+      type: "POST"
     },
-    "columns": [
+    columns: [
+      { data: "id", visible: false },
       {
-        "data": "id",
-        "visible": false
-      },
-      {
-        "data": "title",
-        "render": function (data, type, row, meta) {
-          if (type === 'display') {
-            return '<a class="edit_task_button" data="' + row.id + '" href="#">' + data + '</a>';
-          } else {
-            return data;
-          }
+        data: "title",
+        render: function (data, type, row) {
+          return type === 'display'
+            ? `<a class="edit_task_button" data-id="${row.id}" href="#">${data}</a>`
+            : data;
         }
       },
-      { "data": "created_by" },
-      { "data": "assigned_to" }
+      { data: "created_by" },
+      { data: "assigned_to" }
     ]
   });
 
-  $('#add_task_button').click(function (){
-    $('#add_task_modal').modal();
+  // Open "Add Task" modal
+  $('#add_task_button').on('click', function () {
+    addTaskModal.modal('show');
   });
 
-  $('#add_task_form').submit(function(){
-    $.post('/rfq/task/save_task', $(this).serialize(), function(res){
-      $('#add_task_form')[0].reset();
-      $('#add_task_modal').modal('hide');
-      $('#tasks_board').load('/rfq/task/load_tasks_board/');
-      $('#my_tasks_board').load('/rfq/task/load_my_tasks_board/');
+  // Handle "Add Task" form submission
+  addTaskForm.on('submit', function (e) {
+    e.preventDefault();
+    $.post('/rfq/task/save_task', $(this).serialize(), function () {
+      addTaskForm[0].reset();
+      addTaskModal.modal('hide');
+      loadTaskBoards();
     });
-
-    return false;
   });
 
-  $('#tasks_board, #my_tasks_board, #tasks_done_table').on('click', '.edit_task_button', function(){
-    $('#edit_task_modal form').load('/rfq/task/load_task/' + $(this).attr('data'), function(){
-      $('#edit_task_modal').modal();
+  // Open "Edit Task" modal
+  function openEditTaskModal(taskId) {
+    const loadUrl = `/rfq/task/load_task/${taskId}`;
+    editTaskModal.find('form').load(loadUrl, function () {
+      editTaskModal.modal('show');
     });
-    return false;
+  }
+
+  // Handle clicks on "Edit Task" buttons
+  $('#tasks_board, #my_tasks_board, #tasks_done_table').on('click', '.edit_task_button', function (e) {
+    e.preventDefault();
+    const taskId = $(this).data('id');
+    if (taskId) {
+      openEditTaskModal(taskId);
+    } else {
+      console.error('Task ID is missing');
+    }
   });
 
-  $('#edit_task_form').submit(function(){
-    $.post('/rfq/task/update_task', $(this).serialize(), function(res){
-      $('#edit_task_form')[0].reset();
-      $('#edit_task_modal').modal('hide');
-      doneTasksTable.ajax.reload();
-      $('#tasks_board').load('/rfq/task/load_tasks_board/');
-      $('#my_tasks_board').load('/rfq/task/load_my_tasks_board/');
+  // Handle "Edit Task" form submission
+  editTaskForm.on('submit', function (e) {
+    e.preventDefault();
+    $.post('/rfq/task/update_task', $(this).serialize(), function () {
+      editTaskForm[0].reset();
+      editTaskModal.modal('hide');
+      tasksDoneTable.ajax.reload();
+      loadTaskBoards();
     });
-    return false;
   });
+
+  // Initial loading of task boards
+  loadTaskBoards();
 });

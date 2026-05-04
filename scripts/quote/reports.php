@@ -52,6 +52,21 @@ try {
       'getReport' => 'getSalesCommissionReport',
       'getTotalCount' => 'getSalesCommissionReportCount',
       'getFilteredCount' => 'getFilteredSalesCommissionReportCount'
+    ],
+    'no-bid' => [
+      'getReport' => 'getNoBidReport',
+      'getTotalCount' => 'getNoBidReportCount',
+      'getFilteredCount' => 'getFilteredNoBidReportCount'
+    ],
+    'not-submitted' => [
+      'getReport' => 'getNotSubmittedReport',
+      'getTotalCount' => 'getNotSubmittedReportCount',
+      'getFilteredCount' => 'getFilteredNotSubmittedReportCount'
+    ],
+    'cancelled' => [
+      'getReport' => 'getCancelledReport',
+      'getTotalCount' => 'getCancelledReportCount',
+      'getFilteredCount' => 'getFilteredCancelledReportCount'
     ]
   ];
 

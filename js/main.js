@@ -1,14 +1,21 @@
 $(document).ready(function () {
+  const tooltipOptions = {
+    selector: '[data-toggle="tooltip"]',
+    trigger: 'hover',
+    placement: 'top'
+  };
+
+  $('body').tooltip(tooltipOptions);
+
   const idRfq = $('[name="id_rfq"]').val();
+  const continueButton = $('#continue_button');
+  const alertDeleteSystem = $('#alert_delete_system');
 
   /**
  * Enables the continue button in the deletion modal.
  * @param {jQuery} button - The button triggering the delete action.
  */
   function enableContinueButton(button) {
-    const alertDeleteSystem = $('#alert_delete_system');
-    const continueButton = $('#continue_button');
-
     alertDeleteSystem.modal();
     const linkToDelete = button.attr('href');
     continueButton.attr('href', linkToDelete);
@@ -24,6 +31,24 @@ $(document).ready(function () {
       return false; // Prevent default navigation
     });
   }
+
+  toastr.options = {
+    "closeButton": true,
+    "debug": false,
+    "newestOnTop": false,
+    "progressBar": true,
+    "positionClass": "toast-top-right",
+    "preventDuplicates": false,
+    "onclick": null,
+    "showDuration": "300",
+    "hideDuration": "1000",
+    "timeOut": "5000",
+    "extendedTimeOut": "1000",
+    "showEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "fadeIn",
+    "hideMethod": "fadeOut"
+  };
   /*********************************** ALERT BUTTONS FOR DELETION ***********************************/
   bindDeleteButtonAlert('.delete_service_button');
   bindDeleteButtonAlert('.delete_item_button');
@@ -65,7 +90,8 @@ $(document).ready(function () {
   });
   /*********************** FILE INPUT INITIALIZATION ***********************/
   $('#archivos_crear').fileinput({
-    theme: 'fa',
+    theme: 'explorer-fa',
+    mainClass: 'input-group-sm',
     initialPreviewAsData: true,
     showUpload: false,
     overwriteInitial: false,
@@ -109,10 +135,10 @@ $(document).ready(function () {
 
         // Handle pre-delete events
         $('#archivos_ejemplo').on('filepredelete', function (event, key) {
-          alert_delete_system.modal(); // Open delete confirmation modal
-          continue_button.attr('href', key);
+          alertDeleteSystem.modal(); // Open delete confirmation modal
+          continueButton.attr('href', key);
 
-          continue_button.one('click', function (e) {
+          continueButton.one('click', function (e) {
             e.preventDefault();
             $.ajax({
               url: key,
@@ -157,35 +183,14 @@ $(document).ready(function () {
       }
     });
   });
-  /********************* AUDIT TRAILS *********************************************/
-  $(document).ready(function () {
-    const HIGHLIGHT_DURATION = 5000; // Duration to keep the element highlighted
-
-    // Highlight an element when an audit trail link is clicked
-    $('.audit_trail').on('click', function (e) {
-      e.preventDefault(); // Prevent default anchor behavior
-      $('#audit_trails_modal').modal('hide'); // Close the modal
-
-      const targetElement = $($(this).attr('href')); // Get the target element by its href
-      targetElement.addClass('highlight');
-
-      setTimeout(() => {
-        targetElement.removeClass('highlight'); // Remove the highlight after the specified duration
-      }, HIGHLIGHT_DURATION);
-    });
-
-    // Show the audit trails modal when the button is clicked
-    $('#audit_trails_button').on('click', function () {
-      $('#audit_trails_modal').modal('show');
-    });
-  });
   /************************************** SHOW COMMENTS BUTTON ************************/
   $('#mostrar_comentarios').on('click', function () {
     $('#todos_commentarios_quote').modal('show');
   });
   /************************************* ADD NEW COMMENT ***********************************/
   if ($('#nuevo_comment').length) {
-    $('#add_comment').on('click', function () {
+    $('#add_comment').on('click', function (e) {
+      e.preventDefault();
       $('#nuevo_comment').modal('show');
     });
   }
@@ -200,7 +205,7 @@ $(document).ready(function () {
       autoUpdateInput: selector === '.date' ? false : true,
       autoApply: true,
     };
-    
+
     $(selector).daterangepicker({ ...defaultOptions, ...options });
 
     $(selector).on('apply.daterangepicker', function (ev, picker) {
@@ -257,6 +262,26 @@ $(document).ready(function () {
         { data: 'end_date' },
         { data: 'email_code' },
         {
+          data: 'priority',
+          render: function (data, type) {
+            if (type !== 'display') {
+              return data; // for sorting/filtering, return raw value
+            }
+
+            // Map priorities to colors and labels
+            const priorityMap = {
+              1: { color: 'text-danger', label: 'Urgent' },
+              2: { color: 'text-warning', label: 'High' },
+              3: { color: 'text-primary', label: 'Normal' },
+              4: { color: 'text-success', label: 'Low' }
+            };
+
+            const priority = priorityMap[data] || { color: 'text-muted', label: 'Unknown' };
+
+            return `<i class="fas fa-flag ${priority.color}" title="${priority.label}"></i>`;
+          }
+        },
+        {
           data: 'rfp',
           orderable: false,
           render: function (data, type) {
@@ -270,7 +295,7 @@ $(document).ready(function () {
           orderable: false,
           render: function (data, type, row) {
             return type === 'display'
-              ? `<a href="/rfq/quote/delete_quote/${row.id}" class="delete_quote_button btn btn-sm btn-danger">
+              ? `<a href="/rfq/quote/delete_quote/${row.id}" class="delete_quote_button btn btn-sm btn-secondary">
                   <i class="fas fa-trash"></i>
                 </a>`
               : data;
@@ -319,6 +344,26 @@ $(document).ready(function () {
       { data: 'fecha_completado' },
       { data: 'email_code' },
       {
+        data: 'priority',
+        render: function (data, type) {
+          if (type !== 'display') {
+            return data; // for sorting/filtering, return raw value
+          }
+
+          // Map priorities to colors and labels
+          const priorityMap = {
+            1: { color: 'text-danger', label: 'Urgent' },
+            2: { color: 'text-warning', label: 'High' },
+            3: { color: 'text-primary', label: 'Normal' },
+            4: { color: 'text-success', label: 'Low' }
+          };
+
+          const priority = priorityMap[data] || { color: 'text-muted', label: 'Unknown' };
+
+          return `<i class="fas fa-flag ${priority.color}" title="${priority.label}"></i>`;
+        }
+      },
+      {
         data: 'rfp',
         orderable: false,
         render: function (data, type) {
@@ -333,11 +378,11 @@ $(document).ready(function () {
         render: function (data, type, row) {
           return type === 'display'
             ? `
-              <a class="btn btn-sm calculate" href="/rfq/quote/proposal/${row.id}" target="_blank">
-                <i class="fa fa-copy"></i>
+              <a class="btn btn-sm btn-secondary" data-toggle="tooltip" data-original-title="Proposal" href="/rfq/quote/proposal/${row.id}" target="_blank">
+                <i class="fa fa-file"></i>
               </a>
-              <a class="btn btn-primary btn-sm" href="/rfq/quote/proposal_gsa/${row.id}" target="_blank">
-                <i class="fa fa-copy"></i>
+              <a class="btn btn-secondary btn-sm" data-toggle="tooltip" data-original-title="GSA Proposal" href="/rfq/quote/proposal_gsa/${row.id}" target="_blank">
+                <i class="fa fa-balance-scale"></i>
               </a>
             `
             : data;
@@ -370,6 +415,26 @@ $(document).ready(function () {
       { data: 'fecha_submitted' },
       { data: 'email_code' },
       {
+        data: 'priority',
+        render: function (data, type) {
+          if (type !== 'display') {
+            return data; // for sorting/filtering, return raw value
+          }
+
+          // Map priorities to colors and labels
+          const priorityMap = {
+            1: { color: 'text-danger', label: 'Urgent' },
+            2: { color: 'text-warning', label: 'High' },
+            3: { color: 'text-primary', label: 'Normal' },
+            4: { color: 'text-success', label: 'Low' }
+          };
+
+          const priority = priorityMap[data] || { color: 'text-muted', label: 'Unknown' };
+
+          return `<i class="fas fa-flag ${priority.color}" title="${priority.label}"></i>`;
+        }
+      },
+      {
         data: 'rfp',
         orderable: false,
         render: function (data, type) {
@@ -384,11 +449,11 @@ $(document).ready(function () {
         render: function (data, type, row) {
           return type === 'display'
             ? `
-              <a class="btn btn-sm calculate" href="/rfq/quote/proposal/${row.id}" target="_blank">
-                <i class="fa fa-copy"></i>
+              <a class="btn btn-sm btn-secondary" data-toggle="tooltip" data-original-title="Proposal" href="/rfq/quote/proposal/${row.id}" target="_blank">
+                <i class="fa fa-file"></i>
               </a>
-              <a class="btn btn-primary btn-sm" href="/rfq/quote/proposal_gsa/${row.id}" target="_blank">
-                <i class="fa fa-copy"></i>
+              <a class="btn btn-secondary btn-sm" data-toggle="tooltip" data-original-title="GSA Proposal" href="/rfq/quote/proposal_gsa/${row.id}" target="_blank">
+                <i class="fa fa-balance-scale"></i>
               </a>
             `
             : data;
@@ -421,6 +486,26 @@ $(document).ready(function () {
       { data: 'fecha_award' },
       { data: 'email_code' },
       {
+        data: 'priority',
+        render: function (data, type) {
+          if (type !== 'display') {
+            return data; // for sorting/filtering, return raw value
+          }
+
+          // Map priorities to colors and labels
+          const priorityMap = {
+            1: { color: 'text-danger', label: 'Urgent' },
+            2: { color: 'text-warning', label: 'High' },
+            3: { color: 'text-primary', label: 'Normal' },
+            4: { color: 'text-success', label: 'Low' }
+          };
+
+          const priority = priorityMap[data] || { color: 'text-muted', label: 'Unknown' };
+
+          return `<i class="fas fa-flag ${priority.color}" title="${priority.label}"></i>`;
+        }
+      },
+      {
         data: 'rfp',
         orderable: false,
         render: function (data, type) {
@@ -435,11 +520,11 @@ $(document).ready(function () {
         render: function (data, type, row) {
           return type === 'display'
             ? `
-              <a class="btn btn-sm calculate" href="/rfq/quote/proposal/${row.id}" target="_blank">
-                <i class="fa fa-copy"></i>
+              <a class="btn btn-sm btn-secondary" data-toggle="tooltip" data-original-title="Proposal" href="/rfq/quote/proposal/${row.id}" target="_blank">
+                <i class="fa fa-file"></i>
               </a>
-              <a class="btn btn-primary btn-sm" href="/rfq/quote/proposal_gsa/${row.id}" target="_blank">
-                <i class="fa fa-copy"></i>
+              <a class="btn btn-secondary btn-sm" data-toggle="tooltip" data-original-title="GSA Proposal" href="/rfq/quote/proposal_gsa/${row.id}" target="_blank">
+                <i class="fa fa-balance-scale"></i>
               </a>
             `
             : data;
@@ -473,8 +558,8 @@ $(document).ready(function () {
         orderable: false,
         render: function (data, type, row) {
           return type === 'display'
-            ? `<a href="/rfq/quote/delete_quote/${row.id}" class="delete_quote_button text-danger">
-                <i class="fa fa-times"></i> Delete
+            ? `<a href="/rfq/quote/delete_quote/${row.id}" class="delete_quote_button btn btn-sm btn-secondary">
+                <i class="fas fa-trash"></i>
               </a>`
             : data;
         },
@@ -506,8 +591,8 @@ $(document).ready(function () {
         orderable: false,
         render: function (data, type, row) {
           return type === 'display'
-            ? `<a href="/rfq/quote/delete_quote/${row.id}" class="delete_quote_button text-danger">
-                <i class="fa fa-times"></i> Delete
+            ? `<a href="/rfq/quote/delete_quote/${row.id}" class="delete_quote_button btn btn-sm btn-secondary">
+                <i class="fas fa-trash"></i>
               </a>`
             : data;
         },
@@ -539,8 +624,8 @@ $(document).ready(function () {
         orderable: false,
         render: function (data, type, row) {
           return type === 'display'
-            ? `<a href="/rfq/quote/delete_quote/${row.id}" class="delete_quote_button text-danger">
-                <i class="fa fa-times"></i> Delete
+            ? `<a href="/rfq/quote/delete_quote/${row.id}" class="delete_quote_button btn btn-sm btn-secondary">
+                <i class="fas fa-trash"></i>
               </a>`
             : data;
         },
@@ -572,9 +657,13 @@ $(document).ready(function () {
         orderable: false,
         render: function (data, type, row) {
           return type === 'display'
-            ? `<a href="/rfq/quote/restore_quote/${row.id}" class="btn btn-sm btn-success">
+            ? `<a href="/rfq/quote/restore_quote/${row.id}" class="btn btn-sm btn-primary">
                 <i class="fas fa-sync"></i>
-              </a>`
+              </a>
+              <a href="/rfq/quote/destroy_quote/${row.id}" class="btn btn-sm btn-secondary" onclick="return confirm('Are you sure you want to permanently delete this quote?');">
+                <i class="fas fa-skull-crossbones"></i>
+              </a>
+              `
             : data;
         },
       },

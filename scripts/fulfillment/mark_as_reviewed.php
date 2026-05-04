@@ -22,6 +22,8 @@ try {
   // Mark fulfillment item as reviewed
   FulfillmentItemRepository::mark_as_reviewed(Conexion::obtener_conexion(), $id_fulfillment_item);
 
+  FulfillmentAuditTrailRepository::status_event(Conexion::obtener_conexion(), 'Item reviewed', $item->obtener_id_rfq());
+
   // Close database connection
   Conexion::cerrar_conexion();
 

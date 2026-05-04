@@ -84,6 +84,7 @@ CREATE TABLE rfq(
   invoice_acceptance TEXT CHARACTER SET utf8,
   bpa TINYINT,
   reference_url VARCHAR(255),
+  priority INT DEFAULT 4,
   PRIMARY KEY(id),
   FOREIGN KEY(id_usuario) REFERENCES usuarios(id) ON UPDATE CASCADE ON DELETE RESTRICT
 );
@@ -206,6 +207,8 @@ CREATE TABLE audit_trails(
   id INT NOT NULL AUTO_INCREMENT UNIQUE,
   id_rfq INT NOT NULL,
   username VARCHAR(255) NOT NULL,
+  action_type VARCHAR(50) NULL,
+  id_user INT NULL,
   audit_trail TEXT CHARACTER SET utf8 NOT NULL,
   created_date DATETIME,
   PRIMARY KEY(id),
@@ -215,6 +218,8 @@ CREATE TABLE re_quote_audit_trails(
   id INT NOT NULL AUTO_INCREMENT UNIQUE,
   id_re_quote INT NOT NULL,
   username VARCHAR(255) NOT NULL,
+  action_type VARCHAR(50) NULL,
+  id_user INT NULL,
   audit_trail TEXT CHARACTER SET utf8 NOT NULL,
   created_date DATETIME,
   PRIMARY KEY(id),
@@ -427,6 +432,8 @@ CREATE TABLE fulfillment_audit_trails(
   id INT NOT NULL AUTO_INCREMENT UNIQUE,
   id_rfq INT NOT NULL,
   username VARCHAR(255) NOT NULL,
+  action_type VARCHAR(50) NULL,
+  id_user INT NULL,
   audit_trail TEXT CHARACTER SET utf8 NOT NULL,
   created_date DATETIME,
   PRIMARY KEY(id),
@@ -475,5 +482,10 @@ CREATE TABLE rooms(
   name VARCHAR(255) NOT NULL,
   color VARCHAR(255),
   PRIMARY KEY(id)
+);
+CREATE TABLE priority_levels(
+  id INT NOT NULL AUTO_INCREMENT UNIQUE,
+  name VARCHAR(255) NOT NULL,
+  weight INT,
 );
 ALTER TABLE rfq AUTO_INCREMENT = 300;

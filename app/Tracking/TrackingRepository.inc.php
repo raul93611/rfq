@@ -133,11 +133,11 @@ class TrackingRepository {
     Conexion::cerrar_conexion();
     if (count($items)) {
 ?>
-      <div class="table-responsive">
-        <table id="tracking_table" class="table table-bordered table-hover">
+      <div class="table-responsive" id="tracking_table_container">
+        <table id="tracking_table" class="table table-hover">
           <thead>
             <tr>
-              <th class="thin">OPTIONS</th>
+              <th class="thin">ADD</th>
               <th class="thin">#</th>
               <th class="description">E-LOGIC PROPOSAL</th>
               <th class="thin">QTY(ordered)</th>
@@ -170,6 +170,7 @@ class TrackingRepository {
       return;
     }
     Conexion::abrir_conexion();
+    $room = $item->getIdRoom() ? RoomRepository::getById(Conexion::obtener_conexion(), $item->getIdRoom()) : null;
     $trackings = TrackingRepository::get_all_trackings_by_id_item(Conexion::obtener_conexion(), $item->obtener_id());
     Conexion::cerrar_conexion();
     if (!count($trackings)) {
@@ -179,33 +180,35 @@ class TrackingRepository {
     }
     ?>
     <tr>
-      <td class="align-middle text-center" rowspan="<?php echo $trackings_quantity; ?>">
-        <button type="button" class="add_tracking_button btn btn-warning" name="<?php echo $item->obtener_id(); ?>"><i class="fas fa-plus"></i></button>
+      <td class="align-middle text-center" rowspan="<?= $trackings_quantity; ?>">
+        <button type="button" class="add_tracking_button btn btn-xs item-action-btn btn-item" name="<?= $item->obtener_id(); ?>"><i class="fas fa-plus mr-1"></i> Add</button>
       </td>
-      <td rowspan="<?php echo $trackings_quantity; ?>"><?php echo $i + 1; ?></td>
-      <td rowspan="<?php echo $trackings_quantity; ?>">
+      <td rowspan="<?= $trackings_quantity; ?>"><?= ($item->getIdRoom() ? '<span class="mb-2 badge badge-primary" style="background-color: ' . $room->getColor() . ';">' . $room->getName() . '</span>' : '') . '<br>' .  ($i + 1); ?></td>
+      <td rowspan="<?= $trackings_quantity; ?>">
         <?php
         echo '<b>Brand:</b> ' . $re_quote_item->get_brand() . '<br>';
         echo '<b>Part #:</b> ' . $re_quote_item->get_part_number() . '<br>';
         echo '<b>Description:</b> ' . nl2br(mb_substr($re_quote_item->get_description(), 0, 100));
         ?>
       </td>
-      <td rowspan="<?php echo $trackings_quantity; ?>"><?php echo $re_quote_item->get_quantity(); ?></td>
+      <td rowspan="<?= $trackings_quantity; ?>"><?= $re_quote_item->get_quantity(); ?></td>
       <?php
       if (count($trackings)) {
       ?>
         <td class="align-middle text-center">
-          <a href="<?php echo DELETE_TRACKING . $trackings[0]->get_id(); ?>" class="mb-2 btn btn-warning"><i class="fas fa-trash"></i></a><br>
-          <a href="#" data="<?php echo $trackings[0]->get_id(); ?>" class="edit_tracking btn btn-warning"><i class="fas fa-pen"></i></a>
+          <div class="item-actions">
+            <a href="<?= DELETE_TRACKING . $trackings[0]->get_id(); ?>" class="btn btn-xs item-action-btn btn-item-del"><i class="fas fa-trash mr-1"></i> Delete</a>
+            <a href="#" data="<?= $trackings[0]->get_id(); ?>" class="edit_tracking btn btn-xs item-action-btn btn-item"><i class="fas fa-pen mr-1"></i> Edit</a>
+          </div>
         </td>
-        <td><?php echo $trackings[0]->get_quantity(); ?></td>
-        <td><?php echo $trackings[0]->get_carrier(); ?></td>
-        <td><?php echo nl2br($trackings[0]->get_tracking_number()); ?></td>
-        <td><?php echo RepositorioComment::mysql_date_to_english_format($trackings[0]->get_delivery_date()); ?></td>
-        <td><?php echo RepositorioComment::mysql_date_to_english_format($trackings[0]->get_due_date()); ?></td>
-        <td><?php echo $trackings[0]->get_signed_by(); ?></td>
+        <td><?= $trackings[0]->get_quantity(); ?></td>
+        <td><?= $trackings[0]->get_carrier(); ?></td>
+        <td><?= nl2br($trackings[0]->get_tracking_number()); ?></td>
+        <td><?= RepositorioComment::mysql_date_to_english_format($trackings[0]->get_delivery_date()); ?></td>
+        <td><?= RepositorioComment::mysql_date_to_english_format($trackings[0]->get_due_date()); ?></td>
+        <td><?= $trackings[0]->get_signed_by(); ?></td>
         <td>
-          <button type="button" class="btn btn-link" data-toggle="tooltip" data-html="true" title="<?php echo !empty($trackings[0]->get_comments()) ? nl2br($trackings[0]->get_comments()) : 'No comments'; ?>">
+          <button type="button" class="btn btn-link" data-toggle="tooltip" data-html="true" title="<?= !empty($trackings[0]->get_comments()) ? nl2br($trackings[0]->get_comments()) : 'No comments'; ?>">
             <i class="fas fa-comment fa-2x"></i>
           </button>
         </td>
@@ -218,17 +221,19 @@ class TrackingRepository {
     ?>
       <tr>
         <td class="align-middle text-center">
-          <a href="<?php echo DELETE_TRACKING . $tracking->get_id(); ?>" class="mb-2 btn btn-warning"><i class="fas fa-trash"></i></a><br>
-          <a href="#" data="<?php echo $tracking->get_id(); ?>" class="edit_tracking btn btn-warning"><i class="fas fa-pen"></i></a>
+          <div class="item-actions">
+            <a href="<?= DELETE_TRACKING . $tracking->get_id(); ?>" class="btn btn-xs item-action-btn btn-item-del"><i class="fas fa-trash mr-1"></i> Del</a>
+            <a href="#" data="<?= $tracking->get_id(); ?>" class="edit_tracking btn btn-xs item-action-btn btn-item"><i class="fas fa-pen mr-1"></i> Edit</a>
+          </div>
         </td>
-        <td><?php echo $tracking->get_quantity(); ?></td>
-        <td><?php echo $tracking->get_carrier(); ?></td>
-        <td><?php echo nl2br($tracking->get_tracking_number()); ?></td>
-        <td><?php echo RepositorioComment::mysql_date_to_english_format($tracking->get_delivery_date()); ?></td>
-        <td><?php echo RepositorioComment::mysql_date_to_english_format($tracking->get_due_date()); ?></td>
-        <td><?php echo $tracking->get_signed_by(); ?></td>
+        <td><?= $tracking->get_quantity(); ?></td>
+        <td><?= $tracking->get_carrier(); ?></td>
+        <td><?= nl2br($tracking->get_tracking_number()); ?></td>
+        <td><?= RepositorioComment::mysql_date_to_english_format($tracking->get_delivery_date()); ?></td>
+        <td><?= RepositorioComment::mysql_date_to_english_format($tracking->get_due_date()); ?></td>
+        <td><?= $tracking->get_signed_by(); ?></td>
         <td>
-          <button type="button" class="btn btn-link" data-toggle="tooltip" data-html="true" title="<?php echo !empty($tracking->get_comments()) ? nl2br($tracking->get_comments()) : 'No comments'; ?>">
+          <button type="button" class="btn btn-link" data-toggle="tooltip" data-html="true" title="<?= !empty($tracking->get_comments()) ? nl2br($tracking->get_comments()) : 'No comments'; ?>">
             <i class="fas fa-comment fa-2x"></i>
           </button>
         </td>
@@ -260,33 +265,35 @@ class TrackingRepository {
       }
   ?>
   <tr>
-    <td class="align-middle text-center" rowspan="<?php echo $trackings_quantity; ?>">
-      <button type="button" class="add_tracking_subitem_button btn btn-warning" name="<?php echo $subitem->obtener_id(); ?>"><i class="fas fa-plus"></i></button>
+    <td class="align-middle text-center" rowspan="<?= $trackings_quantity; ?>">
+      <button type="button" class="add_tracking_subitem_button btn btn-xs item-action-btn btn-subitem" name="<?= $subitem->obtener_id(); ?>"><i class="fas fa-plus mr-1"></i> Add</button>
     </td>
-    <td rowspan="<?php echo $trackings_quantity; ?>"></td>
-    <td rowspan="<?php echo $trackings_quantity; ?>">
+    <td rowspan="<?= $trackings_quantity; ?>"></td>
+    <td rowspan="<?= $trackings_quantity; ?>">
       <?php
       echo '<b>Brand:</b> ' . $re_quote_subitem->get_brand() . '<br>';
       echo '<b>Part #:</b> ' . $re_quote_subitem->get_part_number() . '<br>';
       echo '<b>Description:</b> ' . nl2br(mb_substr($re_quote_subitem->get_description(), 0, 100));
       ?>
     </td>
-    <td rowspan="<?php echo $trackings_quantity; ?>"><?php echo $re_quote_subitem->get_quantity(); ?></td>
+    <td rowspan="<?= $trackings_quantity; ?>"><?= $re_quote_subitem->get_quantity(); ?></td>
     <?php
       if (count($trackings_subitems)) {
     ?>
       <td class="align-middle text-center">
-        <a href="<?php echo DELETE_TRACKING_SUBITEM . $trackings_subitems[0]->get_id(); ?>" class="mb-2 btn btn-warning"><i class="fas fa-trash"></i></a><br>
-        <a href="#" data="<?php echo $trackings_subitems[0]->get_id(); ?>" class="edit_tracking_subitem btn btn-warning"><i class="fas fa-pen"></i></a>
+        <div class="item-actions">
+          <a href="<?= DELETE_TRACKING_SUBITEM . $trackings_subitems[0]->get_id(); ?>" class="btn btn-xs item-action-btn btn-item-del"><i class="fas fa-trash mr-1"></i> Del</a>
+          <a href="#" data="<?= $trackings_subitems[0]->get_id(); ?>" class="edit_tracking_subitem btn btn-xs item-action-btn btn-subitem"><i class="fas fa-pen mr-1"></i> Edit</a>
+        </div>
       </td>
-      <td><?php echo $trackings_subitems[0]->get_quantity(); ?></td>
-      <td><?php echo $trackings_subitems[0]->get_carrier(); ?></td>
-      <td><?php echo nl2br($trackings_subitems[0]->get_tracking_number()); ?></td>
-      <td><?php echo RepositorioComment::mysql_date_to_english_format($trackings_subitems[0]->get_delivery_date()); ?></td>
-      <td><?php echo RepositorioComment::mysql_date_to_english_format($trackings_subitems[0]->get_due_date()); ?></td>
-      <td><?php echo $trackings_subitems[0]->get_signed_by(); ?></td>
+      <td><?= $trackings_subitems[0]->get_quantity(); ?></td>
+      <td><?= $trackings_subitems[0]->get_carrier(); ?></td>
+      <td><?= nl2br($trackings_subitems[0]->get_tracking_number()); ?></td>
+      <td><?= RepositorioComment::mysql_date_to_english_format($trackings_subitems[0]->get_delivery_date()); ?></td>
+      <td><?= RepositorioComment::mysql_date_to_english_format($trackings_subitems[0]->get_due_date()); ?></td>
+      <td><?= $trackings_subitems[0]->get_signed_by(); ?></td>
       <td>
-        <button type="button" class="btn btn-link" data-toggle="tooltip" data-html="true" title="<?php echo !empty($trackings_subitems[0]->get_comments()) ? nl2br($trackings_subitems[0]->get_comments()) : 'No comments'; ?>">
+        <button type="button" class="btn btn-link" data-toggle="tooltip" data-html="true" title="<?= !empty($trackings_subitems[0]->get_comments()) ? nl2br($trackings_subitems[0]->get_comments()) : 'No comments'; ?>">
           <i class="fas fa-comment fa-2x"></i>
         </button>
       </td>
@@ -299,17 +306,19 @@ class TrackingRepository {
   ?>
     <tr>
       <td class="align-middle text-center">
-        <a href="<?php echo DELETE_TRACKING_SUBITEM . $tracking->get_id(); ?>" class="mb-2 btn btn-warning"><i class="fas fa-trash"></i></a><br>
-        <a href="#" data="<?php echo $tracking->get_id(); ?>" class="edit_tracking_subitem btn btn-warning"><i class="fas fa-pen"></i></a>
+        <div class="item-actions">
+          <a href="<?= DELETE_TRACKING_SUBITEM . $tracking->get_id(); ?>" class="btn btn-xs item-action-btn btn-item-del"><i class="fas fa-trash mr-1"></i> Del</a>
+          <a href="#" data="<?= $tracking->get_id(); ?>" class="edit_tracking_subitem btn btn-xs item-action-btn btn-subitem"><i class="fas fa-pen mr-1"></i> Edit</a>
+        </div>
       </td>
-      <td><?php echo $tracking->get_quantity(); ?></td>
-      <td><?php echo $tracking->get_carrier(); ?></td>
-      <td><?php echo nl2br($tracking->get_tracking_number()); ?></td>
-      <td><?php echo RepositorioComment::mysql_date_to_english_format($tracking->get_delivery_date()); ?></td>
-      <td><?php echo RepositorioComment::mysql_date_to_english_format($tracking->get_due_date()); ?></td>
-      <td><?php echo $tracking->get_signed_by(); ?></td>
+      <td><?= $tracking->get_quantity(); ?></td>
+      <td><?= $tracking->get_carrier(); ?></td>
+      <td><?= nl2br($tracking->get_tracking_number()); ?></td>
+      <td><?= RepositorioComment::mysql_date_to_english_format($tracking->get_delivery_date()); ?></td>
+      <td><?= RepositorioComment::mysql_date_to_english_format($tracking->get_due_date()); ?></td>
+      <td><?= $tracking->get_signed_by(); ?></td>
       <td>
-        <button type="button" class="btn btn-link" data-toggle="tooltip" data-html="true" title="<?php echo !empty($tracking->get_comments()) ? nl2br($tracking->get_comments()) : 'No comments'; ?>">
+        <button type="button" class="btn btn-link" data-toggle="tooltip" data-html="true" title="<?= !empty($tracking->get_comments()) ? nl2br($tracking->get_comments()) : 'No comments'; ?>">
           <i class="fas fa-comment fa-2x"></i>
         </button>
       </td>

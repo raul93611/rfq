@@ -1,7 +1,5 @@
 <?php if (!$cotizacion_recuperada->obtener_multi_year_project()): ?>
-  <small>
-    <a href="#" id="link_quote_button" class="text-muted" aria-label="Link Quote">
-      <i class="h6 fas fa-link"></i>
-    </a>
-  </small>
+  <a href="#" id="link_quote_button" class="btn btn-outline-secondary btn-sm">
+    <i class="fas fa-link mr-1"></i> Link to Multi-Year Project
+  </a>
 <?php endif; ?>

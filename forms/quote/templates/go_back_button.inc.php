@@ -31,5 +31,5 @@ if ($cotizacion_recuperada->getDeleted()) {
 
 // Output the button if a URL is set
 if ($url) {
-  echo '<a class="btn btn-primary" id="go_back" href="' . $url . '"><i class="fa fa-reply"></i></a>';
+  echo '<a class="btn btn-secondary btn-sm" id="go_back" href="' . $url . '"><i class="fa fa-reply mr-1"></i> Back</a>';
 }

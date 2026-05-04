@@ -43,5 +43,5 @@ try {
   </div>
 </div>
 <div class="modal-footer">
-  <button type="submit" name="save" form="edit_payment_term_form" class="btn btn-success"><i class="fa fa-check"></i> Save</button>
+  <button type="submit" name="save" form="edit_payment_term_form" class="btn btn-primary"><i class="fa fa-check"></i> Save</button>
 </div>

@@ -14,7 +14,7 @@ function createSpreadsheet() {
     'A2' => 'FULFILLMENT DATE', 'B2' => 'PROPOSAL #', 'C2' => 'DESIGNATED USER',
     'D2' => 'CHANNEL', 'E2' => 'CODE', 'F2' => 'TYPE OF BID', 'G2' => 'CONTRACT NUMBER',
     'H2' => 'TOTAL COST', 'I2' => 'TOTAL PRICE', 'J2' => 'PROFIT', 'K2' => 'PROFIT(%)',
-    'L2' => 'TOTAL COST', 'M2' => 'TOTAL PRICE', 'N2' => 'PROFIT', 'O2' => 'PROFIT(%)', 'P2' => 'TYPE', 'Q2' => 'SET ASIDE'
+    'L2' => 'TOTAL COST', 'M2' => 'TOTAL PRICE', 'N2' => 'PROFIT', 'O2' => 'PROFIT(%)', 'P2' => 'TYPE', 'Q2' => 'SET ASIDE', 'R2' => 'STATE'
   ];
 
   $activeWorksheet->mergeCells('H1:K1');

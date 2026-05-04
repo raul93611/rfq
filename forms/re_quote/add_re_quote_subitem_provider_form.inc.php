@@ -6,29 +6,24 @@ $re_quote = ReQuoteRepository::get_re_quote_by_id(Conexion::obtener_conexion(), 
 Conexion::cerrar_conexion();
 ?>
 <input type="hidden" name="id_re_quote_subitem" value="<?= $id_re_quote_subitem; ?>">
-<div class="card-body">
-  <div class="row">
-    <div class="col-md-6">
-      <div class="form-group">
-        <label for="provider">Provider:</label>
-        <input type="text" class="form-control form-control-sm" name="provider" required>
-        <small class="form-text text-muted">Enter the name of the service provider.</small>
-      </div>
+<div class="card-body user-form">
+  <div class="form-row">
+    <div class="form-group col-md-7">
+      <label for="provider">Provider</label>
+      <input type="text" class="form-control form-control-sm" id="provider" name="provider" placeholder="Provider name ..." autofocus required>
     </div>
-    <div class="col-md-6">
-      <div class="form-group">
-        <label for="price">Price:</label>
-        <input type="number" step=".01" class="form-control form-control-sm" name="price" required>
-        <small class="form-text text-muted">Specify the price in your local currency.</small>
+    <div class="form-group col-md-5">
+      <label for="price">Price (USD)</label>
+      <div class="input-group input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text">$</span>
+        </div>
+        <input type="number" step=".01" min="0" class="form-control" id="price" name="price" placeholder="0.00" required>
       </div>
     </div>
   </div>
 </div>
-<div class="card-footer">
-  <button type="submit" class="btn btn-success" name="save_re_quote_subitem_provider">
-    <i class="fa fa-check"></i> Save
-  </button>
-  <a href="<?= RE_QUOTE . $re_quote->get_id_rfq(); ?>" class="btn btn-danger">
-    <i class="fa fa-times"></i> Cancel
-  </a>
+<div class="card-footer d-flex justify-content-end" style="gap:8px;background:transparent;border-top:1px solid #f0f0f0;">
+  <button type="submit" class="btn btn-primary btn-sm" name="save_re_quote_subitem_provider"><i class="fa fa-check mr-1"></i> Save</button>
+  <a href="<?= RE_QUOTE . $re_quote->get_id_rfq();  ?>" class="btn btn-secondary btn-sm"><i class="fa fa-times mr-1"></i> Cancel</a>
 </div>

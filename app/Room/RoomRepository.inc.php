@@ -41,10 +41,12 @@ class RoomRepository {
         $sentence->bindValue(':name', $room->getName(), PDO::PARAM_STR);
         $sentence->bindValue(':color', $room->getColor(), PDO::PARAM_STR);
         $sentence->execute();
+        $id = $connection->lastInsertId();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';
       }
     }
+    return $id;
   }
 
   public static function getAll($conexion, $id_rfq) {

@@ -3,7 +3,7 @@ header('Content-Type: application/json');
 
 // Function to sanitize input
 function sanitize_input($input) {
-  return htmlspecialchars(trim($input), ENT_QUOTES, 'UTF-8');
+  return trim($input);
 }
 
 // Validate and sanitize inputs

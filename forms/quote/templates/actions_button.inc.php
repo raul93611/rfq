@@ -1,8 +1,8 @@
 <div class="btn-group dropup">
-  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    Actions
+  <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <i class="fas fa-ellipsis-h mr-1"></i> Actions
   </button>
-  <div class="dropdown-menu">
+  <div class="dropdown-menu dropdown-menu-right">
     <?php if ($cotizacion_recuperada->obtener_fullfillment() && $re_quote_exists): ?>
       <a class="dropdown-item" href="<?= TRACKING . $cotizacion_recuperada->obtener_id(); ?>">Tracking</a>
     <?php endif; ?>
@@ -15,5 +15,6 @@
       <a class="dropdown-item" href="<?= FULFILLMENT . $cotizacion_recuperada->obtener_id(); ?>">Fulfillment</a>
       <a class="dropdown-item" href="<?= KPI . $cotizacion_recuperada->obtener_id(); ?>">KPI</a>
     <?php endif; ?>
+    <a id="import-items-modal-button" class="dropdown-item" href="#">Import items</a>
   </div>
 </div>

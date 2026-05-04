@@ -1,101 +1,93 @@
 <?php
 try {
-  // Open database connection
   Conexion::abrir_conexion();
   $conexion = Conexion::obtener_conexion();
-
-  // Fetch quote and re-quote details
-  $quote = RepositorioRfq::obtener_cotizacion_por_id($conexion, $id_rfq);
+  $quote    = RepositorioRfq::obtener_cotizacion_por_id($conexion, $id_rfq);
   $id_requote = ReQuoteRepository::create_re_quote($conexion, $id_rfq);
-  $re_quote = ReQuoteRepository::get_re_quote_by_id_rfq($conexion, $id_rfq);
+  $re_quote   = ReQuoteRepository::get_re_quote_by_id_rfq($conexion, $id_rfq);
   $total_service = ServiceRepository::get_total($conexion, $id_rfq);
 } catch (Exception $e) {
-  // Handle errors and display an appropriate message
   die('Error retrieving data: ' . $e->getMessage());
 } finally {
-  // Ensure the connection is closed
   Conexion::cerrar_conexion();
 }
 ?>
 <div class="content-wrapper">
-  <section class="content-header">
-    <div class="container-fluid">
-      <div class="row mb-2">
-        <div class="col-sm-2">
-          <h1>Re-quote</h1>
-        </div>
-        <div class="col-sm-10 text-center">
-          <button type="button" class="btn btn-info" id="audit_trails_button">Audit Trails</button>
-          <a href="<?= htmlspecialchars(RELOAD_REQUOTE . $id_rfq); ?>" class="btn btn-primary">Reload</a>
-        </div>
-      </div>
+
+  <div class="content-header page-header-bar">
+    <div>
+      <h1 class="page-title">Re-Quote</h1>
+      <p class="page-subtitle">Proposal #<?= htmlspecialchars($quote->obtener_id()); ?> &mdash; <?= htmlspecialchars($quote->obtener_email_code()); ?></p>
     </div>
-  </section>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button type="button" class="btn btn-outline-secondary btn-sm" id="audit_trails_button" data-id="<?= htmlspecialchars($id_rfq, ENT_QUOTES, 'UTF-8'); ?>">
+        <i class="fas fa-history mr-1"></i> Audit Trails
+      </button>
+      <a href="<?= htmlspecialchars(RELOAD_REQUOTE . $id_rfq); ?>" class="btn btn-outline-secondary btn-sm">
+        <i class="fas fa-sync-alt mr-1"></i> Reload
+      </a>
+    </div>
+  </div>
 
-  <section class="content">
+  <section class="content" style="padding-top:20px;">
     <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-12">
-          <form id="re_quote_form" action="<?= htmlspecialchars(SAVE_RE_QUOTE); ?>" method="post">
-            <div class="card card-primary">
-              <input type="hidden" name="id_re_quote" value="<?= htmlspecialchars($re_quote->get_id()); ?>">
-              <div class="card-header">
-                <h3 class="card-title"><i class="fas fa-highlighter"></i> Enter the data</h3>
-              </div>
-              <div class="card-body">
-                <?php
-                ReQuoteItemRepository::print_re_quote_items($re_quote->get_id());
-                ?>
-              </div>
-            </div>
+      <form id="re_quote_form" action="<?= htmlspecialchars(SAVE_RE_QUOTE); ?>" method="post">
+        <input type="hidden" name="id_re_quote" value="<?= htmlspecialchars($re_quote->get_id()); ?>">
 
-            <div class="card card-primary">
-              <div class="card-header">
-                <h3 class="card-title"><i class="fas fa-dollar-sign"></i> Total Services</h3>
-              </div>
-              <div class="card-body">
-                <?php include_once 're_quote_services.inc.php'; ?>
-              </div>
-            </div>
-
-            <div class="card card-primary">
-              <div class="card-header">
-                <h3 class="card-title"><i class="fas fa-dollar-sign"></i> Total</h3>
-              </div>
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-md-4">
-                    <h3 class="text-info text-center">Total Price: $ <?= number_format($quote->obtener_quote_total_price(), 2); ?></h3>
-                  </div>
-                  <div class="col-md-4">
-                    <h3 class="text-info text-center">Total Profit: $ <?= number_format($quote->obtener_re_quote_profit(), 2); ?></h3>
-                  </div>
-                  <div class="col-md-4">
-                    <h3 class="text-info text-center">Total Profit (%): <?= number_format($quote->obtener_re_quote_profit_percentage(), 2); ?></h3>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="card-footer footer_item">
-              <a class="btn btn-primary" id="go_back" href="<?= htmlspecialchars(EDITAR_COTIZACION . '/' . $re_quote->get_id_rfq()); ?>">
-                <i class="fa fa-reply"></i> Go Back
-              </a>
-              <button type="submit" class="btn btn-success" name="save_re_quote">
-                <i class="fas fa-check"></i> Save
-              </button>
-            </div>
-          </form>
+        <!-- Items table card -->
+        <div class="chart-card mb-4">
+          <div class="card-body" style="padding:20px;">
+            <?php ReQuoteItemRepository::print_re_quote_items($re_quote->get_id()); ?>
+          </div>
         </div>
-      </div>
+
+        <!-- Services card -->
+        <div class="chart-card mb-4">
+          <div class="card-body" style="padding:20px;">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#8896a5;margin-bottom:14px;">
+              <i class="fas fa-concierge-bell mr-1"></i> Total Services
+            </div>
+            <?php include_once 're_quote_services.inc.php'; ?>
+          </div>
+        </div>
+
+        <!-- Sticky action bar: Back | Save | Totals -->
+        <div class="quote-action-bar">
+          <div class="quote-action-bar__left">
+            <a class="btn btn-secondary btn-sm" href="<?= htmlspecialchars(EDITAR_COTIZACION . '/' . $re_quote->get_id_rfq()); ?>">
+              <i class="fa fa-reply mr-1"></i> Back
+            </a>
+          </div>
+          <div class="quote-action-bar__right">
+            <button type="submit" class="btn btn-primary btn-sm" name="save_re_quote">
+              <i class="fas fa-check mr-1"></i> Save
+            </button>
+          </div>
+          <div class="quote-action-bar__totals">
+            <div class="quote-action-total">
+              <span class="quote-action-total__label">Total Price</span>
+              <span class="quote-action-total__value">$<?= number_format($quote->obtener_quote_total_price(), 2); ?></span>
+            </div>
+            <div class="quote-action-total">
+              <span class="quote-action-total__label">Total Profit</span>
+              <span class="quote-action-total__value">$<?= number_format($quote->obtener_re_quote_profit(), 2); ?></span>
+            </div>
+            <div class="quote-action-total">
+              <span class="quote-action-total__label">Profit %</span>
+              <span class="quote-action-total__value"><?= number_format($quote->obtener_re_quote_profit_percentage(), 2); ?>%</span>
+            </div>
+          </div>
+        </div>
+
+      </form>
     </div>
   </section>
 </div>
 
 <?php
-// Include modals
 include_once 'plantillas/re_quote/modals/audit_trails_modal.inc.php';
 include_once 'modals/edit_service_modal.inc.php';
 ?>
 
 <script src="<?= htmlspecialchars(RUTA_JS); ?>reQuote.js"></script>
+<script src="<?= htmlspecialchars(RUTA_JS); ?>audit_trail.js"></script>

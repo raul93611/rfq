@@ -1,51 +1,36 @@
-<div class="content-wrapper">
-  <?php
-  // Open the connection and fetch user data
-  try {
-    Conexion::abrir_conexion();
-    $conexion = Conexion::obtener_conexion();
-
-    // Fetch the user data
-    $user = RepositorioUsuario::obtener_usuario_por_id($conexion, $id_user);
-
-    // Check if the user exists
-    if (!$user) {
-      // If user is not found, show a message and exit
-      echo '<div class="alert alert-danger">User not found.</div>';
-      exit;
-    }
-  } catch (Exception $e) {
-    // Show a user-friendly error message
-    echo '<div class="alert alert-danger">An error occurred while fetching user data. Please try again later.</div>';
-    exit; // Exit to stop further rendering in case of error
-  } finally {
-    Conexion::cerrar_conexion();
+<?php
+try {
+  Conexion::abrir_conexion();
+  $conexion = Conexion::obtener_conexion();
+  $user = RepositorioUsuario::obtener_usuario_por_id($conexion, $id_user);
+  if (!$user) {
+    echo '<div class="alert alert-danger">User not found.</div>';
+    exit;
   }
-  ?>
+} catch (Exception $e) {
+  echo '<div class="alert alert-danger">An error occurred while fetching user data. Please try again later.</div>';
+  exit;
+} finally {
+  Conexion::cerrar_conexion();
+}
+?>
+<div class="content-wrapper">
 
-  <section class="content-header">
-    <div class="container-fluid">
-      <div class="row mb-2">
-        <div class="col-sm-6">
-          <h1><?= htmlspecialchars($user->obtener_nombre_usuario(), ENT_QUOTES, 'UTF-8') ?></h1>
-        </div>
-        <div class="col-sm-6">
-          <!-- Placeholder for future content -->
-        </div>
-      </div>
+  <div class="content-header page-header-bar">
+    <div>
+      <h1 class="page-title">Update Password</h1>
+      <p class="page-subtitle"><?= htmlspecialchars($user->obtener_nombre_usuario(), ENT_QUOTES, 'UTF-8') ?></p>
     </div>
-  </section>
+    <a href="<?= USERS ?>" class="btn btn-secondary btn-sm">
+      <i class="fas fa-arrow-left mr-1"></i> Back to Users
+    </a>
+  </div>
 
-  <section class="content">
+  <section class="content" style="padding-top:20px;">
     <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="card card-primary">
-            <div class="card-header">
-              <h3 class="card-title">
-                <i class="fas fa-key" aria-hidden="true"></i> Update password
-              </h3>
-            </div>
+      <div class="row justify-content-center">
+        <div class="col-lg-5 col-md-8">
+          <div class="card chart-card">
             <form id="update-password-form" role="form" method="post" action="<?= htmlspecialchars($_SERVER['PHP_SELF']); ?>">
               <?php include_once 'forms/user/update_password.inc.php'; ?>
             </form>
@@ -54,7 +39,7 @@
       </div>
     </div>
   </section>
+
 </div>
 
-<!-- External JS file -->
 <script src="<?= RUTA_JS; ?>users.js"></script>

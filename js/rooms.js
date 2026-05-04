@@ -30,97 +30,80 @@ $(document).ready(function () {
 
   const idRfq = $('input[name="id_rfq"]').val();
 
+  // Utility: Initialize color picker
+  function initColorPicker(element) {
+    element.colorpicker(colorpickerOptions);
+    element.on('colorpickerChange', function (event) {
+      $(this).parent().find('.fa-square').css('color', event.color.toString());
+    });
+  }
+
+  // Utility: Show modal with loaded content
+  function loadModal(modal, form, url, data, callback) {
+    form.load(url, data, function () {
+      form[0].reset();
+      const colorPickerElement = form.find('#color');
+      initColorPicker(colorPickerElement);
+      modal.modal();
+      if (callback) callback();
+    });
+  }
+
+  // Utility: Handle form submission
+  function handleFormSubmission(form, url, modal) {
+    form.validate({
+      rules: {
+        name: { required: true }
+      },
+      submitHandler: function () {
+        $.ajax({
+          url: url,
+          type: 'POST',
+          data: form.serialize(),
+          success: function () {
+            modal.modal('hide');
+            location.reload();
+          },
+          error: function (xhr, status, error) {
+            console.error('Form submission failed:', error);
+          }
+        });
+      }
+    });
+  }
+
+  // Add Room Modal Logic
   const addRoomModal = $('#add-room-modal');
   const addRoomForm = $('#add-room-form');
-  const addRoomButton = $('#add-room-button');
-
-  addRoomButton.on('click', function (e) {
+  $('#add-room-button').on('click', function (e) {
     e.preventDefault();
-
-    addRoomForm.load('/rfq/quote/rooms/load/', {
-      idRfq: idRfq
-    }, function () {
-      addRoomForm[0].reset();
-      addRoomForm.find('#color').colorpicker(colorpickerOptions);
-      addRoomForm.find('#color').on('colorpickerChange', function (event) {
-        $(this).parent().find('.fa-square').css('color', event.color.toString());
-      })
-      addRoomModal.modal();
-    });
+    loadModal(addRoomModal, addRoomForm, '/rfq/quote/rooms/load/', { idRfq });
   });
+  handleFormSubmission(addRoomForm, '/rfq/quote/rooms/save', addRoomModal);
 
-  addRoomForm.validate({
-    rules: {
-      name: {
-        required: true
-      }
-    },
-    submitHandler: function (form) {
-      $.ajax({
-        url: '/rfq/quote/rooms/save',
-        type: 'POST',
-        data: $(form).serialize(),
-        success: function (response) {
-          addRoomForm.modal('hide');
-          location.reload();
-        },
-        error: function (xhr, status, error) {
-          console.error(error);
-        }
-      });
-    }
-  });
-
+  // Edit Room Modal Logic
   const editRoomModal = $('#edit-room-modal');
   const editRoomForm = $('#edit-room-form');
-  const editRoomButton = $('.edit-room-button');
-
-  editRoomButton.on('click', function (e) {
+  $('.edit-room-button').on('click', function (e) {
     e.preventDefault();
     const idRoom = $(this).data('id');
-    editRoomForm.load(`/rfq/quote/rooms/load`, {
-      idRoom: idRoom
-    }, function () {
-      editRoomForm.find('#color').colorpicker(colorpickerOptions);
-      editRoomForm.find('#color').on('colorpickerChange', function (event) {
-        $(this).parent().find('.fa-square').css('color', event.color.toString());
-      })
-      editRoomModal.modal();
-    });
+    loadModal(editRoomModal, editRoomForm, '/rfq/quote/rooms/load', { idRoom });
   });
+  handleFormSubmission(editRoomForm, '/rfq/quote/rooms/update', editRoomModal);
 
-  editRoomForm.validate({
-    rules: {
-      name: {
-        required: true
-      }
-    },
-    submitHandler: function (form) {
-      $.ajax({
-        url: '/rfq/quote/rooms/update',
-        type: 'POST',
-        data: $(form).serialize(),
-        success: function (response) {
-          editRoomModal.modal('hide');
-          location.reload();
-        },
-        error: function (xhr, status, error) {
-          console.error(error);
-        }
-      });
-    }
-  });
-
-  editRoomForm.on('click', '#delete-room-button', function (e) {
+  // Delete Room Logic
+  editRoomForm.on('click', '#delete-room-button', function () {
+    const roomId = $(this).data('id');
     $.ajax({
       url: '/rfq/quote/rooms/delete',
-      data: {
-        id: $(this).data('id'),
-      },
       type: 'POST',
-      success: function (res) {
+      data: { id: roomId },
+      success: function () {
         editRoomModal.modal('hide');
         location.reload();
+      },
+      error: function (xhr, status, error) {
+        console.error('Failed to delete room:', error);
       }
     });
   });

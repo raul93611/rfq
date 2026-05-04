@@ -25,22 +25,23 @@ try {
   Conexion::cerrar_conexion();
 }
 ?>
-
-<table class="table table-bordered">
-  <thead>
-    <tr>
-      <th></th>
-      <th>TOTAL INVOICE AMOUNT</th>
-      <th>TOTAL PROFIT($)</th>
-      <th>TOTAL PROFIT(%)</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="width: 200px;">TOTALS</td>
-      <td><?= htmlspecialchars($totals[0]['sum_total_price']) ?></td>
-      <td><?= htmlspecialchars($totals[0]['sum_total_profit']) ?></td>
-      <td><?= htmlspecialchars($totals[0]['sum_total_profit_percentage']) ?></td>
-    </tr>
-  </tbody>
-</table>
+<div class="projection-totals-bar">
+  <div class="projection-total-item">
+    <span class="projection-total-label">Total Invoice Amount</span>
+    <span class="projection-total-value" style="color:var(--color-primary);">$<?= htmlspecialchars($totals[0]['sum_total_price']) ?></span>
+  </div>
+  <div class="projection-totals-divider"></div>
+  <div class="projection-total-item">
+    <span class="projection-total-label">Total Profit ($)</span>
+    <span class="projection-total-value <?= ($totals[0]['sum_total_profit'] >= 0) ? 'text-success' : 'text-danger' ?>">
+      $<?= htmlspecialchars($totals[0]['sum_total_profit']) ?>
+    </span>
+  </div>
+  <div class="projection-totals-divider"></div>
+  <div class="projection-total-item">
+    <span class="projection-total-label">Total Profit (%)</span>
+    <span class="projection-total-value <?= ($totals[0]['sum_total_profit_percentage'] >= 0) ? 'text-success' : 'text-danger' ?>">
+      <?= htmlspecialchars($totals[0]['sum_total_profit_percentage']) ?>%
+    </span>
+  </div>
+</div>

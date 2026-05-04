@@ -21,15 +21,6 @@ $(document).ready(function () {
       $(this).val('');
     });
   }
-  /***********************************TOOLTIP INITIALIZATION******************/
-  // Initialize tooltips with custom configuration on elements with [data-toggle="tooltip"]
-  const tooltipOptions = {
-    selector: '[data-toggle="tooltip"]',
-    trigger: 'click',
-    placement: 'top'
-  };
-
-  $('body').tooltip(tooltipOptions);
   /***************************************Invoices*************************************/
   // Selectors for elements on the fulfillment page
   const fulfillmentPage = $('#fulfillment_page');
@@ -48,6 +39,34 @@ $(document).ready(function () {
   function loadInvoiceDropdown(idRfq) {
     invoiceDropdown.load('/rfq/fulfillment/invoice/load_dropdown', { id: idRfq });
   }
+
+  function loadFulfillmentTotals() {
+    $('#fulfillment_action_totals').load(`/rfq/fulfillment/load_fulfillment_totals/${idRfq}`);
+  }
+
+  function reloadFulfillmentPage(rfqId) {
+    const scrollableContainers = ['#fulfillment_items_table_container', '#fulfillment_services_table_container', '#fulfillment_invoices_table_container'];
+    const scrollPositions = {};
+    scrollableContainers.forEach(function (selector) {
+      const el = document.querySelector(selector);
+      if (el) scrollPositions[selector] = { top: el.scrollTop, left: el.scrollLeft };
+    });
+    fulfillmentPage.load(`/rfq/fulfillment/load_fulfillment_page/${rfqId}`, function () {
+      scrollableContainers.forEach(function (selector) {
+        if (scrollPositions[selector]) {
+          const el = document.querySelector(selector);
+          if (el) {
+            el.scrollTop = scrollPositions[selector].top;
+            el.scrollLeft = scrollPositions[selector].left;
+          }
+        }
+      });
+      loadFulfillmentTotals();
+    });
+  }
+
+  // Initial load of totals
+  loadFulfillmentTotals();
 
   // Event listener to open the Add Invoice modal and initialize date picker
   invoiceDropdown.on('click', '#add_invoice', function (e) {
@@ -144,7 +163,7 @@ $(document).ready(function () {
           } else {
             editInvoiceModal.modal('hide');
             loadInvoiceDropdown(idRfq);
-            fulfillmentPage.load(`/rfq/fulfillment/load_fulfillment_page/${idRfq}`);
+            reloadFulfillmentPage(idRfq);
           }
         },
         error: function (xhr, status, error) {
@@ -173,7 +192,7 @@ $(document).ready(function () {
     performAjaxRequest('/rfq/fulfillment/invoice/delete', 'POST', { id: invoiceId }, function (response) {
       editInvoiceModal.modal('hide');
       loadInvoiceDropdown(idRfq);
-      fulfillmentPage.load(`/rfq/fulfillment/load_fulfillment_page/${idRfq}`);
+      reloadFulfillmentPage(idRfq);
     });
   }
 
@@ -181,7 +200,7 @@ $(document).ready(function () {
   fulfillmentPage.on('click', '.attach-sales-commission-button', function () {
     const invoiceId = $(this).data('id');
     performAjaxRequest('/rfq/fulfillment/invoice/attach_sales_commission', 'POST', { id: invoiceId, idRfq: idRfq }, function (res) {
-      fulfillmentPage.load(`/rfq/fulfillment/load_fulfillment_page/${res.id_rfq}`);
+      reloadFulfillmentPage(res.id_rfq);
     });
   });
 
@@ -206,39 +225,42 @@ $(document).ready(function () {
   loadInvoiceDropdown(idRfq);
   /****************************************REVIEWED CHECK************************************/
   // Event listener for marking main items as reviewed
-  fulfillmentPage.on('click', '.reviewed_button', function () {
+  fulfillmentPage.on('click', '.reviewed_button', function (e) {
+    e.preventDefault();
     const data = {
       id_fulfillment_item: $(this).data('id'),
       id_item: $(this).data('id_item')
     };
     performAjaxRequest('/rfq/fulfillment/equipment/mark_as_reviewed/', 'POST', data, function (res) {
-      fulfillmentPage.load(`/rfq/fulfillment/load_fulfillment_page/${res.id_rfq}`);
+      reloadFulfillmentPage(res.id_rfq);
     });
     return false;
   });
 
   // Event listener for marking subitems as reviewed
-  fulfillmentPage.on('click', '.subitem_reviewed_button', function () {
+  fulfillmentPage.on('click', '.subitem_reviewed_button', function (e) {
+    e.preventDefault();
     const data = {
       id_fulfillment_subitem: $(this).data('id'),
       id_subitem: $(this).data('id_subitem'),
       id_rfq: $(this).data('id_rfq')
     };
     performAjaxRequest('/rfq/fulfillment/equipment/mark_subitem_as_reviewed/', 'POST', data, function (res) {
-      fulfillmentPage.load(`/rfq/fulfillment/load_fulfillment_page/${res.id_rfq}`);
+      reloadFulfillmentPage(res.id_rfq);
     });
     return false;
   });
   /****************************************REVIEWED SERVICE CHECK************************************/
   // Event listener for marking services as reviewed
-  fulfillmentPage.on('click', '.reviewed_service_button', function () {
+  fulfillmentPage.on('click', '.reviewed_service_button', function (e) {
+    e.preventDefault();
     const data = {
       id_fulfillment_service: $(this).data('id'),
       id_service: $(this).data('id_service')
     };
 
     performAjaxRequest('/rfq/fulfillment/service/mark_as_reviewed_service/', 'POST', data, function (res) {
-      fulfillmentPage.load(`/rfq/fulfillment/load_fulfillment_page/${res.id_rfq}`);
+      reloadFulfillmentPage(res.id_rfq);
     });
 
     return false;
@@ -254,7 +276,7 @@ $(document).ready(function () {
       };
 
       performAjaxRequest(url, 'POST', data, function (res) {
-        fulfillmentPage.load(`/rfq/fulfillment/load_fulfillment_page/${res.id_rfq}`);
+        reloadFulfillmentPage(res.id_rfq);
       });
     });
   }
@@ -262,30 +284,6 @@ $(document).ready(function () {
   // Initialize Net 30 change handlers for equipment and services
   handleNet30Change('#net30_cc', '/rfq/fulfillment/equipment/save_net_30/');
   handleNet30Change('#net30_cc_services', '/rfq/fulfillment/service/save_net_30/');
-  /***********************************FULFILLMENT AUDIT TRAILS******************/
-  const btnAuditTrail = $('#fulfillment_audit_trails_button');
-  const auditTrailModal = $('#fulfillment_audit_trails_modal');
-  const auditTrailModalBody = auditTrailModal.find('.modal-body');
-
-  // Open Audit Trail modal and load data
-  btnAuditTrail.on('click', function () {
-    const data = { id_rfq: $(this).data('id') };
-    auditTrailModalBody.load('/rfq/fulfillment/load_fulfillment_audit_trails', data, function () {
-      auditTrailModal.modal('show');
-    });
-  });
-
-  // Highlight selected audit trail item
-  auditTrailModal.on('click', '.audit_trail_link', function () {
-    auditTrailModal.modal('hide');
-    const $targetElement = $($(this).data('target'));
-    console.log($(this).data('target'));
-    
-    if ($targetElement.length) {
-      $targetElement.addClass('highlight');
-      setTimeout(() => $targetElement.removeClass('highlight'), 5000);
-    }
-  });
   /***********************************FULFILLMENT SHIPPING******************/
   let counterShipping = +$('#edit_fulfillment_shipping_modal form').data('counter') || 0;
   const editFulfillmentShippingModal = $('#edit_fulfillment_shipping_modal');
@@ -306,7 +304,7 @@ $(document).ready(function () {
     $.post('/rfq/fulfillment/equipment/update_fulfillment_shipping', $(this).serialize(), function (res) {
       editFulfillmentShippingForm[0].reset();
       editFulfillmentShippingModal.modal('hide');
-      fulfillmentPage.load(`/rfq/fulfillment/load_fulfillment_page/${res.id_rfq}`);
+      reloadFulfillmentPage(res.id_rfq);
     });
   });
 
@@ -340,16 +338,25 @@ $(document).ready(function () {
   // Helper function to create shipping fields
   function createShippingFields(counter) {
     return `
-    <div class="shipping${counter}">
-      <div class="form-group">
-        <label for="fulfillment_shipping${counter}">Description:</label>
-        <input type="hidden" name="fulfillment_shipping_original${counter}" value="">
-        <input type="text" class="form-control form-control-sm" id="fulfillment_shipping${counter}" name="fulfillment_shipping${counter}" value="">
-      </div>
-      <div class="form-group">
-        <label for="amount${counter}">Amount:</label>
-        <input type="hidden" name="amount_original${counter}" value="">
-        <input type="number" step="0.01" id="amount${counter}" class="form-control form-control-sm" name="amount${counter}" value="">
+    <div class="shipping${counter} mb-3">
+      <div class="form-row">
+        <div class="col-md-8">
+          <div class="form-group mb-0">
+            <label>Description</label>
+            <input type="hidden" name="fulfillment_shipping_original${counter}" value="">
+            <input type="text" class="form-control form-control-sm" id="fulfillment_shipping${counter}" name="fulfillment_shipping${counter}" value="">
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group mb-0">
+            <label>Amount</label>
+            <input type="hidden" name="amount_original${counter}" value="">
+            <div class="input-group input-group">
+              <div class="input-group-prepend"><span class="input-group-text">$</span></div>
+              <input type="number" step="0.01" id="amount${counter}" class="form-control" name="amount${counter}" value="">
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   `;
@@ -373,7 +380,8 @@ $(document).ready(function () {
   });
 
   // Open modal and load form for editing a fulfillment service
-  fulfillmentPage.on('click', '.edit_fulfillment_service_button', function () {
+  fulfillmentPage.on('click', '.edit_fulfillment_service_button', function (e) {
+    e.preventDefault();
     const idFulfillmentService = $(this).data('id');
     loadFulfillmentServiceForm(editFulfillmentServiceModal, idFulfillmentService, null);
   });
@@ -413,7 +421,7 @@ $(document).ready(function () {
     $.post(url, form.serialize(), function (res) {
       form[0].reset();
       modal.modal('hide');
-      fulfillmentPage.load(`/rfq/fulfillment/load_fulfillment_page/${res.id_rfq}`);
+      reloadFulfillmentPage(res.id_rfq);
     });
   }
 
@@ -422,7 +430,7 @@ $(document).ready(function () {
    */
   function deleteFulfillmentService(idFulfillmentService, idService) {
     $.post('/rfq/fulfillment/service/delete_fulfillment_service/', { id_fulfillment_service: idFulfillmentService, id_service: idService }, function (res) {
-      fulfillmentPage.load(`/rfq/fulfillment/load_fulfillment_page/${res.id_rfq}`);
+      reloadFulfillmentPage(res.id_rfq);
     });
   }
   /***********************************FULFILLMENT***************************/
@@ -487,7 +495,7 @@ $(document).ready(function () {
     $.post(url, form.serialize(), function (res) {
       form[0].reset();
       modal.modal('hide');
-      fulfillmentPage.load(`/rfq/fulfillment/load_fulfillment_page/${res.id_rfq}`);
+      reloadFulfillmentPage(res.id_rfq);
     });
   }
 
@@ -496,7 +504,7 @@ $(document).ready(function () {
    */
   function deleteFulfillmentItem(idFulfillmentItem, idItem) {
     $.post('/rfq/fulfillment/equipment/delete_fulfillment_item/', { id_fulfillment_item: idFulfillmentItem, id_item: idItem }, function (res) {
-      fulfillmentPage.load(`/rfq/fulfillment/load_fulfillment_page/${res.id_rfq}`);
+      reloadFulfillmentPage(res.id_rfq);
     });
   }
 
@@ -566,7 +574,7 @@ $(document).ready(function () {
     $.post(url, form.serialize(), function (res) {
       form[0].reset();
       modal.modal('hide');
-      fulfillmentPage.load(`/rfq/fulfillment/load_fulfillment_page/${res.id_rfq}`);
+      reloadFulfillmentPage(res.id_rfq);
     });
   }
 
@@ -575,7 +583,7 @@ $(document).ready(function () {
    */
   function deleteFulfillmentSubitem(idFulfillmentSubitem, idSubitem, idRfq) {
     $.post('/rfq/fulfillment/equipment/delete_fulfillment_subitem/', { id_fulfillment_subitem: idFulfillmentSubitem, id_subitem: idSubitem, id_rfq: idRfq }, function (res) {
-      fulfillmentPage.load(`/rfq/fulfillment/load_fulfillment_page/${res.id_rfq}`);
+      reloadFulfillmentPage(res.id_rfq);
     });
   }
 });

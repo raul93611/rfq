@@ -1,4 +1,5 @@
 <?php
+
 // error_reporting(E_ALL);
 // ini_set('display_errors', '1');
 
@@ -28,7 +29,8 @@ spl_autoload_register(function ($class) {
     'TypeOfProject' => ['TypeOfProject', 'TypeOfProjectRepository'],
     'YearlyProjection' => ['YearlyProjection', 'YearlyProjectionRepository'],
     'MonthlyProjection' => ['MonthlyProjection', 'MonthlyProjectionRepository'],
-    'Room' => ['Room', 'RoomRepository']
+    'Room' => ['Room', 'RoomRepository'],
+    'PriorityLevel' => ['PriorityLevel', 'PriorityLevelRepository']
   ];
 
   foreach ($subfolder as $key => $array) {
@@ -67,6 +69,22 @@ switch ($partes_ruta[1] ?? null) {
   case 'logout':
     $ruta_elegida = 'scripts/user/logout.php';
     break;
+  case 'internal_script':
+    $ruta_elegida = 'scripts/utilities/internal_script.php';
+    break;
+  case 'employee_docs':
+    switch ($partes_ruta[2]) {
+      case 'upload':
+        $ruta_elegida = 'scripts/utilities/employee_docs_upload.php';
+        break;
+      case 'container':
+        $ruta_elegida = 'scripts/utilities/employee_docs_container.php';
+        break;
+      case 'delete':
+        $ruta_elegida = 'scripts/utilities/employee_docs_delete.php';
+        break;
+    }
+    break;
   case 'quote':
     switch ($partes_ruta[2]) {
       case 'remove_slave':
@@ -77,6 +95,9 @@ switch ($partes_ruta[1] ?? null) {
         break;
       case 'guardar_comment':
         $ruta_elegida = 'scripts/utilities/guardar_comment.php';
+        break;
+      case 'load_unified_audit_trail':
+        $ruta_elegida = 'scripts/quote/load_unified_audit_trail.php';
         break;
       case 'save_checklist':
         $ruta_elegida = 'scripts/quote/save_checklist.php';
@@ -116,6 +137,9 @@ switch ($partes_ruta[1] ?? null) {
         break;
       case 'link_quote':
         $ruta_elegida = 'scripts/quote/link_quote.php';
+        break;
+      case 'import_items':
+        $ruta_elegida = 'scripts/quote/import_items.php';
         break;
       case 'service':
         switch ($partes_ruta[3]) {
@@ -241,6 +265,10 @@ switch ($partes_ruta[1] ?? null) {
       case 'delete_quote':
         $id_rfq = $partes_ruta[3];
         $ruta_elegida = 'scripts/quote/delete_quote.php';
+        break;
+      case 'destroy_quote':
+        $id_rfq = $partes_ruta[3];
+        $ruta_elegida = 'scripts/quote/destroy_quote.php';
         break;
       case 'restore_quote':
         $id_rfq = $partes_ruta[3];
@@ -594,6 +622,9 @@ switch ($partes_ruta[1] ?? null) {
             break;
         }
         break;
+      case 'restore_item':
+        $ruta_elegida = 'scripts/fulfillment/restore_item.php';
+        break;
       case 'fulfillment_quotes_table':
         $ruta_elegida = 'scripts/fulfillment/fulfillment_quotes_table.php';
         break;
@@ -603,6 +634,10 @@ switch ($partes_ruta[1] ?? null) {
       case 'load_fulfillment_page':
         $id_rfq = $partes_ruta[3];
         $ruta_elegida = 'scripts/fulfillment/load_fulfillment_page.php';
+        break;
+      case 'load_fulfillment_totals':
+        $id_rfq = $partes_ruta[3];
+        $ruta_elegida = 'scripts/fulfillment/load_fulfillment_totals.php';
         break;
       case 'mark_as_pending':
         $id_rfq = $partes_ruta[3];
@@ -702,6 +737,9 @@ switch ($partes_ruta[1] ?? null) {
         $id_provider = $partes_ruta[3];
         $ruta_elegida = 'scripts/providers/load_provider.php';
         break;
+      case 'export_to_excel':
+        $ruta_elegida = 'scripts/providers/export_to_excel.php';
+        break;
       default:
         break;
     }
@@ -761,6 +799,9 @@ switch ($partes_ruta[1] ?? null) {
     switch ($partes_ruta[2]) {
       case 'search_quotes':
         $ruta_elegida = 'scripts/utilities/search_quotes.php';
+        break;
+      case 'search_invoices':
+        $ruta_elegida = 'scripts/utilities/search_invoices.php';
         break;
       default:
         break;

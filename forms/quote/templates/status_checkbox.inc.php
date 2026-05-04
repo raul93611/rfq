@@ -18,20 +18,34 @@ if ($canal == 'Chemonics' && !$cotizacion_recuperada->obtener_award()) {
                 <input type="checkbox" class="custom-control-input" name="submitted_invoice" value="si" ' . $submittedInvoiceChecked . ' id="submitted_invoice">
                 <label class="custom-control-label" for="submitted_invoice">Submitted Invoice</label>
               </div>';
-  } elseif ($cotizacion_recuperada->isEnabledToInvoice()) {
+  } elseif ($cotizacion_recuperada->isEnabledToInvoice() === true) {
     echo '<div class="custom-control custom-checkbox">
                 <input type="checkbox" class="custom-control-input" name="invoice" value="si" ' . $invoiceChecked . ' id="invoice">
                 <label class="custom-control-label" for="invoice">Invoice</label>
               </div>';
   } elseif ($cotizacion_recuperada->obtener_fullfillment()) {
-    echo '<div class="text-danger">Fill out the required information!</div>';
-  } elseif ($cotizacion_recuperada->isEnabledToFulfillment()) {
+    $invoiceCheck = $cotizacion_recuperada->isEnabledToInvoice();
+    echo '<div class="next-step-requirements">';
+    echo '<div class="next-step-req-label"><i class="fas fa-lock mr-1"></i> To enable Invoice, complete:</div>';
+    echo '<ul class="next-step-req-list">';
+    foreach ($invoiceCheck as $error) {
+      echo '<li><i class="fas fa-times-circle mr-1"></i>' . $error . '</li>';
+    }
+    echo '</ul></div>';
+  } elseif ($cotizacion_recuperada->isEnabledToFulfillment() === true) {
     echo '<div id="id1" class="custom-control custom-checkbox">
                 <input type="checkbox" class="custom-control-input" name="fulfillment" value="si" ' . $fulfillmentChecked . ' id="fulfillment">
                 <label class="custom-control-label" for="fulfillment">Fulfillment</label>
               </div>';
   } elseif ($cotizacion_recuperada->obtener_award()) {
-    echo '<div class="text-danger">Fill out the required information!</div>';
+    $fulfillmentCheck = $cotizacion_recuperada->isEnabledToFulfillment();
+    echo '<div class="next-step-requirements">';
+    echo '<div class="next-step-req-label"><i class="fas fa-lock mr-1"></i> To enable Fulfillment, complete:</div>';
+    echo '<ul class="next-step-req-list">';
+    foreach ($fulfillmentCheck as $error) {
+      echo '<li><i class="fas fa-times-circle mr-1"></i>' . $error . '</li>';
+    }
+    echo '</ul></div>';
   } elseif ($cotizacion_recuperada->obtener_status() && !$cotizacion_recuperada->obtener_award()) {
     echo '<div class="custom-control custom-checkbox">
                 <input type="checkbox" class="custom-control-input" name="award" value="si" ' . $awardChecked . ' id="award">

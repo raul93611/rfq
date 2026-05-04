@@ -520,6 +520,33 @@ class RepositorioUsuario {
     return $data;
   }
 
+  public static function getQuotesByUserForMonths($connection, $curr_start, $curr_end, $past_start, $past_end) {
+    $data = [];
+    if (!isset($connection)) return $data;
+    try {
+      $sql = "
+      SELECT
+        u.nombre_usuario AS user_name,
+        SUM(CASE WHEN r.completado = 1 AND r.fecha_completado >= ? AND r.fecha_completado < ? THEN 1 ELSE 0 END) AS completed_current,
+        SUM(CASE WHEN r.completado = 1 AND r.fecha_completado >= ? AND r.fecha_completado < ? THEN 1 ELSE 0 END) AS completed_past,
+        SUM(CASE WHEN r.award = 1 AND r.fecha_award >= ? AND r.fecha_award < ? THEN 1 ELSE 0 END) AS award_current,
+        SUM(CASE WHEN r.award = 1 AND r.fecha_award >= ? AND r.fecha_award < ? THEN 1 ELSE 0 END) AS award_past
+      FROM usuarios u
+      LEFT JOIN rfq r ON r.usuario_designado = u.id
+      WHERE u.cargo LIKE '%3%' AND u.status = 1
+      GROUP BY u.id
+      ";
+      $sentence = $connection->prepare($sql);
+      $sentence->execute([$curr_start, $curr_end, $past_start, $past_end, $curr_start, $curr_end, $past_start, $past_end]);
+      while ($row = $sentence->fetch(PDO::FETCH_ASSOC)) {
+        $data[] = $row;
+      }
+    } catch (PDOException $ex) {
+      print 'ERROR:' . $ex->getMessage() . '<br>';
+    }
+    return $data;
+  }
+
   public static function edit_user($conexion, $username, $nombres, $apellidos, $cargo, $email, $id_user) {
     $edited_user = false;
     if (isset($conexion)) {

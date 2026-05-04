@@ -25,6 +25,7 @@ define('SAVE_CHECKLIST', QUOTE_SC . 'save_checklist/');
 define('SAVE_INFORMATION', QUOTE_SC . 'save_information/');
 define('GENERATE_CHECKLIST_PDF', QUOTE_SC . 'generate_checklist_pdf/');
 define('LINK_QUOTE', QUOTE_SC . 'link_quote/');
+define('IMPORT_ITEMS', QUOTE_SC . 'import_items/');
 /********************************SERVICE SCRIPTS*****************************************/
 define('SERVICE_SC', QUOTE_SC . 'service/');
 define('ADD_SERVICE', SERVICE_SC . 'add_service');
@@ -83,6 +84,9 @@ define('MARK_AS_PENDING', FULFILLMENT_SC . 'mark_as_pending/');
 define('UNMARK_AS_PENDING', FULFILLMENT_SC . 'unmark_as_pending/');
 define('DELETE_INVOICE', FULFILLMENT_SC . 'delete_invoice/');
 define('UPDATE_INVOICE', FULFILLMENT_SC . 'update_invoice/');
+/********************************PROVIDERS SCRIPTS*****************************************/
+define('PROVIDER_SC', SERVIDOR . 'provider/');
+define('PROVIDER_EXPORT_TO_EXCEL', PROVIDER_SC . 'export_to_excel/');
 /********************************PROJECTION SCRIPTS*****************************************/
 define('PROJECTION_SC', SERVIDOR . 'projection/');
 define('MONTH_EXCEL', PROJECTION_SC . 'month_excel/');
@@ -201,6 +205,7 @@ define('REPORTS_CHARTS', REPORTS . 'reports_charts');
 /********************************OTHER VIEWS*****************************************/
 define('CHARTS', PERFIL . 'charts');
 define('SEARCH_QUOTES', PERFIL . 'search_quotes');
+define('SEARCH_INVOICES_SC', SERVIDOR . 'utilities/search_invoices');
 define('TRACKING', PERFIL . 'tracking/');
 define('KPI', PERFIL . 'kpi/');
 define('EMPLOYEE_DOCS_PAGE', PERFIL . 'employee_docs_page/');

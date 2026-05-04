@@ -1,5 +1,6 @@
 <?php
 if (!ControlSesion::sesion_iniciada()) {
+  $_SESSION['redirect_after_login'] = $_SERVER['REQUEST_URI'];
   Redireccion::redirigir1(SERVIDOR);
 }
 $titulo = 'Profile';
@@ -8,7 +9,7 @@ include_once 'plantillas/utilities/navbar.inc.php';
 include_once 'plantillas/utilities/barra_lateral.inc.php';
 switch ($partes_ruta[2] ?? null) {
   case '':
-    include_once 'plantillas/utilities/muro.inc.php';
+    include_once 'plantillas/utilities/charts.inc.php';
     break;
   case 'user':
     switch ($partes_ruta[3] ?? null) {
@@ -20,7 +21,11 @@ switch ($partes_ruta[2] ?? null) {
         }
         break;
       case 'users':
-        include_once 'plantillas/user/users.inc.php';
+        if ($_SESSION['user']->is_admin()) {
+          include_once 'plantillas/user/users.inc.php';
+        } else {
+          include_once 'plantillas/utilities/muro.inc.php';
+        }
         break;
       case 'edit_user':
         $id_user = $partes_ruta[4];

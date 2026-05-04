@@ -17,6 +17,8 @@ try {
   // Mark the fulfillment subitem as reviewed
   FulfillmentSubitemRepository::mark_as_reviewed($conexion, $id_fulfillment_subitem);
 
+  FulfillmentAuditTrailRepository::status_event($conexion, 'Subitem reviewed', $id_rfq);
+
   // Close the database connection
   Conexion::cerrar_conexion();
 

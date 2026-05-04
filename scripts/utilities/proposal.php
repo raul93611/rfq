@@ -27,7 +27,7 @@ $fecha_completado = date("m/d/Y", strtotime($cotizacion->obtener_fecha_completad
 $expiration_date = date("m/d/Y", strtotime($cotizacion->obtener_expiration_date() ?? ''));
 
 // Determine logo based on channel
-$logo = ($cotizacion->obtener_canal() == 'Stars III') ? 'logoSinergy.png' : 'logo_proposal.jpg';
+$logo = ($cotizacion->obtener_canal() == 'Stars III') ? 'logoSinergy.png' : 'logo_proposal.png';
 
 // Initialize PDF generator
 $pdfGenerator = new PDFGenerator();
@@ -43,7 +43,7 @@ try {
     // Set PDF footer
     $pdfGenerator->setFooter('
         <div class="color letra_chiquita" style="text-align:center;">
-        EIN: 51-0629765, DUNS: 786-965876, CAGE: 4QTF4<br>SBA 8(a) and HUBZone certified
+        FEIN: 51-0629765, DUNS: 786-965876, CAGE: 4QTF4, SAM UEI: G8SNQ1CZGNX5<br>SBA 8(a) and HUBZone certified
         </div>
     ');
 

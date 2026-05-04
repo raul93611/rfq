@@ -1,34 +1,27 @@
+<?php
+Conexion::abrir_conexion();
+$_rq     = ReQuoteRepository::get_re_quote_by_id(Conexion::obtener_conexion(), $id_re_quote);
+$_rfq_id = $_rq->get_id_rfq();
+Conexion::cerrar_conexion();
+?>
 <div class="content-wrapper">
-  <!-- Content Header -->
-  <section class="content-header">
-    <div class="container-fluid">
-      <div class="row mb-2">
-        <div class="col-md-6">
-          <h1>Add Item</h1>
-        </div>
-        <div class="col-md-6">
-          <!-- Optional actions or breadcrumbs could be added here -->
-        </div>
-      </div>
+  <div class="content-header page-header-bar">
+    <div>
+      <h1 class="page-title">Add Item</h1>
+      <p class="page-subtitle">Proposal #<?= htmlspecialchars($_rfq_id); ?></p>
     </div>
-  </section>
-
-  <!-- Main Content Section -->
-  <section class="content">
+    <a href="<?= RE_QUOTE . $_rfq_id; ?>" class="btn btn-secondary btn-sm">
+      <i class="fas fa-arrow-left mr-1"></i> Back to Re-Quote
+    </a>
+  </div>
+  <section class="content" style="padding-top:20px;">
     <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="card card-primary">
-            <!-- Card Header -->
-            <div class="card-header">
-              <h3 class="card-title"><i class="fas fa-highlighter"></i> Enter the Data</h3>
-            </div>
-
-            <!-- Form Section -->
+      <div class="row justify-content-center">
+        <div class="col-lg-10">
+          <div class="chart-card">
             <form role="form" method="post" action="<?= SAVE_RE_QUOTE_ITEM; ?>">
               <?php include_once 'forms/re_quote/add_re_quote_item_form.inc.php'; ?>
             </form>
-
           </div>
         </div>
       </div>

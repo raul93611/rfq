@@ -321,10 +321,9 @@ class ProposalRepository{
     return $html;
   }
 
-  public static function print_service_pdf_re_quote($re_quote_payment_term, $payment_term, $re_quote_service, $services, $i){
+  public static function print_service_pdf_re_quote($re_quote_payment_term, $payment_term, $re_quote_service, $i){
     $payment_term = $payment_term == 'Net 30/CC' ? 1.03 : 1;
     $re_quote_payment_term = $re_quote_payment_term == 'Net 30/CC' ? 1.03 : 1;
-    $service = $services[$i];
     $html = '
     <tr>
       <td>' . $i . '</td>

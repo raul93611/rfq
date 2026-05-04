@@ -109,6 +109,122 @@ class ExcelRepository {
     }
   }
 
+  public static function print_services($connection, $activeWorksheet, $re_quote, $id_rfq, $i) {
+    $i++;
+    $quote = RepositorioRfq::obtener_cotizacion_por_id($connection, $id_rfq);
+    $services = ServiceRepository::get_services($connection, $id_rfq);
+    $re_quote_services = ReQuoteServiceRepository::get_services($connection, $re_quote->get_id());
+    $total_service = ServiceRepository::get_total($connection, $quote->obtener_id());
+    $re_quote_total_service = ReQuoteServiceRepository::get_total($connection, $re_quote->get_id());
+
+    if (count($services)) {
+      $i++;
+
+      // Define header styles with background colors
+      $headerStyle = [
+        'fill' => [
+          'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+          'startColor' => ['rgb' => '4F81BD'] // Blue color
+        ],
+        'font' => [
+          'bold' => true,
+          'color' => ['rgb' => 'FFFFFF'] // White text
+        ],
+        'alignment' => [
+          'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+        ]
+      ];
+
+      $sectionHeaderStyle = [
+        'fill' => [
+          'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+          'startColor' => ['rgb' => 'D9E1F2'] // Light blue color
+        ],
+        'font' => [
+          'bold' => true,
+          'size' => 12
+        ]
+      ];
+
+      // Section headers for both original and re-quote services
+      $activeWorksheet->setCellValue('A' . $i, 'Services');
+      $activeWorksheet->mergeCells('A' . $i . ':E' . $i);
+      $activeWorksheet->setCellValue('F' . $i, 'Re-quote Services');
+      $activeWorksheet->mergeCells('F' . $i . ':H' . $i);
+      $activeWorksheet->getStyle('A' . $i . ':H' . $i)->applyFromArray($sectionHeaderStyle);
+      $i++;
+
+      // Column headers for original services
+      $headers = ['#', 'Description', 'Unit Price', 'Quantity', 'Total Price'];
+      $x = 'A';
+      foreach ($headers as $header) {
+        $activeWorksheet->setCellValue($x . $i, $header);
+        $x++;
+      }
+
+      // Column headers for re-quote services
+      $headers = ['Unit Price', 'Quantity', 'Total Cost'];
+      $x = 'F';
+      foreach ($headers as $header) {
+        $activeWorksheet->setCellValue($x . $i, $header);
+        $x++;
+      }
+
+      // Apply header style to all columns
+      $activeWorksheet->getStyle('A' . $i . ':H' . $i)->applyFromArray($headerStyle);
+
+      $i++;
+
+      // Data rows - display services and re-quote services side by side
+      foreach ($services as $key => $service) {
+        $re_quote_service = isset($re_quote_services[$key]) ? $re_quote_services[$key] : null;
+
+        // Original services (columns A-E)
+        $x = 'A';
+        $activeWorksheet->setCellValue($x . $i, $key + 1);
+        $x++;
+        $activeWorksheet->setCellValue($x . $i, $service->get_description());
+        $x++;
+        $activeWorksheet->setCellValue($x . $i, $service->get_unit_price());
+        $x++;
+        $activeWorksheet->setCellValue($x . $i, $service->get_quantity());
+        $x++;
+        $activeWorksheet->setCellValue($x . $i, $service->get_total_price());
+
+        // Re-quote services (columns F-J)
+        $x = 'F';
+        if ($re_quote_service) {
+          $activeWorksheet->setCellValue($x . $i, $re_quote_service->get_unit_price());
+          $x++;
+          $activeWorksheet->setCellValue($x . $i, $re_quote_service->get_quantity());
+          $x++;
+          $activeWorksheet->setCellValue($x . $i, $re_quote_service->get_total_price());
+        } else {
+          // If no re-quote service exists, leave cells empty
+          $x++;
+          $activeWorksheet->setCellValue($x . $i, '');
+          $x++;
+          $activeWorksheet->setCellValue($x . $i, '');
+          $x++;
+          $activeWorksheet->setCellValue($x . $i, '');
+          $x++;
+          $activeWorksheet->setCellValue($x . $i, '');
+        }
+
+        $i++;
+      }
+
+      // Total row
+      $activeWorksheet->setCellValue('A' . $i, 'Total:');
+      $activeWorksheet->mergeCells('A' . $i . ':D' . $i);
+      $activeWorksheet->setCellValue('E' . $i, $total_service);
+      $activeWorksheet->mergeCells('F' . $i . ':G' . $i);
+      $activeWorksheet->setCellValue('H' . $i, $re_quote_total_service);
+    }
+
+    return $i; // Return the current row index for continuation
+  }
+
   public static function print_items($connection, $activeWorksheet, $providers_name, $requote_providers_name, $requote, $id_rfq) {
     $i = 3;
     $j = 1;
@@ -157,6 +273,7 @@ class ExcelRepository {
     $x++;
     $activeWorksheet->setCellValue($x . $i, $quote->obtener_total_price());
     $x++;
+    return $i;
   }
 
   public static function print_item($i, $j, $x, $item, $providers_name, $providers, $requote_providers_name, $requote_providers, $activeWorksheet) {
@@ -452,7 +569,7 @@ class ExcelRepository {
       $x++;
       $activeWorksheet->setCellValue($x . $y, $quote['profit']);
       $x++;
-      $activeWorksheet->setCellValue($x . $y, number_format($quote['profit_percentage']?? 0, 2) . '%');
+      $activeWorksheet->setCellValue($x . $y, number_format($quote['profit_percentage'] ?? 0, 2) . '%');
       $x++;
       $activeWorksheet->setCellValue($x . $y, $quote['type_of_contract']);
       $y++;
@@ -492,11 +609,14 @@ class ExcelRepository {
               quotes.total_cost,
               quotes.total_price,
               quotes.profit,
+              quotes.profit / quotes.total_price * 100 AS profit_percentage,
               requotes.total_cost_requote,
               quotes.total_price AS total_price_requote,
               quotes.profit_equipment_requote + quotes.total_service_price - requotes.total_requote_service AS profit_requote,
+              (quotes.profit_equipment_requote + quotes.total_service_price - requotes.total_requote_service) / (quotes.total_price) * 100 AS profit_percentage_requote,
               quotes.type_of_contract,
-              quotes.set_side
+              quotes.set_side, 
+              quotes.state
             FROM
               (
                 SELECT
@@ -525,7 +645,8 @@ class ExcelRepository {
                   ) as profit,
                   COALESCE(r.total_price, 0) - COALESCE(rq.total_cost, 0) as profit_equipment_requote,
                   r.type_of_contract,
-                  r.set_side
+                  r.set_side, 
+                  r.state
                 FROM
                   rfq r
                   LEFT JOIN services s ON r.id = s.id_rfq
@@ -534,6 +655,8 @@ class ExcelRepository {
                 WHERE
                   deleted = 0
                   AND fullfillment = 1
+                  AND invoice = 0
+                  AND submitted_invoice = 0
                   AND MONTH(fulfillment_date) = {$month}
                   AND YEAR(fulfillment_date) = {$year}
                 GROUP BY
@@ -556,6 +679,8 @@ class ExcelRepository {
                 WHERE
                   r.deleted = 0
                   AND r.fullfillment = 1
+                  AND r.invoice = 0
+                  AND r.submitted_invoice = 0
                   AND MONTH(r.fulfillment_date) = {$month}
                   AND YEAR(r.fulfillment_date) = {$year}
                 GROUP BY
@@ -576,9 +701,11 @@ class ExcelRepository {
               quotes.total_cost,
               quotes.total_price,
               quotes.profit,
+              quotes.profit / quotes.total_price * 100 AS profit_percentage,
               requotes.total_cost_requote,
               quotes.total_price AS total_price_requote,
               quotes.profit_equipment_requote + quotes.total_service_price - requotes.total_requote_service AS profit_requote,
+              (quotes.profit_equipment_requote + quotes.total_service_price - requotes.total_requote_service) / (quotes.total_price) * 100 AS profit_percentage_requote,
               quotes.type_of_contract,
               quotes.set_side
             FROM
@@ -618,6 +745,8 @@ class ExcelRepository {
                 WHERE
                   deleted = 0
                   AND fullfillment = 1
+                  AND invoice = 0
+                  AND submitted_invoice = 0
                   AND QUARTER(fulfillment_date) = {$quarter}
                   AND YEAR(fulfillment_date) = {$year}
                 GROUP BY
@@ -640,6 +769,8 @@ class ExcelRepository {
                 WHERE
                   r.deleted = 0
                   AND r.fullfillment = 1
+                  AND r.invoice = 0
+                  AND r.submitted_invoice = 0
                   AND QUARTER(r.fulfillment_date) = {$quarter}
                   AND YEAR(r.fulfillment_date) = {$year}
                 GROUP BY
@@ -660,9 +791,11 @@ class ExcelRepository {
               quotes.total_cost,
               quotes.total_price,
               quotes.profit,
+              quotes.profit / quotes.total_price * 100 AS profit_percentage,
               requotes.total_cost_requote,
               quotes.total_price AS total_price_requote,
               quotes.profit_equipment_requote + quotes.total_service_price - requotes.total_requote_service AS profit_requote,
+              (quotes.profit_equipment_requote + quotes.total_service_price - requotes.total_requote_service) / (quotes.total_price) * 100 AS profit_percentage_requote,
               quotes.type_of_contract,
               quotes.set_side
             FROM
@@ -702,6 +835,8 @@ class ExcelRepository {
                 WHERE
                   deleted = 0
                   AND fullfillment = 1
+                  AND invoice = 0
+                  AND submitted_invoice = 0
                   AND YEAR(fulfillment_date) = {$year}
                 GROUP BY
                   r.id
@@ -723,6 +858,8 @@ class ExcelRepository {
                 WHERE
                   r.deleted = 0
                   AND r.fullfillment = 1
+                  AND r.invoice = 0
+                  AND r.submitted_invoice = 0
                   AND YEAR(r.fulfillment_date) = {$year}
                 GROUP BY
                   rq.id_rfq
@@ -788,6 +925,8 @@ class ExcelRepository {
       $activeWorksheet->setCellValue($x . $y, $quote['type_of_contract']);
       $x++;
       $activeWorksheet->setCellValue($x . $y, $quote['set_side']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['state']);
       $y++;
     }
     $x = 'H';
@@ -1594,5 +1733,323 @@ class ExcelRepository {
     $x++;
     $activeWorksheet->setCellValue($x . $y, number_format($total['total_profit'], 2));
     $x++;
+  }
+
+  public static function getNoBidReport(
+    $connection,
+    $type,
+    $quarter,
+    $month,
+    $year
+  ) {
+    $data = [];
+    if (isset($connection)) {
+      try {
+        switch ($type) {
+          case 'monthly':
+            $sql = "
+            SELECT
+              rfq.id,
+              usuarios.nombre_usuario,
+              rfq.email_code,
+              rfq.type_of_bid,
+              rfq.comments,
+              rfq.issue_date
+            FROM rfq
+            LEFT JOIN usuarios ON rfq.usuario_designado = usuarios.id
+            WHERE
+              rfq.deleted = 0
+              AND MONTH(STR_TO_DATE(issue_date, '%m/%d/%Y')) = {$month}
+              AND YEAR(STR_TO_DATE(issue_date, '%m/%d/%Y')) = {$year}
+              AND 
+              (
+                comments = 'No Bid' 
+                OR comments = 'Manufacturer in the Bid' 
+                OR comments = 'Expired due date' 
+                OR comments = 'Supplier did not provide a quote' 
+                OR comments = 'Others'
+              ) 
+            ";
+            break;
+          case 'quarterly':
+            $sql = "
+            SELECT
+              rfq.id,
+              usuarios.nombre_usuario,
+              rfq.email_code,
+              rfq.type_of_bid,
+              rfq.comments,
+              rfq.issue_date
+            FROM rfq
+            LEFT JOIN usuarios ON rfq.usuario_designado = usuarios.id
+            WHERE
+              rfq.deleted = 0
+              AND QUARTER(STR_TO_DATE(issue_date, '%m/%d/%Y')) = {$quarter}
+              AND YEAR(STR_TO_DATE(issue_date, '%m/%d/%Y')) = {$year}
+              AND 
+              (
+                comments = 'No Bid' 
+                OR comments = 'Manufacturer in the Bid' 
+                OR comments = 'Expired due date' 
+                OR comments = 'Supplier did not provide a quote' 
+                OR comments = 'Others'
+              ) 
+            ";
+            break;
+          case 'yearly':
+            $sql = "
+            SELECT
+              rfq.id,
+              usuarios.nombre_usuario,
+              rfq.email_code,
+              rfq.type_of_bid,
+              rfq.comments,
+              rfq.issue_date
+            FROM rfq
+            LEFT JOIN usuarios ON rfq.usuario_designado = usuarios.id
+            WHERE
+              rfq.deleted = 0
+              AND YEAR(STR_TO_DATE(issue_date, '%m/%d/%Y')) = {$year}
+              AND 
+              (
+                comments = 'No Bid' 
+                OR comments = 'Manufacturer in the Bid' 
+                OR comments = 'Expired due date' 
+                OR comments = 'Supplier did not provide a quote' 
+                OR comments = 'Others'
+              ) 
+            ";
+            break;
+        }
+        $sentence = $connection->prepare($sql);
+        $sentence->execute();
+        while ($row = $sentence->fetch(PDO::FETCH_ASSOC)) {
+          $data[] = $row;
+        }
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $data;
+  }
+
+  public static function noBidReport($connection, $type, $quarter, $month, $year, $activeWorksheet) {
+    $quotes = self::getNoBidReport($connection, $type, $quarter, $month, $year);
+
+    $y = 2;
+    foreach ($quotes as $key => $quote) {
+      $x = 'A';
+
+      $activeWorksheet->setCellValue($x . $y, $quote['id']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['nombre_usuario']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['email_code']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['type_of_bid']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['comments']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['issue_date']);
+      $y++;
+    }
+  }
+
+  public static function getNotSubmittedReport(
+    $connection,
+    $type,
+    $quarter,
+    $month,
+    $year
+  ) {
+    $data = [];
+    if (isset($connection)) {
+      try {
+        switch ($type) {
+          case 'monthly':
+            $sql = "
+            SELECT
+              rfq.id,
+              usuarios.nombre_usuario,
+              rfq.email_code,
+              rfq.type_of_bid,
+              rfq.comments,
+              rfq.issue_date
+            FROM rfq
+            LEFT JOIN usuarios ON rfq.usuario_designado = usuarios.id
+            WHERE
+              rfq.deleted = 0
+              AND MONTH(STR_TO_DATE(issue_date, '%m/%d/%Y')) = {$month}
+              AND YEAR(STR_TO_DATE(issue_date, '%m/%d/%Y')) = {$year}
+              AND comments = 'Not submitted' 
+            ";
+            break;
+          case 'quarterly':
+            $sql = "
+            SELECT
+              rfq.id,
+              usuarios.nombre_usuario,
+              rfq.email_code,
+              rfq.type_of_bid,
+              rfq.comments,
+              rfq.issue_date
+            FROM rfq
+            LEFT JOIN usuarios ON rfq.usuario_designado = usuarios.id
+            WHERE
+              rfq.deleted = 0
+              AND QUARTER(STR_TO_DATE(issue_date, '%m/%d/%Y')) = {$quarter}
+              AND YEAR(STR_TO_DATE(issue_date, '%m/%d/%Y')) = {$year}
+              AND comments = 'Not submitted' 
+            ";
+            break;
+          case 'yearly':
+            $sql = "
+            SELECT
+              rfq.id,
+              usuarios.nombre_usuario,
+              rfq.email_code,
+              rfq.type_of_bid,
+              rfq.comments,
+              rfq.issue_date
+            FROM rfq
+            LEFT JOIN usuarios ON rfq.usuario_designado = usuarios.id
+            WHERE
+              rfq.deleted = 0
+              AND YEAR(STR_TO_DATE(issue_date, '%m/%d/%Y')) = {$year}
+              AND comments = 'Not submitted' 
+            ";
+            break;
+        }
+        $sentence = $connection->prepare($sql);
+        $sentence->execute();
+        while ($row = $sentence->fetch(PDO::FETCH_ASSOC)) {
+          $data[] = $row;
+        }
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $data;
+  }
+
+  public static function notSubmittedReport($connection, $type, $quarter, $month, $year, $activeWorksheet) {
+    $quotes = self::getNotSubmittedReport($connection, $type, $quarter, $month, $year);
+
+    $y = 2;
+    foreach ($quotes as $key => $quote) {
+      $x = 'A';
+
+      $activeWorksheet->setCellValue($x . $y, $quote['id']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['nombre_usuario']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['email_code']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['type_of_bid']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['comments']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['issue_date']);
+      $y++;
+    }
+  }
+
+  public static function getCancelledReport(
+    $connection,
+    $type,
+    $quarter,
+    $month,
+    $year
+  ) {
+    $data = [];
+    if (isset($connection)) {
+      try {
+        switch ($type) {
+          case 'monthly':
+            $sql = "
+            SELECT
+              rfq.id,
+              usuarios.nombre_usuario,
+              rfq.email_code,
+              rfq.type_of_bid,
+              rfq.comments,
+              rfq.issue_date
+            FROM rfq
+            LEFT JOIN usuarios ON rfq.usuario_designado = usuarios.id
+            WHERE
+              rfq.deleted = 0
+              AND MONTH(STR_TO_DATE(issue_date, '%m/%d/%Y')) = {$month}
+              AND YEAR(STR_TO_DATE(issue_date, '%m/%d/%Y')) = {$year}
+              AND comments = 'Cancelled' 
+            ";
+            break;
+          case 'quarterly':
+            $sql = "
+            SELECT
+              rfq.id,
+              usuarios.nombre_usuario,
+              rfq.email_code,
+              rfq.type_of_bid,
+              rfq.comments,
+              rfq.issue_date
+            FROM rfq
+            LEFT JOIN usuarios ON rfq.usuario_designado = usuarios.id
+            WHERE
+              rfq.deleted = 0
+              AND QUARTER(STR_TO_DATE(issue_date, '%m/%d/%Y')) = {$quarter}
+              AND YEAR(STR_TO_DATE(issue_date, '%m/%d/%Y')) = {$year}
+              AND comments = 'Cancelled' 
+            ";
+            break;
+          case 'yearly':
+            $sql = "
+            SELECT
+              rfq.id,
+              usuarios.nombre_usuario,
+              rfq.email_code,
+              rfq.type_of_bid,
+              rfq.comments,
+              rfq.issue_date
+            FROM rfq
+            LEFT JOIN usuarios ON rfq.usuario_designado = usuarios.id
+            WHERE
+              rfq.deleted = 0
+              AND YEAR(STR_TO_DATE(issue_date, '%m/%d/%Y')) = {$year}
+              AND comments = 'Cancelled' 
+            ";
+            break;
+        }
+        $sentence = $connection->prepare($sql);
+        $sentence->execute();
+        while ($row = $sentence->fetch(PDO::FETCH_ASSOC)) {
+          $data[] = $row;
+        }
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $data;
+  }
+
+  public static function cancelledReport($connection, $type, $quarter, $month, $year, $activeWorksheet) {
+    $quotes = self::getCancelledReport($connection, $type, $quarter, $month, $year);
+
+    $y = 2;
+    foreach ($quotes as $key => $quote) {
+      $x = 'A';
+
+      $activeWorksheet->setCellValue($x . $y, $quote['id']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['nombre_usuario']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['email_code']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['type_of_bid']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['comments']);
+      $x++;
+      $activeWorksheet->setCellValue($x . $y, $quote['issue_date']);
+      $y++;
+    }
   }
 }

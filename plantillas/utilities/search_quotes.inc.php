@@ -1,60 +1,74 @@
 <div class="content-wrapper">
-  <section class="content-header">
-    <div class="container-fluid">
-      <div class="row mb-2">
-        <div class="col-sm-6">
-          <h1>Search</h1>
-        </div>
-        <div class="col-sm-6">
-          <!-- Empty column can be removed or used for additional buttons -->
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <section class="content">
+  <div class="content-header page-header-bar">
+    <div>
+      <h1 class="page-title">Search Quotes</h1>
+      <p class="page-subtitle">Find quotes by proposal, code, user or keyword</p>
+    </div>
+  </div>
+
+  <section class="content" style="padding-top:20px;">
     <div class="container-fluid">
-      <div class="row justify-content-center">
-        <div class="col-md-10">
-          <div class="card card-primary">
-            <div class="card-header">
-              <h3 class="card-title"><i class="fas fa-search"></i> Quotes</h3>
-            </div>
+
+      <!-- Search form -->
+      <div class="row justify-content-center mb-4">
+        <div class="col-lg-6 col-md-8">
+          <div class="card chart-card mb-0">
             <div class="card-body">
               <form id="search_quotes" role="form" method="post" action="">
-                <div class="form-group">
-                  <input type="search" name="termino_busqueda" class="form-control" placeholder="Search ..." required autofocus>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                  </div>
+                  <input type="search" name="termino_busqueda" class="form-control search-input" placeholder="Type at least 3 characters to search..." autofocus>
                 </div>
-                <button type="submit" class="btn btn-primary btn-block" name="buscar">Search</button>
+                <small class="form-text text-muted mt-1">Results appear automatically after 3 characters.</small>
               </form>
             </div>
           </div>
-
-          <div class="card card-primary mt-4">
-            <div class="card-header">
-              <h3 class="card-title"><i class="fas fa-search"></i> Quotes</h3>
-            </div>
-            <div class="card-body">
-              <table id="tabla_busqueda" class="table table-bordered table-responsive-md">
-                <thead>
-                  <tr>
-                    <th>Proposal</th>
-                    <th>Code</th>
-                    <th>Designated User</th>
-                    <th>Type of Bid</th>
-                    <th>Comments</th>
-                    <th>Total Price</th>
-                    <th>Options</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <!-- Data gets dynamically populated here -->
-                </tbody>
-              </table>
-            </div>
-          </div>
         </div>
       </div>
+
+      <!-- Quotes results table -->
+      <div class="card chart-card mb-4">
+        <div class="card-body">
+          <p class="chart-card-label">Quotes</p>
+          <table id="tabla_busqueda" class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <th>Proposal</th>
+                <th>Code</th>
+                <th>Contract Number</th>
+                <th>Designated User</th>
+                <th>Type of Bid</th>
+                <th>Comments</th>
+                <th>Total Price</th>
+                <th>Options</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Partial invoices results table -->
+      <div class="card chart-card">
+        <div class="card-body">
+          <p class="chart-card-label"><i class="fas fa-file-invoice-dollar mr-1"></i> Partial Invoices</p>
+          <table id="tabla_invoices" class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <th>Invoice Name</th>
+                <th>Invoice Date</th>
+                <th>Parent Quote</th>
+                <th>Designated User</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
     </div>
   </section>
 </div>

@@ -104,7 +104,8 @@ if (isset($id_rfq)) {
   if ($data) {
     $spreadsheet = createSpreadsheet($data);
     Conexion::abrir_conexion();
-    ExcelRepository::print_items(Conexion::obtener_conexion(), $spreadsheet->getActiveSheet(), $data['providers_name'], $data['requote_providers_name'], $data['requote'], $id_rfq);
+    $i = ExcelRepository::print_items(Conexion::obtener_conexion(), $spreadsheet->getActiveSheet(), $data['providers_name'], $data['requote_providers_name'], $data['requote'], $id_rfq);
+    ExcelRepository::print_services(Conexion::obtener_conexion(), $spreadsheet->getActiveSheet(), $data['requote'], $id_rfq, $i);
     Conexion::cerrar_conexion();
     outputSpreadsheet($spreadsheet);
   }

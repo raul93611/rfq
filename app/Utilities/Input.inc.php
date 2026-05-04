@@ -115,7 +115,7 @@ class Input {
 
   public static function print_year_select($year) {
     ?>
-    <select name="year" class="custom-select">
+    <select name="year" class="custom-select custom-select-sm">
       <?php
       for ($i = 2018; $i <= 2100; $i++) {
       ?>

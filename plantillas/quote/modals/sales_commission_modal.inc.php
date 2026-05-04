@@ -23,9 +23,6 @@ if ($isReQuoteCreated) {
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Sales Commission</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
         </div>
         <div class="modal-body">
           <div class="form-group">
@@ -52,7 +49,7 @@ if ($isReQuoteCreated) {
           <p><b>Note:</b> Reload the page to dismiss the modal.</p>
         </div>
         <div class="modal-footer">
-          <button type="submit" name="guardar_cambios_cotizacion" form="form_edited_quote" class="btn btn-success">
+          <button type="submit" name="guardar_cambios_cotizacion" form="form_edited_quote" class="btn btn-secondary">
             <i class="fa fa-check"></i> Save
           </button>
         </div>

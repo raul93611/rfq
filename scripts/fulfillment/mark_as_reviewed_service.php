@@ -21,6 +21,8 @@ try {
   // Mark the fulfillment service as reviewed
   FulfillmentServiceRepository::mark_as_reviewed($conexion, $id_fulfillment_service);
 
+  FulfillmentAuditTrailRepository::status_event($conexion, 'Service reviewed', $service->get_id_rfq());
+
   // Close the database connection
   Conexion::cerrar_conexion();
 

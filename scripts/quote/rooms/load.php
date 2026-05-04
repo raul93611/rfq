@@ -7,33 +7,37 @@ try {
   Conexion::cerrar_conexion();
 }
 ?>
-<div class="modal-body">
-  <div class="row">
-    <div class="col-md-12">
-      <div class="form-group">
-        <label for="name">Name:</label>
-        <input type="text" id="name" class="form-control form-control-sm" name="name" value="<?= $room ? $room->getName() : ''; ?>">
-        <small class="form-text text-muted">Enter the room name, e.g., "Conference Room A".</small>
-      </div>
-      <div class="form-group">
-        <label for="color">Color:</label>
-        <div class="input-group">
-          <input type="text" id="color" class="form-control form-control-sm" name="color" value="<?= $room ? htmlspecialchars($room->getColor(), ENT_QUOTES, 'UTF-8') : ''; ?>">
-          <div class="input-group-append">
-            <span class="input-group-text" style="color: <?= $room ? htmlspecialchars($room->getColor(), ENT_QUOTES, 'UTF-8') : ''; ?>;"><i class="fas fa-square"></i></span>
-          </div>
-        </div>
-        <small class="form-text text-muted">Enter a valid hex color code, e.g., "#FF5733".</small>
+<div class="modal-body user-form" style="padding:20px;">
+  <div class="form-group">
+    <label for="name">Name</label>
+    <input type="text" id="name" class="form-control form-control-sm" name="name" placeholder="e.g. Conference Room A" value="<?= $room ? htmlspecialchars($room->getName()) : ''; ?>" autofocus>
+  </div>
+  <div class="form-group mb-0">
+    <label for="color">Color</label>
+    <div class="input-group input-group-sm">
+      <input type="text" id="color" class="form-control" name="color" placeholder="#337ab7" value="<?= $room ? htmlspecialchars($room->getColor()) : ''; ?>">
+      <div class="input-group-append">
+        <span class="input-group-text" style="color:<?= $room ? htmlspecialchars($room->getColor()) : '#337ab7'; ?>;">
+          <i class="fas fa-square"></i>
+        </span>
       </div>
     </div>
   </div>
 </div>
-<input type="hidden" id="id_rfq" name="id_rfq" value="<?= $_POST["idRfq"] ?? '' ?>">
+<input type="hidden" id="id_rfq" name="id_rfq" value="<?= htmlspecialchars($_POST["idRfq"] ?? '', ENT_QUOTES, 'UTF-8') ?>">
 <input type="hidden" id="id_room" name="id_room" value="<?= htmlspecialchars($room?->getId() ?? '', ENT_QUOTES, 'UTF-8'); ?>">
-<div class="modal-footer">
-  <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Save</button>
+<div class="modal-footer" style="border-top:1px solid #f0f2f5;padding:12px 20px;justify-content:<?= isset($_POST["idRoom"]) ? 'space-between' : 'flex-end'; ?>;gap:8px;">
   <?php if (isset($_POST["idRoom"])) : ?>
-    <button type="submit" id="delete-room-button" data-id="<?= $_POST["idRoom"] ?>" class="btn btn-danger"><i class="fa fa-times"></i> Delete</button>
+    <button type="button" id="delete-room-button" data-id="<?= htmlspecialchars($_POST["idRoom"]) ?>" class="btn btn-danger btn-sm">
+      <i class="fa fa-trash mr-1"></i> Delete
+    </button>
   <?php endif; ?>
-  <button type="button" class="btn btn-info" data-dismiss="modal"><i class="fa fa-ban"></i> Cancel</button>
+  <div style="display:flex;gap:8px;">
+    <button type="submit" class="btn btn-primary btn-sm">
+      <i class="fa fa-check mr-1"></i> <?= isset($_POST["idRoom"]) ? 'Save Changes' : 'Add Room'; ?>
+    </button>
+    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">
+      <i class="fa fa-times mr-1"></i> Cancel
+    </button>
+  </div>
 </div>
