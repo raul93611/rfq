@@ -40,7 +40,8 @@ if (is_null($cotizacion_recuperada)) {
         include 'plantillas/quote/templates/copy_quote_button.inc.php';
         include 'plantillas/quote/templates/comments_button.inc.php';
         ?>
-        <button id="audit_trails_button" type="button" class="btn btn-secondary btn-sm">
+        <button id="audit_trails_button" type="button" class="btn btn-secondary btn-sm"
+                data-id="<?= htmlspecialchars($id_rfq, ENT_QUOTES, 'UTF-8'); ?>">
           <i class="fas fa-history mr-1"></i> Audit Trails
         </button>
       </div>
@@ -76,3 +77,4 @@ include_once 'modals/import_items_modal.inc.php';
 <script src="<?= RUTA_JS; ?>services.js"></script>
 <script src="<?= RUTA_JS; ?>quote.js"></script>
 <script src="<?= RUTA_JS; ?>rooms.js"></script>
+<script src="<?= RUTA_JS; ?>audit_trail.js"></script>

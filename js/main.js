@@ -183,28 +183,6 @@ $(document).ready(function () {
       }
     });
   });
-  /********************* AUDIT TRAILS *********************************************/
-  $(document).ready(function () {
-    const HIGHLIGHT_DURATION = 5000; // Duration to keep the element highlighted
-
-    // Highlight an element when an audit trail link is clicked
-    $('.audit_trail').on('click', function (e) {
-      e.preventDefault(); // Prevent default anchor behavior
-      $('#audit_trails_modal').modal('hide'); // Close the modal
-
-      const targetElement = $($(this).attr('href')); // Get the target element by its href
-      targetElement.addClass('highlight');
-
-      setTimeout(() => {
-        targetElement.removeClass('highlight'); // Remove the highlight after the specified duration
-      }, HIGHLIGHT_DURATION);
-    });
-
-    // Show the audit trails modal when the button is clicked
-    $('#audit_trails_button').on('click', function () {
-      $('#audit_trails_modal').modal('show');
-    });
-  });
   /************************************** SHOW COMMENTS BUTTON ************************/
   $('#mostrar_comentarios').on('click', function () {
     $('#todos_commentarios_quote').modal('show');

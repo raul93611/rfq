@@ -21,6 +21,8 @@ try {
     // If the save operation failed, set an error message
     if (!$success) {
       $error = 'Failed to save the invoice';
+    } else {
+      FulfillmentAuditTrailRepository::invoice_event(Conexion::obtener_conexion(), 'created', $_POST['name'], $_POST['id_rfq']);
     }
   }
 } catch (Exception $e) {

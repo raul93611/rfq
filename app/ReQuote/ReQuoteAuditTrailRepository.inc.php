@@ -3,10 +3,12 @@ class ReQuoteAuditTrailRepository{
   public static function insert_audit_trail($connection, $audit_trail){
     if(isset($connection)){
       try{
-        $sql = 'INSERT INTO re_quote_audit_trails(id_re_quote, username, audit_trail, created_date) VALUES(:id_re_quote, :username, :audit_trail, NOW())';
+        $sql = 'INSERT INTO re_quote_audit_trails(id_re_quote, username, action_type, id_user, audit_trail, created_date) VALUES(:id_re_quote, :username, :action_type, :id_user, :audit_trail, NOW())';
         $sentence = $connection-> prepare($sql);
         $sentence-> bindValue(':id_re_quote', $audit_trail-> get_id_re_quote(), PDO::PARAM_STR);
         $sentence-> bindValue(':username', $audit_trail-> get_username(), PDO::PARAM_STR);
+        $sentence-> bindValue(':action_type', $audit_trail-> get_action_type(), PDO::PARAM_STR);
+        $sentence-> bindValue(':id_user', $audit_trail-> get_id_user(), PDO::PARAM_INT);
         $sentence-> bindValue(':audit_trail', $audit_trail-> get_audit_trail(), PDO::PARAM_STR);
         $sentence-> execute();
       }catch(PDOException $ex){
@@ -26,7 +28,7 @@ class ReQuoteAuditTrailRepository{
         $result = $sentence-> fetchAll(PDO::FETCH_ASSOC);
         if(count($result)){
           foreach ($result as $fila) {
-            $audit_trails[] = new ReQuoteAuditTrail($fila['id'], $fila['id_re_quote'], $fila['username'], $fila['audit_trail'], $fila['created_date']);
+            $audit_trails[] = new ReQuoteAuditTrail($fila['id'], $fila['id_re_quote'], $fila['username'], $fila['action_type'], $fila['id_user'], $fila['audit_trail'], $fila['created_date']);
           }
         }
       }catch(PDOException $ex){
@@ -95,7 +97,7 @@ class ReQuoteAuditTrailRepository{
       $original_field = 'Empty';
     }
     $message = '<a class="audit_trail" href="#item' . $id_item . '"><b>Item</b></a> modified:<br><b>' . $field_name . '</b> modified:<br><b>' . $original_field . ' > ' . $field . '</b>';
-    $audit_trail = new ReQuoteAuditTrail('', $id_re_quote, $_SESSION['user']-> obtener_nombre_usuario(), $message, '');
+    $audit_trail = new ReQuoteAuditTrail('', $id_re_quote, $_SESSION['user']-> obtener_nombre_usuario(), 'item_modified', $_SESSION['user']-> obtener_id(), $message, '');
     self::insert_audit_trail($connection, $audit_trail);
   }
 
@@ -107,7 +109,7 @@ class ReQuoteAuditTrailRepository{
       $original_field = 'Empty';
     }
     $message = '<b>' . $field_name . '</b> modified:<br><b>' . $original_field . ' > ' . $field . '</b>';
-    $audit_trail = new ReQuoteAuditTrail('', $id_re_quote, $_SESSION['user']-> obtener_nombre_usuario(), $message, '');
+    $audit_trail = new ReQuoteAuditTrail('', $id_re_quote, $_SESSION['user']-> obtener_nombre_usuario(), 'field_modified', $_SESSION['user']-> obtener_id(), $message, '');
     self::insert_audit_trail($connection, $audit_trail);
   }
 
@@ -119,7 +121,7 @@ class ReQuoteAuditTrailRepository{
       $original_field = 'Empty';
     }
     $message = '<a class="audit_trail" href="#subitem' . $id_subitem . '"><b>Subitem</b></a> modified:<br><b>' . $field_name . '</b> modified:<br><b>' . $original_field . ' > ' . $field . '</b>';
-    $audit_trail = new ReQuoteAuditTrail('', $id_re_quote, $_SESSION['user']-> obtener_nombre_usuario(), $message, '');
+    $audit_trail = new ReQuoteAuditTrail('', $id_re_quote, $_SESSION['user']-> obtener_nombre_usuario(), 'item_modified', $_SESSION['user']-> obtener_id(), $message, '');
     self::insert_audit_trail($connection, $audit_trail);
   }
 
@@ -215,31 +217,31 @@ class ReQuoteAuditTrailRepository{
 
   public static function create_audit_trail_item_created($connection, $id_item, $object, $field, $field_name, $id_re_quote){
     $message = '<a class="audit_trail" href="#item' . $id_item . '"><b>' . $object . '</b></a> created<br><b>' . $field_name . ' = ' . $field . '</b>';
-    $audit_trail = new ReQuoteAuditTrail('', $id_re_quote, $_SESSION['user']-> obtener_nombre_usuario(), $message, '');
+    $audit_trail = new ReQuoteAuditTrail('', $id_re_quote, $_SESSION['user']-> obtener_nombre_usuario(), 'item_created', $_SESSION['user']-> obtener_id(), $message, '');
     self::insert_audit_trail($connection, $audit_trail);
   }
 
   public static function create_audit_trail_subitem_created($connection, $id_subitem, $object, $field, $field_name, $id_re_quote){
     $message = '<a class="audit_trail" href="#subitem' . $id_subitem . '"><b>' . $object . '</b></a> created<br><b>' . $field_name . ' = ' . $field . '</b>';
-    $audit_trail = new ReQuoteAuditTrail('', $id_re_quote, $_SESSION['user']-> obtener_nombre_usuario(), $message, '');
+    $audit_trail = new ReQuoteAuditTrail('', $id_re_quote, $_SESSION['user']-> obtener_nombre_usuario(), 'item_created', $_SESSION['user']-> obtener_id(), $message, '');
     self::insert_audit_trail($connection, $audit_trail);
   }
 
   public static function create_audit_trail_item_deleted($connection, $object, $field, $field_name, $id_re_quote){
     $message = '<b>' . $object . '</b> deleted<br><b>' . $field_name . ' = ' . $field . '</b>';
-    $audit_trail = new ReQuoteAuditTrail('', $id_re_quote, $_SESSION['user']-> obtener_nombre_usuario(), $message, '');
+    $audit_trail = new ReQuoteAuditTrail('', $id_re_quote, $_SESSION['user']-> obtener_nombre_usuario(), 'item_deleted', $_SESSION['user']-> obtener_id(), $message, '');
     self::insert_audit_trail($connection, $audit_trail);
   }
 
   public static function create_audit_trail_item_provider_deleted($connection, $field, $field_name, $id_item, $id_re_quote){
     $message = '<a class="audit_trail" href="#item' . $id_item . '"><b>Provider</b></a> deleted<br><b>' . $field_name . ' = ' . $field . '</b>';
-    $audit_trail = new ReQuoteAuditTrail('', $id_re_quote, $_SESSION['user']-> obtener_nombre_usuario(), $message, '');
+    $audit_trail = new ReQuoteAuditTrail('', $id_re_quote, $_SESSION['user']-> obtener_nombre_usuario(), 'item_deleted', $_SESSION['user']-> obtener_id(), $message, '');
     self::insert_audit_trail($connection, $audit_trail);
   }
 
   public static function create_audit_trail_subitem_provider_deleted($connection, $field, $field_name, $id_subitem, $id_re_quote){
     $message = '<a class="audit_trail" href="#subitem' . $id_subitem . '"><b>Provider</b></a> deleted<br><b>' . $field_name . ' = ' . $field . '</b>';
-    $audit_trail = new ReQuoteAuditTrail('', $id_re_quote, $_SESSION['user']-> obtener_nombre_usuario(), $message, '');
+    $audit_trail = new ReQuoteAuditTrail('', $id_re_quote, $_SESSION['user']-> obtener_nombre_usuario(), 'item_deleted', $_SESSION['user']-> obtener_id(), $message, '');
     self::insert_audit_trail($connection, $audit_trail);
   }
 }

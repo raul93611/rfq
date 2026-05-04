@@ -20,7 +20,7 @@ try {
       <p class="page-subtitle">Proposal #<?= htmlspecialchars($quote->obtener_id()); ?> &mdash; <?= htmlspecialchars($quote->obtener_email_code()); ?></p>
     </div>
     <div style="display:flex;gap:8px;align-items:center;">
-      <button type="button" class="btn btn-outline-secondary btn-sm" id="audit_trails_button">
+      <button type="button" class="btn btn-outline-secondary btn-sm" id="audit_trails_button" data-id="<?= htmlspecialchars($id_rfq, ENT_QUOTES, 'UTF-8'); ?>">
         <i class="fas fa-history mr-1"></i> Audit Trails
       </button>
       <a href="<?= htmlspecialchars(RELOAD_REQUOTE . $id_rfq); ?>" class="btn btn-outline-secondary btn-sm">
@@ -90,3 +90,4 @@ include_once 'modals/edit_service_modal.inc.php';
 ?>
 
 <script src="<?= htmlspecialchars(RUTA_JS); ?>reQuote.js"></script>
+<script src="<?= htmlspecialchars(RUTA_JS); ?>audit_trail.js"></script>

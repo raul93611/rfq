@@ -70,3 +70,27 @@ All URL constants are defined in [app/Bootstrap/routes.inc.php](app/Bootstrap/ro
 ### Quote Status Flow
 
 A quote (`Rfq`) progresses through: Created → Completed → Submitted → Award → Fulfillment → Invoice. The `comments` field encodes special statuses (No Bid, Cancelled, Not submitted). The `isEnabledToFulfillment()` and `isEnabledToInvoice()` methods on the `Rfq` class enforce prerequisites for state transitions.
+
+### Unified Audit Trail
+
+All three domains write to their own audit table but are surfaced through a single modal and endpoint.
+
+**Tables:** `audit_trails` (quote), `re_quote_audit_trails` (re-quote), `fulfillment_audit_trails` (fulfillment). All three have `action_type VARCHAR(50) NULL` and `id_user INT NULL` columns added (nullable, no impact on legacy rows).
+
+**Repositories:**
+- `app/Quote/AuditTrailRepository.inc.php` — writes quote audit events; helper methods per action type
+- `app/ReQuote/ReQuoteAuditTrailRepository.inc.php` — same pattern for re-quote
+- `app/Fulfillment/FulfillmentAuditTrailRepository.inc.php` — adds `status_event()`, `invoice_event()`, `net_30_event()` helpers
+
+**Action types** (stored in `action_type` column): `status_change`, `field_modified`, `item_modified`, `item_created`, `item_deleted`, `invoice_created`, `invoice_updated`, `invoice_deleted`, `document_updated`, `net_30`.
+
+**Unified endpoint:** `POST /rfq/quote/load_unified_audit_trail` (`scripts/quote/load_unified_audit_trail.php`) — accepts `id_rfq`, queries all three tables (re-quote joined via `re_quotes.id_rfq`), merges and sorts by `created_date DESC`, returns JSON array. Each entry has: `id, username, action_type, audit_trail, created_date, scope` (scope values: `quote`, `requote`, `fulfillment`).
+
+**Frontend:** `js/audit_trail.js` — self-contained IIFE; handles open/load/filter/render for all three pages. Included in `editar_cotizacion.inc.php`, `fulfillment.inc.php`, and `re_quote.inc.php`. The trigger buttons (`#audit_trails_button`, `#fulfillment_audit_trails_button`) must have `data-id="<id_rfq>"`.
+
+**Modal templates** (all identical unified shell, `id="audit_trails_modal"`):
+- `plantillas/quote/modals/audit_trails_modal.inc.php`
+- `plantillas/fulfillment/modals/audit_trails_modal.inc.php` (referenced as `modals/audit_trails_modal.inc.php` from fulfillment.inc.php)
+- `plantillas/re_quote/modals/audit_trails_modal.inc.php`
+
+**CSS:** All `at-*` namespace styles live at the bottom of `css/estilos.css`.

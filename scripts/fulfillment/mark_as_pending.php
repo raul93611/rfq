@@ -7,6 +7,8 @@ try {
   // Mark or unmark the RFQ as pending
   RepositorioRfq::mark_unmark_as_pending($conexion, $id_rfq, 1);
 
+  FulfillmentAuditTrailRepository::status_event($conexion, 'Pending', $id_rfq);
+
   // Close the database connection
   Conexion::cerrar_conexion();
 

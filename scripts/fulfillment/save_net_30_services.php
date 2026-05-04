@@ -18,6 +18,8 @@ try {
   RepositorioRfq::save_net_30_services($conexion, $_POST['id_rfq'], $_POST['value']);
   RepositorioRfq::set_services_fulfillment_profit_and_total($conexion, $_POST['id_rfq']);
 
+  FulfillmentAuditTrailRepository::net_30_event($conexion, $_POST['value'], 'Services', $_POST['id_rfq']);
+
   // Close database connection
   Conexion::cerrar_conexion();
 

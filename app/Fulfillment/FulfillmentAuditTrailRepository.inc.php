@@ -3,10 +3,12 @@ class FulfillmentAuditTrailRepository {
   public static function insert_audit_trail($connection, $audit_trail) {
     if (isset($connection)) {
       try {
-        $sql = 'INSERT INTO fulfillment_audit_trails(id_rfq, username, audit_trail, created_date) VALUES(:id_rfq, :username, :audit_trail, NOW())';
+        $sql = 'INSERT INTO fulfillment_audit_trails(id_rfq, username, action_type, id_user, audit_trail, created_date) VALUES(:id_rfq, :username, :action_type, :id_user, :audit_trail, NOW())';
         $sentence = $connection->prepare($sql);
         $sentence->bindValue(':id_rfq', $audit_trail->get_id_rfq(), PDO::PARAM_STR);
         $sentence->bindValue(':username', $audit_trail->get_username(), PDO::PARAM_STR);
+        $sentence->bindValue(':action_type', $audit_trail->get_action_type(), PDO::PARAM_STR);
+        $sentence->bindValue(':id_user', $audit_trail->get_id_user(), PDO::PARAM_INT);
         $sentence->bindValue(':audit_trail', $audit_trail->get_audit_trail(), PDO::PARAM_STR);
         $sentence->execute();
       } catch (PDOException $ex) {
@@ -28,7 +30,7 @@ class FulfillmentAuditTrailRepository {
       Conexion::cerrar_conexion();
       if (count($result)) {
         foreach ($result as $fila) {
-          $audit_trails[] = new AuditTrail($fila['id'], $fila['id_rfq'], $fila['username'], $fila['audit_trail'], $fila['created_date']);
+          $audit_trails[] = new AuditTrail($fila['id'], $fila['id_rfq'], $fila['username'], $fila['action_type'], $fila['id_user'], $fila['audit_trail'], $fila['created_date']);
         }
       }
     } catch (PDOException $ex) {
@@ -51,7 +53,7 @@ class FulfillmentAuditTrailRepository {
   }
 
   public static function display_audit_trails($connection, $id_rfq) {
-    $audit_trails = self::get_audit_trails($connection, $id_rfq);
+    $audit_trails = self::get_audit_trails($id_rfq);
 ?>
     <div class="timeline">
       <div>
@@ -132,7 +134,7 @@ class FulfillmentAuditTrailRepository {
     }
     if ($field != $original_field) {
       $message = '<b>' . $field_name . '</b> modified:<br><b>' . $original_field . ' > ' . $field . '</b>';
-      $audit_trail = new AuditTrail('', $id_rfq, $_SESSION['user']->obtener_nombre_usuario(), $message, '');
+      $audit_trail = new AuditTrail('', $id_rfq, $_SESSION['user']->obtener_nombre_usuario(), 'field_modified', $_SESSION['user']->obtener_id(), $message, '');
       self::insert_audit_trail($connection, $audit_trail);
     }
   }
@@ -146,7 +148,7 @@ class FulfillmentAuditTrailRepository {
     }
     if ($field != $original_field) {
       $message = '<a class="audit_trail_link" href="#" data-target=".item' . $id_item . '"><b>Charge</b></a> modified:<br><b>' . $field_name . '</b> modified:<br><b>' . $original_field . ' > ' . $field . '</b>';
-      $audit_trail = new AuditTrail('', $id_rfq, $_SESSION['user']->obtener_nombre_usuario(), $message, '');
+      $audit_trail = new AuditTrail('', $id_rfq, $_SESSION['user']->obtener_nombre_usuario(), 'item_modified', $_SESSION['user']->obtener_id(), $message, '');
       self::insert_audit_trail($connection, $audit_trail);
     }
   }
@@ -160,7 +162,7 @@ class FulfillmentAuditTrailRepository {
     }
     if ($field != $original_field) {
       $message = '<a class="audit_trail_link" href="#" data-target=".subitem' . $id_subitem . '"><b>Charge</b></a> modified:<br><b>' . $field_name . '</b> modified:<br><b>' . $original_field . ' > ' . $field . '</b>';
-      $audit_trail = new AuditTrail('', $id_rfq, $_SESSION['user']->obtener_nombre_usuario(), $message, '');
+      $audit_trail = new AuditTrail('', $id_rfq, $_SESSION['user']->obtener_nombre_usuario(), 'item_modified', $_SESSION['user']->obtener_id(), $message, '');
       self::insert_audit_trail($connection, $audit_trail);
     }
   }
@@ -174,45 +176,63 @@ class FulfillmentAuditTrailRepository {
     }
     if ($field != $original_field) {
       $message = '<a class="audit_trail_link" href="#" data-target=".service' . $id_service . '"><b>Charge</b></a> modified:<br><b>' . $field_name . '</b> modified:<br><b>' . $original_field . ' > ' . $field . '</b>';
-      $audit_trail = new AuditTrail('', $id_rfq, $_SESSION['user']->obtener_nombre_usuario(), $message, '');
+      $audit_trail = new AuditTrail('', $id_rfq, $_SESSION['user']->obtener_nombre_usuario(), 'item_modified', $_SESSION['user']->obtener_id(), $message, '');
       self::insert_audit_trail($connection, $audit_trail);
     }
   }
 
   public static function create_audit_trail_item_created($connection, $id_item, $field, $field_name, $id_rfq) {
     $message = '<a class="audit_trail_link" href="#" data-target=".item' . $id_item . '"><b>New charge</b></a> entered<br><b>' . $field_name . ' = ' . $field . '</b>';
-    $audit_trail = new AuditTrail('', $id_rfq, $_SESSION['user']->obtener_nombre_usuario(), $message, '');
+    $audit_trail = new AuditTrail('', $id_rfq, $_SESSION['user']->obtener_nombre_usuario(), 'item_created', $_SESSION['user']->obtener_id(), $message, '');
     self::insert_audit_trail($connection, $audit_trail);
   }
 
   public static function create_audit_trail_subitem_created($connection, $id_subitem, $field, $field_name, $id_rfq) {
     $message = '<a class="audit_trail_link" href="#" data-target=".subitem' . $id_subitem . '"><b>New charge</b></a> created<br><b>' . $field_name . ' = ' . $field . '</b>';
-    $audit_trail = new AuditTrail('', $id_rfq, $_SESSION['user']->obtener_nombre_usuario(), $message, '');
+    $audit_trail = new AuditTrail('', $id_rfq, $_SESSION['user']->obtener_nombre_usuario(), 'item_created', $_SESSION['user']->obtener_id(), $message, '');
     self::insert_audit_trail($connection, $audit_trail);
   }
 
   public static function create_audit_trail_service_created($connection, $id_service, $field, $field_name, $id_rfq) {
     $message = '<a class="audit_trail_link" href="#" data-target=".service' . $id_service . '"><b>New charge</b></a> entered<br><b>' . $field_name . ' = ' . $field . '</b>';
-    $audit_trail = new AuditTrail('', $id_rfq, $_SESSION['user']->obtener_nombre_usuario(), $message, '');
+    $audit_trail = new AuditTrail('', $id_rfq, $_SESSION['user']->obtener_nombre_usuario(), 'item_created', $_SESSION['user']->obtener_id(), $message, '');
     self::insert_audit_trail($connection, $audit_trail);
   }
 
   public static function create_audit_trail_item_deleted($connection, $item_object, $item_type, $parent_id, $id_rfq) {
     $object_details = self::formatObjectTerminalStyle($item_object);
 
-    // Serialize and base64 encode the object for restoration
     $serialized_object = base64_encode(serialize($item_object));
 
     $message = '<b>Provider deleted from <a class="audit_trail_link" href="#' . $item_type . $parent_id . '">here</a></b><br>' .
       '<button class="btn btn-sm btn-primary restore-item-btn" ' .
       'data-item-type="' . $item_type . '" ' .
-      'data-object-data="' . $serialized_object . '" ' .  
+      'data-object-data="' . $serialized_object . '" ' .
       'data-parent-id="' . $parent_id . '" ' .
       'data-rfq-id="' . $id_rfq . '" ' .
       '>Restore</button>' .
       '<br><br><b>Full details:</b><br>' . $object_details;
 
-    $audit_trail = new AuditTrail('', $id_rfq, $_SESSION['user']->obtener_nombre_usuario(), $message, '');
+    $audit_trail = new AuditTrail('', $id_rfq, $_SESSION['user']->obtener_nombre_usuario(), 'item_deleted', $_SESSION['user']->obtener_id(), $message, '');
+    self::insert_audit_trail($connection, $audit_trail);
+  }
+
+  public static function status_event($connection, $status, $id_rfq) {
+    $message = 'Fulfillment item marked as <b>' . $status . '</b>';
+    $audit_trail = new AuditTrail('', $id_rfq, $_SESSION['user']->obtener_nombre_usuario(), 'status_change', $_SESSION['user']->obtener_id(), $message, '');
+    self::insert_audit_trail($connection, $audit_trail);
+  }
+
+  public static function invoice_event($connection, $action, $invoice_name, $id_rfq) {
+    $message = 'Invoice <b>' . $invoice_name . '</b> ' . $action;
+    $audit_trail = new AuditTrail('', $id_rfq, $_SESSION['user']->obtener_nombre_usuario(), 'invoice_' . $action, $_SESSION['user']->obtener_id(), $message, '');
+    self::insert_audit_trail($connection, $audit_trail);
+  }
+
+  public static function net_30_event($connection, $value, $scope, $id_rfq) {
+    $state = $value ? 'enabled' : 'disabled';
+    $message = 'Net 30 (' . $scope . ') <b>' . $state . '</b>';
+    $audit_trail = new AuditTrail('', $id_rfq, $_SESSION['user']->obtener_nombre_usuario(), 'net_30', $_SESSION['user']->obtener_id(), $message, '');
     self::insert_audit_trail($connection, $audit_trail);
   }
 
@@ -228,10 +248,8 @@ class FulfillmentAuditTrailRepository {
         $name = $property->getName();
         $value = $property->getValue($object);
 
-        // Clean up the property name
         $clean_name = preg_replace('/.*\*/', '', $name);
 
-        // Format the value with colors
         $formatted_value = self::formatTerminalValue($value);
 
         $html .= "<div><span style='color: #569cd6;'>" . htmlspecialchars($clean_name) . "</span>" .
@@ -252,7 +270,6 @@ class FulfillmentAuditTrailRepository {
     } elseif (is_numeric($value)) {
       return "<span style='color: #b5cea8;'>" . $value . "</span>";
     } elseif (is_string($value)) {
-      // Check if it looks like a date
       if (strtotime($value) !== false) {
         return "<span style='color: #ce9178;'>" . htmlspecialchars($value) . "</span>";
       }

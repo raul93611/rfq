@@ -14,6 +14,11 @@ try {
     $isUpdated = InvoiceRepository::update($conexion, $_POST['name'], $_POST["created_at"], $_POST['id_invoice']);
     if (!$isUpdated) {
       $error = 'Failed to update the invoice.';
+    } else {
+      $invoice = InvoiceRepository::get_one($conexion, $_POST['id_invoice']);
+      if ($invoice) {
+        FulfillmentAuditTrailRepository::invoice_event($conexion, 'updated', $_POST['name'], $invoice->get_id_rfq());
+      }
     }
   }
 } catch (Exception $e) {

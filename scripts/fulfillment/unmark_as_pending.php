@@ -9,6 +9,8 @@ try {
 
   RepositorioRfq::mark_unmark_as_pending($conexion, $id_rfq, 0);
 
+  FulfillmentAuditTrailRepository::status_event($conexion, 'Pending removed', $id_rfq);
+
   Conexion::cerrar_conexion();
   Redireccion::redirigir(FULFILLMENT . $id_rfq);
 } catch (Exception $e) {

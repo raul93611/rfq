@@ -95,6 +95,9 @@ switch ($partes_ruta[1] ?? null) {
       case 'guardar_comment':
         $ruta_elegida = 'scripts/utilities/guardar_comment.php';
         break;
+      case 'load_unified_audit_trail':
+        $ruta_elegida = 'scripts/quote/load_unified_audit_trail.php';
+        break;
       case 'save_checklist':
         $ruta_elegida = 'scripts/quote/save_checklist.php';
         break;
