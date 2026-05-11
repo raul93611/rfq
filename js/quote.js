@@ -365,10 +365,13 @@ $(document).ready(function () {
   $addItemModal.on('click', '.iem-save-btn', function () {
     var url = BASE + 'guardar_add_item/' + rfqId();
     ajaxSubmit($addItemForm, url, 'guardar_item', function () {
-      $addItemModal.data('iem-discard', true);
-      $addItemModal.modal('hide');
+      destroySummernote($addItemForm);
+      $addItemForm[0].reset();
+      initSummernote($addItemForm);
+      captureSnapshot($addItemForm);
       refreshItemsTable();
       toastr.success('Item added.');
+      $addItemForm.find('input[type="text"]:first').focus();
     });
   });
 
@@ -435,10 +438,15 @@ $(document).ready(function () {
     var idItem = $('#iem-add-subitem-id-item').val();
     var url    = BASE + 'guardar_add_subitem/' + idItem;
     ajaxSubmit($addSubForm, url, 'guardar_subitem', function () {
-      $addSubModal.data('iem-discard', true);
-      $addSubModal.modal('hide');
+      var savedIdItem = idItem;
+      destroySummernote($addSubForm);
+      $addSubForm[0].reset();
+      $('#iem-add-subitem-id-item').val(savedIdItem);
+      initSummernote($addSubForm);
+      captureSnapshot($addSubForm);
       refreshItemsTable();
       toastr.success('Subitem added.');
+      $addSubForm.find('input[type="text"]:first').focus();
     });
   });
 
@@ -503,10 +511,13 @@ $(document).ready(function () {
     var idItem = $('#iem-add-provider-id-item').val();
     var url    = BASE + 'guardar_add_provider/' + idItem;
     ajaxSubmit($addProvForm, url, 'guardar_provider', function () {
-      $addProvModal.data('iem-discard', true);
-      $addProvModal.modal('hide');
+      var savedIdItem = idItem;
+      $addProvForm[0].reset();
+      $('#iem-add-provider-id-item').val(savedIdItem);
+      captureSnapshot($addProvForm);
       refreshItemsTable();
       toastr.success('Provider added.');
+      $addProvForm.find('input[type="text"]:first').focus();
     });
   });
 
@@ -587,10 +598,13 @@ $(document).ready(function () {
     var idSub = $('#iem-add-psi-id-subitem').val();
     var url   = BASE + 'guardar_add_provider_subitem/' + idSub;
     ajaxSubmit($addPsiForm, url, 'guardar_provider_subitem', function () {
-      $addPsiModal.data('iem-discard', true);
-      $addPsiModal.modal('hide');
+      var savedIdSub = idSub;
+      $addPsiForm[0].reset();
+      $('#iem-add-psi-id-subitem').val(savedIdSub);
+      captureSnapshot($addPsiForm);
       refreshItemsTable();
       toastr.success('Provider added.');
+      $addPsiForm.find('input[type="text"]:first').focus();
     });
   });
 
