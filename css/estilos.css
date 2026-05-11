@@ -1613,27 +1613,12 @@ h3.text-info.text-center .fa-exclamation-circle {
   flex-shrink: 0;
 }
 
-/* Totals pinned to the right */
-.quote-action-bar__autosave {
-  display: flex;
-  align-items: center;
-  margin-left: auto;
-  margin-right: 16px;
-}
-#autosave-status {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.3px;
-  transition: opacity 0.3s;
-}
-#autosave-status[data-state="saving"] { color: #8896a5; }
-#autosave-status[data-state="saved"]  { color: #16a34a; }
-#autosave-status[data-state="error"]  { color: #dc2626; }
 
 .quote-action-bar__totals {
   display: flex;
   align-items: center;
   gap: 0;
+  margin-left: auto;
 }
 
 .quote-action-total {
@@ -1997,6 +1982,7 @@ h3.text-info.text-center .fa-exclamation-circle {
 .iem-dialog { max-width: 95vw !important; }
 .iem-dialog-sm { max-width: min(720px, 95vw) !important; }
 .iem-dialog-lg { max-width: min(760px, 95vw) !important; }
+.iem-dialog-xl { max-width: min(1100px, 95vw) !important; }
 .iem-content { border-radius: 12px !important; overflow: hidden; box-shadow: 0 24px 60px -20px rgba(15,22,35,.35), 0 8px 20px -8px rgba(15,22,35,.25) !important; }
 
 /* Header */
@@ -2193,3 +2179,17 @@ h3.text-info.text-center .fa-exclamation-circle {
 .iem-loading { display: flex; align-items: center; justify-content: center; padding: 40px 0; }
 .iem-provider-link { background: none; border: none; padding: 0; cursor: pointer; font-size: inherit; line-height: inherit; color: #0e6b94; text-decoration: none; }
 .iem-provider-link:hover { text-decoration: underline; }
+
+/* Toastr overrides — fully opaque, solid colors */
+#toast-container > .toast { opacity: 1 !important; box-shadow: 0 4px 16px rgba(0,0,0,0.18) !important; }
+#toast-container > .toast-success { background-color: #16a34a !important; }
+#toast-container > .toast-error   { background-color: #dc2626 !important; }
+#toast-container > .toast:hover   { opacity: 1 !important; box-shadow: 0 6px 20px rgba(0,0,0,0.22) !important; }
+
+/* Force textareas inside IEM modals to respect rows attribute */
+.iem-body textarea.form-control,
+.iem-body textarea.form-control-sm {
+  height: auto !important;
+  min-height: calc(3 * 1.5em + 1rem) !important;
+  resize: vertical;
+}

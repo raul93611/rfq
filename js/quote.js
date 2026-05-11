@@ -121,12 +121,10 @@ $(document).ready(function () {
 
   /************************* AUTO-SAVE *************************/
   if ($('#form_edited_quote').length) {
-    const $autosaveStatus = $('#autosave-status');
     const autosaveUrl = '/rfq/quote/autosave/' + ($('[name="id_rfq"]').val() || '');
     let autosaveTimer = null;
 
     function setOriginals() {
-      $('[name="taxes"]').val($('[name="taxes"]').val());
       $('input[name="taxes_original"]').val($('[name="taxes"]').val());
       $('input[name="profit_original"]').val($('[name="profit"]').val());
       $('input[name="additional_general_original"]').val($('[name="additional_general"]').val());
@@ -136,7 +134,6 @@ $(document).ready(function () {
     }
 
     function doAutosave() {
-      $autosaveStatus.attr('data-state', 'saving').text('Saving…');
       $.ajax({
         url: autosaveUrl,
         type: 'POST',
@@ -147,37 +144,40 @@ $(document).ready(function () {
       .done(function (res) {
         if (res && res.success) {
           setOriginals();
-          $autosaveStatus.attr('data-state', 'saved').text('Saved ✓');
-          setTimeout(function () { $autosaveStatus.attr('data-state', '').text(''); }, 3000);
+          toastr.success('Changes saved', '', { timeOut: 1500, positionClass: 'toast-top-right' });
         } else {
-          $autosaveStatus.attr('data-state', 'error').text('Save failed');
+          toastr.error('Auto-save failed', '', { timeOut: 3000, positionClass: 'toast-top-right' });
         }
       })
       .fail(function () {
-        $autosaveStatus.attr('data-state', 'error').text('Save failed');
+        toastr.error('Auto-save failed', '', { timeOut: 3000, positionClass: 'toast-top-right' });
       });
     }
 
     function scheduleAutosave() {
       clearTimeout(autosaveTimer);
-      autosaveTimer = setTimeout(doAutosave, 1200);
+      autosaveTimer = setTimeout(doAutosave, 1500);
     }
 
-    // Watch quote-level fields
+    // Watch quote-level fields — input fires on every keystroke, change catches blur/select
     $('#form_edited_quote').on(
-      'change',
-      '#taxes, #profit, #additional_general, input[name="payment_terms"], input[name="services_payment_term"], #shipping_cost',
+      'input change',
+      '#taxes, #profit, #additional_general, #shipping_cost',
       scheduleAutosave
     );
-    $('#form_edited_quote').on('blur', '#shipping', scheduleAutosave);
+    $('#form_edited_quote').on(
+      'change',
+      'input[name="payment_terms"], input[name="services_payment_term"]',
+      scheduleAutosave
+    );
+    $('#form_edited_quote').on('input blur', '#shipping', scheduleAutosave);
 
     // Watch per-item additional cost inputs (dynamically rendered)
-    $(document).on('change blur', 'input[id^="add_cost"]', scheduleAutosave);
+    $(document).on('input change', 'input[id^="add_cost"]', scheduleAutosave);
 
-    // Manual save clears the pending timer and updates originals
+    // Manual save clears the pending timer
     $('#form_edited_quote').on('submit', function () {
       clearTimeout(autosaveTimer);
-      $autosaveStatus.attr('data-state', '').text('');
     });
 
   }

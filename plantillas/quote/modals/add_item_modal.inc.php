@@ -1,5 +1,5 @@
 <div class="modal fade" id="add-item-modal" tabindex="-1" role="dialog" aria-hidden="true" data-rfq-id="<?= (int)$id_rfq; ?>">
-  <div class="modal-dialog modal-dialog-centered iem-dialog iem-dialog-lg" role="document">
+  <div class="modal-dialog modal-dialog-centered iem-dialog iem-dialog-xl" role="document">
     <div class="modal-content iem-content">
 
       <div class="modal-header iem-header">
@@ -33,14 +33,15 @@
             </div>
           </div>
           <div class="iem-footer-row" style="width:100%;justify-content:flex-end;">
-            <button type="button" class="iem-btn iem-cancel-btn" data-dismiss="modal">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-              Cancel
-            </button>
             <button type="button" class="iem-btn iem-btn-primary iem-save-btn">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
               Save Item
             </button>
+            <button type="button" class="iem-btn iem-cancel-btn" data-dismiss="modal">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              Cancel
+            </button>
+
           </div>
         </div>
       </form>
