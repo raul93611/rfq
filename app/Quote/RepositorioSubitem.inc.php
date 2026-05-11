@@ -133,7 +133,12 @@ class RepositorioSubitem {
     $providers_subitem = RepositorioProviderSubitem::obtener_providers_subitem_por_id_subitem(Conexion::obtener_conexion(), $subitem->obtener_id());
     Conexion::cerrar_conexion();
     echo '<tr id="subitem' . $subitem->obtener_id() .  '" class="fila_subitem">';
-    echo '<td><div class="item-actions"><a href="' . EDIT_SUBITEM . '/' . $subitem->obtener_id() . '" class="btn btn-subitem btn-xs item-action-btn"><i class="fa fa-edit"></i> Edit</a><a href="' . DELETE_SUBITEM . '/' . $subitem->obtener_id() . '" class="delete_subitem_button btn btn-item-del btn-xs item-action-btn"><i class="fa fa-trash"></i> Delete</a><a href="' . ADD_PROVIDER_SUBITEM . '/' . $subitem->obtener_id() . '" class="btn btn-subitem btn-xs item-action-btn"><i class="fa fa-plus-circle"></i> Provider</a></div></td>';
+    $subitemId = $subitem->obtener_id();
+    echo '<td><div class="item-actions">'
+      . '<button type="button" class="btn btn-subitem btn-xs item-action-btn iem-edit-subitem" data-id="' . $subitemId . '" data-load-url="' . LOAD_EDIT_SUBITEM_FORM . $subitemId . '"><i class="fa fa-edit"></i> Edit</button>'
+      . '<button type="button" class="btn btn-item-del btn-xs item-action-btn iem-delete-subitem" data-id="' . $subitemId . '" data-url="' . DELETE_SUBITEM . '/' . $subitemId . '"><i class="fa fa-trash"></i> Delete</button>'
+      . '<button type="button" class="btn btn-subitem btn-xs item-action-btn iem-add-provider-subitem" data-id-subitem="' . $subitemId . '"><i class="fa fa-plus-circle"></i> Provider</button>'
+      . '</div></td>';
     echo '<td></td>';
     if (strlen($subitem->obtener_description_project()) >= 100) {
       echo '<td><b>Brand:</b> ' . $subitem->obtener_brand_project() . '<br><b>Part #:</b> ' . $subitem->obtener_part_number_project() . '<br><b>Description:</b> ' . nl2br(mb_substr($subitem->obtener_description_project(), 0, 100)) . ' ...</td>';
@@ -150,11 +155,10 @@ class RepositorioSubitem {
     echo '<td><div class="row"><div class="col-6">';
     for ($i = 0; $i < count($providers_subitem); $i++) {
       $provider_subitem = $providers_subitem[$i];
-      if (strlen($provider_subitem->obtener_provider()) >= 10) {
-        echo '<a href="' . EDIT_PROVIDER_SUBITEM . '/' . $provider_subitem->obtener_id() . '"><b>' . mb_substr($provider_subitem->obtener_provider(), 0, 10) . '... :</b></a><br>';
-      } else {
-        echo '<a href="' . EDIT_PROVIDER_SUBITEM . '/' . $provider_subitem->obtener_id() . '"><b>' . $provider_subitem->obtener_provider() . ':</b></a><br>';
-      }
+      $psiLabel = strlen($provider_subitem->obtener_provider()) >= 10
+        ? mb_substr($provider_subitem->obtener_provider(), 0, 10) . '...'
+        : $provider_subitem->obtener_provider();
+      echo '<button type="button" class="iem-provider-link iem-edit-provider-subitem" data-id="' . $provider_subitem->obtener_id() . '" data-load-url="' . LOAD_EDIT_PROVIDER_SUBITEM_FORM . $provider_subitem->obtener_id() . '"><b>' . $psiLabel . ':</b></button><br>';
     }
     echo '</div><div class="col-6">';
     for ($i = 0; $i < count($providers_subitem); $i++) {

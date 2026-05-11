@@ -2,6 +2,12 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Feature Inventory
+
+| Feature | Status | Spec |
+|---|---|---|
+| Quote Inline Editing (modals for item/provider/subitem CRUD) | built | [features/quote-inline-editing.md](features/quote-inline-editing.md) |
+
 ## Environment
 
 This is a PHP application running on a LAMP stack inside Docker (`docker-compose-lamp`). The app is served at `http://localhost/rfq/`.

@@ -72,6 +72,14 @@ include_once 'modals/link_quote_modal.inc.php';
 include_once 'modals/rooms/add_room_modal.inc.php';
 include_once 'modals/rooms/edit_room_modal.inc.php';
 include_once 'modals/import_items_modal.inc.php';
+include_once 'plantillas/quote/modals/add_item_modal.inc.php';
+include_once 'plantillas/quote/modals/edit_item_modal.inc.php';
+include_once 'plantillas/quote/modals/add_subitem_modal.inc.php';
+include_once 'plantillas/quote/modals/edit_subitem_modal.inc.php';
+include_once 'plantillas/quote/modals/add_provider_modal.inc.php';
+include_once 'plantillas/quote/modals/edit_provider_modal.inc.php';
+include_once 'plantillas/quote/modals/add_provider_subitem_modal.inc.php';
+include_once 'plantillas/quote/modals/edit_provider_subitem_modal.inc.php';
 ?>
 
 <script src="<?= RUTA_JS; ?>services.js"></script>

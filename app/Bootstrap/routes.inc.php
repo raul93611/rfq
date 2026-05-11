@@ -26,6 +26,7 @@ define('SAVE_INFORMATION', QUOTE_SC . 'save_information/');
 define('GENERATE_CHECKLIST_PDF', QUOTE_SC . 'generate_checklist_pdf/');
 define('LINK_QUOTE', QUOTE_SC . 'link_quote/');
 define('IMPORT_ITEMS', QUOTE_SC . 'import_items/');
+define('GET_ITEMS_TABLE', QUOTE_SC . 'get_items_table/');
 /********************************SERVICE SCRIPTS*****************************************/
 define('SERVICE_SC', QUOTE_SC . 'service/');
 define('ADD_SERVICE', SERVICE_SC . 'add_service');
@@ -46,6 +47,10 @@ define('GUARDAR_EDIT_PROVIDER_SUBITEM', EQUIPMENT_SC . 'guardar_edit_provider_su
 define('DELETE_PROVIDER', EQUIPMENT_SC . 'delete_provider');
 define('DELETE_PROVIDER_SUBITEM', EQUIPMENT_SC . 'delete_provider_subitem');
 define('DELETE_SUBITEM', EQUIPMENT_SC . 'delete_subitem');
+define('LOAD_EDIT_ITEM_FORM', EQUIPMENT_SC . 'load_edit_item_form/');
+define('LOAD_EDIT_SUBITEM_FORM', EQUIPMENT_SC . 'load_edit_subitem_form/');
+define('LOAD_EDIT_PROVIDER_FORM', EQUIPMENT_SC . 'load_edit_provider_form/');
+define('LOAD_EDIT_PROVIDER_SUBITEM_FORM', EQUIPMENT_SC . 'load_edit_provider_subitem_form/');
 /********************************TRACKING SCRIPTS*****************************************/
 define('TRACKING_SC', SERVIDOR . 'tracking/');
 define('SAVE_TRACKING', TRACKING_SC . 'save_tracking');

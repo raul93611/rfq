@@ -41,14 +41,19 @@ try {
   // Close database connection
   Conexion::cerrar_conexion();
 
-  // Redirect to the updated page
-  Redireccion::redirigir(EDITAR_COTIZACION . '/' . $id_rfq . '#caja_items');
-} catch (Exception $e) {
-  // Ensure the connection is closed
-  if (isset($conexion)) {
-    Conexion::cerrar_conexion();
+  if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+    header('Content-Type: application/json');
+    echo json_encode(['success' => true, 'id_rfq' => $id_rfq]);
+  } else {
+    Redireccion::redirigir(EDITAR_COTIZACION . '/' . $id_rfq . '#caja_items');
   }
-  // Print the error message
-  echo 'Error: ' . $e->getMessage();
+} catch (Exception $e) {
+  if (isset($conexion)) { Conexion::cerrar_conexion(); }
+  if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+    header('Content-Type: application/json');
+    echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+  } else {
+    echo 'Error: ' . $e->getMessage();
+  }
   exit;
 }

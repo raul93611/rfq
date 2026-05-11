@@ -12,8 +12,10 @@ $_rfq_code = htmlspecialchars($cotizacion_recuperada->obtener_email_code());
 $_back_url = EDITAR_COTIZACION . '/' . $_rfq_id;
 ?>
 <script>
-document.getElementById('edit-item-subtitle').textContent =
-  'Proposal #<?= $_rfq_id ?> — <?= addslashes($_rfq_code) ?>';
+(function(){
+  var el = document.getElementById('edit-item-subtitle');
+  if (el) el.textContent = 'Proposal #<?= $_rfq_id ?> — <?= addslashes($_rfq_code) ?>';
+})();
 </script>
 
 <input type="hidden" name="id_item" value="<?= htmlspecialchars($id_item); ?>">

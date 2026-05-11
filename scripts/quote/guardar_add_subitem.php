@@ -57,16 +57,27 @@ if (isset($_POST['guardar_subitem'])) {
       // Close the database connection
       Conexion::cerrar_conexion();
 
-      // Redirect to the updated page
-      Redireccion::redirigir(EDITAR_COTIZACION . '/' . $id_rfq . '#subitem' . $id);
-    } catch (Exception $e) {
-      // Handle exceptions and close the connection if open
-      if (isset($conexion)) {
-        Conexion::cerrar_conexion();
+      if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+        header('Content-Type: application/json');
+        echo json_encode(['success' => true]);
+      } else {
+        Redireccion::redirigir(EDITAR_COTIZACION . '/' . $id_rfq . '#subitem' . $id);
       }
-      echo 'Error: ' . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8');
+    } catch (Exception $e) {
+      if (isset($conexion)) { Conexion::cerrar_conexion(); }
+      if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+        header('Content-Type: application/json');
+        echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+      } else {
+        echo 'Error: ' . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8');
+      }
     }
   } else {
-    echo 'Error: Missing or invalid required fields.';
+    if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+      header('Content-Type: application/json');
+      echo json_encode(['success' => false, 'message' => 'Missing or invalid required fields.']);
+    } else {
+      echo 'Error: Missing or invalid required fields.';
+    }
   }
 }

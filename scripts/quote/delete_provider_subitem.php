@@ -1,5 +1,4 @@
 <?php
-// Function to delete provider subitem and create audit trail
 function deleteProviderSubitemAndCreateAuditTrail($conexion, $id_provider_subitem) {
   $provider_subitem = RepositorioProviderSubitem::obtener_provider_subitem_por_id($conexion, $id_provider_subitem);
   $subitem = RepositorioSubitem::obtener_subitem_por_id($conexion, $provider_subitem->obtener_id_subitem());
@@ -18,24 +17,26 @@ function deleteProviderSubitemAndCreateAuditTrail($conexion, $id_provider_subite
 }
 
 try {
-  // Open database connection
   Conexion::abrir_conexion();
   $conexion = Conexion::obtener_conexion();
 
-  // Delete provider subitem and create audit trail
   $id_rfq = deleteProviderSubitemAndCreateAuditTrail($conexion, $id_provider_subitem);
 
-  // Close database connection
   Conexion::cerrar_conexion();
 
-  // Redirect to the updated page
-  Redireccion::redirigir(EDITAR_COTIZACION . '/' . $id_rfq . '#subitem' . $id_provider_subitem);
-} catch (Exception $e) {
-  // Ensure the connection is closed
-  if (isset($conexion)) {
-    Conexion::cerrar_conexion();
+  if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+    header('Content-Type: application/json');
+    echo json_encode(['success' => true, 'id_rfq' => $id_rfq]);
+  } else {
+    Redireccion::redirigir(EDITAR_COTIZACION . '/' . $id_rfq . '#caja_items');
   }
-  // Print the error message
-  echo 'Error: ' . $e->getMessage();
+} catch (Exception $e) {
+  if (isset($conexion)) { Conexion::cerrar_conexion(); }
+  if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+    header('Content-Type: application/json');
+    echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+  } else {
+    echo 'Error: ' . $e->getMessage();
+  }
   exit;
 }
