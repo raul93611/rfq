@@ -2,14 +2,21 @@ $(document).ready(function () {
   const monto = [];
   const quantity = [];
 
-  // Parse table data and populate `monto` and `quantity` arrays
-  $('#items tr').each(function () {
-    const quantityColumnValue = parseFloat($(this).find('td').eq(5).text()) || 0;
-    const bestUnitCost = parseFloat($(this).find('td').eq(8).text().split(' ')[1]) || 0;
+  function populateCalcArrays() {
+    monto.length = 0;
+    quantity.length = 0;
+    $('#items tr').each(function () {
+      quantity.push(parseFloat($(this).find('td').eq(5).text()) || 0);
+      monto.push(parseFloat($(this).find('td').eq(8).text().split(' ')[1]) || 0);
+    });
+  }
 
-    quantity.push(quantityColumnValue);
-    monto.push(bestUnitCost);
-  });
+  populateCalcArrays();
+
+  // Exposed so the inline-editing IIFE can re-sync arrays after a table refresh
+  window.iemReinitCalc = function () {
+    populateCalcArrays();
+  };
 
   const totalQuantity = quantity.reduce((sum, qty) => sum + qty, 0);
 
@@ -222,9 +229,19 @@ $(document).ready(function () {
   }
 
   /* ---------- Table refresh ---------- */
+  function syncIdInputs() {
+    var itemIds = [], subitemIds = [];
+    $('#items tr[id^="item"]').each(function () { itemIds.push(this.id.replace('item', '')); });
+    $('#items tr[id^="subitem"]').each(function () { subitemIds.push(this.id.replace('subitem', '')); });
+    $('#id_items').val(itemIds.join(','));
+    $('#id_subitems').val(subitemIds.join(','));
+  }
+
   function refreshItemsTable() {
     $.get('/rfq/quote/get_items_table/' + rfqId(), function (html) {
       $('#items').html(html);
+      if (typeof window.iemReinitCalc === 'function') window.iemReinitCalc();
+      syncIdInputs();
     });
   }
 

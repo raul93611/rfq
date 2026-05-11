@@ -224,6 +224,16 @@ class RepositorioItem {
          . '<b>Description:</b> ' . $truncated;
   }
 
+  public static function escribir_items_rows($id_rfq) {
+    Conexion::abrir_conexion();
+    $items = self::obtener_items_por_id_rfq(Conexion::obtener_conexion(), $id_rfq);
+    Conexion::cerrar_conexion();
+    $k = 1;
+    for ($i = 0; $i < count($items); $i++) {
+      $k = self::escribir_item($items[$i], $k, $i + 1);
+    }
+  }
+
   public static function escribir_items($id_rfq) {
     Conexion::abrir_conexion();
     $cotizacion = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
