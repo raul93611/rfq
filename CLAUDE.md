@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 | Feature | Status | Spec |
 |---|---|---|
-| Quote Inline Editing (modals for item/provider/subitem CRUD) | built | [features/quote-inline-editing.md](features/quote-inline-editing.md) |
+| Quote Inline Editing (modals for item/provider/subitem CRUD) | built | — |
 
 ## Environment
 
