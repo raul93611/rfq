@@ -141,15 +141,15 @@
   <div class="quote-action-bar__totals">
     <div class="quote-action-total">
       <span class="quote-action-total__label">Total Price</span>
-      <span class="quote-action-total__value">$<?= number_format($cotizacion_recuperada->obtener_quote_total_price(), 2); ?></span>
+      <span class="quote-action-total__value" id="bar-total-price">$<?= number_format($cotizacion_recuperada->obtener_quote_total_price(), 2); ?></span>
     </div>
     <div class="quote-action-total">
       <span class="quote-action-total__label">Total Profit</span>
-      <span class="quote-action-total__value">$<?= number_format($cotizacion_recuperada->obtener_quote_profit(), 2); ?></span>
+      <span class="quote-action-total__value" id="bar-total-profit">$<?= number_format($cotizacion_recuperada->obtener_quote_profit(), 2); ?></span>
     </div>
     <div class="quote-action-total">
       <span class="quote-action-total__label">Profit %</span>
-      <span class="quote-action-total__value"><?= number_format($cotizacion_recuperada->obtener_quote_profit_percentage(), 2); ?>%</span>
+      <span class="quote-action-total__value" id="bar-profit-pct"><?= number_format($cotizacion_recuperada->obtener_quote_profit_percentage(), 2); ?>%</span>
     </div>
   </div>
 

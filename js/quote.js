@@ -84,7 +84,8 @@ $(document).ready(function () {
     });
 
     const profit = (totalPrice - totalCost).toFixed(2);
-    const percentageProfit = ((profit / totalPrice) * 100).toFixed(2);
+    const percentageProfit = (totalPrice > 0 ? ((profit / totalPrice) * 100) : 0).toFixed(2);
+    const currentTotalQty = quantity.reduce((s, q) => s + q, 0);
 
     // Update input fields
     $('#additional').val(singleAdditionalItems.join());
@@ -96,12 +97,17 @@ $(document).ready(function () {
     $('#total_cost').val(totalCost.toFixed(2));
     $('#total_price').val(totalPrice.toFixed(2));
 
-    // Update table values
+    // Update table footer
     $('#total1').html(`$ ${totalCost.toFixed(2)}`);
     $('#total2').html(`$ ${totalPrice.toFixed(2)}`);
     $('#dif_total').html(`$ ${profit}<br>${percentageProfit}%`);
-    $('#total_quantity').html(totalQuantity);
+    $('#total_quantity').html(currentTotalQty);
     $('#total_additional').html(`$ ${totalAdditional.toFixed(2)}`);
+
+    // Update sticky bottom bar
+    $('#bar-total-price').text(`$${totalPrice.toFixed(2)}`);
+    $('#bar-total-profit').text(`$${profit}`);
+    $('#bar-profit-pct').text(`${percentageProfit}%`);
   };
 
   // Set interval for dynamic updates and trigger on form submission
