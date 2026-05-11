@@ -1614,11 +1614,26 @@ h3.text-info.text-center .fa-exclamation-circle {
 }
 
 /* Totals pinned to the right */
+.quote-action-bar__autosave {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  margin-right: 16px;
+}
+#autosave-status {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  transition: opacity 0.3s;
+}
+#autosave-status[data-state="saving"] { color: #8896a5; }
+#autosave-status[data-state="saved"]  { color: #16a34a; }
+#autosave-status[data-state="error"]  { color: #dc2626; }
+
 .quote-action-bar__totals {
   display: flex;
   align-items: center;
   gap: 0;
-  margin-left: auto;
 }
 
 .quote-action-total {

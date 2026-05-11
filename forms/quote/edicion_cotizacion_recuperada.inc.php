@@ -138,6 +138,10 @@
     <?php include_once 'forms/quote/templates/actions_button.inc.php'; ?>
   </div>
 
+  <div class="quote-action-bar__autosave">
+    <span id="autosave-status"></span>
+  </div>
+
   <div class="quote-action-bar__totals">
     <div class="quote-action-total">
       <span class="quote-action-total__label">Total Price</span>

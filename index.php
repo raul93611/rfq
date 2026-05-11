@@ -145,6 +145,10 @@ switch ($partes_ruta[1] ?? null) {
         $id_rfq = $partes_ruta[3];
         $ruta_elegida = 'scripts/quote/get_items_table.php';
         break;
+      case 'autosave':
+        $id_rfq = $partes_ruta[3];
+        $ruta_elegida = 'scripts/quote/autosave_quote.php';
+        break;
       case 'service':
         switch ($partes_ruta[3]) {
           case 'add_service':

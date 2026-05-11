@@ -118,6 +118,69 @@ $(document).ready(function () {
       calcQuoteTable();
     });
   }
+
+  /************************* AUTO-SAVE *************************/
+  if ($('#form_edited_quote').length) {
+    const $autosaveStatus = $('#autosave-status');
+    const autosaveUrl = '/rfq/quote/autosave/' + ($('[name="id_rfq"]').val() || '');
+    let autosaveTimer = null;
+
+    function setOriginals() {
+      $('[name="taxes"]').val($('[name="taxes"]').val());
+      $('input[name="taxes_original"]').val($('[name="taxes"]').val());
+      $('input[name="profit_original"]').val($('[name="profit"]').val());
+      $('input[name="additional_general_original"]').val($('[name="additional_general"]').val());
+      $('input[name="payment_terms_original"]').val($('input[name="payment_terms"]:checked').val());
+      $('input[name="shipping_original"]').val($('[name="shipping"]').val());
+      $('input[name="shipping_cost_original"]').val($('[name="shipping_cost"]').val());
+    }
+
+    function doAutosave() {
+      $autosaveStatus.attr('data-state', 'saving').text('Saving…');
+      $.ajax({
+        url: autosaveUrl,
+        type: 'POST',
+        data: $('#form_edited_quote').serialize(),
+        dataType: 'json',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+      })
+      .done(function (res) {
+        if (res && res.success) {
+          setOriginals();
+          $autosaveStatus.attr('data-state', 'saved').text('Saved ✓');
+          setTimeout(function () { $autosaveStatus.attr('data-state', '').text(''); }, 3000);
+        } else {
+          $autosaveStatus.attr('data-state', 'error').text('Save failed');
+        }
+      })
+      .fail(function () {
+        $autosaveStatus.attr('data-state', 'error').text('Save failed');
+      });
+    }
+
+    function scheduleAutosave() {
+      clearTimeout(autosaveTimer);
+      autosaveTimer = setTimeout(doAutosave, 1200);
+    }
+
+    // Watch quote-level fields
+    $('#form_edited_quote').on(
+      'change',
+      '#taxes, #profit, #additional_general, input[name="payment_terms"], input[name="services_payment_term"], #shipping_cost',
+      scheduleAutosave
+    );
+    $('#form_edited_quote').on('blur', '#shipping', scheduleAutosave);
+
+    // Watch per-item additional cost inputs (dynamically rendered)
+    $(document).on('change blur', 'input[id^="add_cost"]', scheduleAutosave);
+
+    // Manual save clears the pending timer and updates originals
+    $('#form_edited_quote').on('submit', function () {
+      clearTimeout(autosaveTimer);
+      $autosaveStatus.attr('data-state', '').text('');
+    });
+
+  }
   /***************************************TYPE OF CONTRACT MODAL**************************************************/
   const $fulfillmentCheckbox = $('#fulfillment');
   const $typeOfContractModal = $('#type_of_contract_modal');
