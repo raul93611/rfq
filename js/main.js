@@ -49,6 +49,23 @@ $(document).ready(function () {
     "showMethod": "fadeIn",
     "hideMethod": "fadeOut"
   };
+  /*********************************** AJAX DELETE CONFIRMATION ***********************************/
+  // Call window.confirmDelete(message, fn) to open the modal and fire fn on confirm.
+  window.confirmDelete = function (message, onConfirm) {
+    $('#alert_delete_body p').text(message);
+    continueButton.attr('href', '#');
+    continueButton.off('click.confirmDelete');
+    continueButton.one('click.confirmDelete', function (e) {
+      e.preventDefault();
+      alertDeleteSystem.modal('hide');
+      onConfirm();
+    });
+    alertDeleteSystem.one('hidden.bs.modal.confirmDelete', function () {
+      continueButton.off('click.confirmDelete');
+    });
+    alertDeleteSystem.modal('show');
+  };
+
   /*********************************** ALERT BUTTONS FOR DELETION ***********************************/
   bindDeleteButtonAlert('.delete_service_button');
   bindDeleteButtonAlert('.delete_item_button');

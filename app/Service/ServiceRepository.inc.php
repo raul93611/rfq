@@ -146,14 +146,14 @@ class ServiceRepository {
       <td>
         <div class="item-actions">
           <button type="button" class="btn btn-item btn-xs item-action-btn edit_service" data="<?= $service->get_id(); ?>"><i class="fas fa-pen mr-1"></i> Edit</button>
-          <a href="<?= DELETE_SERVICE . $service->get_id(); ?>" class="delete_service_button btn btn-item-del btn-xs item-action-btn"><i class="fas fa-trash mr-1"></i> Delete</a>
-          <a href="<?= DUPLICATE_SERVICE . $service->get_id(); ?>" class="btn btn-item-sec btn-xs item-action-btn"><i class="fas fa-copy mr-1"></i> Duplicate</a>
+          <button type="button" class="btn btn-item-del btn-xs item-action-btn svc-delete-btn" data-url="<?= DELETE_SERVICE . $service->get_id(); ?>"><i class="fas fa-trash mr-1"></i> Delete</button>
+          <button type="button" class="btn btn-item-sec btn-xs item-action-btn svc-duplicate-btn" data-url="<?= DUPLICATE_SERVICE . $service->get_id(); ?>"><i class="fas fa-copy mr-1"></i> Duplicate</button>
         </div>
       </td>
       <td><?= $service->getIdRoom() ? '<span class="mb-2 badge badge-primary" style="background-color: ' . $room->getColor() . ';">' . $room->getName() . '</span>' : '' ?><?= $key + 1; ?></td>
       <td><?= nl2br(mb_substr($service->get_description(), 0, 100)) . ' ...'; ?></td>
       <td><?= $service->get_quantity(); ?></td>
-      <td><?= $service->get_unit_price(); ?></td>
+      <td data-base-price="<?= htmlspecialchars($service->get_unit_price(), ENT_QUOTES, 'UTF-8'); ?>"><?= $service->get_unit_price(); ?></td>
       <td><?= $service->get_total_price(); ?></td>
     </tr>
 <?php

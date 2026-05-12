@@ -104,6 +104,24 @@ $(document).ready(function () {
     $('#total_quantity').html(currentTotalQty);
     $('#total_additional').html(`$ ${totalAdditional.toFixed(2)}`);
 
+    // Services calculation — runs in the same tick so the total feeds into the bottom bar
+    const svcPaymentMultiplier = $('input:radio[name=services_payment_term]:checked').val() === 'Net 30/CC' ? 1.0299 : 1;
+    let totalServices = 0;
+    $('#services_table tbody .service_item').each(function () {
+      const $cells = $(this).find('td');
+      const $unitCell = $cells.eq(4);
+      const basePrice = parseFloat($unitCell.data('base-price') || $unitCell.text()) || 0;
+      if (!$unitCell.data('base-price')) $unitCell.data('base-price', basePrice);
+      const qty = parseFloat($cells.eq(3).text()) || 0;
+      const newUnitPrice = (basePrice * svcPaymentMultiplier).toFixed(2);
+      const newTotalPrice = (newUnitPrice * qty).toFixed(2);
+      totalServices += parseFloat(newTotalPrice);
+      $unitCell.html(newUnitPrice);
+      $cells.eq(5).html(newTotalPrice);
+    });
+    $('#total_service').html(`$ ${totalServices.toFixed(2)}`);
+    totalPrice += totalServices;
+
     // Update sticky bottom bar
     $('#bar-total-price').text(`$${totalPrice.toFixed(2)}`);
     $('#bar-total-profit').text(`$${profit}`);
@@ -207,42 +225,6 @@ $(document).ready(function () {
       });
     }
   });
-  /************************* SERVICES CALCULATION *************************/
-  const $servicesTable = $('#services_table');
-  const $totalServiceField = $('#total_service');
-  const unitPriceFields = [];
-  const servicesQuantityFields = [];
-
-  // Initialize unit price and quantity arrays from table rows
-  $servicesTable.find('tbody .service_item').each(function () {
-    const $cells = $(this).find('td');
-    unitPriceFields.push(parseFloat($cells.eq(4).text()) || 0); // Ensure numerical values
-    servicesQuantityFields.push(parseFloat($cells.eq(3).text()) || 0);
-  });
-
-  const calculateServices = () => {
-    const paymentTermsMultiplier = $('input:radio[name=services_payment_term]:checked').val() === 'Net 30/CC' ? 1.0299 : 1;
-    let totalServices = 0;
-
-    $servicesTable.find('tbody .service_item').each(function (i) {
-      const newUnitPrice = (unitPriceFields[i] * paymentTermsMultiplier).toFixed(2);
-      const newTotalPrice = (newUnitPrice * servicesQuantityFields[i]).toFixed(2);
-      totalServices += parseFloat(newTotalPrice);
-
-      const $cells = $(this).find('td');
-      $cells.eq(4).html(newUnitPrice);
-      $cells.eq(5).html(newTotalPrice);
-    });
-
-    $totalServiceField.html(`$ ${totalServices.toFixed(2)}`);
-  };
-
-  // Recalculate services periodically and on form submission
-  const servicesCalculationInterval = setInterval(calculateServices, 100);
-  $('#form_edited_quote').on('submit', calculateServices);
-
-  // Clear interval when no longer needed (optional, for cleanup)
-  $('#form_edited_quote').on('submit', () => clearInterval(servicesCalculationInterval));
   /************************* LINK QUOTE MODAL *************************/
   const $linkQuoteModal = $('#link_quote_modal');
   const $linkQuoteButton = $('#link_quote_button');
@@ -323,6 +305,7 @@ $(document).ready(function () {
   }
 
   function initSummernote($ctx) {
+    destroySummernote($ctx);
     $ctx.find('.summernote_textarea').summernote({
       height: 80,
       toolbar: [
@@ -641,20 +624,21 @@ $(document).ready(function () {
   });
 
   $editProvModal.on('click', '.iem-delete-provider-btn', function () {
-    if (!window.confirm('Delete this provider?')) return;
     var idProv = $editProvForm.find('input[name="id_provider"]').val();
-    $.ajax({ url: BASE + 'delete_provider/' + idProv, type: 'GET', headers: { 'X-Requested-With': 'XMLHttpRequest' } })
-      .done(function (res) {
-        if (res && res.success) {
-          $editProvModal.data('iem-discard', true);
-          $editProvModal.modal('hide');
-          refreshItemsTable();
-          toastr.success('Provider deleted.');
-        } else {
-          toastr.error('Could not delete provider.');
-        }
-      })
-      .fail(function () { toastr.error('Network error.'); });
+    window.confirmDelete('Delete this provider?', function () {
+      $.ajax({ url: BASE + 'delete_provider/' + idProv, type: 'GET', headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+        .done(function (res) {
+          if (res && res.success) {
+            $editProvModal.data('iem-discard', true);
+            $editProvModal.modal('hide');
+            refreshItemsTable();
+            toastr.success('Provider deleted.');
+          } else {
+            toastr.error('Could not delete provider.');
+          }
+        })
+        .fail(function () { toastr.error('Network error.'); });
+    });
   });
 
   /* ======================================================
@@ -728,84 +712,73 @@ $(document).ready(function () {
   });
 
   $editPsiModal.on('click', '.iem-delete-provider-subitem-btn', function () {
-    if (!window.confirm('Delete this provider?')) return;
     var idPsi = $editPsiForm.find('input[name="id_provider_subitem"]').val();
-    $.ajax({ url: BASE + 'delete_provider_subitem/' + idPsi, type: 'GET', headers: { 'X-Requested-With': 'XMLHttpRequest' } })
-      .done(function (res) {
-        if (res && res.success) {
-          $editPsiModal.data('iem-discard', true);
-          $editPsiModal.modal('hide');
-          refreshItemsTable();
-          toastr.success('Provider deleted.');
-        } else {
-          toastr.error('Could not delete provider.');
-        }
-      })
-      .fail(function () { toastr.error('Network error.'); });
+    window.confirmDelete('Delete this provider?', function () {
+      $.ajax({ url: BASE + 'delete_provider_subitem/' + idPsi, type: 'GET', headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+        .done(function (res) {
+          if (res && res.success) {
+            $editPsiModal.data('iem-discard', true);
+            $editPsiModal.modal('hide');
+            refreshItemsTable();
+            toastr.success('Provider deleted.');
+          } else {
+            toastr.error('Could not delete provider.');
+          }
+        })
+        .fail(function () { toastr.error('Network error.'); });
+    });
   });
 
   /* ======================================================
      DELETE handlers (delegated — rows are AJAX-refreshed)
   ====================================================== */
   $(document).on('click', '.iem-delete-item', function () {
-    if (!window.confirm('Delete this item and all its subitems?')) return;
     var url = $(this).data('url');
-    $.ajax({ url: url, type: 'GET', headers: { 'X-Requested-With': 'XMLHttpRequest' } })
-      .done(function (res) {
-        if (res && res.success) {
-          refreshItemsTable();
-          toastr.success('Item deleted.');
-        } else {
-          toastr.error('Could not delete item.');
-        }
-      })
-      .fail(function () { toastr.error('Network error.'); });
+    window.confirmDelete('Delete this item and all its subitems?', function () {
+      $.ajax({ url: url, type: 'GET', headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+        .done(function (res) {
+          if (res && res.success) { refreshItemsTable(); toastr.success('Item deleted.'); }
+          else { toastr.error('Could not delete item.'); }
+        })
+        .fail(function () { toastr.error('Network error.'); });
+    });
   });
 
   $(document).on('click', '.iem-delete-subitem', function () {
-    if (!window.confirm('Delete this subitem?')) return;
     var url = $(this).data('url');
-    $.ajax({ url: url, type: 'GET', headers: { 'X-Requested-With': 'XMLHttpRequest' } })
-      .done(function (res) {
-        if (res && res.success) {
-          refreshItemsTable();
-          toastr.success('Subitem deleted.');
-        } else {
-          toastr.error('Could not delete subitem.');
-        }
-      })
-      .fail(function () { toastr.error('Network error.'); });
+    window.confirmDelete('Delete this subitem?', function () {
+      $.ajax({ url: url, type: 'GET', headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+        .done(function (res) {
+          if (res && res.success) { refreshItemsTable(); toastr.success('Subitem deleted.'); }
+          else { toastr.error('Could not delete subitem.'); }
+        })
+        .fail(function () { toastr.error('Network error.'); });
+    });
   });
 
   /* ---------- Provider delete links (rendered inline as part of the provider name cell) ---------- */
   $(document).on('click', '.iem-delete-provider', function () {
-    if (!window.confirm('Delete this provider?')) return;
     var url = $(this).data('url');
-    $.ajax({ url: url, type: 'GET', headers: { 'X-Requested-With': 'XMLHttpRequest' } })
-      .done(function (res) {
-        if (res && res.success) {
-          refreshItemsTable();
-          toastr.success('Provider deleted.');
-        } else {
-          toastr.error('Could not delete provider.');
-        }
-      })
-      .fail(function () { toastr.error('Network error.'); });
+    window.confirmDelete('Delete this provider?', function () {
+      $.ajax({ url: url, type: 'GET', headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+        .done(function (res) {
+          if (res && res.success) { refreshItemsTable(); toastr.success('Provider deleted.'); }
+          else { toastr.error('Could not delete provider.'); }
+        })
+        .fail(function () { toastr.error('Network error.'); });
+    });
   });
 
   $(document).on('click', '.iem-delete-provider-subitem', function () {
-    if (!window.confirm('Delete this provider?')) return;
     var url = $(this).data('url');
-    $.ajax({ url: url, type: 'GET', headers: { 'X-Requested-With': 'XMLHttpRequest' } })
-      .done(function (res) {
-        if (res && res.success) {
-          refreshItemsTable();
-          toastr.success('Provider deleted.');
-        } else {
-          toastr.error('Could not delete provider.');
-        }
-      })
-      .fail(function () { toastr.error('Network error.'); });
+    window.confirmDelete('Delete this provider?', function () {
+      $.ajax({ url: url, type: 'GET', headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+        .done(function (res) {
+          if (res && res.success) { refreshItemsTable(); toastr.success('Provider deleted.'); }
+          else { toastr.error('Could not delete provider.'); }
+        })
+        .fail(function () { toastr.error('Network error.'); });
+    });
   });
 
 }(jQuery));

@@ -10,7 +10,8 @@ if (isset($_POST['guardar_cambios_subitem'])) {
   $description = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
   $description_project = filter_input(INPUT_POST, 'description_project', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
   $quantity = filter_input(INPUT_POST, 'quantity', FILTER_VALIDATE_INT);
-  $comments = filter_input(INPUT_POST, 'comments', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+  $comments_raw = trim($_POST['comments'] ?? '');
+  $comments = (trim(strip_tags($comments_raw)) === '') ? '' : $comments_raw;
   $website = filter_input(INPUT_POST, 'website', FILTER_SANITIZE_URL);
 
   // Original values for audit trail (not sanitized as they are for comparison)

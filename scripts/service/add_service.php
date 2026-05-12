@@ -28,15 +28,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_service_button'])
     // Close database connection
     Conexion::cerrar_conexion();
 
-    // Redirect to the edit quote page with the newly added service
-    Redireccion::redirigir(EDITAR_COTIZACION . '/' . $id_rfq . '#service' . $id);
+    $isAjax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
+    if ($isAjax) {
+      header('Content-Type: application/json');
+      echo json_encode(['success' => true]);
+    } else {
+      Redireccion::redirigir(EDITAR_COTIZACION . '/' . $id_rfq . '#service' . $id);
+    }
   } catch (InvalidArgumentException $e) {
-    // Handle validation exceptions
-    // Implement appropriate error handling (e.g., redirect to an error page, log the error, etc.)
-    die("Error: " . $e->getMessage());
+    $isAjax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
+    if ($isAjax) {
+      header('Content-Type: application/json');
+      echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+    } else {
+      die("Error: " . $e->getMessage());
+    }
   } catch (Exception $e) {
-    // Handle other exceptions
-    // Implement appropriate error handling (e.g., redirect to an error page, log the error, etc.)
-    die("An error occurred: " . $e->getMessage());
+    $isAjax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
+    if ($isAjax) {
+      header('Content-Type: application/json');
+      echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+    } else {
+      die("An error occurred: " . $e->getMessage());
+    }
   }
 }
