@@ -1,5 +1,5 @@
 <?php if ($cotizacion_recuperada->obtener_canal() !== 'Chemonics'): ?>
-  <a class="btn btn-secondary btn-sm" href="<?= ADD_ITEM . '/' . $cotizacion_recuperada->obtener_id(); ?>">
+  <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#add-item-modal">
     <i class="fa fa-plus-circle"></i> Add item
-  </a>
+  </button>
 <?php endif; ?>

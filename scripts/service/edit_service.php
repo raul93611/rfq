@@ -19,8 +19,14 @@ if (isset($_POST['edit_service_button'])) {
     // Close connection
     Conexion::cerrar_conexion();
 
+    $isAjax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
     if ($isEdited) {
-      Redireccion::redirigir(EDITAR_COTIZACION . '/' . $_POST['id_rfq'] . '#service' . $id_service);
+      if ($isAjax) {
+        header('Content-Type: application/json');
+        echo json_encode(['success' => true]);
+      } else {
+        Redireccion::redirigir(EDITAR_COTIZACION . '/' . $_POST['id_rfq'] . '#service' . $id_service);
+      }
     } else {
       throw new Exception('Failed to edit service.');
     }
@@ -28,7 +34,12 @@ if (isset($_POST['edit_service_button'])) {
     if (isset($connection)) {
       Conexion::cerrar_conexion();
     }
-    // Handle the error (e.g., log it, display a message, etc.)
-    die("Error: " . $e->getMessage());
+    $isAjax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
+    if ($isAjax) {
+      header('Content-Type: application/json');
+      echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+    } else {
+      die("Error: " . $e->getMessage());
+    }
   }
 }

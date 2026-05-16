@@ -13,7 +13,7 @@
         <?php include_once 'forms/service/add_service_form.inc.php'; ?>
       </div>
       <div class="modal-footer" style="border-top:1px solid #f0f2f5;padding:12px 20px;justify-content:flex-end;gap:8px;">
-        <button type="submit" form="add_service_form" name="add_service_button" class="btn btn-primary btn-sm">
+        <button type="button" class="btn btn-primary btn-sm svc-add-save-btn">
           <i class="fa fa-check mr-1"></i> Add Service
         </button>
         <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">

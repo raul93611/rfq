@@ -24,7 +24,7 @@ Conexion::cerrar_conexion();
         </div>
         <div class="form-group mb-0">
           <label for="description_project">Description</label>
-          <textarea class="form-control form-control-sm" rows="5" placeholder="Enter description ..." id="description_project" name="description_project"></textarea>
+          <textarea class="form-control form-control-sm" rows="3" placeholder="Enter description ..." id="description_project" name="description_project"></textarea>
         </div>
       </div>
     </div>
@@ -45,7 +45,7 @@ Conexion::cerrar_conexion();
         </div>
         <div class="form-group mb-0">
           <label for="description">Description</label>
-          <textarea class="form-control form-control-sm" rows="5" placeholder="Enter description ..." id="description" name="description"></textarea>
+          <textarea class="form-control form-control-sm" rows="3" placeholder="Enter description ..." id="description" name="description"></textarea>
         </div>
       </div>
     </div>
@@ -76,7 +76,7 @@ Conexion::cerrar_conexion();
     <?php endif; ?>
     <div class="form-group mb-0">
       <label for="comments">Comments</label>
-      <textarea class="summernote_textarea form-control form-control-sm" rows="4" placeholder="Additional comments ..." id="comments" name="comments"></textarea>
+      <textarea class="summernote_textarea form-control form-control-sm" rows="3" placeholder="Additional comments ..." id="comments" name="comments"></textarea>
     </div>
   </div>
 

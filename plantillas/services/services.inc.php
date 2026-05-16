@@ -9,7 +9,7 @@
   </div>
 </div>
 
-<div class="mt-3">
+<div class="mt-3" id="services_section">
   <?php
   Conexion::abrir_conexion();
   ServiceRepository::display_services(Conexion::obtener_conexion(), $cotizacion_recuperada);

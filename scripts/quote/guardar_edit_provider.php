@@ -38,20 +38,31 @@ if (isset($_POST['guardar_cambios_provider'])) {
       // Close the database connection
       Conexion::cerrar_conexion();
 
-      // Redirect if the provider was successfully edited
       if ($provider_editado) {
-        Redireccion::redirigir(EDITAR_COTIZACION . '/' . $id_rfq . '#item' . $item->obtener_id());
+        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+          header('Content-Type: application/json');
+          echo json_encode(['success' => true]);
+        } else {
+          Redireccion::redirigir(EDITAR_COTIZACION . '/' . $id_rfq . '#item' . $item->obtener_id());
+        }
       } else {
-        echo 'Error: Failed to update the provider.';
+        throw new Exception('Failed to update the provider.');
       }
     } catch (Exception $e) {
-      // Handle exceptions and close the connection if open
-      if (isset($conexion)) {
-        Conexion::cerrar_conexion();
+      if (isset($conexion)) { Conexion::cerrar_conexion(); }
+      if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+        header('Content-Type: application/json');
+        echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+      } else {
+        echo 'Error: ' . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8');
       }
-      echo 'Error: ' . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8');
     }
   } else {
-    echo 'Error: Missing or invalid required fields.';
+    if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+      header('Content-Type: application/json');
+      echo json_encode(['success' => false, 'message' => 'Missing or invalid required fields.']);
+    } else {
+      echo 'Error: Missing or invalid required fields.';
+    }
   }
 }

@@ -128,10 +128,10 @@ class RepositorioItem {
     // --- Options column ---
     $optionsCell = '
       <div class="item-actions">
-        <a href="' . EDIT_ITEM   . '/' . $itemId . '" class="btn btn-item     btn-xs item-action-btn"><i class="fa fa-edit"></i> Edit</a>
-        <a href="' . DELETE_ITEM . '/' . $itemId . '" class="delete_item_button btn btn-item-del btn-xs item-action-btn"><i class="fa fa-trash"></i> Delete</a>
-        <a href="' . ADD_PROVIDER . '/' . $itemId . '" class="btn btn-item-sec btn-xs item-action-btn"><i class="fa fa-plus-circle"></i> Provider</a>
-        <a href="' . ADD_SUBITEM  . '/' . $itemId . '" class="btn btn-item-sec btn-xs item-action-btn"><i class="fa fa-plus-circle"></i> Subitem</a>
+        <button type="button" class="btn btn-item btn-xs item-action-btn iem-edit-item" data-id="' . $itemId . '" data-load-url="' . LOAD_EDIT_ITEM_FORM . $itemId . '"><i class="fa fa-edit"></i> Edit</button>
+        <button type="button" class="btn btn-item-del btn-xs item-action-btn iem-delete-item" data-id="' . $itemId . '" data-url="' . DELETE_ITEM . '/' . $itemId . '"><i class="fa fa-trash"></i> Delete</button>
+        <button type="button" class="btn btn-item-sec btn-xs item-action-btn iem-add-provider" data-id-item="' . $itemId . '"><i class="fa fa-plus-circle"></i> Provider</button>
+        <button type="button" class="btn btn-item-sec btn-xs item-action-btn iem-add-subitem" data-id-item="' . $itemId . '"><i class="fa fa-plus-circle"></i> Subitem</button>
       </div>';
 
     // --- # column (with optional room badge) ---
@@ -157,7 +157,7 @@ class RepositorioItem {
     foreach ($providers as $idx => $provider) {
       $name           = $provider->obtener_provider();
       $label          = strlen($name) >= 10 ? mb_substr($name, 0, 10) . '...' : $name;
-      $providerNames  .= '<a href="' . EDIT_PROVIDER . '/' . $provider->obtener_id() . '"><b>' . $label . ':</b></a><br>';
+      $providerNames  .= '<button type="button" class="iem-provider-link iem-edit-provider" data-id="' . $provider->obtener_id() . '" data-load-url="' . LOAD_EDIT_PROVIDER_FORM . $provider->obtener_id() . '"><b>' . $label . ':</b></button><br>';
       $providerPrices .= '$ ' . $provider->obtener_price() . '<br>';
       $precios[$idx]   = $provider->obtener_price();
     }
@@ -222,6 +222,16 @@ class RepositorioItem {
     return '<b>Brand:</b> ' . $brand . '<br>'
          . '<b>Part #:</b> ' . $partNumber . '<br>'
          . '<b>Description:</b> ' . $truncated;
+  }
+
+  public static function escribir_items_rows($id_rfq) {
+    Conexion::abrir_conexion();
+    $items = self::obtener_items_por_id_rfq(Conexion::obtener_conexion(), $id_rfq);
+    Conexion::cerrar_conexion();
+    $k = 1;
+    for ($i = 0; $i < count($items); $i++) {
+      $k = self::escribir_item($items[$i], $k, $i + 1);
+    }
   }
 
   public static function escribir_items($id_rfq) {

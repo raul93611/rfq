@@ -12,8 +12,10 @@ $_rfq_code = htmlspecialchars($cotizacion_recuperada->obtener_email_code());
 $_back_url = EDITAR_COTIZACION . '/' . $_rfq_id;
 ?>
 <script>
-document.getElementById('edit-item-subtitle').textContent =
-  'Proposal #<?= $_rfq_id ?> — <?= addslashes($_rfq_code) ?>';
+(function(){
+  var el = document.getElementById('edit-item-subtitle');
+  if (el) el.textContent = 'Proposal #<?= $_rfq_id ?> — <?= addslashes($_rfq_code) ?>';
+})();
 </script>
 
 <input type="hidden" name="id_item" value="<?= htmlspecialchars($id_item); ?>">
@@ -41,7 +43,7 @@ document.getElementById('edit-item-subtitle').textContent =
         </div>
         <div class="form-group mb-0">
           <label for="description_project">Description</label>
-          <textarea class="form-control form-control-sm" rows="5" placeholder="Enter description ..." id="description_project" name="description_project"><?= htmlspecialchars($item->obtener_description_project()); ?></textarea>
+          <textarea class="form-control form-control-sm" rows="3" placeholder="Enter description ..." id="description_project" name="description_project"><?= htmlspecialchars($item->obtener_description_project()); ?></textarea>
           <input type="hidden" name="description_project_original" value="<?= htmlspecialchars($item->obtener_description_project()); ?>">
         </div>
       </div>
@@ -65,7 +67,7 @@ document.getElementById('edit-item-subtitle').textContent =
         </div>
         <div class="form-group mb-0">
           <label for="description">Description</label>
-          <textarea class="form-control form-control-sm" rows="5" placeholder="Enter description ..." id="description" name="description"><?= htmlspecialchars($item->obtener_description()); ?></textarea>
+          <textarea class="form-control form-control-sm" rows="3" placeholder="Enter description ..." id="description" name="description"><?= htmlspecialchars($item->obtener_description()); ?></textarea>
           <input type="hidden" name="description_original" value="<?= htmlspecialchars($item->obtener_description()); ?>">
         </div>
       </div>
@@ -101,8 +103,8 @@ document.getElementById('edit-item-subtitle').textContent =
     <?php endif; ?>
     <div class="form-group mb-0">
       <label for="comments">Comments</label>
-      <textarea class="summernote_textarea form-control form-control-sm" rows="4" placeholder="Additional comments ..." id="comments" name="comments"><?= htmlspecialchars($item->obtener_comments()); ?></textarea>
-      <textarea name="comments_original" rows="8" cols="80" style="display:none;"><?= htmlspecialchars($item->obtener_comments()); ?></textarea>
+      <textarea class="summernote_textarea form-control form-control-sm" rows="3" placeholder="Additional comments ..." id="comments" name="comments"><?= htmlspecialchars($item->obtener_comments()); ?></textarea>
+      <textarea name="comments_original" rows="3" cols="80" style="display:none;"><?= htmlspecialchars($item->obtener_comments()); ?></textarea>
     </div>
   </div>
 

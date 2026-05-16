@@ -141,6 +141,14 @@ switch ($partes_ruta[1] ?? null) {
       case 'import_items':
         $ruta_elegida = 'scripts/quote/import_items.php';
         break;
+      case 'get_items_table':
+        $id_rfq = $partes_ruta[3];
+        $ruta_elegida = 'scripts/quote/get_items_table.php';
+        break;
+      case 'autosave':
+        $id_rfq = $partes_ruta[3];
+        $ruta_elegida = 'scripts/quote/autosave_quote.php';
+        break;
       case 'service':
         switch ($partes_ruta[3]) {
           case 'add_service':
@@ -160,6 +168,10 @@ switch ($partes_ruta[1] ?? null) {
           case 'duplicate_service';
             $id_service = $partes_ruta[4];
             $ruta_elegida = 'scripts/service/duplicate_service.php';
+            break;
+          case 'get_services_table':
+            $id_rfq = $partes_ruta[4];
+            $ruta_elegida = 'scripts/service/get_services_table.php';
             break;
           default:
             break;
@@ -214,6 +226,22 @@ switch ($partes_ruta[1] ?? null) {
           case 'delete_provider_subitem':
             $id_provider_subitem = $partes_ruta[4];
             $ruta_elegida = 'scripts/quote/delete_provider_subitem.php';
+            break;
+          case 'load_edit_item_form':
+            $id_item = $partes_ruta[4];
+            $ruta_elegida = 'scripts/quote/load_edit_item_form.php';
+            break;
+          case 'load_edit_provider_form':
+            $id_provider = $partes_ruta[4];
+            $ruta_elegida = 'scripts/quote/load_edit_provider_form.php';
+            break;
+          case 'load_edit_subitem_form':
+            $id_subitem = $partes_ruta[4];
+            $ruta_elegida = 'scripts/quote/load_edit_subitem_form.php';
+            break;
+          case 'load_edit_provider_subitem_form':
+            $id_provider_subitem = $partes_ruta[4];
+            $ruta_elegida = 'scripts/quote/load_edit_provider_subitem_form.php';
             break;
           default:
             break;

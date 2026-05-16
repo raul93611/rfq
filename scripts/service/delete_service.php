@@ -18,12 +18,21 @@ try {
     throw new Exception('Failed to delete the service.');
   }
 
-  // Redirect to the edit quote page with the services table anchor
-  Redireccion::redirigir(EDITAR_COTIZACION . '/' . $service->get_id_rfq() . '#services_table');
+  $isAjax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
+  if ($isAjax) {
+    header('Content-Type: application/json');
+    echo json_encode(['success' => true]);
+  } else {
+    Redireccion::redirigir(EDITAR_COTIZACION . '/' . $service->get_id_rfq() . '#services_table');
+  }
 } catch (Exception $e) {
-  // Display a generic error message to the user
-  die("Error: An unexpected error occurred. Please try again later.");
+  $isAjax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
+  if ($isAjax) {
+    header('Content-Type: application/json');
+    echo json_encode(['success' => false, 'message' => 'An unexpected error occurred.']);
+  } else {
+    die("Error: An unexpected error occurred. Please try again later.");
+  }
 } finally {
-  // Ensure the connection is closed
   Conexion::cerrar_conexion();
 }

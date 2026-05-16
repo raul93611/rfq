@@ -9,7 +9,8 @@ if (isset($_POST['guardar_subitem'])) {
   $description = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
   $description_project = filter_input(INPUT_POST, 'description_project', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
   $quantity = filter_input(INPUT_POST, 'quantity', FILTER_VALIDATE_INT);
-  $comments = filter_input(INPUT_POST, 'comments', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+  $comments_raw = trim($_POST['comments'] ?? '');
+  $comments = (trim(strip_tags($comments_raw)) === '') ? '' : $comments_raw;
   $website = filter_input(INPUT_POST, 'website', FILTER_SANITIZE_URL);
 
   // Validate required inputs
@@ -57,16 +58,27 @@ if (isset($_POST['guardar_subitem'])) {
       // Close the database connection
       Conexion::cerrar_conexion();
 
-      // Redirect to the updated page
-      Redireccion::redirigir(EDITAR_COTIZACION . '/' . $id_rfq . '#subitem' . $id);
-    } catch (Exception $e) {
-      // Handle exceptions and close the connection if open
-      if (isset($conexion)) {
-        Conexion::cerrar_conexion();
+      if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+        header('Content-Type: application/json');
+        echo json_encode(['success' => true]);
+      } else {
+        Redireccion::redirigir(EDITAR_COTIZACION . '/' . $id_rfq . '#subitem' . $id);
       }
-      echo 'Error: ' . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8');
+    } catch (Exception $e) {
+      if (isset($conexion)) { Conexion::cerrar_conexion(); }
+      if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+        header('Content-Type: application/json');
+        echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+      } else {
+        echo 'Error: ' . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8');
+      }
     }
   } else {
-    echo 'Error: Missing or invalid required fields.';
+    if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+      header('Content-Type: application/json');
+      echo json_encode(['success' => false, 'message' => 'Missing or invalid required fields.']);
+    } else {
+      echo 'Error: Missing or invalid required fields.';
+    }
   }
 }
