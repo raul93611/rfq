@@ -108,7 +108,8 @@ function createAndInsertQuote($validador, $usuario_designado) {
   if ($cotizacion_insertada) {
     try {
       $designatedUsername = $_POST['usuario_designado'];
-      $sheetRow = SheetSyncService::appendRow($cotizacion, $designatedUsername);
+      $insertedQuote = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
+      $sheetRow = SheetSyncService::appendRow($insertedQuote, $designatedUsername);
       SheetSyncRepository::updateSyncStatus(Conexion::obtener_conexion(), $id_rfq, 'synced', $sheetRow);
     } catch (Exception $syncEx) {
       SheetSyncRepository::updateSyncStatus(Conexion::obtener_conexion(), $id_rfq, 'failed');
