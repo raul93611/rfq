@@ -4,6 +4,20 @@
   <div class="row">
     <div class="col-md-8 offset-md-2">
 
+      <!-- Opportunity Name -->
+      <div class="checklist-section mb-4">
+        <div class="checklist-section-title">Opportunity</div>
+        <div class="form-group">
+          <label for="name" style="font-weight:600;">Opportunity Name</label>
+          <input type="text" class="form-control form-control-sm" id="name" name="name"
+                 placeholder="e.g. Westpine Middle School AV Refresh"
+                 value="<?= htmlspecialchars($quote->getName() ?? '', ENT_QUOTES, 'UTF-8'); ?>">
+          <small class="form-text text-muted">
+            <i class="fas fa-table mr-1" style="color:#2db4e8;"></i>Used as the row label when syncing to the SharePoint sheet.
+          </small>
+        </div>
+      </div>
+
       <!-- Identification -->
       <div class="checklist-section mb-4">
         <div class="checklist-section-title">Identification</div>

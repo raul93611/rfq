@@ -28,6 +28,7 @@ define('LINK_QUOTE', QUOTE_SC . 'link_quote/');
 define('IMPORT_ITEMS', QUOTE_SC . 'import_items/');
 define('GET_ITEMS_TABLE', QUOTE_SC . 'get_items_table/');
 define('AUTOSAVE_QUOTE', QUOTE_SC . 'autosave/');
+define('SYNC_TO_SHEET', QUOTE_SC . 'sync_to_sheet/');
 /********************************SERVICE SCRIPTS*****************************************/
 define('SERVICE_SC', QUOTE_SC . 'service/');
 define('ADD_SERVICE', SERVICE_SC . 'add_service');

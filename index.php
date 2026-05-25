@@ -117,6 +117,9 @@ switch ($partes_ruta[1] ?? null) {
       case 'award_table':
         $ruta_elegida = 'scripts/quote/award_table.php';
         break;
+      case 'sync_to_sheet':
+        $ruta_elegida = 'scripts/quote/sync_to_sheet.php';
+        break;
       case 'no_bid_table':
         $ruta_elegida = 'scripts/quote/no_bid_table.php';
         break;

@@ -2193,3 +2193,75 @@ h3.text-info.text-center .fa-exclamation-circle {
   min-height: calc(3 * 1.5em + 1rem) !important;
   resize: vertical;
 }
+
+/* =================== Sheet Sync Block (detail page) =================== */
+.ss-block {
+  margin-top: 16px;
+  display: grid;
+  grid-template-columns: 40px 1fr auto;
+  gap: 14px;
+  align-items: center;
+  padding: 14px 16px;
+  background: white;
+  border: 1px solid #e3e7ee;
+  border-radius: 10px;
+  box-shadow: 0 1px 2px rgba(15,22,35,0.04);
+  border-left: 3px solid #aab4c2;
+}
+.ss-block-synced  { border-left-color: #16a34a; }
+.ss-block-failed  { background: #fbe9e9; border-color: #f7d4d4; border-left-color: #dc2626; }
+.ss-block-never   { border-left-color: #aab4c2; }
+.ss-block-syncing { border-left-color: #2db4e8; background: #e6f5fc; border-color: #cce8f5; }
+
+.ss-block-icon { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; flex-shrink: 0; }
+.ss-block-icon-synced  { background: #e8f6ec; color: #16a34a; }
+.ss-block-icon-failed  { background: white; color: #dc2626; border: 1px solid #f7d4d4; }
+.ss-block-icon-never   { background: #f4f6fa; color: #7d8ba0; }
+.ss-block-icon-syncing { background: white; color: #2db4e8; border: 1px solid #cce8f5; }
+
+.ss-block-body { min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.ss-block-label { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; color: #7d8ba0; }
+.ss-block-status-row { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; font-size: 13.5px; color: #2c3849; }
+.ss-block-status { font-weight: 600; }
+.ss-block-status-synced  { color: #15803d; }
+.ss-block-status-failed  { color: #b91c1c; }
+.ss-block-status-never   { color: #5a6a7e; }
+.ss-block-status-syncing { color: #1aa2dc; }
+.ss-block-meta  { color: #5a6a7e; font-size: 12.5px; }
+.ss-block-error { color: #b91c1c; font-size: 12.5px; font-style: italic; }
+.ss-block-opp   { margin-top: 2px; font-size: 11.5px; color: #7d8ba0; display: inline-flex; align-items: center; gap: 5px; }
+.ss-block-opp strong { color: #2c3849; font-weight: 600; }
+
+.ss-btn {
+  height: 34px; padding: 0 14px;
+  border-radius: 7px; border: 1px solid #e3e7ee;
+  background: white; font-size: 12.5px; font-weight: 500;
+  color: #2c3849; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 7px;
+  white-space: nowrap; transition: all 0.12s;
+  font-family: inherit;
+}
+.ss-btn:disabled { cursor: not-allowed; opacity: 0.7; }
+.ss-btn-neutral:hover:not(:disabled) { background: #f4f6fa; border-color: #b9c3d2; }
+.ss-btn-success { color: #15803d; border-color: #d6efde; }
+.ss-btn-success:hover:not(:disabled) { background: #e8f6ec; border-color: #16a34a; }
+.ss-btn-danger { color: #b91c1c; border-color: #f7d4d4; }
+.ss-btn-danger:hover:not(:disabled) { background: #fbe9e9; border-color: #dc2626; }
+.ss-btn-busy { color: #1aa2dc; border-color: #cce8f5; }
+
+.ss-btn-spinner {
+  width: 13px; height: 13px;
+  border: 2px solid currentColor; border-right-color: transparent;
+  border-radius: 50%; animation: ss-spin 0.7s linear infinite;
+  display: inline-block; opacity: 0.85;
+}
+@keyframes ss-spin { to { transform: rotate(360deg); } }
+
+/* =================== Sync row icon (quote tables) =================== */
+.ss-rowicon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 22px; height: 22px; border-radius: 50%;
+}
+.ss-rowicon-synced { background: #e8f6ec; color: #16a34a; }
+.ss-rowicon-failed { background: #fbe9e9; color: #dc2626; }
+.ss-rowicon-never  { background: #f4f6fa; color: #aab4c2; }

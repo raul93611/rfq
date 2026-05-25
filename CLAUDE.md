@@ -7,6 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | Feature | Status | Spec |
 |---|---|---|
 | Quote Inline Editing (modals for item/provider/subitem CRUD) | built | — |
+| SharePoint Sheet Sync (portal → E-LOGIC BID PIPELINE xlsx via Graph API) | built | — |
 
 ## Environment
 

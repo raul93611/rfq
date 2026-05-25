@@ -66,6 +66,10 @@ class Rfq {
   private $bpa;
   private $reference_url;
   private $priority;
+  private $name;
+  private $sheet_sync_status;
+  private $sheet_sync_at;
+  private $sheet_row;
 
   public function __construct(array $row) {
     $this->id = $row['id'] ?? null;
@@ -134,6 +138,10 @@ class Rfq {
     $this->bpa = $row['bpa'] ?? null;
     $this->reference_url = $row['reference_url'] ?? null;
     $this->priority = $row['priority'] ?? null;
+    $this->name = $row['name'] ?? null;
+    $this->sheet_sync_status = $row['sheet_sync_status'] ?? null;
+    $this->sheet_sync_at = $row['sheet_sync_at'] ?? null;
+    $this->sheet_row = $row['sheet_row'] ?? null;
   }
 
   public function obtener_id() {
@@ -674,5 +682,52 @@ class Rfq {
 
   public function getPriority() {
     return $this->priority;
+  }
+
+  public function getName() {
+    return $this->name;
+  }
+
+  public function getSheetSyncStatus() {
+    return $this->sheet_sync_status;
+  }
+
+  public function getSheetSyncAt() {
+    return $this->sheet_sync_at;
+  }
+
+  public function getSheetRow() {
+    return $this->sheet_row;
+  }
+
+  public function getSheetStatus() {
+    $no_bid_comments = ['No Bid', 'Manufacturer in the Bid', 'Expired due date', 'Supplier did not provide a quote', 'Others'];
+    if ($this->award || $this->fullfillment || $this->invoice || $this->submitted_invoice) {
+      return 'AWARD';
+    }
+    if ($this->status == 1) {
+      return 'SUBMITTED';
+    }
+    if ($this->comments === 'Not submitted') {
+      return 'NOT SUBMITTED';
+    }
+    if ($this->comments === 'Cancelled') {
+      return 'CANCELLED';
+    }
+    if (in_array($this->comments, $no_bid_comments)) {
+      return 'NO BID';
+    }
+    if ($this->completado == 1) {
+      return 'BID';
+    }
+    return 'TBD';
+  }
+
+  public function getVehicleForSheet() {
+    switch ($this->canal) {
+      case 'FedBid': return 'Unison';
+      case 'FBO':    return 'SAM';
+      default:       return $this->canal;
+    }
   }
 }

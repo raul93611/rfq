@@ -3,6 +3,14 @@
     <?php $validador->mostrar_error_email_code(); ?>
   </div>
 
+  <div class="form-group">
+    <label for="name" style="font-weight:600;">Opportunity Name</label>
+    <input type="text" class="form-control form-control-lg" id="name" name="name" placeholder="e.g. Westpine Middle School AV Refresh" value="<?= htmlspecialchars($_POST['name'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
+    <small class="form-text text-muted">
+      <i class="fas fa-table mr-1" style="color:#2db4e8;"></i>Used as the row label when syncing to the SharePoint sheet.
+    </small>
+  </div>
+
   <div class="form-row">
     <div class="col-md-6">
       <div class="form-group">
