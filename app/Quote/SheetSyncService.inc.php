@@ -1,16 +1,8 @@
 <?php
 class SheetSyncService {
-  private static function fileBase() {
-    return '/drives/' . GRAPH_SHAREPOINT_FILE_ID . '/items/' . GRAPH_SHAREPOINT_FILE_ID;
-  }
-
-  private static function worksheetBase() {
-    return '/me/drive/items/' . GRAPH_SHAREPOINT_FILE_ID
-      . '/workbook/worksheets/' . rawurlencode(GRAPH_SHEET_NAME);
-  }
-
   private static function wsPath($suffix = '') {
-    return '/drives/' . GRAPH_SHAREPOINT_FILE_ID . '/items/' . GRAPH_SHAREPOINT_FILE_ID
+    return '/users/' . rawurlencode(GRAPH_SHAREPOINT_OWNER)
+      . '/drive/items/' . GRAPH_SHAREPOINT_FILE_ID
       . '/workbook/worksheets/' . rawurlencode(GRAPH_SHEET_NAME) . $suffix;
   }
 
@@ -41,7 +33,7 @@ class SheetSyncService {
   }
 
   public static function appendRow(Rfq $quote, $designatedUsername) {
-    if (empty(GRAPH_CLIENT_SECRET) || empty(GRAPH_SHAREPOINT_FILE_ID)) {
+    if (empty(GRAPH_CLIENT_SECRET)) {
       return null;
     }
 
@@ -56,7 +48,7 @@ class SheetSyncService {
   }
 
   public static function updateStatusCell($sheetRow, $status) {
-    if (empty(GRAPH_CLIENT_SECRET) || empty(GRAPH_SHAREPOINT_FILE_ID) || !$sheetRow) {
+    if (empty(GRAPH_CLIENT_SECRET) || !$sheetRow) {
       return;
     }
 
@@ -66,7 +58,7 @@ class SheetSyncService {
   }
 
   public static function deleteRow($sheetRow) {
-    if (empty(GRAPH_CLIENT_SECRET) || empty(GRAPH_SHAREPOINT_FILE_ID) || !$sheetRow) {
+    if (empty(GRAPH_CLIENT_SECRET) || !$sheetRow) {
       return;
     }
 
