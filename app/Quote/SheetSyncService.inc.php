@@ -7,16 +7,24 @@ class SheetSyncService {
   }
 
   private static function buildRowValues(Rfq $quote, $designatedUsername) {
+    $endDateRaw  = $quote->obtener_end_date() ?? '';
+    $endParts    = explode(' ', $endDateRaw, 2);
+    $endDate     = $endParts[0] ?? '';
+    $endTime     = $endParts[1] ?? '';
+
     return [
-      $quote->obtener_id(),
-      $quote->getVehicleForSheet(),
-      $quote->obtener_email_code(),
-      $quote->getName() ?? '',
-      $quote->getSheetStatus(),
-      $quote->obtener_issue_date() ?? '',
-      $quote->obtener_end_date() ?? '',
-      $quote->obtener_type_of_bid() ?? '',
-      $designatedUsername,
+      $quote->obtener_id(),           // A: PROPOSAL
+      $quote->getVehicleForSheet(),   // B: VEHICLE
+      $quote->obtener_email_code(),   // C: ID
+      $quote->getName() ?? '',        // D: (opportunity name)
+      $quote->getSheetStatus(),       // E: STATUS
+      $quote->obtener_issue_date() ?? '', // F: INTERNAL DUE DATE
+      $endDate,                       // G: CLIENT DUE DATE
+      $endTime,                       // H: DUE TIME
+      '',                             // I: TYPE (manual)
+      $quote->obtener_type_of_bid() ?? '', // J: CATEGORY
+      '', '', '', '', '', '', '', '', '', // K–S: blank
+      $designatedUsername,            // T: PROPOSAL WRITER
     ];
   }
 
@@ -29,7 +37,7 @@ class SheetSyncService {
   }
 
   private static function rowAddress($rowIndex) {
-    return 'A' . $rowIndex . ':I' . $rowIndex;
+    return 'A' . $rowIndex . ':T' . $rowIndex;
   }
 
   public static function appendRow(Rfq $quote, $designatedUsername) {
