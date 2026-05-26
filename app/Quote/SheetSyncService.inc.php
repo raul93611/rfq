@@ -68,6 +68,16 @@ class SheetSyncService {
     return $targetRow;
   }
 
+  public static function syncRow($sheetRow, Rfq $quote, $designatedUsername) {
+    if (empty(GRAPH_CLIENT_SECRET) || !$sheetRow) {
+      return;
+    }
+
+    GraphApiClient::patch(self::wsPath('/range(address=\'' . self::rowAddress($sheetRow) . '\')'), [
+      'values' => [self::buildRowValues($quote, $designatedUsername)],
+    ]);
+  }
+
   public static function updateStatusCell($sheetRow, $status) {
     if (empty(GRAPH_CLIENT_SECRET) || !$sheetRow) {
       return;

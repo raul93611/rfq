@@ -32,11 +32,11 @@ try {
   Conexion::cerrar_conexion();
 
   if ($quote->getSheetRow()) {
-    // Row already exists — full re-sync: update status cell and push all fields
-    SheetSyncService::updateStatusCell($quote->getSheetRow(), $quote->getSheetStatus());
+    // Row already exists — re-write all columns so any edited fields are reflected
+    SheetSyncService::syncRow($quote->getSheetRow(), $quote, $designatedUsername);
     $sheetRow = $quote->getSheetRow();
   } else {
-    // No row yet — append a new row
+    // No row yet — append (duplicate-safe)
     $sheetRow = SheetSyncService::appendRow($quote, $designatedUsername);
   }
 

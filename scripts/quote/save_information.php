@@ -31,24 +31,22 @@ if (isset($_POST['save_information'])) {
       $_POST['id_rfq']
     );
 
-    // Persist opportunity name
+    // Persist description
     if (isset($_POST['name'])) {
       SheetSyncRepository::updateNameAndResetSync($conexion, $_POST['id_rfq'], trim($_POST['name']));
     }
 
-    // If comments changed, update STATUS cell in sheet (comments affect status mapping)
-    if (isset($_POST['comments'], $_POST['comments_original']) &&
-        $_POST['comments'] !== $_POST['comments_original']) {
-      try {
-        $updatedQuote = RepositorioRfq::obtener_cotizacion_por_id($conexion, $_POST['id_rfq']);
-        if ($updatedQuote && $updatedQuote->getSheetRow()) {
-          SheetSyncService::updateStatusCell($updatedQuote->getSheetRow(), $updatedQuote->getSheetStatus());
-          SheetSyncRepository::updateSyncStatus($conexion, $_POST['id_rfq'], 'synced');
-        }
-      } catch (Exception $syncEx) {
-        SheetSyncRepository::updateSyncStatus($conexion, $_POST['id_rfq'], 'failed');
-        error_log('Sheet sync error on comments change: ' . $syncEx->getMessage());
+    // Sync all updated fields to sheet
+    try {
+      $updatedQuote = RepositorioRfq::obtener_cotizacion_por_id($conexion, $_POST['id_rfq']);
+      if ($updatedQuote && $updatedQuote->getSheetRow()) {
+        $designatedUsername = $_POST['usuario_designado'];
+        SheetSyncService::syncRow($updatedQuote->getSheetRow(), $updatedQuote, $designatedUsername);
+        SheetSyncRepository::updateSyncStatus($conexion, $_POST['id_rfq'], 'synced');
       }
+    } catch (Exception $syncEx) {
+      SheetSyncRepository::updateSyncStatus($conexion, $_POST['id_rfq'], 'failed');
+      error_log('Sheet sync error on information save: ' . $syncEx->getMessage());
     }
 
     // Log information events
