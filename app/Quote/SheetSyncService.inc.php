@@ -28,12 +28,21 @@ class SheetSyncService {
     ];
   }
 
-  private static function getUsedRowCount() {
+  private static function getUsedRange() {
     $data = GraphApiClient::get(self::wsPath('/usedRange(valuesOnly=true)'));
-    if (isset($data['rowCount'])) {
-      return (int)$data['rowCount'];
+    return [
+      'rowCount' => (int)($data['rowCount'] ?? 1),
+      'values'   => $data['values'] ?? [],
+    ];
+  }
+
+  private static function findRowByQuoteId($quoteId, array $usedValues) {
+    foreach ($usedValues as $i => $row) {
+      if (isset($row[0]) && (string)$row[0] === (string)$quoteId) {
+        return $i + 1; // 1-based sheet row index
+      }
     }
-    return 1;
+    return null;
   }
 
   private static function rowAddress($rowIndex) {
@@ -45,14 +54,18 @@ class SheetSyncService {
       return null;
     }
 
-    $nextRow = self::getUsedRowCount() + 1;
+    $range  = self::getUsedRange();
     $values = self::buildRowValues($quote, $designatedUsername);
 
-    GraphApiClient::patch(self::wsPath('/range(address=\'' . self::rowAddress($nextRow) . '\')'), [
+    // Prevent duplicates: if this quote ID already exists in column A, overwrite that row
+    $existingRow = self::findRowByQuoteId($quote->obtener_id(), $range['values']);
+    $targetRow   = $existingRow ?? ($range['rowCount'] + 1);
+
+    GraphApiClient::patch(self::wsPath('/range(address=\'' . self::rowAddress($targetRow) . '\')'), [
       'values' => [$values],
     ]);
 
-    return $nextRow;
+    return $targetRow;
   }
 
   public static function updateStatusCell($sheetRow, $status) {
