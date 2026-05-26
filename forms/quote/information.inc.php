@@ -8,12 +8,11 @@
       <div class="checklist-section mb-4">
         <div class="checklist-section-title">Opportunity</div>
         <div class="form-group">
-          <label for="name" style="font-weight:600;">Opportunity Name</label>
-          <input type="text" class="form-control form-control-sm" id="name" name="name"
-                 placeholder="e.g. Westpine Middle School AV Refresh"
-                 value="<?= htmlspecialchars($quote->getName() ?? '', ENT_QUOTES, 'UTF-8'); ?>">
+          <label for="name" style="font-weight:600;">Description</label>
+          <textarea class="form-control form-control-sm" id="name" name="name" rows="3"
+                    placeholder="e.g. Westpine Middle School AV Refresh (upgrade and installation of audio-visual equipment across 3 classrooms)"><?= htmlspecialchars($quote->getName() ?? '', ENT_QUOTES, 'UTF-8'); ?></textarea>
           <small class="form-text text-muted">
-            <i class="fas fa-table mr-1" style="color:#2db4e8;"></i>Used as the row label when syncing to the SharePoint sheet.
+            <i class="fas fa-table mr-1" style="color:#2db4e8;"></i>Synced to the SharePoint sheet — include a short title and scope summary.
           </small>
         </div>
       </div>
