@@ -95,6 +95,7 @@ function createAndInsertQuote($validador, $usuario_designado) {
     'bpa' => null,
     'reference_url' => Input::test_input($_POST["reference_url"]),
     'priority' => isset($_POST['priority_level']) ? $_POST['priority_level'] : null,
+    'name' => !empty($_POST['name']) ? htmlspecialchars(trim($_POST['name']), ENT_QUOTES, 'UTF-8') : null,
   ]);
 
   // Insert quote and retrieve ID
@@ -102,6 +103,19 @@ function createAndInsertQuote($validador, $usuario_designado) {
 
   // Log audit trails
   logAuditTrails($id_rfq, $validador);
+
+  // Sync to SharePoint sheet
+  if ($cotizacion_insertada) {
+    try {
+      $designatedUsername = $_POST['usuario_designado'];
+      $insertedQuote = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
+      $sheetRow = SheetSyncService::appendRow($insertedQuote, $designatedUsername);
+      SheetSyncRepository::updateSyncStatus(Conexion::obtener_conexion(), $id_rfq, 'synced', $sheetRow);
+    } catch (Exception $syncEx) {
+      SheetSyncRepository::updateSyncStatus(Conexion::obtener_conexion(), $id_rfq, 'failed');
+      error_log('Sheet sync error on create: ' . $syncEx->getMessage());
+    }
+  }
 
   Conexion::cerrar_conexion();
 

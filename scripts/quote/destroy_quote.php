@@ -4,6 +4,16 @@ try {
   Conexion::abrir_conexion();
   $conexion = Conexion::obtener_conexion();
 
+  // Remove from SharePoint sheet before permanent deletion
+  try {
+    $quote = RepositorioRfq::obtener_cotizacion_por_id($conexion, $id_rfq);
+    if ($quote && $quote->getSheetRow()) {
+      SheetSyncService::deleteRow($quote->getSheetRow());
+    }
+  } catch (Exception $syncEx) {
+    error_log('Sheet sync error on destroy: ' . $syncEx->getMessage());
+  }
+
   RepositorioRfq::destroyQuote($conexion, $id_rfq);
 
   // Close the database connection

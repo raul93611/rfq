@@ -4,7 +4,7 @@ class RepositorioRfq {
     $cotizacion_insertada = false;
     if (isset($conexion)) {
       try {
-        $sql = 'INSERT INTO rfq(id_usuario, usuario_designado, canal, email_code, type_of_bid, issue_date, end_date, status, completado, total_cost, total_price, comments, award, fecha_completado, fecha_submitted, fecha_award, payment_terms, address, ship_to, expiration_date, ship_via, taxes, profit, additional, shipping, shipping_cost, fullfillment, fulfillment_date, contract_number, fulfillment_profit, services_fulfillment_profit, total_fulfillment, total_services_fulfillment, invoice, invoice_date, multi_year_project, submitted_invoice, submitted_invoice_date, fulfillment_pending, fulfillment_shipping_cost, fulfillment_shipping, type_of_contract, net30_fulfillment, sales_commission, city, zip_code, state, client, reference_url, priority) VALUES(:id_usuario, :usuario_designado, :canal, :email_code, :type_of_bid, :issue_date, :end_date, :status, :completado, :total_cost, :total_price, :comments, :award, :fecha_completado, :fecha_submitted, :fecha_award, :payment_terms, :address, :ship_to, :expiration_date, :ship_via, :taxes, :profit, :additional, :shipping, :shipping_cost, :fullfillment, :fulfillment_date, :contract_number, :fulfillment_profit, :services_fulfillment_profit, :total_fulfillment, :total_services_fulfillment, :invoice, :invoice_date, :multi_year_project, :submitted_invoice, :submitted_invoice_date, :fulfillment_pending, :fulfillment_shipping_cost, :fulfillment_shipping, :type_of_contract, :net30_fulfillment, :sales_commission, :city, :zip_code, :state, :client, :reference_url, :priority)';
+        $sql = 'INSERT INTO rfq(id_usuario, usuario_designado, canal, email_code, type_of_bid, issue_date, end_date, status, completado, total_cost, total_price, comments, award, fecha_completado, fecha_submitted, fecha_award, payment_terms, address, ship_to, expiration_date, ship_via, taxes, profit, additional, shipping, shipping_cost, fullfillment, fulfillment_date, contract_number, fulfillment_profit, services_fulfillment_profit, total_fulfillment, total_services_fulfillment, invoice, invoice_date, multi_year_project, submitted_invoice, submitted_invoice_date, fulfillment_pending, fulfillment_shipping_cost, fulfillment_shipping, type_of_contract, net30_fulfillment, sales_commission, city, zip_code, state, client, reference_url, priority, name) VALUES(:id_usuario, :usuario_designado, :canal, :email_code, :type_of_bid, :issue_date, :end_date, :status, :completado, :total_cost, :total_price, :comments, :award, :fecha_completado, :fecha_submitted, :fecha_award, :payment_terms, :address, :ship_to, :expiration_date, :ship_via, :taxes, :profit, :additional, :shipping, :shipping_cost, :fullfillment, :fulfillment_date, :contract_number, :fulfillment_profit, :services_fulfillment_profit, :total_fulfillment, :total_services_fulfillment, :invoice, :invoice_date, :multi_year_project, :submitted_invoice, :submitted_invoice_date, :fulfillment_pending, :fulfillment_shipping_cost, :fulfillment_shipping, :type_of_contract, :net30_fulfillment, :sales_commission, :city, :zip_code, :state, :client, :reference_url, :priority, :name)';
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindValue(':id_usuario', $cotizacion->obtener_id_usuario(), PDO::PARAM_STR);
         $sentencia->bindValue(':usuario_designado', $cotizacion->obtener_usuario_designado(), PDO::PARAM_STR);
@@ -56,6 +56,7 @@ class RepositorioRfq {
         $sentencia->bindValue(':client', $cotizacion->obtener_client(), PDO::PARAM_STR);
         $sentencia->bindValue(':reference_url', $cotizacion->getReferenceUrl(), PDO::PARAM_STR);
         $sentencia->bindValue(':priority', $cotizacion->getPriority(), PDO::PARAM_STR);
+        $sentencia->bindValue(':name', $cotizacion->getName(), PDO::PARAM_STR);
         $resultado = $sentencia->execute();
         $id = $conexion->lastInsertId();
         if ($resultado) {
@@ -190,12 +191,12 @@ class RepositorioRfq {
     $sort_column = $sort_column == 'rfq.end_date' ? 'STR_TO_DATE(rfq.end_date, "%m/%d/%Y %H:%i")' : $sort_column;
     if (isset($conexion)) {
       try {
-        $sql = 'SELECT rfq.id, 
-        usuarios.nombre_usuario, 
-        rfq.type_of_bid, 
-        rfq.issue_date, 
-        rfq.end_date, 
-        rfq.email_code, 
+        $sql = 'SELECT rfq.id,
+        usuarios.nombre_usuario,
+        rfq.type_of_bid,
+        rfq.issue_date,
+        rfq.end_date,
+        rfq.email_code,
         rfq.priority,
         CASE
           WHEN type_of_bid = "Services" THEN "true"
@@ -204,8 +205,9 @@ class RepositorioRfq {
           ELSE "false"
         END AS rfp,
         NULL AS options,
-        comments
-        FROM rfq 
+        comments,
+        rfq.sheet_sync_status
+        FROM rfq
         LEFT JOIN usuarios ON rfq.usuario_designado = usuarios.id
         WHERE rfq.deleted = 0 AND 
         rfq.canal = :canal AND 
@@ -293,11 +295,11 @@ class RepositorioRfq {
 
     if (isset($conexion)) {
       try {
-        $sql = "SELECT rfq.id, 
-        usuarios.nombre_usuario, 
-        rfq.type_of_bid, 
-        DATE_FORMAT(fecha_completado, '%m/%d/%Y') as fecha_completado, 
-        rfq.email_code, 
+        $sql = "SELECT rfq.id,
+        usuarios.nombre_usuario,
+        rfq.type_of_bid,
+        DATE_FORMAT(fecha_completado, '%m/%d/%Y') as fecha_completado,
+        rfq.email_code,
         rfq.priority,
         CASE
           WHEN type_of_bid = 'Services' THEN 'true'
@@ -306,13 +308,14 @@ class RepositorioRfq {
           ELSE 'false'
         END AS rfp,
         NULL AS options,
-        comments
-        FROM rfq 
+        comments,
+        rfq.sheet_sync_status
+        FROM rfq
         LEFT JOIN usuarios ON rfq.usuario_designado = usuarios.id
-        WHERE rfq.deleted = 0 AND 
-        rfq.canal = :canal AND 
-        rfq.completado = 1 AND 
-        rfq.status = 0 AND 
+        WHERE rfq.deleted = 0 AND
+        rfq.canal = :canal AND
+        rfq.completado = 1 AND
+        rfq.status = 0 AND
         rfq.award = 0 
         AND (rfq.comments = 'Working on it' OR rfq.comments = 'No comments') AND 
         (rfq.id LIKE :search OR nombre_usuario LIKE :search OR rfq.type_of_bid LIKE :search OR rfq.email_code LIKE :search) 
@@ -395,11 +398,11 @@ class RepositorioRfq {
 
     if (isset($conexion)) {
       try {
-        $sql = "SELECT rfq.id, 
-        usuarios.nombre_usuario, 
-        rfq.type_of_bid, 
-        DATE_FORMAT(fecha_submitted, '%m/%d/%Y') as fecha_submitted, 
-        rfq.email_code, 
+        $sql = "SELECT rfq.id,
+        usuarios.nombre_usuario,
+        rfq.type_of_bid,
+        DATE_FORMAT(fecha_submitted, '%m/%d/%Y') as fecha_submitted,
+        rfq.email_code,
         rfq.priority,
         CASE
           WHEN type_of_bid = 'Services' THEN 'true'
@@ -408,13 +411,14 @@ class RepositorioRfq {
           ELSE 'false'
         END AS rfp,
         NULL AS options,
-        comments
-        FROM rfq 
+        comments,
+        rfq.sheet_sync_status
+        FROM rfq
         LEFT JOIN usuarios ON rfq.usuario_designado = usuarios.id
-        WHERE rfq.deleted = 0 AND 
-        rfq.canal = :canal AND 
-        rfq.completado = 1 AND 
-        rfq.status = 1 AND 
+        WHERE rfq.deleted = 0 AND
+        rfq.canal = :canal AND
+        rfq.completado = 1 AND
+        rfq.status = 1 AND
         rfq.award = 0 
         AND (rfq.comments = 'Working on it' OR rfq.comments = 'No comments') AND 
         (rfq.id LIKE :search OR nombre_usuario LIKE :search OR rfq.type_of_bid LIKE :search OR rfq.email_code LIKE :search) 
@@ -497,11 +501,11 @@ class RepositorioRfq {
 
     if (isset($conexion)) {
       try {
-        $sql = "SELECT rfq.id, 
-        usuarios.nombre_usuario, 
-        rfq.type_of_bid, 
-        DATE_FORMAT(fecha_award, '%m/%d/%Y') as fecha_award, 
-        rfq.email_code, 
+        $sql = "SELECT rfq.id,
+        usuarios.nombre_usuario,
+        rfq.type_of_bid,
+        DATE_FORMAT(fecha_award, '%m/%d/%Y') as fecha_award,
+        rfq.email_code,
         rfq.priority,
         CASE
           WHEN type_of_bid = 'Services' THEN 'true'
@@ -510,8 +514,9 @@ class RepositorioRfq {
           ELSE 'false'
         END AS rfp,
         NULL AS options,
-        comments
-        FROM rfq 
+        comments,
+        rfq.sheet_sync_status
+        FROM rfq
         LEFT JOIN usuarios ON rfq.usuario_designado = usuarios.id
         WHERE rfq.deleted = 0 AND 
         rfq.canal = :canal AND 

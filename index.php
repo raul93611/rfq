@@ -8,10 +8,10 @@ spl_autoload_register(function ($class) {
     'Bootstrap' => ['Conexion', 'ControlSesion', 'Redireccion'],
     'User' => ['RepositorioUsuario', 'Usuario', 'ValidadorUsuario', 'ValidadorLogin', 'ValidadorRegistro'],
     'Cuestionario' => ['Cuestionario', 'RepositorioCuestionario'],
-    'Quote' => ['Rfq', 'RepositorioRfq', 'ValidadorCotizacion', 'ValidadorCotizacionRegistro', 'Item', 'RepositorioItem', 'Provider', 'RepositorioProvider', 'Subitem', 'RepositorioSubitem', 'ProviderSubitem', 'RepositorioProviderSubitem', 'AuditTrail', 'AuditTrailRepository'],
+    'Quote' => ['Rfq', 'RepositorioRfq', 'ValidadorCotizacion', 'ValidadorCotizacionRegistro', 'Item', 'RepositorioItem', 'Provider', 'RepositorioProvider', 'Subitem', 'RepositorioSubitem', 'ProviderSubitem', 'RepositorioProviderSubitem', 'AuditTrail', 'AuditTrailRepository', 'SheetSyncService', 'SheetSyncRepository'],
     'Comment' => ['Comment', 'RepositorioComment'],
     'ReQuote' => ['ReQuote', 'ReQuoteRepository', 'ReQuoteItem', 'ReQuoteItemRepository', 'ReQuoteProvider', 'ReQuoteProviderRepository', 'ReQuoteSubitem', 'ReQuoteSubitemRepository', 'ReQuoteSubitemProvider', 'ReQuoteSubitemProviderRepository', 'ReQuoteAuditTrail', 'ReQuoteAuditTrailRepository', 'ReQuoteService', 'ReQuoteServiceRepository'],
-    'Utilities' => ['PDFGenerator', 'ProposalRepository', 'ExcelRepository', 'Input', 'Email', 'TeamsIntegration'],
+    'Utilities' => ['PDFGenerator', 'ProposalRepository', 'ExcelRepository', 'Input', 'Email', 'TeamsIntegration', 'GraphApiClient'],
     'TypeOfBid' => ['TypeOfBid', 'TypeOfBidRepository'],
     'Service' => ['Service', 'ServiceRepository'],
     'Tracking' => ['Tracking', 'TrackingRepository', 'TrackingSubitem', 'TrackingSubitemRepository'],
@@ -116,6 +116,9 @@ switch ($partes_ruta[1] ?? null) {
         break;
       case 'award_table':
         $ruta_elegida = 'scripts/quote/award_table.php';
+        break;
+      case 'sync_to_sheet':
+        $ruta_elegida = 'scripts/quote/sync_to_sheet.php';
         break;
       case 'no_bid_table':
         $ruta_elegida = 'scripts/quote/no_bid_table.php';

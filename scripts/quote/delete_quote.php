@@ -7,6 +7,15 @@ try {
   // Fetch the quote
   $quote = RepositorioRfq::obtener_cotizacion_por_id($conexion, $id_rfq);
 
+  // Remove from SharePoint sheet before soft-deleting
+  try {
+    if ($quote->getSheetRow()) {
+      SheetSyncService::deleteRow($quote->getSheetRow());
+    }
+  } catch (Exception $syncEx) {
+    error_log('Sheet sync error on soft delete: ' . $syncEx->getMessage());
+  }
+
   // Delete the quote
   RepositorioRfq::delete_quote($conexion, $quote->obtener_id());
 

@@ -30,6 +30,7 @@ $printable_channel = Input::printable_channel($channel);
                 <th>Code</th>
                 <th>Priority</th>
                 <th>RFP</th>
+                <th>Sheet</th>
                 <th>Options</th>
               </tr>
             </thead>

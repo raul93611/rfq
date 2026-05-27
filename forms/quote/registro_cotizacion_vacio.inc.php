@@ -1,4 +1,12 @@
 <div class="card-body user-form">
+  <div class="form-group">
+    <label for="name" style="font-weight:600;">Description</label>
+    <textarea class="form-control form-control-lg" id="name" name="name" rows="3"
+              placeholder="e.g. Westpine Middle School AV Refresh (upgrade and installation of audio-visual equipment across 3 classrooms)" autofocus></textarea>
+    <small class="form-text text-muted">
+      <i class="fas fa-table mr-1" style="color:#2db4e8;"></i>Synced to the SharePoint sheet — include a short title and scope summary.
+    </small>
+  </div>
   <div class="form-row">
     <div class="col-md-6">
       <div class="form-group">

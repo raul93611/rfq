@@ -94,6 +94,23 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
 
     Conexion::cerrar_conexion();
 
+    // Helper: update the sheet STATUS cell after a status transition
+    $updateSheetStatus = function($id, $sheetRow, $newStatus) {
+      try {
+        if ($sheetRow) {
+          SheetSyncService::updateStatusCell($sheetRow, $newStatus);
+          Conexion::abrir_conexion();
+          SheetSyncRepository::updateSyncStatus(Conexion::obtener_conexion(), $id, 'synced');
+          Conexion::cerrar_conexion();
+        }
+      } catch (Exception $syncEx) {
+        error_log('Sheet sync error on status update: ' . $syncEx->getMessage());
+        Conexion::abrir_conexion();
+        SheetSyncRepository::updateSyncStatus(Conexion::obtener_conexion(), $id, 'failed');
+        Conexion::cerrar_conexion();
+      }
+    };
+
     if ($cotizacion_recuperada->obtener_canal() == 'Chemonics' && $award === 'si') {
       Conexion::abrir_conexion();
       $conexion = Conexion::obtener_conexion();
@@ -103,6 +120,7 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
       RepositorioRfq::actualizar_fecha_y_award($conexion, $id_rfq);
 
       Conexion::cerrar_conexion();
+      $updateSheetStatus($id_rfq, $cotizacion_recuperada->getSheetRow(), 'AWARD');
       Redireccion::redirigir(AWARD . $cotizacion_recuperada->obtener_canal());
     } else {
       if (!$cotizacion_recuperada->obtener_completado() && $completado === 'si') {
@@ -113,6 +131,7 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
         AuditTrailRepository::quote_status_audit_trail($conexion, 'Completed', $id_rfq);
 
         Conexion::cerrar_conexion();
+        $updateSheetStatus($id_rfq, $cotizacion_recuperada->getSheetRow(), 'BID');
         Redireccion::redirigir(COMPLETED . $cotizacion_recuperada->obtener_canal());
       } elseif (!$cotizacion_recuperada->obtener_status() && $status === 'si') {
         Conexion::abrir_conexion();
@@ -122,6 +141,7 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
         RepositorioRfq::actualizar_fecha_y_submitted($conexion, $id_rfq);
 
         Conexion::cerrar_conexion();
+        $updateSheetStatus($id_rfq, $cotizacion_recuperada->getSheetRow(), 'SUBMITTED');
         Redireccion::redirigir(COMPLETED . $cotizacion_recuperada->obtener_canal());
       } elseif (!$cotizacion_recuperada->obtener_award() && $award === 'si') {
         Conexion::abrir_conexion();
@@ -133,6 +153,7 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
         AuditTrailRepository::quote_status_audit_trail($conexion, 'Awarded', $id_rfq);
 
         Conexion::cerrar_conexion();
+        $updateSheetStatus($id_rfq, $cotizacion_recuperada->getSheetRow(), 'AWARD');
         Redireccion::redirigir(AWARD . $cotizacion_recuperada->obtener_canal());
       } elseif (!$cotizacion_recuperada->obtener_fullfillment() && $fulfillment === 'si') {
         Conexion::abrir_conexion();
@@ -145,6 +166,7 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
         AuditTrailRepository::quote_status_audit_trail($conexion, 'Fulfillment', $id_rfq);
 
         Conexion::cerrar_conexion();
+        $updateSheetStatus($id_rfq, $cotizacion_recuperada->getSheetRow(), 'AWARD');
         Redireccion::redirigir(FULFILLMENT_QUOTES);
       } elseif (!$cotizacion_recuperada->obtener_invoice() && $invoice === 'si') {
         Conexion::abrir_conexion();
@@ -157,6 +179,7 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
         AuditTrailRepository::quote_status_audit_trail($conexion, 'Invoice', $id_rfq);
 
         Conexion::cerrar_conexion();
+        $updateSheetStatus($id_rfq, $cotizacion_recuperada->getSheetRow(), 'AWARD');
         Redireccion::redirigir(INVOICE_QUOTES);
       } elseif (!$cotizacion_recuperada->obtener_submitted_invoice() && $submitted_invoice === 'si') {
         Conexion::abrir_conexion();
@@ -166,6 +189,7 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
         AuditTrailRepository::quote_status_audit_trail($conexion, 'Submitted Invoice', $id_rfq);
 
         Conexion::cerrar_conexion();
+        $updateSheetStatus($id_rfq, $cotizacion_recuperada->getSheetRow(), 'AWARD');
         Redireccion::redirigir(SUBMITTED_INVOICE_QUOTES);
       }
     }
