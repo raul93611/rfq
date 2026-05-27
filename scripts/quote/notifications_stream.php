@@ -6,48 +6,58 @@ if (!ControlSesion::sesion_iniciada()) {
 
 $id_user = $_SESSION['user']->obtener_id();
 
-// SSE headers
 header('Content-Type: text/event-stream');
 header('Cache-Control: no-cache');
 header('X-Accel-Buffering: no');
 
-// Disable output buffering
 if (ob_get_level()) ob_end_clean();
+
+// Don't hold the PHP session file open — releases lock so other tabs work
+session_write_close();
+
+// Respect user abort immediately on each flush
+ignore_user_abort(false);
 
 $last_count = -1;
 
-Conexion::abrir_conexion();
-$conexion = Conexion::obtener_conexion();
+try {
+  Conexion::abrir_conexion();
+  $conexion = Conexion::obtener_conexion();
+} catch (Exception $e) {
+  echo "data: {\"count\":0,\"items\":[]}\n\n";
+  flush();
+  exit;
+}
 
-$iterations = 0;
-$max_iterations = 200; // ~10 minutes at 3s interval
+// Max 60 iterations × 3s = 3 minutes, then the client auto-reconnects via EventSource
+$max = 60;
 
-while ($iterations < $max_iterations) {
+for ($i = 0; $i < $max; $i++) {
+  if (connection_aborted()) break;
+
   $count = NotificationRepository::getUnreadCount($conexion, $id_user);
 
   if ($count !== $last_count) {
     $recent = NotificationRepository::getRecent($conexion, $id_user, 5);
-    $items = array_map(function ($n) {
-      return [
-        'id'       => (int) $n['id'],
-        'message'  => $n['message'],
-        'url'      => $n['url'],
-        'is_read'  => (bool) $n['is_read'],
-        'created_at' => $n['created_at'],
-      ];
-    }, $recent);
+    $items  = array_map(fn($n) => [
+      'id'         => (int) $n['id'],
+      'message'    => $n['message'],
+      'url'        => $n['url'],
+      'is_read'    => (bool)(int) $n['is_read'],
+      'created_at' => $n['created_at'],
+    ], $recent);
 
-    $payload = json_encode(['count' => $count, 'items' => $items]);
-    echo "data: {$payload}\n\n";
+    echo "data: " . json_encode(['count' => $count, 'items' => $items]) . "\n\n";
     flush();
     $last_count = $count;
+  } else {
+    // Heartbeat comment so connection_aborted() fires on disconnect
+    echo ": heartbeat\n\n";
+    flush();
   }
 
-  sleep(3);
-  $iterations++;
-
-  // Check if client disconnected
   if (connection_aborted()) break;
+  sleep(3);
 }
 
 Conexion::cerrar_conexion();
