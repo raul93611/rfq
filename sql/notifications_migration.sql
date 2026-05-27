@@ -5,6 +5,11 @@ ALTER TABLE usuarios
   ADD COLUMN ms_token_expiry  INT NULL,
   ADD COLUMN ms_email         VARCHAR(255) NULL;
 
+-- Notification preference columns
+ALTER TABLE usuarios
+  ADD COLUMN notif_inapp TINYINT(1) NOT NULL DEFAULT 1,
+  ADD COLUMN notif_email TINYINT(1) NOT NULL DEFAULT 1;
+
 -- Notifications table
 CREATE TABLE IF NOT EXISTS notifications (
   id         INT AUTO_INCREMENT PRIMARY KEY,

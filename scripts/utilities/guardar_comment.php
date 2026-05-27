@@ -54,13 +54,16 @@ if (isset($_POST['guardar_comment'])) {
     $commenter_tokens = RepositorioUsuario::get_ms_tokens($conexion, $commenter_id);
     $can_send_email   = !empty($commenter_tokens['ms_refresh_token']);
 
-    // Insert notifications and optionally send email
+    // Insert notifications and optionally send email, respecting each recipient's prefs
     foreach ($recipients as $rec) {
       $rec_user = $rec['user'];
-      NotificationRepository::insert($conexion, $rec_user->obtener_id(), $id_rfq, $rec['message'], $url);
+      $prefs    = RepositorioUsuario::get_notif_prefs($conexion, $rec_user->obtener_id());
 
-      // Send via commenter's delegated MS account to recipient's email
-      if ($can_send_email && !empty($rec_user->obtener_email())) {
+      if ($prefs['notif_inapp']) {
+        NotificationRepository::insert($conexion, $rec_user->obtener_id(), $id_rfq, $rec['message'], $url);
+      }
+
+      if ($can_send_email && $prefs['notif_email'] && !empty($rec_user->obtener_email())) {
         _send_mention_email($commenter_tokens, $rec['message'], $url, $rec_user->obtener_email(), $comment_txt);
       }
     }

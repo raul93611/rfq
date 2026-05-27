@@ -656,6 +656,32 @@ class RepositorioUsuario {
     return $users;
   }
 
+  public static function get_notif_prefs($conexion, $id_user) {
+    if (!isset($conexion)) return ['notif_inapp' => 1, 'notif_email' => 1];
+    try {
+      $stmt = $conexion->prepare('SELECT notif_inapp, notif_email FROM usuarios WHERE id = :id');
+      $stmt->bindValue(':id', $id_user, PDO::PARAM_INT);
+      $stmt->execute();
+      return $stmt->fetch(PDO::FETCH_ASSOC) ?: ['notif_inapp' => 1, 'notif_email' => 1];
+    } catch (PDOException $ex) {
+      error_log('get_notif_prefs error: ' . $ex->getMessage());
+      return ['notif_inapp' => 1, 'notif_email' => 1];
+    }
+  }
+
+  public static function save_notif_prefs($conexion, $id_user, $inapp, $email) {
+    if (!isset($conexion)) return;
+    try {
+      $stmt = $conexion->prepare('UPDATE usuarios SET notif_inapp = :inapp, notif_email = :email WHERE id = :id');
+      $stmt->bindValue(':inapp', $inapp ? 1 : 0, PDO::PARAM_INT);
+      $stmt->bindValue(':email', $email ? 1 : 0, PDO::PARAM_INT);
+      $stmt->bindValue(':id', $id_user, PDO::PARAM_INT);
+      $stmt->execute();
+    } catch (PDOException $ex) {
+      error_log('save_notif_prefs error: ' . $ex->getMessage());
+    }
+  }
+
   public static function getByUsername($conexion, $username) {
     if (!isset($conexion)) return null;
     try {

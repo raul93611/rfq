@@ -228,6 +228,7 @@ define('MS_CALLBACK', SERVIDOR . 'user/microsoft/callback');
 define('MS_DISCONNECT', SERVIDOR . 'user/microsoft/disconnect');
 define('ACCOUNT_UPDATE_PROFILE', SERVIDOR . 'user/account/update_profile');
 define('ACCOUNT_UPDATE_PASSWORD', SERVIDOR . 'user/account/update_password');
+define('ACCOUNT_UPDATE_NOTIFICATIONS', SERVIDOR . 'user/account/update_notifications');
 /******************************************************************************/
 define('EMPLOYEE_DOCS', SERVIDOR . 'employee_docs/');
 define('DOCS', SERVIDOR . 'documentos/');

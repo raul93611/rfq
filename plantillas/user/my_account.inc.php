@@ -8,6 +8,7 @@ $ms_connected = !empty($ms['ms_refresh_token']);
 $ms_email     = htmlspecialchars($ms['ms_email'] ?? '');
 $user         = $_SESSION['user'];
 
+$notif_prefs        = RepositorioUsuario::get_notif_prefs($conexion, $_SESSION['user']->obtener_id());
 $flash_connected    = isset($_GET['ms_connected']);
 $flash_disconnected = isset($_GET['ms_disconnected']);
 $flash_ms_error     = isset($_GET['ms_error']) ? htmlspecialchars($_GET['ms_error']) : '';
@@ -182,6 +183,43 @@ $flash_ms_error     = isset($_GET['ms_error']) ? htmlspecialchars($_GET['ms_erro
           </div>
         </div>
 
+        <!-- Notification Preferences card -->
+        <div class="ac-card">
+          <div class="ac-card-head">
+            <div class="ac-card-head-icon">
+              <i class="fas fa-bell"></i>
+            </div>
+            <div class="ac-card-head-text">
+              <div class="ac-card-head-title">Notification Preferences</div>
+              <div class="ac-card-head-sub">Choose how you want to be notified</div>
+            </div>
+          </div>
+          <div class="ac-card-body">
+            <div class="ac-section">
+              <div class="ac-notif-row">
+                <div class="ac-notif-info">
+                  <div class="ac-notif-label">In-app notifications</div>
+                  <div class="ac-notif-desc">Bell icon alerts when you're mentioned or someone comments on your quotes</div>
+                </div>
+                <label class="ac-toggle">
+                  <input type="checkbox" id="ac_notif_inapp" <?= $notif_prefs['notif_inapp'] ? 'checked' : '' ?>>
+                  <span class="ac-toggle-slider"></span>
+                </label>
+              </div>
+              <div class="ac-notif-row">
+                <div class="ac-notif-info">
+                  <div class="ac-notif-label">Email notifications</div>
+                  <div class="ac-notif-desc">Receive email alerts via Outlook when you're mentioned (requires Microsoft account connected)</div>
+                </div>
+                <label class="ac-toggle">
+                  <input type="checkbox" id="ac_notif_email" <?= $notif_prefs['notif_email'] ? 'checked' : '' ?>>
+                  <span class="ac-toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div><!-- /ac-grid -->
     </div>
   </div>
@@ -238,6 +276,23 @@ $flash_ms_error     = isset($_GET['ms_error']) ? htmlspecialchars($_GET['ms_erro
       btn.textContent = 'Save profile';
     });
   });
+
+  // Notification preference toggles — save on change
+  function saveNotifPrefs() {
+    fetch('<?= ACCOUNT_UPDATE_NOTIFICATIONS ?>', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        notif_inapp: document.getElementById('ac_notif_inapp').checked ? '1' : '0',
+        notif_email: document.getElementById('ac_notif_email').checked ? '1' : '0',
+      }),
+    })
+    .then(r => r.json())
+    .then(data => { if (data.ok) toastr.success('Notification preferences saved.'); })
+    .catch(() => toastr.error('Failed to save preferences.'));
+  }
+  document.getElementById('ac_notif_inapp').addEventListener('change', saveNotifPrefs);
+  document.getElementById('ac_notif_email').addEventListener('change', saveNotifPrefs);
 
   // MS Connect — open in new tab, reload this page when it closes
   const msConnectBtn = document.getElementById('ac_ms_connect_btn');

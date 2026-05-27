@@ -419,6 +419,9 @@ switch ($partes_ruta[1] ?? null) {
           case 'update_password':
             $ruta_elegida = 'scripts/user/account_update_password.php';
             break;
+          case 'update_notifications':
+            $ruta_elegida = 'scripts/user/account_update_notifications.php';
+            break;
           default:
             break;
         }
