@@ -260,6 +260,12 @@ switch ($partes_ruta[2] ?? null) {
         break;
     }
     break;
+  case 'account':
+    include_once 'plantillas/user/my_account.inc.php';
+    break;
+  case 'notifications':
+    include_once 'plantillas/user/notifications.inc.php';
+    break;
   case 'charts':
     include_once 'plantillas/utilities/charts.inc.php';
     break;

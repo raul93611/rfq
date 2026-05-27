@@ -31,6 +31,14 @@
           include_once $section;
         }
         ?>
+
+        <!-- My Account — always visible at bottom of nav -->
+        <li class="nav-item" style="margin-top:auto;border-top:1px solid rgba(255,255,255,0.08);padding-top:6px;">
+          <a href="<?= MY_ACCOUNT ?>" class="nav-link <?= ($partes_ruta[2] ?? null) == 'account' ? 'active' : ''; ?>">
+            <i class="fas fa-user-circle nav-icon"></i>
+            <p>My Account</p>
+          </a>
+        </li>
       </ul>
     </nav>
   </div>

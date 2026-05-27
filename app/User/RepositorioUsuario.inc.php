@@ -584,4 +584,92 @@ class RepositorioUsuario {
       }
     }
   }
+
+  public static function update_profile($conexion, $nombres, $apellidos, $email, $id_user) {
+    if (!isset($conexion)) return false;
+    try {
+      $sql = 'UPDATE usuarios SET nombres = :nombres, apellidos = :apellidos, email = :email WHERE id = :id_user';
+      $stmt = $conexion->prepare($sql);
+      $stmt->bindValue(':nombres', $nombres, PDO::PARAM_STR);
+      $stmt->bindValue(':apellidos', $apellidos, PDO::PARAM_STR);
+      $stmt->bindValue(':email', $email, PDO::PARAM_STR);
+      $stmt->bindValue(':id_user', $id_user, PDO::PARAM_INT);
+      return $stmt->execute();
+    } catch (PDOException $ex) {
+      error_log('update_profile error: ' . $ex->getMessage());
+      return false;
+    }
+  }
+
+  public static function get_ms_tokens($conexion, $id_user) {
+    if (!isset($conexion)) return null;
+    try {
+      $sql = 'SELECT ms_refresh_token, ms_access_token, ms_token_expiry, ms_email FROM usuarios WHERE id = :id_user';
+      $stmt = $conexion->prepare($sql);
+      $stmt->bindValue(':id_user', $id_user, PDO::PARAM_INT);
+      $stmt->execute();
+      return $stmt->fetch(PDO::FETCH_ASSOC);
+    } catch (PDOException $ex) {
+      return null;
+    }
+  }
+
+  public static function save_ms_tokens($conexion, $id_user, $access_token, $refresh_token, $expiry, $ms_email) {
+    if (!isset($conexion)) return;
+    try {
+      $sql = 'UPDATE usuarios SET ms_access_token = :at, ms_refresh_token = :rt, ms_token_expiry = :exp, ms_email = :em WHERE id = :id';
+      $stmt = $conexion->prepare($sql);
+      $stmt->bindValue(':at', $access_token, PDO::PARAM_STR);
+      $stmt->bindValue(':rt', $refresh_token, PDO::PARAM_STR);
+      $stmt->bindValue(':exp', $expiry, PDO::PARAM_INT);
+      $stmt->bindValue(':em', $ms_email, PDO::PARAM_STR);
+      $stmt->bindValue(':id', $id_user, PDO::PARAM_INT);
+      $stmt->execute();
+    } catch (PDOException $ex) {
+      error_log('save_ms_tokens error: ' . $ex->getMessage());
+    }
+  }
+
+  public static function clear_ms_tokens($conexion, $id_user) {
+    if (!isset($conexion)) return;
+    try {
+      $sql = 'UPDATE usuarios SET ms_access_token = NULL, ms_refresh_token = NULL, ms_token_expiry = NULL, ms_email = NULL WHERE id = :id';
+      $stmt = $conexion->prepare($sql);
+      $stmt->bindValue(':id', $id_user, PDO::PARAM_INT);
+      $stmt->execute();
+    } catch (PDOException $ex) {
+      error_log('clear_ms_tokens error: ' . $ex->getMessage());
+    }
+  }
+
+  public static function getAllActiveUsers($conexion) {
+    $users = [];
+    if (!isset($conexion)) return $users;
+    try {
+      $sql = 'SELECT id, nombre_usuario, nombres, apellidos, ms_access_token, ms_refresh_token, ms_token_expiry, ms_email FROM usuarios WHERE status = 1';
+      $stmt = $conexion->prepare($sql);
+      $stmt->execute();
+      $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $ex) {
+      error_log('getAllActiveUsers error: ' . $ex->getMessage());
+    }
+    return $users;
+  }
+
+  public static function getByUsername($conexion, $username) {
+    if (!isset($conexion)) return null;
+    try {
+      $sql = 'SELECT * FROM usuarios WHERE nombre_usuario = :u AND status = 1';
+      $stmt = $conexion->prepare($sql);
+      $stmt->bindValue(':u', $username, PDO::PARAM_STR);
+      $stmt->execute();
+      $r = $stmt->fetch(PDO::FETCH_ASSOC);
+      if ($r) {
+        return new Usuario($r['id'], $r['nombre_usuario'], $r['password'], $r['nombres'], $r['apellidos'], $r['cargo'], $r['email'], $r['status'], $r['hash_recover_email']);
+      }
+    } catch (PDOException $ex) {
+      error_log('getByUsername error: ' . $ex->getMessage());
+    }
+    return null;
+  }
 }

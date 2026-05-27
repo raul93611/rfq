@@ -216,6 +216,18 @@ define('SEARCH_INVOICES_SC', SERVIDOR . 'utilities/search_invoices');
 define('TRACKING', PERFIL . 'tracking/');
 define('KPI', PERFIL . 'kpi/');
 define('EMPLOYEE_DOCS_PAGE', PERFIL . 'employee_docs_page/');
+/********************************NOTIFICATIONS & ACCOUNT ROUTES**********************/
+define('MY_ACCOUNT', PERFIL . 'account');
+define('MY_NOTIFICATIONS', PERFIL . 'notifications');
+define('NOTIFICATIONS_STREAM', QUOTE_SC . 'notifications/stream');
+define('NOTIFICATIONS_LIST', QUOTE_SC . 'notifications/list');
+define('NOTIFICATIONS_MARK_READ', QUOTE_SC . 'notifications/mark_read');
+define('USERS_FOR_MENTION', QUOTE_SC . 'notifications/users_for_mention');
+define('MS_CONNECT', SERVIDOR . 'user/microsoft/connect');
+define('MS_CALLBACK', SERVIDOR . 'user/microsoft/callback');
+define('MS_DISCONNECT', SERVIDOR . 'user/microsoft/disconnect');
+define('ACCOUNT_UPDATE_PROFILE', SERVIDOR . 'user/account/update_profile');
+define('ACCOUNT_UPDATE_PASSWORD', SERVIDOR . 'user/account/update_password');
 /******************************************************************************/
 define('EMPLOYEE_DOCS', SERVIDOR . 'employee_docs/');
 define('DOCS', SERVIDOR . 'documentos/');
