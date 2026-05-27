@@ -1,9 +1,9 @@
 -- Add Microsoft OAuth token columns to usuarios
 ALTER TABLE usuarios
-  ADD COLUMN IF NOT EXISTS ms_refresh_token TEXT NULL,
-  ADD COLUMN IF NOT EXISTS ms_access_token  TEXT NULL,
-  ADD COLUMN IF NOT EXISTS ms_token_expiry  INT NULL,
-  ADD COLUMN IF NOT EXISTS ms_email         VARCHAR(255) NULL;
+  ADD COLUMN ms_refresh_token TEXT NULL,
+  ADD COLUMN ms_access_token  TEXT NULL,
+  ADD COLUMN ms_token_expiry  INT NULL,
+  ADD COLUMN ms_email         VARCHAR(255) NULL;
 
 -- Notifications table
 CREATE TABLE IF NOT EXISTS notifications (
