@@ -26,31 +26,20 @@ function nf_relative_time($datetime_str) {
 }
 ?>
 <div class="content-wrapper">
-  <div class="content-header">
-    <div class="container-fluid">
-      <div class="nf-page-head">
-        <div class="nf-page-head-left">
-          <a href="javascript:history.back()" class="nf-back-btn" aria-label="Back">
-            <i class="fas fa-arrow-left"></i>
-          </a>
-          <div>
-            <div class="nf-page-title">Notifications</div>
-            <div class="nf-page-sub">All updates from quotes &amp; fulfillments you're following</div>
-          </div>
-        </div>
-        <?php if ($total > 0): ?>
-        <div class="nf-page-head-actions">
-          <button type="button" class="ap-btn" id="nf_mark_all_btn">
-            <i class="fas fa-check-double mr-1" style="font-size:11px;"></i>
-            Mark all as read
-          </button>
-        </div>
-        <?php endif; ?>
-      </div>
+  <div class="content-header page-header-bar">
+    <div>
+      <h1 class="page-title">Notifications</h1>
+      <p class="page-subtitle">All updates from quotes &amp; fulfillments you're following</p>
     </div>
+    <?php if ($total > 0): ?>
+    <button type="button" class="ap-btn" id="nf_mark_all_page_btn">
+      <i class="fas fa-check-double mr-1" style="font-size:11px;"></i>
+      Mark all as read
+    </button>
+    <?php endif; ?>
   </div>
 
-  <div class="content">
+  <div class="content" style="padding-top:24px;padding-bottom:80px;">
     <div class="container-fluid">
       <div class="nl-card">
 
@@ -111,6 +100,14 @@ function nf_relative_time($datetime_str) {
       </div>
     </div>
   </div>
+
+  <div class="quote-action-bar">
+    <div class="quote-action-bar__left">
+      <a href="javascript:history.back()" class="btn btn-secondary btn-sm">
+        <i class="fas fa-arrow-left mr-1"></i> Back
+      </a>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -130,14 +127,14 @@ function nf_relative_time($datetime_str) {
   });
 
   // Mark all as read
-  const markAllBtn = document.getElementById('nf_mark_all_btn');
+  const markAllBtn = document.getElementById('nf_mark_all_page_btn');
   if (markAllBtn) {
     markAllBtn.addEventListener('click', function () {
       this.disabled = true;
       fetch('<?= NOTIFICATIONS_MARK_READ ?>', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: '',
+        body: 'all=1',
       }).then(() => location.reload());
     });
   }

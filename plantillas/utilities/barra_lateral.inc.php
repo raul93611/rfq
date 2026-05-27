@@ -9,7 +9,7 @@
         <img src="<?= RUTA_IMG ?>user.png" class="img-circle elevation-2" alt="User Image">
       </div>
       <div class="info">
-        <a href="#" class="d-block"><?= $_SESSION['user']->obtener_nombre_usuario() ?></a>
+        <a href="<?= MY_ACCOUNT ?>" class="d-block"><?= $_SESSION['user']->obtener_nombre_usuario() ?></a>
       </div>
     </div>
     <nav class="mt-2">
@@ -32,13 +32,6 @@
         }
         ?>
 
-        <!-- My Account — always visible at bottom of nav -->
-        <li class="nav-item" style="margin-top:auto;border-top:1px solid rgba(255,255,255,0.08);padding-top:6px;">
-          <a href="<?= MY_ACCOUNT ?>" class="nav-link <?= ($partes_ruta[2] ?? null) == 'account' ? 'active' : ''; ?>">
-            <i class="fas fa-user-circle nav-icon"></i>
-            <p>My Account</p>
-          </a>
-        </li>
       </ul>
     </nav>
   </div>

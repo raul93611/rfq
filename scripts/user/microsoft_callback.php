@@ -75,11 +75,35 @@ do {
 
 } while (false);
 
-$redirect = MY_ACCOUNT;
-if ($error) {
-  $redirect .= '?ms_error=' . urlencode($error);
-} else {
-  $redirect .= '?ms_connected=1';
-}
-
-Redireccion::redirigir($redirect);
+$status  = $error ? 'error' : 'connected';
+$message = $error ?: 'Microsoft account connected successfully.';
+?>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Microsoft Sign-in</title>
+  <style>
+    body { font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; background: #f4f6f9; }
+    .box { text-align: center; background: #fff; border-radius: 10px; padding: 40px 48px; box-shadow: 0 4px 24px rgba(0,0,0,0.1); max-width: 360px; }
+    .icon { font-size: 48px; margin-bottom: 16px; }
+    p { color: #555; font-size: 14px; margin: 8px 0 0; }
+  </style>
+</head>
+<body>
+<div class="box">
+  <?php if ($error): ?>
+    <div class="icon">❌</div>
+    <strong>Connection failed</strong>
+    <p><?= htmlspecialchars($message) ?></p>
+  <?php else: ?>
+    <div class="icon">✅</div>
+    <strong>Connected!</strong>
+    <p>Your Microsoft account has been linked. This tab will close automatically.</p>
+  <?php endif; ?>
+</div>
+<script>
+  window.close();
+</script>
+</body>
+</html>

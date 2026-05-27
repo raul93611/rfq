@@ -13,23 +13,14 @@ $flash_disconnected = isset($_GET['ms_disconnected']);
 $flash_ms_error     = isset($_GET['ms_error']) ? htmlspecialchars($_GET['ms_error']) : '';
 ?>
 <div class="content-wrapper ac-page">
-  <div class="content-header">
-    <div class="container-fluid">
-      <div class="nf-page-head">
-        <div class="nf-page-head-left">
-          <a href="javascript:history.back()" class="nf-back-btn" aria-label="Back">
-            <i class="fas fa-arrow-left"></i>
-          </a>
-          <div>
-            <div class="nf-page-title">My Account</div>
-            <div class="nf-page-sub">Manage your profile and connected services</div>
-          </div>
-        </div>
-      </div>
+  <div class="content-header page-header-bar">
+    <div>
+      <h1 class="page-title">My Account</h1>
+      <p class="page-subtitle">Manage your profile and connected services</p>
     </div>
   </div>
 
-  <div class="content">
+  <div class="content" style="padding-top: 24px; padding-bottom: 80px;">
     <div class="container-fluid">
       <?php if ($flash_connected): ?>
         <div class="alert alert-success alert-dismissible fade show nf-alert-success" role="alert">
@@ -179,19 +170,27 @@ $flash_ms_error     = isset($_GET['ms_error']) ? htmlspecialchars($_GET['ms_erro
                     to your Outlook inbox. You'll still see in-app alerts either way.
                   </div>
                 </div>
-                <a href="<?= MS_CONNECT ?>" class="ac-ms-btn" id="ac_ms_connect_btn">
+                <button type="button" class="ac-ms-btn" id="ac_ms_connect_btn">
                   <div class="ac-ms-logo">
                     <span class="ac-ms-logo-r1"></span><span class="ac-ms-logo-r2"></span>
                     <span class="ac-ms-logo-r3"></span><span class="ac-ms-logo-r4"></span>
                   </div>
                   Connect Microsoft Account
-                </a>
+                </button>
               </div>
             <?php endif; ?>
           </div>
         </div>
 
       </div><!-- /ac-grid -->
+    </div>
+  </div>
+
+  <div class="quote-action-bar">
+    <div class="quote-action-bar__left">
+      <a href="javascript:history.back()" class="btn btn-secondary btn-sm">
+        <i class="fas fa-arrow-left mr-1"></i> Back
+      </a>
     </div>
   </div>
 </div>
@@ -239,6 +238,21 @@ $flash_ms_error     = isset($_GET['ms_error']) ? htmlspecialchars($_GET['ms_erro
       btn.textContent = 'Save profile';
     });
   });
+
+  // MS Connect — open in new tab, reload this page when it closes
+  const msConnectBtn = document.getElementById('ac_ms_connect_btn');
+  if (msConnectBtn) {
+    msConnectBtn.addEventListener('click', function () {
+      const popup = window.open('<?= MS_CONNECT ?>', '_blank');
+      if (!popup) return; // blocked by browser
+      const timer = setInterval(function () {
+        if (popup.closed) {
+          clearInterval(timer);
+          window.location.reload();
+        }
+      }, 500);
+    });
+  }
 
   // Password save
   document.getElementById('ac_pass_save').addEventListener('click', function () {

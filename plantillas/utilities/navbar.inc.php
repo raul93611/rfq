@@ -15,7 +15,7 @@ Conexion::cerrar_conexion();
   <ul class="navbar-nav ml-auto">
     <!-- Bell icon -->
     <li class="nav-item nf-bell-wrap" id="nf_bell_li">
-      <button class="nav-link nf-bell-btn" id="nf_bell_btn" aria-label="Notifications" type="button">
+      <button class="nf-bell-btn" id="nf_bell_btn" aria-label="Notifications" type="button">
         <i class="fas fa-bell" style="font-size:16px;"></i>
         <span class="nf-badge" id="nf_badge" style="<?= $unread_count === 0 ? 'display:none;' : '' ?>">
           <?= $unread_count > 99 ? '99+' : $unread_count ?>

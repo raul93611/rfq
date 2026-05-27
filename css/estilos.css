@@ -946,6 +946,10 @@ tfoot th:first-child {
   border-radius: 12px;
   border: none;
   box-shadow: 0 16px 48px rgba(0,0,0,0.18);
+  overflow: visible;
+}
+
+.modal-content:not(.iem-content) {
   overflow: hidden;
 }
 
@@ -1659,7 +1663,7 @@ h3.text-info.text-center .fa-exclamation-circle {
   gap: 0;
   border: 1px solid #e8ecf0;
   border-radius: 10px;
-  overflow: hidden;
+  overflow: visible;
   margin-bottom: 24px;
 }
 
@@ -1674,10 +1678,12 @@ h3.text-info.text-center .fa-exclamation-circle {
 
 .item-panel--project .item-panel-header {
   background: #39485a;
+  border-radius: 9px 0 0 0;
 }
 
 .item-panel--proposal .item-panel-header {
   background: var(--color-primary);
+  border-radius: 0 9px 0 0;
 }
 
 .item-panel--project {
@@ -1983,7 +1989,7 @@ h3.text-info.text-center .fa-exclamation-circle {
 .iem-dialog-sm { max-width: min(720px, 95vw) !important; }
 .iem-dialog-lg { max-width: min(760px, 95vw) !important; }
 .iem-dialog-xl { max-width: min(1100px, 95vw) !important; }
-.iem-content { border-radius: 12px !important; overflow: hidden; box-shadow: 0 24px 60px -20px rgba(15,22,35,.35), 0 8px 20px -8px rgba(15,22,35,.25) !important; }
+.iem-content { border-radius: 12px !important; overflow: visible; box-shadow: 0 24px 60px -20px rgba(15,22,35,.35), 0 8px 20px -8px rgba(15,22,35,.25) !important; }
 
 /* Header */
 .iem-header {
@@ -2036,11 +2042,11 @@ h3.text-info.text-center .fa-exclamation-circle {
 @media (max-width: 600px) { .iem-dual { grid-template-columns: 1fr; } }
 
 /* Section cards */
-.iem-card { background: #fff; border: 1px solid var(--iem-line); border-radius: 8px; overflow: hidden; }
+.iem-card { background: #fff; border: 1px solid var(--iem-line); border-radius: 8px; overflow: visible; }
 .iem-card-head {
   padding: 9px 12px; display: flex; align-items: center; gap: 8px;
   font-size: 10.5px; text-transform: uppercase; letter-spacing: .08em;
-  font-weight: 700; color: #fff;
+  font-weight: 700; color: #fff; border-radius: 7px 7px 0 0;
 }
 .iem-card-head-spec { background: var(--color-dark); }
 .iem-card-head-elogic { background: var(--iem-sky); }
@@ -2186,11 +2192,9 @@ h3.text-info.text-center .fa-exclamation-circle {
 #toast-container > .toast-error   { background-color: #dc2626 !important; }
 #toast-container > .toast:hover   { opacity: 1 !important; box-shadow: 0 6px 20px rgba(0,0,0,0.22) !important; }
 
-/* Force textareas inside IEM modals to respect rows attribute */
 .iem-body textarea.form-control,
 .iem-body textarea.form-control-sm {
-  height: auto !important;
-  min-height: calc(3 * 1.5em + 1rem) !important;
+  min-height: calc(3 * 1.5em + 1rem);
   resize: vertical;
 }
 
