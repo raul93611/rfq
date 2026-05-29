@@ -8,7 +8,7 @@ spl_autoload_register(function ($class) {
     'Bootstrap' => ['Conexion', 'ControlSesion', 'Redireccion'],
     'User' => ['RepositorioUsuario', 'Usuario', 'ValidadorUsuario', 'ValidadorLogin', 'ValidadorRegistro'],
     'Cuestionario' => ['Cuestionario', 'RepositorioCuestionario'],
-    'Quote' => ['Rfq', 'RepositorioRfq', 'ValidadorCotizacion', 'ValidadorCotizacionRegistro', 'Item', 'RepositorioItem', 'Provider', 'RepositorioProvider', 'Subitem', 'RepositorioSubitem', 'ProviderSubitem', 'RepositorioProviderSubitem', 'AuditTrail', 'AuditTrailRepository', 'SheetSyncService', 'SheetSyncRepository'],
+    'Quote' => ['Rfq', 'RepositorioRfq', 'ValidadorCotizacion', 'ValidadorCotizacionRegistro', 'Item', 'RepositorioItem', 'Provider', 'RepositorioProvider', 'Subitem', 'RepositorioSubitem', 'ProviderSubitem', 'RepositorioProviderSubitem', 'AuditTrail', 'AuditTrailRepository', 'SheetSyncService', 'SheetSyncRepository', 'NotificationRepository'],
     'Comment' => ['Comment', 'RepositorioComment'],
     'ReQuote' => ['ReQuote', 'ReQuoteRepository', 'ReQuoteItem', 'ReQuoteItemRepository', 'ReQuoteProvider', 'ReQuoteProviderRepository', 'ReQuoteSubitem', 'ReQuoteSubitemRepository', 'ReQuoteSubitemProvider', 'ReQuoteSubitemProviderRepository', 'ReQuoteAuditTrail', 'ReQuoteAuditTrailRepository', 'ReQuoteService', 'ReQuoteServiceRepository'],
     'Utilities' => ['PDFGenerator', 'ProposalRepository', 'ExcelRepository', 'Input', 'Email', 'TeamsIntegration', 'GraphApiClient'],
@@ -119,6 +119,24 @@ switch ($partes_ruta[1] ?? null) {
         break;
       case 'sync_to_sheet':
         $ruta_elegida = 'scripts/quote/sync_to_sheet.php';
+        break;
+      case 'notifications':
+        switch ($partes_ruta[3]) {
+          case 'stream':
+            $ruta_elegida = 'scripts/quote/notifications_stream.php';
+            break;
+          case 'list':
+            $ruta_elegida = 'scripts/quote/notifications_list.php';
+            break;
+          case 'mark_read':
+            $ruta_elegida = 'scripts/quote/notifications_mark_read.php';
+            break;
+          case 'users_for_mention':
+            $ruta_elegida = 'scripts/quote/notifications_users_for_mention.php';
+            break;
+          default:
+            break;
+        }
         break;
       case 'no_bid_table':
         $ruta_elegida = 'scripts/quote/no_bid_table.php';
@@ -377,6 +395,36 @@ switch ($partes_ruta[1] ?? null) {
         break;
       case 'update_password':
         $ruta_elegida = 'scripts/user/update_password.php';
+        break;
+      case 'microsoft':
+        switch ($partes_ruta[3]) {
+          case 'connect':
+            $ruta_elegida = 'scripts/user/microsoft_connect.php';
+            break;
+          case 'callback':
+            $ruta_elegida = 'scripts/user/microsoft_callback.php';
+            break;
+          case 'disconnect':
+            $ruta_elegida = 'scripts/user/microsoft_disconnect.php';
+            break;
+          default:
+            break;
+        }
+        break;
+      case 'account':
+        switch ($partes_ruta[3]) {
+          case 'update_profile':
+            $ruta_elegida = 'scripts/user/account_update_profile.php';
+            break;
+          case 'update_password':
+            $ruta_elegida = 'scripts/user/account_update_password.php';
+            break;
+          case 'update_notifications':
+            $ruta_elegida = 'scripts/user/account_update_notifications.php';
+            break;
+          default:
+            break;
+        }
         break;
       default:
         break;

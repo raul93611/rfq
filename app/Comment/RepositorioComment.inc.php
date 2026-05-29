@@ -88,7 +88,7 @@ class RepositorioComment{
                 </span>
                 said</h3>
                 <div class="timeline-body">
-                  <?php echo nl2br($comment-> obtener_comment()); ?>
+                  <?php echo self::render_comment_text($comment->obtener_comment()); ?>
                 </div>
               </div>
           </div>
@@ -102,6 +102,11 @@ class RepositorioComment{
     </div>
     <br>
     <?php
+  }
+
+  public static function render_comment_text($text) {
+    $safe = nl2br(htmlspecialchars($text, ENT_QUOTES, 'UTF-8'));
+    return preg_replace('/@([A-Za-z0-9_]+)/', '<span class="cm-mention">@$1</span>', $safe);
   }
 
   public static function delete_all_comments($conexion, $id_rfq){

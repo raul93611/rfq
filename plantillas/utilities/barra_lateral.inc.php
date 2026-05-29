@@ -9,7 +9,7 @@
         <img src="<?= RUTA_IMG ?>user.png" class="img-circle elevation-2" alt="User Image">
       </div>
       <div class="info">
-        <a href="#" class="d-block"><?= $_SESSION['user']->obtener_nombre_usuario() ?></a>
+        <a href="<?= MY_ACCOUNT ?>" class="d-block"><?= $_SESSION['user']->obtener_nombre_usuario() ?></a>
       </div>
     </div>
     <nav class="mt-2">
@@ -31,6 +31,7 @@
           include_once $section;
         }
         ?>
+
       </ul>
     </nav>
   </div>

@@ -8,6 +8,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 |---|---|---|
 | Quote Inline Editing (modals for item/provider/subitem CRUD) | built | — |
 | SharePoint Sheet Sync (portal → E-LOGIC BID PIPELINE xlsx via Graph API) | built | — |
+| Comment Mentions & Notifications (@mention users in comments, in-app bell + email via per-user MS OAuth) | built | [features/comment-mentions-notifications.md](features/comment-mentions-notifications.md) |
 
 ## Environment
 
@@ -101,3 +102,50 @@ All three domains write to their own audit table but are surfaced through a sing
 - `plantillas/re_quote/modals/audit_trails_modal.inc.php`
 
 **CSS:** All `at-*` namespace styles live at the bottom of `css/estilos.css`.
+
+### Comment Mentions & Notifications
+
+**DB changes:** Run `sql/notifications_migration.sql` — adds `ms_refresh_token`, `ms_access_token`, `ms_token_expiry`, `ms_email` to `usuarios`; creates `notifications` table.
+
+**New files:**
+- `app/Quote/NotificationRepository.inc.php` — CRUD for notifications + `parseMentions()` helper
+- `js/mentions.js` — @mention autocomplete IIFE, attaches to `#comment_rfq` on every page
+- `plantillas/user/my_account.inc.php` — My Account page (profile edit + MS OAuth connect/disconnect)
+- `plantillas/user/notifications.inc.php` — Notifications page (paginated list + mark-all-read)
+- `scripts/quote/notifications_stream.php` — SSE endpoint (polls DB every 3s, pushes on count change)
+- `scripts/quote/notifications_list.php` — JSON: recent 5 notifications
+- `scripts/quote/notifications_mark_read.php` — POST: mark one or all as read
+- `scripts/quote/notifications_users_for_mention.php` — JSON: all active users for autocomplete
+- `scripts/user/microsoft_connect.php` — initiate MS OAuth redirect
+- `scripts/user/microsoft_callback.php` — exchange code → tokens, store in DB
+- `scripts/user/microsoft_disconnect.php` — clear MS tokens
+- `scripts/user/account_update_profile.php` — JSON: update name/email
+- `scripts/user/account_update_password.php` — JSON: update password
+
+**Modified files:**
+- `plantillas/utilities/navbar.inc.php` — bell icon + SSE-driven dropdown
+- `plantillas/utilities/barra_lateral.inc.php` — My Account sidebar link
+- `plantillas/utilities/documento_cierre.inc.php` — includes `mentions.js` + sets `NOTIFICATIONS_USERS_FOR_MENTION_URL`
+- `scripts/utilities/guardar_comment.php` — parses @mentions, inserts notifications, sends delegated MS email
+- `app/Comment/RepositorioComment.inc.php` — `render_comment_text()` renders @mention chips
+- `app/User/RepositorioUsuario.inc.php` — MS token methods + `getAllActiveUsers()` + `getByUsername()`
+- `app/Bootstrap/routes.inc.php` — new route constants
+- `index.php` — new case handlers for notifications/* and user/microsoft/* and user/account/*
+- `vistas/perfil.php` — routes `perfil/account` and `perfil/notifications`
+
+**CSS:** All `nf-*`, `ac-*`, `cm-*` namespace styles appended to `css/estilos.css`.
+
+**Routes:**
+| URL | Purpose |
+|---|---|
+| `perfil/account` | My Account page |
+| `perfil/notifications` | Notifications page |
+| `user/microsoft/connect` | Start OAuth |
+| `user/microsoft/callback` | OAuth callback |
+| `user/microsoft/disconnect` | Clear tokens |
+| `user/account/update_profile` | JSON profile update |
+| `user/account/update_password` | JSON password update |
+| `quote/notifications/stream` | SSE stream |
+| `quote/notifications/list` | Recent 5 JSON |
+| `quote/notifications/mark_read` | Mark read |
+| `quote/notifications/users_for_mention` | @mention user list |
