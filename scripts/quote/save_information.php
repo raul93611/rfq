@@ -48,17 +48,25 @@ if (isset($_POST['save_information'])) {
       SheetSyncRepository::updateNameAndResetSync($conexion, $_POST['id_rfq'], trim($_POST['name']));
     }
 
-    // Sync all updated fields to sheet
-    try {
-      $updatedQuote = RepositorioRfq::obtener_cotizacion_por_id($conexion, $_POST['id_rfq']);
-      if ($updatedQuote && $updatedQuote->getSheetRow()) {
-        $designatedUsername = $_POST['usuario_designado'];
-        SheetSyncService::syncRow($updatedQuote->getSheetRow(), $updatedQuote, $designatedUsername);
-        SheetSyncRepository::updateSyncStatus($conexion, $_POST['id_rfq'], 'synced');
+    // Auto-sync to SharePoint sheet for qualifying bid types
+    $syncable_bid_types = ['Audio Visual', 'Services'];
+    if (in_array($_POST['type_of_bid'], $syncable_bid_types)) {
+      try {
+        $updatedQuote = RepositorioRfq::obtener_cotizacion_por_id($conexion, $_POST['id_rfq']);
+        if ($updatedQuote) {
+          $designatedUsername = $_POST['usuario_designado'];
+          if ($updatedQuote->getSheetRow()) {
+            SheetSyncService::syncRow($updatedQuote->getSheetRow(), $updatedQuote, $designatedUsername);
+            SheetSyncRepository::updateSyncStatus($conexion, $_POST['id_rfq'], 'synced');
+          } else {
+            $sheetRow = SheetSyncService::appendRow($updatedQuote, $designatedUsername);
+            SheetSyncRepository::updateSyncStatus($conexion, $_POST['id_rfq'], 'synced', $sheetRow);
+          }
+        }
+      } catch (Exception $syncEx) {
+        SheetSyncRepository::updateSyncStatus($conexion, $_POST['id_rfq'], 'failed');
+        error_log('Sheet sync error on information save: ' . $syncEx->getMessage());
       }
-    } catch (Exception $syncEx) {
-      SheetSyncRepository::updateSyncStatus($conexion, $_POST['id_rfq'], 'failed');
-      error_log('Sheet sync error on information save: ' . $syncEx->getMessage());
     }
 
     // Log information events
