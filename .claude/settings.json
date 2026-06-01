@@ -1,7 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(identify /home/raul-thinkpad/Documents/docker-compose-lamp/www/rfq/img/logo_proposal.png)"
-    ]
-  }
-}

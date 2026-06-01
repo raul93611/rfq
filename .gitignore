@@ -5,3 +5,4 @@ app/Bootstrap/config.inc.php
 LICENSE
 vendor/
 .vscode/
+.claude/
