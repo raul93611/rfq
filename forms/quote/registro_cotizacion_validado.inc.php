@@ -155,8 +155,8 @@
       <div class="col-md-6">
         <div class="form-group mb-0">
           <label for="qa_deadline">Q &amp; A Deadline</label>
-          <input type="text" class="date form-control" id="qa_deadline" name="qa_deadline"
-                 placeholder="MM/DD/YYYY" value="<?= htmlspecialchars($_POST['qa_deadline'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
+          <input type="text" class="form-control" id="qa_deadline" name="qa_deadline"
+                 placeholder="MM/DD/YYYY HH:mm" value="<?= htmlspecialchars($_POST['qa_deadline'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
         </div>
       </div>
     </div>

@@ -221,6 +221,7 @@ $(document).ready(function () {
       singleDatePicker: true,
       autoUpdateInput: selector === '.date' ? false : true,
       autoApply: true,
+      drops: 'auto',
     };
 
     $(selector).daterangepicker({ ...defaultOptions, ...options });
@@ -237,14 +238,14 @@ $(document).ready(function () {
   // Initialize standard date pickers
   initializeDatePicker('.date');
 
-  // Initialize date picker with time picker for specific field
-  initializeDatePicker('#end_date', {
+  // Initialize date picker with time picker for specific fields
+  const dateTimeOptions = {
     timePicker: true,
     timePicker24Hour: true,
-    locale: {
-      format: 'MM/DD/YYYY HH:mm'
-    },
-  });
+    locale: { format: 'MM/DD/YYYY HH:mm' },
+  };
+  initializeDatePicker('#end_date', dateTimeOptions);
+  initializeDatePicker('#qa_deadline', dateTimeOptions);
   /************************************ DATATABLES JQUERY CONFIGURATION **************************/
   function initializeDataTable(selector, options) {
     const defaultOptions = {
