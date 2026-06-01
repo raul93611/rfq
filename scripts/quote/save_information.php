@@ -11,6 +11,11 @@ if (isset($_POST['save_information'])) {
     $usuario = RepositorioUsuario::obtener_usuario_por_nombre_usuario($conexion, $_POST['usuario_designado']);
     $usuario_designado = $usuario->obtener_id();
 
+    // Prepare bid requirement fields
+    $site_visit  = isset($_POST['site_visit'])  && $_POST['site_visit']  !== '' ? (int)$_POST['site_visit']  : null;
+    $resumes     = isset($_POST['resumes'])     && $_POST['resumes']     !== '' ? (int)$_POST['resumes']     : null;
+    $qa_deadline = !empty($_POST['qa_deadline']) ? $_POST['qa_deadline'] : null;
+
     // Save information
     RepositorioRfq::save_information(
       $conexion,
@@ -28,7 +33,10 @@ if (isset($_POST['save_information'])) {
       $_POST['comments'],
       $_POST["reference_url"],
       htmlspecialchars($_POST['priority_level']),
-      $_POST['id_rfq']
+      $_POST['id_rfq'],
+      $site_visit,
+      $resumes,
+      $qa_deadline
     );
 
     // Persist description

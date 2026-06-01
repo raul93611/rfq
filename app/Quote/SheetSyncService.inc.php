@@ -23,7 +23,15 @@ class SheetSyncService {
       $endTime,                       // H: DUE TIME
       '',                             // I: TYPE (manual)
       $quote->obtener_type_of_bid() ?? '', // J: CATEGORY
-      '', '', '', '', '', '', '', '', '', // K–S: blank
+      '',                             // K: TEAMING PARTNER (manual)
+      '',                             // L: Q&A YES/NO (manual)
+      $quote->getQaDeadline() ? date('m/d/Y', strtotime($quote->getQaDeadline())) : '', // M: Q & A DEADLINE
+      is_null($quote->getResumes()) ? '' : ($quote->getResumes() ? 'YES' : 'NO'), // N: RESUMES
+      '',                             // O: LETTER OF INTENT (manual)
+      '',                             // P: RECRUITMENT (manual)
+      is_null($quote->getSiteVisit()) ? '' : ($quote->getSiteVisit() ? 'YES' : 'NO'), // Q: SITE VISIT
+      '',                             // R: SUBMIT BY (manual)
+      '',                             // S: PRICING (manual)
       $designatedUsername,            // T: PROPOSAL WRITER
     ];
   }

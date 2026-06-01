@@ -115,6 +115,43 @@
     <input type="file" id="archivos_crear" multiple name="documentos[]">
     <small class="form-text text-muted">Upload relevant documents for this bid.</small>
   </div>
+
+  <div class="br-group">
+    <div class="br-group-header">
+      <span class="br-group-title">Additional Requirements</span>
+      <span class="br-group-optional">Optional</span>
+    </div>
+    <div class="form-row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="site_visit">Site Visit</label>
+          <select class="form-control" name="site_visit" id="site_visit">
+            <option value="">Not specified</option>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="resumes">Resumes</label>
+          <select class="form-control" name="resumes" id="resumes">
+            <option value="">Not specified</option>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="col-md-6">
+        <div class="form-group mb-0">
+          <label for="qa_deadline">Q &amp; A Deadline</label>
+          <input type="text" class="date form-control" id="qa_deadline" name="qa_deadline" placeholder="MM/DD/YYYY">
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="card-footer d-flex justify-content-end" style="gap:8px;background:transparent;border-top:1px solid #f0f2f5;">

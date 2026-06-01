@@ -70,6 +70,9 @@ class Rfq {
   private $sheet_sync_status;
   private $sheet_sync_at;
   private $sheet_row;
+  private $site_visit;
+  private $resumes;
+  private $qa_deadline;
 
   public function __construct(array $row) {
     $this->id = $row['id'] ?? null;
@@ -142,6 +145,9 @@ class Rfq {
     $this->sheet_sync_status = $row['sheet_sync_status'] ?? null;
     $this->sheet_sync_at = $row['sheet_sync_at'] ?? null;
     $this->sheet_row = $row['sheet_row'] ?? null;
+    $this->site_visit = isset($row['site_visit']) ? (int)$row['site_visit'] : null;
+    $this->resumes = isset($row['resumes']) ? (int)$row['resumes'] : null;
+    $this->qa_deadline = $row['qa_deadline'] ?? null;
   }
 
   public function obtener_id() {
@@ -721,6 +727,18 @@ class Rfq {
       return 'BID';
     }
     return 'TBD';
+  }
+
+  public function getSiteVisit() {
+    return $this->site_visit;
+  }
+
+  public function getResumes() {
+    return $this->resumes;
+  }
+
+  public function getQaDeadline() {
+    return $this->qa_deadline;
   }
 
   public function getVehicleForSheet() {

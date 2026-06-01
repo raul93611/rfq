@@ -383,6 +383,28 @@ CREATE TABLE type_of_bids(
   type_of_bid VARCHAR(255) NOT NULL,
   PRIMARY KEY(id)
 );
+INSERT INTO type_of_bids (type_of_bid) VALUES
+  ('A/V'),
+  ('A/V - INSTALLATION'),
+  ('A/V - SERVICES'),
+  ('Audio Visual'),
+  ('Back Up Batteries'),
+  ('Cameras'),
+  ('Computer Peripherals'),
+  ('Computers'),
+  ('IT'),
+  ('Medical'),
+  ('Miscellaneous & Tools'),
+  ('Monitor & Televisions'),
+  ('MOVING & LOGISTICS'),
+  ('Phones'),
+  ('Printers & Scanners'),
+  ('PROFESSIONAL SERVICES'),
+  ('Projectors'),
+  ('Servers & Switches'),
+  ('Services'),
+  ('Software'),
+  ('Tactical');
 CREATE TABLE payment_terms(
   id INT NOT NULL AUTO_INCREMENT UNIQUE,
   payment_term VARCHAR(255) NOT NULL,
