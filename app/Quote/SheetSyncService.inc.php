@@ -25,7 +25,7 @@ class SheetSyncService {
       $quote->obtener_type_of_bid() ?? '', // J: CATEGORY
       '',                             // K: TEAMING PARTNER (manual)
       '',                             // L: Q&A YES/NO (manual)
-      $quote->getQaDeadline() ? explode(' ', $quote->getQaDeadline())[0] : '', // M: Q & A DEADLINE
+      $quote->getQaDeadline() ? date('m/d/Y', strtotime($quote->getQaDeadline())) : '', // M: Q & A DEADLINE
       is_null($quote->getResumes()) ? '' : ($quote->getResumes() ? 'YES' : 'NO'), // N: RESUMES
       '',                             // O: LETTER OF INTENT (manual)
       '',                             // P: RECRUITMENT (manual)

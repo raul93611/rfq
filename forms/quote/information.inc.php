@@ -159,7 +159,8 @@
             $sv_sel  = is_null($sv_val) ? '' : (string)(int)$sv_val;
             $res_val = $quote->getResumes();
             $res_sel = is_null($res_val) ? '' : (string)(int)$res_val;
-            $qa_disp = $quote->getQaDeadline() ?? '';
+            $qa_raw  = $quote->getQaDeadline();
+            $qa_disp = $qa_raw ? date('m/d/Y H:i', strtotime($qa_raw)) : '';
           ?>
           <div class="form-row">
             <div class="form-group col-md-6">
