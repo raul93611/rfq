@@ -12,9 +12,11 @@ if (isset($_POST['save_information'])) {
     $usuario_designado = $usuario->obtener_id();
 
     // Prepare bid requirement fields
-    $site_visit  = isset($_POST['site_visit'])  && $_POST['site_visit']  !== '' ? (int)$_POST['site_visit']  : null;
-    $resumes     = isset($_POST['resumes'])     && $_POST['resumes']     !== '' ? (int)$_POST['resumes']     : null;
-    $qa_deadline = !empty($_POST['qa_deadline']) ? $_POST['qa_deadline'] : null;
+    $site_visit        = isset($_POST['site_visit'])  && $_POST['site_visit']  !== '' ? (int)$_POST['site_visit']  : null;
+    $resumes           = isset($_POST['resumes'])     && $_POST['resumes']     !== '' ? (int)$_POST['resumes']     : null;
+    $qa_deadline       = !empty($_POST['qa_deadline'])       ? $_POST['qa_deadline']       : null;
+    $internal_due_date = !empty($_POST['internal_due_date']) ? $_POST['internal_due_date'] : null;
+    $qa                = isset($_POST['qa'])          && $_POST['qa']          !== '' ? (int)$_POST['qa']          : null;
 
     // Save information
     RepositorioRfq::save_information(
@@ -36,7 +38,9 @@ if (isset($_POST['save_information'])) {
       $_POST['id_rfq'],
       $site_visit,
       $resumes,
-      $qa_deadline
+      $qa_deadline,
+      $internal_due_date,
+      $qa
     );
 
     // Persist description

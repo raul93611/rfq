@@ -52,6 +52,16 @@
   <div class="form-row">
     <div class="col-md-6">
       <div class="form-group">
+        <label for="internal_due_date">Internal Due Date</label>
+        <input type="text" class="date form-control" id="internal_due_date" name="internal_due_date" placeholder="MM/DD/YYYY">
+        <small class="form-text text-muted"><i class="fas fa-table mr-1" style="color:#2db4e8;"></i>Synced to the SharePoint sheet.</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="col-md-6">
+      <div class="form-group">
         <?php
         Conexion::abrir_conexion();
         $usuarios = RepositorioUsuario::obtener_usuarios_rfq(Conexion::obtener_conexion());
@@ -124,6 +134,24 @@
     <div class="form-row">
       <div class="col-md-6">
         <div class="form-group">
+          <label for="qa">Q &amp; A</label>
+          <select class="form-control" name="qa" id="qa">
+            <option value="">Not specified</option>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="qa_deadline">Q &amp; A Deadline</label>
+          <input type="text" class="form-control" id="qa_deadline" name="qa_deadline" placeholder="MM/DD/YYYY HH:mm">
+        </div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="col-md-6">
+        <div class="form-group">
           <label for="site_visit">Site Visit</label>
           <select class="form-control" name="site_visit" id="site_visit">
             <option value="">Not specified</option>
@@ -133,21 +161,13 @@
         </div>
       </div>
       <div class="col-md-6">
-        <div class="form-group">
+        <div class="form-group mb-0">
           <label for="resumes">Resumes</label>
           <select class="form-control" name="resumes" id="resumes">
             <option value="">Not specified</option>
             <option value="1">Yes</option>
             <option value="0">No</option>
           </select>
-        </div>
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="col-md-6">
-        <div class="form-group mb-0">
-          <label for="qa_deadline">Q &amp; A Deadline</label>
-          <input type="text" class="form-control" id="qa_deadline" name="qa_deadline" placeholder="MM/DD/YYYY HH:mm">
         </div>
       </div>
     </div>

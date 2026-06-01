@@ -18,13 +18,13 @@ class SheetSyncService {
       $quote->obtener_email_code(),   // C: ID
       $quote->getName() ?? '',        // D: (opportunity name)
       $quote->getSheetStatus(),       // E: STATUS
-      $quote->obtener_issue_date() ?? '', // F: INTERNAL DUE DATE
+      $quote->getInternalDueDate() ? date('m/d/Y', strtotime($quote->getInternalDueDate())) : '', // F: INTERNAL DUE DATE
       $endDate,                       // G: CLIENT DUE DATE
       $endTime,                       // H: DUE TIME
       '',                             // I: TYPE (manual)
       $quote->obtener_type_of_bid() ?? '', // J: CATEGORY
       '',                             // K: TEAMING PARTNER (manual)
-      '',                             // L: Q&A YES/NO (manual)
+      is_null($quote->getQa()) ? '' : ($quote->getQa() ? 'YES' : 'NO'), // L: Q&A
       $quote->getQaDeadline() ? date('m/d/Y', strtotime($quote->getQaDeadline())) : '', // M: Q & A DEADLINE
       is_null($quote->getResumes()) ? '' : ($quote->getResumes() ? 'YES' : 'NO'), // N: RESUMES
       '',                             // O: LETTER OF INTENT (manual)

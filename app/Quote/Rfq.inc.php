@@ -73,6 +73,8 @@ class Rfq {
   private $site_visit;
   private $resumes;
   private $qa_deadline;
+  private $internal_due_date;
+  private $qa;
 
   public function __construct(array $row) {
     $this->id = $row['id'] ?? null;
@@ -148,6 +150,8 @@ class Rfq {
     $this->site_visit = isset($row['site_visit']) ? (int)$row['site_visit'] : null;
     $this->resumes = isset($row['resumes']) ? (int)$row['resumes'] : null;
     $this->qa_deadline = $row['qa_deadline'] ?? null;
+    $this->internal_due_date = $row['internal_due_date'] ?? null;
+    $this->qa = isset($row['qa']) ? (int)$row['qa'] : null;
   }
 
   public function obtener_id() {
@@ -727,6 +731,14 @@ class Rfq {
       return 'BID';
     }
     return 'TBD';
+  }
+
+  public function getInternalDueDate() {
+    return $this->internal_due_date;
+  }
+
+  public function getQa() {
+    return $this->qa;
   }
 
   public function getSiteVisit() {
