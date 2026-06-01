@@ -11,6 +11,13 @@ if (isset($_POST['save_information'])) {
     $usuario = RepositorioUsuario::obtener_usuario_por_nombre_usuario($conexion, $_POST['usuario_designado']);
     $usuario_designado = $usuario->obtener_id();
 
+    // Prepare bid requirement fields
+    $site_visit        = isset($_POST['site_visit'])  && $_POST['site_visit']  !== '' ? (int)$_POST['site_visit']  : null;
+    $resumes           = isset($_POST['resumes'])     && $_POST['resumes']     !== '' ? (int)$_POST['resumes']     : null;
+    $qa_deadline       = !empty($_POST['qa_deadline'])       ? $_POST['qa_deadline']       : null;
+    $internal_due_date = !empty($_POST['internal_due_date']) ? $_POST['internal_due_date'] : null;
+    $qa                = isset($_POST['qa'])          && $_POST['qa']          !== '' ? (int)$_POST['qa']          : null;
+
     // Save information
     RepositorioRfq::save_information(
       $conexion,
@@ -28,7 +35,12 @@ if (isset($_POST['save_information'])) {
       $_POST['comments'],
       $_POST["reference_url"],
       htmlspecialchars($_POST['priority_level']),
-      $_POST['id_rfq']
+      $_POST['id_rfq'],
+      $site_visit,
+      $resumes,
+      $qa_deadline,
+      $internal_due_date,
+      $qa
     );
 
     // Persist description
@@ -36,17 +48,25 @@ if (isset($_POST['save_information'])) {
       SheetSyncRepository::updateNameAndResetSync($conexion, $_POST['id_rfq'], trim($_POST['name']));
     }
 
-    // Sync all updated fields to sheet
-    try {
-      $updatedQuote = RepositorioRfq::obtener_cotizacion_por_id($conexion, $_POST['id_rfq']);
-      if ($updatedQuote && $updatedQuote->getSheetRow()) {
-        $designatedUsername = $_POST['usuario_designado'];
-        SheetSyncService::syncRow($updatedQuote->getSheetRow(), $updatedQuote, $designatedUsername);
-        SheetSyncRepository::updateSyncStatus($conexion, $_POST['id_rfq'], 'synced');
+    // Auto-sync to SharePoint sheet for qualifying bid types
+    $syncable_bid_types = ['Audio Visual', 'Services'];
+    if (in_array($_POST['type_of_bid'], $syncable_bid_types)) {
+      try {
+        $updatedQuote = RepositorioRfq::obtener_cotizacion_por_id($conexion, $_POST['id_rfq']);
+        if ($updatedQuote) {
+          $designatedUsername = $_POST['usuario_designado'];
+          if ($updatedQuote->getSheetRow()) {
+            SheetSyncService::syncRow($updatedQuote->getSheetRow(), $updatedQuote, $designatedUsername);
+            SheetSyncRepository::updateSyncStatus($conexion, $_POST['id_rfq'], 'synced');
+          } else {
+            $sheetRow = SheetSyncService::appendRow($updatedQuote, $designatedUsername);
+            SheetSyncRepository::updateSyncStatus($conexion, $_POST['id_rfq'], 'synced', $sheetRow);
+          }
+        }
+      } catch (Exception $syncEx) {
+        SheetSyncRepository::updateSyncStatus($conexion, $_POST['id_rfq'], 'failed');
+        error_log('Sheet sync error on information save: ' . $syncEx->getMessage());
       }
-    } catch (Exception $syncEx) {
-      SheetSyncRepository::updateSyncStatus($conexion, $_POST['id_rfq'], 'failed');
-      error_log('Sheet sync error on information save: ' . $syncEx->getMessage());
     }
 
     // Log information events

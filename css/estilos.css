@@ -2652,3 +2652,31 @@ h3.text-info.text-center .fa-exclamation-circle {
 .ac-toggle-slider::before { content: ''; position: absolute; width: 18px; height: 18px; left: 3px; top: 3px; background: #fff; border-radius: 50%; transition: transform 0.18s; box-shadow: 0 1px 3px rgba(0,0,0,0.18); }
 .ac-toggle input:checked + .ac-toggle-slider { background: var(--color-primary); }
 .ac-toggle input:checked + .ac-toggle-slider::before { transform: translateX(20px); }
+
+/* ===== Bid Requirement Fields (br-*) ===== */
+.br-group {
+  padding: 14px 16px 16px;
+  border: 1px solid #e3e7ee;
+  border-left: 3px solid #2db4e8;
+  border-radius: 8px;
+  background: #fcfdfe;
+  margin-top: 4px;
+}
+.br-group-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.br-group-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+  color: #2c3849;
+}
+.br-group-optional {
+  font-size: 11px;
+  color: #7d8ba0;
+  font-weight: 500;
+}

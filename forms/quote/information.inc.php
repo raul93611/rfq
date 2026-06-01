@@ -101,6 +101,14 @@
         </div>
         <div class="form-row">
           <div class="form-group col-md-6">
+            <label for="internal_due_date">Internal Due Date</label>
+            <input type="text" class="date form-control form-control-sm" id="internal_due_date" name="internal_due_date"
+                   value="<?= $quote->getInternalDueDate() ? date('m/d/Y', strtotime($quote->getInternalDueDate())) : ''; ?>">
+            <small class="form-text text-muted"><i class="fas fa-table mr-1" style="color:#2db4e8;"></i>Synced to SharePoint sheet.</small>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
             <label for="completed_date">Completed Date</label>
             <input type="text" class="date form-control form-control-sm" id="completed_date" name="completed_date"
                    value="<?= $quote->obtener_fecha_completado() ? RepositorioComment::mysql_date_to_english_format($quote->obtener_fecha_completado()) : ''; ?>">
@@ -142,6 +150,60 @@
             <label for="reference_url">Reference URL</label>
             <input type="text" class="form-control form-control-sm" id="reference_url" name="reference_url"
                    value="<?= $quote->getReferenceUrl(); ?>">
+          </div>
+        </div>
+      </div>
+
+      <!-- Additional Requirements -->
+      <div class="checklist-section mb-4">
+        <div class="checklist-section-title">Additional Requirements</div>
+        <div class="br-group">
+          <div class="br-group-header">
+            <span class="br-group-title">Bid Requirements</span>
+            <span class="br-group-optional">Optional</span>
+          </div>
+          <?php
+            $sv_val  = $quote->getSiteVisit();
+            $sv_sel  = is_null($sv_val) ? '' : (string)(int)$sv_val;
+            $res_val = $quote->getResumes();
+            $res_sel = is_null($res_val) ? '' : (string)(int)$res_val;
+            $qa_raw  = $quote->getQaDeadline();
+            $qa_disp = $qa_raw ? date('m/d/Y H:i', strtotime($qa_raw)) : '';
+            $qa_val  = $quote->getQa();
+            $qa_sel  = is_null($qa_val) ? '' : (string)(int)$qa_val;
+          ?>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="qa">Q &amp; A</label>
+              <select class="form-control form-control-sm" name="qa" id="qa">
+                <option value="" <?= $qa_sel === '' ? 'selected' : ''; ?>>Not specified</option>
+                <option value="1" <?= $qa_sel === '1' ? 'selected' : ''; ?>>Yes</option>
+                <option value="0" <?= $qa_sel === '0' ? 'selected' : ''; ?>>No</option>
+              </select>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="qa_deadline">Q &amp; A Deadline</label>
+              <input type="text" class="form-control form-control-sm" id="qa_deadline" name="qa_deadline"
+                     placeholder="MM/DD/YYYY HH:mm" value="<?= htmlspecialchars($qa_disp, ENT_QUOTES, 'UTF-8'); ?>">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="site_visit">Site Visit</label>
+              <select class="form-control form-control-sm" name="site_visit" id="site_visit">
+                <option value="" <?= $sv_sel === '' ? 'selected' : ''; ?>>Not specified</option>
+                <option value="1" <?= $sv_sel === '1' ? 'selected' : ''; ?>>Yes</option>
+                <option value="0" <?= $sv_sel === '0' ? 'selected' : ''; ?>>No</option>
+              </select>
+            </div>
+            <div class="form-group col-md-6 mb-0">
+              <label for="resumes">Resumes</label>
+              <select class="form-control form-control-sm" name="resumes" id="resumes">
+                <option value="" <?= $res_sel === '' ? 'selected' : ''; ?>>Not specified</option>
+                <option value="1" <?= $res_sel === '1' ? 'selected' : ''; ?>>Yes</option>
+                <option value="0" <?= $res_sel === '0' ? 'selected' : ''; ?>>No</option>
+              </select>
+            </div>
           </div>
         </div>
       </div>

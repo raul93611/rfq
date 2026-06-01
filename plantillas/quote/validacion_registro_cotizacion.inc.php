@@ -96,6 +96,11 @@ function createAndInsertQuote($validador, $usuario_designado) {
     'reference_url' => Input::test_input($_POST["reference_url"]),
     'priority' => isset($_POST['priority_level']) ? $_POST['priority_level'] : null,
     'name' => !empty($_POST['name']) ? htmlspecialchars(trim($_POST['name']), ENT_QUOTES, 'UTF-8') : null,
+    'site_visit'       => isset($_POST['site_visit'])  && $_POST['site_visit']  !== '' ? (int)$_POST['site_visit']  : null,
+    'resumes'          => isset($_POST['resumes'])     && $_POST['resumes']     !== '' ? (int)$_POST['resumes']     : null,
+    'qa_deadline'      => !empty($_POST['qa_deadline'])      ? $_POST['qa_deadline']      : null,
+    'internal_due_date'=> !empty($_POST['internal_due_date'])? $_POST['internal_due_date']: null,
+    'qa'               => isset($_POST['qa'])             && $_POST['qa']             !== '' ? (int)$_POST['qa']             : null,
   ]);
 
   // Insert quote and retrieve ID
@@ -104,8 +109,9 @@ function createAndInsertQuote($validador, $usuario_designado) {
   // Log audit trails
   logAuditTrails($id_rfq, $validador);
 
-  // Sync to SharePoint sheet
-  if ($cotizacion_insertada) {
+  // Auto-sync to SharePoint sheet for qualifying bid types
+  $syncable_bid_types = ['Audio Visual', 'Services'];
+  if ($cotizacion_insertada && in_array($_POST['type_of_bid'], $syncable_bid_types)) {
     try {
       $designatedUsername = $_POST['usuario_designado'];
       $insertedQuote = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
