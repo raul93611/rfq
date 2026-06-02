@@ -126,6 +126,7 @@
       .then(function (data) {
         if (data.success) {
           setTone('synced', data.sync_at);
+          if (breakBtn) breakBtn.style.display = '';
         } else {
           setTone('failed', null);
           console.error('Sheet sync failed:', data.message);
