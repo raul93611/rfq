@@ -130,6 +130,17 @@
   </div>
 
   <div class="form-group">
+    <label for="create_master_proposal">Master Proposal <span class="text-muted" style="font-weight:400;">(optional)</span></label>
+    <select id="create_master_proposal" name="multi_year_project" class="form-control form-control-sm" style="width:100%;">
+      <option value="">None — this is a standalone proposal</option>
+      <?php if (!empty($_POST['multi_year_project'])): ?>
+        <option value="<?= (int)$_POST['multi_year_project']; ?>" selected>Proposal #<?= (int)$_POST['multi_year_project']; ?></option>
+      <?php endif; ?>
+    </select>
+    <small class="form-text text-muted">Link this as a child of a multi-year project. Child quotes are <strong>not synced</strong> to the sheet.</small>
+  </div>
+
+  <div class="form-group">
     <label>Documents</label>
     <input type="file" id="archivos_crear" multiple name="documentos[]">
     <small class="form-text text-muted">Upload relevant documents for this bid.</small>

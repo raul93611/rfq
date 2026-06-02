@@ -2252,6 +2252,8 @@ h3.text-info.text-center .fa-exclamation-circle {
 .ss-btn-danger { color: #b91c1c; border-color: #f7d4d4; }
 .ss-btn-danger:hover:not(:disabled) { background: #fbe9e9; border-color: #dc2626; }
 .ss-btn-busy { color: #1aa2dc; border-color: #cce8f5; }
+.ss-btn-break { color: #6c757d; border-color: #dee2e6; }
+.ss-btn-break:hover:not(:disabled) { background: #f8f9fa; border-color: #adb5bd; color: #495057; }
 
 .ss-btn-spinner {
   width: 13px; height: 13px;

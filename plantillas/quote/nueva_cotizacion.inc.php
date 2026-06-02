@@ -31,3 +31,31 @@ include_once 'plantillas/quote/validacion_registro_cotizacion.inc.php';
   </section>
 
 </div>
+
+<script>
+$(function () {
+  $('#create_master_proposal').select2({
+    theme: 'bootstrap4',
+    placeholder: 'Search by proposal ID…',
+    allowClear: true,
+    ajax: {
+      type: 'POST',
+      url: '/rfq/quote/ids',
+      dataType: 'json',
+      delay: 250,
+      data: function (params) {
+        return { term: params.term, id_rfq: 0 };
+      },
+      processResults: function (data) {
+        return {
+          results: data.map(function (r) {
+            return { id: r.id, text: 'Proposal #' + r.id };
+          })
+        };
+      },
+      cache: true
+    },
+    minimumInputLength: 1
+  });
+});
+</script>

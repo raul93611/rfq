@@ -26,6 +26,12 @@ try {
     exit;
   }
 
+  if ($quote->obtener_multi_year_project() !== null) {
+    Conexion::cerrar_conexion();
+    echo json_encode(['success' => false, 'message' => 'Child quotes are not synced to the sheet.']);
+    exit;
+  }
+
   $usuario = RepositorioUsuario::obtener_usuario_por_id($conexion, $quote->obtener_usuario_designado());
   $designatedUsername = $usuario ? $usuario->obtener_nombre_usuario() : '';
 

@@ -5,7 +5,10 @@
   const block  = document.getElementById('ss-block');
   if (!btn || !block) return;
 
-  const idRfq = block.dataset.id;
+  const idRfq      = block.dataset.id;
+  const breakBtn   = document.getElementById('ss-break-btn');
+  const breakModal = document.getElementById('ss-break-modal');
+  const breakConfirmBtn = document.getElementById('ss-break-confirm-btn');
 
   const TONES = {
     synced:  { label: 'Synced',       btnText: 'Re-sync',      btnClass: 'ss-btn-success', blockClass: 'ss-block-synced' },
@@ -75,6 +78,42 @@
     }
   }
 
+  if (breakConfirmBtn) {
+    breakConfirmBtn.addEventListener('click', function () {
+      breakConfirmBtn.disabled = true;
+      breakConfirmBtn.textContent = 'Breaking…';
+
+      fetch('/rfq/quote/break_sheet_sync/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ id_rfq: idRfq }),
+      })
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+          if (data.success) {
+            if (breakModal && typeof $ !== 'undefined') {
+              $(breakModal).modal('hide');
+            }
+            setTone('never', null);
+            // Clear stale "Last synced" meta
+            var metaEl = block.querySelector('.ss-block-meta');
+            if (metaEl) metaEl.style.display = 'none';
+            // Hide the Break Sync button — no sheet row anymore
+            if (breakBtn) breakBtn.style.display = 'none';
+          } else {
+            breakConfirmBtn.disabled = false;
+            breakConfirmBtn.textContent = 'Break Sync';
+            console.error('Break sync failed:', data.message);
+          }
+        })
+        .catch(function (err) {
+          breakConfirmBtn.disabled = false;
+          breakConfirmBtn.textContent = 'Break Sync';
+          console.error('Break sync error:', err);
+        });
+    });
+  }
+
   btn.addEventListener('click', function () {
     setTone('syncing');
 
@@ -87,6 +126,7 @@
       .then(function (data) {
         if (data.success) {
           setTone('synced', data.sync_at);
+          if (breakBtn) breakBtn.style.display = '';
         } else {
           setTone('failed', null);
           console.error('Sheet sync failed:', data.message);

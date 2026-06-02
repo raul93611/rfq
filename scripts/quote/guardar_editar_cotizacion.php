@@ -94,8 +94,11 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
 
     Conexion::cerrar_conexion();
 
-    // Helper: update the sheet STATUS cell after a status transition
-    $updateSheetStatus = function($id, $sheetRow, $newStatus) {
+    // Helper: update the sheet STATUS cell after a status transition (skips child quotes)
+    $updateSheetStatus = function($id, $sheetRow, $newStatus) use ($cotizacion_recuperada) {
+      if ($cotizacion_recuperada->obtener_multi_year_project() !== null) {
+        return;
+      }
       try {
         if ($sheetRow) {
           SheetSyncService::updateStatusCell($sheetRow, $newStatus);

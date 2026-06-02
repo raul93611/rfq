@@ -65,7 +65,7 @@ function createAndInsertQuote($validador, $usuario_designado) {
     'total_services_fulfillment' => null,
     'invoice' => 0,
     'invoice_date' => null,
-    'multi_year_project' => null,
+    'multi_year_project' => !empty($_POST['multi_year_project']) ? (int)$_POST['multi_year_project'] : null,
     'submitted_invoice' => 0,
     'submitted_invoice_date' => null,
     'fulfillment_pending' => 0,
@@ -111,7 +111,7 @@ function createAndInsertQuote($validador, $usuario_designado) {
 
   // Auto-sync to SharePoint sheet for qualifying bid types
   $syncable_bid_types = ['Audio Visual', 'Services'];
-  if ($cotizacion_insertada && in_array($_POST['type_of_bid'], $syncable_bid_types)) {
+  if ($cotizacion_insertada && in_array($_POST['type_of_bid'], $syncable_bid_types) && empty($_POST['multi_year_project'])) {
     try {
       $designatedUsername = $_POST['usuario_designado'];
       $insertedQuote = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);

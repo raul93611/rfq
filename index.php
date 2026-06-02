@@ -120,6 +120,9 @@ switch ($partes_ruta[1] ?? null) {
       case 'sync_to_sheet':
         $ruta_elegida = 'scripts/quote/sync_to_sheet.php';
         break;
+      case 'break_sheet_sync':
+        $ruta_elegida = 'scripts/quote/break_sheet_sync.php';
+        break;
       case 'notifications':
         switch ($partes_ruta[3]) {
           case 'stream':

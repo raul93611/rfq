@@ -49,6 +49,7 @@ if (is_null($cotizacion_recuperada)) {
   </div>
 
   <?php
+  $ss_is_child  = $cotizacion_recuperada->obtener_multi_year_project() !== null;
   $ss_status    = $cotizacion_recuperada->getSheetSyncStatus();
   $ss_at        = $cotizacion_recuperada->getSheetSyncAt();
   $ss_opp       = $cotizacion_recuperada->getName();
@@ -66,43 +67,65 @@ if (is_null($cotizacion_recuperada)) {
   ];
   ?>
   <div class="container-fluid" style="padding-top:14px;padding-bottom:0;">
-    <div id="ss-block" class="ss-block ss-block-<?= htmlspecialchars($ss_tone); ?>"
-         data-id="<?= (int)$id_rfq; ?>">
-      <div class="ss-block-icon ss-block-icon-<?= htmlspecialchars($ss_tone); ?>">
-        <?= $ss_icon_html[$ss_tone] ?? $ss_icon_html['never']; ?>
+    <?php if ($ss_is_child): ?>
+      <div class="ss-block ss-block-never" style="justify-content:flex-start;gap:10px;">
+        <div class="ss-block-icon ss-block-icon-never">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <div class="ss-block-body">
+          <div class="ss-block-label">Sheet Sync</div>
+          <div class="ss-block-status-row">
+            <span class="ss-block-status ss-block-status-never">Child quotes are not synced to the sheet.</span>
+          </div>
+        </div>
       </div>
-      <div class="ss-block-body">
-        <div class="ss-block-label">Sheet Sync</div>
-        <div class="ss-block-status-row">
-          <span class="ss-block-status ss-block-status-<?= htmlspecialchars($ss_tone); ?>">
-            <?= htmlspecialchars($ss_label); ?>
-          </span>
-          <?php if ($ss_status === 'synced' && $ss_at_fmt): ?>
-            <span class="ss-block-meta">· Last synced <?= htmlspecialchars($ss_at_fmt); ?></span>
-          <?php elseif ($ss_status === 'failed' && $ss_at_fmt): ?>
-            <span class="ss-block-meta">· Last attempted <?= htmlspecialchars($ss_at_fmt); ?></span>
+    <?php else: ?>
+      <div id="ss-block" class="ss-block ss-block-<?= htmlspecialchars($ss_tone); ?>"
+           data-id="<?= (int)$id_rfq; ?>">
+        <div class="ss-block-icon ss-block-icon-<?= htmlspecialchars($ss_tone); ?>">
+          <?= $ss_icon_html[$ss_tone] ?? $ss_icon_html['never']; ?>
+        </div>
+        <div class="ss-block-body">
+          <div class="ss-block-label">Sheet Sync</div>
+          <div class="ss-block-status-row">
+            <span class="ss-block-status ss-block-status-<?= htmlspecialchars($ss_tone); ?>">
+              <?= htmlspecialchars($ss_label); ?>
+            </span>
+            <?php if ($ss_status === 'synced' && $ss_at_fmt): ?>
+              <span class="ss-block-meta">· Last synced <?= htmlspecialchars($ss_at_fmt); ?></span>
+            <?php elseif ($ss_status === 'failed' && $ss_at_fmt): ?>
+              <span class="ss-block-meta">· Last attempted <?= htmlspecialchars($ss_at_fmt); ?></span>
+            <?php endif; ?>
+          </div>
+          <?php if ($ss_opp): ?>
+            <div class="ss-block-opp">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41 13.42 20.58a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><circle cx="7" cy="7" r="1.4" fill="currentColor"/></svg>
+              Description: <strong><?= htmlspecialchars($ss_opp); ?></strong>
+            </div>
           <?php endif; ?>
         </div>
-        <?php if ($ss_opp): ?>
-          <div class="ss-block-opp">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41 13.42 20.58a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><circle cx="7" cy="7" r="1.4" fill="currentColor"/></svg>
-            Description: <strong><?= htmlspecialchars($ss_opp); ?></strong>
-          </div>
-        <?php endif; ?>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <button type="button" id="ss-sync-btn" class="ss-btn <?= htmlspecialchars($ss_btn_class); ?>">
+            <svg id="ss-btn-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <?php if ($ss_status === 'failed'): ?>
+                <path d="M3 12a9 9 0 1 0 3-6.7"/><polyline points="3 4 3 9 8 9"/>
+              <?php elseif ($ss_status === 'synced'): ?>
+                <polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+              <?php else: ?>
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+              <?php endif; ?>
+            </svg>
+            <span id="ss-btn-label"><?= htmlspecialchars($ss_btn_text); ?></span>
+          </button>
+          <button type="button" id="ss-break-btn" class="ss-btn ss-btn-break"
+                  data-toggle="modal" data-target="#ss-break-modal"
+                  <?= $ss_status !== 'synced' ? 'style="display:none;"' : ''; ?>>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            <span>Break Sync</span>
+          </button>
+        </div>
       </div>
-      <button type="button" id="ss-sync-btn" class="ss-btn <?= htmlspecialchars($ss_btn_class); ?>">
-        <svg id="ss-btn-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <?php if ($ss_status === 'failed'): ?>
-            <path d="M3 12a9 9 0 1 0 3-6.7"/><polyline points="3 4 3 9 8 9"/>
-          <?php elseif ($ss_status === 'synced'): ?>
-            <polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
-          <?php else: ?>
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
-          <?php endif; ?>
-        </svg>
-        <span id="ss-btn-label"><?= htmlspecialchars($ss_btn_text); ?></span>
-      </button>
-    </div>
+    <?php endif; ?>
   </div>
 
   <section class="content" style="padding-top:20px;">
@@ -126,6 +149,7 @@ include_once 'plantillas/services/modals/edit_service_modal.inc.php';
 include_once 'modals/type_of_contract_modal.inc.php';
 include_once 'modals/sales_commission_modal.inc.php';
 include_once 'modals/link_quote_modal.inc.php';
+include_once 'plantillas/quote/modals/break_sheet_sync_modal.inc.php';
 include_once 'modals/rooms/add_room_modal.inc.php';
 include_once 'modals/rooms/edit_room_modal.inc.php';
 include_once 'modals/import_items_modal.inc.php';
