@@ -111,7 +111,7 @@ function createAndInsertQuote($validador, $usuario_designado) {
 
   // Auto-sync to SharePoint sheet for qualifying bid types
   $syncable_bid_types = ['Audio Visual', 'Services'];
-  if ($cotizacion_insertada && in_array($_POST['type_of_bid'], $syncable_bid_types)) {
+  if ($cotizacion_insertada && in_array($_POST['type_of_bid'], $syncable_bid_types) && empty($_POST['multi_year_project'])) {
     try {
       $designatedUsername = $_POST['usuario_designado'];
       $insertedQuote = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
