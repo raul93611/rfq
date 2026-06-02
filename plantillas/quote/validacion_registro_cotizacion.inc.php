@@ -65,7 +65,7 @@ function createAndInsertQuote($validador, $usuario_designado) {
     'total_services_fulfillment' => null,
     'invoice' => 0,
     'invoice_date' => null,
-    'multi_year_project' => null,
+    'multi_year_project' => !empty($_POST['multi_year_project']) ? (int)$_POST['multi_year_project'] : null,
     'submitted_invoice' => 0,
     'submitted_invoice_date' => null,
     'fulfillment_pending' => 0,

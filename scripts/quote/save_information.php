@@ -53,7 +53,7 @@ if (isset($_POST['save_information'])) {
     if (in_array($_POST['type_of_bid'], $syncable_bid_types)) {
       try {
         $updatedQuote = RepositorioRfq::obtener_cotizacion_por_id($conexion, $_POST['id_rfq']);
-        if ($updatedQuote) {
+        if ($updatedQuote && $updatedQuote->obtener_multi_year_project() === null) {
           $designatedUsername = $_POST['usuario_designado'];
           if ($updatedQuote->getSheetRow()) {
             SheetSyncService::syncRow($updatedQuote->getSheetRow(), $updatedQuote, $designatedUsername);
