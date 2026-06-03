@@ -80,6 +80,15 @@ All URL constants are defined in [app/Bootstrap/routes.inc.php](app/Bootstrap/ro
 
 A quote (`Rfq`) progresses through: Created → Completed → Submitted → Award → Fulfillment → Invoice. The `comments` field encodes special statuses (No Bid, Cancelled, Not submitted). The `isEnabledToFulfillment()` and `isEnabledToInvoice()` methods on the `Rfq` class enforce prerequisites for state transitions.
 
+### SharePoint Sheet Sync — row-pointer invariants
+
+The DB column `rfq.sheet_row` is the source of truth for which sheet row a quote owns; the sheet itself (Graph `usedRange`) is only **eventually consistent**, so never decide append-vs-update by scanning it when a pointer exists.
+- `syncRow($sheetRow,…)` is **self-healing**: it verifies column A of `$sheetRow` equals the quote id before writing; if it drifted it re-resolves via `appendRow` (column-A scan) and returns the corrected row — callers must persist the returned value.
+- `appendRow` reads only row-count + column A (not the full grid) and overwrites a matching row if found, else appends.
+- **Break Sync** keeps `sheet_row` (only sets status `never`); auto-sync is gated on status `synced`, not on having a row — so re-sync re-attaches instead of duplicating.
+- After `deleteRow` (shift='Up'), call `SheetSyncRepository::shiftRowsAfterDelete()` to decrement pointers below the deleted row.
+- Child/multi-year quotes never sync. Only bid types `Audio Visual` and `Services` auto-sync.
+
 ### Unified Audit Trail
 
 All three domains write to their own audit table but are surfaced through a single modal and endpoint.
