@@ -94,25 +94,11 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
 
     Conexion::cerrar_conexion();
 
-    // Helper: update the sheet STATUS cell after a status transition (skips child quotes)
-    $updateSheetStatus = function($id, $sheetRow, $newStatus) use ($cotizacion_recuperada) {
-      if ($cotizacion_recuperada->obtener_multi_year_project() !== null) {
-        return;
-      }
-      try {
-        if ($sheetRow) {
-          SheetSyncService::updateStatusCell($sheetRow, $newStatus);
-          Conexion::abrir_conexion();
-          SheetSyncRepository::updateSyncStatus(Conexion::obtener_conexion(), $id, 'synced');
-          Conexion::cerrar_conexion();
-        }
-      } catch (Exception $syncEx) {
-        error_log('Sheet sync error on status update: ' . $syncEx->getMessage());
-        Conexion::abrir_conexion();
-        SheetSyncRepository::updateSyncStatus(Conexion::obtener_conexion(), $id, 'failed');
-        Conexion::cerrar_conexion();
-      }
-    };
+    // Status transitions no longer push to the sheet's STATUS column (col E is human-owned —
+    // staff edit it directly in the sheet and a write would wipe their changes). The lifecycle
+    // status lives in the app; app-owned columns sync via the Save Information flow instead.
+    // Kept as a no-op so the status-transition branches below don't need to change.
+    $updateSheetStatus = function($id, $sheetRow, $newStatus) { /* STATUS is human-owned */ };
 
     if ($cotizacion_recuperada->obtener_canal() == 'Chemonics' && $award === 'si') {
       Conexion::abrir_conexion();

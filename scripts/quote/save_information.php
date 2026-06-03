@@ -48,24 +48,25 @@ if (isset($_POST['save_information'])) {
       SheetSyncRepository::updateNameAndResetSync($conexion, $_POST['id_rfq'], trim($_POST['name']));
     }
 
-    // Auto-sync to SharePoint sheet for qualifying bid types
-    $syncable_bid_types = ['Audio Visual', 'Services'];
-    if (in_array($_POST['type_of_bid'], $syncable_bid_types)) {
-      try {
-        $updatedQuote = RepositorioRfq::obtener_cotizacion_por_id($conexion, $_POST['id_rfq']);
-        // Gate auto-sync on the sync STATUS, not merely on having a sheet_row. After a
-        // "Break Sync" the pointer is retained (so manual re-sync re-attaches cleanly) but
-        // the status is 'never', and edits must NOT silently push to the sheet.
-        if ($updatedQuote && $updatedQuote->obtener_multi_year_project() === null
-            && $updatedQuote->getSheetSyncStatus() === 'synced' && $updatedQuote->getSheetRow()) {
-          $designatedUsername = $_POST['usuario_designado'];
+    // Auto-sync to the SharePoint sheet whenever this quote is flagged to sync.
+    // The sync_to_sheet flag is the sole gate — bid type and master-link no longer matter.
+    // "Break Sync" sets the flag to 0 (keeping sheet_row), so edits then stop pushing.
+    try {
+      $updatedQuote = RepositorioRfq::obtener_cotizacion_por_id($conexion, $_POST['id_rfq']);
+      if ($updatedQuote && (int)$updatedQuote->getSyncToSheet() === 1) {
+        $designatedUsername = $_POST['usuario_designado'];
+        if ($updatedQuote->getSheetRow()) {
+          // syncRow self-heals a stale pointer and returns the row it actually wrote.
           $writtenRow = SheetSyncService::syncRow($updatedQuote->getSheetRow(), $updatedQuote, $designatedUsername);
-          SheetSyncRepository::updateSyncStatus($conexion, $_POST['id_rfq'], 'synced', $writtenRow);
+        } else {
+          // Flagged to sync but no row yet (e.g. a prior append failed) — append (dedup-safe).
+          $writtenRow = SheetSyncService::appendRow($updatedQuote, $designatedUsername);
         }
-      } catch (Exception $syncEx) {
-        SheetSyncRepository::updateSyncStatus($conexion, $_POST['id_rfq'], 'failed');
-        error_log('Sheet sync error on information save: ' . $syncEx->getMessage());
+        SheetSyncRepository::updateSyncStatus($conexion, $_POST['id_rfq'], 'synced', $writtenRow);
       }
+    } catch (Exception $syncEx) {
+      SheetSyncRepository::updateSyncStatus($conexion, $_POST['id_rfq'], 'failed');
+      error_log('Sheet sync error on information save: ' . $syncEx->getMessage());
     }
 
     // Log information events

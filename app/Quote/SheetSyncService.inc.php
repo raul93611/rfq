@@ -6,6 +6,12 @@ class SheetSyncService {
       . '/workbook/worksheets/' . rawurlencode(GRAPH_SHEET_NAME) . $suffix;
   }
 
+  // Columns the app owns and rewrites on every sync. Everything NOT listed here is
+  // human-owned (E STATUS, I TYPE, K TEAMING PARTNER, O LETTER OF INTENT, P RECRUITMENT,
+  // R SUBMIT BY, S PRICING) and is preserved via read-merge-write — see mergeAppOwned().
+  // 0-based indices: A=0 B=1 C=2 D=3 F=5 G=6 H=7 J=9 L=11 M=12 N=13 Q=16 T=19.
+  private static $humanOwnedIndices = [4, 8, 10, 14, 15, 17, 18]; // E, I, K, O, P, R, S
+
   private static function buildRowValues(Rfq $quote, $designatedUsername) {
     $endDateRaw  = $quote->obtener_end_date() ?? '';
     $endParts    = explode(' ', $endDateRaw, 2);
@@ -17,23 +23,39 @@ class SheetSyncService {
       $quote->getVehicleForSheet(),   // B: VEHICLE
       $quote->obtener_email_code(),   // C: ID
       $quote->getName() ?? '',        // D: (opportunity name)
-      $quote->getSheetStatus(),       // E: STATUS
+      '',                             // E: STATUS (human-owned — preserved on merge)
       $quote->getInternalDueDate() ? date('m/d/Y', strtotime($quote->getInternalDueDate())) : '', // F: INTERNAL DUE DATE
       $endDate,                       // G: CLIENT DUE DATE
       $endTime,                       // H: DUE TIME
-      '',                             // I: TYPE (manual)
+      '',                             // I: TYPE (human-owned)
       $quote->obtener_type_of_bid() ?? '', // J: CATEGORY
-      '',                             // K: TEAMING PARTNER (manual)
+      '',                             // K: TEAMING PARTNER (human-owned)
       is_null($quote->getQa()) ? '' : ($quote->getQa() ? 'YES' : 'NO'), // L: Q&A
       $quote->getQaDeadline() ? date('m/d/Y', strtotime($quote->getQaDeadline())) : '', // M: Q & A DEADLINE
       is_null($quote->getResumes()) ? '' : ($quote->getResumes() ? 'YES' : 'NO'), // N: RESUMES
-      '',                             // O: LETTER OF INTENT (manual)
-      '',                             // P: RECRUITMENT (manual)
+      '',                             // O: LETTER OF INTENT (human-owned)
+      '',                             // P: RECRUITMENT (human-owned)
       is_null($quote->getSiteVisit()) ? '' : ($quote->getSiteVisit() ? 'YES' : 'NO'), // Q: SITE VISIT
-      '',                             // R: SUBMIT BY (manual)
-      '',                             // S: PRICING (manual)
+      '',                             // R: SUBMIT BY (human-owned)
+      '',                             // S: PRICING (human-owned)
       $designatedUsername,            // T: PROPOSAL WRITER
     ];
+  }
+
+  // Read the full A:T values of a sheet row (or [] if it doesn't exist / is empty).
+  private static function readRow($rowIndex) {
+    $resp = GraphApiClient::get(self::wsPath('/range(address=\'' . self::rowAddress($rowIndex) . '\')?$select=values'));
+    return $resp['values'][0] ?? [];
+  }
+
+  // Overlay app-owned values onto the existing row so human-owned cells survive the write.
+  // $existing is whatever Graph currently holds for that row ([] for a brand-new row, in
+  // which case the human-owned cells stay blank).
+  private static function mergeAppOwned(array $appValues, array $existing) {
+    foreach (self::$humanOwnedIndices as $idx) {
+      $appValues[$idx] = $existing[$idx] ?? '';
+    }
+    return $appValues;
   }
 
   private static function getUsedRange() {
@@ -77,6 +99,11 @@ class SheetSyncService {
     $existingRow = self::findRowByQuoteId($quote->obtener_id(), $range['values']);
     $targetRow   = $existingRow ?? ($range['rowCount'] + 1);
 
+    // When overwriting an existing row, read it first so human-owned columns survive.
+    // A genuinely new (appended) row has no existing values, so those cells stay blank.
+    $existingValues = $existingRow ? self::readRow($targetRow) : [];
+    $values = self::mergeAppOwned($values, $existingValues);
+
     GraphApiClient::patch(self::wsPath('/range(address=\'' . self::rowAddress($targetRow) . '\')'), [
       'values' => [$values],
     ]);
@@ -95,15 +122,18 @@ class SheetSyncService {
     // occupies it — re-resolve via appendRow() (which scans column A and overwrites the
     // real row, or appends if it's genuinely gone) and return the corrected row so the
     // caller can persist it.
-    $quoteId = (string)$quote->obtener_id();
-    $cellA   = GraphApiClient::get(self::wsPath('/range(address=\'A' . (int)$sheetRow . '\')?$select=values'));
-    $cellVal = $cellA['values'][0][0] ?? null;
+    // Read the whole row up front: column A (index 0) verifies the pointer, and the rest
+    // supplies the human-owned cell values to preserve on write.
+    $quoteId  = (string)$quote->obtener_id();
+    $existing = self::readRow($sheetRow);
+    $cellVal  = $existing[0] ?? null;
     if ($cellVal === null || (string)$cellVal !== $quoteId) {
       return self::appendRow($quote, $designatedUsername);
     }
 
+    $values = self::mergeAppOwned(self::buildRowValues($quote, $designatedUsername), $existing);
     GraphApiClient::patch(self::wsPath('/range(address=\'' . self::rowAddress($sheetRow) . '\')'), [
-      'values' => [self::buildRowValues($quote, $designatedUsername)],
+      'values' => [$values],
     ]);
 
     return $sheetRow;

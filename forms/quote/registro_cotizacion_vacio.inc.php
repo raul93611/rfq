@@ -33,6 +33,24 @@
   </div>
 
   <div class="form-row">
+    <div class="col-md-6 d-none d-md-block"></div>
+    <div class="col-md-6">
+      <div class="form-group sync-field">
+        <label class="sync-check" for="sync_to_sheet">
+          <input type="checkbox" class="sync-check-input" id="sync_to_sheet" name="sync_to_sheet" value="1" checked>
+          <span class="sync-check-box" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </span>
+          <span class="sync-check-text">
+            <span class="sync-check-label">Sync to pipeline</span>
+            <span class="sync-check-help">Adds this quote to the E-LOGIC Bid Pipeline sheet.</span>
+          </span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-row">
     <div class="col-md-6">
       <div class="form-group">
         <label for="issue_date">Issue Date</label>
@@ -125,7 +143,7 @@
     <select id="create_master_proposal" name="multi_year_project" class="form-control form-control-sm" style="width:100%;">
       <option value="">None — this is a standalone proposal</option>
     </select>
-    <small class="form-text text-muted">Link this as a child of a multi-year project. Child quotes are <strong>not synced</strong> to the sheet.</small>
+    <small class="form-text text-muted">Link this as a child of a multi-year project.</small>
   </div>
 
   <div class="form-group">

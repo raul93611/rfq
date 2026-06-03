@@ -22,8 +22,10 @@ try {
   // (see the Break Sync modal copy), and retaining the pointer means a future manual
   // "Sync to Sheet" re-attaches to that exact row via syncRow() instead of taking the
   // appendRow() path — which decides append-vs-update by scanning the eventually-consistent
-  // sheet and can miss the orphaned row, creating a duplicate. Auto-sync is gated on the
-  // status (see save_information.php), so flipping status to 'never' is enough to stop it.
+  // sheet and can miss the orphaned row, creating a duplicate.
+  // Turn the per-quote flag off so edits stop auto-syncing (the gate in save_information.php),
+  // and flip the status to 'never' for the UI badge.
+  SheetSyncRepository::setSyncToSheet($conexion, $id_rfq, 0);
   SheetSyncRepository::updateSyncStatus($conexion, $id_rfq, 'never');
 
   Conexion::cerrar_conexion();
