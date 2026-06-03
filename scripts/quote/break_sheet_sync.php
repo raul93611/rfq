@@ -18,7 +18,12 @@ try {
   Conexion::abrir_conexion();
   $conexion = Conexion::obtener_conexion();
 
-  SheetSyncRepository::clearSheetRow($conexion, $id_rfq);
+  // Disconnect from auto-sync but KEEP the sheet_row pointer. The row stays in the sheet
+  // (see the Break Sync modal copy), and retaining the pointer means a future manual
+  // "Sync to Sheet" re-attaches to that exact row via syncRow() instead of taking the
+  // appendRow() path — which decides append-vs-update by scanning the eventually-consistent
+  // sheet and can miss the orphaned row, creating a duplicate. Auto-sync is gated on the
+  // status (see save_information.php), so flipping status to 'never' is enough to stop it.
   SheetSyncRepository::updateSyncStatus($conexion, $id_rfq, 'never');
 
   Conexion::cerrar_conexion();

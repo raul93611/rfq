@@ -9,6 +9,8 @@ try {
     $quote = RepositorioRfq::obtener_cotizacion_por_id($conexion, $id_rfq);
     if ($quote && $quote->getSheetRow()) {
       SheetSyncService::deleteRow($quote->getSheetRow());
+      // Rows below shifted up by one — keep every other quote's stored pointer correct.
+      SheetSyncRepository::shiftRowsAfterDelete($conexion, $quote->getSheetRow());
     }
   } catch (Exception $syncEx) {
     error_log('Sheet sync error on destroy: ' . $syncEx->getMessage());

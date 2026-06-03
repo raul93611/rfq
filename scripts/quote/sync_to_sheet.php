@@ -38,9 +38,9 @@ try {
   Conexion::cerrar_conexion();
 
   if ($quote->getSheetRow()) {
-    // Row already exists — re-write all columns so any edited fields are reflected
-    SheetSyncService::syncRow($quote->getSheetRow(), $quote, $designatedUsername);
-    $sheetRow = $quote->getSheetRow();
+    // Row already exists — re-write all columns so any edited fields are reflected.
+    // syncRow self-heals a stale pointer and returns the row it actually wrote.
+    $sheetRow = SheetSyncService::syncRow($quote->getSheetRow(), $quote, $designatedUsername);
   } else {
     // No row yet — append (duplicate-safe)
     $sheetRow = SheetSyncService::appendRow($quote, $designatedUsername);
