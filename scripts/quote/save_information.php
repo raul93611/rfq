@@ -53,10 +53,14 @@ if (isset($_POST['save_information'])) {
     if (in_array($_POST['type_of_bid'], $syncable_bid_types)) {
       try {
         $updatedQuote = RepositorioRfq::obtener_cotizacion_por_id($conexion, $_POST['id_rfq']);
-        if ($updatedQuote && $updatedQuote->obtener_multi_year_project() === null && $updatedQuote->getSheetRow()) {
+        // Gate auto-sync on the sync STATUS, not merely on having a sheet_row. After a
+        // "Break Sync" the pointer is retained (so manual re-sync re-attaches cleanly) but
+        // the status is 'never', and edits must NOT silently push to the sheet.
+        if ($updatedQuote && $updatedQuote->obtener_multi_year_project() === null
+            && $updatedQuote->getSheetSyncStatus() === 'synced' && $updatedQuote->getSheetRow()) {
           $designatedUsername = $_POST['usuario_designado'];
-          SheetSyncService::syncRow($updatedQuote->getSheetRow(), $updatedQuote, $designatedUsername);
-          SheetSyncRepository::updateSyncStatus($conexion, $_POST['id_rfq'], 'synced');
+          $writtenRow = SheetSyncService::syncRow($updatedQuote->getSheetRow(), $updatedQuote, $designatedUsername);
+          SheetSyncRepository::updateSyncStatus($conexion, $_POST['id_rfq'], 'synced', $writtenRow);
         }
       } catch (Exception $syncEx) {
         SheetSyncRepository::updateSyncStatus($conexion, $_POST['id_rfq'], 'failed');

@@ -37,10 +37,18 @@ class SheetSyncService {
   }
 
   private static function getUsedRange() {
-    $data = GraphApiClient::get(self::wsPath('/usedRange(valuesOnly=true)'));
+    // Only the row count is needed up front (tiny payload vs. the full ~4MB grid that
+    // usedRange returns for every column/property).
+    $dims = GraphApiClient::get(self::wsPath('/usedRange(valuesOnly=true)?$select=rowCount'));
+    $rowCount = (int)($dims['rowCount'] ?? 1);
+
+    // Dedup only inspects column A, so read just that column (~350x smaller than the full
+    // used range). A smaller, faster read also narrows the window where a slow/heavy
+    // response or Graph's eventual consistency could yield stale values and a duplicate row.
+    $colA = GraphApiClient::get(self::wsPath('/range(address=\'A1:A' . $rowCount . '\')?$select=values'));
     return [
-      'rowCount' => (int)($data['rowCount'] ?? 1),
-      'values'   => $data['values'] ?? [],
+      'rowCount' => $rowCount,
+      'values'   => $colA['values'] ?? [],
     ];
   }
 
@@ -78,12 +86,27 @@ class SheetSyncService {
 
   public static function syncRow($sheetRow, Rfq $quote, $designatedUsername) {
     if (empty(GRAPH_CLIENT_SECRET) || !$sheetRow) {
-      return;
+      return $sheetRow;
+    }
+
+    // Guard against a stale pointer: rows shift up when another quote is deleted
+    // (deleteRow uses shift='Up'), and a row can be moved/removed manually. If the stored
+    // row no longer holds this quote's id in column A, don't clobber whatever quote now
+    // occupies it — re-resolve via appendRow() (which scans column A and overwrites the
+    // real row, or appends if it's genuinely gone) and return the corrected row so the
+    // caller can persist it.
+    $quoteId = (string)$quote->obtener_id();
+    $cellA   = GraphApiClient::get(self::wsPath('/range(address=\'A' . (int)$sheetRow . '\')?$select=values'));
+    $cellVal = $cellA['values'][0][0] ?? null;
+    if ($cellVal === null || (string)$cellVal !== $quoteId) {
+      return self::appendRow($quote, $designatedUsername);
     }
 
     GraphApiClient::patch(self::wsPath('/range(address=\'' . self::rowAddress($sheetRow) . '\')'), [
       'values' => [self::buildRowValues($quote, $designatedUsername)],
     ]);
+
+    return $sheetRow;
   }
 
   public static function updateStatusCell($sheetRow, $status) {

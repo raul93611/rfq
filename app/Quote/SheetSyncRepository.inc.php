@@ -29,6 +29,20 @@ class SheetSyncRepository {
     }
   }
 
+  // After a sheet row is deleted with shift='Up', every row below it moves up by one.
+  // Keep the stored pointers in sync by decrementing sheet_row for all quotes below the
+  // deleted row, so later syncRow() calls don't write to a neighbour's (shifted) row.
+  public static function shiftRowsAfterDelete($connection, $deletedRow) {
+    try {
+      $sql = 'UPDATE rfq SET sheet_row = sheet_row - 1 WHERE sheet_row > :deleted_row';
+      $stmt = $connection->prepare($sql);
+      $stmt->bindValue(':deleted_row', $deletedRow, PDO::PARAM_INT);
+      $stmt->execute();
+    } catch (PDOException $ex) {
+      error_log('SheetSyncRepository::shiftRowsAfterDelete error: ' . $ex->getMessage());
+    }
+  }
+
   public static function getSyncInfo($connection, $id_rfq) {
     try {
       $sql = 'SELECT sheet_sync_status, sheet_sync_at, sheet_row FROM rfq WHERE id = :id';
