@@ -49,7 +49,6 @@ if (is_null($cotizacion_recuperada)) {
   </div>
 
   <?php
-  $ss_is_child  = $cotizacion_recuperada->obtener_multi_year_project() !== null;
   $ss_status    = $cotizacion_recuperada->getSheetSyncStatus();
   $ss_at        = $cotizacion_recuperada->getSheetSyncAt();
   $ss_opp       = $cotizacion_recuperada->getName();
@@ -67,19 +66,6 @@ if (is_null($cotizacion_recuperada)) {
   ];
   ?>
   <div class="container-fluid" style="padding-top:14px;padding-bottom:0;">
-    <?php if ($ss_is_child): ?>
-      <div class="ss-block ss-block-never" style="justify-content:flex-start;gap:10px;">
-        <div class="ss-block-icon ss-block-icon-never">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        </div>
-        <div class="ss-block-body">
-          <div class="ss-block-label">Sheet Sync</div>
-          <div class="ss-block-status-row">
-            <span class="ss-block-status ss-block-status-never">Child quotes are not synced to the sheet.</span>
-          </div>
-        </div>
-      </div>
-    <?php else: ?>
       <div id="ss-block" class="ss-block ss-block-<?= htmlspecialchars($ss_tone); ?>"
            data-id="<?= (int)$id_rfq; ?>">
         <div class="ss-block-icon ss-block-icon-<?= htmlspecialchars($ss_tone); ?>">
@@ -125,7 +111,6 @@ if (is_null($cotizacion_recuperada)) {
           </button>
         </div>
       </div>
-    <?php endif; ?>
   </div>
 
   <section class="content" style="padding-top:20px;">

@@ -70,6 +70,7 @@ class Rfq {
   private $sheet_sync_status;
   private $sheet_sync_at;
   private $sheet_row;
+  private $sync_to_sheet;
   private $site_visit;
   private $resumes;
   private $qa_deadline;
@@ -147,6 +148,9 @@ class Rfq {
     $this->sheet_sync_status = $row['sheet_sync_status'] ?? null;
     $this->sheet_sync_at = $row['sheet_sync_at'] ?? null;
     $this->sheet_row = $row['sheet_row'] ?? null;
+    // Explicit per-quote pipeline-sync flag. Defaults to 1 to match the column default
+    // for rows created/read before this property is set (e.g. hand-built Rfq arrays).
+    $this->sync_to_sheet = isset($row['sync_to_sheet']) ? (int)$row['sync_to_sheet'] : 1;
     $this->site_visit = isset($row['site_visit']) ? (int)$row['site_visit'] : null;
     $this->resumes = isset($row['resumes']) ? (int)$row['resumes'] : null;
     $this->qa_deadline = $row['qa_deadline'] ?? null;
@@ -708,6 +712,10 @@ class Rfq {
 
   public function getSheetRow() {
     return $this->sheet_row;
+  }
+
+  public function getSyncToSheet() {
+    return $this->sync_to_sheet;
   }
 
   public function getSheetStatus() {

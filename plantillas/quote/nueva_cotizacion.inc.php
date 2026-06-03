@@ -57,5 +57,17 @@ $(function () {
     },
     minimumInputLength: 1
   });
+
+  // Sync to pipeline — auto-set the checkbox default from the chosen Type of Bid.
+  // Service-type commodities sync by default; hardware/VAR types do not. The user can
+  // still flip the checkbox afterward (we only re-set it when the bid type changes).
+  var SYNCABLE_BID_TYPES = [
+    'MOVING & LOGISTICS', 'PROFESSIONAL SERVICES', 'IT',
+    'Audio Visual', 'A/V', 'A/V - INSTALLATION', 'A/V - SERVICES', 'Services'
+  ];
+  $('#type_of_bid').on('change', function () {
+    var isSyncable = SYNCABLE_BID_TYPES.indexOf($(this).val()) !== -1;
+    $('#sync_to_sheet').prop('checked', isSyncable);
+  });
 });
 </script>

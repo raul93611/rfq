@@ -18,6 +18,21 @@ class SheetSyncRepository {
     }
   }
 
+  // Toggle the explicit per-quote "sync to pipeline" flag. This is the gate that decides
+  // whether edits auto-sync (see save_information.php); the Sync to Sheet / Break Sync
+  // buttons flip it on/off.
+  public static function setSyncToSheet($connection, $id_rfq, $flag) {
+    try {
+      $sql = 'UPDATE rfq SET sync_to_sheet = :flag WHERE id = :id';
+      $stmt = $connection->prepare($sql);
+      $stmt->bindValue(':flag', $flag ? 1 : 0, PDO::PARAM_INT);
+      $stmt->bindValue(':id', $id_rfq, PDO::PARAM_INT);
+      $stmt->execute();
+    } catch (PDOException $ex) {
+      error_log('SheetSyncRepository::setSyncToSheet error: ' . $ex->getMessage());
+    }
+  }
+
   public static function clearSheetRow($connection, $id_rfq) {
     try {
       $sql = 'UPDATE rfq SET sheet_row = NULL WHERE id = :id';

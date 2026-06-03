@@ -26,12 +26,6 @@ try {
     exit;
   }
 
-  if ($quote->obtener_multi_year_project() !== null) {
-    Conexion::cerrar_conexion();
-    echo json_encode(['success' => false, 'message' => 'Child quotes are not synced to the sheet.']);
-    exit;
-  }
-
   $usuario = RepositorioUsuario::obtener_usuario_por_id($conexion, $quote->obtener_usuario_designado());
   $designatedUsername = $usuario ? $usuario->obtener_nombre_usuario() : '';
 
@@ -48,6 +42,8 @@ try {
 
   Conexion::abrir_conexion();
   SheetSyncRepository::updateSyncStatus(Conexion::obtener_conexion(), $id_rfq, 'synced', $sheetRow);
+  // Manually syncing also turns the per-quote flag on, so future edits auto-sync.
+  SheetSyncRepository::setSyncToSheet(Conexion::obtener_conexion(), $id_rfq, 1);
   $syncAt = date('M j, Y \a\t g:i A');
   Conexion::cerrar_conexion();
 

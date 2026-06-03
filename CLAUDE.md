@@ -10,6 +10,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | SharePoint Sheet Sync (portal → E-LOGIC BID PIPELINE xlsx via Graph API) | built | — |
 | Comment Mentions & Notifications (@mention users in comments, in-app bell + email via per-user MS OAuth) | built | [features/comment-mentions-notifications.md](features/comment-mentions-notifications.md) |
 | Bid Requirement Fields (Site Visit, Q&A Deadline, Resumes on quotes + sheet sync) | built | — |
+| Bid Pipeline Sync Controls (`sync_to_sheet` flag, bid-type smart default, human-owned sheet columns, master-linked quotes keep syncing) | built | — |
 
 ## Environment
 
@@ -83,11 +84,11 @@ A quote (`Rfq`) progresses through: Created → Completed → Submitted → Awar
 ### SharePoint Sheet Sync — row-pointer invariants
 
 The DB column `rfq.sheet_row` is the source of truth for which sheet row a quote owns; the sheet itself (Graph `usedRange`) is only **eventually consistent**, so never decide append-vs-update by scanning it when a pointer exists.
-- `syncRow($sheetRow,…)` is **self-healing**: it verifies column A of `$sheetRow` equals the quote id before writing; if it drifted it re-resolves via `appendRow` (column-A scan) and returns the corrected row — callers must persist the returned value.
-- `appendRow` reads only row-count + column A (not the full grid) and overwrites a matching row if found, else appends.
-- **Break Sync** keeps `sheet_row` (only sets status `never`); auto-sync is gated on status `synced`, not on having a row — so re-sync re-attaches instead of duplicating.
+- `syncRow($sheetRow,…)` is **self-healing**: it reads the full `A:T` of `$sheetRow`, verifies column A equals the quote id before writing; if it drifted it re-resolves via `appendRow` (column-A scan) and returns the corrected row — callers must persist the returned value.
+- `appendRow` reads row-count + column A to find/append; before overwriting an existing row it reads that row's `A:T` so human columns survive.
 - After `deleteRow` (shift='Up'), call `SheetSyncRepository::shiftRowsAfterDelete()` to decrement pointers below the deleted row.
-- Child/multi-year quotes never sync. Only bid types `Audio Visual` and `Services` auto-sync.
+- **Per-quote `sync_to_sheet` flag is the sole auto-sync gate** (not bid type, not child/master-link). Creation form's "Sync to pipeline" checkbox sets it (JS smart-defaults it from bid type via the syncable list — all A/V variants + `IT`/`MOVING & LOGISTICS`/`PROFESSIONAL SERVICES`/`Services` — but the user can override). `Sync to Sheet` btn sets flag=1 (+status `synced`); `Break Sync` sets flag=0 (keeps `sheet_row`, status `never`). `copyRfq` sets copies to 0.
+- **Read-merge-write column ownership** (`SheetSyncService::mergeAppOwned`): app rewrites A,B,C,D,F,G,H,J,L,M,N,Q,T each sync; **E (STATUS), I, K, O, P, R, S are human-owned** and preserved (blank on brand-new rows). Status transitions in `guardar_editar_cotizacion.php` no longer push STATUS (that helper is now a no-op).
 
 ### Unified Audit Trail
 

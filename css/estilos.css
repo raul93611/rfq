@@ -2682,3 +2682,77 @@ h3.text-info.text-center .fa-exclamation-circle {
   color: #7d8ba0;
   font-weight: 500;
 }
+
+/* Sync to pipeline — inline checkbox field (New Quote form) */
+.sync-field {
+  padding-top: 2px;
+}
+.sync-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 0;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  font-weight: 400;
+}
+.sync-check-input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  pointer-events: none;
+}
+.sync-check-box {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  margin-top: 1px;
+  border: 1.5px solid #aab4c2;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  transition: background-color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+.sync-check-box > svg {
+  width: 13px;
+  height: 13px;
+  opacity: 0;
+  transform: scale(0.4);
+  transition: opacity 0.16s ease, transform 0.2s cubic-bezier(0.2, 1.4, 0.5, 1);
+}
+.sync-check:hover .sync-check-box {
+  border-color: #2db4e8;
+}
+.sync-check-input:checked + .sync-check-box {
+  background: #2db4e8;
+  border-color: #2db4e8;
+}
+.sync-check-input:checked + .sync-check-box > svg {
+  opacity: 1;
+  transform: scale(1);
+}
+.sync-check-input:focus-visible + .sync-check-box {
+  box-shadow: 0 0 0 3px rgba(45, 180, 232, 0.25);
+}
+.sync-check-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.sync-check-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #0f1623;
+  line-height: 1.35;
+}
+.sync-check-help {
+  font-size: 11.5px;
+  color: #5a6a7e;
+  line-height: 1.4;
+}

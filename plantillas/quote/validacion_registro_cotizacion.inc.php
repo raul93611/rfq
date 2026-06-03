@@ -96,6 +96,7 @@ function createAndInsertQuote($validador, $usuario_designado) {
     'reference_url' => Input::test_input($_POST["reference_url"]),
     'priority' => isset($_POST['priority_level']) ? $_POST['priority_level'] : null,
     'name' => !empty($_POST['name']) ? htmlspecialchars(trim($_POST['name']), ENT_QUOTES, 'UTF-8') : null,
+    'sync_to_sheet'    => isset($_POST['sync_to_sheet']) ? 1 : 0,
     'site_visit'       => isset($_POST['site_visit'])  && $_POST['site_visit']  !== '' ? (int)$_POST['site_visit']  : null,
     'resumes'          => isset($_POST['resumes'])     && $_POST['resumes']     !== '' ? (int)$_POST['resumes']     : null,
     'qa_deadline'      => !empty($_POST['qa_deadline'])      ? $_POST['qa_deadline']      : null,
@@ -109,9 +110,10 @@ function createAndInsertQuote($validador, $usuario_designado) {
   // Log audit trails
   logAuditTrails($id_rfq, $validador);
 
-  // Auto-sync to SharePoint sheet for qualifying bid types
-  $syncable_bid_types = ['Audio Visual', 'Services'];
-  if ($cotizacion_insertada && in_array($_POST['type_of_bid'], $syncable_bid_types) && empty($_POST['multi_year_project'])) {
+  // Auto-sync to the SharePoint sheet when the user opted in via the "Sync to pipeline"
+  // checkbox. The checkbox is the sole gate — bid type only sets its default in the form,
+  // and master-linked (child) quotes may sync too.
+  if ($cotizacion_insertada && isset($_POST['sync_to_sheet'])) {
     try {
       $designatedUsername = $_POST['usuario_designado'];
       $insertedQuote = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
