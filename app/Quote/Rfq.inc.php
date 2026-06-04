@@ -468,7 +468,13 @@ class Rfq {
   }
 
   public function isServices() {
-    $services = ['Services', 'Audio Visual', 'Computers', 'Back Up Batteries'];
+    // Keep in step with SYNCABLE_BID_TYPES in plantillas/quote/nueva_cotizacion.inc.php.
+    // The sync list plus the two legacy service-eligible types (Computers, Back Up Batteries).
+    $services = [
+      'Services', 'Audio Visual', 'Computers', 'Back Up Batteries',
+      'MOVING & LOGISTICS', 'PROFESSIONAL SERVICES', 'IT',
+      'A/V', 'A/V - INSTALLATION', 'A/V - SERVICES'
+    ];
     if (in_array($this->type_of_bid, $services)) {
       return true;
     }
