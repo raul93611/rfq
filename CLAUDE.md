@@ -88,7 +88,7 @@ The DB column `rfq.sheet_row` is the source of truth for which sheet row a quote
 - `appendRow` reads row-count + column A to find/append; before overwriting an existing row it reads that row's `A:T` so human columns survive.
 - After `deleteRow` (shift='Up'), call `SheetSyncRepository::shiftRowsAfterDelete()` to decrement pointers below the deleted row.
 - **Per-quote `sync_to_sheet` flag is the sole auto-sync gate** (not bid type, not child/master-link). Creation form's "Sync to pipeline" checkbox sets it (JS smart-defaults it from bid type via the syncable list — all A/V variants + `IT`/`MOVING & LOGISTICS`/`PROFESSIONAL SERVICES`/`Services` — but the user can override). `Sync to Sheet` btn sets flag=1 (+status `synced`); `Break Sync` sets flag=0 (keeps `sheet_row`, status `never`). `copyRfq` sets copies to 0.
-- **Read-merge-write column ownership** (`SheetSyncService::mergeAppOwned`): app rewrites A,B,C,D,F,G,H,J,L,M,N,Q,T each sync; **E (STATUS), I, K, O, P, R, S are human-owned** and preserved (blank on brand-new rows). Status transitions in `guardar_editar_cotizacion.php` no longer push STATUS (that helper is now a no-op).
+- **Read-merge-write column ownership** (`SheetSyncService::mergeAppOwned`): app rewrites A,B,C,D,G,H,J,L,M,N,Q,T each sync; **E (STATUS), F (INTERNAL DUE DATE), I, K, O, P, R, S are human-owned** and preserved (blank on brand-new rows). Status transitions in `guardar_editar_cotizacion.php` no longer push STATUS (that helper is now a no-op).
 
 ### Unified Audit Trail
 

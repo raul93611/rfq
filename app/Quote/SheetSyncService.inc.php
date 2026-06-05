@@ -7,10 +7,11 @@ class SheetSyncService {
   }
 
   // Columns the app owns and rewrites on every sync. Everything NOT listed here is
-  // human-owned (E STATUS, I TYPE, K TEAMING PARTNER, O LETTER OF INTENT, P RECRUITMENT,
-  // R SUBMIT BY, S PRICING) and is preserved via read-merge-write — see mergeAppOwned().
-  // 0-based indices: A=0 B=1 C=2 D=3 F=5 G=6 H=7 J=9 L=11 M=12 N=13 Q=16 T=19.
-  private static $humanOwnedIndices = [4, 8, 10, 14, 15, 17, 18]; // E, I, K, O, P, R, S
+  // human-owned (E STATUS, F INTERNAL DUE DATE, I TYPE, K TEAMING PARTNER, O LETTER OF
+  // INTENT, P RECRUITMENT, R SUBMIT BY, S PRICING) and is preserved via read-merge-write —
+  // see mergeAppOwned().
+  // 0-based indices: A=0 B=1 C=2 D=3 G=6 H=7 J=9 L=11 M=12 N=13 Q=16 T=19.
+  private static $humanOwnedIndices = [4, 5, 8, 10, 14, 15, 17, 18]; // E, F, I, K, O, P, R, S
 
   private static function buildRowValues(Rfq $quote, $designatedUsername) {
     $endDateRaw  = $quote->obtener_end_date() ?? '';
@@ -24,7 +25,7 @@ class SheetSyncService {
       $quote->obtener_email_code(),   // C: ID
       $quote->getName() ?? '',        // D: (opportunity name)
       '',                             // E: STATUS (human-owned — preserved on merge)
-      $quote->getInternalDueDate() ? date('m/d/Y', strtotime($quote->getInternalDueDate())) : '', // F: INTERNAL DUE DATE
+      '',                             // F: INTERNAL DUE DATE (human-owned — preserved on merge)
       $endDate,                       // G: CLIENT DUE DATE
       $endTime,                       // H: DUE TIME
       '',                             // I: TYPE (human-owned)
