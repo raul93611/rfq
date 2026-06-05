@@ -177,6 +177,9 @@ switch ($partes_ruta[2] ?? null) {
       case 'reports_charts':
         include_once 'plantillas/utilities/reports_charts.inc.php';
         break;
+      case 'pipeline_metrics':
+        include_once 'plantillas/utilities/pipeline_metrics.inc.php';
+        break;
       default:
         break;
     }

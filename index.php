@@ -18,7 +18,7 @@ spl_autoload_register(function ($class) {
     'Fulfillment' => ['FulfillmentRepository', 'FulfillmentItem', 'FulfillmentItemRepository', 'FulfillmentSubitem', 'FulfillmentSubitemRepository', 'FulfillmentService', 'FulfillmentServiceRepository', 'FulfillmentAuditTrailRepository'],
     'ProviderList' => ['ProviderList', 'ProviderListRepository'],
     'PaymentTerm' => ['PaymentTerm', 'PaymentTermRepository'],
-    'Report' => ['Report'],
+    'Report' => ['Report', 'PipelineMetricsRepository'],
     'Task' => ['Task', 'TaskRepository'],
     'TaskComment' => ['TaskComment', 'TaskCommentRepository'],
     'TypeOfContract' => ['TypeOfContract', 'TypeOfContractRepository'],
@@ -155,6 +155,12 @@ switch ($partes_ruta[1] ?? null) {
         break;
       case 'reports':
         $ruta_elegida = 'scripts/quote/reports.php';
+        break;
+      case 'pipeline_metrics':
+        $ruta_elegida = 'scripts/quote/pipeline_metrics.php';
+        break;
+      case 'pipeline_metrics_drilldown':
+        $ruta_elegida = 'scripts/quote/pipeline_metrics_drilldown.php';
         break;
       case 'ids':
         $ruta_elegida = 'scripts/quote/ids.php';

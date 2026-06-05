@@ -210,6 +210,9 @@ define('ALL_TASKS', TASKS . 'all_tasks');
 define('REPORTS', PERFIL . 'reports/');
 define('REPORTS_TABLES', REPORTS . 'reports_tables');
 define('REPORTS_CHARTS', REPORTS . 'reports_charts');
+define('PIPELINE_METRICS', REPORTS . 'pipeline_metrics');
+define('PIPELINE_METRICS_DATA', QUOTE_SC . 'pipeline_metrics');
+define('PIPELINE_METRICS_DRILLDOWN', QUOTE_SC . 'pipeline_metrics_drilldown');
 /********************************OTHER VIEWS*****************************************/
 define('CHARTS', PERFIL . 'charts');
 define('SEARCH_QUOTES', PERFIL . 'search_quotes');
