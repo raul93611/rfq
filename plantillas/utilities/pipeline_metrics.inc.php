@@ -115,7 +115,7 @@ $pm_current_year = (int)date('Y');
               <div class="pm-card-title"><?= $c['title']; ?></div>
               <div class="pm-card-hint" data-card-hint><?= $c['hint']; ?></div>
             </div>
-            <button class="pm-iconbtn" data-export="<?= $c['key']; ?>" title="Export as image" type="button">
+            <button class="pm-iconbtn" data-export="<?= $c['key']; ?>" title="Export to Excel" type="button">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             </button>
           </div>
@@ -164,6 +164,7 @@ $pm_current_year = (int)date('Y');
   window.PM_CONFIG = {
     dataUrl: '<?= PIPELINE_METRICS_DATA; ?>',
     drillUrl: '<?= PIPELINE_METRICS_DRILLDOWN; ?>',
+    exportUrl: '<?= PIPELINE_METRICS_EXPORT; ?>',
     year: <?= $pm_current_year; ?>,
     month: <?= (int)date('n'); ?>,
     minYear: 2015,

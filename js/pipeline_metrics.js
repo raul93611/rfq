@@ -321,11 +321,11 @@
       xaxis: { categories: ['Priced bids'], labels: { style: { fontSize: '11px', colors: INK_400 },
         formatter: function (v) { return asPct ? Math.round(v) + '%' : Math.round(v); } }, axisBorder: { show: false }, axisTicks: { show: false } },
       yaxis: { labels: { style: { fontSize: '11px', colors: INK_400, fontWeight: 600 } } },
-      tooltip: { y: { formatter: function (v, opts) {
-        var b = state.data.pricing, seg = b.buckets[opts.seriesIndex];
+      tooltip: { custom: function (o) {
+        var b = state.data.pricing, seg = b.buckets[o.seriesIndex];
         var pct = b.total ? Math.round(seg.count / b.total * 100) : 0;
-        return seg.count + ' bids · ' + pct + '%';
-      } } },
+        return tip(seg.color, seg.label, seg.count + ' bids · ' + pct + '%');
+      } },
       states: { active: { filter: { type: 'darken', value: 0.85 } } }
     });
   }
@@ -376,16 +376,18 @@
     dr.setAttribute('aria-hidden', 'true');
   }
 
-  /* ================= export ================= */
-  function exportChart(key) {
-    var c = charts[key];
-    if (!c) return;
-    c.dataURI({ scale: 2 }).then(function (res) {
-      var a = document.createElement('a');
-      a.href = res.imgURI;
-      a.download = 'pipeline_' + key + '_' + periodLabel().replace(/[^\w-]+/g, '_') + '.png';
-      a.click();
-    });
+  /* ================= export to Excel ================= */
+  // Downloads an .xlsx built server-side (PhpSpreadsheet). `key` exports a single
+  // report; omit it (or 'all') for the full workbook.
+  function exportExcel(key) {
+    var extra = (key && key !== 'all') ? { chart: key } : null;
+    var url = CFG.exportUrl + '?' + buildQuery(extra);
+    var a = document.createElement('a');
+    a.href = url;
+    a.rel = 'noopener';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   }
 
   /* ================= controls wiring ================= */
@@ -432,8 +434,8 @@
       });
     });
 
-    $$('[data-export]').forEach(function (b) { b.addEventListener('click', function () { exportChart(b.dataset.export); }); });
-    $('#pm-export-all').addEventListener('click', function () { exportChart('status'); });
+    $$('[data-export]').forEach(function (b) { b.addEventListener('click', function () { exportExcel(b.dataset.export); }); });
+    $('#pm-export-all').addEventListener('click', function () { exportExcel('all'); });
 
     $('#pm-drawer-close').addEventListener('click', closeDrill);
     $('#pm-scrim').addEventListener('click', closeDrill);

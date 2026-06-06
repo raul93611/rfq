@@ -162,6 +162,9 @@ switch ($partes_ruta[1] ?? null) {
       case 'pipeline_metrics_drilldown':
         $ruta_elegida = 'scripts/quote/pipeline_metrics_drilldown.php';
         break;
+      case 'pipeline_metrics_export':
+        $ruta_elegida = 'scripts/quote/pipeline_metrics_export.php';
+        break;
       case 'ids':
         $ruta_elegida = 'scripts/quote/ids.php';
         break;

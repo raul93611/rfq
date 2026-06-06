@@ -63,6 +63,20 @@ test.describe('Bid Pipeline Metrics dashboard', () => {
     await expect(page.locator('#pm-show .pm-seg-btn[data-show="percent"]')).toHaveClass(/is-active/);
   });
 
+  test('per-chart and full-report buttons export .xlsx', async ({ page }) => {
+    await gotoDataRichYear(page);
+    const [chartDl] = await Promise.all([
+      page.waitForEvent('download'),
+      page.click('[data-export="pricing"]'),
+    ]);
+    expect(chartDl.suggestedFilename()).toMatch(/\.xlsx$/);
+    const [reportDl] = await Promise.all([
+      page.waitForEvent('download'),
+      page.click('#pm-export-all'),
+    ]);
+    expect(reportDl.suggestedFilename()).toMatch(/\.xlsx$/);
+  });
+
   test('empty period shows a clean no-data state', async ({ page }) => {
     await page.goto(DASH);
     await page.waitForSelector('#pm-chart-status', { timeout: 15000 });
