@@ -8,7 +8,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 |---|---|---|
 | Quote Inline Editing (modals for item/provider/subitem CRUD) | built | — |
 | SharePoint Sheet Sync (portal → E-LOGIC BID PIPELINE xlsx via Graph API) | built | — |
-| Comment Mentions & Notifications (@mention users in comments, in-app bell + email via per-user MS OAuth) | built | [features/comment-mentions-notifications.md](features/comment-mentions-notifications.md) |
+| Comment Mentions & Notifications (@mention users in comments, in-app bell + email via per-user MS OAuth) | built | — |
 | Bid Requirement Fields (Site Visit, Q&A Deadline, Resumes on quotes + sheet sync) | built | — |
 | Bid Pipeline Sync Controls (`sync_to_sheet` flag, bid-type smart default, human-owned sheet columns, master-linked quotes keep syncing) | built | — |
 | Bid Pipeline Metrics Dashboard (interactive ApexCharts report reproducing the SharePoint METRICS 2026 tab from app data) | built | — |
