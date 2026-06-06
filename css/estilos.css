@@ -2950,3 +2950,19 @@ h3.text-info.text-center .fa-exclamation-circle {
 
 @media (max-width: 1180px) { .pm-kpis { grid-template-columns: repeat(3, 1fr); } }
 @media (max-width: 900px) { .pm-grid { grid-template-columns: 1fr; } .pm-card-full { grid-column: auto; } }
+
+/* Sources Sought submit modal — choice cards */
+.ss-choice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.ss-choice {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 6px;
+  padding: 14px; text-align: left; background: #fff; border: 1px solid #e3e7ee;
+  border-radius: 10px; cursor: pointer; font-family: 'Manrope', sans-serif; transition: all 0.14s;
+}
+.ss-choice:hover { border-color: #cce8f5; background: #f6fbfe; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(15,22,35,0.06); }
+.ss-choice-ico {
+  width: 36px; height: 36px; border-radius: 9px; display: grid; place-items: center;
+  color: var(--c); background: color-mix(in srgb, var(--c) 12%, white);
+}
+.ss-choice-title { font-size: 13.5px; font-weight: 700; color: #0f1623; }
+.ss-choice-sub { font-size: 11.5px; color: #5a6a7e; line-height: 1.4; }
+@media (max-width: 520px) { .ss-choice-grid { grid-template-columns: 1fr; } }

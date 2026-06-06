@@ -21,6 +21,7 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
   $award = filter_input(INPUT_POST, 'award', FILTER_SANITIZE_SPECIAL_CHARS);
   $completado = filter_input(INPUT_POST, 'completado', FILTER_SANITIZE_SPECIAL_CHARS);
   $status = filter_input(INPUT_POST, 'status', FILTER_SANITIZE_SPECIAL_CHARS);
+  $sources_sought = filter_input(INPUT_POST, 'sources_sought', FILTER_VALIDATE_INT);
   $fulfillment = filter_input(INPUT_POST, 'fulfillment', FILTER_SANITIZE_SPECIAL_CHARS);
   $invoice = filter_input(INPUT_POST, 'invoice', FILTER_SANITIZE_SPECIAL_CHARS);
   $submitted_invoice = filter_input(INPUT_POST, 'submitted_invoice', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -128,6 +129,7 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
 
         AuditTrailRepository::quote_status_audit_trail($conexion, 'Submitted', $id_rfq);
         RepositorioRfq::actualizar_fecha_y_submitted($conexion, $id_rfq);
+        RepositorioRfq::set_sources_sought($conexion, $sources_sought, $id_rfq);
 
         Conexion::cerrar_conexion();
         $updateSheetStatus($id_rfq, $cotizacion_recuperada->getSheetRow(), 'SUBMITTED');

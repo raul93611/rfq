@@ -143,6 +143,8 @@
               <option <?= $quote->obtener_comments() == 'Not submitted'                    ? 'selected' : ''; ?>>Not submitted</option>
               <option <?= $quote->obtener_comments() == 'Cancelled'                        ? 'selected' : ''; ?>>Cancelled</option>
               <option <?= $quote->obtener_comments() == 'Out of our scope'                 ? 'selected' : ''; ?>>Out of our scope</option>
+              <option <?= $quote->obtener_comments() == 'No Award - Pricing'               ? 'selected' : ''; ?>>No Award - Pricing</option>
+              <option <?= $quote->obtener_comments() == 'No Award - Technical'             ? 'selected' : ''; ?>>No Award - Technical</option>
             </select>
             <input type="hidden" name="comments_original" value="<?= $quote->obtener_comments(); ?>">
           </div>

@@ -2011,6 +2011,24 @@ class RepositorioRfq {
     return $rfq_editado;
   }
 
+  /**
+   * Records the Sources Sought submission sub-type captured at submit time.
+   * Used by the Bid Pipeline Metrics dashboard; excluded from win/loss math.
+   */
+  public static function set_sources_sought($conexion, $sources_sought, $id_rfq) {
+    if (isset($conexion)) {
+      try {
+        $sql = 'UPDATE rfq SET sources_sought = :sources_sought WHERE id = :id_rfq';
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindValue(':sources_sought', $sources_sought ? 1 : 0, PDO::PARAM_INT);
+        $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
+        $sentencia->execute();
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+  }
+
   public static function check_completed($conexion, $id_rfq) {
     $rfq_editado = false;
     if (isset($conexion)) {
