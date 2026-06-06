@@ -711,6 +711,50 @@ $(document).ready(function () {
     ],
   });
 
+  // Shared renderers for the Sources Sought / No Award tables
+  const renderQuoteIdLink = function (data, type) {
+    return type === 'display' ? `<a href="/rfq/perfil/quote/editar_cotizacion/${data}">${data}</a>` : data;
+  };
+  const renderOpenButton = function (data, type, row) {
+    return type === 'display'
+      ? `<a href="/rfq/perfil/quote/editar_cotizacion/${row.id}" class="btn btn-sm btn-secondary" title="Open quote"><i class="fas fa-folder-open"></i></a>`
+      : data;
+  };
+
+  // Initialize DataTable for #sources_sought_table
+  initializeDataTable('#sources_sought_table', {
+    ajax: { url: '/rfq/quote/sources_sought_table', type: 'POST' },
+    order: [[0, 'desc']],
+    columns: [
+      { data: 'id', render: renderQuoteIdLink },
+      { data: 'nombre_usuario' },
+      { data: 'email_code' },
+      { data: 'type_of_bid' },
+      { data: 'options', orderable: false, render: renderOpenButton },
+    ],
+  });
+
+  // Initialize DataTable for #no_award_table
+  initializeDataTable('#no_award_table', {
+    ajax: { url: '/rfq/quote/no_award_table', type: 'POST' },
+    order: [[0, 'desc']],
+    columns: [
+      { data: 'id', render: renderQuoteIdLink },
+      { data: 'nombre_usuario' },
+      { data: 'email_code' },
+      { data: 'type_of_bid' },
+      {
+        data: 'reason',
+        render: function (data, type) {
+          if (type !== 'display') return data;
+          const color = data === 'No Award - Technical' ? '#f0734f' : '#dc2626';
+          return `<span style="background:${color};color:#fff;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">${data}</span>`;
+        },
+      },
+      { data: 'options', orderable: false, render: renderOpenButton },
+    ],
+  });
+
   // Initialize DataTable for #deleted_table with custom settings
   initializeDataTable('#deleted_table', {
     ajax: {

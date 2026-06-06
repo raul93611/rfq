@@ -1104,6 +1104,85 @@ class RepositorioRfq {
     return $sentencia->fetchColumn();
   }
 
+  /**
+   * Generic DataTables list for a static WHERE condition (no user input in $condition).
+   * $extraSelect lets a view add a column (e.g. ", comments AS reason").
+   */
+  private static function getQuotesByCondition($conexion, $condition, $extraSelect, $start, $length, $search, $sort_column_index, $sort_direction) {
+    $data = [];
+    $search = '%' . $search . '%';
+    $sort_column = $sort_column_index == 0 ? 'rfq.id' : ($sort_column_index == 1 ? 'nombre_usuario' : ($sort_column_index == 2 ? 'email_code' : 'type_of_bid'));
+    $sort_direction = strtolower($sort_direction) === 'asc' ? 'ASC' : 'DESC';
+    if (isset($conexion)) {
+      try {
+        $sql = 'SELECT rfq.id, usuarios.nombre_usuario, email_code, type_of_bid' . $extraSelect . ', NULL AS options
+          FROM rfq
+          LEFT JOIN usuarios ON rfq.usuario_designado = usuarios.id
+          WHERE rfq.deleted = 0 AND ' . $condition . ' AND
+          (rfq.id LIKE :search OR nombre_usuario LIKE :search OR type_of_bid LIKE :search OR email_code LIKE :search)
+          ORDER BY ' . $sort_column . ' ' . $sort_direction . ' LIMIT ' . (int)$start . ', ' . (int)$length;
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindValue(':search', $search, PDO::PARAM_STR);
+        $sentencia->execute();
+        $data = $sentencia->fetchAll(PDO::FETCH_ASSOC);
+      } catch (PDOException $ex) {
+        print 'ERROR:' . $ex->getMessage() . '<br>';
+      }
+    }
+    return $data;
+  }
+
+  /** Count rows for a static condition; pass $search to count the filtered set. */
+  private static function countQuotesByCondition($conexion, $condition, $search = null) {
+    if (!isset($conexion)) {
+      return 0;
+    }
+    try {
+      if ($search === null) {
+        $sql = 'SELECT COUNT(*) FROM rfq WHERE deleted = 0 AND ' . $condition;
+        $sentencia = $conexion->prepare($sql);
+      } else {
+        $sql = 'SELECT COUNT(*) FROM rfq
+          LEFT JOIN usuarios ON rfq.usuario_designado = usuarios.id
+          WHERE rfq.deleted = 0 AND ' . $condition . ' AND
+          (rfq.id LIKE :search OR nombre_usuario LIKE :search OR type_of_bid LIKE :search OR email_code LIKE :search)';
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
+      }
+      $sentencia->execute();
+      return $sentencia->fetchColumn();
+    } catch (PDOException $ex) {
+      print 'ERROR:' . $ex->getMessage() . '<br>';
+      return 0;
+    }
+  }
+
+  // --- Sources Sought (submitted sub-type: status = 1 AND sources_sought = 1) ---
+  const COND_SOURCES_SOUGHT = 'rfq.status = 1 AND rfq.sources_sought = 1';
+
+  public static function getSourcesSoughtQuotes($conexion, $start, $length, $search, $sort_column_index, $sort_direction) {
+    return self::getQuotesByCondition($conexion, self::COND_SOURCES_SOUGHT, '', $start, $length, $search, $sort_column_index, $sort_direction);
+  }
+  public static function getTotalSourcesSoughtQuotesCount($conexion) {
+    return self::countQuotesByCondition($conexion, self::COND_SOURCES_SOUGHT);
+  }
+  public static function getTotalFilteredSourcesSoughtQuotesCount($conexion, $search) {
+    return self::countQuotesByCondition($conexion, self::COND_SOURCES_SOUGHT, $search);
+  }
+
+  // --- No Award (lost bids: comments in the two No Award reasons) ---
+  const COND_NO_AWARD = "rfq.comments IN ('No Award - Pricing', 'No Award - Technical')";
+
+  public static function getNoAwardQuotes($conexion, $start, $length, $search, $sort_column_index, $sort_direction) {
+    return self::getQuotesByCondition($conexion, self::COND_NO_AWARD, ', comments AS reason', $start, $length, $search, $sort_column_index, $sort_direction);
+  }
+  public static function getTotalNoAwardQuotesCount($conexion) {
+    return self::countQuotesByCondition($conexion, self::COND_NO_AWARD);
+  }
+  public static function getTotalFilteredNoAwardQuotesCount($conexion, $search) {
+    return self::countQuotesByCondition($conexion, self::COND_NO_AWARD, $search);
+  }
+
   public static function getDeletedQuotes($conexion, $start, $length, $search, $sort_column_index, $sort_direction) {
     $data = [];
     $search = '%' . $search . '%';

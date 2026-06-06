@@ -51,6 +51,7 @@ class Input {
     Conexion::abrir_conexion();
     $usuarios = RepositorioUsuario::getAllRfqUsers(Conexion::obtener_conexion());
     Conexion::cerrar_conexion();
+    $designated_user = '';
     foreach ($usuarios as $usuario) {
       if ($usuario->obtener_id() == $quote->obtener_usuario_designado()) {
         $designated_user = $usuario->obtener_nombre_usuario();

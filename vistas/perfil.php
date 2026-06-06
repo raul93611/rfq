@@ -50,6 +50,12 @@ switch ($partes_ruta[2] ?? null) {
       case 'cancelled':
         include_once 'plantillas/cancelled/cancelled.inc.php';
         break;
+      case 'sources_sought':
+        include_once 'plantillas/sources_sought/sources_sought.inc.php';
+        break;
+      case 'no_award':
+        include_once 'plantillas/no_award/no_award.inc.php';
+        break;
       case 'deleted':
         include_once 'plantillas/deleted/deleted.inc.php';
         break;

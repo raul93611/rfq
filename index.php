@@ -150,6 +150,12 @@ switch ($partes_ruta[1] ?? null) {
       case 'cancelled_table':
         $ruta_elegida = 'scripts/quote/cancelled_table.php';
         break;
+      case 'sources_sought_table':
+        $ruta_elegida = 'scripts/quote/sources_sought_table.php';
+        break;
+      case 'no_award_table':
+        $ruta_elegida = 'scripts/quote/no_award_table.php';
+        break;
       case 'deleted_table':
         $ruta_elegida = 'scripts/quote/deleted_table.php';
         break;
