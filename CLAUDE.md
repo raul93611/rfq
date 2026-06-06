@@ -11,6 +11,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | Comment Mentions & Notifications (@mention users in comments, in-app bell + email via per-user MS OAuth) | built | [features/comment-mentions-notifications.md](features/comment-mentions-notifications.md) |
 | Bid Requirement Fields (Site Visit, Q&A Deadline, Resumes on quotes + sheet sync) | built | — |
 | Bid Pipeline Sync Controls (`sync_to_sheet` flag, bid-type smart default, human-owned sheet columns, master-linked quotes keep syncing) | built | — |
+| Bid Pipeline Metrics Dashboard (interactive ApexCharts report reproducing the SharePoint METRICS 2026 tab from app data) | built | — |
 
 ## Environment
 
@@ -160,3 +161,17 @@ All three domains write to their own audit table but are surfaced through a sing
 | `quote/notifications/list` | Recent 5 JSON |
 | `quote/notifications/mark_read` | Mark read |
 | `quote/notifications/users_for_mention` | @mention user list |
+
+### Bid Pipeline Metrics Dashboard
+
+Interactive ApexCharts report at `perfil/reports/pipeline_metrics` (sidebar entry in `reports_sidebar.inc.php`). Computes the 5 METRICS-2026 reports from app data — **all aggregation is in SQL**, never by loading Rfq objects.
+
+**DB:** Run `sql/bid_pipeline_metrics_migration.sql` — adds `rfq.sources_sought TINYINT(1) DEFAULT 0`. Lost-bid buckets reuse `rfq.comments` (`No Award - Pricing` / `No Award - Technical`) — no schema change. Report-only: SharePoint sync is untouched.
+
+**Status derivation:** `PipelineMetricsRepository::STATUS_CASE` is a SQL `CASE` that mirrors `Rfq::getSheetStatus()` exactly (and in order) — keep the two in sync. 10 buckets: tbd, bid, no_bid, submitted, submitted_ss, award, no_award_pricing, no_award_technical, cancelled, not_submitted. Period filter parses the VARCHAR `issue_date` via `STR_TO_DATE(...,'%m/%d/%Y')` (unparseable rows drop out of period views). Category = `type_of_bid`; priced = `completado = 1`.
+
+**Win/Loss (logic owned by spec, not the design's 2-slice donut):** 3-way — denominator = regular `submitted` + `award` + lost (`no_award_*`); **sources-sought excluded**. Donut shows Awarded/No Award/Pending summing to 100%; center = Awarded/denominator (N/A when 0).
+
+**Key files:** `app/Report/PipelineMetricsRepository.inc.php` (autoloaded — registered under `Report` in `index.php`); endpoints `quote/pipeline_metrics` + `quote/pipeline_metrics_drilldown`; view `plantillas/utilities/pipeline_metrics.inc.php`; `js/pipeline_metrics.js` (vanilla, ApexCharts via CDN — Chart.js pages untouched); `pm-*` CSS in `estilos.css`. Capture: checking "Submitted" opens the Sources Sought modal (`js/sources_sought.js`) → hidden `sources_sought` → persisted in `guardar_editar_cotizacion.php`; lost reasons are comments-select options in `information.inc.php`.
+
+**Tests:** `tests/php/pipeline_metrics_test.php` (43 assertions, `docker exec lamp-php83 php …`, transaction-isolated); `tests/specs/09-pipeline-metrics.spec.js` (Playwright E2E).
