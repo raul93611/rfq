@@ -2940,6 +2940,7 @@ h3.text-info.text-center .fa-exclamation-circle {
 .pm-quote-main { flex: 1; min-width: 0; }
 .pm-quote-name { font-size: 13px; font-weight: 600; color: var(--pm-ink-900); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .pm-quote-sub { display: flex; align-items: center; gap: 7px; margin-top: 3px; }
+.pm-quote-id { font-size: 10.5px; font-weight: 700; color: var(--pm-sky-600); background: var(--pm-sky-50); padding: 1px 6px; border-radius: 4px; flex-shrink: 0; }
 .pm-quote-code { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-size: 10.5px; color: var(--pm-ink-700); padding: 1px 5px; background: var(--pm-navy-50); border-radius: 4px; }
 .pm-quote-cat { font-size: 11px; color: var(--pm-ink-400); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .pm-quote-right { text-align: right; flex-shrink: 0; }

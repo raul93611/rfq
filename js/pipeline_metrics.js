@@ -358,7 +358,8 @@
         list.innerHTML = quotes.map(function (q) {
           return '<a class="pm-quote" href="' + esc(q.url) + '" title="Open quote">'
             + '<div class="pm-quote-main"><div class="pm-quote-name">' + esc(q.name) + '</div>'
-            + '<div class="pm-quote-sub"><span class="pm-quote-code">' + esc(q.code) + '</span>'
+            + '<div class="pm-quote-sub"><span class="pm-quote-id">#' + esc(q.id) + '</span>'
+            + '<span class="pm-quote-code">' + esc(q.code) + '</span>'
             + '<span class="pm-quote-cat">' + esc(q.category) + '</span></div></div>'
             + '<div class="pm-quote-right"><div class="pm-quote-value">' + fmtMoneyFull(q.value) + '</div>'
             + '<div class="pm-quote-date">' + esc(q.date) + '</div></div>'
