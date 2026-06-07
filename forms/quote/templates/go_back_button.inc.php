@@ -17,6 +17,10 @@ if ($cotizacion_recuperada->getDeleted()) {
   $url = FULFILLMENT_QUOTES;
 } elseif ($cotizacion_recuperada->obtener_award() && in_array($comments, $noCommentsStatus)) {
   $url = AWARD . $canal;
+} elseif ($comments === 'No Award - Pricing' || $comments === 'No Award - Technical') {
+  $url = NO_AWARD;
+} elseif ($cotizacion_recuperada->obtener_status() && $cotizacion_recuperada->getSourcesSought() && in_array($comments, $noCommentsStatus)) {
+  $url = SOURCES_SOUGHT;
 } elseif ($cotizacion_recuperada->obtener_status() && in_array($comments, $noCommentsStatus)) {
   $url = SUBMITTED . $canal;
 } elseif ($cotizacion_recuperada->obtener_completado() && in_array($comments, $noCommentsStatus)) {
