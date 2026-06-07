@@ -135,6 +135,7 @@ include_once 'modals/type_of_contract_modal.inc.php';
 include_once 'modals/sales_commission_modal.inc.php';
 include_once 'modals/link_quote_modal.inc.php';
 include_once 'plantillas/quote/modals/break_sheet_sync_modal.inc.php';
+include_once 'plantillas/quote/modals/sources_sought_modal.inc.php';
 include_once 'modals/rooms/add_room_modal.inc.php';
 include_once 'modals/rooms/edit_room_modal.inc.php';
 include_once 'modals/import_items_modal.inc.php';
@@ -153,3 +154,4 @@ include_once 'plantillas/quote/modals/edit_provider_subitem_modal.inc.php';
 <script src="<?= RUTA_JS; ?>rooms.js"></script>
 <script src="<?= RUTA_JS; ?>audit_trail.js"></script>
 <script src="<?= RUTA_JS; ?>sheet_sync.js"></script>
+<script src="<?= RUTA_JS; ?>sources_sought.js"></script>

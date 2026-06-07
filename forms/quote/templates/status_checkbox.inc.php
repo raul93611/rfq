@@ -52,10 +52,13 @@ if ($canal == 'Chemonics' && !$cotizacion_recuperada->obtener_award()) {
                 <label class="custom-control-label" for="award">Award</label>
               </div>';
   } elseif ($cotizacion_recuperada->obtener_completado() && !$cotizacion_recuperada->obtener_status()) {
+    // Checking "Submitted" opens the Sources Sought modal (sources_sought.js) before the
+    // box stays checked; the chosen sub-type rides along in this hidden input.
     echo '<div class="custom-control custom-checkbox">
                 <input type="checkbox" class="custom-control-input" name="status" value="si" ' . $statusChecked . ' id="status">
                 <label class="custom-control-label" for="status">Submitted</label>
-              </div>';
+              </div>
+              <input type="hidden" name="sources_sought" id="sources_sought_input" value="' . ((int)$cotizacion_recuperada->getSourcesSought()) . '">';
   } elseif (!$cotizacion_recuperada->obtener_completado()) {
     echo '<div class="custom-control custom-checkbox">
                 <input type="checkbox" class="custom-control-input" name="completado" value="si" ' . $completedChecked . ' id="completado">

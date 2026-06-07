@@ -123,6 +123,18 @@
       </a>
     </li>
     <li class="nav-item">
+      <a href="<?= SOURCES_SOUGHT; ?>" class="nav-link <?= ($partes_ruta[3] ?? null) === 'sources_sought' ? 'active' : ''; ?>">
+        <i class="nav-icon fas fa-search"></i>
+        <p>Sources Sought</p>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="<?= NO_AWARD; ?>" class="nav-link <?= ($partes_ruta[3] ?? null) === 'no_award' ? 'active' : ''; ?>">
+        <i class="nav-icon fas fa-times-circle"></i>
+        <p>No Award</p>
+      </a>
+    </li>
+    <li class="nav-item">
       <a href="<?= DELETED; ?>" class="nav-link <?= ($partes_ruta[3] ?? null) === 'deleted' ? 'active' : ''; ?>">
         <i class="nav-icon fas fa-th"></i>
         <p>Deleted</p>

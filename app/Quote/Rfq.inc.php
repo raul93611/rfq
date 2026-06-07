@@ -76,6 +76,7 @@ class Rfq {
   private $qa_deadline;
   private $internal_due_date;
   private $qa;
+  private $sources_sought;
 
   public function __construct(array $row) {
     $this->id = $row['id'] ?? null;
@@ -156,6 +157,9 @@ class Rfq {
     $this->qa_deadline = $row['qa_deadline'] ?? null;
     $this->internal_due_date = $row['internal_due_date'] ?? null;
     $this->qa = isset($row['qa']) ? (int)$row['qa'] : null;
+    // Sources Sought submission sub-type. Coexists with status = 1 and is excluded
+    // from win/loss math. Defaults to 0 (regular submission).
+    $this->sources_sought = isset($row['sources_sought']) ? (int)$row['sources_sought'] : 0;
   }
 
   public function obtener_id() {
@@ -724,13 +728,29 @@ class Rfq {
     return $this->sync_to_sheet;
   }
 
+  /**
+   * Derives the pipeline status bucket for a single quote.
+   *
+   * The Bid Pipeline Metrics dashboard aggregates these buckets in SQL (a CASE that
+   * mirrors this exact order — see PipelineMetricsRepository), never by loading every
+   * Rfq into PHP. This method is kept for per-row consistency (e.g. drill-down rows).
+   *
+   * Order matters: the No Award buckets are checked before SUBMITTED because a lost
+   * bid was itself submitted (status = 1); sources-sought is a sub-type of SUBMITTED.
+   */
   public function getSheetStatus() {
     $no_bid_comments = ['No Bid', 'Manufacturer in the Bid', 'Expired due date', 'Supplier did not provide a quote', 'Others'];
     if ($this->award || $this->fullfillment || $this->invoice || $this->submitted_invoice) {
       return 'AWARD';
     }
+    if ($this->comments === 'No Award - Pricing') {
+      return 'NO AWARD-PRICING';
+    }
+    if ($this->comments === 'No Award - Technical') {
+      return 'NO AWARD-TECHNICAL';
+    }
     if ($this->status == 1) {
-      return 'SUBMITTED';
+      return $this->sources_sought ? 'SUBMITTED-SOURCES SOUGHT' : 'SUBMITTED';
     }
     if ($this->comments === 'Not submitted') {
       return 'NOT SUBMITTED';
@@ -745,6 +765,10 @@ class Rfq {
       return 'BID';
     }
     return 'TBD';
+  }
+
+  public function getSourcesSought() {
+    return $this->sources_sought;
   }
 
   public function getInternalDueDate() {
