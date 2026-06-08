@@ -105,7 +105,7 @@ $(document).ready(function () {
     $('#total_additional').html(`$ ${totalAdditional.toFixed(2)}`);
 
     // Services calculation — runs in the same tick so the total feeds into the bottom bar
-    const svcPaymentMultiplier = $('input:radio[name=services_payment_term]:checked').val() === 'Net 30/CC' ? 1.0299 : 1;
+    const svcPaymentMultiplier = $('input:radio[name=services_payment_term]:checked').val() === 'Net 30/CC' ? 1.03 : 1;
     let totalServices = 0;
     $('#services_table tbody .service_item').each(function () {
       const $cells = $(this).find('td');
@@ -114,7 +114,7 @@ $(document).ready(function () {
       if (!$unitCell.data('base-price')) $unitCell.data('base-price', basePrice);
       const qty = parseFloat($cells.eq(3).text()) || 0;
       const newUnitPrice = (basePrice * svcPaymentMultiplier).toFixed(2);
-      const newTotalPrice = (newUnitPrice * qty).toFixed(2);
+      const newTotalPrice = (basePrice * svcPaymentMultiplier * qty).toFixed(2);
       totalServices += parseFloat(newTotalPrice);
       $unitCell.html(newUnitPrice);
       $cells.eq(5).html(newTotalPrice);
