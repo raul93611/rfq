@@ -27,18 +27,7 @@
             <div class="card-body">
               <p class="chart-card-label">Annual Awards <span class="chart-card-label-sub">by Amount</span></p>
               <div style="position:relative;height:220px;"><canvas id="monto_ganados_anual_chart"></canvas></div>
-              <div class="chart-legend mt-3">
-                <div class="chart-legend-item">
-                  <span class="chart-legend-dot" style="background:#13A8F0"></span>
-                  <span class="chart-legend-text">Current year</span>
-                  <span class="chart-legend-value current"></span>
-                </div>
-                <div class="chart-legend-item">
-                  <span class="chart-legend-dot" style="background:#39485a"></span>
-                  <span class="chart-legend-text">Past year</span>
-                  <span class="chart-legend-value past"></span>
-                </div>
-              </div>
+              <div class="chart-legend mt-3" id="annual_awards_amounts_legend"></div>
             </div>
           </div>
 
@@ -60,18 +49,7 @@
             <div class="card-body">
               <p class="chart-card-label">Annual Awards <span class="chart-card-label-sub">by Count</span></p>
               <div style="position:relative;height:220px;"><canvas id="ganados_anuales_chart"></canvas></div>
-              <div class="chart-legend mt-3">
-                <div class="chart-legend-item">
-                  <span class="chart-legend-dot" style="background:#13A8F0"></span>
-                  <span class="chart-legend-text">Current year</span>
-                  <span class="chart-legend-value current"></span>
-                </div>
-                <div class="chart-legend-item">
-                  <span class="chart-legend-dot" style="background:#39485a"></span>
-                  <span class="chart-legend-text">Past year</span>
-                  <span class="chart-legend-value past"></span>
-                </div>
-              </div>
+              <div class="chart-legend mt-3" id="annual_awards_legend"></div>
             </div>
           </div>
 

@@ -50,6 +50,20 @@ function insertQuote($conexion, $year, array $o) {
   return (int)$conexion->lastInsertId();
 }
 
+/** Insert one services line item for a quote (drives the services subtotal). */
+function insertService($conexion, $id_rfq, $total_price) {
+  $sql = 'INSERT INTO services (id_rfq, description, quantity, unit_price, total_price)
+          VALUES (:id_rfq, :description, :quantity, :unit_price, :total_price)';
+  $stmt = $conexion->prepare($sql);
+  $stmt->bindValue(':id_rfq', $id_rfq, PDO::PARAM_INT);
+  $stmt->bindValue(':description', 'PMTEST service');
+  $stmt->bindValue(':quantity', 1);
+  $stmt->bindValue(':unit_price', $total_price);
+  $stmt->bindValue(':total_price', $total_price);
+  $stmt->execute();
+  return (int)$conexion->lastInsertId();
+}
+
 $conexion->beginTransaction();
 try {
   // ---- controlled dataset (12 quotes covering every bucket) ----
@@ -160,6 +174,24 @@ try {
   check('March count = 12', 12, $mar['count']);
   $apr = PipelineMetricsRepository::getMetrics($conexion, ['mode' => 'month', 'year' => $YEAR, 'month' => 4]);
   check('April count = 0', 0, $apr['count']);
+
+  // ---- services-inclusive value (bug: pipeline $ must include services subtotal) ----
+  // Isolated sentinel year: one awarded quote, total_price=100, plus two services (30+20).
+  // Every money figure must equal 150 = total_price + sum(services.total_price), not 100.
+  echo "[Services-inclusive value]\n";
+  $SVC_YEAR = 2097;
+  $svcPeriod = ['mode' => 'year', 'year' => $SVC_YEAR];
+  $svcAward = insertQuote($conexion, $SVC_YEAR, [
+    'award' => 1, 'status' => 1, 'completado' => 1, 'total_price' => 100, 'type_of_bid' => 'Services',
+  ]);
+  insertService($conexion, $svcAward, 30);
+  insertService($conexion, $svcAward, 20);
+  $sm = PipelineMetricsRepository::getMetrics($conexion, $svcPeriod);
+  check('awardedValue includes services subtotal (100+30+20)', 150.0, (float)$sm['awardedValue']);
+  check('totalValue includes services subtotal',               150.0, (float)$sm['totalValue']);
+  check('submittedValue includes services subtotal',           150.0, (float)$sm['submittedValue']);
+  $sd = PipelineMetricsRepository::getDrillDown($conexion, $svcPeriod, ['type' => 'status', 'key' => 'award']);
+  check('drill-down row value includes services subtotal', 150.0, (float)($sd[0]['value'] ?? 0));
 
 } finally {
   $conexion->rollBack(); // leave the DB exactly as we found it

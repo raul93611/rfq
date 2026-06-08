@@ -1,3 +1,30 @@
+/* =========================================================================
+   Dashboard · Charts tab (/rfq/perfil/charts)
+   The two ANNUAL AWARDS cards compare THREE years (current + 2 prior) as
+   grouped monthly columns with a three-row legend. Recency reads as
+   saturation: newest year = brand blue, older years progressively muted.
+   The Completed / Awards (by-user) cards are unchanged (current vs last month).
+   ========================================================================= */
+
+const MONTHS_SHORT = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+const MONTHS_LONG = ['January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December'];
+
+/* recency ramp — index 0 = oldest … last = current year */
+const AWARD_RAMP = ['#aebccb', '#5e83a4', '#13A8F0'];
+const rampColor = (i) => AWARD_RAMP[i] || AWARD_RAMP[AWARD_RAMP.length - 1];
+
+/* ---- formatters (match the Annual Awards design) ----------------------- */
+function fmtCount(n) { return Math.round(n).toLocaleString('en-US'); }
+function fmtMoneyFull(n) {
+  return '$' + Number(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+function fmtAxisMoney(v) {
+  if (v >= 1e6) return '$' + (v / 1e6).toFixed(1) + 'M';
+  if (v >= 1e3) return '$' + Math.round(v / 1e3) + 'k';
+  return '$' + Math.round(v);
+}
+
 $(document).ready(function () {
   if ($('#graficas').length > 0) {
     $.ajax({
@@ -6,13 +33,7 @@ $(document).ready(function () {
       contentType: "application/json; charset=utf-8",
       method: "GET",
       success: function (data) {
-        // Update HTML content
-        $('#annual_awards_amounts .current').text(`$ ${data.annual_awards_amount}`);
-        $('#annual_awards_amounts .past').text(`$ ${data.past_annual_awards_amount}`);
-        $('#annual_awards .current').text(data.annual_awards);
-        $('#annual_awards .past').text(data.past_annual_awards);
-
-        // Helper function to create bar charts
+        // Helper for the unchanged per-user bar charts (current vs last month)
         function createBarChart(elementId, labels, datasets, callback = null) {
           const chartElement = $(elementId);
           const options = {
@@ -32,7 +53,69 @@ $(document).ready(function () {
           });
         }
 
-        // Completed Quotes Chart
+        /* ---- Annual Awards: three-year grouped columns ------------------- */
+        function createAnnualChart(elementId, years, isMoney) {
+          const datasets = years.map((y, i) => ({
+            label: String(y.year),
+            backgroundColor: rampColor(i),
+            borderColor: rampColor(i),
+            borderRadius: 2,
+            borderSkipped: false,
+            maxBarThickness: 22,
+            data: y.by_month.map(m => isMoney ? m.total_price : m.total_quotes)
+          }));
+
+          new Chart($(elementId), {
+            type: 'bar',
+            data: { labels: MONTHS_SHORT, datasets },
+            options: {
+              maintainAspectRatio: false,
+              // One tooltip per hovered bar (a single year), not the shared index tooltip
+              interaction: { mode: 'nearest', intersect: true },
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+                  mode: 'nearest',
+                  intersect: true,
+                  callbacks: {
+                    title: (items) => items.length
+                      ? `${MONTHS_LONG[items[0].dataIndex]} ${items[0].dataset.label}` : '',
+                    label: (item) => isMoney
+                      ? fmtMoneyFull(item.raw)
+                      : `${fmtCount(item.raw)} award${item.raw === 1 ? '' : 's'}`
+                  }
+                }
+              },
+              scales: {
+                x: { grid: { display: false } },
+                y: {
+                  beginAtZero: true,
+                  ticks: { callback: (v) => isMoney ? fmtAxisMoney(v) : fmtCount(v) }
+                }
+              }
+            }
+          });
+        }
+
+        /* ---- three-row legend (newest year first), totals from the data -- */
+        function renderAnnualLegend(containerId, years, isMoney) {
+          const $c = $(containerId).empty();
+          years.slice().reverse().forEach((y) => {
+            const i = years.findIndex(x => x.year === y.year);
+            const total = isMoney ? fmtMoneyFull(y.total_price) : fmtCount(y.total_quotes);
+            $c.append(
+              '<div class="chart-legend-item">' +
+              '<span class="chart-legend-dot" style="background:' + rampColor(i) + '"></span>' +
+              '<span class="chart-legend-text">' + y.year + '</span>' +
+              '<span class="chart-legend-value">' + total + '</span>' +
+              '</div>'
+            );
+          });
+        }
+
+        const annualYears = data.annual_awards_years || [];
+
+        // Completed Quotes Chart (unchanged)
         const usernames = data.completed_quotes_by_user_past_month.map(obj => obj.user_name);
         const completedQuotesCurrent = data.completed_quotes_by_user_current_month.map(obj => obj.total_quotes);
         const completedQuotesPast = data.completed_quotes_by_user_past_month.map(obj => obj.total_quotes);
@@ -52,40 +135,11 @@ $(document).ready(function () {
           }
         ]);
 
-        // Annual Awards Amount by Month Chart
-        const annualAwardsAmountCurrent = data.annual_awards_amount_by_month.map(obj => obj.total_price);
-        const annualAwardsAmountPast = data.past_annual_awards_amount_by_month.map(obj => obj.total_price);
+        // Annual Awards by Amount (3-year)
+        createAnnualChart("#monto_ganados_anual_chart", annualYears, true);
+        renderAnnualLegend("#annual_awards_amounts_legend", annualYears, true);
 
-        createBarChart(
-          "#monto_ganados_anual_chart",
-          ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
-          [
-            {
-              label: 'Annual awards (by amount)',
-              backgroundColor: '#13A8F0',
-              borderColor: '#13A8F0',
-              data: annualAwardsAmountCurrent
-            },
-            {
-              label: 'Past annual awards (by amount)',
-              backgroundColor: '#39485A',
-              borderColor: '#39485A',
-              data: annualAwardsAmountPast
-            }
-          ],
-          {
-            callback: function (value) {
-              if (value >= 1_000_000) {
-                return `$${(value / 1_000_000).toFixed(1)}M`; // Show in millions
-              } else if (value >= 1000) {
-                return `$${(value / 1000).toFixed(1)}k`; // Fallback to thousands
-              }
-              return `$${value}`;
-            }
-          }
-        );
-
-        // Award Quotes Chart
+        // Award Quotes Chart (unchanged)
         const awardedQuotesCurrent = data.award_quotes_by_user_current_month.map(obj => obj.total_quotes);
         const awardedQuotesPast = data.award_quotes_by_user_past_month.map(obj => obj.total_quotes);
 
@@ -104,28 +158,9 @@ $(document).ready(function () {
           }
         ]);
 
-        // Annual Awards Chart
-        const annualAwardsCurrent = data.annual_awards_by_month.map(obj => obj.total_quotes);
-        const annualAwardsPast = data.past_annual_awards_by_month.map(obj => obj.total_quotes);
-
-        createBarChart(
-          "#ganados_anuales_chart",
-          ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
-          [
-            {
-              label: 'Annual awards',
-              backgroundColor: '#13A8F0',
-              borderColor: '#13A8F0',
-              data: annualAwardsCurrent
-            },
-            {
-              label: 'Past annual awards',
-              backgroundColor: '#39485A',
-              borderColor: '#39485A',
-              data: annualAwardsPast
-            }
-          ]
-        );
+        // Annual Awards by Count (3-year)
+        createAnnualChart("#ganados_anuales_chart", annualYears, false);
+        renderAnnualLegend("#annual_awards_legend", annualYears, false);
       },
       error: function (xhr, status, error) {
         console.error("Error fetching data:", { xhr, status, error });
