@@ -58,6 +58,19 @@ class PipelineMetricsRepository {
   ];
 
   /**
+   * A quote's value = product total + services subtotal. The pipeline dollar figures
+   * must match the Charts tab (RepositorioRfq::getAnnualAwardsDataByMonthForYears),
+   * so every value query joins services and uses VALUE_EXPR — never rfq.total_price alone.
+   */
+  const SERVICES_JOIN = "
+    LEFT JOIN (
+      SELECT id_rfq, SUM(COALESCE(total_price, 0)) AS services_total
+      FROM services
+      GROUP BY id_rfq
+    ) svc ON svc.id_rfq = rfq.id";
+  const VALUE_EXPR = "(COALESCE(rfq.total_price, 0) + COALESCE(svc.services_total, 0))";
+
+  /**
    * Builds the period WHERE fragment (without the leading AND) and its bind params.
    * Returns [sqlFragment, params]. For 'year' mode only the year is constrained.
    */
@@ -96,8 +109,8 @@ class PipelineMetricsRepository {
     // --- status counts + summed value per bucket (drives KPIs + status donut) ---
     $sql = "SELECT bucket AS skey, COUNT(*) AS cnt, COALESCE(SUM(total_price), 0) AS val
             FROM (
-              SELECT " . self::STATUS_CASE . " AS bucket, rfq.total_price AS total_price
-              FROM rfq
+              SELECT " . self::STATUS_CASE . " AS bucket, " . self::VALUE_EXPR . " AS total_price
+              FROM rfq" . self::SERVICES_JOIN . "
               WHERE rfq.deleted = 0 AND $periodSql
             ) t
             GROUP BY bucket";
@@ -251,9 +264,9 @@ class PipelineMetricsRepository {
     $sql = "SELECT id, email_code, name, type_of_bid, total_price, issue_date, bucket
             FROM (
               SELECT rfq.id, rfq.email_code, rfq.name, rfq.type_of_bid,
-                     rfq.total_price, rfq.issue_date, rfq.completado,
+                     " . self::VALUE_EXPR . " AS total_price, rfq.issue_date, rfq.completado,
                      " . self::STATUS_CASE . " AS bucket
-              FROM rfq
+              FROM rfq" . self::SERVICES_JOIN . "
               WHERE rfq.deleted = 0 AND $periodSql
             ) t
             WHERE $where
