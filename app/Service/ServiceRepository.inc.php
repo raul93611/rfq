@@ -250,7 +250,7 @@ class ServiceRepository {
     $payment_term = $payment_term == 'Net 30/CC' ? 1.03 : 1;
     if (isset($connection)) {
       try {
-        $sql = 'UPDATE services SET total_price = quantity * (unit_price * :payment_term) WHERE id_rfq = :id_rfq';
+        $sql = 'UPDATE services SET total_price = quantity * ROUND(unit_price * :payment_term, 2) WHERE id_rfq = :id_rfq';
         $sentence = $connection->prepare($sql);
         $sentence->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentence->bindValue(':payment_term', $payment_term, PDO::PARAM_STR);
