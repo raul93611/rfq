@@ -114,7 +114,7 @@ $(document).ready(function () {
       if (!$unitCell.data('base-price')) $unitCell.data('base-price', basePrice);
       const qty = parseFloat($cells.eq(3).text()) || 0;
       const newUnitPrice = (basePrice * svcPaymentMultiplier).toFixed(2);
-      const newTotalPrice = (basePrice * svcPaymentMultiplier * qty).toFixed(2);
+      const newTotalPrice = (parseFloat(newUnitPrice) * qty).toFixed(2);
       totalServices += parseFloat(newTotalPrice);
       $unitCell.html(newUnitPrice);
       $cells.eq(5).html(newTotalPrice);
