@@ -70,9 +70,13 @@ $(document).ready(function () {
             data: { labels: MONTHS_SHORT, datasets },
             options: {
               maintainAspectRatio: false,
+              // One tooltip per hovered bar (a single year), not the shared index tooltip
+              interaction: { mode: 'nearest', intersect: true },
               plugins: {
                 legend: { display: false },
                 tooltip: {
+                  mode: 'nearest',
+                  intersect: true,
                   callbacks: {
                     title: (items) => items.length
                       ? `${MONTHS_LONG[items[0].dataIndex]} ${items[0].dataset.label}` : '',
