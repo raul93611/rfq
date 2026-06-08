@@ -2028,16 +2028,27 @@ class RepositorioRfq {
     return $sentence->fetchColumn();
   }
 
-  public static function getAnnualAwardsDataByMonthBothYears($connection, $current_year, $past_year) {
+  /**
+   * Monthly awarded-quote counts and dollar amounts for an arbitrary set of years.
+   * Drives the Charts-tab "Annual Awards" rolling 3-year comparison (current + 2 prior).
+   * A quote's value is the canonical product total + services subtotal, matching the
+   * Bid Pipeline Metrics page.
+   *
+   * Returns [ year => [12 month entries of ['total_quotes'=>int, 'total_price'=>float]] ]
+   * for every year in $years. A year with no awards renders as 12 zero months rather
+   * than dropping out, so the chart never loses a series.
+   */
+  public static function getAnnualAwardsDataByMonthForYears($connection, array $years) {
     $empty_month = ['total_quotes' => 0, 'total_price' => 0];
-    $result = [
-      'current_by_month' => array_fill(0, 12, $empty_month),
-      'past_by_month'    => array_fill(0, 12, $empty_month),
-    ];
-    if (!isset($connection)) return $result;
+    $result = [];
+    foreach ($years as $y) {
+      $result[(int)$y] = array_fill(0, 12, $empty_month);
+    }
+    if (!isset($connection) || empty($years)) return $result;
     try {
-      $past_start = "{$past_year}-01-01";
-      $curr_end   = ($current_year + 1) . "-01-01";
+      $ints = array_map('intval', $years);
+      $range_start = min($ints) . "-01-01";
+      $range_end   = (max($ints) + 1) . "-01-01";
       $sql = "
       SELECT
         MONTH(r.fecha_award) AS month,
@@ -2057,11 +2068,12 @@ class RepositorioRfq {
       GROUP BY YEAR(r.fecha_award), MONTH(r.fecha_award)
       ";
       $sentence = $connection->prepare($sql);
-      $sentence->execute([$past_start, $curr_end]);
+      $sentence->execute([$range_start, $range_end]);
       while ($row = $sentence->fetch(PDO::FETCH_ASSOC)) {
-        $idx = (int)$row['month'] - 1;
-        $key = (int)$row['year'] === (int)$current_year ? 'current_by_month' : 'past_by_month';
-        $result[$key][$idx] = [
+        $year = (int)$row['year'];
+        $idx  = (int)$row['month'] - 1;
+        if (!isset($result[$year]) || $idx < 0 || $idx > 11) continue;
+        $result[$year][$idx] = [
           'total_quotes' => (int)$row['total_quotes'],
           'total_price'  => (float)$row['total_price'],
         ];
