@@ -12,6 +12,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | Bid Requirement Fields (Site Visit, Q&A Deadline, Resumes on quotes + sheet sync) | built | — |
 | Bid Pipeline Sync Controls (`sync_to_sheet` flag, bid-type smart default, human-owned sheet columns, master-linked quotes keep syncing) | built | — |
 | Bid Pipeline Metrics Dashboard (interactive ApexCharts report reproducing the SharePoint METRICS 2026 tab from app data) | built | — |
+| 3-Year Annual Awards Comparison (Charts tab annual cards: rolling current + 2 prior years) | built | — |
 
 ## Environment
 
@@ -172,8 +173,14 @@ Interactive ApexCharts report at `perfil/reports/pipeline_metrics` (sidebar entr
 
 **Win/Loss (logic owned by spec, not the design's 2-slice donut):** 3-way — denominator = regular `submitted` + `award` + lost (`no_award_*`); **sources-sought excluded**. Donut shows Awarded/No Award/Pending summing to 100%; center = Awarded/denominator (N/A when 0).
 
+**Dollar values (gotcha):** every money figure = product total + services subtotal. `getMetrics`/`getDrillDown` join services via `PipelineMetricsRepository::SERVICES_JOIN` and sum `VALUE_EXPR` (never `rfq.total_price` alone) so the page reconciles with the Charts tab. Count-only aggregations (`categoryBreakdown`, `pricingEffort`, win/loss) deliberately skip the join.
+
 **Key files:** `app/Report/PipelineMetricsRepository.inc.php` (autoloaded — registered under `Report` in `index.php`); endpoints `quote/pipeline_metrics` + `quote/pipeline_metrics_drilldown` + `quote/pipeline_metrics_export` (xlsx via PhpSpreadsheet — `chart=` for one report, omit for the full workbook); view `plantillas/utilities/pipeline_metrics.inc.php`; `js/pipeline_metrics.js` (vanilla, ApexCharts via CDN — Chart.js pages untouched); `pm-*` CSS in `estilos.css`. Capture: checking "Submitted" opens the Sources Sought modal (`js/sources_sought.js`) → hidden `sources_sought` → persisted in `guardar_editar_cotizacion.php`; lost reasons are comments-select options in `information.inc.php`.
 
 **Surfacing the new statuses:** the quote-page status pill (`status_title.inc.php`) shows Sources Sought / No Award - Pricing / No Award - Technical; two listing pages mirror the cancelled/not-submitted pattern — **Sources Sought** (`quote/sources_sought`, `status=1 AND sources_sought=1`) and **No Award** (`quote/no_award`, the two No-Award comments, with a Reason column). Repo list/count uses shared private helpers `getQuotesByCondition` / `countQuotesByCondition`; DataTable inits in `js/main.js`; sidebar links in `sales_sidebar.inc.php`.
 
-**Tests:** `tests/php/pipeline_metrics_test.php` (43 assertions, `docker exec lamp-php83 php …`, transaction-isolated); `tests/specs/09-pipeline-metrics.spec.js` (Playwright E2E).
+**Tests:** `tests/php/pipeline_metrics_test.php` (47 assertions, `docker exec lamp-php83 php …`, transaction-isolated); `tests/specs/09-pipeline-metrics.spec.js` (Playwright E2E).
+
+### Charts Tab — Annual Awards (3-year)
+
+Dashboard `perfil/charts` (`plantillas/utilities/charts.inc.php` + `js/main_charts.js`, **Chart.js** — not the ApexCharts pipeline page). The two Annual Awards cards (by Count `#ganados_anuales_chart`, by Amount `#monto_ganados_anual_chart`) compare a **rolling** window — current year + 2 prior — as grouped monthly columns. Endpoint `scripts/utilities/main_charts.php` builds `[Y-2, Y-1, Y]` and returns `annual_awards_years` (per year: totals + 12 monthly points) from `RepositorioRfq::getAnnualAwardsDataByMonthForYears($conn, $years)`; award value = product + services subtotal (same canon as Pipeline Metrics). JS builds the 3 datasets and the 3-row legend (newest first) into `#annual_awards_*_legend`. Ramp oldest→newest: `#aebccb`, `#5e83a4`, `#13A8F0`. The per-user Completed/Awards cards are separate (current vs last month, unchanged). Test: `tests/php/annual_awards_test.php`.
