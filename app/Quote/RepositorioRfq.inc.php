@@ -2029,14 +2029,21 @@ class RepositorioRfq {
   }
 
   /**
-   * Monthly awarded-quote counts and dollar amounts for an arbitrary set of years.
-   * Drives the Charts-tab "Annual Awards" rolling 3-year comparison (current + 2 prior).
-   * A quote's value is the canonical product total + services subtotal, matching the
-   * Bid Pipeline Metrics page.
+   * Monthly "annual awards" counts and dollar amounts for an arbitrary set of years.
+   * Drives the Charts-tab rolling 3-year comparison (current + 2 prior).
+   *
+   * Cohort deliberately matches the Bid Pipeline Metrics dashboard so the two app pages
+   * reconcile (the source-of-truth SharePoint METRICS tab tracks no award date — "AWARD"
+   * is a status, and the year is which yearly sheet a bid lives in):
+   *   - year/month basis = issue_date (the app's proxy for the sheet-year), NOT fecha_award.
+   *   - "awarded" = award OR fulfillment OR invoice OR submitted_invoice — identical to
+   *     PipelineMetricsRepository's award bucket. Keep the two definitions in sync.
+   *   - value = product total + services subtotal.
    *
    * Returns [ year => [12 month entries of ['total_quotes'=>int, 'total_price'=>float]] ]
    * for every year in $years. A year with no awards renders as 12 zero months rather
-   * than dropping out, so the chart never loses a series.
+   * than dropping out, so the chart never loses a series. Rows whose issue_date can't be
+   * parsed as MM/DD/YYYY fall out (same as the Pipeline page).
    */
   public static function getAnnualAwardsDataByMonthForYears($connection, array $years) {
     $empty_month = ['total_quotes' => 0, 'total_price' => 0];
@@ -2046,14 +2053,14 @@ class RepositorioRfq {
     }
     if (!isset($connection) || empty($years)) return $result;
     try {
-      $ints = array_map('intval', $years);
-      $range_start = min($ints) . "-01-01";
-      $range_end   = (max($ints) + 1) . "-01-01";
+      $ints = array_values(array_unique(array_map('intval', $years)));
+      $placeholders = implode(',', array_fill(0, count($ints), '?'));
+      $issued = "STR_TO_DATE(r.issue_date, '%m/%d/%Y')";
       $sql = "
       SELECT
-        MONTH(r.fecha_award) AS month,
-        YEAR(r.fecha_award)  AS year,
-        COUNT(r.id)          AS total_quotes,
+        MONTH($issued) AS month,
+        YEAR($issued)  AS year,
+        COUNT(r.id)    AS total_quotes,
         SUM(COALESCE(s_totals.services_total, 0) + COALESCE(r.total_price, 0)) AS total_price
       FROM rfq r
       LEFT JOIN (
@@ -2061,14 +2068,14 @@ class RepositorioRfq {
         FROM services
         GROUP BY id_rfq
       ) s_totals ON r.id = s_totals.id_rfq
-      WHERE r.award = 1
+      WHERE (r.award = 1 OR r.fullfillment = 1 OR r.invoice = 1 OR r.submitted_invoice = 1)
         AND r.deleted = 0
-        AND r.fecha_award >= ?
-        AND r.fecha_award < ?
-      GROUP BY YEAR(r.fecha_award), MONTH(r.fecha_award)
+        AND $issued IS NOT NULL
+        AND YEAR($issued) IN ($placeholders)
+      GROUP BY YEAR($issued), MONTH($issued)
       ";
       $sentence = $connection->prepare($sql);
-      $sentence->execute([$range_start, $range_end]);
+      $sentence->execute($ints);
       while ($row = $sentence->fetch(PDO::FETCH_ASSOC)) {
         $year = (int)$row['year'];
         $idx  = (int)$row['month'] - 1;
