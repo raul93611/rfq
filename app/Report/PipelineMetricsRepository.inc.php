@@ -75,15 +75,17 @@ class PipelineMetricsRepository {
    * Returns [sqlFragment, params]. For 'year' mode only the year is constrained.
    */
   private static function periodClause(array $period) {
-    $parsed = "STR_TO_DATE(rfq.issue_date, '%m/%d/%Y')";
-    $sql = "$parsed IS NOT NULL AND YEAR($parsed) = :year";
+    // Cohort date = created_at (the auto, always-present quote creation timestamp).
+    // Replaces the hand-typed issue_date, whose unparseable values silently dropped rows.
+    $col = "rfq.created_at";
+    $sql = "$col IS NOT NULL AND YEAR($col) = :year";
     $params = [':year' => (int)$period['year']];
 
     if (($period['mode'] ?? 'year') === 'quarter') {
-      $sql .= " AND QUARTER($parsed) = :quarter";
+      $sql .= " AND QUARTER($col) = :quarter";
       $params[':quarter'] = (int)$period['quarter'];
     } elseif (($period['mode'] ?? 'year') === 'month') {
-      $sql .= " AND MONTH($parsed) = :month";
+      $sql .= " AND MONTH($col) = :month";
       $params[':month'] = (int)$period['month'];
     }
     return [$sql, $params];
