@@ -34,6 +34,7 @@ function insertQuote($conexion, $year, array $o) {
   $f = array_merge([
     'id_usuario' => 1, 'usuario_designado' => 1, 'canal' => 'PMTEST',
     'email_code' => 'PMTEST-' . uniqid(), 'type_of_bid' => 'IT',
+    'created_at' => sprintf('%04d-03-15 00:00:00', $year), // cohort date (Q1, March)
     'issue_date' => $issue, 'end_date' => $issue, 'status' => 0, 'completado' => 0,
     'comments' => 'No comments', 'award' => 0, 'payment_terms' => 'Net 30',
     'address' => '', 'ship_to' => '', 'ship_via' => '', 'taxes' => 0, 'profit' => 0,
