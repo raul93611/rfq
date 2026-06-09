@@ -63,6 +63,7 @@ if (isset($_POST['save_information'])) {
           $writtenRow = SheetSyncService::appendRow($updatedQuote, $designatedUsername);
         }
         SheetSyncRepository::updateSyncStatus($conexion, $_POST['id_rfq'], 'synced', $writtenRow);
+        AuditTrailRepository::sync_to_sheet_audit_trail($conexion, $_POST['id_rfq']);
       }
     } catch (Exception $syncEx) {
       SheetSyncRepository::updateSyncStatus($conexion, $_POST['id_rfq'], 'failed');

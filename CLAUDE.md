@@ -13,6 +13,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | Bid Pipeline Sync Controls (`sync_to_sheet` flag, bid-type smart default, human-owned sheet columns, master-linked quotes keep syncing) | built | — |
 | Bid Pipeline Metrics Dashboard (interactive ApexCharts report reproducing the SharePoint METRICS 2026 tab from app data) | built | — |
 | 3-Year Annual Awards Comparison (Charts tab annual cards: rolling current + 2 prior years) | built | — |
+| Quote Lifecycle Audit Events (audit-trail entries on quote create / sync / unsync, surfaced via the Audit Trail modal's Sync tab) | built | — |
 
 ## Environment
 
@@ -103,11 +104,11 @@ All three domains write to their own audit table but are surfaced through a sing
 - `app/ReQuote/ReQuoteAuditTrailRepository.inc.php` — same pattern for re-quote
 - `app/Fulfillment/FulfillmentAuditTrailRepository.inc.php` — adds `status_event()`, `invoice_event()`, `net_30_event()` helpers
 
-**Action types** (stored in `action_type` column): `status_change`, `field_modified`, `item_modified`, `item_created`, `item_deleted`, `invoice_created`, `invoice_updated`, `invoice_deleted`, `document_updated`, `net_30`.
+**Action types** (stored in `action_type` column): `status_change`, `field_modified`, `item_modified`, `item_created`, `item_deleted`, `invoice_created`, `invoice_updated`, `invoice_deleted`, `document_updated`, `net_30`, `quote_created` (Status group), `sync_to_sheet`/`break_sync` (Sync group — quote only). The three lifecycle helpers on `AuditTrailRepository` (`quote_created_audit_trail`, `sync_to_sheet_audit_trail`, `break_sync_audit_trail`) mirror `quote_status_audit_trail`; only **successful** syncs are logged (every flagged save logs one — accepted noise, isolated under the Sync tab). Call sites: create (`validacion_registro_cotizacion.inc.php`), all 3 sync paths after a `synced` status (`sync_to_sheet.php`, on-create + on-save auto-sync), and `break_sheet_sync.php`.
 
 **Unified endpoint:** `POST /rfq/quote/load_unified_audit_trail` (`scripts/quote/load_unified_audit_trail.php`) — accepts `id_rfq`, queries all three tables (re-quote joined via `re_quotes.id_rfq`), merges and sorts by `created_date DESC`, returns JSON array. Each entry has: `id, username, action_type, audit_trail, created_date, scope` (scope values: `quote`, `requote`, `fulfillment`).
 
-**Frontend:** `js/audit_trail.js` — self-contained IIFE; handles open/load/filter/render for all three pages. Included in `editar_cotizacion.inc.php`, `fulfillment.inc.php`, and `re_quote.inc.php`. The trigger buttons (`#audit_trails_button`, `#fulfillment_audit_trails_button`) must have `data-id="<id_rfq>"`.
+**Frontend:** `js/audit_trail.js` — self-contained IIFE; handles open/load/filter/render for all three pages. Included in `editar_cotizacion.inc.php`, `fulfillment.inc.php`, and `re_quote.inc.php`. The trigger buttons (`#audit_trails_button`, `#fulfillment_audit_trails_button`) must have `data-id="<id_rfq>"`. Primary filter tabs: All / Status / Edits / Items / Invoices / **Sync**. Sync-group events render as compact single-line rows (`at-sync-*`, purple Synced / amber Unsynced) instead of full cards; 3+ consecutive `sync_to_sheet` events collapse into one expandable "N automatic syncs" run (`at-run-*`, `atBuildUnits`).
 
 **Modal templates** (all identical unified shell, `id="audit_trails_modal"`):
 - `plantillas/quote/modals/audit_trails_modal.inc.php`

@@ -44,6 +44,7 @@ try {
   SheetSyncRepository::updateSyncStatus(Conexion::obtener_conexion(), $id_rfq, 'synced', $sheetRow);
   // Manually syncing also turns the per-quote flag on, so future edits auto-sync.
   SheetSyncRepository::setSyncToSheet(Conexion::obtener_conexion(), $id_rfq, 1);
+  AuditTrailRepository::sync_to_sheet_audit_trail(Conexion::obtener_conexion(), $id_rfq);
   $syncAt = date('M j, Y \a\t g:i A');
   Conexion::cerrar_conexion();
 

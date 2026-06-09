@@ -109,6 +109,8 @@ function createAndInsertQuote($validador, $usuario_designado) {
 
   // Log audit trails
   logAuditTrails($id_rfq, $validador);
+  // Single lifecycle marker alongside the per-field creation entries (Status tab).
+  AuditTrailRepository::quote_created_audit_trail(Conexion::obtener_conexion(), $id_rfq);
 
   // Auto-sync to the SharePoint sheet when the user opted in via the "Sync to pipeline"
   // checkbox. The checkbox is the sole gate — bid type only sets its default in the form,
@@ -119,6 +121,7 @@ function createAndInsertQuote($validador, $usuario_designado) {
       $insertedQuote = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
       $sheetRow = SheetSyncService::appendRow($insertedQuote, $designatedUsername);
       SheetSyncRepository::updateSyncStatus(Conexion::obtener_conexion(), $id_rfq, 'synced', $sheetRow);
+      AuditTrailRepository::sync_to_sheet_audit_trail(Conexion::obtener_conexion(), $id_rfq);
     } catch (Exception $syncEx) {
       SheetSyncRepository::updateSyncStatus(Conexion::obtener_conexion(), $id_rfq, 'failed');
       error_log('Sheet sync error on create: ' . $syncEx->getMessage());

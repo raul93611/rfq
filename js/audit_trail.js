@@ -15,7 +15,12 @@
     'invoice_updated':  { label: 'Invoice Updated',  color: '#ea580c', bg: '#fdebd9', fg: '#c2410c', group: 'invoices' },
     'invoice_deleted':  { label: 'Invoice Deleted',  color: '#ea580c', bg: '#fdebd9', fg: '#c2410c', group: 'invoices' },
     'document_updated': { label: 'Document Updated', color: '#2563eb', bg: '#e8f0fc', fg: '#1d4ed8', group: 'edits'    },
-    'net_30':           { label: 'Field Edited',     color: '#2563eb', bg: '#e8f0fc', fg: '#1d4ed8', group: 'edits'    }
+    'net_30':           { label: 'Field Edited',     color: '#2563eb', bg: '#e8f0fc', fg: '#1d4ed8', group: 'edits'    },
+    // Quote lifecycle events. 'quote_created' is a Status-group marker; sync events live
+    // in their own 'sync' group and render as compact single-line rows (see at-sync-*).
+    'quote_created':    { label: 'Quote Created',   color: '#16a34a', bg: '#e8f6ec', fg: '#15803d', group: 'status' },
+    'sync_to_sheet':    { label: 'Synced',          color: '#7c3aed', bg: '#f1ebfc', fg: '#6d28d9', group: 'sync', syncType: 'synced'   },
+    'break_sync':       { label: 'Unsynced',        color: '#d97706', bg: '#fdf1de', fg: '#b45309', group: 'sync', syncType: 'unsynced' }
   };
   var AT_DEFAULT = { label: 'Modified', color: '#2563eb', bg: '#e8f0fc', fg: '#1d4ed8', group: 'edits' };
 
@@ -65,6 +70,12 @@
     };
   }
 
+  // Short clock time (e.g. "3:42 PM") for the compact sync rows + collapsed runs.
+  function atTimeShort(dateStr) {
+    var d = new Date(dateStr.replace(' ', 'T'));
+    return d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+  }
+
   function atEsc(s) {
     return String(s)
       .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
@@ -89,7 +100,7 @@
       return atScopeTab === 'full' || e.scope === atScopeTab;
     });
     var g = function (grp) { return base.filter(function (e) { return atType(e.action_type).group === grp; }).length; };
-    return { all: base.length, status: g('status'), edits: g('edits'), items: g('items'), invoices: g('invoices') };
+    return { all: base.length, status: g('status'), edits: g('edits'), items: g('items'), invoices: g('invoices'), sync: g('sync') };
   }
 
   // ---------- Render one entry ----------
@@ -131,6 +142,89 @@
     '</li>';
   }
 
+  // ---------- Sync rows (compact single-line) ----------
+  // A consecutive run of 3+ 'synced' events collapses into one expandable summary so a
+  // high-volume auto-sync history doesn't drown the timeline. 'unsynced' is always its own row.
+  function atBuildUnits(items) {
+    var units = [];
+    var i = 0;
+    while (i < items.length) {
+      var st = atType(items[i].action_type).syncType;
+      if (st === 'synced') {
+        var j = i;
+        while (j < items.length && atType(items[j].action_type).syncType === 'synced') { j++; }
+        var run = items.slice(i, j);
+        if (run.length >= 3) {
+          units.push({ kind: 'run', items: run });
+        } else {
+          run.forEach(function (r) { units.push({ kind: 'sync', e: r }); });
+        }
+        i = j;
+      } else if (st === 'unsynced') {
+        units.push({ kind: 'sync', e: items[i] }); i++;
+      } else {
+        units.push({ kind: 'entry', e: items[i] }); i++;
+      }
+    }
+    return units;
+  }
+
+  function atRenderSyncEntry(e, showLine) {
+    var t = atType(e.action_type);
+    var shadow = '0 0 0 3px #fff,0 0 0 4px ' + t.color + '33';
+    var lineClass = t.syncType === 'unsynced' ? ' at-sync-line-unsynced' : '';
+    return '<li class="at-entry at-sync-entry">' +
+      '<div class="at-rail">' +
+        '<span class="at-dot at-dot-sm" style="background:' + t.color + ';box-shadow:' + shadow + '"></span>' +
+        (showLine ? '<span class="at-line"></span>' : '') +
+      '</div>' +
+      '<div class="at-sync-line' + lineClass + '">' +
+        '<span class="at-badge" style="background:' + t.bg + ';color:' + t.fg + '">' +
+          '<span class="at-badge-dot" style="background:' + t.color + '"></span>' + t.label +
+        '</span>' +
+        '<span class="at-sync-text">' + e.audit_trail + '</span>' +
+        '<span class="at-sync-spacer"></span>' +
+        '<span class="at-sync-actor">' + atEsc(e.username) + '</span>' +
+        '<span class="at-sync-ts">' + atEsc(atTimeShort(e.created_date)) + '</span>' +
+      '</div>' +
+    '</li>';
+  }
+
+  function atRenderSyncRun(items, showLine) {
+    var t = atType('sync_to_sheet');
+    var shadow = '0 0 0 3px #fff,0 0 0 4px ' + t.color + '33';
+    var newest = items[0], oldest = items[items.length - 1];
+    var listItems = items.map(function (e) {
+      return '<li class="at-run-item">' +
+        '<span class="at-run-bullet" style="background:' + t.color + '"></span>' +
+        '<span class="at-run-item-text">' + e.audit_trail + '</span>' +
+        '<span class="at-sync-spacer"></span>' +
+        '<span class="at-run-item-actor">' + atEsc(e.username) + '</span>' +
+        '<span class="at-run-item-ts">' + atEsc(atTimeShort(e.created_date)) + '</span>' +
+      '</li>';
+    }).join('');
+    return '<li class="at-entry at-run-entry">' +
+      '<div class="at-rail">' +
+        '<span class="at-dot at-dot-sm" style="background:' + t.color + ';box-shadow:' + shadow + '"></span>' +
+        (showLine ? '<span class="at-line"></span>' : '') +
+      '</div>' +
+      '<div class="at-run-wrap">' +
+        '<button type="button" class="at-run-summary">' +
+          '<span class="at-badge" style="background:' + t.bg + ';color:' + t.fg + '">' +
+            '<span class="at-badge-dot" style="background:' + t.color + '"></span>' + t.label +
+          '</span>' +
+          '<span class="at-run-count">' + items.length + ' automatic syncs</span>' +
+          '<span class="at-run-range">' + atEsc(atTimeShort(oldest.created_date)) + ' &ndash; ' + atEsc(atTimeShort(newest.created_date)) + '</span>' +
+          '<span class="at-sync-spacer"></span>' +
+          '<span class="at-run-toggle"><span class="at-run-toggle-text">Show all</span>' +
+            '<svg class="at-run-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>' +
+          '</span>' +
+        '</button>' +
+        '<ul class="at-run-list" style="display:none">' + listItems + '</ul>' +
+      '</div>' +
+    '</li>';
+  }
+
   // ---------- Render grouped timeline ----------
   function atRenderGrouped(filtered) {
     var groups = [];
@@ -147,9 +241,12 @@
         '<div class="at-day-label"><span>' + atEsc(g.day) + '</span>' +
         '<span class="at-day-count">' + g.items.length + (g.items.length === 1 ? ' event' : ' events') + '</span></div>' +
         '<ul class="at-timeline">';
-      g.items.forEach(function (e, i) {
-        var last = i === g.items.length - 1 && gi === groups.length - 1;
-        html += atRenderEntry(e, !last);
+      var units = atBuildUnits(g.items);
+      units.forEach(function (u, i) {
+        var showLine = i < units.length - 1 || gi < groups.length - 1;
+        if (u.kind === 'run')       html += atRenderSyncRun(u.items, showLine);
+        else if (u.kind === 'sync') html += atRenderSyncEntry(u.e, showLine);
+        else                        html += atRenderEntry(u.e, showLine);
       });
       html += '</ul></div>';
     });
@@ -252,6 +349,15 @@
     $modal.on('input', '.at-search-input', function () {
       atSearch = $(this).val();
       atUpdateUI();
+    });
+
+    // Expand / collapse a run of auto-syncs
+    $modal.on('click', '.at-run-summary', function () {
+      var $list = $(this).closest('.at-run-wrap').find('.at-run-list');
+      var open  = $list.is(':visible');
+      $list.toggle(!open);
+      $(this).toggleClass('is-open', !open);
+      $(this).find('.at-run-toggle-text').text(open ? 'Show all' : 'Hide');
     });
 
     // Scroll-to-item link (closes modal, highlights row)
