@@ -88,6 +88,42 @@ class SheetSyncService {
     return 'A' . $rowIndex . ':T' . $rowIndex;
   }
 
+  // Write-once create-or-link. Presence is decided by scanning column A (the stored
+  // sheet_row pointer is never trusted as a license to write). If the quote id is already
+  // in the sheet, that row becomes the pointer and NOTHING is written (link). If it's
+  // absent, a fresh row is appended with the app-owned columns filled and human-owned
+  // columns left blank (create). The app never overwrites or deletes an existing row.
+  //
+  // Returns ['row' => int|null, 'outcome' => 'created'|'linked'|null]. When Graph is not
+  // configured, returns a null outcome so callers treat it as "sync not performed".
+  public static function createOrLink(Rfq $quote, $designatedUsername) {
+    if (empty(GRAPH_CLIENT_SECRET)) {
+      return ['row' => null, 'outcome' => null];
+    }
+
+    $range       = self::getUsedRange();
+    $existingRow = self::findRowByQuoteId($quote->obtener_id(), $range['values']);
+
+    // Found in the sheet — link only, write nothing (human-owned and app-owned cells stay
+    // exactly as they are).
+    if ($existingRow) {
+      return ['row' => $existingRow, 'outcome' => 'linked'];
+    }
+
+    // Absent — create. A genuinely new row has no existing values, so human-owned cells
+    // stay blank (buildRowValues already emits them empty); no read-merge needed.
+    $targetRow = $range['rowCount'] + 1;
+    $values    = self::buildRowValues($quote, $designatedUsername);
+    GraphApiClient::patch(self::wsPath('/range(address=\'' . self::rowAddress($targetRow) . '\')'), [
+      'values' => [$values],
+    ]);
+
+    return ['row' => $targetRow, 'outcome' => 'created'];
+  }
+
+  // --- Superseded by createOrLink() under the write-once model (kept for reference /
+  //     historical callers). appendRow/syncRow could overwrite an existing row; the app no
+  //     longer does that. deleteRow has no callers — the app never removes a sheet row. ---
   public static function appendRow(Rfq $quote, $designatedUsername) {
     if (empty(GRAPH_CLIENT_SECRET)) {
       return null;

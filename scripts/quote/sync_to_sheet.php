@@ -29,26 +29,49 @@ try {
   $usuario = RepositorioUsuario::obtener_usuario_por_id($conexion, $quote->obtener_usuario_designado());
   $designatedUsername = $usuario ? $usuario->obtener_nombre_usuario() : '';
 
+  // Capture the pre-sync linkage so we can tell whether this sync establishes something new
+  // (worth a timestamp bump + audit event) or is a no-op re-affirmation of an existing link.
+  $priorRow    = $quote->getSheetRow();
+  $priorStatus = $quote->getSheetSyncStatus();
+
   Conexion::cerrar_conexion();
 
-  if ($quote->getSheetRow()) {
-    // Row already exists — re-write all columns so any edited fields are reflected.
-    // syncRow self-heals a stale pointer and returns the row it actually wrote.
-    $sheetRow = SheetSyncService::syncRow($quote->getSheetRow(), $quote, $designatedUsername);
-  } else {
-    // No row yet — append (duplicate-safe)
-    $sheetRow = SheetSyncService::appendRow($quote, $designatedUsername);
-  }
+  // Write-once: create the row if the quote isn't in the sheet, otherwise link to it
+  // (writing nothing). Never overwrites an existing row.
+  $result   = SheetSyncService::createOrLink($quote, $designatedUsername);
+  $sheetRow = $result['row'] ?? $priorRow;
+  $outcome  = $result['outcome'];
 
   Conexion::abrir_conexion();
-  SheetSyncRepository::updateSyncStatus(Conexion::obtener_conexion(), $id_rfq, 'synced', $sheetRow);
-  // Manually syncing also turns the per-quote flag on, so future edits auto-sync.
-  SheetSyncRepository::setSyncToSheet(Conexion::obtener_conexion(), $id_rfq, 1);
-  AuditTrailRepository::sync_to_sheet_audit_trail(Conexion::obtener_conexion(), $id_rfq);
-  $syncAt = date('M j, Y \a\t g:i A');
+  $conexion = Conexion::obtener_conexion();
+  // Manually syncing always turns the per-quote flag on, so future edits keep it represented.
+  SheetSyncRepository::setSyncToSheet($conexion, $id_rfq, 1);
+
+  // Only stamp the status / bump sheet_sync_at / log an audit event when the link is newly
+  // established — re-syncing a quote that's already linked to the same row is a no-op.
+  $established = $outcome !== null
+    && ($outcome === 'created'
+        || (string)$priorRow !== (string)$sheetRow
+        || $priorStatus !== 'synced');
+
+  if ($established) {
+    SheetSyncRepository::updateSyncStatus($conexion, $id_rfq, 'synced', $sheetRow);
+    if ($outcome === 'created') {
+      AuditTrailRepository::sheet_row_created_audit_trail($conexion, $id_rfq);
+    } else {
+      AuditTrailRepository::sheet_row_linked_audit_trail($conexion, $id_rfq);
+    }
+    $syncAt = date('M j, Y \a\t g:i A');
+  } else {
+    // Keep the existing "Last synced" time; nothing changed.
+    $existing = SheetSyncRepository::getSyncInfo($conexion, $id_rfq);
+    $syncAt = !empty($existing['sheet_sync_at'])
+      ? date('M j, Y \a\t g:i A', strtotime($existing['sheet_sync_at']))
+      : date('M j, Y \a\t g:i A');
+  }
   Conexion::cerrar_conexion();
 
-  echo json_encode(['success' => true, 'sync_at' => $syncAt, 'sheet_row' => $sheetRow]);
+  echo json_encode(['success' => true, 'sync_at' => $syncAt, 'sheet_row' => $sheetRow, 'outcome' => $outcome]);
 } catch (Exception $e) {
   error_log('Sheet sync error (manual): ' . $e->getMessage());
   try {

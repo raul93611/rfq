@@ -14,6 +14,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | Bid Pipeline Metrics Dashboard (interactive ApexCharts report reproducing the SharePoint METRICS 2026 tab from app data) | built | — |
 | 3-Year Annual Awards Comparison (Charts tab annual cards: rolling current + 2 prior years) | built | — |
 | Quote Lifecycle Audit Events (audit-trail entries on quote create / sync / unsync, surfaced via the Audit Trail modal's Sync tab) | built | — |
+| Write-Once Sheet Sync (app creates a sheet row if missing but never overwrites/deletes an existing one — sync becomes create-or-link) | built | — |
 
 ## Environment
 
@@ -84,14 +85,13 @@ All URL constants are defined in [app/Bootstrap/routes.inc.php](app/Bootstrap/ro
 
 A quote (`Rfq`) progresses through: Created → Completed → Submitted → Award → Fulfillment → Invoice. The `comments` field encodes special statuses (No Bid, Cancelled, Not submitted). The `isEnabledToFulfillment()` and `isEnabledToInvoice()` methods on the `Rfq` class enforce prerequisites for state transitions.
 
-### SharePoint Sheet Sync — row-pointer invariants
+### SharePoint Sheet Sync — write-once create-or-link
 
-The DB column `rfq.sheet_row` is the source of truth for which sheet row a quote owns; the sheet itself (Graph `usedRange`) is only **eventually consistent**, so never decide append-vs-update by scanning it when a pointer exists.
-- `syncRow($sheetRow,…)` is **self-healing**: it reads the full `A:T` of `$sheetRow`, verifies column A equals the quote id before writing; if it drifted it re-resolves via `appendRow` (column-A scan) and returns the corrected row — callers must persist the returned value.
-- `appendRow` reads row-count + column A to find/append; before overwriting an existing row it reads that row's `A:T` so human columns survive.
-- After `deleteRow` (shift='Up'), call `SheetSyncRepository::shiftRowsAfterDelete()` to decrement pointers below the deleted row.
-- **Per-quote `sync_to_sheet` flag is the sole auto-sync gate** (not bid type, not child/master-link). Creation form's "Sync to pipeline" checkbox sets it (JS smart-defaults it from bid type via the syncable list — all A/V variants + `IT`/`MOVING & LOGISTICS`/`PROFESSIONAL SERVICES`/`Services` — but the user can override). `Sync to Sheet` btn sets flag=1 (+status `synced`); `Break Sync` sets flag=0 (keeps `sheet_row`, status `never`). `copyRfq` sets copies to 0.
-- **Read-merge-write column ownership** (`SheetSyncService::mergeAppOwned`): app rewrites A,B,C,D,G,H,J,L,M,N,Q,T each sync; **E (STATUS), F (INTERNAL DUE DATE), I, K, O, P, R, S are human-owned** and preserved (blank on brand-new rows). Status transitions in `guardar_editar_cotizacion.php` no longer push STATUS (that helper is now a no-op).
+The app is **strictly non-destructive** to the sheet: it may create a missing pipeline row but never overwrites or deletes an existing one. Every sync path routes through `SheetSyncService::createOrLink($quote, $designatedUsername)` → `['row','outcome']`:
+- Presence is decided by **scanning column A** (PROPOSAL = quote id), never by trusting the stored `sheet_row`. **Found** → that row becomes the pointer, write nothing, `outcome='linked'`. **Absent** → append a fresh row (`buildRowValues`: app columns filled, human columns blank), `outcome='created'`. No Graph secret → `outcome=null`.
+- Persist only on **establishment** (created, or linked to a row not already pointed at, or prior status ≠ `synced`): `updateSyncStatus('synced', row)` + matching audit event. A no-op edit of an already-linked quote makes **zero** Graph writes, no `sheet_sync_at` bump, no audit row. Old overwrite paths (`syncRow`, `appendRow`) + `deleteRow`/`shiftRowsAfterDelete` are retired/unused; quote delete never touches the sheet.
+- **Per-quote `sync_to_sheet` flag is the sole auto-sync gate** (not bid type, not child/master-link). Creation "Sync to pipeline" checkbox sets it (JS smart-defaults from bid type via the syncable list — all A/V variants + `IT`/`MOVING & LOGISTICS`/`PROFESSIONAL SERVICES`/`Services` — user can override). `Sync to Sheet` btn create-or-links + flag=1 (returns `outcome` for the button label); `Break Sync` → flag=0 (keeps `sheet_row`, status `never`); `copyRfq` → 0.
+- **Column ownership:** app owns A,B,C,D,G,H,J,L,M,N,Q,T; **E,F,I,K,O,P,R,S are human-owned**, written blank only on a brand-new created row — existing rows never touched.
 
 ### Unified Audit Trail
 
@@ -104,11 +104,11 @@ All three domains write to their own audit table but are surfaced through a sing
 - `app/ReQuote/ReQuoteAuditTrailRepository.inc.php` — same pattern for re-quote
 - `app/Fulfillment/FulfillmentAuditTrailRepository.inc.php` — adds `status_event()`, `invoice_event()`, `net_30_event()` helpers
 
-**Action types** (stored in `action_type` column): `status_change`, `field_modified`, `item_modified`, `item_created`, `item_deleted`, `invoice_created`, `invoice_updated`, `invoice_deleted`, `document_updated`, `net_30`, `quote_created` (Status group), `sync_to_sheet`/`break_sync` (Sync group — quote only). The three lifecycle helpers on `AuditTrailRepository` (`quote_created_audit_trail`, `sync_to_sheet_audit_trail`, `break_sync_audit_trail`) mirror `quote_status_audit_trail`; only **successful** syncs are logged (every flagged save logs one — accepted noise, isolated under the Sync tab). Call sites: create (`validacion_registro_cotizacion.inc.php`), all 3 sync paths after a `synced` status (`sync_to_sheet.php`, on-create + on-save auto-sync), and `break_sheet_sync.php`.
+**Action types** (stored in `action_type` column): `status_change`, `field_modified`, `item_modified`, `item_created`, `item_deleted`, `invoice_created`, `invoice_updated`, `invoice_deleted`, `document_updated`, `net_30`, `quote_created` (Status group), and the Sync group (quote only): `sheet_row_created`/`sheet_row_linked` (write-once outcomes), `break_sync`, plus legacy `sync_to_sheet` (historical "Synced" rows, still rendered). `AuditTrailRepository` helpers (`sheet_row_created_audit_trail`/`sheet_row_linked_audit_trail`/`break_sync_audit_trail`/`quote_created_audit_trail`) mirror `quote_status_audit_trail`. **Logged once on establishment** — a no-op sync logs nothing. Call sites: create, on-save auto-sync (`save_information.php`), manual `sync_to_sheet.php`, `break_sheet_sync.php`.
 
 **Unified endpoint:** `POST /rfq/quote/load_unified_audit_trail` (`scripts/quote/load_unified_audit_trail.php`) — accepts `id_rfq`, queries all three tables (re-quote joined via `re_quotes.id_rfq`), merges and sorts by `created_date DESC`, returns JSON array. Each entry has: `id, username, action_type, audit_trail, created_date, scope` (scope values: `quote`, `requote`, `fulfillment`).
 
-**Frontend:** `js/audit_trail.js` — self-contained IIFE; handles open/load/filter/render for all three pages. Included in `editar_cotizacion.inc.php`, `fulfillment.inc.php`, and `re_quote.inc.php`. The trigger buttons (`#audit_trails_button`, `#fulfillment_audit_trails_button`) must have `data-id="<id_rfq>"`. Primary filter tabs: All / Status / Edits / Items / Invoices / **Sync**. Sync-group events render as compact single-line rows (`at-sync-*`, purple Synced / amber Unsynced) instead of full cards; 3+ consecutive `sync_to_sheet` events collapse into one expandable "N automatic syncs" run (`at-run-*`, `atBuildUnits`).
+**Frontend:** `js/audit_trail.js` — self-contained IIFE; handles open/load/filter/render for all three pages. Included in `editar_cotizacion.inc.php`, `fulfillment.inc.php`, and `re_quote.inc.php`. The trigger buttons (`#audit_trails_button`, `#fulfillment_audit_trails_button`) must have `data-id="<id_rfq>"`. Primary filter tabs: All / Status / Edits / Items / Invoices / **Sync**. Sync-group events render as compact single-line rows (`at-sync-*`) with a colored icon chip + distinct glyph per outcome — **Created** (violet, sheet-plus), **Linked** (cyan, link), **Unsynced** (amber, unlink); legacy `sync_to_sheet` falls back to a violet "Synced" row. 3+ consecutive synced (create/link) events collapse into one type-neutral "N automatic syncs" run with a `2 created · 1 linked` breakdown (`at-run-*`, `atBuildUnits`, `atSyncGlyph`); expanded run items keep their per-outcome accent.
 
 **Modal templates** (all identical unified shell, `id="audit_trails_modal"`):
 - `plantillas/quote/modals/audit_trails_modal.inc.php`
