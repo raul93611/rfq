@@ -353,6 +353,27 @@ class AuditTrailRepository {
     self::insert_audit_trail($connection, $audit_trail);
   }
 
+  // ---- Quote lifecycle events (creation + Bid Pipeline sheet sync) ----
+  // Each mirrors quote_status_audit_trail: session-derived username/id, one insert_audit_trail row.
+
+  public static function quote_created_audit_trail($connection, $id_rfq) {
+    $message = 'The quote was <b>Created</b>';
+    $audit_trail = new AuditTrail('', $id_rfq, $_SESSION['user']->obtener_nombre_usuario(), 'quote_created', $_SESSION['user']->obtener_id(), $message, '');
+    self::insert_audit_trail($connection, $audit_trail);
+  }
+
+  public static function sync_to_sheet_audit_trail($connection, $id_rfq) {
+    $message = 'Quote synced to <b>Bid Pipeline</b>';
+    $audit_trail = new AuditTrail('', $id_rfq, $_SESSION['user']->obtener_nombre_usuario(), 'sync_to_sheet', $_SESSION['user']->obtener_id(), $message, '');
+    self::insert_audit_trail($connection, $audit_trail);
+  }
+
+  public static function break_sync_audit_trail($connection, $id_rfq) {
+    $message = 'Quote unsynced from <b>Bid Pipeline</b>';
+    $audit_trail = new AuditTrail('', $id_rfq, $_SESSION['user']->obtener_nombre_usuario(), 'break_sync', $_SESSION['user']->obtener_id(), $message, '');
+    self::insert_audit_trail($connection, $audit_trail);
+  }
+
   public static function re_quote_status_audit_trail($connection, $status, $id_rfq) {
     $message = 'The Re-quote was <b>' . $status . '</b>';
     $audit_trail = new AuditTrail('', $id_rfq, $_SESSION['user']->obtener_nombre_usuario(), 'status_change', $_SESSION['user']->obtener_id(), $message, '');

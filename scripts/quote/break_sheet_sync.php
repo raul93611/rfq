@@ -27,6 +27,7 @@ try {
   // and flip the status to 'never' for the UI badge.
   SheetSyncRepository::setSyncToSheet($conexion, $id_rfq, 0);
   SheetSyncRepository::updateSyncStatus($conexion, $id_rfq, 'never');
+  AuditTrailRepository::break_sync_audit_trail($conexion, $id_rfq);
 
   Conexion::cerrar_conexion();
 
