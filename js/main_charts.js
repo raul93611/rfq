@@ -3,7 +3,8 @@
    The two ANNUAL AWARDS cards compare THREE years (current + 2 prior) as
    grouped monthly columns with a three-row legend. Recency reads as
    saturation: newest year = brand blue, older years progressively muted.
-   The Completed / Awards (by-user) cards are unchanged (current vs last month).
+   The Completed / Awards (by-user) cards compare current vs last month and hide
+   users with no activity in either month, filtered independently per card.
    ========================================================================= */
 
 const MONTHS_SHORT = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
@@ -25,7 +26,21 @@ function fmtAxisMoney(v) {
   return '$' + Math.round(v);
 }
 
-$(document).ready(function () {
+/* Zip a user's last-month + current-month series into one row per user and drop
+   anyone with no activity in either month. SQL SUM(...) values arrive as strings
+   over JSON, so coerce with Number() before the zero check. Each chart filters
+   independently — a user can show in Awards while hidden in Completed. */
+function activeUserSeries(pastArr, currentArr) {
+  return pastArr
+    .map((row, i) => ({
+      name: row.user_name,
+      current: currentArr[i].total_quotes,
+      past: row.total_quotes
+    }))
+    .filter(u => Number(u.current) !== 0 || Number(u.past) !== 0);
+}
+
+function initCharts() {
   if ($('#graficas').length > 0) {
     $.ajax({
       url: "/rfq/main_charts",
@@ -115,23 +130,24 @@ $(document).ready(function () {
 
         const annualYears = data.annual_awards_years || [];
 
-        // Completed Quotes Chart (unchanged)
-        const usernames = data.completed_quotes_by_user_past_month.map(obj => obj.user_name);
-        const completedQuotesCurrent = data.completed_quotes_by_user_current_month.map(obj => obj.total_quotes);
-        const completedQuotesPast = data.completed_quotes_by_user_past_month.map(obj => obj.total_quotes);
+        // Completed Quotes Chart — hide users with no activity in either month
+        const completedUsers = activeUserSeries(
+          data.completed_quotes_by_user_past_month,
+          data.completed_quotes_by_user_current_month
+        );
 
-        createBarChart("#completados-chart", usernames, [
+        createBarChart("#completados-chart", completedUsers.map(u => u.name), [
           {
             label: 'Current month',
             backgroundColor: '#13A8F0',
             borderColor: '#13A8F0',
-            data: completedQuotesCurrent
+            data: completedUsers.map(u => u.current)
           },
           {
             label: 'Last month',
             backgroundColor: '#39485A',
             borderColor: '#39485A',
-            data: completedQuotesPast
+            data: completedUsers.map(u => u.past)
           }
         ]);
 
@@ -139,22 +155,24 @@ $(document).ready(function () {
         createAnnualChart("#monto_ganados_anual_chart", annualYears, true);
         renderAnnualLegend("#annual_awards_amounts_legend", annualYears, true);
 
-        // Award Quotes Chart (unchanged)
-        const awardedQuotesCurrent = data.award_quotes_by_user_current_month.map(obj => obj.total_quotes);
-        const awardedQuotesPast = data.award_quotes_by_user_past_month.map(obj => obj.total_quotes);
+        // Award Quotes Chart — hide users with no activity in either month
+        const awardedUsers = activeUserSeries(
+          data.award_quotes_by_user_past_month,
+          data.award_quotes_by_user_current_month
+        );
 
-        createBarChart("#ganadas-chart", usernames, [
+        createBarChart("#ganadas-chart", awardedUsers.map(u => u.name), [
           {
             label: 'Current month',
             backgroundColor: '#13A8F0',
             borderColor: '#13A8F0',
-            data: awardedQuotesCurrent
+            data: awardedUsers.map(u => u.current)
           },
           {
             label: 'Last month',
             backgroundColor: '#39485A',
             borderColor: '#39485A',
-            data: awardedQuotesPast
+            data: awardedUsers.map(u => u.past)
           }
         ]);
 
@@ -167,4 +185,14 @@ $(document).ready(function () {
       }
     });
   }
-});
+}
+
+/* Browser entry point — guarded so this file can be required by Node unit tests
+   (tests/js/charts_filter.test.js) without a jQuery/DOM environment. */
+if (typeof $ !== 'undefined') {
+  $(document).ready(initCharts);
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { activeUserSeries };
+}
