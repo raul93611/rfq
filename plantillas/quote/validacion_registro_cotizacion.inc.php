@@ -119,9 +119,18 @@ function createAndInsertQuote($validador, $usuario_designado) {
     try {
       $designatedUsername = $_POST['usuario_designado'];
       $insertedQuote = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
-      $sheetRow = SheetSyncService::appendRow($insertedQuote, $designatedUsername);
-      SheetSyncRepository::updateSyncStatus(Conexion::obtener_conexion(), $id_rfq, 'synced', $sheetRow);
-      AuditTrailRepository::sync_to_sheet_audit_trail(Conexion::obtener_conexion(), $id_rfq);
+      // Write-once: link to the quote's row if it's already in the sheet, otherwise create it.
+      $result   = SheetSyncService::createOrLink($insertedQuote, $designatedUsername);
+      $sheetRow = $result['row'];
+      $outcome  = $result['outcome'];
+      if ($outcome !== null) {
+        SheetSyncRepository::updateSyncStatus(Conexion::obtener_conexion(), $id_rfq, 'synced', $sheetRow);
+        if ($outcome === 'created') {
+          AuditTrailRepository::sheet_row_created_audit_trail(Conexion::obtener_conexion(), $id_rfq);
+        } else {
+          AuditTrailRepository::sheet_row_linked_audit_trail(Conexion::obtener_conexion(), $id_rfq);
+        }
+      }
     } catch (Exception $syncEx) {
       SheetSyncRepository::updateSyncStatus(Conexion::obtener_conexion(), $id_rfq, 'failed');
       error_log('Sheet sync error on create: ' . $syncEx->getMessage());

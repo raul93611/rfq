@@ -24,7 +24,11 @@
     syncing: '<path d="M3 12a9 9 0 1 0 3-6.7"/><polyline points="3 4 3 9 8 9"/>',
   };
 
-  function setTone(tone, syncAtText) {
+  // Write-once outcome → status label. Both read as "synced" (green), but say what actually
+  // happened: the app created a brand-new pipeline row or linked to an existing one.
+  const OUTCOME_LABEL = { created: 'Created in sheet', linked: 'Linked to row' };
+
+  function setTone(tone, syncAtText, labelOverride) {
     const t = TONES[tone] || TONES.never;
 
     // Block class
@@ -42,7 +46,7 @@
     const statusEl = block.querySelector('.ss-block-status');
     if (statusEl) {
       statusEl.className = `ss-block-status ss-block-status-${tone}`;
-      statusEl.textContent = t.label;
+      statusEl.textContent = labelOverride || t.label;
     }
 
     // Meta line (last synced / last attempted)
@@ -125,7 +129,7 @@
       .then(function (res) { return res.json(); })
       .then(function (data) {
         if (data.success) {
-          setTone('synced', data.sync_at);
+          setTone('synced', data.sync_at, OUTCOME_LABEL[data.outcome]);
           if (breakBtn) breakBtn.style.display = '';
         } else {
           setTone('failed', null);

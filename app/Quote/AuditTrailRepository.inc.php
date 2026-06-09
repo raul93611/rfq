@@ -362,9 +362,25 @@ class AuditTrailRepository {
     self::insert_audit_trail($connection, $audit_trail);
   }
 
+  // Legacy generic "Synced" event. Superseded by the write-once create/link helpers below,
+  // but kept so historical sync_to_sheet rows still render. New sync paths log create/link.
   public static function sync_to_sheet_audit_trail($connection, $id_rfq) {
     $message = 'Quote synced to <b>Bid Pipeline</b>';
     $audit_trail = new AuditTrail('', $id_rfq, $_SESSION['user']->obtener_nombre_usuario(), 'sync_to_sheet', $_SESSION['user']->obtener_id(), $message, '');
+    self::insert_audit_trail($connection, $audit_trail);
+  }
+
+  // Write-once sheet sync: the app added a brand-new pipeline row for this quote.
+  public static function sheet_row_created_audit_trail($connection, $id_rfq) {
+    $message = 'Created row in <b>Bid Pipeline</b>';
+    $audit_trail = new AuditTrail('', $id_rfq, $_SESSION['user']->obtener_nombre_usuario(), 'sheet_row_created', $_SESSION['user']->obtener_id(), $message, '');
+    self::insert_audit_trail($connection, $audit_trail);
+  }
+
+  // Write-once sheet sync: the app attached to a row that already existed, writing nothing.
+  public static function sheet_row_linked_audit_trail($connection, $id_rfq) {
+    $message = 'Linked to existing <b>Bid Pipeline</b> row';
+    $audit_trail = new AuditTrail('', $id_rfq, $_SESSION['user']->obtener_nombre_usuario(), 'sheet_row_linked', $_SESSION['user']->obtener_id(), $message, '');
     self::insert_audit_trail($connection, $audit_trail);
   }
 

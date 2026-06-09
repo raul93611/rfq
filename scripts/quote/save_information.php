@@ -55,15 +55,32 @@ if (isset($_POST['save_information'])) {
       $updatedQuote = RepositorioRfq::obtener_cotizacion_por_id($conexion, $_POST['id_rfq']);
       if ($updatedQuote && (int)$updatedQuote->getSyncToSheet() === 1) {
         $designatedUsername = $_POST['usuario_designado'];
-        if ($updatedQuote->getSheetRow()) {
-          // syncRow self-heals a stale pointer and returns the row it actually wrote.
-          $writtenRow = SheetSyncService::syncRow($updatedQuote->getSheetRow(), $updatedQuote, $designatedUsername);
-        } else {
-          // Flagged to sync but no row yet (e.g. a prior append failed) — append (dedup-safe).
-          $writtenRow = SheetSyncService::appendRow($updatedQuote, $designatedUsername);
+        $priorRow    = $updatedQuote->getSheetRow();
+        $priorStatus = $updatedQuote->getSheetSyncStatus();
+
+        // Write-once: create the row if this quote isn't in the sheet, otherwise link to the
+        // existing row and write NOTHING. An ordinary edit of an already-linked quote makes
+        // zero Graph writes and leaves every cell untouched.
+        $result     = SheetSyncService::createOrLink($updatedQuote, $designatedUsername);
+        $writtenRow = $result['row'] ?? $priorRow;
+        $outcome    = $result['outcome'];
+
+        // Only stamp status / bump the timestamp / log an audit event when the link is newly
+        // established (created, or linked to a row this quote wasn't pointed at). A no-op edit
+        // produces no Sync-tab noise and doesn't move "last synced".
+        $established = $outcome !== null
+          && ($outcome === 'created'
+              || (string)$priorRow !== (string)$writtenRow
+              || $priorStatus !== 'synced');
+
+        if ($established) {
+          SheetSyncRepository::updateSyncStatus($conexion, $_POST['id_rfq'], 'synced', $writtenRow);
+          if ($outcome === 'created') {
+            AuditTrailRepository::sheet_row_created_audit_trail($conexion, $_POST['id_rfq']);
+          } else {
+            AuditTrailRepository::sheet_row_linked_audit_trail($conexion, $_POST['id_rfq']);
+          }
         }
-        SheetSyncRepository::updateSyncStatus($conexion, $_POST['id_rfq'], 'synced', $writtenRow);
-        AuditTrailRepository::sync_to_sheet_audit_trail($conexion, $_POST['id_rfq']);
       }
     } catch (Exception $syncEx) {
       SheetSyncRepository::updateSyncStatus($conexion, $_POST['id_rfq'], 'failed');

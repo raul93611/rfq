@@ -18,9 +18,14 @@
     'net_30':           { label: 'Field Edited',     color: '#2563eb', bg: '#e8f0fc', fg: '#1d4ed8', group: 'edits'    },
     // Quote lifecycle events. 'quote_created' is a Status-group marker; sync events live
     // in their own 'sync' group and render as compact single-line rows (see at-sync-*).
+    // Write-once model: the app either CREATES a brand-new pipeline row (violet) or LINKS to
+    // one that already exists (cyan) — never overwriting. 'break_sync' (amber) is unchanged.
+    // 'sheetOp' drives the row tint + glyph; legacy 'sync_to_sheet' rows render as generic synced.
     'quote_created':    { label: 'Quote Created',   color: '#16a34a', bg: '#e8f6ec', fg: '#15803d', group: 'status' },
-    'sync_to_sheet':    { label: 'Synced',          color: '#7c3aed', bg: '#f1ebfc', fg: '#6d28d9', group: 'sync', syncType: 'synced'   },
-    'break_sync':       { label: 'Unsynced',        color: '#d97706', bg: '#fdf1de', fg: '#b45309', group: 'sync', syncType: 'unsynced' }
+    'sheet_row_created':{ label: 'Created in sheet', color: '#7c3aed', bg: '#f3eefe', fg: '#6d28d9', group: 'sync', syncType: 'synced',   sheetOp: 'rowCreated' },
+    'sheet_row_linked': { label: 'Linked to row',    color: '#0e8fbf', bg: '#e7f4fb', fg: '#0b6f93', group: 'sync', syncType: 'synced',   sheetOp: 'rowLinked'  },
+    'sync_to_sheet':    { label: 'Synced',           color: '#7c3aed', bg: '#f1ebfc', fg: '#6d28d9', group: 'sync', syncType: 'synced',   sheetOp: 'synced'     },
+    'break_sync':       { label: 'Unsynced',         color: '#d97706', bg: '#fdf1de', fg: '#b45309', group: 'sync', syncType: 'unsynced', sheetOp: 'unsynced'   }
   };
   var AT_DEFAULT = { label: 'Modified', color: '#2563eb', bg: '#e8f0fc', fg: '#1d4ed8', group: 'edits' };
 
@@ -169,19 +174,32 @@
     return units;
   }
 
+  // Distinct glyph per sync outcome so a reader can tell at a glance whether the app wrote a
+  // brand-new row (sheet-plus), attached to an existing one (link), or removed it (unlink).
+  // Legacy 'synced' rows fall back to a refresh glyph.
+  function atSyncGlyph(op, size) {
+    size = size || 14;
+    var open = '<svg width="' + size + '" height="' + size + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">';
+    var paths = {
+      rowCreated: '<rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="8.5" x2="21" y2="8.5"/><line x1="12" y1="12" x2="12" y2="18"/><line x1="9" y1="15" x2="15" y2="15"/>',
+      rowLinked:  '<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>',
+      unsynced:   '<path d="M18.84 12.25l1.72-1.71a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M5.17 11.75l-1.71 1.71a5 5 0 0 0 7.07 7.07l1.71-1.71"/><line x1="2" y1="2" x2="22" y2="22"/>',
+      synced:     '<polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>'
+    };
+    return open + (paths[op] || paths.synced) + '</svg>';
+  }
+
   function atRenderSyncEntry(e, showLine) {
-    var t = atType(e.action_type);
+    var t  = atType(e.action_type);
+    var op = t.sheetOp || 'synced';
     var shadow = '0 0 0 3px #fff,0 0 0 4px ' + t.color + '33';
-    var lineClass = t.syncType === 'unsynced' ? ' at-sync-line-unsynced' : '';
     return '<li class="at-entry at-sync-entry">' +
       '<div class="at-rail">' +
         '<span class="at-dot at-dot-sm" style="background:' + t.color + ';box-shadow:' + shadow + '"></span>' +
         (showLine ? '<span class="at-line"></span>' : '') +
       '</div>' +
-      '<div class="at-sync-line' + lineClass + '">' +
-        '<span class="at-badge" style="background:' + t.bg + ';color:' + t.fg + '">' +
-          '<span class="at-badge-dot" style="background:' + t.color + '"></span>' + t.label +
-        '</span>' +
+      '<div class="at-sync-line at-sync-line-' + op + '">' +
+        '<span class="at-sync-ic at-sync-ic-' + op + '">' + atSyncGlyph(op) + '</span>' +
         '<span class="at-sync-text">' + e.audit_trail + '</span>' +
         '<span class="at-sync-spacer"></span>' +
         '<span class="at-sync-actor">' + atEsc(e.username) + '</span>' +
@@ -190,30 +208,42 @@
     '</li>';
   }
 
+  // Collapsed run of consecutive automatic syncs. The summary is type-neutral with a
+  // breakdown ("2 created · 1 linked"); expanded items keep their own create/link accent so
+  // the two outcomes stay distinguishable even inside the run.
   function atRenderSyncRun(items, showLine) {
-    var t = atType('sync_to_sheet');
-    var shadow = '0 0 0 3px #fff,0 0 0 4px ' + t.color + '33';
+    var dotColor = '#94a3b8';
+    var shadow   = '0 0 0 3px #fff,0 0 0 4px rgba(148,163,184,0.25)';
     var newest = items[0], oldest = items[items.length - 1];
+
+    var created = items.filter(function (e) { return atType(e.action_type).sheetOp === 'rowCreated'; }).length;
+    var linked  = items.filter(function (e) { return atType(e.action_type).sheetOp === 'rowLinked';  }).length;
+    var parts = [];
+    if (created) { parts.push(created + ' created'); }
+    if (linked)  { parts.push(linked  + ' linked');  }
+    var breakdown = parts.join(' · ');
+
     var listItems = items.map(function (e) {
+      var op = atType(e.action_type).sheetOp || 'synced';
       return '<li class="at-run-item">' +
-        '<span class="at-run-bullet" style="background:' + t.color + '"></span>' +
+        '<span class="at-run-ic-sm at-sync-ic-' + op + '">' + atSyncGlyph(op, 11) + '</span>' +
         '<span class="at-run-item-text">' + e.audit_trail + '</span>' +
         '<span class="at-sync-spacer"></span>' +
         '<span class="at-run-item-actor">' + atEsc(e.username) + '</span>' +
         '<span class="at-run-item-ts">' + atEsc(atTimeShort(e.created_date)) + '</span>' +
       '</li>';
     }).join('');
+
     return '<li class="at-entry at-run-entry">' +
       '<div class="at-rail">' +
-        '<span class="at-dot at-dot-sm" style="background:' + t.color + ';box-shadow:' + shadow + '"></span>' +
+        '<span class="at-dot at-dot-sm at-dot-run" style="background:' + dotColor + ';box-shadow:' + shadow + '"></span>' +
         (showLine ? '<span class="at-line"></span>' : '') +
       '</div>' +
       '<div class="at-run-wrap">' +
         '<button type="button" class="at-run-summary">' +
-          '<span class="at-badge" style="background:' + t.bg + ';color:' + t.fg + '">' +
-            '<span class="at-badge-dot" style="background:' + t.color + '"></span>' + t.label +
-          '</span>' +
+          '<span class="at-run-ic">' + atSyncGlyph('synced', 13) + '</span>' +
           '<span class="at-run-count">' + items.length + ' automatic syncs</span>' +
+          (breakdown ? '<span class="at-run-breakdown">' + breakdown + '</span>' : '') +
           '<span class="at-run-range">' + atEsc(atTimeShort(oldest.created_date)) + ' &ndash; ' + atEsc(atTimeShort(newest.created_date)) + '</span>' +
           '<span class="at-sync-spacer"></span>' +
           '<span class="at-run-toggle"><span class="at-run-toggle-text">Show all</span>' +
