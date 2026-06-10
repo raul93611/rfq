@@ -16,6 +16,9 @@ module.exports = defineConfig({
     baseURL: 'http://localhost/rfq',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
+    // Playwright's bundled chromium has no build for this host OS — set
+    // PW_CHANNEL=chrome to run against the system-installed Google Chrome.
+    channel: process.env.PW_CHANNEL || undefined,
   },
   projects: [
     {
