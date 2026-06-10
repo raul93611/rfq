@@ -66,11 +66,11 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/additional-methods.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/3.4.0/js/bootstrap-colorpicker.min.js" integrity="sha512-94dgCw8xWrVcgkmOc2fwKjO4dqy/X3q7IjFru6MHJKeaAzCvhkVtOS6S+co+RbcZvvPBngLzuVMApmxkuWZGwQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="<?= RUTA_JS; ?>main.js"></script>
+<script src="<?= asset_url('js/main.js'); ?>"></script>
 <script>
   window.NOTIFICATIONS_USERS_FOR_MENTION_URL = '<?= USERS_FOR_MENTION ?>';
 </script>
-<script src="<?= RUTA_JS; ?>mentions.js"></script>
+<script src="<?= asset_url('js/mentions.js'); ?>"></script>
 </body>
 
 </html>

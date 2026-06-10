@@ -172,4 +172,4 @@ $pm_current_year = (int)date('Y');
   };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.49.1/dist/apexcharts.min.js"></script>
-<script src="<?= RUTA_JS; ?>pipeline_metrics.js"></script>
+<script src="<?= asset_url('js/pipeline_metrics.js'); ?>"></script>

@@ -89,5 +89,5 @@ include_once 'plantillas/re_quote/modals/audit_trails_modal.inc.php';
 include_once 'modals/edit_service_modal.inc.php';
 ?>
 
-<script src="<?= htmlspecialchars(RUTA_JS); ?>reQuote.js"></script>
-<script src="<?= htmlspecialchars(RUTA_JS); ?>audit_trail.js"></script>
+<script src="<?= asset_url('js/reQuote.js'); ?>"></script>
+<script src="<?= asset_url('js/audit_trail.js'); ?>"></script>

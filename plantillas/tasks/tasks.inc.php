@@ -19,4 +19,4 @@ include_once 'modals/add_task_modal.inc.php';
 include_once 'modals/edit_task_modal.inc.php';
 ?>
 
-<script src="<?= RUTA_JS; ?>tasks.js"></script>
+<script src="<?= asset_url('js/tasks.js'); ?>"></script>

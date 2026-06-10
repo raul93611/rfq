@@ -65,6 +65,8 @@ This is a custom PHP MVC-like application with no framework.
 - `js/` — Per-module JavaScript files (vanilla JS / jQuery)
 - `css/estilos.css` — Single application stylesheet
 
+Local CSS/JS must be included via `asset_url('js/file.js')` (in `routes.inc.php`) — it appends `?v=<filemtime>` so Cloudflare/browser caches drop stale copies after a deploy. Don't use bare `RUTA_CSS`/`RUTA_JS` for assets.
+
 ### Database Access Pattern
 
 All DB access goes through the `Conexion` singleton:

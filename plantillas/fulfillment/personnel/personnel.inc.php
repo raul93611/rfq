@@ -40,4 +40,4 @@ include_once 'modals/add_modal.inc.php';
 include_once 'modals/edit_modal.inc.php';
 ?>
 
-<script src="<?= RUTA_JS; ?>personnel.js"></script>
+<script src="<?= asset_url('js/personnel.js'); ?>"></script>

@@ -36,4 +36,4 @@
 include_once 'modals/add_payment_term_modal.inc.php';
 include_once 'modals/edit_payment_term_modal.inc.php';
 ?>
-<script src="<?= RUTA_JS; ?>payment_terms.js"></script>
+<script src="<?= asset_url('js/payment_terms.js'); ?>"></script>

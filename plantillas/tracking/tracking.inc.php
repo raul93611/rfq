@@ -45,4 +45,4 @@ include_once 'plantillas/tracking/modals/edit_tracking_modal.inc.php';
 include_once 'plantillas/tracking/modals/add_tracking_modal.inc.php';
 include_once 'plantillas/tracking/modals/add_tracking_subitem_modal.inc.php';
 ?>
-<script src="<?= RUTA_JS; ?>tracking.js"></script>
+<script src="<?= asset_url('js/tracking.js'); ?>"></script>

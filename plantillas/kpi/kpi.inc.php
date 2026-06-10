@@ -45,4 +45,4 @@
   </section>
 </div>
 
-<script src="<?= RUTA_JS; ?>kpi.js"></script>
+<script src="<?= asset_url('js/kpi.js'); ?>"></script>

@@ -242,6 +242,15 @@ define('DOCS', SERVIDOR . 'documentos/');
 define('RUTA_CSS', SERVIDOR . 'css/');
 define('RUTA_JS', SERVIDOR . 'js/');
 define('RUTA_IMG', SERVIDOR . 'img/');
+
+/**
+ * Cache-busted URL for a local asset (path relative to the app root, e.g. 'js/main.js').
+ * Appends ?v=<filemtime> so browser/Cloudflare caches drop stale copies after each deploy.
+ */
+function asset_url($relative_path) {
+  $version = @filemtime(__DIR__ . '/../../' . $relative_path);
+  return SERVIDOR . $relative_path . ($version ? '?v=' . $version : '');
+}
 define('STATES', [
   'AL' => 'Alabama',
   'AK' => 'Alaska',

@@ -61,4 +61,4 @@
 
 </div>
 
-<script src="<?= RUTA_JS ?>main_charts.js"></script>
+<script src="<?= asset_url('js/main_charts.js'); ?>"></script>

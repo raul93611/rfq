@@ -80,5 +80,5 @@ foreach ($modals as $modal) {
 }
 ?>
 
-<script src="<?= RUTA_JS; ?>fulfillment.js"></script>
-<script src="<?= RUTA_JS; ?>audit_trail.js"></script>
+<script src="<?= asset_url('js/fulfillment.js'); ?>"></script>
+<script src="<?= asset_url('js/audit_trail.js'); ?>"></script>

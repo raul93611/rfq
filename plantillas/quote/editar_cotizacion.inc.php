@@ -149,9 +149,9 @@ include_once 'plantillas/quote/modals/add_provider_subitem_modal.inc.php';
 include_once 'plantillas/quote/modals/edit_provider_subitem_modal.inc.php';
 ?>
 
-<script src="<?= RUTA_JS; ?>services.js"></script>
-<script src="<?= RUTA_JS; ?>quote.js"></script>
-<script src="<?= RUTA_JS; ?>rooms.js"></script>
-<script src="<?= RUTA_JS; ?>audit_trail.js"></script>
-<script src="<?= RUTA_JS; ?>sheet_sync.js"></script>
-<script src="<?= RUTA_JS; ?>sources_sought.js"></script>
+<script src="<?= asset_url('js/services.js'); ?>"></script>
+<script src="<?= asset_url('js/quote.js'); ?>"></script>
+<script src="<?= asset_url('js/rooms.js'); ?>"></script>
+<script src="<?= asset_url('js/audit_trail.js'); ?>"></script>
+<script src="<?= asset_url('js/sheet_sync.js'); ?>"></script>
+<script src="<?= asset_url('js/sources_sought.js'); ?>"></script>

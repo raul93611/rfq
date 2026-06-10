@@ -231,4 +231,4 @@ $sq_statuses = array_map(function ($s) use ($sq_label_overrides) {
 <script>
   window.SQ_STATUSES = <?= json_encode($sq_statuses); ?>;
 </script>
-<script src="<?= RUTA_JS; ?>searchQuotes.js"></script>
+<script src="<?= asset_url('js/searchQuotes.js'); ?>"></script>

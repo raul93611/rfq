@@ -103,4 +103,4 @@ Conexion::cerrar_conexion();
 </div>
 
 <?php include_once 'modals/edit_invoice_acceptance.inc.php'; ?>
-<script src="<?= htmlspecialchars(RUTA_JS . 'month.js') ?>"></script>
+<script src="<?= asset_url('js/month.js'); ?>"></script>

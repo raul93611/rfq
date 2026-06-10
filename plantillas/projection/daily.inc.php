@@ -33,4 +33,4 @@
 
 </div>
 
-<script src="<?= htmlspecialchars(RUTA_JS . 'projections.js') ?>"></script>
+<script src="<?= asset_url('js/projections.js'); ?>"></script>
