@@ -151,4 +151,4 @@ document.querySelector('span[data="generate_report"]').addEventListener('click',
 });
 </script>
 
-<script src="<?= RUTA_JS; ?>reports.js"></script>
+<script src="<?= asset_url('js/reports.js'); ?>"></script>

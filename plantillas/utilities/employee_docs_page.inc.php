@@ -90,4 +90,4 @@
 
 <?php include_once 'modals/add_employee_doc_modal.inc.php'; ?>
 
-<script src="<?= RUTA_JS; ?>employee_docs.js"></script>
+<script src="<?= asset_url('js/employee_docs.js'); ?>"></script>

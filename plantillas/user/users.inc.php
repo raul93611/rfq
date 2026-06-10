@@ -39,4 +39,4 @@
 
 </div>
 
-<script src="<?= RUTA_JS; ?>users.js"></script>
+<script src="<?= asset_url('js/users.js'); ?>"></script>

@@ -49,4 +49,4 @@
 </div>
 
 <?php include_once 'modals/edit_monthly_projection.inc.php'; ?>
-<script src="<?= htmlspecialchars(RUTA_JS); ?>monthly.js"></script>
+<script src="<?= asset_url('js/monthly.js'); ?>"></script>

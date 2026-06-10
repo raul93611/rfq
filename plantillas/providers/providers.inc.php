@@ -42,4 +42,4 @@ include_once 'modals/add_provider_modal.inc.php';
 include_once 'modals/edit_provider_modal.inc.php';
 ?>
 
-<script src="<?= RUTA_JS; ?>providers.js"></script>
+<script src="<?= asset_url('js/providers.js'); ?>"></script>

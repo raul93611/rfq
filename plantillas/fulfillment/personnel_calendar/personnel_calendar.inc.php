@@ -32,4 +32,4 @@ include_once 'modals/edit_modal.inc.php';
 include_once 'modals/add_shared_event_modal.inc.php';
 ?>
 
-<script src="<?= RUTA_JS; ?>roadmap.js"></script>
+<script src="<?= asset_url('js/roadmap.js'); ?>"></script>

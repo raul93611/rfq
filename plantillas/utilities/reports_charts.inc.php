@@ -77,5 +77,5 @@
 </div>
 
 <!-- External Scripts -->
-<script src="<?= RUTA_JS; ?>reports.js"></script>
-<script src="<?= RUTA_JS; ?>reports_charts.js"></script>
+<script src="<?= asset_url('js/reports.js'); ?>"></script>
+<script src="<?= asset_url('js/reports_charts.js'); ?>"></script>
