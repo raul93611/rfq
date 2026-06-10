@@ -15,6 +15,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | 3-Year Annual Awards Comparison (Charts tab annual cards: rolling current + 2 prior years) | built | — |
 | Quote Lifecycle Audit Events (audit-trail entries on quote create / sync / unsync, surfaced via the Audit Trail modal's Sync tab) | built | — |
 | Write-Once Sheet Sync (app creates a sheet row if missing but never overwrites/deletes an existing one — sync becomes create-or-link) | built | — |
+| Advanced Quote Search (Advanced toggle + filter panel on Search Quotes, Status pill column) | built | — |
 
 ## Environment
 
@@ -36,7 +37,7 @@ composer install
 
 **Generate users:** Visit `/genera_usuario` route.
 
-There are no automated tests or lint commands.
+**Tests:** PHP integration tests in `tests/php/` (`docker exec lamp-php83 php /var/www/html/rfq/tests/php/<file>`), Node unit tests in `tests/js/` (`node --test`), Playwright E2E in `tests/specs/` (`cd tests && PW_CHANNEL=chrome npx playwright test`). No lint commands.
 
 ## Architecture
 
@@ -187,3 +188,11 @@ Interactive ApexCharts report at `perfil/reports/pipeline_metrics` (sidebar entr
 Dashboard `perfil/charts` (`plantillas/utilities/charts.inc.php` + `js/main_charts.js`, **Chart.js** — not the ApexCharts pipeline page). The two Annual Awards cards (by Count `#ganados_anuales_chart`, by Amount `#monto_ganados_anual_chart`) compare a **rolling** window — current year + 2 prior — as grouped monthly columns. Endpoint `scripts/utilities/main_charts.php` builds `[Y-2, Y-1, Y]` and returns `annual_awards_years` (per year: totals + 12 monthly points) from `RepositorioRfq::getAnnualAwardsDataByMonthForYears($conn, $years)`. JS builds the 3 datasets and the 3-row legend (newest first) into `#annual_awards_*_legend`. Ramp oldest→newest: `#aebccb`, `#5e83a4`, `#13A8F0`. The per-user Completed/Awards cards are separate (current vs last month). Each **hides users with no activity in either month** (filtered independently per card via `activeUserSeries()` in `js/main_charts.js`; JSON counts `Number()`-coerced). That helper is unit-tested (`node --test tests/js/charts_filter.test.js`); the jQuery bootstrap is `typeof $`-guarded so the file stays requirable under Node.
 
 **Counts awards by AWARD DATE** (leadership decision — "when we won"): year **and** month bucket on `fecha_award` (NOT `issue_date`), matching the per-user Awards card; "awarded" = `award = 1` (`fecha_award` is stamped only when a bid is awarded — see `set_award`); value = product + services subtotal. This **deliberately differs** from the issue-date Bid Pipeline Metrics page — the two answer different questions (when-won vs issued-this-year conversion) and need not reconcile. Awards lacking a `fecha_award` don't appear. Test: `tests/php/annual_awards_test.php`.
+
+### Advanced Quote Search
+
+Search Quotes (`perfil/search_quotes`) has an **Advanced** toggle beside the keyword input. On: filter panel expands (status multi-select over the 10 pipeline buckets, designated user, type of bid, type of contract, date range with Created/Submitted/Awarded field selector, price min/max, client, state — AND-combined, keyword optional), Partial Invoices card hides, and the Quotes table gains a **Status pill** column. Off: filters reset, page identical to basic. Empty advanced search = all non-deleted quotes; inverted ranges = empty state, no error.
+
+- **Backend:** `RepositorioRfq::getAdvancedSearchedQuotes` / `getAdvancedSearchedQuotesCount` — a separate pair so the basic-mode queries stay untouched. Derived status reuses `PipelineMetricsRepository::STATUS_CASE` verbatim (filter counts match the pipeline chart); price filters compare product + services total; date filters exclude NULLs by construction. Same endpoint `utilities/search_quotes` with `advanced=1` + `statuses[]`/`f_*` params (whitelisted in `advancedSearchWhere`).
+- **Frontend:** dropdowns server-rendered in `search_quotes.inc.php` (active users, `type_of_bids`, `type_of_contracts`); status vocabulary emitted as `window.SQ_STATUSES` (keys/colors from `PipelineMetricsRepository::STATUSES`, labels per design). `js/searchQuotes.js` swaps DataTable column sets (inserts/removes the Status `<th>`) when toggling modes. `sq-*` CSS namespace at the bottom of `estilos.css`.
+- **Tests:** `tests/php/advanced_search_test.php` (35 assertions, transaction-isolated, client-marker scoping); `tests/specs/10-advanced-search.spec.js` (Playwright). Playwright on hosts without a bundled-chromium build: run with `PW_CHANNEL=chrome` to use system Google Chrome.
