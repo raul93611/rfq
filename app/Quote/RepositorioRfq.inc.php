@@ -1827,6 +1827,214 @@ class RepositorioRfq {
     return $sentencia->fetchColumn();
   }
 
+  /* ---- Advanced Quote Search (Search Quotes page, advanced mode) ----
+     Separate from the basic-mode pair above so basic behavior stays untouched.
+     derived_status reuses PipelineMetricsRepository::STATUS_CASE verbatim so the
+     status filter always agrees with the Bid Pipeline Metrics chart.
+     total_price = product total + services subtotal (same semantics as basic). */
+
+  private static function advancedSearchSubquery() {
+    return "
+      SELECT rfq.id,
+        rfq.email_code,
+        u.nombre_usuario,
+        rfq.type_of_bid,
+        rfq.type_of_contract,
+        rfq.usuario_designado,
+        rfq.comments,
+        rfq.contract_number,
+        rfq.city,
+        rfq.zip_code,
+        rfq.state,
+        rfq.client,
+        rfq.shipping_address,
+        rfq.special_requirements,
+        rfq.created_at,
+        rfq.fecha_submitted,
+        rfq.fecha_award,
+        COALESCE(SUM(COALESCE(s.total_price, 0)) + COALESCE(rfq.total_price, 0), 0) AS total_price,
+        " . PipelineMetricsRepository::STATUS_CASE . " AS derived_status
+      FROM rfq
+        LEFT JOIN usuarios u ON rfq.usuario_designado = u.id
+        LEFT JOIN services s ON rfq.id = s.id_rfq
+      WHERE rfq.deleted = 0
+      GROUP BY rfq.id";
+  }
+
+  /** Builds [whereSql, params] over the sq subquery for keyword + filters (AND-combined). */
+  private static function advancedSearchWhere($search_term, array $filters) {
+    $clauses = [];
+    $params = [];
+
+    if (trim((string)$search_term) !== '') {
+      $params[':search_term'] = '%' . $search_term . '%';
+      $clauses[] = "(
+        sq.nombre_usuario LIKE :search_term
+        OR sq.email_code LIKE :search_term
+        OR sq.type_of_bid LIKE :search_term
+        OR sq.comments LIKE :search_term
+        OR sq.total_price LIKE :search_term
+        OR sq.contract_number LIKE :search_term
+        OR sq.city LIKE :search_term
+        OR sq.zip_code LIKE :search_term
+        OR sq.state LIKE :search_term
+        OR sq.client LIKE :search_term
+        OR sq.shipping_address LIKE :search_term
+        OR sq.special_requirements LIKE :search_term
+        OR sq.id LIKE :search_term
+        OR EXISTS (
+          SELECT 1 FROM item i
+          WHERE i.id_rfq = sq.id
+            AND (i.provider_menor LIKE :search_term
+              OR i.brand LIKE :search_term
+              OR i.brand_project LIKE :search_term
+              OR i.part_number LIKE :search_term
+              OR i.part_number_project LIKE :search_term
+              OR i.description LIKE :search_term
+              OR i.description_project LIKE :search_term
+              OR i.comments LIKE :search_term)
+        )
+        OR EXISTS (
+          SELECT 1 FROM services svc
+          WHERE svc.id_rfq = sq.id AND svc.description LIKE :search_term
+        )
+        OR EXISTS (
+          SELECT 1 FROM subitems si
+            JOIN item i ON si.id_item = i.id
+          WHERE i.id_rfq = sq.id
+            AND (si.provider_menor LIKE :search_term
+              OR si.brand LIKE :search_term
+              OR si.brand_project LIKE :search_term
+              OR si.part_number LIKE :search_term
+              OR si.part_number_project LIKE :search_term
+              OR si.description LIKE :search_term
+              OR si.description_project LIKE :search_term
+              OR si.comments LIKE :search_term)
+        )
+      )";
+    }
+
+    $valid_statuses = array_column(PipelineMetricsRepository::STATUSES, 'key');
+    $statuses = array_values(array_intersect((array)($filters['statuses'] ?? []), $valid_statuses));
+    if (count($statuses)) {
+      $ph = [];
+      foreach ($statuses as $i => $st) {
+        $ph[] = ":status_$i";
+        $params[":status_$i"] = $st;
+      }
+      $clauses[] = 'sq.derived_status IN (' . implode(', ', $ph) . ')';
+    }
+
+    if (!empty($filters['user'])) {
+      $clauses[] = 'sq.usuario_designado = :f_user';
+      $params[':f_user'] = (int)$filters['user'];
+    }
+    if (!empty($filters['bid_type'])) {
+      $clauses[] = 'sq.type_of_bid = :f_bid_type';
+      $params[':f_bid_type'] = $filters['bid_type'];
+    }
+    if (!empty($filters['contract_type'])) {
+      $clauses[] = 'sq.type_of_contract = :f_contract_type';
+      $params[':f_contract_type'] = $filters['contract_type'];
+    }
+
+    // created_at is DATETIME, the other two are DATE — compare on DATE() uniformly.
+    $date_columns = [
+      'created' => 'DATE(sq.created_at)',
+      'submitted' => 'sq.fecha_submitted',
+      'awarded' => 'sq.fecha_award',
+    ];
+    $date_expr = $date_columns[$filters['date_field'] ?? 'created'] ?? $date_columns['created'];
+    if (!empty($filters['date_from'])) {
+      $clauses[] = "$date_expr >= :f_date_from";
+      $params[':f_date_from'] = $filters['date_from'];
+    }
+    if (!empty($filters['date_to'])) {
+      $clauses[] = "$date_expr <= :f_date_to";
+      $params[':f_date_to'] = $filters['date_to'];
+    }
+
+    if (isset($filters['price_min']) && $filters['price_min'] !== '') {
+      $clauses[] = 'sq.total_price >= :f_price_min';
+      $params[':f_price_min'] = (float)$filters['price_min'];
+    }
+    if (isset($filters['price_max']) && $filters['price_max'] !== '') {
+      $clauses[] = 'sq.total_price <= :f_price_max';
+      $params[':f_price_max'] = (float)$filters['price_max'];
+    }
+
+    if (!empty($filters['client']) && trim($filters['client']) !== '') {
+      $clauses[] = 'sq.client LIKE :f_client';
+      $params[':f_client'] = '%' . trim($filters['client']) . '%';
+    }
+    if (!empty($filters['state']) && trim($filters['state']) !== '') {
+      $clauses[] = 'sq.state LIKE :f_state';
+      $params[':f_state'] = '%' . trim($filters['state']) . '%';
+    }
+
+    $where = count($clauses) ? 'WHERE ' . implode("\n          AND ", $clauses) : '';
+    return [$where, $params];
+  }
+
+  public static function getAdvancedSearchedQuotes($conexion, $start, $length, $sort_column_index, $sort_direction, $search_term, array $filters) {
+    $data = [];
+    // Advanced table column order (Status inserted at index 5).
+    $sort_columns = [
+      0 => 'sq.id', 1 => 'sq.email_code', 2 => 'sq.contract_number', 3 => 'sq.nombre_usuario',
+      4 => 'sq.type_of_bid', 5 => 'sq.derived_status', 6 => 'sq.comments', 7 => 'sq.total_price',
+    ];
+    $sort_column = $sort_columns[$sort_column_index] ?? 'sq.id';
+    $sort_direction = strtolower($sort_direction) === 'asc' ? 'asc' : 'desc';
+    $start = (int)$start;
+    $length = (int)$length;
+    if (isset($conexion)) {
+      try {
+        list($where, $params) = self::advancedSearchWhere($search_term, $filters);
+        $sql = "
+        SELECT sq.id, sq.email_code, sq.contract_number, sq.nombre_usuario,
+          sq.type_of_bid, sq.derived_status, sq.comments, sq.total_price,
+          NULL AS options
+        FROM (" . self::advancedSearchSubquery() . ") AS sq
+        $where
+        ORDER BY {$sort_column} {$sort_direction} LIMIT {$start}, {$length}
+        ";
+        $sentencia = $conexion->prepare($sql);
+        foreach ($params as $key => $value) {
+          $sentencia->bindValue($key, $value);
+        }
+        $sentencia->execute();
+        while ($row = $sentencia->fetch(PDO::FETCH_ASSOC)) {
+          $data[] = $row;
+        }
+      } catch (PDOException $ex) {
+        error_log('getAdvancedSearchedQuotes error: ' . $ex->getMessage());
+      }
+    }
+    return $data;
+  }
+
+  public static function getAdvancedSearchedQuotesCount($conexion, $search_term, array $filters) {
+    if (isset($conexion)) {
+      try {
+        list($where, $params) = self::advancedSearchWhere($search_term, $filters);
+        $sql = "
+        SELECT COUNT(*)
+        FROM (" . self::advancedSearchSubquery() . ") AS sq
+        $where
+        ";
+        $sentencia = $conexion->prepare($sql);
+        foreach ($params as $key => $value) {
+          $sentencia->bindValue($key, $value);
+        }
+        $sentencia->execute();
+        return (int)$sentencia->fetchColumn();
+      } catch (PDOException $ex) {
+        error_log('getAdvancedSearchedQuotesCount error: ' . $ex->getMessage());
+      }
+    }
+    return 0;
+  }
+
   public static function getSearchedInvoices($conexion, $start, $length, $sort_column_index, $sort_direction, $search_term) {
     $data = [];
     $search_term = '%' . $search_term . '%';
