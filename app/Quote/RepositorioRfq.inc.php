@@ -2043,6 +2043,7 @@ class RepositorioRfq {
       case 1: $sort_column = 'inv.created_at'; break;
       case 2: $sort_column = 'r.email_code'; break;
       case 3: $sort_column = 'u.nombre_usuario'; break;
+      case 4: $sort_column = 'total_price'; break;
       default: $sort_column = 'inv.created_at'; break;
     }
     if (isset($conexion)) {
@@ -2053,12 +2054,15 @@ class RepositorioRfq {
           DATE_FORMAT(inv.created_at, '%m/%d/%Y') AS invoice_date,
           r.id AS quote_id,
           r.email_code,
-          u.nombre_usuario
+          u.nombre_usuario,
+          COALESCE(SUM(COALESCE(s.total_price, 0)) + COALESCE(r.total_price, 0), 0) AS total_price
         FROM invoices inv
         JOIN rfq r ON inv.id_rfq = r.id
         LEFT JOIN usuarios u ON r.usuario_designado = u.id
+        LEFT JOIN services s ON r.id = s.id_rfq
         WHERE r.deleted = 0
           AND inv.name LIKE :search_term
+        GROUP BY inv.id, inv.name, inv.created_at, r.id, r.email_code, u.nombre_usuario, r.total_price
         ORDER BY {$sort_column} {$sort_direction}
         LIMIT {$start}, {$length}
         ";

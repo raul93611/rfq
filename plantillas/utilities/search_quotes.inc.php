@@ -217,6 +217,7 @@ $sq_statuses = array_map(function ($s) use ($sq_label_overrides) {
                 <th>Invoice Date</th>
                 <th>Parent Quote</th>
                 <th>Designated User</th>
+                <th>Total Price</th>
               </tr>
             </thead>
             <tbody></tbody>

@@ -147,6 +147,7 @@ $(document).ready(function () {
           },
         },
         { data: 'nombre_usuario' },
+        { data: 'total_price' },
       ],
       createdRow: function (row) {
         $(row).addClass('table-info');
