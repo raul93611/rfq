@@ -28,16 +28,14 @@ class ReQuoteServiceRepository {
     <?php return; endif; ?>
 
     <!-- Payment terms -->
-    <div style="display:flex;align-items:center;gap:16px;margin-bottom:12px;font-size:13px;">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;font-size:13px;">
       <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.4px;color:#8896a5;">Payment Terms</span>
-      <div class="custom-control custom-radio custom-control-inline">
-        <input type="radio" id="net_30Services" name="services_payment_term" class="custom-control-input" value="Net 30" <?= $re_quote->get_services_payment_term() == 'Net 30' ? 'checked' : ''; ?>>
-        <label class="custom-control-label" for="net_30Services">Net 30</label>
-      </div>
-      <div class="custom-control custom-radio custom-control-inline">
-        <input type="radio" id="net_30ccServices" name="services_payment_term" class="custom-control-input" value="Net 30/CC" <?= $re_quote->get_services_payment_term() == 'Net 30/CC' ? 'checked' : ''; ?>>
-        <label class="custom-control-label" for="net_30ccServices">Net 30/CC</label>
-      </div>
+      <?php $rq_services_payment_term = $re_quote->get_services_payment_term(); ?>
+      <select name="services_payment_term" id="rq_services_payment_term" class="form-control form-control-sm js-payment-terms" style="width:auto;">
+        <option value="Net 30" <?= $rq_services_payment_term == 'Net 30' ? 'selected' : ''; ?>>Net 30</option>
+        <option value="Net 30/CC" <?= $rq_services_payment_term == 'Net 30/CC' ? 'selected' : ''; ?>>Net 30/CC</option>
+        <option value="50% Upfront / 50% on Completion" <?= $rq_services_payment_term == '50% Upfront / 50% on Completion' ? 'selected' : ''; ?>>50% Upfront / 50% on Completion</option>
+      </select>
     </div>
 
     <!-- Services table -->

@@ -53,16 +53,15 @@ class ReQuoteItemRepository {
         <i class="fas fa-list mr-1"></i> Items
       </span>
       <div style="display:flex;align-items:center;gap:16px;">
-        <div style="display:flex;align-items:center;gap:12px;font-size:13px;">
-          <div class="custom-control custom-radio custom-control-inline">
-            <input type="radio" id="net_30" name="payment_terms" class="custom-control-input" value="Net 30" <?= $re_quote->get_payment_terms() == 'Net 30' ? 'checked' : ''; ?>>
-            <label class="custom-control-label" for="net_30">Net 30</label>
-          </div>
-          <div class="custom-control custom-radio custom-control-inline">
-            <input type="radio" id="net_30_cc" name="payment_terms" class="custom-control-input" value="Net 30/CC" <?= $re_quote->get_payment_terms() == 'Net 30/CC' ? 'checked' : ''; ?>>
-            <label class="custom-control-label" for="net_30_cc">Net 30/CC</label>
-          </div>
-          <input type="hidden" name="payment_terms_original" value="<?= $re_quote->get_payment_terms(); ?>">
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;">
+          <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.4px;color:#8896a5;">Payment Terms</span>
+          <?php $rq_payment_terms = $re_quote->get_payment_terms(); ?>
+          <select name="payment_terms" id="rq_items_payment_terms" class="form-control form-control-sm js-payment-terms" style="width:auto;">
+            <option value="Net 30" <?= $rq_payment_terms == 'Net 30' ? 'selected' : ''; ?>>Net 30</option>
+            <option value="Net 30/CC" <?= $rq_payment_terms == 'Net 30/CC' ? 'selected' : ''; ?>>Net 30/CC</option>
+            <option value="50% Upfront / 50% on Completion" <?= $rq_payment_terms == '50% Upfront / 50% on Completion' ? 'selected' : ''; ?>>50% Upfront / 50% on Completion</option>
+          </select>
+          <input type="hidden" name="payment_terms_original" value="<?= htmlspecialchars($rq_payment_terms); ?>">
         </div>
         <a target="_blank" href="<?= PDF_RE_QUOTE . $re_quote->get_id_rfq(); ?>" class="btn btn-outline-secondary btn-sm">
           <i class="fa fa-file mr-1"></i> PDF

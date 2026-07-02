@@ -139,6 +139,17 @@
   </div>
 
   <div class="quote-action-bar__totals">
+    <!-- 50/50 split — shown only when the "50% Upfront / 50% on Completion" term is active (quote.js) -->
+    <div class="quote-split" id="payment_split_totals" style="display:none;">
+      <div class="quote-action-total quote-split-total">
+        <span class="quote-action-total__label">Due Upfront <span class="quote-split-pct">50%</span></span>
+        <span class="quote-action-total__value quote-split-value" id="bar-due-upfront">$0.00</span>
+      </div>
+      <div class="quote-action-total quote-split-total">
+        <span class="quote-action-total__label">Due on Completion <span class="quote-split-pct">50%</span></span>
+        <span class="quote-action-total__value quote-split-value" id="bar-due-completion">$0.00</span>
+      </div>
+    </div>
     <div class="quote-action-total">
       <span class="quote-action-total__label">Total Price</span>
       <span class="quote-action-total__value" id="bar-total-price">$<?= number_format($cotizacion_recuperada->obtener_quote_total_price(), 2); ?></span>

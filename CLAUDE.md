@@ -16,6 +16,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | Quote Lifecycle Audit Events (audit-trail entries on quote create / sync / unsync, surfaced via the Audit Trail modal's Sync tab) | built | — |
 | Write-Once Sheet Sync (app creates a sheet row if missing but never overwrites/deletes an existing one — sync becomes create-or-link) | built | — |
 | Advanced Quote Search (Advanced toggle + filter panel on Search Quotes, Status pill column) | built | — |
+| Commercial Moving bid type + 50/50 payment term (new bid type; "50% Upfront / 50% on Completion" term, split shown on quote + PDF, no calc change) | built | — |
 
 ## Environment
 
@@ -198,3 +199,12 @@ Search Quotes (`perfil/search_quotes`) has an **Advanced** toggle beside the key
 - **Backend:** `RepositorioRfq::getAdvancedSearchedQuotes` / `getAdvancedSearchedQuotesCount` — a separate pair so the basic-mode queries stay untouched. Derived status reuses `PipelineMetricsRepository::STATUS_CASE` verbatim (filter counts match the pipeline chart); price filters compare product + services total; date filters exclude NULLs by construction. Same endpoint `utilities/search_quotes` with `advanced=1` + `statuses[]`/`f_*` params (whitelisted in `advancedSearchWhere`).
 - **Frontend:** dropdowns server-rendered in `search_quotes.inc.php` (active users, `type_of_bids`, `type_of_contracts`); status vocabulary emitted as `window.SQ_STATUSES` (keys/colors from `PipelineMetricsRepository::STATUSES`, labels per design). `js/searchQuotes.js` swaps DataTable column sets (inserts/removes the Status `<th>`) when toggling modes. `sq-*` CSS namespace at the bottom of `estilos.css`.
 - **Tests:** `tests/php/advanced_search_test.php` (35 assertions, transaction-isolated, client-marker scoping); `tests/specs/10-advanced-search.spec.js` (Playwright). Playwright on hosts without a bundled-chromium build: run with `PW_CHANNEL=chrome` to use system Google Chrome.
+
+### Commercial Moving + 50/50 Payment Term
+
+New bid type "Commercial Moving" (`sql/commercial_moving_payment_term_migration.sql`, idempotent, local + prod) + a third payment term **`50% Upfront / 50% on Completion`** — the canonical string stored in `rfq.payment_terms`/`rfq.services_payment_term` (**no schema change**; split computed on the fly). Bid type is **not** in `nueva_cotizacion.inc.php`'s `SYNCABLE_BID_TYPES`, so "Sync to pipeline" auto-defaults **off**; it surfaces in the metrics category breakdown automatically (grouped by `type_of_bid`).
+
+- **No calc change:** 50/50 is a schedule, ×1 like Net 30. Every calc/PDF path already special-cased only `Net 30/CC` (×1.03 services, ×1.0298661174047374 items), so non-CC terms were already ×1.
+- **Controls:** items + services payment-term **radios → 3-option `<select class="js-payment-terms">`** (`RepositorioItem`/`ServiceRepository`; re-quote `ReQuoteItemRepository`/`ReQuoteServiceRepository`). Quote-wide **all-or-nothing** mirroring in `js/quote.js` + `js/reQuote.js`: 50/50 on either sets both; leaving it resets the other to Net 30; Net 30 / Net 30/CC stay independent.
+- **Split display:** `js/payment_split.js` (`split5050` + `PAYMENT_TERM_SPLIT`, Node-requireable + `window`; loaded before quote/reQuote.js; odd cents → upfront). App: bottom bar `#payment_split_totals` shown only when split (`renderPaymentSplit`). PDF: `proposal.inc.php` adds two rows under TOTAL + completion note via `ProposalRepository::is_split_term`/`split_5050`. Re-quote PDF (internal cost sheet) + `proposal_room.inc.php` intentionally get no split block.
+- **Tests:** `tests/js/payment_split.test.js`; `tests/php/commercial_moving_test.php` (self-cleaning).

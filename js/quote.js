@@ -20,8 +20,27 @@ $(document).ready(function () {
 
   const totalQuantity = quantity.reduce((sum, qty) => sum + qty, 0);
 
+  const SPLIT_TERM = window.PAYMENT_TERM_SPLIT || '50% Upfront / 50% on Completion';
+
+  // The 50/50 split term is a payment schedule, not a price change — it uses the
+  // same ×1 multiplier as Net 30. Only Net 30/CC applies an uplift.
+  function paymentTermIsSplit() {
+    return $('[name="payment_terms"]').val() === SPLIT_TERM
+      || $('[name="services_payment_term"]').val() === SPLIT_TERM;
+  }
+
+  function renderPaymentSplit(total) {
+    const $wrap = $('#payment_split_totals');
+    if (!$wrap.length) return;
+    if (!paymentTermIsSplit()) { $wrap.hide(); return; }
+    const s = window.split5050(total);
+    $('#bar-due-upfront').text(`$${s.upfront.toFixed(2)}`);
+    $('#bar-due-completion').text(`$${s.completion.toFixed(2)}`);
+    $wrap.css('display', 'flex');
+  }
+
   const calcQuoteTable = () => {
-    const paymentTerms = $('input:radio[name=payment_terms]:checked').val() === 'Net 30/CC'
+    const paymentTerms = $('[name="payment_terms"]').val() === 'Net 30/CC'
       ? 1.0298661174047374
       : 1;
     const taxesMultiplier = (parseFloat($('#taxes').val()) / 100 || 0) + 1;
@@ -105,7 +124,7 @@ $(document).ready(function () {
     $('#total_additional').html(`$ ${totalAdditional.toFixed(2)}`);
 
     // Services calculation — runs in the same tick so the total feeds into the bottom bar
-    const svcPaymentMultiplier = $('input:radio[name=services_payment_term]:checked').val() === 'Net 30/CC' ? 1.03 : 1;
+    const svcPaymentMultiplier = $('[name="services_payment_term"]').val() === 'Net 30/CC' ? 1.03 : 1;
     let totalServices = 0;
     $('#services_table tbody .service_item').each(function () {
       const $cells = $(this).find('td');
@@ -126,7 +145,24 @@ $(document).ready(function () {
     $('#bar-total-price').text(`$${totalPrice.toFixed(2)}`);
     $('#bar-total-profit').text(`$${profit}`);
     $('#bar-profit-pct').text(`${percentageProfit}%`);
+
+    // 50/50 split — Due Upfront / Due on Completion beside the grand total
+    renderPaymentSplit(totalPrice);
   };
+
+  // 50/50 is one arrangement for the whole job: selecting it on either table mirrors
+  // to the other; leaving it resets the other table to Net 30. Net 30 / Net 30/CC
+  // stay independently selectable per table.
+  $('#form_edited_quote').on('change', 'select.js-payment-terms', function () {
+    const $changed = $(this);
+    const $other = $('select.js-payment-terms').not($changed);
+    if (!$other.length) return;
+    if ($changed.val() === SPLIT_TERM) {
+      if ($other.val() !== SPLIT_TERM) $other.val(SPLIT_TERM).trigger('change');
+    } else if ($other.val() === SPLIT_TERM) {
+      $other.val('Net 30').trigger('change');
+    }
+  });
 
   // Set interval for dynamic updates and trigger on form submission
   if ($('#form_edited_quote').length) {
@@ -146,7 +182,7 @@ $(document).ready(function () {
       $('input[name="taxes_original"]').val($('[name="taxes"]').val());
       $('input[name="profit_original"]').val($('[name="profit"]').val());
       $('input[name="additional_general_original"]').val($('[name="additional_general"]').val());
-      $('input[name="payment_terms_original"]').val($('input[name="payment_terms"]:checked').val());
+      $('input[name="payment_terms_original"]').val($('[name="payment_terms"]').val());
       $('input[name="shipping_original"]').val($('[name="shipping"]').val());
       $('input[name="shipping_cost_original"]').val($('[name="shipping_cost"]').val());
     }
@@ -185,7 +221,7 @@ $(document).ready(function () {
     );
     $('#form_edited_quote').on(
       'change',
-      'input[name="payment_terms"], input[name="services_payment_term"]',
+      '[name="payment_terms"], [name="services_payment_term"]',
       scheduleAutosave
     );
     $('#form_edited_quote').on('input blur', '#shipping', scheduleAutosave);

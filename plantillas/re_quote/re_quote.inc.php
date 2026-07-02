@@ -89,5 +89,6 @@ include_once 'plantillas/re_quote/modals/audit_trails_modal.inc.php';
 include_once 'modals/edit_service_modal.inc.php';
 ?>
 
+<script src="<?= asset_url('js/payment_split.js'); ?>"></script>
 <script src="<?= asset_url('js/reQuote.js'); ?>"></script>
 <script src="<?= asset_url('js/audit_trail.js'); ?>"></script>
