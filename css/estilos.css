@@ -1653,6 +1653,28 @@ h3.text-info.text-center .fa-exclamation-circle {
   color: var(--color-dark);
   line-height: 1.2;
 }
+/* 50/50 payment split — read-only, visually secondary to the grand total */
+.quote-split {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  animation: quoteSplitIn 0.2s ease;
+}
+@keyframes quoteSplitIn {
+  from { opacity: 0; transform: translateX(6px); }
+  to   { opacity: 1; transform: none; }
+}
+.quote-split-total .quote-action-total__value.quote-split-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #5a6a7e;
+}
+.quote-split-pct {
+  font-size: 9px;
+  font-weight: 700;
+  color: #aab4c2;
+  margin-left: 3px;
+}
 
 /* =============================================
    ADD ITEM — Comparison panel layout

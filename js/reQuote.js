@@ -3,7 +3,7 @@ $(document).ready(function () {
   if ($('#requote_table').length !== 0) {
     const calculateTotals = () => {
       const totalGanado = parseFloat($('#total_ganado').html().split(' ')[1]);
-      const paymentTermsMultiplier = $('input:radio[name=payment_terms]:checked').val() === 'Net 30/CC' ? 0.029 : 0;
+      const paymentTermsMultiplier = $('[name=payment_terms]').val() === 'Net 30/CC' ? 0.029 : 0;
       const paymentTerms = totalGanado * paymentTermsMultiplier;
 
       const totales = $('#re_quote_data tr').map((_, row) => {
@@ -67,7 +67,7 @@ $(document).ready(function () {
 
   // Calculate service totals
   const calcServices = () => {
-    const paymentTermsMultiplier = $('input:radio[name=services_payment_term]:checked').val() === 'Net 30/CC' ? 1.0299 : 1;
+    const paymentTermsMultiplier = $('[name=services_payment_term]').val() === 'Net 30/CC' ? 1.0299 : 1;
     let totalServices = 0;
 
     $('#services_table tbody .service_item').each(function (i) {
@@ -89,6 +89,22 @@ $(document).ready(function () {
 
   // Recalculate totals before submitting the form
   $('#form_edited_quote').submit(calcServices);
+
+  /****************************PAYMENT TERMS 50/50 MIRRORING*******************************************/
+  // 50/50 is one arrangement for the whole job: selecting it on either table mirrors
+  // to the other; leaving it resets the other table to Net 30. Net 30 / Net 30/CC
+  // stay independently selectable per table.
+  const SPLIT_TERM = window.PAYMENT_TERM_SPLIT || '50% Upfront / 50% on Completion';
+  $(document).on('change', 'select.js-payment-terms', function () {
+    const $changed = $(this);
+    const $other = $('select.js-payment-terms').not($changed);
+    if (!$other.length) return;
+    if ($changed.val() === SPLIT_TERM) {
+      if ($other.val() !== SPLIT_TERM) $other.val(SPLIT_TERM).trigger('change');
+    } else if ($other.val() === SPLIT_TERM) {
+      $other.val('Net 30').trigger('change');
+    }
+  });
 
   // Edit service modal logic
   $('#services_table').on('click', '.edit_service', function () {

@@ -1,5 +1,21 @@
 <?php
 class ProposalRepository{
+  // Canonical value stored in rfq.payment_terms / rfq.services_payment_term for the
+  // "50% Upfront / 50% on Completion" term. No calc change — it is a payment schedule.
+  const PAYMENT_TERM_SPLIT = '50% Upfront / 50% on Completion';
+
+  public static function is_split_term($term){
+    return $term === self::PAYMENT_TERM_SPLIT;
+  }
+
+  /* Half the total, always summing back to the exact total. Odd cents go to the
+     upfront half so the pair reconciles cleanly (8749.55 -> 4374.78 + 4374.77). */
+  public static function split_5050($total){
+    $cents = (int) round(((float) $total) * 100);
+    $up = (int) ceil($cents / 2);
+    return ['upfront' => $up / 100, 'completion' => ($cents - $up) / 100];
+  }
+
   public static function print_item($item, $limit, $a){
     $item_description = '';
     $html = '';

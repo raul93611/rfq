@@ -150,6 +150,7 @@ include_once 'plantillas/quote/modals/edit_provider_subitem_modal.inc.php';
 ?>
 
 <script src="<?= asset_url('js/services.js'); ?>"></script>
+<script src="<?= asset_url('js/payment_split.js'); ?>"></script>
 <script src="<?= asset_url('js/quote.js'); ?>"></script>
 <script src="<?= asset_url('js/rooms.js'); ?>"></script>
 <script src="<?= asset_url('js/audit_trail.js'); ?>"></script>

@@ -287,17 +287,13 @@ class RepositorioItem {
           </div>
           <div class="col-md-3">
             <label>Payment Terms</label>
-            <div class="d-flex gap-3" style="gap:16px;">
-              <div class="custom-control custom-radio">
-                <input type="radio" id="net_30" name="payment_terms" class="custom-control-input" value="Net 30" <?php echo $cotizacion->obtener_payment_terms() == 'Net 30' ? 'checked' : ''; ?>>
-                <label class="custom-control-label" for="net_30">Net 30</label>
-              </div>
-              <div class="custom-control custom-radio">
-                <input type="radio" id="net_30cc" name="payment_terms" class="custom-control-input" value="Net 30/CC" <?php echo $cotizacion->obtener_payment_terms() == 'Net 30/CC' ? 'checked' : ''; ?>>
-                <label class="custom-control-label" for="net_30cc">Net 30/CC</label>
-              </div>
-            </div>
-            <input type="hidden" name="payment_terms_original" value="<?php echo $cotizacion->obtener_payment_terms(); ?>">
+            <?php $items_payment_terms = $cotizacion->obtener_payment_terms(); ?>
+            <select name="payment_terms" id="items_payment_terms" class="form-control form-control-sm js-payment-terms">
+              <option value="Net 30" <?= $items_payment_terms == 'Net 30' ? 'selected' : ''; ?>>Net 30</option>
+              <option value="Net 30/CC" <?= $items_payment_terms == 'Net 30/CC' ? 'selected' : ''; ?>>Net 30/CC</option>
+              <option value="50% Upfront / 50% on Completion" <?= $items_payment_terms == '50% Upfront / 50% on Completion' ? 'selected' : ''; ?>>50% Upfront / 50% on Completion</option>
+            </select>
+            <input type="hidden" name="payment_terms_original" value="<?= htmlspecialchars($items_payment_terms); ?>">
           </div>
         </div>
       </div>

@@ -142,6 +142,17 @@
       padding: 10px;
     }
 
+    /* ── 50/50 split rows (below TOTAL, read-only, secondary) ── */
+    .items-table .split-row td {
+      background: #fff !important;
+      border: none;
+      border-bottom: 1px solid #e5edf5;
+      font-size: 9pt;
+      font-weight: 600;
+      color: #1e5aa8;
+      padding: 6px 10px;
+    }
+
     .num-col   { width: 22px; text-align: center; }
     .qty-col   { width: 30px; text-align: center; }
     .price-col { width: 100px; text-align: right; }
@@ -229,7 +240,7 @@
       </td>
       <td>
         <div class="d-label">Payment Terms</div>
-        <div class="d-value"><?= htmlspecialchars($payment_terms) ?></div>
+        <div class="d-value"<?= ProposalRepository::is_split_term($payment_terms) ? ' style="color:#1e5aa8;"' : '' ?>><?= htmlspecialchars($payment_terms) ?></div>
       </td>
     </tr>
   </table>
@@ -284,15 +295,35 @@
         <td class="total-col">$ <?= number_format($cotizacion->obtener_shipping_cost(), 2) ?></td>
       </tr>
 
+      <?php
+      $grand_total = $cotizacion->obtener_total_price() + $total_service;
+      $is_split = ProposalRepository::is_split_term($payment_terms);
+      ?>
       <tr class="total-row">
         <td colspan="3" style="text-align:right;">TOTAL</td>
-        <td colspan="2" style="text-align:right;">$ <?= number_format($cotizacion->obtener_total_price() + $total_service, 2) ?></td>
+        <td colspan="2" style="text-align:right;">$ <?= number_format($grand_total, 2) ?></td>
       </tr>
+
+      <?php if ($is_split) : $split = ProposalRepository::split_5050($grand_total); ?>
+        <tr class="split-row">
+          <td colspan="3" style="text-align:right;">Due Upfront <span style="color:#8fa8c4;">(50%)</span></td>
+          <td colspan="2" style="text-align:right;">$ <?= number_format($split['upfront'], 2) ?></td>
+        </tr>
+        <tr class="split-row">
+          <td colspan="3" style="text-align:right;">Due on Completion <span style="color:#8fa8c4;">(50%)</span></td>
+          <td colspan="2" style="text-align:right;">$ <?= number_format($split['completion'], 2) ?></td>
+        </tr>
+      <?php endif; ?>
 
     </tbody>
   </table>
 
-  <?php if ($payment_terms === 'Net 30') : ?>
+  <?php if ($is_split) : ?>
+    <div class="payment-note">
+      <b>50% due upon acceptance, 50% due upon completion of the move.</b>
+      An invoice for the upfront half is issued at contract award; the balance is invoiced on final delivery and sign-off.
+    </div>
+  <?php elseif ($payment_terms === 'Net 30') : ?>
     <div class="payment-note">
       <b>Payment Terms</b>
       Net Terms: 30 Days &nbsp;·&nbsp;

@@ -86,16 +86,12 @@ class ServiceRepository {
         <div class="row">
           <div class="col-md-4">
             <label>Payment Terms</label>
-            <div class="d-flex" style="gap:16px;">
-              <div class="custom-control custom-radio">
-                <input type="radio" id="net_30Services" name="services_payment_term" class="custom-control-input" value="Net 30" <?= $quote->obtener_services_payment_term() == 'Net 30' ? 'checked' : ''; ?>>
-                <label class="custom-control-label" for="net_30Services">Net 30</label>
-              </div>
-              <div class="custom-control custom-radio">
-                <input type="radio" id="net_30ccServices" name="services_payment_term" class="custom-control-input" value="Net 30/CC" <?= $quote->obtener_services_payment_term() == 'Net 30/CC' ? 'checked' : ''; ?>>
-                <label class="custom-control-label" for="net_30ccServices">Net 30/CC</label>
-              </div>
-            </div>
+            <?php $services_payment_term = $quote->obtener_services_payment_term(); ?>
+            <select name="services_payment_term" id="services_payment_term" class="form-control form-control-sm js-payment-terms">
+              <option value="Net 30" <?= $services_payment_term == 'Net 30' ? 'selected' : ''; ?>>Net 30</option>
+              <option value="Net 30/CC" <?= $services_payment_term == 'Net 30/CC' ? 'selected' : ''; ?>>Net 30/CC</option>
+              <option value="50% Upfront / 50% on Completion" <?= $services_payment_term == '50% Upfront / 50% on Completion' ? 'selected' : ''; ?>>50% Upfront / 50% on Completion</option>
+            </select>
           </div>
         </div>
       </div>
