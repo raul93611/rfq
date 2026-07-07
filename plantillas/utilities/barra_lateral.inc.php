@@ -25,6 +25,7 @@
           'projections_sidebar.inc.php',
           'employee_docs_sidebar.inc.php',
           'reports_sidebar.inc.php',
+          'admin_sidebar.inc.php',
         ];
 
         foreach ($sidebar_sections as $section) {

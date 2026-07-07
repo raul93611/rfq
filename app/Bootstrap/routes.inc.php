@@ -236,6 +236,10 @@ define('MS_DISCONNECT', SERVIDOR . 'user/microsoft/disconnect');
 define('ACCOUNT_UPDATE_PROFILE', SERVIDOR . 'user/account/update_profile');
 define('ACCOUNT_UPDATE_PASSWORD', SERVIDOR . 'user/account/update_password');
 define('ACCOUNT_UPDATE_NOTIFICATIONS', SERVIDOR . 'user/account/update_notifications');
+/********************************ADMIN SETTINGS ROUTES*******************************/
+define('ADMIN_SETTINGS', PERFIL . 'admin/settings');
+define('MAILBOX_CONNECT', SERVIDOR . 'admin/mailbox/connect');
+define('MAILBOX_DISCONNECT', SERVIDOR . 'admin/mailbox/disconnect');
 /******************************************************************************/
 define('EMPLOYEE_DOCS', SERVIDOR . 'employee_docs/');
 define('DOCS', SERVIDOR . 'documentos/');

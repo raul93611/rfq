@@ -275,6 +275,15 @@ switch ($partes_ruta[2] ?? null) {
   case 'notifications':
     include_once 'plantillas/user/notifications.inc.php';
     break;
+  case 'admin':
+    switch ($partes_ruta[3] ?? '') {
+      case 'settings':
+        include_once 'plantillas/admin/admin_settings.inc.php';
+        break;
+      default:
+        break;
+    }
+    break;
   case 'charts':
     include_once 'plantillas/utilities/charts.inc.php';
     break;

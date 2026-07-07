@@ -1,46 +1,21 @@
 <?php
 Conexion::abrir_conexion();
 $conexion = Conexion::obtener_conexion();
-$ms = RepositorioUsuario::get_ms_tokens($conexion, $_SESSION['user']->obtener_id());
+$notif_prefs = RepositorioUsuario::get_notif_prefs($conexion, $_SESSION['user']->obtener_id());
 Conexion::cerrar_conexion();
 
-$ms_connected = !empty($ms['ms_refresh_token']);
-$ms_email     = htmlspecialchars($ms['ms_email'] ?? '');
-$user         = $_SESSION['user'];
-
-$notif_prefs        = RepositorioUsuario::get_notif_prefs($conexion, $_SESSION['user']->obtener_id());
-$flash_connected    = isset($_GET['ms_connected']);
-$flash_disconnected = isset($_GET['ms_disconnected']);
-$flash_ms_error     = isset($_GET['ms_error']) ? htmlspecialchars($_GET['ms_error']) : '';
+$user = $_SESSION['user'];
 ?>
 <div class="content-wrapper ac-page">
   <div class="content-header page-header-bar">
     <div>
       <h1 class="page-title">My Account</h1>
-      <p class="page-subtitle">Manage your profile and connected services</p>
+      <p class="page-subtitle">Manage your profile and notification preferences</p>
     </div>
   </div>
 
   <div class="content" style="padding-top: 24px; padding-bottom: 80px;">
     <div class="container-fluid">
-      <?php if ($flash_connected): ?>
-        <div class="alert alert-success alert-dismissible fade show nf-alert-success" role="alert">
-          <i class="fas fa-check-circle mr-2"></i> Microsoft account connected successfully.
-          <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
-        </div>
-      <?php endif; ?>
-      <?php if ($flash_disconnected): ?>
-        <div class="alert alert-info alert-dismissible fade show" role="alert">
-          <i class="fas fa-unlink mr-2"></i> Microsoft account disconnected.
-          <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
-        </div>
-      <?php endif; ?>
-      <?php if ($flash_ms_error): ?>
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-          <i class="fas fa-exclamation-circle mr-2"></i> <?= $flash_ms_error ?>
-          <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
-        </div>
-      <?php endif; ?>
 
       <div class="ac-grid">
 
@@ -118,71 +93,6 @@ $flash_ms_error     = isset($_GET['ms_error']) ? htmlspecialchars($_GET['ms_erro
           </div>
         </div>
 
-        <!-- Microsoft Account card -->
-        <div class="ac-card">
-          <div class="ac-card-head">
-            <div class="ac-card-head-icon ac-card-head-icon-ms">
-              <div class="ac-ms-logo">
-                <span class="ac-ms-logo-r1"></span><span class="ac-ms-logo-r2"></span>
-                <span class="ac-ms-logo-r3"></span><span class="ac-ms-logo-r4"></span>
-              </div>
-            </div>
-            <div class="ac-card-head-text">
-              <div class="ac-card-head-title">Microsoft Account</div>
-              <div class="ac-card-head-sub">Required to receive @mention notifications by email</div>
-            </div>
-          </div>
-          <div class="ac-card-body">
-            <?php if ($ms_connected): ?>
-              <div class="ac-ms-connected">
-                <div class="ac-ms-conn-left">
-                  <div class="ac-ms-illus">
-                    <div class="ac-ms-logo ac-ms-logo-lg">
-                      <span class="ac-ms-logo-r1"></span><span class="ac-ms-logo-r2"></span>
-                      <span class="ac-ms-logo-r3"></span><span class="ac-ms-logo-r4"></span>
-                    </div>
-                  </div>
-                  <div class="ac-ms-conn-email-block">
-                    <div class="ac-ms-conn-email-label">Connected as</div>
-                    <div class="ac-ms-conn-email"><?= $ms_email ?></div>
-                  </div>
-                </div>
-                <div class="ac-ms-conn-right">
-                  <span class="ac-badge-connected">
-                    <span class="ac-badge-connected-dot"></span>
-                    Connected
-                  </span>
-                  <a href="<?= MS_DISCONNECT ?>" class="ap-btn-danger-link"
-                     onclick="return confirm('Disconnect your Microsoft account?')">Disconnect</a>
-                </div>
-              </div>
-            <?php else: ?>
-              <div class="ac-ms-disconnected">
-                <div class="ac-ms-illus">
-                  <div class="ac-ms-logo ac-ms-logo-lg">
-                    <span class="ac-ms-logo-r1"></span><span class="ac-ms-logo-r2"></span>
-                    <span class="ac-ms-logo-r3"></span><span class="ac-ms-logo-r4"></span>
-                  </div>
-                </div>
-                <div class="ac-ms-text">
-                  <div class="ac-ms-text-title">Not connected</div>
-                  <div class="ac-ms-text-desc">
-                    Connect your Microsoft account so notifications can also be delivered
-                    to your Outlook inbox. You'll still see in-app alerts either way.
-                  </div>
-                </div>
-                <button type="button" class="ac-ms-btn" id="ac_ms_connect_btn">
-                  <div class="ac-ms-logo">
-                    <span class="ac-ms-logo-r1"></span><span class="ac-ms-logo-r2"></span>
-                    <span class="ac-ms-logo-r3"></span><span class="ac-ms-logo-r4"></span>
-                  </div>
-                  Connect Microsoft Account
-                </button>
-              </div>
-            <?php endif; ?>
-          </div>
-        </div>
-
         <!-- Notification Preferences card -->
         <div class="ac-card">
           <div class="ac-card-head">
@@ -209,7 +119,7 @@ $flash_ms_error     = isset($_GET['ms_error']) ? htmlspecialchars($_GET['ms_erro
               <div class="ac-notif-row">
                 <div class="ac-notif-info">
                   <div class="ac-notif-label">Email notifications</div>
-                  <div class="ac-notif-desc">Receive email alerts via Outlook when you're mentioned (requires Microsoft account connected)</div>
+                  <div class="ac-notif-desc">Receive email alerts when you're mentioned or someone comments on your quotes</div>
                 </div>
                 <label class="ac-toggle">
                   <input type="checkbox" id="ac_notif_email" <?= $notif_prefs['notif_email'] ? 'checked' : '' ?>>
@@ -293,21 +203,6 @@ $flash_ms_error     = isset($_GET['ms_error']) ? htmlspecialchars($_GET['ms_erro
   }
   document.getElementById('ac_notif_inapp').addEventListener('change', saveNotifPrefs);
   document.getElementById('ac_notif_email').addEventListener('change', saveNotifPrefs);
-
-  // MS Connect — open in new tab, reload this page when it closes
-  const msConnectBtn = document.getElementById('ac_ms_connect_btn');
-  if (msConnectBtn) {
-    msConnectBtn.addEventListener('click', function () {
-      const popup = window.open('<?= MS_CONNECT ?>', '_blank');
-      if (!popup) return; // blocked by browser
-      const timer = setInterval(function () {
-        if (popup.closed) {
-          clearInterval(timer);
-          window.location.reload();
-        }
-      }, 500);
-    });
-  }
 
   // Password save
   document.getElementById('ac_pass_save').addEventListener('click', function () {
