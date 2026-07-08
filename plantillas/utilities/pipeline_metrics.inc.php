@@ -230,14 +230,13 @@ $pm_statuses  = PipelineMetricsRepository::STATUSES;
           <div class="pt-table-wrap">
             <table class="pt-table">
               <colgroup>
-                <col class="pt-col-id"><col class="pt-col-channel"><col class="pt-col-email">
-                <col class="pt-col-status"><col class="pt-col-type"><col class="pt-col-user"><col class="pt-col-watch">
+                <col class="pt-col-id"><col class="pt-col-created"><col class="pt-col-channel"><col class="pt-col-email">
+                <col class="pt-col-status"><col class="pt-col-type"><col class="pt-col-user">
               </colgroup>
               <thead>
                 <tr>
-                  <th>Quote ID</th><th>Channel</th><th>Email Code</th><th>Status</th>
+                  <th>Quote ID</th><th>Created</th><th>Channel</th><th>Email Code</th><th>Status</th>
                   <th>Type of Bid</th><th>Designated User</th>
-                  <th class="pt-th-watch" title="Watch"><span class="pt-th-watch-glyph">★</span></th>
                 </tr>
               </thead>
               <tbody id="pt-tbody"></tbody>

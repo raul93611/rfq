@@ -106,14 +106,12 @@
       tbody.innerHTML = st.rows.map(function (b) {
         return '<tr data-row="' + b.id + '">'
           + '<td class="pt-td-id"><button type="button" class="pt-idlink" data-open="' + b.id + '">' + esc(b.id) + '</button></td>'
+          + '<td class="pt-td-mono">' + esc(b.created) + '</td>'
           + '<td class="pt-td-ellip" title="' + esc(b.channel) + '">' + esc(b.channel) + '</td>'
           + '<td class="pt-td-mono">' + esc(b.emailCode) + '</td>'
           + '<td>' + statusPill(b.status) + '</td>'
           + '<td>' + esc(b.bidType) + '</td>'
           + '<td class="pt-td-ellip" title="' + esc(b.user) + '">' + esc(b.user) + '</td>'
-          + '<td class="pt-td-watch"><button type="button" class="pt-watch ' + (b.watched ? 'is-on' : '') + '" data-watch="' + b.id + '" '
-          + 'aria-pressed="' + (b.watched ? 'true' : 'false') + '" title="' + (b.watched ? 'Watching — click to stop' : 'Watch this quote') + '">'
-          + watchSvg(b.watched) + '</button></td>'
           + '</tr>';
       }).join('');
     }
@@ -279,18 +277,18 @@
     $('#qs-modal').innerHTML =
       '<div class="qs-head"><div class="qs-head-main">'
       + '<div class="qs-eyebrow"><span class="qs-code">' + esc(b.code) + '</span><span class="qs-eyebrow-sep">·</span>Quote #' + esc(b.id) + '</div>'
-      + '<div class="qs-title" id="qs-title">' + esc(b.id) + '</div>'
+      + '<a class="qs-title qs-title-link" id="qs-title" href="' + CFG.editBase + b.id + '" title="Open quote #' + esc(b.id) + '">' + esc(b.id) + '</a>'
       + '<div class="qs-desc">' + esc(b.name) + '</div></div>'
       + '<button class="qs-close" id="qs-close" aria-label="Close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>'
       + '<div class="qs-body">'
-      + '<div class="qs-amount-row"><div class="qs-amount-block"><div class="qs-amount-label">Total amount</div><div class="qs-amount">' + fmtMoneyFull(b.value) + '</div></div>'
-      + '<button type="button" class="qs-watch-btn ' + (b.watched ? 'is-on' : '') + '" id="qs-watch-btn">' + watchSvg(b.watched) + (b.watched ? 'Watching' : 'Watch') + '</button></div>'
+      + '<div class="qs-amount-row"><div class="qs-amount-block"><div class="qs-amount-label">Total amount</div><div class="qs-amount">' + fmtMoneyFull(b.value) + '</div></div></div>'
       + docsSection
       + '<div class="qs-section"><div class="qs-section-title">Details</div><div class="qs-fields">'
       + '<div class="qs-field"><span class="qs-field-label">Status</span><span class="qs-field-val">' + statusPill(b.status) + '</span></div>'
       + '<div class="qs-field"><span class="qs-field-label">Designated User</span><span class="qs-field-val">' + esc(b.user) + '</span></div>'
       + '<div class="qs-field"><span class="qs-field-label">Channel</span><span class="qs-field-val">' + esc(b.channel) + '</span></div>'
       + '<div class="qs-field"><span class="qs-field-label">Type of Bid</span><span class="qs-field-val">' + esc(b.bidType) + '</span></div>'
+      + '<div class="qs-field"><span class="qs-field-label">Created</span><span class="qs-field-val">' + esc(b.created) + '</span></div>'
       + '</div></div></div>'
       + '<div class="qs-foot">'
       + '<div class="qs-confirm" id="qs-confirm" hidden><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Comment posted</div>'
@@ -301,7 +299,6 @@
 
     $('#qs-scrim').hidden = false;
     $('#qs-close').addEventListener('click', closeModal);
-    $('#qs-watch-btn').addEventListener('click', function () { toggleWatch(b.id); });
 
     var ta = $('#comment_rfq'), send = $('#qs-send');
     ta.addEventListener('input', function () { send.disabled = !ta.value.trim(); });

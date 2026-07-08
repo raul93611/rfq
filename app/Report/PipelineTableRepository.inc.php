@@ -34,9 +34,9 @@ class PipelineTableRepository {
     $total = (int)self::scalar($conexion, $countSql, $params);
 
     $offset = $page * self::PAGE_SIZE;
-    $rowsSql = "SELECT id, email_code, canal, type_of_bid, name, file_document, designated_username, value, bucket, watched
+    $rowsSql = "SELECT id, email_code, canal, type_of_bid, name, file_document, designated_username, value, bucket, watched, created_at
       FROM (
-        SELECT rfq.id, rfq.email_code, rfq.canal, rfq.type_of_bid, rfq.name, rfq.file_document,
+        SELECT rfq.id, rfq.email_code, rfq.canal, rfq.type_of_bid, rfq.name, rfq.file_document, rfq.created_at,
                u.nombre_usuario AS designated_username,
                " . PipelineMetricsRepository::VALUE_EXPR . " AS value,
                " . PipelineMetricsRepository::STATUS_CASE . " AS bucket,
@@ -73,6 +73,7 @@ class PipelineTableRepository {
         'value'       => (float)$r['value'],
         'docs'        => $docs,
         'watched'     => (int)$r['watched'] === 1,
+        'created'     => !empty($r['created_at']) ? date('m/d/Y', strtotime($r['created_at'])) : '—',
       ];
     }, $rows);
 
