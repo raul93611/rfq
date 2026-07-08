@@ -3472,6 +3472,8 @@ a.qs-title-link:hover .qs-title-num { text-decoration: underline; }
 .qs-doc:hover { border-color: #cce8f5; background: var(--sky-50); }
 .qs-doc-ico { width: 30px; height: 30px; border-radius: 7px; flex-shrink: 0; display: grid; place-items: center; color: var(--dc); background: color-mix(in srgb, var(--dc) 12%, white); }
 .qs-doc-name { flex: 1; min-width: 0; font-size: 13px; font-weight: 500; color: var(--ink-900); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.qs-doc-dl { color: var(--ink-300); flex-shrink: 0; display: grid; place-items: center; transition: color .12s; }
+.qs-doc:hover .qs-doc-dl { color: var(--sky-600); }
 .qs-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; }
 .qs-field { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
 .qs-field-label { font-size: 11px; color: var(--ink-400); font-weight: 600; }

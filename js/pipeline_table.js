@@ -265,14 +265,6 @@
     var b = st.rows.filter(function (r) { return r.id === id; })[0];
     if (!b) return;
     st.openId = id;
-    var docs = (b.docs || []).map(function (d) {
-      return '<a class="qs-doc" href="' + CFG.editBase + b.id + '" title="Open quote to view documents">'
-        + '<span class="qs-doc-ico" style="--dc:' + docColor(d) + '"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>'
-        + '<span class="qs-doc-name">' + esc(d) + '</span></a>';
-    }).join('');
-    var docsSection = docs
-      ? '<div class="qs-section"><div class="qs-section-title">Attached documents <span class="qs-count">' + b.docs.length + '</span></div><div class="qs-docs">' + docs + '</div></div>'
-      : '';
 
     $('#qs-modal').innerHTML =
       '<div class="qs-head"><div class="qs-head-main">'
@@ -285,7 +277,7 @@
       + '<button class="qs-close" id="qs-close" aria-label="Close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>'
       + '<div class="qs-body">'
       + '<div class="qs-amount-row"><div class="qs-amount-block"><div class="qs-amount-label">Total amount</div><div class="qs-amount">' + fmtMoneyFull(b.value) + '</div></div></div>'
-      + docsSection
+      + '<div id="qs-docs-host"></div>'
       + '<div class="qs-section"><div class="qs-section-title">Details</div><div class="qs-fields">'
       + '<div class="qs-field"><span class="qs-field-label">Status</span><span class="qs-field-val">' + statusPill(b.status) + '</span></div>'
       + '<div class="qs-field"><span class="qs-field-label">Designated User</span><span class="qs-field-val">' + esc(b.user) + '</span></div>'
@@ -302,6 +294,7 @@
 
     $('#qs-scrim').hidden = false;
     $('#qs-close').addEventListener('click', closeModal);
+    loadModalDocs(b.id);
 
     var ta = $('#comment_rfq'), send = $('#qs-send');
     ta.addEventListener('input', function () { send.disabled = !ta.value.trim(); });
@@ -317,6 +310,33 @@
   }
 
   function closeModal() { $('#qs-scrim').hidden = true; $('#qs-modal').innerHTML = ''; st.openId = null; }
+
+  // Real attached documents = the files on disk under documentos/<id>/ (same source as the
+  // quote page), fetched on open. Each row is a download link. NOT rfq.file_document (that's
+  // a checklist field, not the uploaded files).
+  function loadModalDocs(id) {
+    var host = document.getElementById('qs-docs-host');
+    if (!host) return;
+    fetch(CFG.filesUrl + id, { credentials: 'same-origin' })
+      .then(function (r) { return r.json(); })
+      .then(function (res) {
+        if (st.openId !== id) return; // modal changed/closed while loading
+        var files = (res && res.files) || [];
+        files.sort(function (a, b) { return a.toLowerCase().localeCompare(b.toLowerCase()); });
+        if (files.length === 0) { host.innerHTML = ''; return; }
+        host.className = 'qs-section';
+        host.innerHTML = '<div class="qs-section-title">Attached documents <span class="qs-count">' + files.length + '</span></div>'
+          + '<div class="qs-docs">' + files.map(function (f) {
+              var url = CFG.docsBase + id + '/' + encodeURIComponent(f);
+              return '<a class="qs-doc" href="' + url + '" download title="Download ' + esc(f) + '">'
+                + '<span class="qs-doc-ico" style="--dc:' + docColor(f) + '"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>'
+                + '<span class="qs-doc-name">' + esc(f) + '</span>'
+                + '<span class="qs-doc-dl"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>'
+                + '</a>';
+            }).join('') + '</div>';
+      })
+      .catch(function () { if (st.openId === id) host.innerHTML = ''; });
+  }
 
   function postComment(id, ta, send) {
     var text = ta.value.trim();
