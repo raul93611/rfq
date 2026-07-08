@@ -175,9 +175,6 @@ switch ($partes_ruta[1] ?? null) {
       case 'pipeline_table':
         $ruta_elegida = 'scripts/quote/pipeline_table.php';
         break;
-      case 'quote_summary':
-        $ruta_elegida = 'scripts/quote/quote_summary.php';
-        break;
       case 'watch_quote':
         $ruta_elegida = 'scripts/quote/watch_quote.php';
         break;

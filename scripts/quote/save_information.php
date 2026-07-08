@@ -115,6 +115,21 @@ if (isset($_POST['save_information'])) {
       $_POST['id_rfq']
     );
 
+    // Notify watchers of tracked-field edits (Type of Bid / Designated User / Comments —
+    // the status-encoding field). A reassignment also auto-subscribes the new designated user.
+    $actor_id = $_SESSION['user']->obtener_id();
+    $watch_changes = [];
+    if (($_POST['type_of_bid'] ?? '') !== ($_POST['type_of_bid_original'] ?? '')) $watch_changes[] = 'Type of Bid';
+    if (($_POST['usuario_designado'] ?? '') !== ($_POST['designated_user_original'] ?? '')) $watch_changes[] = 'Designated User';
+    if (($_POST['comments'] ?? '') !== ($_POST['comments_original'] ?? '')) $watch_changes[] = 'Comments';
+    if (!empty($watch_changes)) {
+      if (in_array('Designated User', $watch_changes, true)) {
+        WatcherNotificationService::autoSubscribeDesignated($conexion, $_POST['id_rfq'], $usuario_designado);
+      }
+      $watch_msg = 'Quote #' . (int)$_POST['id_rfq'] . ' updated: ' . implode(', ', $watch_changes);
+      WatcherNotificationService::notify($conexion, $_POST['id_rfq'], $actor_id, $watch_msg);
+    }
+
     // Close database connection
     Conexion::cerrar_conexion();
 

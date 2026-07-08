@@ -3,6 +3,17 @@ if (!ControlSesion::sesion_iniciada()) {
   Redireccion::redirigir1(SERVIDOR);
 }
 $pm_current_year = (int)date('Y');
+
+// Table-view filter dropdowns. Status vocabulary mirrors PipelineMetricsRepository::STATUSES
+// so the table filter always agrees with the charts.
+Conexion::abrir_conexion();
+$pm_conn      = Conexion::obtener_conexion();
+$pm_users     = RepositorioUsuario::getAllActiveUsers($pm_conn);
+usort($pm_users, fn($a, $b) => strcasecmp($a['nombre_usuario'], $b['nombre_usuario']));
+$pm_bid_types = TypeOfBidRepository::get_all($pm_conn);
+$pm_channels  = PipelineTableRepository::getDistinctChannels($pm_conn);
+Conexion::cerrar_conexion();
+$pm_statuses  = PipelineMetricsRepository::STATUSES;
 ?>
 <div class="content-wrapper">
   <section class="content" style="padding-top:18px;padding-bottom:30px;">
@@ -15,6 +26,10 @@ $pm_current_year = (int)date('Y');
           <div class="pm-sub" id="pm-subtitle">Reports · loading…</div>
         </div>
         <div class="pm-head-actions">
+          <div class="pm-seg pm-seg-sm" id="pm-view" role="group" aria-label="Charts or table">
+            <button class="pm-seg-btn is-active" data-view="charts" type="button">Charts</button>
+            <button class="pm-seg-btn" data-view="table" type="button">Table</button>
+          </div>
           <button class="pm-btn" id="pm-export-all" type="button">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Export report
@@ -54,6 +69,7 @@ $pm_current_year = (int)date('Y');
             <button class="pm-seg-btn is-active" data-mode="year" type="button">Year</button>
             <button class="pm-seg-btn" data-mode="quarter" type="button">Quarter</button>
             <button class="pm-seg-btn" data-mode="month" type="button">Month</button>
+            <button class="pm-seg-btn pm-mode-custom" data-mode="custom" type="button" style="display:none;">Custom range</button>
           </div>
 
           <div class="pm-period-divider"></div>
@@ -86,9 +102,15 @@ $pm_current_year = (int)date('Y');
               <?php endforeach; ?>
             </select>
           </div>
+
+          <div class="pm-daterange" id="pm-daterange" style="display:none;">
+            <input type="date" class="pm-date" id="pm-date-from" aria-label="From date">
+            <span class="pm-date-sep">to</span>
+            <input type="date" class="pm-date" id="pm-date-to" aria-label="To date">
+          </div>
         </div>
 
-        <div class="pm-periodbar-right">
+        <div class="pm-periodbar-right" id="pm-periodbar-right">
           <span class="pm-mode-label">Show</span>
           <div class="pm-seg pm-seg-sm" id="pm-show" role="group" aria-label="Count or percent">
             <button class="pm-seg-btn is-active" data-show="count" type="button">Count</button>
@@ -97,6 +119,8 @@ $pm_current_year = (int)date('Y');
         </div>
       </div>
 
+      <!-- charts view (chart grid + foot) -->
+      <div id="pm-charts-body">
       <!-- chart grid -->
       <div class="pm-grid">
         <?php
@@ -137,8 +161,98 @@ $pm_current_year = (int)date('Y');
       <div class="pm-foot">
         <span class="pm-foot-hint">Click any chart segment to see the underlying quotes.</span>
       </div>
+      </div><!-- /#pm-charts-body -->
+
+      <!-- table view (hidden until the Table toggle is selected) -->
+      <div id="pm-table-view" hidden>
+        <div class="pt-filters">
+          <div class="pt-filters-grid">
+            <div class="pt-field">
+              <span class="pt-field-label">Quote ID</span>
+              <input class="pt-input" id="pt-f-quoteId" placeholder="e.g. 121438">
+            </div>
+            <div class="pt-field">
+              <span class="pt-field-label">Channel</span>
+              <div class="pt-select-wrap">
+                <select class="pt-input pt-select" id="pt-f-channel">
+                  <option value="">Any channel</option>
+                  <?php foreach ($pm_channels as $ch): ?>
+                    <option value="<?= htmlspecialchars($ch['value']); ?>"><?= htmlspecialchars($ch['label']); ?></option>
+                  <?php endforeach; ?>
+                </select>
+              </div>
+            </div>
+            <div class="pt-field">
+              <span class="pt-field-label">Email Code</span>
+              <input class="pt-input" id="pt-f-emailCode" placeholder="e.g. EM-4471">
+            </div>
+            <div class="pt-field" id="pt-status-field">
+              <span class="pt-field-label">Status</span>
+              <div class="pt-ms-wrap" id="pt-status-ms"><!-- multi-select injected by JS --></div>
+            </div>
+            <div class="pt-field">
+              <span class="pt-field-label">Type of Bid</span>
+              <div class="pt-select-wrap">
+                <select class="pt-input pt-select" id="pt-f-bidType">
+                  <option value="">Any type</option>
+                  <?php foreach ($pm_bid_types as $tb): ?>
+                    <option value="<?= htmlspecialchars($tb->get_type_of_bid()); ?>"><?= htmlspecialchars($tb->get_type_of_bid()); ?></option>
+                  <?php endforeach; ?>
+                </select>
+              </div>
+            </div>
+            <div class="pt-field">
+              <span class="pt-field-label">Designated User</span>
+              <div class="pt-select-wrap">
+                <select class="pt-input pt-select" id="pt-f-user">
+                  <option value="">Any user</option>
+                  <?php foreach ($pm_users as $u): ?>
+                    <option value="<?= (int)$u['id']; ?>"><?= htmlspecialchars($u['nombre_usuario']); ?></option>
+                  <?php endforeach; ?>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="pt-filters-foot">
+            <span class="pt-filters-count" id="pt-filters-count">No filters applied</span>
+            <button type="button" class="pt-clear-btn" id="pt-clear" disabled>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              Clear filters
+            </button>
+          </div>
+        </div>
+
+        <div class="pt-card">
+          <div class="pt-card-head">
+            <div class="pt-card-title">Quotes</div>
+            <div class="pt-card-sub" id="pt-card-sub">Loading…</div>
+          </div>
+          <div class="pt-table-wrap">
+            <table class="pt-table">
+              <colgroup>
+                <col class="pt-col-id"><col class="pt-col-channel"><col class="pt-col-email">
+                <col class="pt-col-status"><col class="pt-col-type"><col class="pt-col-user"><col class="pt-col-watch">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>Quote ID</th><th>Channel</th><th>Email Code</th><th>Status</th>
+                  <th>Type of Bid</th><th>Designated User</th>
+                  <th class="pt-th-watch" title="Watch"><span class="pt-th-watch-glyph">★</span></th>
+                </tr>
+              </thead>
+              <tbody id="pt-tbody"></tbody>
+            </table>
+          </div>
+          <div id="pt-pager"></div>
+        </div>
+      </div>
     </div>
   </section>
+</div>
+
+<!-- Quote Summary modal (opens on Quote ID click) -->
+<div class="qs-scrim" id="qs-scrim" hidden>
+  <div class="qs-modal" id="qs-modal" role="dialog" aria-modal="true" aria-labelledby="qs-title"></div>
 </div>
 
 <!-- drill-down drawer (fixed to viewport) -->
@@ -165,11 +279,17 @@ $pm_current_year = (int)date('Y');
     dataUrl: '<?= PIPELINE_METRICS_DATA; ?>',
     drillUrl: '<?= PIPELINE_METRICS_DRILLDOWN; ?>',
     exportUrl: '<?= PIPELINE_METRICS_EXPORT; ?>',
+    tableUrl: '<?= PIPELINE_TABLE; ?>',
+    watchUrl: '<?= WATCH_QUOTE; ?>',
+    commentUrl: '<?= GUARDAR_COMMENT; ?>',
+    editBase: '<?= EDITAR_COTIZACION; ?>/',
     year: <?= $pm_current_year; ?>,
     month: <?= (int)date('n'); ?>,
     minYear: 2015,
     maxYear: <?= $pm_current_year + 1; ?>
   };
+  window.PM_STATUSES = <?= json_encode($pm_statuses); ?>;
 </script>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.49.1/dist/apexcharts.min.js"></script>
 <script src="<?= asset_url('js/pipeline_metrics.js'); ?>"></script>
+<script src="<?= asset_url('js/pipeline_table.js'); ?>"></script>
