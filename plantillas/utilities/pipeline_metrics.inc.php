@@ -235,7 +235,7 @@ $pm_statuses  = PipelineMetricsRepository::STATUSES;
               </colgroup>
               <thead>
                 <tr>
-                  <th>Quote ID</th><th>Created</th><th>Channel</th><th>Email Code</th><th>Status</th>
+                  <th>Quote ID</th><th>Created</th><th>Channel</th><th>Code</th><th>Status</th>
                   <th>Type of Bid</th><th>Designated User</th>
                 </tr>
               </thead>

@@ -277,7 +277,10 @@
     $('#qs-modal').innerHTML =
       '<div class="qs-head"><div class="qs-head-main">'
       + '<div class="qs-eyebrow"><span class="qs-code">' + esc(b.code) + '</span><span class="qs-eyebrow-sep">·</span>Quote #' + esc(b.id) + '</div>'
-      + '<a class="qs-title qs-title-link" id="qs-title" href="' + CFG.editBase + b.id + '" title="Open quote #' + esc(b.id) + '">' + esc(b.id) + '</a>'
+      + '<a class="qs-title qs-title-link" id="qs-title" href="' + CFG.editBase + b.id + '" target="_blank" rel="noopener noreferrer" title="Open quote #' + esc(b.id) + ' in a new tab">'
+      + '<span class="qs-title-num">' + esc(b.id) + '</span>'
+      + '<svg class="qs-title-ext" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>'
+      + '</a>'
       + '<div class="qs-desc">' + esc(b.name) + '</div></div>'
       + '<button class="qs-close" id="qs-close" aria-label="Close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>'
       + '<div class="qs-body">'
