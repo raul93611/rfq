@@ -8,7 +8,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 |---|---|---|
 | Quote Inline Editing (modals for item/provider/subitem CRUD) | built | — |
 | SharePoint Sheet Sync (portal → E-LOGIC BID PIPELINE xlsx via Graph API) | built | — |
-| Comment Mentions & Notifications (@mention users in comments, in-app bell + email via per-user MS OAuth) | built | — |
+| Comment Mentions & Notifications (@mention users in comments, in-app bell + email via the shared notification mailbox) | built | — |
 | Bid Requirement Fields (Site Visit, Q&A Deadline, Resumes on quotes + sheet sync) | built | — |
 | Bid Pipeline Sync Controls (`sync_to_sheet` flag, bid-type smart default, human-owned sheet columns, master-linked quotes keep syncing) | built | — |
 | Bid Pipeline Metrics Dashboard (interactive ApexCharts report reproducing the SharePoint METRICS 2026 tab from app data) | built | — |
@@ -17,6 +17,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | Write-Once Sheet Sync (app creates a sheet row if missing but never overwrites/deletes an existing one — sync becomes create-or-link) | built | — |
 | Advanced Quote Search (Advanced toggle + filter panel on Search Quotes, Status pill column) | built | — |
 | Commercial Moving bid type + 50/50 payment term (new bid type; "50% Upfront / 50% on Completion" term, split shown on quote + PDF, no calc change) | built | — |
+| Pipeline Table View + Quote Watchers (Charts/Table toggle on the metrics page; per-quote watch subscriptions with in-app + email notifications) | built | — |
+| Shared Notification Mailbox (one admin-connected MS mailbox sends all notification emails; retires per-user MS connect) | built | — |
 
 ## Environment
 
@@ -38,7 +40,7 @@ composer install
 
 **Generate users:** Visit `/genera_usuario` route.
 
-**Tests:** PHP integration tests in `tests/php/` (`docker exec lamp-php83 php /var/www/html/rfq/tests/php/<file>`), Node unit tests in `tests/js/` (`node --test`), Playwright E2E in `tests/specs/` (`cd tests && PW_CHANNEL=chrome npx playwright test`). No lint commands.
+**Tests:** PHP integration tests in `tests/php/` (`docker exec lamp-php84 php /var/www/html/rfq/tests/php/<file>`), Node unit tests in `tests/js/` (`node --test`), Playwright E2E in `tests/specs/` (`cd tests && PW_CHANNEL=chrome npx playwright test`). No lint commands.
 
 ## Architecture
 
@@ -144,7 +146,7 @@ All three domains write to their own audit table but are surfaced through a sing
 - `plantillas/utilities/navbar.inc.php` — bell icon + SSE-driven dropdown
 - `plantillas/utilities/barra_lateral.inc.php` — My Account sidebar link
 - `plantillas/utilities/documento_cierre.inc.php` — includes `mentions.js` + sets `NOTIFICATIONS_USERS_FOR_MENTION_URL`
-- `scripts/utilities/guardar_comment.php` — parses @mentions, inserts notifications, sends delegated MS email
+- `scripts/utilities/guardar_comment.php` — parses @mentions, inserts notifications, emails via the Shared Notification Mailbox (`NotificationEmail::send`)
 - `app/Comment/RepositorioComment.inc.php` — `render_comment_text()` renders @mention chips
 - `app/User/RepositorioUsuario.inc.php` — MS token methods + `getAllActiveUsers()` + `getByUsername()`
 - `app/Bootstrap/routes.inc.php` — new route constants
@@ -184,7 +186,7 @@ Interactive ApexCharts report at `perfil/reports/pipeline_metrics` (sidebar entr
 
 **Surfacing the new statuses:** the quote-page status pill (`status_title.inc.php`) shows Sources Sought / No Award - Pricing / No Award - Technical; two listing pages mirror the cancelled/not-submitted pattern — **Sources Sought** (`quote/sources_sought`, `status=1 AND sources_sought=1`) and **No Award** (`quote/no_award`, the two No-Award comments, with a Reason column). Repo list/count uses shared private helpers `getQuotesByCondition` / `countQuotesByCondition`; DataTable inits in `js/main.js`; sidebar links in `sales_sidebar.inc.php`.
 
-**Tests:** `tests/php/pipeline_metrics_test.php` (47 assertions, `docker exec lamp-php83 php …`, transaction-isolated); `tests/specs/09-pipeline-metrics.spec.js` (Playwright E2E).
+**Tests:** `tests/php/pipeline_metrics_test.php` (47 assertions, `docker exec lamp-php84 php …`, transaction-isolated); `tests/specs/09-pipeline-metrics.spec.js` (Playwright E2E).
 
 ### Charts Tab — Annual Awards (3-year)
 
@@ -208,3 +210,21 @@ New bid type "Commercial Moving" (`sql/commercial_moving_payment_term_migration.
 - **Controls:** items + services payment-term **radios → 3-option `<select class="js-payment-terms">`** (`RepositorioItem`/`ServiceRepository`; re-quote `ReQuoteItemRepository`/`ReQuoteServiceRepository`). Quote-wide **all-or-nothing** mirroring in `js/quote.js` + `js/reQuote.js`: 50/50 on either sets both; leaving it resets the other to Net 30; Net 30 / Net 30/CC stay independent.
 - **Split display:** `js/payment_split.js` (`split5050` + `PAYMENT_TERM_SPLIT`, Node-requireable + `window`; loaded before quote/reQuote.js; odd cents → upfront). App: bottom bar `#payment_split_totals` shown only when split (`renderPaymentSplit`). PDF: `proposal.inc.php` adds two rows under TOTAL + completion note via `ProposalRepository::is_split_term`/`split_5050`. Re-quote PDF (internal cost sheet) + `proposal_room.inc.php` intentionally get no split block.
 - **Tests:** `tests/js/payment_split.test.js`; `tests/php/commercial_moving_test.php` (self-cleaning).
+
+### Shared Notification Mailbox
+
+One admin-connected Microsoft mailbox sends **all** system notification emails (@mention comments + quote-watcher alerts), replacing the per-user delegated connection whose emails silently failed when the actor never connected. Run `sql/shared_notification_mailbox_migration.sql` (single-row `notification_mailbox` table, id=1).
+
+- `NotificationMailboxRepository` (`Setting` domain): `get`/`save`/`clear`/`getAccessToken` (refresh-on-expiry, persists rotated tokens, silent-null on failure). `NotificationEmail::send($conexion,$to,$msg,$url,$comment='')` (`Utilities`) centralizes the Graph `/me/sendMail` + the branded HTML template — used by `guardar_comment.php` and `WatcherNotificationService`.
+- **OAuth reuse:** admin clicks Connect (`scripts/admin/mailbox_connect.php`, admin-gated) → sets `$_SESSION['ms_oauth_target']='mailbox'` → the **existing** `microsoft_callback.php` branches on that flag to store in `notification_mailbox` instead of the user row. No new Azure app / redirect URI. Personal `ms_*` columns on `usuarios` are left in place but unused.
+- **UI:** admin-only `perfil/admin/settings` (`plantillas/admin/admin_settings.inc.php`, reuses the `ac-*` My Account card CSS + `admin_sidebar.inc.php`). Per-user "Connect Microsoft" card removed from My Account. Not connected → email leg is a safe no-op, in-app notifications unaffected.
+- **Tests:** `tests/php/shared_mailbox_test.php` (transaction-isolated).
+
+### Pipeline Table View + Quote Watchers
+
+A `Charts | Table` toggle on `perfil/reports/pipeline_metrics` swaps the chart grid for a dense, filterable, server-paginated (25/row) quote table over the same `created_at` cohort. Run `sql/quote_watchers_migration.sql` (`quote_watchers`, unique on `id_rfq,id_user`).
+
+- **Repo:** `PipelineTableRepository` (`Report` domain) reuses `PipelineMetricsRepository::{STATUS_CASE,STATUSES,SERVICES_JOIN,VALUE_EXPR}`; adds a **custom date range** mode + filters (Quote ID/Channel/Email Code/Status multi-select/Type of Bid/Designated User) and a per-user `watched` flag. Endpoints `quote/pipeline_table` (rows+total; each row carries name/value/docs so the modal opens without a second fetch) and `quote/watch_quote` (toggle). No `sheet_row` / audit involvement — report-only.
+- **Watchers:** `QuoteWatcherRepository` (watch/unwatch/isWatching/getWatcherIds) + `WatcherNotificationService` (`Quote` domain). Designated user auto-subscribed on **create** (`validacion_registro_cotizacion.inc.php`) and **reassignment** (`save_information.php`). `notify()` fans one in-app notification per watcher (never the actor) + a shared-mailbox email, respecting per-user prefs. Triggers: **status changes** (each branch of `guardar_editar_cotizacion.php`) + Type of Bid / Designated User / Comments edits (`save_information.php`). **No audit trail** for watch/unwatch.
+- **Frontend:** view toggle + custom range live in `js/pipeline_metrics.js` (owns period/charts, calls `window.PipelineTable`); the table controller, filters, pager, watch toggles and the **Quote Summary modal** (`qs-*`) are in `js/pipeline_table.js`. Modal quick-comment reuses `#comment_rfq` + `mentions.js` and POSTs to the existing `guardar_comment` endpoint (no bespoke comment logic). `pt-*`/`qs-*` CSS at the end of `estilos.css` — the design's bare tokens (`--ink-*` etc.) are supplied in a block scoped to `#pm-table-view, .qs-scrim` (the page itself uses `--pm-*`).
+- **Tests:** `tests/php/quote_watchers_test.php` (transaction-isolated, rows in year 2099).
