@@ -486,9 +486,6 @@
     if (dt) dt.addEventListener('change', function () { changePeriod(Object.assign({}, state.period, { mode: 'custom', to: this.value })); });
   }
 
-  // expose the live period so the table controller can read it on activate
-  window.PM_getPeriod = function () { return state.period; };
-
   document.addEventListener('DOMContentLoaded', function () {
     if (!$('#pm-dashboard')) return;
     wire();
