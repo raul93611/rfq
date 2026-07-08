@@ -61,6 +61,31 @@ do {
 
   $expiry = time() + (int)($data['expires_in'] ?? 3600);
 
+  // Shared Notification Mailbox flow: the admin connect button sets this target so the
+  // tokens land in the single dedicated notification_mailbox record rather than the
+  // acting user's row. Reuses the exact same OAuth app / redirect URI as before.
+  $target = $_SESSION['ms_oauth_target'] ?? 'personal';
+  unset($_SESSION['ms_oauth_target']);
+
+  if ($target === 'mailbox') {
+    if (!$_SESSION['user']->is_admin()) {
+      $error = 'Only administrators can connect the notification mailbox.';
+      break;
+    }
+    Conexion::abrir_conexion();
+    $conexion = Conexion::obtener_conexion();
+    NotificationMailboxRepository::save(
+      $conexion,
+      $data['access_token'],
+      $data['refresh_token'] ?? '',
+      $expiry,
+      $ms_email,
+      $_SESSION['user']->obtener_id()
+    );
+    Conexion::cerrar_conexion();
+    break;
+  }
+
   Conexion::abrir_conexion();
   $conexion = Conexion::obtener_conexion();
   RepositorioUsuario::save_ms_tokens(

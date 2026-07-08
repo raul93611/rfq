@@ -101,6 +101,12 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
     // Kept as a no-op so the status-transition branches below don't need to change.
     $updateSheetStatus = function($id, $sheetRow, $newStatus) { /* STATUS is human-owned */ };
 
+    // Notify quote watchers of a lifecycle status change (in-app + shared-mailbox email).
+    $watch_actor_id = $_SESSION['user']->obtener_id();
+    $notifyWatchers = function($conexion, $id, $label) use ($watch_actor_id) {
+      WatcherNotificationService::notify($conexion, $id, $watch_actor_id, 'Quote #' . (int)$id . ' status changed to ' . $label);
+    };
+
     if ($cotizacion_recuperada->obtener_canal() == 'Chemonics' && $award === 'si') {
       Conexion::abrir_conexion();
       $conexion = Conexion::obtener_conexion();
@@ -108,6 +114,7 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
       RepositorioRfq::check_completed($conexion, $id_rfq);
       RepositorioRfq::actualizar_fecha_y_submitted($conexion, $id_rfq);
       RepositorioRfq::actualizar_fecha_y_award($conexion, $id_rfq);
+      $notifyWatchers($conexion, $id_rfq, 'Awarded');
 
       Conexion::cerrar_conexion();
       $updateSheetStatus($id_rfq, $cotizacion_recuperada->getSheetRow(), 'AWARD');
@@ -119,6 +126,7 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
 
         RepositorioRfq::check_completed($conexion, $id_rfq);
         AuditTrailRepository::quote_status_audit_trail($conexion, 'Completed', $id_rfq);
+        $notifyWatchers($conexion, $id_rfq, 'Completed');
 
         Conexion::cerrar_conexion();
         $updateSheetStatus($id_rfq, $cotizacion_recuperada->getSheetRow(), 'BID');
@@ -130,6 +138,7 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
         AuditTrailRepository::quote_status_audit_trail($conexion, 'Submitted', $id_rfq);
         RepositorioRfq::actualizar_fecha_y_submitted($conexion, $id_rfq);
         RepositorioRfq::set_sources_sought($conexion, $sources_sought, $id_rfq);
+        $notifyWatchers($conexion, $id_rfq, 'Submitted');
 
         Conexion::cerrar_conexion();
         $updateSheetStatus($id_rfq, $cotizacion_recuperada->getSheetRow(), 'SUBMITTED');
@@ -142,6 +151,7 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
         $usuario = RepositorioUsuario::obtener_usuario_por_id($conexion, $cotizacion_recuperada->obtener_usuario_designado());
         TeamsIntegration::notifyQuoteAward($cotizacion_recuperada->obtener_id(), $usuario, $cotizacion_recuperada->obtener_quote_total_price());
         AuditTrailRepository::quote_status_audit_trail($conexion, 'Awarded', $id_rfq);
+        $notifyWatchers($conexion, $id_rfq, 'Awarded');
 
         Conexion::cerrar_conexion();
         $updateSheetStatus($id_rfq, $cotizacion_recuperada->getSheetRow(), 'AWARD');
@@ -155,6 +165,7 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
         $fulfillment_users = RepositorioUsuario::get_fulfillment_users($conexion);
         TeamsIntegration::notifyQuoteFulfillment($id_rfq, $type_of_contract, $cotizacion_recuperada->obtener_quote_total_price(), $fulfillment_users);
         AuditTrailRepository::quote_status_audit_trail($conexion, 'Fulfillment', $id_rfq);
+        $notifyWatchers($conexion, $id_rfq, 'Fulfillment');
 
         Conexion::cerrar_conexion();
         $updateSheetStatus($id_rfq, $cotizacion_recuperada->getSheetRow(), 'AWARD');
@@ -168,6 +179,7 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
         $accounting_users = RepositorioUsuario::get_accounting_users($conexion);
         Email::send_email_invoice_quote($accounting_users, $cotizacion_recuperada);
         AuditTrailRepository::quote_status_audit_trail($conexion, 'Invoice', $id_rfq);
+        $notifyWatchers($conexion, $id_rfq, 'Invoice');
 
         Conexion::cerrar_conexion();
         $updateSheetStatus($id_rfq, $cotizacion_recuperada->getSheetRow(), 'AWARD');
@@ -178,6 +190,7 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
 
         RepositorioRfq::check_submitted_invoice_and_date($conexion, $id_rfq);
         AuditTrailRepository::quote_status_audit_trail($conexion, 'Submitted Invoice', $id_rfq);
+        $notifyWatchers($conexion, $id_rfq, 'Submitted Invoice');
 
         Conexion::cerrar_conexion();
         $updateSheetStatus($id_rfq, $cotizacion_recuperada->getSheetRow(), 'AWARD');

@@ -216,6 +216,8 @@ define('PIPELINE_METRICS', REPORTS . 'pipeline_metrics');
 define('PIPELINE_METRICS_DATA', QUOTE_SC . 'pipeline_metrics');
 define('PIPELINE_METRICS_DRILLDOWN', QUOTE_SC . 'pipeline_metrics_drilldown');
 define('PIPELINE_METRICS_EXPORT', QUOTE_SC . 'pipeline_metrics_export');
+define('PIPELINE_TABLE', QUOTE_SC . 'pipeline_table');
+define('WATCH_QUOTE', QUOTE_SC . 'watch_quote');
 /********************************OTHER VIEWS*****************************************/
 define('CHARTS', PERFIL . 'charts');
 define('SEARCH_QUOTES', PERFIL . 'search_quotes');
@@ -236,6 +238,10 @@ define('MS_DISCONNECT', SERVIDOR . 'user/microsoft/disconnect');
 define('ACCOUNT_UPDATE_PROFILE', SERVIDOR . 'user/account/update_profile');
 define('ACCOUNT_UPDATE_PASSWORD', SERVIDOR . 'user/account/update_password');
 define('ACCOUNT_UPDATE_NOTIFICATIONS', SERVIDOR . 'user/account/update_notifications');
+/********************************ADMIN SETTINGS ROUTES*******************************/
+define('ADMIN_SETTINGS', PERFIL . 'admin/settings');
+define('MAILBOX_CONNECT', SERVIDOR . 'admin/mailbox/connect');
+define('MAILBOX_DISCONNECT', SERVIDOR . 'admin/mailbox/disconnect');
 /******************************************************************************/
 define('EMPLOYEE_DOCS', SERVIDOR . 'employee_docs/');
 define('DOCS', SERVIDOR . 'documentos/');

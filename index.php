@@ -8,17 +8,18 @@ spl_autoload_register(function ($class) {
     'Bootstrap' => ['Conexion', 'ControlSesion', 'Redireccion'],
     'User' => ['RepositorioUsuario', 'Usuario', 'ValidadorUsuario', 'ValidadorLogin', 'ValidadorRegistro'],
     'Cuestionario' => ['Cuestionario', 'RepositorioCuestionario'],
-    'Quote' => ['Rfq', 'RepositorioRfq', 'ValidadorCotizacion', 'ValidadorCotizacionRegistro', 'Item', 'RepositorioItem', 'Provider', 'RepositorioProvider', 'Subitem', 'RepositorioSubitem', 'ProviderSubitem', 'RepositorioProviderSubitem', 'AuditTrail', 'AuditTrailRepository', 'SheetSyncService', 'SheetSyncRepository', 'NotificationRepository'],
+    'Quote' => ['Rfq', 'RepositorioRfq', 'ValidadorCotizacion', 'ValidadorCotizacionRegistro', 'Item', 'RepositorioItem', 'Provider', 'RepositorioProvider', 'Subitem', 'RepositorioSubitem', 'ProviderSubitem', 'RepositorioProviderSubitem', 'AuditTrail', 'AuditTrailRepository', 'SheetSyncService', 'SheetSyncRepository', 'NotificationRepository', 'QuoteWatcherRepository', 'WatcherNotificationService'],
     'Comment' => ['Comment', 'RepositorioComment'],
     'ReQuote' => ['ReQuote', 'ReQuoteRepository', 'ReQuoteItem', 'ReQuoteItemRepository', 'ReQuoteProvider', 'ReQuoteProviderRepository', 'ReQuoteSubitem', 'ReQuoteSubitemRepository', 'ReQuoteSubitemProvider', 'ReQuoteSubitemProviderRepository', 'ReQuoteAuditTrail', 'ReQuoteAuditTrailRepository', 'ReQuoteService', 'ReQuoteServiceRepository'],
-    'Utilities' => ['PDFGenerator', 'ProposalRepository', 'ExcelRepository', 'Input', 'Email', 'TeamsIntegration', 'GraphApiClient'],
+    'Utilities' => ['PDFGenerator', 'ProposalRepository', 'ExcelRepository', 'Input', 'Email', 'TeamsIntegration', 'GraphApiClient', 'NotificationEmail'],
+    'Setting' => ['NotificationMailboxRepository'],
     'TypeOfBid' => ['TypeOfBid', 'TypeOfBidRepository'],
     'Service' => ['Service', 'ServiceRepository'],
     'Tracking' => ['Tracking', 'TrackingRepository', 'TrackingSubitem', 'TrackingSubitemRepository'],
     'Fulfillment' => ['FulfillmentRepository', 'FulfillmentItem', 'FulfillmentItemRepository', 'FulfillmentSubitem', 'FulfillmentSubitemRepository', 'FulfillmentService', 'FulfillmentServiceRepository', 'FulfillmentAuditTrailRepository'],
     'ProviderList' => ['ProviderList', 'ProviderListRepository'],
     'PaymentTerm' => ['PaymentTerm', 'PaymentTermRepository'],
-    'Report' => ['Report', 'PipelineMetricsRepository'],
+    'Report' => ['Report', 'PipelineMetricsRepository', 'PipelineTableRepository'],
     'Task' => ['Task', 'TaskRepository'],
     'TaskComment' => ['TaskComment', 'TaskCommentRepository'],
     'TypeOfContract' => ['TypeOfContract', 'TypeOfContractRepository'],
@@ -170,6 +171,12 @@ switch ($partes_ruta[1] ?? null) {
         break;
       case 'pipeline_metrics_export':
         $ruta_elegida = 'scripts/quote/pipeline_metrics_export.php';
+        break;
+      case 'pipeline_table':
+        $ruta_elegida = 'scripts/quote/pipeline_table.php';
+        break;
+      case 'watch_quote':
+        $ruta_elegida = 'scripts/quote/watch_quote.php';
         break;
       case 'ids':
         $ruta_elegida = 'scripts/quote/ids.php';
@@ -439,6 +446,24 @@ switch ($partes_ruta[1] ?? null) {
             break;
           case 'update_notifications':
             $ruta_elegida = 'scripts/user/account_update_notifications.php';
+            break;
+          default:
+            break;
+        }
+        break;
+      default:
+        break;
+    }
+    break;
+  case 'admin':
+    switch ($partes_ruta[2]) {
+      case 'mailbox':
+        switch ($partes_ruta[3]) {
+          case 'connect':
+            $ruta_elegida = 'scripts/admin/mailbox_connect.php';
+            break;
+          case 'disconnect':
+            $ruta_elegida = 'scripts/admin/mailbox_disconnect.php';
             break;
           default:
             break;
