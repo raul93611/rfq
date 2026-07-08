@@ -110,7 +110,7 @@ try {
   foreach ($all['rows'] as $r) $byId[$r['id']] = $r;
   check('qAward watched by userA', true, $byId[$qAward]['watched']);
   check('qBid not watched by userA', false, $byId[$qBid]['watched']);
-  check('row carries docs list', 2, count($byId[$qBid]['docs']));
+  check('row carries created date', true, (bool)preg_match('#^\d{2}/\d{2}/\d{4}$#', $byId[$qBid]['created']));
   check('row status label present', 'Award', $byId[$qAward]['statusLabel']);
 
   // status filter

@@ -282,6 +282,8 @@ $pm_statuses  = PipelineMetricsRepository::STATUSES;
     watchUrl: '<?= WATCH_QUOTE; ?>',
     commentUrl: '<?= GUARDAR_COMMENT; ?>',
     editBase: '<?= EDITAR_COTIZACION; ?>/',
+    filesUrl: '<?= QUOTE_SC; ?>get_quote_files/',
+    docsBase: '<?= DOCS; ?>',
     year: <?= $pm_current_year; ?>,
     month: <?= (int)date('n'); ?>,
     minYear: 2015,
