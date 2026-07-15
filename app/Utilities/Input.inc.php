@@ -1,18 +1,6 @@
 <?php
 class Input {
   public static function print_designated_user($quote) {
-    if ($quote->obtener_completado() || $quote->obtener_status()) {
-      Conexion::abrir_conexion();
-      $usuario = self::get_designated_user($quote);
-      Conexion::cerrar_conexion();
-?>
-      <div class="form-group">
-        <label for="usuario_designado">Designated user:</label>
-        <input type="text" name="usuario_designado" class="form-control form-control-sm" value="<?= $usuario; ?>" readonly>
-        <input type="hidden" name="designated_user_original" value="<?= $usuario; ?>">
-      </div>
-    <?php
-    } else {
     ?>
       <div class="form-group">
         <?php
@@ -44,7 +32,6 @@ class Input {
         ?>
       </div>
     <?php
-    }
   }
 
   public static function get_designated_user($quote) {
