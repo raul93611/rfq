@@ -246,7 +246,10 @@ class ServiceRepository {
     $payment_term = $payment_term == 'Net 30/CC' ? 1.03 : 1;
     if (isset($connection)) {
       try {
-        $sql = 'UPDATE services SET total_price = quantity * ROUND(unit_price * :payment_term, 2) WHERE id_rfq = :id_rfq';
+        // Cast the bound param to DECIMAL — as a plain placeholder MySQL evaluates the
+        // multiplication in DOUBLE, so exact .xx5 ties (e.g. 10687.50 * 1.03 = 11008.125)
+        // round down to match float representation instead of up like PHP/JS number_format.
+        $sql = 'UPDATE services SET total_price = quantity * ROUND(unit_price * CAST(:payment_term AS DECIMAL(10,4)), 2) WHERE id_rfq = :id_rfq';
         $sentence = $connection->prepare($sql);
         $sentence->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentence->bindValue(':payment_term', $payment_term, PDO::PARAM_STR);
