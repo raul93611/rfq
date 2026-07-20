@@ -22,6 +22,7 @@
   var state = {
     period: { mode: 'year', year: CFG.year, quarter: Math.floor((CFG.month - 1) / 3) + 1, month: CFG.month },
     show: 'count',
+    view: 'charts',
     data: null
   };
   var charts = {};        // key -> ApexCharts instance
@@ -396,18 +397,47 @@
     state.period = next;
     closeDrill();
     syncPeriodUI();
-    fetchMetrics();
+    if (state.view === 'table') {
+      if (window.PipelineTable) window.PipelineTable.setPeriod(state.period);
+    } else {
+      fetchMetrics();
+    }
   }
   function syncPeriodUI() {
-    var p = state.period;
+    var p = state.period, custom = p.mode === 'custom';
     $$('#pm-mode .pm-seg-btn').forEach(function (b) { b.classList.toggle('is-active', b.dataset.mode === p.mode); });
     $('#pm-year-value').textContent = p.year;
     $('#pm-year-prev').disabled = p.year <= CFG.minYear;
     $('#pm-year-next').disabled = p.year >= CFG.maxYear;
+    var stepper = $('.pm-stepper'); if (stepper) stepper.style.display = custom ? 'none' : '';
     $('#pm-quarter').style.display = p.mode === 'quarter' ? '' : 'none';
     $('#pm-month-wrap').style.display = p.mode === 'month' ? '' : 'none';
+    $('#pm-daterange').style.display = custom ? '' : 'none';
     if (p.mode === 'quarter') $$('#pm-quarter .pm-seg-btn').forEach(function (b) { b.classList.toggle('is-active', +b.dataset.quarter === p.quarter); });
     if (p.mode === 'month') $('#pm-month').value = p.month;
+    if (custom) { $('#pm-date-from').value = p.from || ''; $('#pm-date-to').value = p.to || ''; }
+  }
+
+  /* charts <-> table view toggle */
+  function applyView(view) {
+    // custom range is table-only; drop back to year when returning to charts
+    if (view === 'charts' && state.period.mode === 'custom') {
+      state.period = Object.assign({}, state.period, { mode: 'year' });
+    }
+    state.view = view;
+    var isTable = view === 'table';
+    $$('#pm-view .pm-seg-btn').forEach(function (b) { b.classList.toggle('is-active', b.dataset.view === view); });
+    $('#pm-kpis').style.display = isTable ? 'none' : '';
+    $('#pm-periodbar-right').style.display = isTable ? 'none' : '';
+    $('#pm-charts-body').hidden = isTable;
+    $('#pm-table-view').hidden = !isTable;
+    var customBtn = $('.pm-mode-custom'); if (customBtn) customBtn.style.display = isTable ? '' : 'none';
+    syncPeriodUI();
+    if (isTable) {
+      if (window.PipelineTable) window.PipelineTable.activate(state.period);
+    } else {
+      if (!state.data) fetchMetrics(); else { render(); window.dispatchEvent(new Event('resize')); }
+    }
   }
 
   function wire() {
@@ -416,6 +446,10 @@
         var next = Object.assign({}, state.period, { mode: b.dataset.mode });
         if (next.mode === 'quarter' && !next.quarter) next.quarter = 1;
         if (next.mode === 'month' && !next.month) next.month = CFG.month;
+        if (next.mode === 'custom') {
+          if (!next.from) next.from = next.year + '-01-01';
+          if (!next.to) next.to = next.year + '-12-31';
+        }
         changePeriod(next);
       });
     });
@@ -441,6 +475,15 @@
     $('#pm-drawer-close').addEventListener('click', closeDrill);
     $('#pm-scrim').addEventListener('click', closeDrill);
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeDrill(); });
+
+    // Charts | Table view toggle
+    $$('#pm-view .pm-seg-btn').forEach(function (b) {
+      b.addEventListener('click', function () { if (state.view !== b.dataset.view) applyView(b.dataset.view); });
+    });
+    // custom date range inputs (table view only)
+    var df = $('#pm-date-from'), dt = $('#pm-date-to');
+    if (df) df.addEventListener('change', function () { changePeriod(Object.assign({}, state.period, { mode: 'custom', from: this.value })); });
+    if (dt) dt.addEventListener('change', function () { changePeriod(Object.assign({}, state.period, { mode: 'custom', to: this.value })); });
   }
 
   document.addEventListener('DOMContentLoaded', function () {

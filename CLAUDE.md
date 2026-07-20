@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 All built. Detail for most of these lives in the matching `###` section below.
 
-Quote Inline Editing · SharePoint Sheet Sync · Comment Mentions & Notifications · Bid Requirement Fields (Site Visit/Q&A Deadline/Resumes) · Bid Pipeline Sync Controls · Bid Pipeline Metrics Dashboard · 3-Year Annual Awards Comparison · Quote Lifecycle Audit Events · Write-Once Sheet Sync · Advanced Quote Search · Commercial Moving bid type + 50/50 payment term · Shared Notification Mailbox · Daily RFQ Digest Email
+Quote Inline Editing · SharePoint Sheet Sync · Comment Mentions & Notifications · Bid Requirement Fields (Site Visit/Q&A Deadline/Resumes) · Bid Pipeline Sync Controls · Bid Pipeline Metrics Dashboard · Pipeline Table View · 3-Year Annual Awards Comparison · Quote Lifecycle Audit Events · Write-Once Sheet Sync · Advanced Quote Search · Commercial Moving bid type + 50/50 payment term · Shared Notification Mailbox · Daily RFQ Digest Email
 
 ## Environment
 
@@ -78,6 +78,12 @@ Endpoint `POST quote/load_unified_audit_trail` queries all three (re-quote joine
 **Win/Loss gotcha:** denominator = `submitted` + `award` + lost (`no_award_*`); sources-sought is excluded. **Dollar-value gotcha:** every money figure = product total + services subtotal via `SERVICES_JOIN`/`VALUE_EXPR`, never `rfq.total_price` alone (count-only aggregations skip the join).
 
 Two listing pages mirror this: Sources Sought (`quote/sources_sought`) and No Award (`quote/no_award`, with a Reason column). Tests: `tests/php/pipeline_metrics_test.php`, `tests/specs/09-pipeline-metrics.spec.js`.
+
+### Pipeline Table View
+
+`Charts | Table` toggle on `perfil/reports/pipeline_metrics` (`#pm-view`) swaps to a filterable, server-paginated (25/row) quote table over the same `created_at` cohort as the charts (`PipelineTableRepository`, `js/pipeline_table.js`). Clicking a row opens a Quote Summary modal (real attached files from `quote/get_quote_files/<id>`, not the `rfq.file_document` checklist field; quick-comment reuses `#comment_rfq`/`mentions.js`).
+
+**No Quote Watchers** — that subsystem (per-quote watch subscriptions + notification fan-out) was built alongside this Table View, then removed; don't reintroduce a `watched` field/join without deliberately re-adding that whole feature. Test: `tests/php/pipeline_table_test.php`.
 
 ### Charts Tab — Annual Awards (3-year)
 
