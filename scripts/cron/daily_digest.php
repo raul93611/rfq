@@ -14,10 +14,10 @@
  * A digest_send_log row per calendar date is the dedup guard: a second trigger the same day
  * (whether or not the shared mailbox is connected) no-ops instead of double-sending.
  *
- * Crontab (production droplet, 6:00am America/New_York):
- *   0 6 * * * docker exec <php-container> php /var/www/html/rfq/scripts/cron/daily_digest.php
+ * Crontab (production droplet, runs PHP directly — no Docker there):
+ *   0 6 * * * php /var/www/elogicportal/rfq/scripts/cron/daily_digest.php
  *
- * Manual run: docker exec lamp-php84 php /var/www/html/rfq/scripts/cron/daily_digest.php
+ * Manual run, local dev (Docker): docker exec lamp-php84 php /var/www/html/rfq/scripts/cron/daily_digest.php
  */
 
 date_default_timezone_set('America/New_York');
