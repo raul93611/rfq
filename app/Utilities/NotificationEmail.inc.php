@@ -22,16 +22,25 @@ class NotificationEmail {
    */
   public static function send($conexion, $to_email, $message, $url, $comment_text = '') {
     if (!$to_email) return;
+    $body_html = self::buildHtml($message, $url, $comment_text);
+    self::sendCustom($conexion, $to_email, 'E-logic: ' . $message, $body_html);
+  }
+
+  /**
+   * Send a fully custom HTML email through the shared mailbox (e.g. the Daily RFQ Digest).
+   * Same delivery path and silent no-op behavior as send() — mailbox connectivity is the
+   * only gate, callers don't need to check it themselves.
+   */
+  public static function sendCustom($conexion, $to_email, $subject, $html_body) {
+    if (!$to_email) return;
 
     $access_token = NotificationMailboxRepository::getAccessToken($conexion);
     if (!$access_token) return; // mailbox not connected / refresh failed — skip the email leg
 
-    $body_html = self::buildHtml($message, $url, $comment_text);
-
     $mail_payload = json_encode([
       'message' => [
-        'subject' => 'E-logic: ' . $message,
-        'body'    => ['contentType' => 'HTML', 'content' => $body_html],
+        'subject' => $subject,
+        'body'    => ['contentType' => 'HTML', 'content' => $html_body],
         'toRecipients' => [['emailAddress' => ['address' => $to_email]]],
       ],
       'saveToSentItems' => false,
