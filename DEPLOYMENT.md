@@ -27,17 +27,30 @@ Create the schema, then apply every migration in `sql/` once, in date order:
 # base schema
 docker compose exec -T database mysql -uroot -p"$DB_PASS" elogicnewdb < sql/elogic.sql
 
-# incremental migrations (run each once per environment)
+# incremental migrations (run each once per environment, in date order — see sql/)
 for f in sql/sheet_sync_migration.sql \
          sql/notifications_migration.sql \
          sql/bid_requirement_fields_migration.sql \
          sql/audit_trails_action_type_migration.sql \
          sql/type_of_bids_migration.sql \
          sql/pipeline_sync_controls_migration.sql \
-         sql/bid_pipeline_metrics_migration.sql; do
+         sql/bid_pipeline_metrics_migration.sql \
+         sql/quote_created_at_migration.sql \
+         sql/shared_notification_mailbox_migration.sql \
+         sql/commercial_moving_payment_term_migration.sql \
+         sql/services_net30cc_rounding_fix.sql \
+         sql/daily_digest_migration.sql \
+         sql/quote_watchers_drop.sql; do
   docker compose exec -T database mysql -uroot -p"$DB_PASS" elogicnewdb < "$f"
 done
 ```
+
+On production only, also run `sql/quote_created_at_revert_backfill.sql` after
+`quote_created_at_migration.sql` (see that file's header — local keeps a historical
+backfill that prod should not).
+
+`quote_watchers_drop.sql` drops the retired `quote_watchers` table. Skip it if this
+environment never ran `quote_watchers_migration.sql`.
 
 `bid_pipeline_metrics_migration.sql` adds `rfq.sources_sought TINYINT(1) DEFAULT 0`
 (required by the Bid Pipeline Metrics dashboard). The lost-bid buckets reuse the
@@ -59,14 +72,27 @@ Production also requires the **`xmlwriter`** PHP module enabled.
 Front-end libraries (jQuery, AdminLTE, ApexCharts, Chart.js, FontAwesome) load
 from CDNs — no build step.
 
-## 4. Third-party services
+## 4. Cron jobs
+
+Add to the production droplet's crontab (OS-level, not a container cron):
+
+```
+0 6 * * * docker exec <php-container> php /var/www/html/rfq/scripts/cron/daily_digest.php
+```
+
+Sends the Daily RFQ Digest at 6:00am America/New_York to every active Admin-role user.
+Requires the Shared Notification Mailbox to be connected (**Admin Settings**) to actually
+deliver mail — the script runs and logs `digest_send_log` either way, so a disconnected
+mailbox is a silent no-op, not a failure.
+
+## 5. Third-party services
 
 - **Microsoft Graph / SharePoint** — `GRAPH_*` constants drive the bid-pipeline
   sheet sync and delegated mention emails. Register the app in Entra ID and set the
   tenant/client/secret + target file id. Optional; the app runs without it.
 - **Teams webhooks** — `WEBHOOK_AWARD` / `WEBHOOK_FULFILLMENT` (optional).
 
-## 5. Health check
+## 6. Health check
 
 After deploy, confirm the app responds and the new dashboard is wired:
 

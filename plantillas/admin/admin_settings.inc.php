@@ -56,7 +56,7 @@ $flash_disconnected = isset($_GET['mailbox_disconnected']);
                 <span class="ac-admin-tag"><i class="fas fa-shield-alt"></i> Admin only</span>
               </div>
               <div class="ac-card-head-sub">
-                The shared Microsoft mailbox that sends @mention and quote-watcher notification emails for the whole team.
+                The shared Microsoft mailbox that sends @mention notification emails for the whole team.
               </div>
             </div>
           </div>
@@ -99,7 +99,7 @@ $flash_disconnected = isset($_GET['mailbox_disconnected']);
                 <div class="ac-ms-text">
                   <div class="ac-ms-text-title">No mailbox connected</div>
                   <div class="ac-ms-text-desc">
-                    Connect a shared Microsoft mailbox so the app can send @mention and quote-watcher
+                    Connect a shared Microsoft mailbox so the app can send @mention
                     notification emails on behalf of the team. Sign in with the shared mailbox account
                     (e.g. portal@e-logic.us), not your own. In-app alerts work either way.
                   </div>

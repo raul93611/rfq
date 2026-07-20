@@ -4,12 +4,12 @@
  * NotificationEmail
  *
  * Sends a system notification email through the shared notification mailbox
- * (see NotificationMailboxRepository). Used by both @mention comment emails and
- * quote-watcher alerts — the sending identity is always the one admin-connected
- * mailbox, never the acting user, so delivery no longer depends on who triggered it.
+ * (see NotificationMailboxRepository). Used by @mention/comment-reply emails (send(), with
+ * this class's own branded template) and by custom HTML sends like the Daily RFQ Digest
+ * (sendCustom()) — the sending identity is always the one admin-connected mailbox, never
+ * the acting user, so delivery no longer depends on who triggered it.
  *
  * Silent no-op when the shared mailbox isn't connected (in-app notifications still fire).
- * The HTML template is unchanged from the previous per-user path — only the sender moved.
  */
 class NotificationEmail {
 
@@ -22,16 +22,25 @@ class NotificationEmail {
    */
   public static function send($conexion, $to_email, $message, $url, $comment_text = '') {
     if (!$to_email) return;
+    $body_html = self::buildHtml($message, $url, $comment_text);
+    self::sendCustom($conexion, $to_email, 'E-logic: ' . $message, $body_html);
+  }
+
+  /**
+   * Send a fully custom HTML email through the shared mailbox (e.g. the Daily RFQ Digest).
+   * Same delivery path and silent no-op behavior as send() — mailbox connectivity is the
+   * only gate, callers don't need to check it themselves.
+   */
+  public static function sendCustom($conexion, $to_email, $subject, $html_body) {
+    if (!$to_email) return;
 
     $access_token = NotificationMailboxRepository::getAccessToken($conexion);
     if (!$access_token) return; // mailbox not connected / refresh failed — skip the email leg
 
-    $body_html = self::buildHtml($message, $url, $comment_text);
-
     $mail_payload = json_encode([
       'message' => [
-        'subject' => 'E-logic: ' . $message,
-        'body'    => ['contentType' => 'HTML', 'content' => $body_html],
+        'subject' => $subject,
+        'body'    => ['contentType' => 'HTML', 'content' => $html_body],
         'toRecipients' => [['emailAddress' => ['address' => $to_email]]],
       ],
       'saveToSentItems' => false,
@@ -96,7 +105,7 @@ class NotificationEmail {
         </tr>
         <tr>
           <td style="background:#f8fafc;border-top:1px solid #e8ecf0;padding:16px 32px;">
-            <p style="margin:0;font-size:12px;color:#94a3b8;font-family:\'Manrope\',Arial,sans-serif;">You are receiving this because you were mentioned, are the designated user, or are watching this proposal. This is an automated message — please do not reply.</p>
+            <p style="margin:0;font-size:12px;color:#94a3b8;font-family:\'Manrope\',Arial,sans-serif;">You are receiving this because you were mentioned or are the designated user on this proposal. This is an automated message — please do not reply.</p>
           </td>
         </tr>
       </table>

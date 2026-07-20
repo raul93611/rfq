@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 All built. Detail for most of these lives in the matching `###` section below.
 
-Quote Inline Editing · SharePoint Sheet Sync · Comment Mentions & Notifications · Bid Requirement Fields (Site Visit/Q&A Deadline/Resumes) · Bid Pipeline Sync Controls · Bid Pipeline Metrics Dashboard · 3-Year Annual Awards Comparison · Quote Lifecycle Audit Events · Write-Once Sheet Sync · Advanced Quote Search · Commercial Moving bid type + 50/50 payment term · Pipeline Table View + Quote Watchers · Shared Notification Mailbox
+Quote Inline Editing · SharePoint Sheet Sync · Comment Mentions & Notifications · Bid Requirement Fields (Site Visit/Q&A Deadline/Resumes) · Bid Pipeline Sync Controls · Bid Pipeline Metrics Dashboard · 3-Year Annual Awards Comparison · Quote Lifecycle Audit Events · Write-Once Sheet Sync · Advanced Quote Search · Commercial Moving bid type + 50/50 payment term · Shared Notification Mailbox · Daily RFQ Digest Email
 
 ## Environment
 
@@ -99,14 +99,14 @@ New bid type "Commercial Moving" + a third payment term `50% Upfront / 50% on Co
 
 ### Shared Notification Mailbox
 
-One admin-connected MS mailbox sends **all** system notification emails (mentions + watcher alerts), replacing the per-user delegated connection whose emails silently failed when the actor hadn't connected. `NotificationMailboxRepository` (refresh-on-expiry token storage); `NotificationEmail::send()` centralizes the Graph `/me/sendMail` call + HTML template.
+One admin-connected MS mailbox sends **all** system notification emails (mentions + the Daily RFQ Digest), replacing the per-user delegated connection whose emails silently failed when the actor hadn't connected. `NotificationMailboxRepository` (refresh-on-expiry token storage); `NotificationEmail::send()` (own branded template, e.g. mentions) and `NotificationEmail::sendCustom()` (caller-supplied HTML, e.g. the digest) both funnel through the same Graph `/me/sendMail` call and the same silent-no-op-when-disconnected gate.
 
 **OAuth reuse:** admin Connect sets `$_SESSION['ms_oauth_target']='mailbox'`, and the existing `microsoft_callback.php` branches on that flag to store in `notification_mailbox` instead of the user row — no new Azure app needed. Admin-only UI at `perfil/admin/settings`. Not connected → email is a safe no-op, in-app notifications unaffected. Test: `tests/php/shared_mailbox_test.php`.
 
-### Pipeline Table View + Quote Watchers
+### Daily RFQ Digest Email
 
-`Charts | Table` toggle on `perfil/reports/pipeline_metrics` swaps to a filterable, server-paginated (25/row) quote table over the same `created_at` cohort, plus per-quote watch subscriptions (`quote_watchers`, unique on `id_rfq,id_user`).
+`scripts/cron/daily_digest.php` — droplet crontab, 6:00am America/New_York (crontab line in the file's docblock); no in-app UI or config screen.
 
-Designated user auto-subscribed on create and on reassignment. `WatcherNotificationService::notify()` fans one in-app notification per watcher (never the actor) + a shared-mailbox email. Triggers: status changes, and Type of Bid/Designated User/Comments edits. No audit trail for watch/unwatch. Modal's attached documents are the real uploaded files from `quote/get_quote_files/<id>` (not the `rfq.file_document` checklist field). Quick-comment reuses `#comment_rfq`/`mentions.js`.
+One HTML email (`DigestEmailTemplate`) to every active Admin-role user (`RepositorioUsuario::getActiveAdminUsers`, cross-checked with `Usuario::is_admin()`) via the Shared Notification Mailbox. Four sections, always shown even when empty: Created/Submitted/Awarded scope to the **previous calendar day**, Due Today scopes to **today's** Internal Due Date (`DigestRepository`, all excluding `deleted=1`). `date_default_timezone_set('America/New_York')` is set explicitly — never rely on server/container default (droplets commonly default to UTC).
 
-**Watch UI currently hidden** (email-notifications feature on hold): table Watch column, modal Watch button, and Admin Settings sidebar link are commented out — backend + route still work, re-enabling is markup-only. Test: `tests/php/quote_watchers_test.php`.
+`digest_send_log` (unique per date) dedupes same-day re-triggers regardless of mailbox connectivity — written after every completed run, not just successful sends. Test: `tests/php/daily_digest_test.php`.
