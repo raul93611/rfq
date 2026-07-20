@@ -74,16 +74,21 @@ from CDNs — no build step.
 
 ## 4. Cron jobs
 
-Add to the production droplet's crontab (OS-level, not a container cron):
+Production runs the PHP app directly on the droplet (no Docker there — Docker is local-dev
+only, via `docker-compose-lamp`). Add to the droplet's OS crontab:
 
 ```
-0 6 * * * docker exec <php-container> php /var/www/html/rfq/scripts/cron/daily_digest.php
+0 6 * * * php /var/www/elogicportal/rfq/scripts/cron/daily_digest.php
 ```
 
 Sends the Daily RFQ Digest at 6:00am America/New_York to every active Admin-role user.
 Requires the Shared Notification Mailbox to be connected (**Admin Settings**) to actually
 deliver mail — the script runs and logs `digest_send_log` either way, so a disconnected
 mailbox is a silent no-op, not a failure.
+
+If the job silently never runs, check that cron's minimal environment actually resolves
+`php` — swap in the absolute binary path (e.g. `/usr/bin/php`, or a versioned binary like
+`/usr/bin/php8.4`) if so.
 
 ## 5. Third-party services
 
