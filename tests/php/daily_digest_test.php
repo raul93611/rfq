@@ -142,7 +142,7 @@ try {
   check('translates FedBid channel to Unison', true, str_contains($html, 'Unison'));
   check('translates FBO channel to SAM', true, str_contains($html, 'SAM'));
   check('renders empty state for Due Today', true, str_contains($html, 'No quotes due today.'));
-  check('does not render empty state for a populated section', false, str_contains($html, 'No quotes created today.'));
+  check('does not render empty state for a populated section', false, str_contains($html, 'No quotes created yesterday.'));
 
   echo "[Safe no-op when mailbox disconnected]\n";
   NotificationMailboxRepository::clear($conexion);

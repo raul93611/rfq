@@ -15,10 +15,10 @@
 class DigestEmailTemplate {
 
   private const SECTIONS = [
-    'created'   => ['title' => 'Created',   'bar' => '#2db4e8', 'icon_bg' => '#e6f5fc', 'icon_color' => '#1aa2dc', 'icon_glyph' => '+',       'empty' => 'No quotes created today.'],
-    'submitted' => ['title' => 'Submitted', 'bar' => '#4f6ef0', 'icon_bg' => '#eef1fd', 'icon_color' => '#4f6ef0', 'icon_glyph' => '&rarr;',  'empty' => 'No quotes submitted today.'],
-    'awarded'   => ['title' => 'Awarded',   'bar' => '#16a34a', 'icon_bg' => '#e8f6ec', 'icon_color' => '#15803d', 'icon_glyph' => '&check;', 'empty' => 'No quotes awarded today.'],
-    'due'       => ['title' => 'Due Today', 'bar' => '#d97706', 'icon_bg' => '#fdf2dc', 'icon_color' => '#d97706', 'icon_glyph' => '!',       'empty' => 'No quotes due today.'],
+    'created'   => ['title' => 'Created',   'bar' => '#2db4e8', 'icon_bg' => '#e6f5fc', 'icon_color' => '#1aa2dc', 'icon_glyph' => '+',       'period' => 'yesterday', 'empty' => 'No quotes created yesterday.'],
+    'submitted' => ['title' => 'Submitted', 'bar' => '#4f6ef0', 'icon_bg' => '#eef1fd', 'icon_color' => '#4f6ef0', 'icon_glyph' => '&rarr;',  'period' => 'yesterday', 'empty' => 'No quotes submitted yesterday.'],
+    'awarded'   => ['title' => 'Awarded',   'bar' => '#16a34a', 'icon_bg' => '#e8f6ec', 'icon_color' => '#15803d', 'icon_glyph' => '&#10003;', 'period' => 'yesterday', 'empty' => 'No quotes awarded yesterday.'],
+    'due'       => ['title' => 'Due Today', 'bar' => '#d97706', 'icon_bg' => '#fdf2dc', 'icon_color' => '#d97706', 'icon_glyph' => '!',       'period' => 'today',     'empty' => 'No quotes due today.'],
   ];
 
   /**
@@ -32,7 +32,7 @@ class DigestEmailTemplate {
     $rows_by_section = ['created' => $created, 'submitted' => $submitted, 'awarded' => $awarded, 'due' => $due];
 
     $preheader = sprintf(
-      '%d created &middot; %d submitted &middot; %d awarded &middot; %d due today — your team&#8217;s RFQ activity from Elogic',
+      'Yesterday: %d created, %d submitted, %d awarded &middot; Today: %d due — your team&#8217;s RFQ activity from Elogic',
       count($created), count($submitted), count($awarded), count($due)
     );
     $preheader_pad = str_repeat('&nbsp;&zwnj;', 10);
@@ -79,7 +79,7 @@ a:hover{color:#2db4e8}
 
 <tr><td class="pad-side" bgcolor="#14202f" style="background:#14202f;padding:24px 32px 22px;border-radius:12px 12px 0 0;">
 <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
-<td width="30" style="width:30px;"><table role="presentation" cellpadding="0" cellspacing="0" border="0" width="30" height="30" style="width:30px;height:30px;"><tr><td align="center" valign="middle" bgcolor="#1aa2dc" style="background:#1aa2dc;background-image:linear-gradient(135deg,#4dabe9,#1d6db8);border-radius:7px;width:30px;height:30px;color:#ffffff;font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:700;">eP</td></tr></table></td>
+<td width="30" style="width:30px;"><img src="' . RUTA_IMG . 'eP_perfil.png" width="30" height="30" alt="Elogic" style="display:block;width:30px;height:30px;border-radius:7px;"></td>
 <td style="padding-left:10px;" valign="middle"><span style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:700;letter-spacing:0.08em;color:#aeb9c9;text-transform:uppercase;">Elogic</span></td>
 </tr></table>
 <div style="height:18px;line-height:18px;font-size:1px;">&nbsp;</div>
@@ -89,7 +89,7 @@ a:hover{color:#2db4e8}
 </td></tr>
 
 <tr><td class="pad-side" style="padding:20px 32px 2px;">
-<div style="font-family:Arial,Helvetica,sans-serif;font-size:12.5px;color:#5a6a7e;line-height:1.5;">RFQ activity across your team in the last 24 hours.</div>
+<div style="font-family:Arial,Helvetica,sans-serif;font-size:12.5px;color:#5a6a7e;line-height:1.5;">Created, Submitted, and Awarded reflect <strong>yesterday\'s</strong> activity — Due Today looks ahead to what\'s due <strong>today</strong>.</div>
 </td></tr>
 
 <tr><td class="pad-side" style="padding:16px 32px 0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="height:1px;line-height:1px;font-size:1px;">&nbsp;</td></tr></table></td></tr>
@@ -117,7 +117,7 @@ a:hover{color:#2db4e8}
 <tr><td style="padding:12px 16px 10px;">
 <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
 <td width="22" style="width:22px;"><table role="presentation" width="22" height="22" cellpadding="0" cellspacing="0" border="0"><tr><td align="center" valign="middle" bgcolor="' . $meta['icon_bg'] . '" style="background:' . $meta['icon_bg'] . ';border-radius:6px;width:22px;height:22px;color:' . $meta['icon_color'] . ';font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:700;">' . $meta['icon_glyph'] . '</td></tr></table></td>
-<td style="padding-left:8px;" valign="middle"><span style="font-family:Arial,Helvetica,sans-serif;font-size:14.5px;font-weight:700;color:#0f1623;">' . htmlspecialchars($meta['title'], ENT_QUOTES, 'UTF-8') . '</span><span style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#7d8ba0;padding-left:6px;">&middot; ' . count($rows) . ' today</span></td>
+<td style="padding-left:8px;" valign="middle"><span style="font-family:Arial,Helvetica,sans-serif;font-size:14.5px;font-weight:700;color:#0f1623;">' . htmlspecialchars($meta['title'], ENT_QUOTES, 'UTF-8') . '</span><span style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#7d8ba0;padding-left:6px;">&middot; ' . count($rows) . ' ' . $meta['period'] . '</span></td>
 </tr></table>
 </td></tr>';
 
