@@ -4,12 +4,12 @@
  * NotificationEmail
  *
  * Sends a system notification email through the shared notification mailbox
- * (see NotificationMailboxRepository). Used by both @mention comment emails and
- * quote-watcher alerts — the sending identity is always the one admin-connected
- * mailbox, never the acting user, so delivery no longer depends on who triggered it.
+ * (see NotificationMailboxRepository). Used by @mention/comment-reply emails (send(), with
+ * this class's own branded template) and by custom HTML sends like the Daily RFQ Digest
+ * (sendCustom()) — the sending identity is always the one admin-connected mailbox, never
+ * the acting user, so delivery no longer depends on who triggered it.
  *
  * Silent no-op when the shared mailbox isn't connected (in-app notifications still fire).
- * The HTML template is unchanged from the previous per-user path — only the sender moved.
  */
 class NotificationEmail {
 
@@ -105,7 +105,7 @@ class NotificationEmail {
         </tr>
         <tr>
           <td style="background:#f8fafc;border-top:1px solid #e8ecf0;padding:16px 32px;">
-            <p style="margin:0;font-size:12px;color:#94a3b8;font-family:\'Manrope\',Arial,sans-serif;">You are receiving this because you were mentioned, are the designated user, or are watching this proposal. This is an automated message — please do not reply.</p>
+            <p style="margin:0;font-size:12px;color:#94a3b8;font-family:\'Manrope\',Arial,sans-serif;">You are receiving this because you were mentioned or are the designated user on this proposal. This is an automated message — please do not reply.</p>
           </td>
         </tr>
       </table>

@@ -112,11 +112,6 @@ function createAndInsertQuote($validador, $usuario_designado) {
   // Single lifecycle marker alongside the per-field creation entries (Status tab).
   AuditTrailRepository::quote_created_audit_trail(Conexion::obtener_conexion(), $id_rfq);
 
-  // Auto-subscribe the designated user as a watcher of the new quote.
-  if ($cotizacion_insertada) {
-    WatcherNotificationService::autoSubscribeDesignated(Conexion::obtener_conexion(), $id_rfq, $cotizacion->obtener_usuario_designado());
-  }
-
   // Auto-sync to the SharePoint sheet when the user opted in via the "Sync to pipeline"
   // checkbox. The checkbox is the sole gate — bid type only sets its default in the form,
   // and master-linked (child) quotes may sync too.

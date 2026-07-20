@@ -4,7 +4,7 @@
  * NotificationMailboxRepository
  *
  * Storage + token handling for the single shared Microsoft mailbox that sends all
- * system notification emails (@mention comments and quote-watcher alerts). This
+ * system notification emails (@mention comments and the Daily RFQ Digest). This
  * replaces the old per-user delegated connection as the email sender, so emails
  * send reliably regardless of who triggered them.
  *

@@ -216,8 +216,6 @@ define('PIPELINE_METRICS', REPORTS . 'pipeline_metrics');
 define('PIPELINE_METRICS_DATA', QUOTE_SC . 'pipeline_metrics');
 define('PIPELINE_METRICS_DRILLDOWN', QUOTE_SC . 'pipeline_metrics_drilldown');
 define('PIPELINE_METRICS_EXPORT', QUOTE_SC . 'pipeline_metrics_export');
-define('PIPELINE_TABLE', QUOTE_SC . 'pipeline_table');
-define('WATCH_QUOTE', QUOTE_SC . 'watch_quote');
 /********************************OTHER VIEWS*****************************************/
 define('CHARTS', PERFIL . 'charts');
 define('SEARCH_QUOTES', PERFIL . 'search_quotes');
