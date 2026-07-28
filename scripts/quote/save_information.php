@@ -118,8 +118,8 @@ if (isset($_POST['save_information'])) {
     // Close database connection
     Conexion::cerrar_conexion();
 
-    // Redirect to information page
-    Redireccion::redirigir(INFORMATION . $_POST['id_rfq']);
+    header('Content-Type: application/json');
+    echo json_encode(['success' => true]);
   } catch (Exception $e) {
     // Ensure the connection is closed in case of an error
     if (isset($conexion)) {
@@ -128,7 +128,8 @@ if (isset($_POST['save_information'])) {
 
     // Handle the exception (logging, user feedback, etc.)
     error_log('Error saving information: ' . $e->getMessage());
-    // Optionally, redirect to an error page or display an error message
-    Redireccion::redirigir(ERROR);
+    http_response_code(500);
+    header('Content-Type: application/json');
+    echo json_encode(['success' => false, 'message' => 'Could not save the information. Please try again.']);
   }
 }

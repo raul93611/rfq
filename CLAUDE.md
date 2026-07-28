@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 All built. Detail for most of these lives in the matching `###` section below.
 
-Quote Inline Editing · SharePoint Sheet Sync · Comment Mentions & Notifications · Bid Requirement Fields (Site Visit/Q&A Deadline/Resumes) · Bid Pipeline Sync Controls · Bid Pipeline Metrics Dashboard · Pipeline Table View · 3-Year Annual Awards Comparison · Quote Lifecycle Audit Events · Write-Once Sheet Sync · Advanced Quote Search · Commercial Moving bid type + 50/50 payment term · Shared Notification Mailbox · Daily RFQ Digest Email
+Quote Inline Editing · SharePoint Sheet Sync · Comment Mentions & Notifications · Bid Requirement Fields (Site Visit/Q&A Deadline/Resumes) · Bid Pipeline Sync Controls · Bid Pipeline Metrics Dashboard · Pipeline Table View · 3-Year Annual Awards Comparison · Quote Lifecycle Audit Events · Write-Once Sheet Sync · Advanced Quote Search · Commercial Moving bid type + 50/50 payment term · Shared Notification Mailbox · Daily RFQ Digest Email · Quote Checklist & Info Drawer
 
 ## Environment
 
@@ -116,3 +116,15 @@ One admin-connected MS mailbox sends **all** system notification emails (mention
 One HTML email (`DigestEmailTemplate`) to every active Admin-role user (`RepositorioUsuario::getActiveAdminUsers`, cross-checked with `Usuario::is_admin()`) via the Shared Notification Mailbox. Four sections, always shown even when empty: Created/Submitted/Awarded scope to the **previous calendar day**, Due Today scopes to **today's** Internal Due Date (`DigestRepository`, all excluding `deleted=1`). `date_default_timezone_set('America/New_York')` is set explicitly — never rely on server/container default (droplets commonly default to UTC).
 
 `digest_send_log` (unique per date) dedupes same-day re-triggers regardless of mailbox connectivity — written after every completed run, not just successful sends. Test: `tests/php/daily_digest_test.php`.
+
+### Quote Checklist & Info Drawer
+
+Contract-info cards on `perfil/quote/editar_cotizacion/{id}` are denser (same fields, less padding); the old Checklist/Information nav buttons are now two `.qed-status-card` status-strip cards (styled on the `.ss-block` pattern) that open a slide-over drawer (`plantillas/quote/modals/checklist_information_drawer.inc.php`, `js/checklist_info_drawer.js`, `qed-*` CSS namespace — bare design tokens scoped to `.qed-status-row, .qed-drawer, .qed-drawer-scrim, .qed-confirm-overlay`, same pattern as `#pm-table-view, .qs-scrim`). Both tabs' `forms/quote/checklist.inc.php`/`information.inc.php` stay mounted in the DOM the whole time the drawer is open (CSS-hidden, not removed) so switching tabs never loses edits — required prefixing checklist.inc.php's colliding ids (`email_code`→`cl_email_code`, `canal`→`cl_canal`, `ship_to`→`cl_ship_to`, `Input::print_designated_user($quote, 'cl_')`) since both forms render simultaneously.
+
+**Checklist completeness** is `Rfq::getChecklistCompletionCount()` (10 fields incl. File Document/Accounting checkbox groups) — Set Aside/GSA only count once moved off their default dropdown option (`'Full & Open'`/`'na'`), not merely non-empty.
+
+**Save endpoints** (`scripts/quote/save_checklist.php`/`save_information.php`) always return JSON now (no redirect) — reused as-is otherwise. The client must manually append `save_checklist=1`/`save_information=1` to the AJAX payload since `FormData`/`.serialize()` never include the submitting button's `name`, which is what these scripts gate on.
+
+**Old `/quote/checklist/{id}` and `/quote/information/{id}` URLs** redirect via `Redireccion::redirigir1` (client-side `<script>` redirect), not `redirigir` (`header()`) — `vistas/perfil.php` already echoes the page shell (`documento_declaracion.inc.php`) before reaching those routing cases, so a header-based redirect fails silently with "headers already sent". `editar_cotizacion.inc.php`'s own not-found guard uses the same `redirigir1` pattern for the same reason.
+
+Test: `tests/php/checklist_info_drawer_test.php`, `tests/specs/11-checklist-info-drawer.spec.js`.

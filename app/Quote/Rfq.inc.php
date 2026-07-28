@@ -688,6 +688,26 @@ class Rfq {
     return $this->gsa;
   }
 
+  // 10-field checklist completeness for the drawer's status card.
+  // Set Aside / GSA only count once moved off their default dropdown option
+  // (SET_SIDE[0] 'Full & Open', GSA['na'] 'N/A' — see routes.inc.php) since an
+  // unset field otherwise reads as "complete" just because it renders a first option.
+  public function getChecklistCompletionCount() {
+    $checks = [
+      !empty($this->obtener_contract_number()),
+      !empty($this->obtener_client()),
+      !empty($this->getPoc()),
+      !empty($this->getCo()),
+      !empty($this->obtener_ship_to()),
+      !empty($this->getSetSide()) && $this->getSetSide() !== 'Full & Open',
+      !empty($this->getGsa()) && $this->getGsa() !== 'na',
+      !empty($this->getEstimatedDeliveryDate()),
+      count(array_filter($this->getFileDocument())) > 0,
+      count(array_filter($this->getAccounting())) > 0,
+    ];
+    return count(array_filter($checks));
+  }
+
   public function getClientPaymentTerms() {
     return $this->client_payment_terms;
   }

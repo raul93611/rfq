@@ -53,14 +53,31 @@
 
   </div>
 
-  <!-- Quick Links -->
-  <div class="mb-3" style="display:flex;gap:8px;">
-    <a href="<?= CHECKLIST . htmlspecialchars($cotizacion_recuperada->obtener_id()); ?>" class="btn btn-sm btn-outline-secondary">
-      <i class="fas fa-clipboard-list mr-1"></i> Checklist
-    </a>
-    <a href="<?= INFORMATION . htmlspecialchars($cotizacion_recuperada->obtener_id()); ?>" class="btn btn-sm btn-outline-secondary">
-      <i class="fas fa-info-circle mr-1"></i> Information
-    </a>
+  <!-- Checklist / Information entry cards -->
+  <?php
+  $qedChecklistCount    = $cotizacion_recuperada->getChecklistCompletionCount();
+  $qedChecklistTotal    = 10;
+  $qedChecklistComplete = $qedChecklistCount === $qedChecklistTotal;
+  ?>
+  <div class="qed-status-row mb-3">
+    <button type="button" id="qed-open-checklist" class="qed-status-card" data-tab="checklist">
+      <span class="qed-status-ring <?= $qedChecklistComplete ? 'is-complete' : ''; ?>" style="--pct:<?= $qedChecklistCount * 10; ?>;">
+        <span class="qed-status-ring-inner"><i class="fas <?= $qedChecklistComplete ? 'fa-check' : 'fa-clipboard-list'; ?>"></i></span>
+      </span>
+      <span class="qed-status-text">
+        <span class="qed-status-label">Checklist</span>
+        <span class="qed-status-value" id="qed-checklist-status-value"><?= $qedChecklistCount; ?> of <?= $qedChecklistTotal; ?> items complete</span>
+      </span>
+      <span class="qed-status-chevron"><i class="fas fa-chevron-right"></i></span>
+    </button>
+    <button type="button" id="qed-open-information" class="qed-status-card" data-tab="information">
+      <span class="qed-status-icon"><i class="fas fa-info-circle"></i></span>
+      <span class="qed-status-text">
+        <span class="qed-status-label">Information</span>
+        <span class="qed-status-value">Dates, status &amp; bid requirements</span>
+      </span>
+      <span class="qed-status-chevron"><i class="fas fa-chevron-right"></i></span>
+    </button>
   </div>
 
   <!-- Documents -->

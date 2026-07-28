@@ -129,6 +129,7 @@ if (is_null($cotizacion_recuperada)) {
 include_once 'plantillas/quote/modals/new_comment_modal.inc.php';
 include_once 'plantillas/quote/modals/comments_modal.inc.php';
 include_once 'plantillas/quote/modals/audit_trails_modal.inc.php';
+include_once 'plantillas/quote/modals/checklist_information_drawer.inc.php';
 include_once 'plantillas/services/modals/add_service_modal.inc.php';
 include_once 'plantillas/services/modals/edit_service_modal.inc.php';
 include_once 'modals/type_of_contract_modal.inc.php';
@@ -156,3 +157,4 @@ include_once 'plantillas/quote/modals/edit_provider_subitem_modal.inc.php';
 <script src="<?= asset_url('js/audit_trail.js'); ?>"></script>
 <script src="<?= asset_url('js/sheet_sync.js'); ?>"></script>
 <script src="<?= asset_url('js/sources_sought.js'); ?>"></script>
+<script src="<?= asset_url('js/checklist_info_drawer.js'); ?>"></script>

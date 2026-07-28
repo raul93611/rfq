@@ -242,12 +242,3 @@
     </div>
   </div>
 </div>
-
-<div class="quote-action-bar">
-  <a class="btn btn-secondary btn-sm" href="<?= EDITAR_COTIZACION . '/' . $quote->obtener_id(); ?>">
-    <i class="fa fa-reply mr-1"></i> Back
-  </a>
-  <button type="submit" class="btn btn-primary btn-sm" form="information_form" name="save_information">
-    <i class="fa fa-check mr-1"></i> Save
-  </button>
-</div>

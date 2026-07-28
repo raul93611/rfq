@@ -1,6 +1,6 @@
 <?php
 class Input {
-  public static function print_designated_user($quote) {
+  public static function print_designated_user($quote, $idPrefix = '') {
     ?>
       <div class="form-group">
         <?php
@@ -12,9 +12,9 @@ class Input {
         <?php
         if (count($usuarios)) {
         ?>
-          <label for="usuario_designado">Designated user:</label>
+          <label for="<?= $idPrefix; ?>usuario_designado">Designated user:</label>
           <input type="hidden" name="designated_user_original" value="<?= $designated_user; ?>">
-          <select id="usuario_designado" class="form-control form-control-sm" name="usuario_designado">
+          <select id="<?= $idPrefix; ?>usuario_designado" class="form-control form-control-sm" name="usuario_designado">
             <?php
             foreach ($usuarios as $usuario) {
             ?>
