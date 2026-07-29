@@ -7,7 +7,7 @@
     <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#8896a5;margin-bottom:12px;">
       <i class="fas fa-chart-bar mr-1"></i> Financial Summary
     </div>
-    <div style="display:flex;gap:0;flex-wrap:wrap;">
+    <div style="display:flex;gap:0;flex-wrap:wrap;justify-content:center;text-align:center;">
       <?php
       $summaryItems = [
         'Contract Amount'    => '$ ' . number_format($quote->obtener_quote_total_price(), 2),
@@ -22,7 +22,7 @@
         $i++;
         $isLast = ($i === $count);
       ?>
-        <div style="padding:4px 20px 4px <?= $i === 1 ? '0' : ''; ?>;<?= !$isLast ? 'border-right:1px solid #dee2e6;margin-right:20px;' : ''; ?>">
+        <div style="padding:4px 20px;<?= !$isLast ? 'border-right:1px solid #dee2e6;' : ''; ?>">
           <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#8896a5;margin-bottom:2px;"><?= $label; ?></div>
           <div style="font-size:16px;font-weight:700;color:var(--color-primary);font-family:'Manrope',sans-serif;"><?= $val; ?></div>
         </div>
@@ -70,7 +70,7 @@
         <div class="form-row">
           <div class="form-group col-md-6">
             <label>Channel</label>
-            <select class="form-control form-control-sm" name="canal" id="canal">
+            <select class="form-control form-control-sm" name="canal" id="cl_canal">
               <option <?= $quote->obtener_canal() == 'GSA-Buy'       ? 'selected' : ''; ?>>GSA-Buy</option>
               <option value="FedBid" <?= $quote->obtener_canal() == 'FedBid'    ? 'selected' : ''; ?>>Unison</option>
               <option <?= $quote->obtener_canal() == 'E-mails'       ? 'selected' : ''; ?>>E-mails</option>
@@ -116,8 +116,8 @@
             <input type="hidden" name="contract_number_original" value="<?= $quote->obtener_contract_number(); ?>">
           </div>
           <div class="form-group col-md-6">
-            <label for="email_code">Code</label>
-            <input type="text" class="form-control form-control-sm" id="email_code" name="email_code"
+            <label for="cl_email_code">Code</label>
+            <input type="text" class="form-control form-control-sm" id="cl_email_code" name="email_code"
                    value="<?= $quote->obtener_email_code(); ?>">
             <input type="hidden" name="email_code_original" value="<?= $quote->obtener_email_code(); ?>">
           </div>
@@ -127,7 +127,7 @@
       <!-- People -->
       <div class="checklist-section mb-4">
         <div class="checklist-section-title">People</div>
-        <?php Input::print_designated_user($quote); ?>
+        <?php Input::print_designated_user($quote, 'cl_'); ?>
         <div class="form-row">
           <div class="form-group col-md-6">
             <label for="client">Client</label>
@@ -204,9 +204,9 @@
           </div>
         </div>
         <div class="form-group">
-          <label for="ship_to">Ship To</label>
+          <label for="cl_ship_to">Ship To</label>
           <textarea class="form-control form-control-sm" rows="4" placeholder="Full shipping address..."
-                    id="ship_to" name="ship_to"><?= $quote->obtener_ship_to(); ?></textarea>
+                    id="cl_ship_to" name="ship_to"><?= $quote->obtener_ship_to(); ?></textarea>
           <input type="hidden" name="ship_to_original" value="<?= $quote->obtener_ship_to(); ?>">
         </div>
       </div>
@@ -224,13 +224,4 @@
 
     </div>
   </div>
-</div>
-
-<div class="card-footer d-flex justify-content-between align-items-center">
-  <a class="btn btn-secondary btn-sm" href="<?= EDITAR_COTIZACION . '/' . $quote->obtener_id(); ?>">
-    <i class="fa fa-reply mr-1"></i> Back
-  </a>
-  <button type="submit" class="btn btn-primary btn-sm" form="checklist_form" name="save_checklist">
-    <i class="fa fa-check mr-1"></i> Save
-  </button>
 </div>

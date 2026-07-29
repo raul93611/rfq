@@ -71,8 +71,14 @@ if (isset($_POST['save_checklist'])) {
       );
     }
 
-    // Redirect to checklist
-    Redireccion::redirigir(CHECKLIST . $_POST['id_rfq']);
+    // Re-fetch for the live "N of 10" completeness count the drawer's status card
+    // and tab badge show after saving.
+    Conexion::abrir_conexion();
+    $savedQuote = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $_POST['id_rfq']);
+    Conexion::cerrar_conexion();
+
+    header('Content-Type: application/json');
+    echo json_encode(['success' => true, 'checklistCount' => $savedQuote->getChecklistCompletionCount()]);
   } catch (Exception $e) {
     // Ensure the connection is closed in case of an error
     if (isset($conexion)) {
@@ -81,7 +87,8 @@ if (isset($_POST['save_checklist'])) {
 
     // Handle the exception (logging, user feedback, etc.)
     error_log('Error saving checklist: ' . $e->getMessage());
-    // Optionally, redirect to an error page or display an error message
-    Redireccion::redirigir(ERROR);
+    http_response_code(500);
+    header('Content-Type: application/json');
+    echo json_encode(['success' => false, 'message' => 'Could not save the checklist. Please try again.']);
   }
 }

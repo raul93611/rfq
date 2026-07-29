@@ -115,11 +115,23 @@ if (isset($_POST['save_information'])) {
       $_POST['id_rfq']
     );
 
-    // Close database connection
+    // Re-fetch: the sync block above can flip sheet_sync_status/sheet_row/sheet_sync_at, and
+    // the on-page Sheet Sync block is static HTML rendered once at page load — with the save
+    // now AJAX instead of a full-page redirect, nothing else re-renders it, so the client
+    // needs fresh values here to repaint it in place (see js/sheet_sync.js's ssRepaint).
+    Conexion::abrir_conexion();
+    $finalQuote = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $_POST['id_rfq']);
     Conexion::cerrar_conexion();
 
-    // Redirect to information page
-    Redireccion::redirigir(INFORMATION . $_POST['id_rfq']);
+    header('Content-Type: application/json');
+    echo json_encode([
+      'success' => true,
+      'sheetSync' => [
+        'status' => $finalQuote->getSheetSyncStatus(),
+        'syncAt' => $finalQuote->getSheetSyncAt() ? date('M j, Y \a\t g:i A', strtotime($finalQuote->getSheetSyncAt())) : null,
+        'row'    => $finalQuote->getSheetRow(),
+      ],
+    ]);
   } catch (Exception $e) {
     // Ensure the connection is closed in case of an error
     if (isset($conexion)) {
@@ -128,7 +140,8 @@ if (isset($_POST['save_information'])) {
 
     // Handle the exception (logging, user feedback, etc.)
     error_log('Error saving information: ' . $e->getMessage());
-    // Optionally, redirect to an error page or display an error message
-    Redireccion::redirigir(ERROR);
+    http_response_code(500);
+    header('Content-Type: application/json');
+    echo json_encode(['success' => false, 'message' => 'Could not save the information. Please try again.']);
   }
 }
