@@ -68,19 +68,21 @@
     });
   }
 
-  // Captured on window 'load' rather than immediately: main.js's #end_date/#qa_deadline
-  // datepicker init runs in a $(document).ready() handler registered before this script
-  // and rewrites those fields' values (autoUpdateInput) shortly after this script parses —
-  // snapshotting synchronously here would bake in a false "dirty" reading on a fresh page.
+  // Captured lazily on the first drawer open rather than at page load: main.js's
+  // #end_date/#qa_deadline datepicker init (autoUpdateInput) rewrites those fields'
+  // values asynchronously — not reliably done by 'load', let alone by the time this
+  // script parses — so snapshotting on any fixed page-load-relative event risks baking
+  // in a false "dirty" reading on a fresh drawer. Any real open (click or auto-open) is
+  // by definition after the field has already settled; a successful save updates the
+  // relevant form's snapshot on its own, and re-opening after that never re-captures,
+  // so edits left unsaved across a close/reopen still trip the discard-confirmation guard.
   var savedSnapshots = { checklist: [], information: [] };
-  function captureInitialSnapshots() {
+  var snapshotsCaptured = false;
+  function ensureInitialSnapshots() {
+    if (snapshotsCaptured) return;
+    snapshotsCaptured = true;
     savedSnapshots.checklist = checklistForm ? snapshotForm(checklistForm) : [];
     savedSnapshots.information = informationForm ? snapshotForm(informationForm) : [];
-  }
-  if (document.readyState === 'complete') {
-    captureInitialSnapshots();
-  } else {
-    window.addEventListener('load', captureInitialSnapshots);
   }
 
   function isDirty(which) {
@@ -99,6 +101,7 @@
   }
 
   function openDrawer(tab) {
+    ensureInitialSnapshots();
     switchTab(tab || 'checklist');
     scrim.classList.add('is-open');
     drawer.classList.add('is-open');
@@ -257,5 +260,13 @@
     window.history.replaceState({}, '', newUrl);
   }
 
-  autoOpenFromUrl();
+  // Unlike a real click, this runs at script-parse time on a fresh navigation (the old
+  // bookmark redirect), i.e. before the page has settled — deferred past 'load' plus a
+  // beat so ensureInitialSnapshots() (called from openDrawer above) doesn't run ahead of
+  // main.js's datepicker init the same way a synchronous call here would.
+  if (document.readyState === 'complete') {
+    setTimeout(autoOpenFromUrl, 50);
+  } else {
+    window.addEventListener('load', function () { setTimeout(autoOpenFromUrl, 50); });
+  }
 })();
