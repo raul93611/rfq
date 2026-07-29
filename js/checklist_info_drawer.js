@@ -232,6 +232,11 @@
           if (which === 'checklist' && typeof result.data.checklistCount === 'number') {
             updateChecklistCount(result.data.checklistCount);
           }
+          if (which === 'information' && result.data.sheetSync && typeof window.ssRepaint === 'function') {
+            var ss = result.data.sheetSync;
+            var tone = ss.status === 'synced' ? 'synced' : (ss.status === 'failed' ? 'failed' : 'never');
+            window.ssRepaint(tone, ss.syncAt);
+          }
         } else {
           showError(which, (result.data && result.data.message) || 'Could not save. Please try again.');
         }

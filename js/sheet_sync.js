@@ -49,13 +49,22 @@
       statusEl.textContent = labelOverride || t.label;
     }
 
-    // Meta line (last synced / last attempted)
-    const metaEl = block.querySelector('.ss-block-meta');
+    // Meta line (last synced / last attempted). Absent from the DOM entirely when the page
+    // was rendered in the 'never' state (the PHP template only emits this span for
+    // synced/failed) — create it on first transition rather than silently no-op'ing.
+    let metaEl = block.querySelector('.ss-block-meta');
     if (syncAtText) {
+      if (!metaEl && statusEl) {
+        metaEl = document.createElement('span');
+        metaEl.className = 'ss-block-meta';
+        statusEl.insertAdjacentElement('afterend', metaEl);
+      }
       if (metaEl) {
         metaEl.textContent = `· ${tone === 'synced' ? 'Last synced' : 'Last attempted'} ${syncAtText}`;
         metaEl.style.display = '';
       }
+    } else if (metaEl) {
+      metaEl.style.display = 'none';
     }
 
     // Button
@@ -117,6 +126,14 @@
         });
     });
   }
+
+  // Exposed so other AJAX flows that can silently change sync state server-side (e.g. the
+  // Information tab save in the checklist/info drawer, which runs the same write-once
+  // create-or-link check) can repaint this block without a page reload.
+  window.ssRepaint = function (tone, syncAtText, labelOverride) {
+    setTone(tone, syncAtText, labelOverride);
+    if (tone === 'synced' && breakBtn) breakBtn.style.display = '';
+  };
 
   btn.addEventListener('click', function () {
     setTone('syncing');
