@@ -35,7 +35,7 @@ $quote = $cotizacion_recuperada;
         <span class="qed-error-text"></span>
         <button type="button" class="qed-error-dismiss" data-error-for="checklist" aria-label="Dismiss error"><i class="fas fa-times"></i></button>
       </div>
-      <form id="checklist_form" method="post" action="<?= htmlspecialchars(SAVE_CHECKLIST . $id_rfq, ENT_QUOTES, 'UTF-8'); ?>">
+      <form id="checklist_form" method="post" autocomplete="off" action="<?= htmlspecialchars(SAVE_CHECKLIST . $id_rfq, ENT_QUOTES, 'UTF-8'); ?>">
         <?php include 'forms/quote/checklist.inc.php'; ?>
       </form>
     </div>
@@ -57,7 +57,7 @@ $quote = $cotizacion_recuperada;
         <span class="qed-error-text"></span>
         <button type="button" class="qed-error-dismiss" data-error-for="information" aria-label="Dismiss error"><i class="fas fa-times"></i></button>
       </div>
-      <form id="information_form" method="post" action="<?= htmlspecialchars(SAVE_INFORMATION . $id_rfq, ENT_QUOTES, 'UTF-8'); ?>">
+      <form id="information_form" method="post" autocomplete="off" action="<?= htmlspecialchars(SAVE_INFORMATION . $id_rfq, ENT_QUOTES, 'UTF-8'); ?>">
         <?php include 'forms/quote/information.inc.php'; ?>
       </form>
     </div>
