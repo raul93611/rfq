@@ -7,7 +7,7 @@
     <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#8896a5;margin-bottom:12px;">
       <i class="fas fa-chart-bar mr-1"></i> Financial Summary
     </div>
-    <div style="display:flex;gap:0;flex-wrap:wrap;">
+    <div style="display:flex;gap:0;flex-wrap:wrap;justify-content:center;text-align:center;">
       <?php
       $summaryItems = [
         'Contract Amount'    => '$ ' . number_format($quote->obtener_quote_total_price(), 2),
@@ -22,7 +22,7 @@
         $i++;
         $isLast = ($i === $count);
       ?>
-        <div style="padding:4px 20px 4px <?= $i === 1 ? '0' : ''; ?>;<?= !$isLast ? 'border-right:1px solid #dee2e6;margin-right:20px;' : ''; ?>">
+        <div style="padding:4px 20px;<?= !$isLast ? 'border-right:1px solid #dee2e6;' : ''; ?>">
           <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#8896a5;margin-bottom:2px;"><?= $label; ?></div>
           <div style="font-size:16px;font-weight:700;color:var(--color-primary);font-family:'Manrope',sans-serif;"><?= $val; ?></div>
         </div>
