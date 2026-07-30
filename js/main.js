@@ -7,7 +7,6 @@ $(document).ready(function () {
 
   $('body').tooltip(tooltipOptions);
 
-  const idRfq = $('[name="id_rfq"]').val();
   const continueButton = $('#continue_button');
   const alertDeleteSystem = $('#alert_delete_system');
 
@@ -104,101 +103,6 @@ $(document).ready(function () {
     ],
     placeholder: 'Start typing here...', // Adds a placeholder for empty text areas
     height: 200 // Set a default height for the editor
-  });
-  /*********************** FILE INPUT INITIALIZATION ***********************/
-  $('#archivos_crear').fileinput({
-    theme: 'explorer-fa',
-    mainClass: 'input-group-sm',
-    initialPreviewAsData: true,
-    showUpload: false,
-    overwriteInitial: false,
-    fileActionSettings: {
-      showZoom: false,
-      showUpload: false,
-      showRemove: false
-    }
-  });
-  /*********************** FILE PREVIEW AND DELETION ***********************/
-  if ($('#archivos_ejemplo').length !== 0) {
-    $.ajax({
-      url: `/rfq/quote/get_quote_files/${idRfq}`,
-      dataType: 'json',
-      contentType: "application/json; charset=utf-8",
-      method: "GET",
-      success: function (data) {
-        const filesIcon = data.files.map(() => '<h1><i class="p-3 fas fa-file"></i></h1>');
-        const filesConfig = data.files.map(file => ({
-          previewAsData: false,
-          caption: file,
-          url: `/rfq/quote/delete_document/${idRfq}/${file}`,
-          downloadUrl: `/rfq/documentos/${idRfq}/${file}`,
-          key: `/rfq/quote/delete_document/${idRfq}/${file}`
-        }));
-
-        $('#archivos_ejemplo').fileinput({
-          theme: 'explorer-fa',
-          mainClass: 'input-group-sm',
-          uploadUrl: `/rfq/quote/load_img/${idRfq}`,
-          overwriteInitial: false,
-          initialPreviewAsData: true,
-          initialPreview: filesIcon,
-          initialPreviewConfig: filesConfig,
-          showRemove: false,
-          showCancel: false,
-          fileActionSettings: {
-            showZoom: false
-          }
-        });
-
-        // Handle pre-delete events
-        $('#archivos_ejemplo').on('filepredelete', function (event, key) {
-          alertDeleteSystem.modal(); // Open delete confirmation modal
-          continueButton.attr('href', key);
-
-          continueButton.one('click', function (e) {
-            e.preventDefault();
-            $.ajax({
-              url: key,
-              type: 'POST',
-              success: function () {
-                location.reload(); // Reload the page on successful deletion
-              },
-              error: function (jqXHR, textStatus, errorThrown) {
-                console.error("Deletion failed:", textStatus, errorThrown);
-              }
-            });
-          });
-
-          return true;
-        });
-      },
-      error: function (jqXHR, textStatus, errorThrown) {
-        console.error("Failed to load files:", textStatus, errorThrown);
-      }
-    });
-  }
-
-  /*********************** DOWNLOAD ALL FILES ***********************/
-  $('#download-all').on('click', function (e) {
-    e.preventDefault();
-
-    $.ajax({
-      url: '/rfq/quote/download_all',
-      type: 'POST',
-      data: { idRfq }, // Use the existing `idRfq` variable
-      success: function (response) {
-        if (response.error) {
-          console.error("Error:", response.error);
-        } else if (response.downloadUrl) {
-          window.location.href = response.downloadUrl; // Redirect to download
-        } else {
-          console.error("Unexpected response from the server.");
-        }
-      },
-      error: function (jqXHR, textStatus, errorThrown) {
-        console.error("AJAX request failed:", textStatus, errorThrown);
-      }
-    });
   });
   /************************************** SHOW COMMENTS BUTTON ************************/
   $('#mostrar_comentarios').on('click', function () {

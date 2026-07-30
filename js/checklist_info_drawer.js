@@ -21,6 +21,7 @@
   var panels = $$('.qed-tab-panel');
   var openChecklistBtn = $('#qed-open-checklist');
   var openInformationBtn = $('#qed-open-information');
+  var openDocumentsBtn = $('#qed-open-documents');
   var confirmOverlay = $('#qed-confirm-overlay');
   var confirmCancelBtn = $('#qed-confirm-cancel');
   var confirmDiscardBtn = $('#qed-confirm-discard');
@@ -127,6 +128,7 @@
 
   if (openChecklistBtn) openChecklistBtn.addEventListener('click', function () { openDrawer('checklist'); });
   if (openInformationBtn) openInformationBtn.addEventListener('click', function () { openDrawer('information'); });
+  if (openDocumentsBtn) openDocumentsBtn.addEventListener('click', function () { openDrawer('documents'); });
   tabButtons.forEach(function (btn) {
     btn.addEventListener('click', function () { switchTab(btn.dataset.tab); });
   });
@@ -251,6 +253,41 @@
 
   if (checklistForm) checklistForm.addEventListener('submit', function (e) { e.preventDefault(); saveTab('checklist'); });
   if (informationForm) informationForm.addEventListener('submit', function (e) { e.preventDefault(); saveTab('information'); });
+
+  /* ---------- Documents tab — dropzone/upload widget + live count ---------- */
+
+  function updateDocumentsCount(count) {
+    var tabCountEl = $('#qed-tab-documents-count');
+    if (tabCountEl) tabCountEl.textContent = count;
+    var statusValueEl = $('#qed-documents-status-value');
+    if (statusValueEl) statusValueEl.textContent = count + (count === 1 ? ' file attached' : ' files attached');
+  }
+
+  var documentsRoot = $('#qed-documents-widget');
+  if (documentsRoot && window.DocumentWidget) {
+    window.DocumentWidget.init(documentsRoot, {
+      mode: 'immediate',
+      idRfq: documentsRoot.dataset.idRfq,
+      onCountChange: updateDocumentsCount
+    });
+  }
+
+  var downloadAllBtn = $('#qed-download-all-btn');
+  if (downloadAllBtn && documentsRoot) {
+    downloadAllBtn.addEventListener('click', function () {
+      fetch('/rfq/quote/download_all', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest' },
+        credentials: 'same-origin',
+        body: 'idRfq=' + encodeURIComponent(documentsRoot.dataset.idRfq)
+      })
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+          if (data && data.downloadUrl) window.location.href = data.downloadUrl;
+        })
+        .catch(function () {});
+    });
+  }
 
   /* ---------- auto-open from old bookmarked URLs (?drawer=checklist|information) ---------- */
 

@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 All built. Detail for most of these lives in the matching `###` section below.
 
-Quote Inline Editing · SharePoint Sheet Sync · Comment Mentions & Notifications · Bid Requirement Fields (Site Visit/Q&A Deadline/Resumes) · Bid Pipeline Sync Controls · Bid Pipeline Metrics Dashboard · Pipeline Table View · 3-Year Annual Awards Comparison · Quote Lifecycle Audit Events · Write-Once Sheet Sync · Advanced Quote Search · Commercial Moving bid type + 50/50 payment term · Shared Notification Mailbox · Daily RFQ Digest Email · Quote Checklist & Info Drawer
+Quote Inline Editing · SharePoint Sheet Sync · Comment Mentions & Notifications · Bid Requirement Fields (Site Visit/Q&A Deadline/Resumes) · Bid Pipeline Sync Controls · Bid Pipeline Metrics Dashboard · Pipeline Table View · 3-Year Annual Awards Comparison · Quote Lifecycle Audit Events · Write-Once Sheet Sync · Advanced Quote Search · Commercial Moving bid type + 50/50 payment term · Shared Notification Mailbox · Daily RFQ Digest Email · Quote Checklist & Info Drawer · Documents Drawer Tab + Custom File Widget
 
 ## Environment
 
@@ -128,3 +128,15 @@ Contract-info cards on `perfil/quote/editar_cotizacion/{id}` are denser (same fi
 **Old `/quote/checklist/{id}` and `/quote/information/{id}` URLs** redirect via `Redireccion::redirigir1` (client-side `<script>` redirect), not `redirigir` (`header()`) — `vistas/perfil.php` already echoes the page shell (`documento_declaracion.inc.php`) before reaching those routing cases, so a header-based redirect fails silently with "headers already sent". `editar_cotizacion.inc.php`'s own not-found guard uses the same `redirigir1` pattern for the same reason.
 
 Test: `tests/php/checklist_info_drawer_test.php`, `tests/specs/11-checklist-info-drawer.spec.js`.
+
+### Documents Drawer Tab + Custom File Widget
+
+Documents moved off the quote edit page into a third `qed-drawer` tab (`data-tab="documents"`), matching the Checklist/Information status-card → drawer pattern; the old inline block and its `#download-all` button are gone from `edicion_cotizacion_recuperada.inc.php`. kartik-v bootstrap-fileinput is fully retired (CDN CSS/JS removed from `documento_declaracion.inc.php`/`documento_cierre.inc.php`) and replaced everywhere by `js/document_widget.js` (`doc-*` CSS namespace, same bare-tokens-scoped-to-root pattern as `qed-*`, self-contained so it works with or without a `qed-drawer` ancestor).
+
+`DocumentWidget.init(root, opts)` runs in two modes from one shared implementation:
+- **`immediate`** (edit page, inside the drawer): loads existing files via `get_quote_files`, uploads each dropped file with its own XHR (live progress, independent success/failure per file in a batch), deletes go through an inline confirm row (not the site-wide modal) via `delete_document`. Live count feeds both the drawer's tab badge and the status card (`#qed-documents-status-value`) through an `onCountChange` callback — same wiring as the Checklist tab's live count.
+- **`deferred`** (create-quote page, no `id_rfq` yet): dropped files are staged client-side only, mirrored onto the real `name="documentos[]"` file input via `new DataTransfer()` so the page's existing native multipart submit is untouched — no upload request fires until the form itself is submitted.
+
+Backend is untouched (`get_quote_files.php`/`load_img.php`/`delete_document.php`/`download_all.php` all reused as-is); the field name uploads go out under (`archivos_ejemplo[]`) still matches what `load_img.php`/`Input::save_files()` expect. `document_widget.js` must load before `js/checklist_info_drawer.js` (which calls `DocumentWidget.init` synchronously at parse time) — since page-specific scripts run *before* `documento_cierre.inc.php`'s global closing scripts in `vistas/perfil.php`'s include order, `document_widget.js` is tagged in the `<head>` (`documento_declaracion.inc.php`) rather than alongside `main.js`.
+
+Test: `tests/php/documents_drawer_test.php`, `tests/specs/12-documents-drawer.spec.js`.

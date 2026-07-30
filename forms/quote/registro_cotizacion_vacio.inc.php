@@ -148,7 +148,16 @@
 
   <div class="form-group">
     <label>Documents</label>
-    <input type="file" id="archivos_crear" multiple name="documentos[]">
+    <div class="doc-widget" id="doc-widget-create">
+      <div class="doc-dropzone">
+        <div class="doc-dropzone-icon"><i class="fas fa-upload"></i></div>
+        <div class="doc-dropzone-title">Drag &amp; drop files here, or <em>browse</em></div>
+        <div class="doc-dropzone-sub">PDF, Word, Excel, images</div>
+        <input type="file" id="archivos_crear" multiple name="documentos[]">
+      </div>
+      <div class="doc-empty">No files attached yet.</div>
+      <div class="doc-filelist"></div>
+    </div>
     <small class="form-text text-muted">Upload relevant documents for this bid.</small>
   </div>
 
