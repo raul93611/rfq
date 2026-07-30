@@ -77,6 +77,23 @@ test.describe('Documents Drawer Tab', () => {
     await expect(page.locator('.doc-file-row', { hasText: 'to-delete.pdf' })).toHaveCount(0);
     expect(page.url()).toContain(`editar_cotizacion/${rfqId}`);
   });
+
+  test('Download All zips the attached files and returns a working download URL', async ({ page, request }) => {
+    await page.click('#qed-open-documents');
+    await page.setInputFiles('#qed-documents-widget .doc-dropzone input[type=file]', uploadFile('zip-me.pdf'));
+    await page.waitForSelector('[data-testid="doc-file-delete"]');
+
+    const [response] = await Promise.all([
+      page.waitForResponse((res) => res.url().includes('/quote/download_all')),
+      page.click('#qed-download-all-btn'),
+    ]);
+    expect(response.status()).toBe(200);
+    const body = await response.json();
+    expect(body.downloadUrl).toMatch(new RegExp(`^/rfq/tmp/zips/files_${rfqId}\\.zip$`));
+
+    const zipRes = await request.get('http://localhost' + body.downloadUrl);
+    expect(zipRes.ok()).toBe(true);
+  });
 });
 
 test.describe('Documents widget on the New Quote page (deferred mode)', () => {
