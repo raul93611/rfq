@@ -22,7 +22,14 @@ try {
 
   // Define the ZIP file name and path
   $zipFileName = 'files_' . $idRfq . '.zip';
-  $zipFilePath = $_SERVER['DOCUMENT_ROOT'] . '/rfq/tmp/zips/' . $zipFileName; // Path where the ZIP file will be saved
+  $zipDir = $_SERVER['DOCUMENT_ROOT'] . '/rfq/tmp/zips';
+  $zipFilePath = $zipDir . '/' . $zipFileName; // Path where the ZIP file will be saved
+
+  // ZipArchive::open() with CREATE does not create missing parent directories, and tmp/ is
+  // gitignored runtime-only content — nothing else ever creates the zips/ subfolder.
+  if (!is_dir($zipDir)) {
+    mkdir($zipDir, 0777, true);
+  }
 
   $zip = new ZipArchive();
 
