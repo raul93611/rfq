@@ -115,6 +115,16 @@
       var actions = document.createElement('div');
       actions.className = 'doc-file-actions';
       if (f.status === 'done' || f.status === 'staged') {
+        if (f.status === 'done') {
+          var dlBtn = document.createElement('a');
+          dlBtn.className = 'doc-file-btn';
+          dlBtn.setAttribute('data-testid', 'doc-file-download');
+          dlBtn.setAttribute('aria-label', 'Download');
+          dlBtn.setAttribute('href', '/rfq/documentos/' + idRfq + '/' + encodeURIComponent(f.name));
+          dlBtn.setAttribute('download', f.name);
+          dlBtn.appendChild(icon('fa-download'));
+          actions.appendChild(dlBtn);
+        }
         var delBtn = document.createElement('button');
         delBtn.type = 'button';
         delBtn.className = 'doc-file-btn is-danger';

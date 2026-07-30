@@ -6,10 +6,11 @@ function fixtures() {
   return JSON.parse(fs.readFileSync(path.join(__dirname, '../.fixtures.json'), 'utf-8'));
 }
 
-function makeUploadFile(name) {
-  const filePath = path.join(__dirname, '../.tmp-' + name);
-  fs.writeFileSync(filePath, 'Playwright test upload contents for ' + name);
-  return filePath;
+// In-memory file — setInputFiles uses `name` verbatim as the uploaded filename,
+// independent of any file on disk, so the exact filename asserted against later
+// (e.g. the download link's href) is guaranteed rather than derived from a local path.
+function uploadFile(name) {
+  return { name, mimeType: 'application/pdf', buffer: Buffer.from('Playwright test upload contents for ' + name) };
 }
 
 test.describe('Documents Drawer Tab', () => {
@@ -46,24 +47,24 @@ test.describe('Documents Drawer Tab', () => {
     await page.click('#qed-open-documents');
     const before = await page.locator('#qed-tab-documents-count').textContent();
 
-    const filePath = makeUploadFile('upload-test.pdf');
-    await page.setInputFiles('#qed-documents-widget .doc-dropzone input[type=file]', filePath);
+    await page.setInputFiles('#qed-documents-widget .doc-dropzone input[type=file]', uploadFile('upload-test.pdf'));
 
     const row = page.locator('.doc-file-row', { hasText: 'upload-test.pdf' });
     await expect(row).toBeVisible();
     await expect(row.locator('.doc-file-meta.is-error-text')).toHaveCount(0);
     await expect(page.locator('[data-testid="doc-file-delete"]').first()).toBeVisible({ timeout: 10000 });
 
+    const downloadLink = row.locator('[data-testid="doc-file-download"]');
+    await expect(downloadLink).toBeVisible();
+    await expect(downloadLink).toHaveAttribute('href', /\/rfq\/documentos\/\d+\/upload-test\.pdf$/);
+
     await expect(page.locator('#qed-tab-documents-count')).not.toHaveText(before);
     await expect(page.locator('#qed-documents-status-value')).toContainText('attached');
-
-    fs.unlinkSync(filePath);
   });
 
   test('deleting a file shows an inline confirm; confirming removes it via AJAX with no reload', async ({ page }) => {
     await page.click('#qed-open-documents');
-    const filePath = makeUploadFile('to-delete.pdf');
-    await page.setInputFiles('#qed-documents-widget .doc-dropzone input[type=file]', filePath);
+    await page.setInputFiles('#qed-documents-widget .doc-dropzone input[type=file]', uploadFile('to-delete.pdf'));
 
     const row = page.locator('.doc-file-row', { hasText: 'to-delete.pdf' });
     await row.locator('[data-testid="doc-file-delete"]').click();
@@ -75,8 +76,6 @@ test.describe('Documents Drawer Tab', () => {
     ]);
     await expect(page.locator('.doc-file-row', { hasText: 'to-delete.pdf' })).toHaveCount(0);
     expect(page.url()).toContain(`editar_cotizacion/${rfqId}`);
-
-    fs.unlinkSync(filePath);
   });
 });
 
@@ -88,12 +87,9 @@ test.describe('Documents widget on the New Quote page (deferred mode)', () => {
     let uploadRequestSeen = false;
     page.on('request', (req) => { if (req.url().includes('/quote/load_img/')) uploadRequestSeen = true; });
 
-    const filePath = makeUploadFile('staged-test.pdf');
-    await page.setInputFiles('#doc-widget-create .doc-dropzone input[type=file]', filePath);
+    await page.setInputFiles('#doc-widget-create .doc-dropzone input[type=file]', uploadFile('staged-test.pdf'));
 
     await expect(page.locator('#doc-widget-create .doc-file-row', { hasText: 'staged-test.pdf' })).toBeVisible();
     expect(uploadRequestSeen).toBe(false);
-
-    fs.unlinkSync(filePath);
   });
 });
