@@ -3624,3 +3624,73 @@ body.qed-drawer-open { overflow: hidden; }
 @media (max-width: 1100px) {
   .qed-status-row { flex-direction: column; }
 }
+
+/* =========================================================================
+   Documents drop widget (doc-* namespace)
+   Custom replacement for the kartik-v bootstrap-fileinput plugin. Same
+   bare-tokens-scoped-to-root approach as the qed-* block above, so this
+   widget carries its own tokens and works standalone on the create-quote
+   page (no drawer ancestor) as well as inside the qed-drawer Documents tab.
+   ========================================================================= */
+.doc-widget {
+  --ink-900:#0f1623; --ink-700:#2c3849; --ink-500:#5a6a7e; --ink-400:#7d8ba0; --ink-300:#aab4c2;
+  --line:#e3e7ee; --line-2:#eef1f6; --navy-50:#f4f6fa;
+  --sky:#2db4e8; --sky-600:#1aa2dc; --sky-50:#e6f5fc;
+  --green:#16a34a; --green-600:#15803d; --green-50:#e8f6ec;
+  --red:#dc2626; --red-50:#fbe9e9;
+  --amber:#d97706; --amber-50:#fdf2dc;
+}
+.doc-dropzone {
+  border: 1.5px dashed #cdd6e2; border-radius: 9px; background: #fafbfd;
+  padding: 18px; text-align: center; cursor: pointer; transition: border-color .12s, background .12s;
+}
+.doc-dropzone:hover, .doc-dropzone.is-drag { border-color: var(--sky); background: var(--sky-50); }
+.doc-dropzone-icon {
+  width: 34px; height: 34px; border-radius: 50%; background: var(--sky-50); color: var(--sky-600);
+  display: grid; place-items: center; margin: 0 auto 8px;
+}
+.doc-dropzone-title { font-size: 13px; font-weight: 600; color: var(--ink-700); }
+.doc-dropzone-title em { color: var(--sky-600); font-style: normal; font-weight: 700; text-decoration: underline; }
+.doc-dropzone-sub { font-size: 11.5px; color: var(--ink-400); margin-top: 3px; }
+.doc-dropzone input[type=file] { display: none; }
+
+.doc-empty { padding: 20px; text-align: center; color: var(--ink-400); font-size: 12.5px; }
+.doc-filelist { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+.doc-file-row {
+  position: relative; display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; border: 1px solid var(--line); border-radius: 9px; background: #fff;
+}
+.doc-file-row.is-error { border-color: #f3c2c2; background: var(--red-50); }
+.doc-file-badge {
+  width: 34px; height: 34px; border-radius: 8px; flex-shrink: 0;
+  display: grid; place-items: center; font-size: 9.5px; font-weight: 800; color: #fff; letter-spacing: .02em;
+}
+.doc-file-badge.pdf { background: #dc2626; }
+.doc-file-badge.word { background: #2f6fd6; }
+.doc-file-badge.excel { background: #16a34a; }
+.doc-file-badge.image { background: #9333ea; }
+.doc-file-badge.generic { background: #8593a6; }
+.doc-file-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.doc-file-name { font-size: 12.5px; font-weight: 600; color: var(--ink-900); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.doc-file-meta { font-size: 11px; color: var(--ink-400); }
+.doc-file-meta.is-error-text { color: var(--red); }
+.doc-file-progress-track { height: 5px; border-radius: 3px; background: var(--line-2); overflow: hidden; margin-top: 2px; }
+.doc-file-progress-bar { height: 100%; background: var(--sky); border-radius: 3px; transition: width .2s linear; }
+.doc-file-actions { display: flex; gap: 6px; flex-shrink: 0; }
+.doc-file-btn {
+  width: 28px; height: 28px; display: grid; place-items: center; border: 1px solid var(--line);
+  background: #fff; border-radius: 6px; color: var(--ink-500); cursor: pointer;
+}
+.doc-file-btn:hover { background: var(--navy-50); }
+.doc-file-btn.is-danger:hover { background: var(--red-50); color: var(--red); border-color: #f3c2c2; }
+.doc-file-retry { color: var(--sky-600); }
+.doc-file-confirm {
+  position: absolute; inset: 0; background: #fff; border-radius: 9px; display: flex; align-items: center;
+  gap: 10px; padding: 0 12px; border: 1px solid #f3c2c2;
+}
+.doc-file-confirm-text { font-size: 12px; color: var(--ink-700); flex: 1; }
+.doc-file-confirm-actions { display: flex; gap: 6px; }
+.doc-file-confirm-actions button { height: 26px; padding: 0 10px; border-radius: 6px; font-size: 11.5px; font-weight: 600; border: 1px solid var(--line); background: #fff; cursor: pointer; }
+.doc-file-confirm-cancel:hover { background: var(--navy-50); }
+.doc-file-confirm-delete { background: var(--red); border-color: var(--red); color: #fff; }
+.doc-file-confirm-delete:hover { background: #b91c1c; }

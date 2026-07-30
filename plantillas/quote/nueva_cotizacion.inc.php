@@ -69,5 +69,12 @@ $(function () {
     var isSyncable = SYNCABLE_BID_TYPES.indexOf($(this).val()) !== -1;
     $('#sync_to_sheet').prop('checked', isSyncable);
   });
+
+  // Documents — staged client-side (no id_rfq yet); rides along with this form's
+  // native submit as documentos[] exactly like the old plugin-driven input did.
+  var docWidgetCreate = document.getElementById('doc-widget-create');
+  if (docWidgetCreate && window.DocumentWidget) {
+    window.DocumentWidget.init(docWidgetCreate, { mode: 'deferred' });
+  }
 });
 </script>

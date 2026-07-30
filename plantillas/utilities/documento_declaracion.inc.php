@@ -16,6 +16,7 @@
   <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-timeline/7.7.3/vis-timeline-graph2d.min.js" integrity="sha512-Qf8QaMU6tjILOhQdWoXk3guYmm4dTOEgYbtYoGmQpdd4c4BEl/TzHgFJW5UtXWwo9VJYDnig38DVhl09JNVfLg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="<?= asset_url('js/document_widget.js'); ?>"></script>
 
   <!-- Stylesheets -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-timeline/7.7.3/vis-timeline-graph2d.css" integrity="sha512-x+B2ONGKkcWCTxOtB5zFVHSeNL9PnZPcjTB6KbJzjTNyfBuJBjpDwQR5lQYf66bAjhBnB5fJOk0wKX6d51js1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -23,8 +24,6 @@
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" crossorigin="anonymous">
-  <link href="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.2.1/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
-  <link href="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.2.1/themes/explorer-fa/theme.min.css" media="all" rel="stylesheet" type="text/css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">

@@ -53,11 +53,14 @@
 
   </div>
 
-  <!-- Checklist / Information entry cards -->
+  <!-- Checklist / Information / Documents entry cards -->
   <?php
   $qedChecklistCount    = $cotizacion_recuperada->getChecklistCompletionCount();
   $qedChecklistTotal    = 10;
   $qedChecklistComplete = $qedChecklistCount === $qedChecklistTotal;
+
+  $qedDocPath  = $_SERVER['DOCUMENT_ROOT'] . '/rfq/documentos/' . $cotizacion_recuperada->obtener_id();
+  $qedDocCount = is_dir($qedDocPath) ? count(array_diff(scandir($qedDocPath), ['.', '..'])) : 0;
   ?>
   <div class="qed-status-row mb-3">
     <button type="button" id="qed-open-checklist" class="qed-status-card" data-tab="checklist">
@@ -78,19 +81,14 @@
       </span>
       <span class="qed-status-chevron"><i class="fas fa-chevron-right"></i></span>
     </button>
-  </div>
-
-  <!-- Documents -->
-  <div class="mb-4" style="background:#f8f9fa;border-radius:8px;padding:14px 16px;">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-      <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#8896a5;">
-        <i class="fas fa-paperclip mr-1"></i> Documents
+    <button type="button" id="qed-open-documents" class="qed-status-card" data-tab="documents">
+      <span class="qed-status-icon"><i class="fas fa-paperclip"></i></span>
+      <span class="qed-status-text">
+        <span class="qed-status-label">Documents</span>
+        <span class="qed-status-value" id="qed-documents-status-value"><?= $qedDocCount; ?> <?= $qedDocCount === 1 ? 'file' : 'files'; ?> attached</span>
       </span>
-      <button id="download-all" type="button" class="btn btn-sm btn-outline-secondary">
-        <i class="fa fa-download mr-1"></i> Download All
-      </button>
-    </div>
-    <input type="file" id="archivos_ejemplo" multiple name="archivos_ejemplo[]" style="width:100%;">
+      <span class="qed-status-chevron"><i class="fas fa-chevron-right"></i></span>
+    </button>
   </div>
 
   <!-- Items Table -->

@@ -19,6 +19,9 @@ $quote = $cotizacion_recuperada;
         Checklist <span class="qed-tab-count" id="qed-tab-checklist-count"><?= (int)$quote->getChecklistCompletionCount(); ?>/10</span>
       </button>
       <button type="button" class="qed-tab" data-tab="information" id="qed-tab-information">Information</button>
+      <button type="button" class="qed-tab" data-tab="documents" id="qed-tab-documents">
+        Documents <span class="qed-tab-count" id="qed-tab-documents-count"><?= (int)$qedDocCount; ?></span>
+      </button>
     </div>
   </div>
 
@@ -66,6 +69,27 @@ $quote = $cotizacion_recuperada;
       <button type="submit" class="btn btn-primary btn-sm qed-btn-save" id="qed-information-save-btn" form="information_form" name="save_information">
         <i class="fas fa-check mr-1"></i> Save Information
       </button>
+    </div>
+  </div>
+
+  <div class="qed-tab-panel is-hidden" data-tab-panel="documents">
+    <div class="qed-panel-topbar">
+      <span class="qed-panel-topbar-label">Documents</span>
+      <button type="button" id="qed-download-all-btn" class="btn btn-outline-secondary btn-sm">
+        <i class="fa fa-download mr-1"></i> Download All
+      </button>
+    </div>
+    <div class="qed-panel-scroll">
+      <div class="doc-widget" id="qed-documents-widget" data-id-rfq="<?= htmlspecialchars($id_rfq, ENT_QUOTES, 'UTF-8'); ?>">
+        <div class="doc-dropzone">
+          <div class="doc-dropzone-icon"><i class="fas fa-upload"></i></div>
+          <div class="doc-dropzone-title">Drag &amp; drop files here, or <em>browse</em></div>
+          <div class="doc-dropzone-sub">PDF, Word, Excel, images</div>
+          <input type="file" multiple>
+        </div>
+        <div class="doc-empty">No files attached yet.</div>
+        <div class="doc-filelist"></div>
+      </div>
     </div>
   </div>
 </aside>
