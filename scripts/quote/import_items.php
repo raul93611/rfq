@@ -3,7 +3,7 @@ require 'vendor/autoload.php';
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
   if (isset($_FILES['uploaded_file']) && $_FILES['uploaded_file']['error'] === UPLOAD_ERR_OK) {
     $file_tmp_path = $_FILES['uploaded_file']['tmp_name'];
     $file_name = $_FILES['uploaded_file']['name'];
@@ -15,7 +15,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       die('Invalid file format');
     }
 
-    // Process the file
+    $import_mode = ($_POST['import_mode'] ?? 'append') === 'replace' ? 'replace' : 'append';
+
+    // Process the file — the whole file is parsed (and would throw here on a malformed
+    // file) before anything below touches existing items, so a bad upload never leaves a
+    // Replace with existing items wiped and nothing imported in their place.
     $rows = [];
     try {
       if ($file_ext === 'csv') {
@@ -27,6 +31,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $roomMap = []; // Tracks normalized room names => IDs
 
       Conexion::abrir_conexion();
+
+      if ($import_mode === 'replace') {
+        $existingItems = RepositorioItem::obtener_items_por_id_rfq(Conexion::obtener_conexion(), $_POST['id_rfq']);
+        foreach ($existingItems as $existingItem) {
+          // delete_item() only cascades to `provider` — subitems need clearing separately
+          // or they're left orphaned pointing at a deleted item.
+          $subitems = RepositorioSubitem::obtener_subitems_por_id_item(Conexion::obtener_conexion(), $existingItem->obtener_id());
+          foreach ($subitems as $subitem) {
+            RepositorioSubitem::delete_subitem(Conexion::obtener_conexion(), $subitem->obtener_id());
+          }
+          RepositorioItem::delete_item(Conexion::obtener_conexion(), $existingItem->obtener_id());
+        }
+      }
 
       // Phase 1: Identify unique rooms and create them
       $roomsToCreate = [];
@@ -77,8 +94,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           $roomId
         );
         Conexion::abrir_conexion();
-        RepositorioItem::insertar_item(Conexion::obtener_conexion(), $item);
+        $newItemId = RepositorioItem::insertar_item(Conexion::obtener_conexion(), $item);
         Conexion::cerrar_conexion();
+
+        foreach ($row['providers'] as $providerRow) {
+          $provider = new Provider('', $newItemId, $providerRow['name'], $providerRow['price']);
+          Conexion::abrir_conexion();
+          RepositorioProvider::insertar_provider(Conexion::obtener_conexion(), $provider);
+          Conexion::cerrar_conexion();
+        }
       }
 
       Redireccion::redirigir(EDITAR_COTIZACION . '/' . $_POST['id_rfq']);
@@ -86,6 +110,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       die('Error processing file: ' . $e->getMessage());
     }
   }
+}
+
+// Reads up to 5 Provider Name/Price pairs starting at $startIndex. A pair is skipped
+// entirely when Name is blank; when Name is present but Price is blank/non-numeric,
+// Price defaults to 0.
+function parseProviderPairs($cells, $startIndex) {
+  $providers = [];
+  for ($p = 0; $p < 5; $p++) {
+    $nameIndex = $startIndex + ($p * 2);
+    $priceIndex = $nameIndex + 1;
+    $name = isset($cells[$nameIndex]) ? trim((string) $cells[$nameIndex]) : '';
+    if ($name === '') continue;
+    $price = isset($cells[$priceIndex]) ? trim((string) $cells[$priceIndex]) : '';
+    $providers[] = ['name' => $name, 'price' => is_numeric($price) ? $price : 0];
+  }
+  return $providers;
 }
 
 function processCsv($filePath) {
@@ -111,7 +151,8 @@ function processCsv($filePath) {
         'quantity' => $data[6],
         'comments' => $data[7],
         'website' => $data[8],
-        'room' => !empty($room) ? $room : null
+        'room' => !empty($room) ? $room : null,
+        'providers' => parseProviderPairs($data, 10)
       ];
     }
     fclose($handle);
@@ -145,7 +186,8 @@ function processExcel($filePath) {
       'quantity' => $row[6],
       'comments' => $row[7],
       'website' => $row[8],
-      'room' => !empty($room) ? $room : null
+      'room' => !empty($room) ? $room : null,
+      'providers' => parseProviderPairs($row, 10)
     ];
   }
   return $processed;

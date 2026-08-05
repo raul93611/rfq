@@ -2305,6 +2305,86 @@ h3.text-info.text-center .fa-exclamation-circle {
   resize: vertical;
 }
 
+/* =================== Import Items Modal (ii-) =================== */
+.ii-field-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.ii-template-link {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 12px; font-weight: 600; color: var(--iem-sky-600);
+  white-space: nowrap; cursor: pointer;
+}
+.ii-template-link:hover { text-decoration: underline; }
+
+.ii-dropzone {
+  border: 1.5px dashed #cdd6e2; border-radius: 9px;
+  background: #fafbfd; padding: 16px 18px;
+  transition: border-color .12s, background .12s;
+  cursor: pointer;
+}
+.ii-dropzone:hover, .ii-dropzone.is-drag { border-color: var(--iem-sky); background: var(--iem-sky-50); }
+.ii-dropzone-cue { display: flex; align-items: center; gap: 14px; color: var(--iem-ink-400); }
+.ii-dropzone-title { font-size: 13px; color: var(--iem-ink-700); font-weight: 500; }
+.ii-dropzone-link { color: var(--iem-sky-600); font-weight: 600; text-decoration: underline; }
+.ii-dropzone-sub { font-size: 11.5px; color: var(--iem-ink-400); margin-top: 2px; }
+
+.ii-file-chip {
+  margin-top: 8px; display: flex; align-items: center; gap: 9px;
+  padding: 8px 10px; background: var(--iem-navy-50);
+  border: 1px solid var(--iem-line-2); border-radius: 7px;
+  font-size: 12.5px; color: var(--iem-ink-700);
+}
+.ii-file-badge {
+  width: 28px; height: 28px; border-radius: 7px; flex-shrink: 0;
+  display: grid; place-items: center; font-size: 8.5px; font-weight: 800; color: #fff;
+  background: var(--iem-green);
+}
+.ii-file-name { font-weight: 500; color: var(--iem-ink-900); }
+.ii-file-size { color: var(--iem-ink-400); font-size: 11.5px; }
+.ii-file-remove {
+  margin-left: auto; width: 22px; height: 22px;
+  display: grid; place-items: center;
+  border: 0; background: transparent; border-radius: 5px;
+  color: var(--iem-ink-400); cursor: pointer;
+}
+.ii-file-remove:hover { background: var(--iem-red-50); color: var(--iem-red); }
+
+.ii-radio-group { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; }
+.ii-radio {
+  position: relative; display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 12px; border: 1px solid var(--iem-line); border-radius: 8px;
+  background: #fff; cursor: pointer;
+  transition: border-color .12s, background .12s;
+}
+.ii-radio:hover { border-color: #c9d3e0; }
+.ii-radio.is-selected { border-color: #bfe3f5; background: var(--iem-sky-50); }
+.ii-radio-input { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; pointer-events: none; }
+.ii-radio-dot {
+  flex-shrink: 0; width: 18px; height: 18px; margin-top: 1px;
+  border: 1.5px solid var(--iem-ink-300); border-radius: 50%;
+  display: grid; place-items: center;
+  transition: border-color .15s, background-color .15s;
+}
+.ii-radio-dot::after {
+  content: ''; width: 8px; height: 8px; border-radius: 50%;
+  background: #fff; transform: scale(0);
+  transition: transform .16s cubic-bezier(.2,1.4,.5,1);
+}
+.ii-radio.is-selected .ii-radio-dot { border-color: var(--iem-sky); background: var(--iem-sky); }
+.ii-radio.is-selected .ii-radio-dot::after { transform: scale(1); }
+.ii-radio-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.ii-radio-label { font-size: 13px; font-weight: 600; color: var(--iem-ink-900); }
+.ii-radio-help { font-size: 11.5px; color: var(--iem-ink-500); line-height: 1.4; }
+
+.ii-warning-collapse { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .32s cubic-bezier(.4,0,.2,1); }
+.ii-warning-collapse.is-open { grid-template-rows: 1fr; }
+.ii-warning-collapse > div { overflow: hidden; min-height: 0; }
+.ii-warning {
+  margin-top: 10px; display: flex; align-items: flex-start; gap: 9px;
+  padding: 10px 11px; background: var(--iem-amber-50); border: 1px solid #f5d98a;
+  border-radius: 7px; color: #92400e; font-size: 12.5px; line-height: 1.45;
+}
+.ii-warning svg { flex-shrink: 0; color: var(--iem-amber); margin-top: 1px; }
+.ii-warning strong { color: #78350f; font-weight: 700; }
+
 /* =================== Sheet Sync Block (detail page) =================== */
 .ss-block {
   margin-top: 16px;

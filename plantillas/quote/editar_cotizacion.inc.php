@@ -158,3 +158,4 @@ include_once 'plantillas/quote/modals/edit_provider_subitem_modal.inc.php';
 <script src="<?= asset_url('js/sheet_sync.js'); ?>"></script>
 <script src="<?= asset_url('js/sources_sought.js'); ?>"></script>
 <script src="<?= asset_url('js/checklist_info_drawer.js'); ?>"></script>
+<script src="<?= asset_url('js/import_items_modal.js'); ?>"></script>
