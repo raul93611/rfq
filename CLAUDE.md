@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 All built. Detail for most of these lives in the matching `###` section below.
 
-Quote Inline Editing · SharePoint Sheet Sync · Comment Mentions & Notifications · Bid Requirement Fields (Site Visit/Q&A Deadline/Resumes) · Bid Pipeline Sync Controls · Bid Pipeline Metrics Dashboard · Pipeline Table View · 3-Year Annual Awards Comparison · Quote Lifecycle Audit Events · Write-Once Sheet Sync · Advanced Quote Search · Commercial Moving bid type + 50/50 payment term · Shared Notification Mailbox · Daily RFQ Digest Email · Quote Checklist & Info Drawer · Documents Drawer Tab + Custom File Widget
+Quote Inline Editing · SharePoint Sheet Sync · Comment Mentions & Notifications · Bid Requirement Fields (Site Visit/Q&A Deadline/Resumes) · Bid Pipeline Sync Controls · Bid Pipeline Metrics Dashboard · Pipeline Table View · 3-Year Annual Awards Comparison · Quote Lifecycle Audit Events · Write-Once Sheet Sync · Advanced Quote Search · Commercial Moving bid type + 50/50 payment term · Shared Notification Mailbox · Daily RFQ Digest Email · Quote Checklist & Info Drawer · Documents Drawer Tab + Custom File Widget · Import Items Enhancements (template download, append/replace mode, provider import)
 
 ## Environment
 
@@ -119,7 +119,7 @@ One HTML email (`DigestEmailTemplate`) to every active Admin-role user (`Reposit
 
 ### Quote Checklist & Info Drawer
 
-Contract-info cards on `perfil/quote/editar_cotizacion/{id}` are denser (same fields, less padding); the old Checklist/Information nav buttons are now two `.qed-status-card` status-strip cards (styled on the `.ss-block` pattern) that open a slide-over drawer (`plantillas/quote/modals/checklist_information_drawer.inc.php`, `js/checklist_info_drawer.js`, `qed-*` CSS namespace — bare design tokens scoped to `.qed-status-row, .qed-drawer, .qed-drawer-scrim, .qed-confirm-overlay`, same pattern as `#pm-table-view, .qs-scrim`). Both tabs' `forms/quote/checklist.inc.php`/`information.inc.php` stay mounted in the DOM the whole time the drawer is open (CSS-hidden, not removed) so switching tabs never loses edits — required prefixing checklist.inc.php's colliding ids (`email_code`→`cl_email_code`, `canal`→`cl_canal`, `ship_to`→`cl_ship_to`, `Input::print_designated_user($quote, 'cl_')`) since both forms render simultaneously.
+Contract-info cards on `perfil/quote/editar_cotizacion/{id}` are denser (same fields, less padding); the old Checklist/Information nav buttons are now two `.qed-status-card` status-strip cards (styled on the `.ss-block` pattern) that open a slide-over drawer (`plantillas/quote/modals/checklist_information_drawer.inc.php`, `js/checklist_info_drawer.js`, `qed-*` CSS namespace — bare design tokens scoped to `.qed-status-row, .qed-drawer, .qed-drawer-scrim, .qed-confirm-overlay`, same pattern as `#pm-table-view, .qs-scrim`). Both tabs' `forms/quote/checklist.inc.php`/`information.inc.php` stay mounted in the DOM the whole time the drawer is open (CSS-hidden, not removed) so switching tabs never loses edits — required prefixing checklist.inc.php's ids that collide with information.inc.php's (`cl_` prefix) since both forms render simultaneously.
 
 **Checklist completeness** is `Rfq::getChecklistCompletionCount()` (10 fields incl. File Document/Accounting checkbox groups) — Set Aside/GSA only count once moved off their default dropdown option (`'Full & Open'`/`'na'`), not merely non-empty.
 
@@ -140,3 +140,14 @@ Documents moved off the quote edit page into a third `qed-drawer` tab (`data-tab
 Backend is untouched (`get_quote_files.php`/`load_img.php`/`delete_document.php`/`download_all.php` all reused as-is); the field name uploads go out under (`archivos_ejemplo[]`) still matches what `load_img.php`/`Input::save_files()` expect. `document_widget.js` must load before `js/checklist_info_drawer.js` (which calls `DocumentWidget.init` synchronously at parse time) — since page-specific scripts run *before* `documento_cierre.inc.php`'s global closing scripts in `vistas/perfil.php`'s include order, `document_widget.js` is tagged in the `<head>` (`documento_declaracion.inc.php`) rather than alongside `main.js`.
 
 Test: `tests/php/documents_drawer_test.php`, `tests/specs/12-documents-drawer.spec.js`.
+
+### Import Items Enhancements
+
+Import Items modal (Items table toolbar → Actions → Import items) gained a template download, an Append/Replace mode, and provider import — `scripts/quote/import_items.php` + new `scripts/quote/import_items_template.php`.
+
+- **Template** streams a header-only `.xlsx`: the existing 10 item columns unchanged at positions 0-9 (including Room at 9), plus 5 new Provider Name/Price pairs appended at 10-19 (20 columns total — not 9/19 as an earlier planning doc miscounted, since Room was already the importer's 10th column).
+- `processCsv`/`processExcel` read those 5 pairs per row via `parseProviderPairs()`: a pair is skipped when Name is blank; Price defaults to 0 when Name is present but Price is blank/non-numeric.
+- New `import_mode` (`append` default | `replace`). Replace deletes all existing items — and, first, each item's subitems — before inserting the file's rows; Rooms are left in place. The whole file is parsed before any deletion, so a malformed upload can't partially wipe a quote. **Gotcha:** `RepositorioItem::delete_item()` alone throws an FK-violation exception on any item with a subitem (`subitems.id_item` → `item.id`) — always delete subitems first.
+- Modal UI reuses the `iem-*` shell (same chrome as Add/Edit Item) with new `ii-*` controls: single-file dropzone, Add/Replace radio group, and a height-collapse Fulfillment warning shown only for Replace on a quote where `obtener_fullfillment()` is already true. Upload stays disabled until a file is chosen. JS: `js/import_items_modal.js`.
+
+Test: `tests/php/import_items_test.php`, `tests/specs/13-import-items.spec.js`.
