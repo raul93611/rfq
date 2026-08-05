@@ -151,6 +151,7 @@
     </a>
     <?php include_once 'forms/quote/templates/rooms_button.inc.php'; ?>
     <?php include_once 'forms/quote/templates/actions_button.inc.php'; ?>
+    <?php include_once 'forms/quote/templates/downloads_button.inc.php'; ?>
   </div>
 
   <div class="quote-action-bar__totals">

@@ -20,6 +20,24 @@ test.describe('Quote Editing — Items', () => {
     await expect(page.locator('.iem-edit-item').first()).toBeVisible();
   });
 
+  test('Downloads dropdown lives in the bottom action bar, not above the Items table', async ({ page }) => {
+    // See bugs/downloads-button-relocate-to-navbar.md — Downloads used to render inside
+    // .quote-section-header via RepositorioItem::escribir_items(), styled as a leftward
+    // dropleft dropdown. It now lives in .quote-action-bar__right as the rightmost button,
+    // matching Rooms/Actions (dropup, right-aligned).
+    const actionBarDownloads = page.locator('.quote-action-bar__right .dropdown-toggle', { hasText: 'Downloads' });
+    await expect(actionBarDownloads).toBeVisible();
+    await expect(page.locator('.quote-section-header .dropdown-toggle', { hasText: 'Downloads' })).toHaveCount(0);
+
+    const group = page.locator('.quote-action-bar__right .btn-group:has(.dropdown-toggle:text("Downloads"))');
+    await expect(group).toHaveClass(/dropup/);
+
+    await actionBarDownloads.click();
+    const menu = group.locator('.dropdown-menu');
+    await expect(menu).toHaveClass(/dropdown-menu-right/);
+    await expect(menu.locator('.dropdown-item', { hasText: 'PDF - Items table' })).toBeVisible();
+  });
+
   test('add item button opens modal', async ({ page }) => {
     await page.click('[data-target="#add-item-modal"]');
     await expect(page.locator('#add-item-modal')).toBeVisible();
