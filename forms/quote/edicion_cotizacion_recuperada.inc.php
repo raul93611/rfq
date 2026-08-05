@@ -92,7 +92,7 @@
   </div>
 
   <!-- Items Table -->
-  <div class="items-section-wrapper">
+  <div class="items-section-wrapper" id="items-section-wrapper">
     <?php RepositorioItem::escribir_items($cotizacion_recuperada->obtener_id()); ?>
     <?php
     Conexion::abrir_conexion();
