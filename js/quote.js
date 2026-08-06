@@ -326,7 +326,11 @@ $(document).ready(function () {
 
   function refreshItemsTable() {
     $.get('/rfq/quote/get_items_table/' + rfqId(), function (html) {
-      $('#items').html(html);
+      // Replaces the whole section (not just '#items', the <tbody> inside the table) —
+      // that table only exists in the DOM once the quote has at least one item, so
+      // targeting '#items' directly silently no-ops when adding the first item to an
+      // empty quote.
+      $('#items-section-wrapper').html(html);
       if (typeof window.iemReinitCalc === 'function') window.iemReinitCalc();
       syncIdInputs();
     });

@@ -20,6 +20,24 @@ test.describe('Quote Editing — Items', () => {
     await expect(page.locator('.iem-edit-item').first()).toBeVisible();
   });
 
+  test('Downloads dropdown lives in the bottom action bar, not above the Items table', async ({ page }) => {
+    // See bugs/downloads-button-relocate-to-navbar.md — Downloads used to render inside
+    // .quote-section-header via RepositorioItem::escribir_items(), styled as a leftward
+    // dropleft dropdown. It now lives in .quote-action-bar__right as the rightmost button,
+    // matching Rooms/Actions (dropup, right-aligned).
+    const actionBarDownloads = page.locator('.quote-action-bar__right .dropdown-toggle', { hasText: 'Downloads' });
+    await expect(actionBarDownloads).toBeVisible();
+    await expect(page.locator('.quote-section-header .dropdown-toggle', { hasText: 'Downloads' })).toHaveCount(0);
+
+    const group = page.locator('.quote-action-bar__right .btn-group:has(.dropdown-toggle:text("Downloads"))');
+    await expect(group).toHaveClass(/dropup/);
+
+    await actionBarDownloads.click();
+    const menu = group.locator('.dropdown-menu');
+    await expect(menu).toHaveClass(/dropdown-menu-right/);
+    await expect(menu.locator('.dropdown-item', { hasText: 'PDF - Items table' })).toBeVisible();
+  });
+
   test('add item button opens modal', async ({ page }) => {
     await page.click('[data-target="#add-item-modal"]');
     await expect(page.locator('#add-item-modal')).toBeVisible();
@@ -95,5 +113,54 @@ test.describe('Quote Editing — Items', () => {
     // Dismiss without confirming
     await page.click('#alert_delete_system [data-dismiss="modal"]');
     await expect(page.locator('#alert_delete_system')).not.toBeVisible();
+  });
+
+  test('adding the first item to an empty quote renders it immediately, no reload needed', async ({ page }) => {
+    // Regression: on an empty quote, <table id="tabla_items">/<tbody id="items"> doesn't
+    // exist in the DOM at all (RepositorioItem::escribir_items() only renders it inside
+    // `if (count($items))`). refreshItemsTable() used to target '#items' directly, so
+    // $('#items').html(...) silently no-opped on the very first item — it only appeared
+    // after a full page reload. Fixed by replacing the whole '#items-section-wrapper'.
+    const { query } = require('../helpers/db');
+    const { userId } = fixtures();
+
+    const insertResult = await query(
+      `INSERT INTO rfq (id_usuario, usuario_designado, canal, email_code, type_of_bid, issue_date, end_date,
+        status, completado, award, payment_terms, address, ship_to, ship_via, taxes, profit, additional,
+        shipping_cost, shipping, fullfillment, contract_number, deleted)
+       VALUES (?, ?, 'GSA-Buy', ?, 'Services', '2026-01-01', '2026-12-31', 0, 0, 0, 'Net 30', '', '', '', 0, 0, '', 0, '', 0, '', 0)`,
+      [userId, userId, 'EMPTY-' + Date.now()]
+    );
+    const emptyRfqId = insertResult.insertId;
+
+    try {
+      await page.goto(`http://localhost/rfq/perfil/quote/editar_cotizacion/${emptyRfqId}`);
+      await page.waitForSelector('.items-section-wrapper .section-empty-state');
+      await expect(page.locator('#tabla_items')).toHaveCount(0);
+
+      await page.click('[data-target="#add-item-modal"]');
+      await page.waitForSelector('#add-item-modal.show');
+      await page.fill('#add-item-modal [name="brand"]', 'PW-Empty-Brand');
+      await page.fill('#add-item-modal [name="brand_project"]', 'PW-Empty-Brand');
+      await page.fill('#add-item-modal [name="part_number"]', 'PW-Empty-PN');
+      await page.fill('#add-item-modal [name="part_number_project"]', 'PW-Empty-PN');
+      await page.fill('#add-item-modal [name="description"]', 'Playwright Empty Quote Item');
+      await page.fill('#add-item-modal [name="description_project"]', 'Playwright Empty Quote Item');
+      await page.fill('#add-item-modal [name="quantity"]', '1');
+
+      const toastPromise = page.waitForSelector('.toast-success', { timeout: 10000 });
+      await page.click('#add-item-modal .iem-save-btn');
+      await toastPromise;
+
+      // No page.reload() anywhere above — this must come from the AJAX refresh alone.
+      await expect(page.locator('#tabla_items')).toBeVisible({ timeout: 10000 });
+      await expect(page.locator('#tabla_items tbody tr', { hasText: 'PW-Empty-Brand' })).toBeVisible();
+      await expect(page.locator('.items-section-wrapper .section-empty-state')).toHaveCount(0);
+    } finally {
+      await query('DELETE FROM provider WHERE id_item IN (SELECT id FROM item WHERE id_rfq = ?)', [emptyRfqId]);
+      await query('DELETE FROM item WHERE id_rfq = ?', [emptyRfqId]);
+      await query('DELETE FROM audit_trails WHERE id_rfq = ?', [emptyRfqId]);
+      await query('DELETE FROM rfq WHERE id = ?', [emptyRfqId]);
+    }
   });
 });

@@ -70,6 +70,12 @@ test.describe('Documents Drawer Tab', () => {
     await row.locator('[data-testid="doc-file-delete"]').click();
     await expect(row.locator('[data-testid="doc-file-confirm"]')).toBeVisible();
 
+    // Regression: .doc-file-confirm-actions button's shared `background: #fff` used to beat
+    // .doc-file-confirm-delete's `background: var(--red)` on specificity, leaving the Delete
+    // button white-on-white until hover (see bugs/documents-delete-confirm-white-button.md).
+    const deleteBg = await row.locator('.doc-file-confirm-delete').evaluate((el) => getComputedStyle(el).backgroundColor);
+    expect(deleteBg).not.toBe('rgb(255, 255, 255)');
+
     await Promise.all([
       page.waitForResponse((res) => res.url().includes('/quote/delete_document/') && res.status() === 200),
       row.locator('.doc-file-confirm-delete').click(),

@@ -184,6 +184,9 @@ switch ($partes_ruta[1] ?? null) {
       case 'import_items':
         $ruta_elegida = 'scripts/quote/import_items.php';
         break;
+      case 'import_items_template':
+        $ruta_elegida = 'scripts/quote/import_items_template.php';
+        break;
       case 'get_items_table':
         $id_rfq = $partes_ruta[3];
         $ruta_elegida = 'scripts/quote/get_items_table.php';
