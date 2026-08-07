@@ -20,6 +20,7 @@ require_once $root . 'app/Service/Service.inc.php';
 require_once $root . 'app/Utilities/ProposalRepository.inc.php';
 require_once $root . 'app/TypeOfBid/TypeOfBid.inc.php';
 require_once $root . 'app/TypeOfBid/TypeOfBidRepository.inc.php';
+require_once $root . 'app/Quote/Rfq.inc.php';
 
 $SPLIT = '50% Upfront / 50% on Completion';
 
@@ -58,6 +59,10 @@ $cc_html     = ProposalRepository::print_service('Net 30/CC', $service, 1);
 check('50/50 service output equals Net 30 (×1, no uplift)', $net30_html, $split_html);
 check('50/50 service keeps base unit price $150.00', true, strpos($split_html, '$ 150.00') !== false);
 check('Net 30/CC service applies ×1.03 uplift ($154.50)', true, strpos($cc_html, '$ 154.50') !== false);
+
+/* ---------- Commercial Moving quotes are allowed to have Service items ---------- */
+$commercial_moving_rfq = new Rfq(['type_of_bid' => 'Commercial Moving']);
+check('isServices() true for Commercial Moving', true, $commercial_moving_rfq->isServices());
 
 /* ---------- Commercial Moving bid type surfaces in the dropdown ---------- */
 Conexion::abrir_conexion();
