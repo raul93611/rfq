@@ -157,10 +157,6 @@ class RepositorioItem {
     return '<svg width="' . $size . '" height="' . $size . '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' . $body . '</svg>';
   }
 
-  public static function itUSD($amount) {
-    return '$' . number_format((float) $amount, 2);
-  }
-
   /* Kebab action menu — wraps caller-built menu-item buttons. */
   public static function renderKebab($id, $menuItemsHtml) {
     return '<div class="it-kebab-wrap">'
@@ -229,9 +225,8 @@ class RepositorioItem {
       return $a->obtener_price() <=> $b->obtener_price();
     });
     $low = $sorted[0]->obtener_price();
-    $scrollClass = count($sorted) > 3 ? ' is-scroll' : '';
-    $editClass   = $isSubitem ? 'iem-edit-provider-subitem' : 'iem-edit-provider';
-    $loadUrl     = $isSubitem ? LOAD_EDIT_PROVIDER_SUBITEM_FORM : LOAD_EDIT_PROVIDER_FORM;
+    $editClass = $isSubitem ? 'iem-edit-provider-subitem' : 'iem-edit-provider';
+    $loadUrl   = $isSubitem ? LOAD_EDIT_PROVIDER_SUBITEM_FORM : LOAD_EDIT_PROVIDER_FORM;
 
     $rows = '';
     foreach ($sorted as $provider) {
@@ -243,7 +238,7 @@ class RepositorioItem {
         . '<span class="it-prov-price">$ ' . number_format((float) $provider->obtener_price(), 2) . '</span>'
         . '</div>';
     }
-    return '<div class="it-prov' . $scrollClass . '">' . $rows . '</div>';
+    return '<div class="it-prov">' . $rows . '</div>';
   }
 
   public static function escribir_item($item, $i, $numeracion) {
@@ -381,9 +376,9 @@ class RepositorioItem {
         <div id="table_items_container" class="it-table-scroll">
           <table id="tabla_items" class="it-table">
             <colgroup>
-              <col style="width:36px;"><col style="width:104px;"><col><col><col style="width:48px;">
-              <col style="width:172px;"><col style="width:84px;"><col style="width:88px;"><col style="width:90px;">
-              <col style="width:92px;"><col style="width:108px;"><col style="width:36px;">
+              <col style="width:42px;"><col style="width:104px;"><col><col><col style="width:48px;">
+              <col style="width:172px;"><col style="width:84px;"><col style="width:104px;"><col style="width:104px;">
+              <col style="width:100px;"><col style="width:118px;"><col style="width:42px;">
             </colgroup>
             <thead>
               <tr class="it-group">
@@ -421,18 +416,20 @@ class RepositorioItem {
             </tbody>
             <tfoot>
               <tr class="it-totals">
-                <td colspan="4" class="it-totals-label">
-                  <span class="it-totals-k">Totals</span>
-                  <span class="it-totals-meta"><?= $itemCount; ?> item<?= $itemCount === 1 ? '' : 's'; ?> &middot; <?= $subCount; ?> subitem<?= $subCount === 1 ? '' : 's'; ?> &middot; incl. <?= self::itUSD($cotizacion->obtener_shipping_cost()); ?> shipping and <?= self::itUSD($cotizacion->obtener_additional()); ?> additional general</span>
-                </td>
+                <td colspan="4" class="it-totals-label"><span class="it-totals-k">Totals</span></td>
                 <td class="is-num" id="total_quantity"></td>
                 <td></td>
                 <td class="is-num" id="total_additional"></td>
                 <td></td>
                 <td class="is-num" id="total1"></td>
                 <td class="is-div is-num"></td>
-                <td class="is-num is-grand" id="total2"></td>
-                <td id="dif_total"></td>
+                <td class="is-num is-grand">
+                  <div class="it-totals-grand-wrap">
+                    <span id="total2"></span>
+                    <span class="it-totals-profit" id="dif_total"></span>
+                  </div>
+                </td>
+                <td></td>
               </tr>
             </tfoot>
           </table>

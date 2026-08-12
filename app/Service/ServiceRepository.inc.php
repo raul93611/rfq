@@ -105,7 +105,7 @@ class ServiceRepository {
         <div id="services_table" class="it-table-scroll">
           <table class="it-table is-services">
             <colgroup>
-              <col style="width:36px;"><col style="width:112px;"><col><col style="width:64px;"><col style="width:118px;"><col style="width:130px;">
+              <col style="width:42px;"><col style="width:112px;"><col><col style="width:64px;"><col style="width:118px;"><col style="width:130px;">
             </colgroup>
             <thead>
               <tr class="it-thead">
@@ -126,10 +126,7 @@ class ServiceRepository {
             </tbody>
             <tfoot>
               <tr class="it-totals">
-                <td colspan="4" class="it-totals-label">
-                  <span class="it-totals-k">Totals</span>
-                  <span class="it-totals-meta"><?= $count; ?> service<?= $count === 1 ? '' : 's'; ?> &middot; <?= htmlspecialchars($services_payment_term, ENT_QUOTES, 'UTF-8'); ?></span>
-                </td>
+                <td colspan="4" class="it-totals-label"><span class="it-totals-k">Totals</span></td>
                 <td class="is-div is-num"></td>
                 <td class="is-num is-grand" id="total_service">$ <?= $total_service; ?></td>
               </tr>

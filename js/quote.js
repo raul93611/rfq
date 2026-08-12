@@ -119,7 +119,7 @@ $(document).ready(function () {
     // Update table footer
     $('#total1').html(`$ ${totalCost.toFixed(2)}`);
     $('#total2').html(`$ ${totalPrice.toFixed(2)}`);
-    $('#dif_total').html(`$ ${profit}<br>${percentageProfit}%`);
+    $('#dif_total').html(`+$ ${profit} &middot; ${percentageProfit}%`);
     $('#total_quantity').html(currentTotalQty);
     $('#total_additional').html(`$ ${totalAdditional.toFixed(2)}`);
 
