@@ -1,6 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const fs = require('fs');
 const path = require('path');
+const { openKebabFor } = require('../helpers/kebab');
 
 function fixtures() {
   return JSON.parse(fs.readFileSync(path.join(__dirname, '../.fixtures.json'), 'utf-8'));
@@ -17,7 +18,8 @@ test.describe('Quote Editing — Items', () => {
 
   test('items table renders with test item', async ({ page }) => {
     await expect(page.locator('#tabla_items tbody tr').first()).toBeVisible();
-    await expect(page.locator('.iem-edit-item').first()).toBeVisible();
+    const editBtn = await openKebabFor(page, '.iem-edit-item');
+    await expect(editBtn).toBeVisible();
   });
 
   test('Downloads dropdown lives in the bottom action bar, not above the Items table', async ({ page }) => {
@@ -80,7 +82,7 @@ test.describe('Quote Editing — Items', () => {
   });
 
   test('edit item button opens populated edit modal', async ({ page }) => {
-    const $editBtn = page.locator('.iem-edit-item').first();
+    const $editBtn = await openKebabFor(page, '.iem-edit-item');
     await $editBtn.click();
     await expect(page.locator('#edit-item-modal')).toBeVisible();
     // Form should load content
@@ -88,7 +90,8 @@ test.describe('Quote Editing — Items', () => {
   });
 
   test('edit item saves changes and updates table', async ({ page }) => {
-    await page.locator('.iem-edit-item').first().click();
+    const editBtn = await openKebabFor(page, '.iem-edit-item');
+    await editBtn.click();
     await page.waitForSelector('#iem-edit-item-body [name="brand_project"]', { timeout: 5000 });
 
     await page.fill('#iem-edit-item-body [name="brand_project"]', 'UpdatedBrand');
@@ -105,7 +108,8 @@ test.describe('Quote Editing — Items', () => {
     let dialogFired = false;
     page.on('dialog', () => { dialogFired = true; });
 
-    await page.locator('.iem-delete-item').first().click();
+    const deleteBtn = await openKebabFor(page, '.iem-delete-item');
+    await deleteBtn.click();
     // Should open #alert_delete_system
     await expect(page.locator('#alert_delete_system')).toBeVisible();
     expect(dialogFired).toBe(false);

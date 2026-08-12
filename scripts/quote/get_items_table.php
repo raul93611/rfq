@@ -11,13 +11,6 @@ header('Content-Type: text/html; charset=utf-8');
 // alone couldn't create/remove the surrounding <table>/<tbody id="items"> when the item
 // count crossed the 0-to-1 boundary — on an empty quote that table doesn't exist yet, so
 // $('#items').html(...) silently no-opped and the first added item never appeared until
-// a full page reload.
+// a full page reload. escribir_items() renders the empty state itself (.it-card stays,
+// only the table area swaps for a placeholder) when there are no items.
 RepositorioItem::escribir_items($id_rfq);
-
-Conexion::abrir_conexion();
-$items_exists = RepositorioItem::items_exists(Conexion::obtener_conexion(), $id_rfq);
-Conexion::cerrar_conexion();
-
-if (!$items_exists) {
-  echo '<div class="section-empty-state"><i class="fas fa-box-open"></i><p>No items added yet</p></div>';
-}

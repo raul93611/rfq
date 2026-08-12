@@ -1,6 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const fs = require('fs');
 const path = require('path');
+const { openKebabFor } = require('../helpers/kebab');
 
 function fixtures() {
   return JSON.parse(fs.readFileSync(path.join(__dirname, '../.fixtures.json'), 'utf-8'));
@@ -16,7 +17,8 @@ test.describe('Quote Editing — Providers', () => {
   });
 
   test('add provider button opens modal', async ({ page }) => {
-    await page.locator('.iem-add-provider').first().click();
+    const addBtn = await openKebabFor(page, '.iem-add-provider');
+    await addBtn.click();
     await expect(page.locator('#add-provider-modal')).toBeVisible();
     // Modal should have item id set
     const val = await page.locator('#iem-add-provider-id-item').inputValue();
@@ -24,7 +26,8 @@ test.describe('Quote Editing — Providers', () => {
   });
 
   test('add provider modal has provider and price fields', async ({ page }) => {
-    await page.locator('.iem-add-provider').first().click();
+    const addBtn = await openKebabFor(page, '.iem-add-provider');
+    await addBtn.click();
     await expect(page.locator('#add-provider-modal')).toBeVisible();
     await expect(page.locator('#add-provider-modal [name="provider"]')).toBeVisible();
     await expect(page.locator('#add-provider-modal [name="price"]')).toBeVisible();
@@ -33,7 +36,8 @@ test.describe('Quote Editing — Providers', () => {
   test('add provider saves and refreshes table', async ({ page }) => {
     const { query } = require('../helpers/db');
 
-    await page.locator('.iem-add-provider').first().click();
+    const addBtn = await openKebabFor(page, '.iem-add-provider');
+    await addBtn.click();
     await page.waitForSelector('#add-provider-modal.show');
 
     await page.fill('#add-provider-modal [name="provider"]', 'PW-Provider-New');

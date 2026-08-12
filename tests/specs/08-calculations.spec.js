@@ -52,8 +52,8 @@ test.describe('Live Calculations', () => {
     const unitCellBefore = await page.locator('#services_section tbody .service_item td:nth-child(5)').first().textContent();
     const basePriceBefore = parseFloat(unitCellBefore);
 
-    // Select Net 30/CC — click the label since it's a custom Bootstrap radio
-    await page.locator('label[for="net_30ccServices"]').click();
+    // Payment Terms is a <select id="services_payment_term">, not a radio group.
+    await page.selectOption('#services_payment_term', 'Net 30/CC');
     await page.waitForTimeout(300);
 
     const unitCellAfter = await page.locator('#services_section tbody .service_item td:nth-child(5)').first().textContent();
@@ -64,14 +64,14 @@ test.describe('Live Calculations', () => {
   });
 
   test('Net 30 payment term restores base service price', async ({ page }) => {
-    // First set Net 30/CC — click the label (custom Bootstrap radio)
-    await page.locator('label[for="net_30ccServices"]').click();
+    // First set Net 30/CC
+    await page.selectOption('#services_payment_term', 'Net 30/CC');
     await page.waitForTimeout(300);
 
     const priceWithCC = await page.locator('#services_section tbody .service_item td:nth-child(5)').first().textContent();
 
     // Switch back to Net 30
-    await page.locator('label[for="net_30Services"]').click();
+    await page.selectOption('#services_payment_term', 'Net 30');
     await page.waitForTimeout(300);
 
     const priceWithNet30 = await page.locator('#services_section tbody .service_item td:nth-child(5)').first().textContent();

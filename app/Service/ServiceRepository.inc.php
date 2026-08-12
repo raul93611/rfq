@@ -80,14 +80,19 @@ class ServiceRepository {
   public static function display_services($connection, $quote) {
     $services = self::get_services($connection, $quote->obtener_id());
     $total_service = self::get_total($connection, $quote->obtener_id());
-    if (count($services)) {
-?>
-      <div class="items-controls-bar user-form">
-        <div class="row">
-          <div class="col-md-4">
-            <label>Payment Terms</label>
-            <?php $services_payment_term = $quote->obtener_services_payment_term(); ?>
-            <select name="services_payment_term" id="services_payment_term" class="form-control form-control-sm js-payment-terms">
+    $count = count($services);
+    $services_payment_term = $quote->obtener_services_payment_term();
+    ?>
+    <div class="it-card">
+      <div class="it-card-head">
+        <div class="it-card-titlewrap">
+          <div class="it-card-title"><span class="it-card-title-ico"><?= RepositorioItem::itIcon('tool', 15); ?></span>Services</div>
+          <div class="it-card-sub"><?= $count; ?> line item<?= $count === 1 ? '' : 's'; ?></div>
+        </div>
+        <div class="it-ctl">
+          <div class="it-fld" style="width:190px;">
+            <span class="it-fld-l">Payment Terms</span>
+            <select name="services_payment_term" id="services_payment_term" class="it-input it-select js-payment-terms">
               <option value="Net 30" <?= $services_payment_term == 'Net 30' ? 'selected' : ''; ?>>Net 30</option>
               <option value="Net 30/CC" <?= $services_payment_term == 'Net 30/CC' ? 'selected' : ''; ?>>Net 30/CC</option>
               <option value="50% Upfront / 50% on Completion" <?= $services_payment_term == '50% Upfront / 50% on Completion' ? 'selected' : ''; ?>>50% Upfront / 50% on Completion</option>
@@ -95,62 +100,75 @@ class ServiceRepository {
           </div>
         </div>
       </div>
-      <div class="table-responsive" id="services_table">
-        <table class="table table-hover">
-          <thead>
-            <tr>
-              <th style="width: 50px;">Options</th>
-              <th style="width: 30px;">#</th>
-              <th>DESCRIPTION</th>
-              <th style="width: 30px;">QTY</th>
-              <th style="width: 100px;">UNIT PRICE</th>
-              <th style="width: 100px;">TOTAL PRICE</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php
-            foreach ($services as $key => $service) {
-              self::display_service($service, $key);
-            }
-            ?>
-          </tbody>
-          <tfoot>
-            <tr>
-              <td colspan="5" style="font-size:13px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;">TOTAL</td>
-              <td id="total_service">$ <?= $total_service; ?></td>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
+
+      <?php if ($count > 0): ?>
+        <div id="services_table" class="it-table-scroll">
+          <table class="it-table is-services">
+            <colgroup>
+              <col style="width:42px;"><col style="width:112px;"><col><col style="width:64px;"><col style="width:118px;"><col style="width:130px;">
+            </colgroup>
+            <thead>
+              <tr class="it-thead">
+                <th></th>
+                <th>Room / #</th>
+                <th class="is-div">Description</th>
+                <th class="is-div is-num">Qty</th>
+                <th class="is-num">Unit Price</th>
+                <th class="is-num">Total Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php
+              foreach ($services as $key => $service) {
+                self::display_service($service, $key);
+              }
+              ?>
+            </tbody>
+            <tfoot>
+              <tr class="it-totals">
+                <td colspan="4" class="it-totals-label"><span class="it-totals-k">Totals</span></td>
+                <td class="is-div is-num"></td>
+                <td class="is-num is-grand" id="total_service">$ <?= $total_service; ?></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      <?php else: ?>
+        <div class="it-empty">
+          <div class="it-empty-ico"><i class="fas fa-concierge-bell"></i></div>
+          <div class="it-empty-t">No services added yet</div>
+        </div>
+      <?php endif; ?>
+    </div>
     <?php
-    } else {
-    ?>
-      <div class="section-empty-state">
-        <i class="fas fa-concierge-bell"></i>
-        <p>No services added yet</p>
-      </div>
-    <?php
-    }
   }
 
   public static function display_service($service, $key) {
     Conexion::abrir_conexion();
     $room = $service->getIdRoom() ? RoomRepository::getById(Conexion::obtener_conexion(), $service->getIdRoom()) : null;
     Conexion::cerrar_conexion();
+
+    $menu = '<button type="button" class="it-menu-item edit_service" data="' . $service->get_id() . '">' . RepositorioItem::itIcon('edit', 13) . 'Edit service</button>'
+      . '<button type="button" class="it-menu-item svc-duplicate-btn" data-url="' . DUPLICATE_SERVICE . $service->get_id() . '">' . RepositorioItem::itIcon('copy', 13) . 'Duplicate</button>'
+      . '<hr class="it-menu-sep">'
+      . '<button type="button" class="it-menu-item is-danger svc-delete-btn" data-url="' . DELETE_SERVICE . $service->get_id() . '">' . RepositorioItem::itIcon('trash', 13) . 'Delete service</button>';
+    $kebabCell = RepositorioItem::renderKebab($service->get_id(), $menu);
+
+    $roomName = $room ? htmlspecialchars($room->getName(), ENT_QUOTES, 'UTF-8') : '';
+    $idxCell = '<div class="it-idx">'
+      . ($roomName !== '' ? '<span class="it-room" title="' . $roomName . '">' . $roomName . '</span>' : '')
+      . '<span class="it-no">' . ($key + 1) . '</span>'
+      . '</div>';
+
+    $descCell = RepositorioItem::renderDescBlock('prop', $service->get_description(), '', $service->get_description());
     ?>
-    <tr class="service_item" id="service<?= $service->get_id(); ?>">
-      <td>
-        <div class="item-actions">
-          <button type="button" class="btn btn-item btn-xs item-action-btn edit_service" data="<?= $service->get_id(); ?>"><i class="fas fa-pen mr-1"></i> Edit</button>
-          <button type="button" class="btn btn-item-del btn-xs item-action-btn svc-delete-btn" data-url="<?= DELETE_SERVICE . $service->get_id(); ?>"><i class="fas fa-trash mr-1"></i> Delete</button>
-          <button type="button" class="btn btn-item-sec btn-xs item-action-btn svc-duplicate-btn" data-url="<?= DUPLICATE_SERVICE . $service->get_id(); ?>"><i class="fas fa-copy mr-1"></i> Duplicate</button>
-        </div>
-      </td>
-      <td><?= $service->getIdRoom() ? '<span class="mb-2 badge badge-primary" style="background-color: ' . $room->getColor() . ';">' . $room->getName() . '</span>' : '' ?><?= $key + 1; ?></td>
-      <td><?= nl2br(mb_substr($service->get_description(), 0, 100)) . ' ...'; ?></td>
-      <td><?= $service->get_quantity(); ?></td>
-      <td data-base-price="<?= htmlspecialchars($service->get_unit_price(), ENT_QUOTES, 'UTF-8'); ?>"><?= $service->get_unit_price(); ?></td>
-      <td><?= $service->get_total_price(); ?></td>
+    <tr class="it-row service_item" id="service<?= $service->get_id(); ?>">
+      <td class="it-td is-c"><?= $kebabCell; ?></td>
+      <td class="it-td"><?= $idxCell; ?></td>
+      <td class="it-td is-div"><?= $descCell; ?></td>
+      <td class="it-td is-div is-num"><?= $service->get_quantity(); ?></td>
+      <td class="it-td is-num it-price-client" data-base-price="<?= htmlspecialchars($service->get_unit_price(), ENT_QUOTES, 'UTF-8'); ?>"><?= $service->get_unit_price(); ?></td>
+      <td class="it-td is-num it-price-total"><?= $service->get_total_price(); ?></td>
     </tr>
 <?php
   }

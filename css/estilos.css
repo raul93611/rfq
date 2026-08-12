@@ -425,24 +425,8 @@ table {
   }
 }
 
-#tabla_items .description {
-  width: 150px !important;
-}
-
-#tabla_items .options {
-  min-width: 130px !important;
-}
-
-#tabla_items .qty {
-  min-width: 80px !important;
-}
-
 .estrechar {
   word-break: break-all !important;
-}
-
-#tabla_items #numeracion {
-  min-width: 20px !important;
 }
 
 #users #id {
@@ -451,10 +435,6 @@ table {
 
 #users #options {
   width: 140px !important;
-}
-
-#tabla_items #provider {
-  min-width: 250px !important;
 }
 
 .cantidad {
@@ -2290,8 +2270,6 @@ h3.text-info.text-center .fa-exclamation-circle {
 .iem-prov-price { color: var(--iem-ink-700); font-variant-numeric: tabular-nums; }
 
 .iem-loading { display: flex; align-items: center; justify-content: center; padding: 40px 0; }
-.iem-provider-link { background: none; border: none; padding: 0; cursor: pointer; font-size: inherit; line-height: inherit; color: #0e6b94; text-decoration: none; }
-.iem-provider-link:hover { text-decoration: underline; }
 
 /* Toastr overrides — fully opaque, solid colors */
 #toast-container > .toast { opacity: 1 !important; box-shadow: 0 4px 16px rgba(0,0,0,0.18) !important; }
@@ -3775,3 +3753,208 @@ body.qed-drawer-open { overflow: hidden; }
 .doc-file-confirm-cancel:hover { background: var(--navy-50); }
 .doc-file-confirm-delete { background: var(--red); border-color: var(--red); color: #fff; }
 .doc-file-confirm-delete:hover { background: #b91c1c; }
+
+/* =========================================================================
+   Items & Services Table Redesign (it-* namespace)
+   Ported from the Claude Design handoff ("Items and Services Tables"). The
+   design used a CSS-grid div layout; adapted here to a real <table> so
+   #tabla_items / <tbody id="items"> / <tr>/<td> stay intact for existing
+   JS calc selectors (js/quote.js) and Playwright specs. Design's bare
+   tokens scoped locally, same approach as .qed-status-row above.
+   ========================================================================= */
+.it-card {
+  --ink-900:#0f1623; --ink-700:#2c3849; --ink-600:#46566a; --ink-500:#5a6a7e; --ink-400:#7d8ba0; --ink-300:#aab4c2;
+  --line:#e3e7ee; --line-2:#eef1f6; --navy-50:#f4f6fa;
+  --sky:#2db4e8; --sky-600:#1aa2dc; --sky-50:#e6f5fc;
+  --green:#16a34a; --green-50:#e8f6ec; --green-700:#15803d;
+  --red:#dc2626; --red-50:#fbe9e9;
+}
+
+.it-card { background: #fff; border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 1px 2px rgba(15,22,35,.03); margin-top: 16px; }
+.it-card-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 18px; padding: 12px 14px; border-bottom: 1px solid var(--line-2); background: #fafbfd; border-radius: 12px 12px 0 0; flex-wrap: wrap; }
+.it-card-titlewrap { min-width: 0; }
+.it-card-title { font-size: 14px; font-weight: 700; color: var(--ink-900); display: flex; align-items: center; gap: 8px; }
+.it-card-title-ico { color: var(--ink-400); display: inline-flex; }
+.it-card-sub { font-size: 11.5px; color: var(--ink-400); margin-top: 2px; }
+
+/* ---- controls bar ---- */
+.it-ctl { display: flex; align-items: flex-end; gap: 9px; flex-wrap: wrap; }
+.it-fld { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.it-fld-l { font-size: 10.5px; text-transform: uppercase; letter-spacing: .05em; font-weight: 700; color: var(--ink-500); white-space: nowrap; display: flex; align-items: center; gap: 5px; }
+.it-fld-l svg { color: var(--ink-300); }
+.it-input { height: 32px; width: 100%; padding: 0 10px; border: 1px solid var(--line); border-radius: 7px; background: #fff; font: inherit; font-size: 12.5px; color: var(--ink-900); transition: border-color .12s, box-shadow .12s; }
+.it-input:focus { outline: 0; border-color: var(--sky); box-shadow: 0 0 0 3px rgba(45,180,232,.18); }
+.it-input-num { text-align: right; font-variant-numeric: tabular-nums; }
+textarea.it-input { height: auto; min-height: 50px; padding: 7px 10px; resize: vertical; line-height: 1.45; font-family: inherit; }
+.it-select { appearance: none; cursor: pointer; padding-right: 26px; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237d8ba0' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>"); background-repeat: no-repeat; background-position: right 9px center; font-weight: 500; }
+.it-affix { position: relative; display: flex; }
+.it-affix-sym { position: absolute; left: 9px; top: 0; bottom: 0; display: flex; align-items: center; font-size: 12px; color: var(--ink-400); pointer-events: none; }
+.it-affix .it-input { padding-left: 20px; }
+.it-affix.is-pct .it-affix-sym { left: auto; right: 9px; }
+.it-affix.is-pct .it-input { padding-left: 10px; padding-right: 22px; }
+
+/* ============ Table (real <table>/<tr>/<td> — see header comment) ============ */
+.it-table-scroll { overflow-x: auto; }
+.it-table { width: 100%; border-collapse: separate; border-spacing: 0; table-layout: fixed; font-size: 12.5px; }
+.it-table th, .it-table td { box-sizing: border-box; }
+
+.it-group th { background: var(--navy-50); border-bottom: 1px solid #e7ebf3; position: sticky; top: 0; z-index: 3; padding: 5px 9px 4px; font-size: 10.5px; text-transform: uppercase; letter-spacing: .02em; font-weight: 700; color: var(--ink-500); text-align: left; white-space: nowrap; overflow: hidden; }
+.it-group th.is-div { border-left: 1px solid #e0e6ef; }
+.it-group th.is-spec { color: var(--ink-900); }
+.it-group th.is-prop { color: #0e7fae; }
+.it-group th.is-price { color: var(--ink-700); }
+.it-gsw { width: 6px; height: 6px; border-radius: 2px; display: inline-block; margin-right: 5px; vertical-align: middle; }
+
+.it-thead th { background: var(--navy-50); border-bottom: 1px solid var(--line); position: sticky; top: 23px; z-index: 3; padding: 5px 9px 7px; font-size: 10.5px; text-transform: uppercase; letter-spacing: .03em; color: var(--ink-500); font-weight: 700; text-align: left; white-space: nowrap; overflow: hidden; }
+.it-table.is-services .it-thead th { top: 0; }
+.it-thead th.is-num { text-align: right; }
+.it-thead th.is-c { text-align: center; }
+.it-thead th.is-div { border-left: 1px solid #e0e6ef; }
+
+.it-table tbody tr.it-row { border-top: 1px solid var(--line-2); transition: background .12s; }
+.it-table tbody tr.it-row:hover { background: #fcfdff; }
+.it-td { padding: 8px 9px; color: var(--ink-700); vertical-align: middle; }
+.it-td.is-num { text-align: right; font-variant-numeric: tabular-nums; }
+.it-td.is-c { text-align: center; }
+.it-td.is-div { border-left: 1px solid var(--line-2); }
+.it-td-price { background: #f9fbfd; }
+.it-row:hover .it-td-price { background: #f6fafd; }
+
+/* ---- room badge + row number ---- */
+.it-idx { display: flex; flex-direction: column; gap: 3px; align-items: flex-start; min-width: 0; }
+.it-room { max-width: 100%; padding: 1px 5px; border-radius: 4px; background: #eef2f8; border: 1px solid #e1e7f0; font-size: 10.5px; font-weight: 700; letter-spacing: .01em; text-transform: uppercase; color: var(--ink-500); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: inline-block; }
+.it-no { display: flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 700; color: var(--ink-400); font-variant-numeric: tabular-nums; }
+.it-disc-slot { width: 14px; height: 16px; flex-shrink: 0; display: flex; }
+.it-disc { width: 14px; height: 16px; border: 0; background: transparent; border-radius: 4px; color: var(--ink-300); display: grid; place-items: center; cursor: pointer; padding: 0; flex-shrink: 0; }
+.it-disc:hover { background: #e8edf5; color: var(--ink-700); }
+.it-disc svg { transition: transform .18s; }
+.it-disc.is-open svg { transform: rotate(90deg); }
+.it-subn { font-size: 10.5px; font-weight: 700; color: #0e7fae; background: var(--sky-50); border-radius: 3px; padding: 0 4px; letter-spacing: .01em; }
+.it-elbow { color: var(--ink-300); font-family: ui-monospace, Menlo, monospace; font-size: 11px; line-height: 1; }
+
+/* ---- subitem nesting ---- */
+tr.it-row.is-sub { background: #f6f9fc; box-shadow: inset 4px 0 0 #c5e2f3; }
+tr.it-row.is-sub:hover { background: #f2f7fc; }
+tr.it-row.is-sub .it-td { padding-top: 6px; padding-bottom: 6px; font-size: 12px; }
+tr.it-row.is-sub .it-td-spec, tr.it-row.is-sub .it-td-prop { padding-left: 26px; }
+tr.it-row.is-sub .it-room { background: #fff; border-style: dashed; color: var(--ink-400); }
+tr.it-row.is-sub .it-price-total { font-size: 14px; font-weight: 700; }
+tr.it-row.is-sub .it-td-price { background: #f4f8fc; }
+tr.it-row.is-sub[hidden] { display: none; }
+
+/* ---- description block (condensed → expanded) ---- */
+.it-desc { cursor: pointer; border-radius: 6px; margin: -3px -5px; padding: 3px 5px; min-width: 0; transition: background .12s; }
+.it-desc:hover { background: #f1f5fa; }
+.it-desc-top { display: flex; align-items: center; gap: 5px; min-width: 0; }
+.it-desc-brand { font-size: 12.5px; font-weight: 650; color: var(--ink-900); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.it-desc-caret { margin-left: auto; flex-shrink: 0; color: var(--ink-300); display: flex; transition: transform .2s, color .12s; }
+.it-desc:hover .it-desc-caret { color: var(--ink-500); }
+.it-desc.is-open .it-desc-caret { transform: rotate(180deg); color: var(--sky-600); }
+.it-desc-meta { display: flex; align-items: center; gap: 6px; min-width: 0; margin-top: 1px; }
+.it-desc-part { font-size: 11px; color: var(--ink-400); font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 0 0 auto; max-width: 100%; }
+.it-link { display: inline-flex; align-items: center; gap: 3px; font-size: 11px; font-weight: 600; color: var(--sky-600); flex: 0 1 auto; min-width: 0; overflow: hidden; white-space: nowrap; }
+.it-link:hover { text-decoration: underline; }
+.it-link span { overflow: hidden; text-overflow: ellipsis; }
+.it-collapse { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .28s cubic-bezier(.4,0,.2,1); }
+.it-desc.is-open .it-collapse { grid-template-rows: 1fr; }
+.it-collapse > div { overflow: hidden; min-height: 0; }
+.it-desc-body { margin-top: 6px; padding: 6px 8px; border-left: 2px solid #9aa8bd; background: #fafbfd; border-radius: 0 5px 5px 0; font-size: 11.5px; line-height: 1.5; color: var(--ink-500); }
+.it-desc.tone-prop .it-desc-body { border-left-color: #7fd0ee; background: #f4fbfe; }
+.it-desc-empty { font-size: 12px; color: var(--ink-300); }
+
+/* ---- provider price comparison ---- */
+/* No internal scroll/cap — a row with many providers just grows taller
+   (same as an expanded description), so the row height always matches
+   its content instead of hiding quotes behind a scrollbar. */
+.it-prov { display: flex; flex-direction: column; gap: 2px; }
+.it-prov-row { display: flex; align-items: center; gap: 5px; padding: 2px 6px; border-radius: 4px; background: #f4f6fa; font-size: 11.5px; }
+.it-prov-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--ink-500); border: 0; background: transparent; text-align: left; padding: 0; font: inherit; cursor: pointer; }
+.it-prov-name:hover { text-decoration: underline; }
+.it-prov-price { font-variant-numeric: tabular-nums; color: var(--ink-500); font-weight: 600; flex-shrink: 0; }
+.it-prov-row.is-best { background: var(--green-50); box-shadow: inset 2px 0 0 var(--green); }
+.it-prov-row.is-best .it-prov-name { color: #166534; font-weight: 600; }
+.it-prov-row.is-best .it-prov-price { color: var(--green-700); font-weight: 800; }
+.it-prov-mark { display: flex; color: var(--green); flex-shrink: 0; }
+.it-prov-empty { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
+.it-prov-none { font-size: 11px; color: var(--ink-300); border: 1px dashed var(--line); border-radius: 4px; padding: 2px 6px; white-space: nowrap; }
+.it-prov-add { border: 0; background: transparent; color: var(--sky-600); font: inherit; font-size: 11px; font-weight: 700; cursor: pointer; padding: 0; display: inline-flex; gap: 3px; align-items: center; }
+.it-prov-add:hover { text-decoration: underline; }
+
+/* ---- money cells ---- */
+.it-addl { position: relative; display: flex; width: 100%; }
+.it-addl-sym { position: absolute; left: 7px; top: 0; bottom: 0; display: flex; align-items: center; font-size: 11px; color: var(--ink-300); pointer-events: none; }
+.it-addl-input { width: 100%; height: 28px; padding: 0 7px 0 17px; border: 1px solid var(--line); border-radius: 6px; background: #fff; font: inherit; font-size: 12px; text-align: right; font-variant-numeric: tabular-nums; color: var(--ink-700); transition: border-color .12s, box-shadow .12s; }
+.it-addl-input:focus { outline: 0; border-color: var(--sky); box-shadow: 0 0 0 3px rgba(45,180,232,.18); color: var(--ink-900); }
+.it-td.it-cost { font-size: 12px; color: var(--ink-500); font-weight: 500; font-variant-numeric: tabular-nums; }
+.it-td.it-price-client { font-size: 12.5px; font-weight: 700; color: var(--ink-900); font-variant-numeric: tabular-nums; }
+.it-td.it-price-total { font-size: 15.5px; font-weight: 800; color: var(--ink-900); letter-spacing: -.015em; font-variant-numeric: tabular-nums; }
+tr.it-row.is-sub .it-td.it-price-total { font-size: 14px; font-weight: 700; }
+
+/* ---- kebab menu ---- */
+.it-kebab-wrap { position: relative; display: inline-flex; align-items: center; justify-content: center; }
+.it-kebab { width: 24px; height: 26px; border: 1px solid transparent; background: transparent; border-radius: 6px; color: var(--ink-300); cursor: pointer; display: grid; place-items: center; padding: 0; transition: background .12s, color .12s, border-color .12s; }
+.it-row:hover .it-kebab { border-color: var(--line); background: #fff; color: var(--ink-500); }
+.it-kebab:hover, .it-row:hover .it-kebab:hover { background: var(--navy-50); color: var(--ink-900); border-color: #d3dae5; }
+.it-kebab.is-open, .it-row:hover .it-kebab.is-open { background: #1d2a3d; border-color: #1d2a3d; color: #fff; }
+/* position:fixed with top/left set by items_table.js (getBoundingClientRect
+   off the trigger button) — the table's horizontal-scroll wrapper forces
+   overflow-y:auto too (CSS quirk: overflow-x set to anything but visible
+   flips the other axis from visible to auto), which would otherwise clip
+   an absolutely-positioned menu for rows near the table's bottom edge, and
+   an off-table popover would inflate the wrapper's scrollable width. Fixed
+   positioning opts out of both. */
+.it-menu { position: fixed; z-index: 60; min-width: 176px; background: #fff; border: 1px solid var(--line); border-radius: 9px; box-shadow: 0 16px 36px -12px rgba(15,22,35,.34), 0 4px 10px -4px rgba(15,22,35,.14); padding: 4px; animation: itMenuIn .13s ease-out; }
+.it-menu[hidden] { display: none; }
+@keyframes itMenuIn { from { opacity: 0; transform: translateY(-3px); } to { opacity: 1; transform: none; } }
+.it-menu-item { display: flex; align-items: center; gap: 9px; width: 100%; padding: 7px 9px; border: 0; background: transparent; border-radius: 6px; font: inherit; font-size: 12.5px; font-weight: 500; color: var(--ink-700); cursor: pointer; text-align: left; white-space: nowrap; }
+.it-menu-item svg { color: var(--ink-400); flex-shrink: 0; }
+.it-menu-item:hover { background: var(--navy-50); color: var(--ink-900); }
+.it-menu-item:hover svg { color: var(--ink-700); }
+.it-menu-sep { border: 0; border-top: 1px solid var(--line-2); margin: 4px 2px; }
+.it-menu-item.is-danger { color: var(--red); }
+.it-menu-item.is-danger svg { color: var(--red); }
+.it-menu-item.is-danger:hover { background: var(--red-50); color: var(--red); }
+
+/* ---- comments ---- */
+.it-note { position: relative; display: inline-flex; align-items: center; justify-content: center; }
+.it-note-btn { width: 24px; height: 24px; border: 0; background: transparent; border-radius: 6px; color: var(--ink-300); cursor: pointer; display: grid; place-items: center; padding: 0; transition: background .12s, color .12s; }
+.it-note-btn.has-note { color: var(--sky-600); background: var(--sky-50); }
+.it-note-btn:hover { background: var(--navy-50); color: var(--ink-700); }
+.it-note-btn.is-open { background: #1d2a3d; color: #fff; }
+/* position:fixed — see .it-menu comment above for why. */
+.it-note-pop { position: fixed; z-index: 60; width: 220px; background: #fff; border: 1px solid var(--line); border-radius: 9px; box-shadow: 0 16px 36px -12px rgba(15,22,35,.34), 0 4px 10px -4px rgba(15,22,35,.14); padding: 9px 11px; text-align: left; animation: itMenuIn .13s ease-out; }
+.it-note-pop[hidden] { display: none; }
+.it-note-pop-l { font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em; font-weight: 700; color: var(--ink-500); margin-bottom: 4px; }
+.it-note-pop-t { font-size: 11.5px; line-height: 1.5; color: var(--ink-600); }
+.it-dash { color: var(--ink-300); }
+
+/* ---- totals row (tfoot) ---- */
+.it-totals td { border-top: 2px solid #dbe2ec; background: var(--navy-50); padding: 10px 8px; vertical-align: middle; }
+/* display:flex must live on an inner wrapper, not the <td> itself — a flex
+   display on a table cell drops it out of the column grid in most browsers
+   and visibly shifts every cell after it. */
+.it-totals-label { padding: 10px 12px !important; }
+.it-totals-k { font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em; font-weight: 700; color: var(--ink-500); white-space: nowrap; }
+.it-totals td.is-num { text-align: right; font-variant-numeric: tabular-nums; font-size: 12.5px; font-weight: 700; color: var(--ink-600); }
+.it-totals td.is-grand { font-size: 17px; font-weight: 800; color: var(--ink-900); letter-spacing: -.015em; }
+/* Grand-total cell holds two stacked spans (#total2, .it-totals-profit) — the
+   flex layout lives on an inner wrapper, never the <td> itself (display:flex
+   on a table cell drops it out of the column grid in most browsers). */
+.it-totals-grand-wrap { display: flex; flex-direction: column; align-items: flex-end; gap: 1px; }
+.it-totals .it-totals-profit { font-size: 11px; font-weight: 700; letter-spacing: 0; color: var(--green-700); white-space: nowrap; }
+.it-totals .it-totals-profit:empty { display: none; }
+.it-totals td.is-div { border-left: 1px solid #e0e6ef; }
+
+/* ---- shipping strip ---- */
+.it-ship { display: grid; grid-template-columns: 1fr 190px; gap: 14px; padding: 12px 14px; border-top: 1px solid var(--line); background: #fafbfd; border-radius: 0 0 12px 12px; }
+
+/* ---- empty state ---- */
+.it-empty { padding: 40px 20px 44px; text-align: center; }
+.it-empty-ico { width: 52px; height: 52px; margin: 0 auto 12px; border-radius: 50%; background: var(--navy-50); color: var(--ink-300); display: grid; place-items: center; }
+.it-empty-t { font-size: 14px; font-weight: 600; color: var(--ink-900); }
+.it-empty-s { font-size: 12.5px; color: var(--ink-400); margin-top: 3px; }
+
+@media (max-width: 1024px) {
+  .it-ship { grid-template-columns: 1fr; }
+  .it-card-head { align-items: stretch; }
+}
