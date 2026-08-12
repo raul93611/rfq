@@ -6,8 +6,8 @@ $(document).ready(function () {
     monto.length = 0;
     quantity.length = 0;
     $('#items tr').each(function () {
-      quantity.push(parseFloat($(this).find('td').eq(5).text()) || 0);
-      monto.push(parseFloat($(this).find('td').eq(8).text().split(' ')[1]) || 0);
+      quantity.push(parseFloat($(this).find('td').eq(4).text()) || 0);
+      monto.push(parseFloat($(this).find('td').eq(7).text().split(' ')[1]) || 0);
     });
   }
 
@@ -62,10 +62,10 @@ $(document).ready(function () {
     $('#items tr').each(function (index) {
       const $row = $(this);
 
-      const bestUnitCostField = $row.find('td').eq(8);
-      const singleTotalCostField = $row.find('td').eq(9);
-      const priceForClientField = $row.find('td').eq(10);
-      const singleTotalPriceField = $row.find('td').eq(11);
+      const bestUnitCostField = $row.find('td').eq(7);
+      const singleTotalCostField = $row.find('td').eq(8);
+      const priceForClientField = $row.find('td').eq(9);
+      const singleTotalPriceField = $row.find('td').eq(10);
 
       const singleAdditional = parseFloat($(`#add_cost${index + 1}`).val()) || 0;
 

@@ -124,78 +124,77 @@ class RepositorioSubitem {
     return $subitems;
   }
 
-  public static function escribir_subitem($subitem, $i) {
+  public static function escribir_subitem($subitem, $i, $idItem, $displayNo) {
     if (!isset($subitem)) {
       return;
     }
     $j = $i;
-    Conexion::abrir_conexion();
-    $providers_subitem = RepositorioProviderSubitem::obtener_providers_subitem_por_id_subitem(Conexion::obtener_conexion(), $subitem->obtener_id());
-    Conexion::cerrar_conexion();
-    echo '<tr id="subitem' . $subitem->obtener_id() .  '" class="fila_subitem">';
     $subitemId = $subitem->obtener_id();
-    echo '<td><div class="item-actions">'
-      . '<button type="button" class="btn btn-subitem btn-xs item-action-btn iem-edit-subitem" data-id="' . $subitemId . '" data-load-url="' . LOAD_EDIT_SUBITEM_FORM . $subitemId . '"><i class="fa fa-edit"></i> Edit</button>'
-      . '<button type="button" class="btn btn-item-del btn-xs item-action-btn iem-delete-subitem" data-id="' . $subitemId . '" data-url="' . DELETE_SUBITEM . '/' . $subitemId . '"><i class="fa fa-trash"></i> Delete</button>'
-      . '<button type="button" class="btn btn-subitem btn-xs item-action-btn iem-add-provider-subitem" data-id-subitem="' . $subitemId . '"><i class="fa fa-plus-circle"></i> Provider</button>'
-      . '</div></td>';
-    echo '<td></td>';
-    if (strlen($subitem->obtener_description_project()) >= 100) {
-      echo '<td><b>Brand:</b> ' . $subitem->obtener_brand_project() . '<br><b>Part #:</b> ' . $subitem->obtener_part_number_project() . '<br><b>Description:</b> ' . nl2br(mb_substr($subitem->obtener_description_project(), 0, 100)) . ' ...</td>';
-    } else {
-      echo '<td><b>Brand:</b> ' . $subitem->obtener_brand_project() . '<br><b>Part #:</b> ' . $subitem->obtener_part_number_project() . '<br><b>Description:</b> ' . nl2br($subitem->obtener_description_project()) . '</td>';
-    }
-    if (strlen($subitem->obtener_description()) >= 100) {
-      echo '<td><b>Brand:</b> ' . $subitem->obtener_brand() . '<br><b>Part #:</b> ' . $subitem->obtener_part_number() . '<br><b>Description:</b> ' . nl2br(mb_substr($subitem->obtener_description(), 0, 100)) . ' ...</td>';
-    } else {
-      echo '<td><b>Brand:</b> ' . $subitem->obtener_brand() . '<br><b>Part #:</b> ' . $subitem->obtener_part_number() . '<br><b>Description:</b> ' . nl2br($subitem->obtener_description()) . '</td>';
-    }
-    echo '<td class="estrechar"><a target="_blank" href="' . $subitem->obtener_website() . '">' . $subitem->obtener_website() . '</a></td>';
-    echo '<td>' . $subitem->obtener_quantity() . '</td>';
-    echo '<td><div class="row"><div class="col-6">';
-    for ($i = 0; $i < count($providers_subitem); $i++) {
-      $provider_subitem = $providers_subitem[$i];
-      $psiLabel = strlen($provider_subitem->obtener_provider()) >= 10
-        ? mb_substr($provider_subitem->obtener_provider(), 0, 10) . '...'
-        : $provider_subitem->obtener_provider();
-      echo '<button type="button" class="iem-provider-link iem-edit-provider-subitem" data-id="' . $provider_subitem->obtener_id() . '" data-load-url="' . LOAD_EDIT_PROVIDER_SUBITEM_FORM . $provider_subitem->obtener_id() . '"><b>' . $psiLabel . ':</b></button><br>';
-    }
-    echo '</div><div class="col-6">';
-    for ($i = 0; $i < count($providers_subitem); $i++) {
-      $provider_subitem = $providers_subitem[$i];
-      echo '$ ' . $provider_subitem->obtener_price() . '<br>';
-    }
-    echo '</div></div></td>';
-    if ($subitem->obtener_additional() != 0) {
-      echo '<td><input type="text" class="form-control form-control-sm" id="add_cost' . $j . '" size="10" value="' . $subitem->obtener_additional() . '"></td>';
-    } else {
-      echo '<td><input type="text" class="form-control form-control-sm" id="add_cost' . $j . '" size="10" value="0"></td>';
-    }
-    echo '<td>';
-    for ($i = 0; $i < count($providers_subitem); $i++) {
-      $provider_subitem = $providers_subitem[$i];
-      $precios_subitem[$i] = $provider_subitem->obtener_price();
+    Conexion::abrir_conexion();
+    $providers_subitem = RepositorioProviderSubitem::obtener_providers_subitem_por_id_subitem(Conexion::obtener_conexion(), $subitemId);
+    Conexion::cerrar_conexion();
+
+    // --- Kebab (row actions) column ---
+    $menu = '<button type="button" class="it-menu-item iem-edit-subitem" data-id="' . $subitemId . '" data-load-url="' . LOAD_EDIT_SUBITEM_FORM . $subitemId . '">' . RepositorioItem::itIcon('edit', 13) . 'Edit subitem</button>'
+      . '<button type="button" class="it-menu-item iem-add-provider-subitem" data-id-subitem="' . $subitemId . '">' . RepositorioItem::itIcon('userPlus', 13) . 'Add provider</button>'
+      . '<hr class="it-menu-sep">'
+      . '<button type="button" class="it-menu-item is-danger iem-delete-subitem" data-id="' . $subitemId . '" data-url="' . DELETE_SUBITEM . '/' . $subitemId . '">' . RepositorioItem::itIcon('trash', 13) . 'Delete subitem</button>';
+    $kebabCell = RepositorioItem::renderKebab($subitemId, $menu);
+
+    // --- # column (elbow + hierarchical N.N number, no room badge of its own) ---
+    $numberCell = '<div class="it-idx"><span class="it-no"><span class="it-disc-slot"><span class="it-elbow">&#8627;</span></span><span class="it-subn">' . htmlspecialchars((string) $displayNo, ENT_QUOTES, 'UTF-8') . '</span></span></div>';
+
+    // --- Description columns (full text always sent — see RepositorioItem::renderDescBlock) ---
+    $projectDesc = RepositorioItem::renderDescBlock('spec', $subitem->obtener_brand_project(), $subitem->obtener_part_number_project(), $subitem->obtener_description_project());
+    $elogicDesc  = RepositorioItem::renderDescBlock('prop', $subitem->obtener_brand(), $subitem->obtener_part_number(), $subitem->obtener_description(), $subitem->obtener_website());
+
+    // --- Providers column ---
+    $providersCell = RepositorioItem::renderProvidersList($providers_subitem, $subitemId, true);
+
+    // --- Additional cost column ---
+    $additionalValue = $subitem->obtener_additional() != 0 ? $subitem->obtener_additional() : 0;
+    $additionalCell  = '<label class="it-addl"><span class="it-addl-sym">$</span><input type="number" step=".01" class="it-addl-input" id="add_cost' . $j . '" value="' . htmlspecialchars($additionalValue, ENT_QUOTES, 'UTF-8') . '"></label>';
+
+    // --- Best unit cost column (also updates provider_menor) ---
+    $bestUnitCostCell = '';
+    $precios_subitem = [];
+    foreach ($providers_subitem as $idx => $provider_subitem) {
+      $precios_subitem[$idx] = $provider_subitem->obtener_price();
     }
     if (!empty($precios_subitem)) {
       $best_unit_price = min($precios_subitem);
-      for ($i = 0; $i < count($precios_subitem); $i++) {
-        if ($best_unit_price == $precios_subitem[$i]) {
+      foreach ($precios_subitem as $idx => $price) {
+        if ($best_unit_price == $price) {
           Conexion::abrir_conexion();
-          self::actualizar_provider_menor_subitem(Conexion::obtener_conexion(), $providers_subitem[$i]->obtener_id(), $subitem->obtener_id());
+          self::actualizar_provider_menor_subitem(Conexion::obtener_conexion(), $providers_subitem[$idx]->obtener_id(), $subitemId);
           Conexion::cerrar_conexion();
         }
       }
-      echo '$ ' . $best_unit_price;
+      $bestUnitCostCell = '$ ' . $best_unit_price;
     }
-    echo '</td>';
-    echo '<td></td>';
-    echo '<td></td>';
-    echo '<td></td>';
-    echo '<td>' . nl2br($subitem->obtener_comments()) . '</td>';
+
+    // --- Comments column ---
+    $commentsCell = RepositorioItem::renderNoteCell($subitem->obtener_comments());
+
+    // --- Render row ---
+    // "fila_subitem" is a legacy class kept for js/quote.js's `$row.hasClass('fila_subitem')` calc branch.
+    echo '<tr id="subitem' . $subitemId . '" class="it-row is-sub fila_subitem" data-parent-item="' . $idItem . '">';
+    echo '<td class="it-td is-c">' . $kebabCell . '</td>';
+    echo '<td class="it-td">' . $numberCell . '</td>';
+    echo '<td class="it-td is-div it-td-spec">' . $projectDesc . '</td>';
+    echo '<td class="it-td is-div it-td-prop">' . $elogicDesc . '</td>';
+    echo '<td class="it-td is-div is-num">' . $subitem->obtener_quantity() . '</td>';
+    echo '<td class="it-td">' . $providersCell . '</td>';
+    echo '<td class="it-td is-div">' . $additionalCell . '</td>';
+    echo '<td class="it-td is-num it-cost">' . $bestUnitCostCell . '</td>';
+    echo '<td class="it-td is-num it-cost"></td>'; // Total cost  (calculated by JS)
+    echo '<td class="it-td is-div is-num it-price-client it-td-price"></td>'; // Price for client (calculated by JS)
+    echo '<td class="it-td is-num it-price-total it-td-price"></td>'; // Total price (calculated by JS)
+    echo '<td class="it-td is-c">' . $commentsCell . '</td>';
     echo '</tr>';
   }
 
-  public static function escribir_subitems($id_item, $j) {
+  public static function escribir_subitems($id_item, $j, $parentNumeracion = '') {
     $j++;
     Conexion::abrir_conexion();
     $subitems = self::obtener_subitems_por_id_item(Conexion::obtener_conexion(), $id_item);
@@ -203,7 +202,8 @@ class RepositorioSubitem {
     if (count($subitems)) {
       for ($i = 0; $i < count($subitems); $i++) {
         $subitem = $subitems[$i];
-        self::escribir_subitem($subitem, $j);
+        $displayNo = $parentNumeracion !== '' ? ($parentNumeracion . '.' . ($i + 1)) : (string) ($i + 1);
+        self::escribir_subitem($subitem, $j, $id_item, $displayNo);
         $j++;
       }
     }

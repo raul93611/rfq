@@ -94,19 +94,6 @@
   <!-- Items Table -->
   <div class="items-section-wrapper" id="items-section-wrapper">
     <?php RepositorioItem::escribir_items($cotizacion_recuperada->obtener_id()); ?>
-    <?php
-    Conexion::abrir_conexion();
-    $items_exists = RepositorioItem::items_exists(Conexion::obtener_conexion(), $cotizacion_recuperada->obtener_id());
-    $re_quote_exists = ReQuoteRepository::re_quote_exists(Conexion::obtener_conexion(), $cotizacion_recuperada->obtener_id());
-    $total_services = ServiceRepository::get_total(Conexion::obtener_conexion(), $id_rfq);
-    Conexion::cerrar_conexion();
-    ?>
-    <?php if (!$items_exists): ?>
-      <div class="section-empty-state">
-        <i class="fas fa-box-open"></i>
-        <p>No items added yet</p>
-      </div>
-    <?php endif; ?>
   </div>
 
   <!-- Chemonics: manual total price -->

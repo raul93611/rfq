@@ -1,6 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const fs = require('fs');
 const path = require('path');
+const { openKebabFor } = require('../helpers/kebab');
 
 function fixtures() {
   return JSON.parse(fs.readFileSync(path.join(__dirname, '../.fixtures.json'), 'utf-8'));
@@ -16,14 +17,16 @@ test.describe('Quote Editing — Subitems', () => {
   });
 
   test('add subitem button opens modal with correct item id', async ({ page }) => {
-    await page.locator('.iem-add-subitem').first().click();
+    const addBtn = await openKebabFor(page, '.iem-add-subitem');
+    await addBtn.click();
     await expect(page.locator('#add-subitem-modal')).toBeVisible();
     const val = await page.locator('#iem-add-subitem-id-item').inputValue();
     expect(parseInt(val)).toBeGreaterThan(0);
   });
 
   test('add subitem modal has required fields', async ({ page }) => {
-    await page.locator('.iem-add-subitem').first().click();
+    const addBtn = await openKebabFor(page, '.iem-add-subitem');
+    await addBtn.click();
     await expect(page.locator('#add-subitem-modal')).toBeVisible();
     await expect(page.locator('#add-subitem-modal [name="brand_project"]')).toBeVisible();
     await expect(page.locator('#add-subitem-modal [name="quantity"]')).toBeVisible();
@@ -33,7 +36,8 @@ test.describe('Quote Editing — Subitems', () => {
   test('add subitem saves and refreshes table', async ({ page }) => {
     const { query } = require('../helpers/db');
 
-    await page.locator('.iem-add-subitem').first().click();
+    const addBtn = await openKebabFor(page, '.iem-add-subitem');
+    await addBtn.click();
     await page.waitForSelector('#add-subitem-modal.show');
 
     await page.fill('#add-subitem-modal [name="brand"]', 'PW-Sub-Brand');
@@ -57,13 +61,15 @@ test.describe('Quote Editing — Subitems', () => {
   });
 
   test('edit subitem button opens populated modal', async ({ page }) => {
-    await page.locator('.iem-edit-subitem').first().click();
+    const editBtn = await openKebabFor(page, '.iem-edit-subitem');
+    await editBtn.click();
     await expect(page.locator('#edit-subitem-modal')).toBeVisible();
     await page.waitForSelector('#iem-edit-subitem-body [name="brand_project"]', { timeout: 5000 });
   });
 
   test('edit subitem saves changes', async ({ page }) => {
-    await page.locator('.iem-edit-subitem').first().click();
+    const editBtn = await openKebabFor(page, '.iem-edit-subitem');
+    await editBtn.click();
     await page.waitForSelector('#iem-edit-subitem-body [name="quantity"]', { timeout: 5000 });
 
     await page.fill('#iem-edit-subitem-body [name="quantity"]', '2');
@@ -79,7 +85,8 @@ test.describe('Quote Editing — Subitems', () => {
     let dialogFired = false;
     page.on('dialog', () => { dialogFired = true; });
 
-    await page.locator('.iem-delete-subitem').first().click();
+    const deleteBtn = await openKebabFor(page, '.iem-delete-subitem');
+    await deleteBtn.click();
     await expect(page.locator('#alert_delete_system')).toBeVisible();
     expect(dialogFired).toBe(false);
 
@@ -88,7 +95,8 @@ test.describe('Quote Editing — Subitems', () => {
   });
 
   test('add provider subitem button opens modal', async ({ page }) => {
-    await page.locator('.iem-add-provider-subitem').first().click();
+    const addBtn = await openKebabFor(page, '.iem-add-provider-subitem');
+    await addBtn.click();
     await expect(page.locator('#add-provider-subitem-modal')).toBeVisible();
     const val = await page.locator('#iem-add-psi-id-subitem').inputValue();
     expect(parseInt(val)).toBeGreaterThan(0);
@@ -97,7 +105,8 @@ test.describe('Quote Editing — Subitems', () => {
   test('add provider subitem saves and refreshes table', async ({ page }) => {
     const { query } = require('../helpers/db');
 
-    await page.locator('.iem-add-provider-subitem').first().click();
+    const addBtn = await openKebabFor(page, '.iem-add-provider-subitem');
+    await addBtn.click();
     await page.waitForSelector('#add-provider-subitem-modal.show');
 
     await page.fill('#add-provider-subitem-modal [name="provider"]', 'PW-SubProvider');

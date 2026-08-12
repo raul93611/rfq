@@ -1,6 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const fs = require('fs');
 const path = require('path');
+const { openKebabFor } = require('../helpers/kebab');
 
 function fixtures() {
   return JSON.parse(fs.readFileSync(path.join(__dirname, '../.fixtures.json'), 'utf-8'));
@@ -27,7 +28,8 @@ test.describe('Delete Confirmation Modal', () => {
     const before = countBefore[0].c;
 
     // Trigger service delete
-    await page.locator('.svc-delete-btn').first().click();
+    const deleteBtn = await openKebabFor(page, '.svc-delete-btn');
+    await deleteBtn.click();
     await expect(page.locator('#alert_delete_system')).toBeVisible();
 
     // Click cancel
@@ -58,7 +60,8 @@ test.describe('Delete Confirmation Modal', () => {
     const tempId = rows[0].id;
 
     // Click delete on that specific service row
-    await page.locator(`#service${tempId} .svc-delete-btn`).click();
+    const deleteBtn = await openKebabFor(page, `#service${tempId} .svc-delete-btn`);
+    await deleteBtn.click();
     await expect(page.locator('#alert_delete_system')).toBeVisible();
 
     // Confirm
@@ -80,21 +83,24 @@ test.describe('Delete Confirmation Modal', () => {
 
     // Trigger item delete
     if (await page.locator('.iem-delete-item').count() > 0) {
-      await page.locator('.iem-delete-item').first().click();
+      const deleteItemBtn = await openKebabFor(page, '.iem-delete-item');
+      await deleteItemBtn.click();
       await expect(page.locator('#alert_delete_system')).toBeVisible();
       await page.locator('#alert_delete_system [data-dismiss="modal"]').first().click();
     }
 
     // Trigger subitem delete
     if (await page.locator('.iem-delete-subitem').count() > 0) {
-      await page.locator('.iem-delete-subitem').first().click();
+      const deleteSubBtn = await openKebabFor(page, '.iem-delete-subitem');
+      await deleteSubBtn.click();
       await expect(page.locator('#alert_delete_system')).toBeVisible();
       await page.locator('#alert_delete_system [data-dismiss="modal"]').first().click();
     }
 
     // Trigger service delete
     if (await page.locator('.svc-delete-btn').count() > 0) {
-      await page.locator('.svc-delete-btn').first().click();
+      const deleteSvcBtn = await openKebabFor(page, '.svc-delete-btn');
+      await deleteSvcBtn.click();
       await expect(page.locator('#alert_delete_system')).toBeVisible();
       await page.locator('#alert_delete_system [data-dismiss="modal"]').first().click();
     }

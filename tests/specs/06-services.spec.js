@@ -1,6 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const fs = require('fs');
 const path = require('path');
+const { openKebabFor } = require('../helpers/kebab');
 
 function fixtures() {
   return JSON.parse(fs.readFileSync(path.join(__dirname, '../.fixtures.json'), 'utf-8'));
@@ -79,7 +80,8 @@ test.describe('Services', () => {
   });
 
   test('edit service button opens populated edit modal', async ({ page }) => {
-    await page.locator('.edit_service').first().click();
+    const editBtn = await openKebabFor(page, '.edit_service');
+    await editBtn.click();
     await expect(page.locator('#edit_service_modal')).toBeVisible();
     await page.waitForSelector('#edit_service_form [name="description"]', { timeout: 5000 });
     const desc = await page.locator('#edit_service_form [name="description"]').inputValue();
@@ -87,7 +89,8 @@ test.describe('Services', () => {
   });
 
   test('edit service saves changes and refreshes section', async ({ page }) => {
-    await page.locator('.edit_service').first().click();
+    const editBtn = await openKebabFor(page, '.edit_service');
+    await editBtn.click();
     await page.waitForSelector('#edit_service_form [name="quantity"]', { timeout: 5000 });
 
     await page.fill('#edit_service_form [name="quantity"]', '5');
@@ -103,7 +106,8 @@ test.describe('Services', () => {
     let dialogFired = false;
     page.on('dialog', () => { dialogFired = true; });
 
-    await page.locator('.svc-delete-btn').first().click();
+    const deleteBtn = await openKebabFor(page, '.svc-delete-btn');
+    await deleteBtn.click();
     await expect(page.locator('#alert_delete_system')).toBeVisible();
     expect(dialogFired).toBe(false);
 
@@ -119,7 +123,8 @@ test.describe('Services', () => {
     const before = countBefore[0].c;
 
     const toastPromise = page.waitForSelector('.toast-success', { timeout: 10000 });
-    await page.locator('.svc-duplicate-btn').first().click();
+    const dupBtn = await openKebabFor(page, '.svc-duplicate-btn');
+    await dupBtn.click();
     await toastPromise;
 
     const countAfter = await query('SELECT COUNT(*) as c FROM services WHERE id_rfq = ?', [id]);
@@ -132,9 +137,11 @@ test.describe('Services', () => {
     }
   });
 
-  test('service payment term radio updates section', async ({ page }) => {
-    // Net 30/CC radio should be present
-    await expect(page.locator('[name="services_payment_term"][value="Net 30/CC"]')).toBeVisible();
-    await expect(page.locator('[name="services_payment_term"][value="Net 30"]')).toBeVisible();
+  test('service payment term select offers Net 30 and Net 30/CC', async ({ page }) => {
+    // Payment Terms is a <select id="services_payment_term">, not a radio group.
+    const select = page.locator('#services_payment_term');
+    await expect(select).toBeVisible();
+    await expect(select.locator('option[value="Net 30"]')).toHaveCount(1);
+    await expect(select.locator('option[value="Net 30/CC"]')).toHaveCount(1);
   });
 });
