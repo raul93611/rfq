@@ -1,3 +1,8 @@
+<?php
+Conexion::abrir_conexion();
+$re_quote_exists = ReQuoteRepository::re_quote_exists(Conexion::obtener_conexion(), $id_rfq);
+Conexion::cerrar_conexion();
+?>
 <div class="btn-group dropup">
   <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     <i class="fas fa-ellipsis-h mr-1"></i> Actions
