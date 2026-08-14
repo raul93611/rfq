@@ -15,6 +15,7 @@
 
   var APEX_FONT = "'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
   var INK_500 = '#5a6a7e', INK_400 = '#7d8ba0', LINE = '#e3e7ee';
+  var PM_STATUSES = window.PM_STATUSES || [];
   var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
   var animCfg = { enabled: true, easing: 'easeinout', speed: 520, animateGradually: { enabled: true, delay: 90 } };
   var noToolbar = { show: false };
@@ -100,6 +101,7 @@
     $('#pm-subtitle').textContent = 'Reports · ' + periodLabel() + ' · ' + d.count + (d.count === 1 ? ' bid' : ' bids') + ' in pipeline';
     renderKpis(d);
     renderStatus(d);
+    renderByUser(d);
     renderWinLoss(d);
     renderCategory('awards', d.awardsByCategory, d);
     renderCategory('submitted', d.submittedByCategory, d);
@@ -201,6 +203,51 @@
         var tot = cur.reduce(function (a, b) { return a + b.count; }, 0);
         var pct = tot ? Math.round(it.count / tot * 100) : 0;
         return tip(it.color, it.label, state.show === 'percent' ? pct + '% · ' + it.count + ' bids' : it.count + ' bids · ' + pct + '%');
+      } },
+      states: { active: { filter: { type: 'darken', value: 0.85 } } }
+    });
+  }
+
+  /* ================= chart 1b: status by user (horizontal stacked bar) ================= */
+  function renderByUser(d) {
+    var rows = d.byUser || [];
+    if (d.empty || rows.length === 0) { setEmpty('byUser', true); return; }
+    setEmpty('byUser', false);
+    setHint('byUser', rows.length + (rows.length === 1 ? ' designated user' : ' designated users'));
+    var asPct = state.show === 'percent';
+    var height = Math.max(300, 130 + rows.length * 48);
+    mountOrUpdate('byUser', {
+      chart: {
+        type: 'bar', height: height, stacked: true, stackType: asPct ? '100%' : 'normal',
+        fontFamily: APEX_FONT, animations: animCfg, toolbar: noToolbar,
+        events: { dataPointSelection: function (e, ctx, cf) {
+          var cur = state.data.byUser || [];
+          var user = cur[cf.dataPointIndex];
+          var status = PM_STATUSES[cf.seriesIndex];
+          var n = user ? (user.counts[status.key] || 0) : 0;
+          if (user && status && n > 0) openDrill(
+            { type: 'byUser', user: user.userId, key: status.key },
+            user.userName + ' · ' + status.label, status.color);
+        } }
+      },
+      series: PM_STATUSES.map(function (s) {
+        return { name: s.label, data: rows.map(function (u) { return u.counts[s.key] || 0; }) };
+      }),
+      colors: PM_STATUSES.map(function (s) { return s.color; }),
+      plotOptions: { bar: { horizontal: true, borderRadius: 3, barHeight: '62%' } },
+      dataLabels: { enabled: false },
+      legend: { position: 'bottom', fontSize: '12px', labels: { colors: INK_500 }, markers: { width: 9, height: 9, radius: 3 }, itemMargin: { horizontal: 10, vertical: 4 } },
+      grid: { borderColor: LINE, strokeDashArray: 4, padding: { left: 8, right: 8 } },
+      xaxis: { categories: rows.map(function (u) { return u.userName; }),
+        labels: { style: { fontSize: '11px', colors: INK_400 }, formatter: function (v) { return asPct ? Math.round(v) + '%' : Math.round(v); } },
+        axisBorder: { color: LINE }, axisTicks: { color: LINE } },
+      yaxis: { labels: { style: { fontSize: '12px', colors: INK_500, fontWeight: 600 } } },
+      tooltip: { custom: function (o) {
+        var row = (state.data.byUser || [])[o.dataPointIndex];
+        var status = PM_STATUSES[o.seriesIndex];
+        var n = row ? (row.counts[status.key] || 0) : 0;
+        var pct = row && row.total ? Math.round(n / row.total * 100) : 0;
+        return tip(status.color, status.label, n + (n === 1 ? ' quote' : ' quotes') + ' · ' + pct + '%');
       } },
       states: { active: { filter: { type: 'darken', value: 0.85 } } }
     });

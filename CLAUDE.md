@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 All built. Detail for most of these lives in the matching `###` section below.
 
-Quote Inline Editing · SharePoint Sheet Sync · Comment Mentions & Notifications · Bid Requirement Fields (Site Visit/Q&A Deadline/Resumes) · Bid Pipeline Sync Controls · Bid Pipeline Metrics Dashboard · Pipeline Table View · 3-Year Annual Awards Comparison · Quote Lifecycle Audit Events · Write-Once Sheet Sync · Advanced Quote Search · Commercial Moving bid type + 50/50 payment term · Shared Notification Mailbox · Daily RFQ Digest Email · Quote Checklist & Info Drawer · Documents Drawer Tab + Custom File Widget · Import Items Enhancements (template download, append/replace mode, provider import) · Items & Services Table Redesign
+Quote Inline Editing · SharePoint Sheet Sync · Comment Mentions & Notifications · Bid Requirement Fields (Site Visit/Q&A Deadline/Resumes) · Bid Pipeline Sync Controls · Bid Pipeline Metrics Dashboard · Pipeline Table View · 3-Year Annual Awards Comparison · Quote Lifecycle Audit Events · Write-Once Sheet Sync · Advanced Quote Search · Commercial Moving bid type + 50/50 payment term · Shared Notification Mailbox · Daily RFQ Digest Email · Quote Checklist & Info Drawer · Documents Drawer Tab + Custom File Widget · Import Items Enhancements (template download, append/replace mode, provider import) · Items & Services Table Redesign · Internal Due Date Table Filter + Required Field · Pipeline Status by User + Wider Drill-down Drawer
 
 ## Environment
 
@@ -79,11 +79,15 @@ Endpoint `POST quote/load_unified_audit_trail` queries all three (re-quote joine
 
 Two listing pages mirror this: Sources Sought (`quote/sources_sought`) and No Award (`quote/no_award`, with a Reason column). Tests: `tests/php/pipeline_metrics_test.php`, `tests/specs/09-pipeline-metrics.spec.js`.
 
+**Status by user** — full-width card directly under Status Distribution: one horizontal stacked bar per designated user with ≥1 quote in the period (10-bucket colors, alphabetical, `PipelineMetricsRepository::getStatusByUser()` — INNER JOIN to `usuarios` so a dangling/unassigned `usuario_designado` naturally drops out, no LEFT JOIN needed since the column is `NOT NULL`). Percent mode uses ApexCharts native `stackType:'100%'` (per-user-normalized). Drill-down spec type `byUser` (`user` + `key`) needs `usuario_designado` added to `getDrillDown()`'s *inner* subquery SELECT list only — the outer SELECT/columns stay unchanged, WHERE can reference any inner-subquery column. Export sheet added the same way as the other chart keys. `.pm-drawer` is `50vw` (was a fixed `430px`) for every drill-down on the page, not just this chart.
+
 ### Pipeline Table View
 
 `Charts | Table` toggle on `perfil/reports/pipeline_metrics` (`#pm-view`) swaps to a filterable, server-paginated (25/row) quote table over the same `created_at` cohort as the charts (`PipelineTableRepository`, `js/pipeline_table.js`). Clicking a row opens a Quote Summary modal (real attached files from `quote/get_quote_files/<id>`, not the `rfq.file_document` checklist field; quick-comment reuses `#comment_rfq`/`mentions.js`).
 
 **No Quote Watchers** — that subsystem (per-quote watch subscriptions + notification fan-out) was built alongside this Table View, then removed; don't reintroduce a `watched` field/join without deliberately re-adding that whole feature. Test: `tests/php/pipeline_table_test.php`.
+
+**Internal Due Date filter** — 7th filter field (after Designated User), preset dropdown only (Today/Tomorrow/Next 7 days/Overdue), purely date-based via MySQL `CURDATE()` in `PipelineTableRepository::dueDateClause()` — no status-aware "exclude Awarded" logic, no custom range. AND-combines with every other filter and the period exactly like the rest. Also **required now everywhere it's entered**: New Quote form (`required` + `ValidadorCotizacionRegistro`/`ValidadorCotizacion::validar_internal_due_date()`, same "Must be fill out." pattern as End Date, no cross-field constraint) and the Information drawer tab (`save_information.php` rejects a blank value pre-DB-write, surfaced through the drawer's existing error banner — no new client-side validation). Tests: `tests/php/pipeline_table_test.php`, `tests/php/internal_due_date_test.php`.
 
 ### Charts Tab — Annual Awards (3-year)
 

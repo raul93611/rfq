@@ -192,7 +192,44 @@ class PipelineMetricsRepository {
       'awardsByCategory'    => self::categoryBreakdown($conexion, $period, 'awards'),
       'submittedByCategory' => self::categoryBreakdown($conexion, $period, 'submitted'),
       'pricing'             => self::pricingEffort($conexion, $period),
+      'byUser'              => self::getStatusByUser($conexion, $period),
     ];
+  }
+
+  /**
+   * Status-bucket breakdown per designated user, for the "Status by user" chart.
+   * Excludes quotes with no designated user; only users with >=1 matching quote are
+   * returned (no zero-count rows), ordered alphabetically by name. Every row's `counts`
+   * has all 10 status keys present (zero-filled).
+   */
+  public static function getStatusByUser($conexion, array $period) {
+    [$periodSql, $params] = self::periodClause($period);
+
+    $sql = "SELECT u.id AS user_id, u.nombre_usuario AS user_name, t.bucket AS bucket, COUNT(*) AS cnt
+            FROM (
+              SELECT rfq.usuario_designado, " . self::STATUS_CASE . " AS bucket
+              FROM rfq
+              WHERE rfq.deleted = 0 AND rfq.usuario_designado IS NOT NULL AND $periodSql
+            ) t
+            JOIN usuarios u ON u.id = t.usuario_designado
+            GROUP BY u.id, u.nombre_usuario, t.bucket";
+    $rows = self::run($conexion, $sql, $params);
+
+    $byUser = [];
+    foreach ($rows as $r) {
+      $uid = (int)$r['user_id'];
+      if (!isset($byUser[$uid])) {
+        $counts = [];
+        foreach (self::STATUSES as $s) { $counts[$s['key']] = 0; }
+        $byUser[$uid] = ['userId' => $uid, 'userName' => $r['user_name'], 'total' => 0, 'counts' => $counts];
+      }
+      $byUser[$uid]['counts'][$r['bucket']] = (int)$r['cnt'];
+      $byUser[$uid]['total'] += (int)$r['cnt'];
+    }
+
+    $result = array_values($byUser);
+    usort($result, fn($a, $b) => strcasecmp($a['userName'], $b['userName']));
+    return $result;
   }
 
   /**
@@ -265,7 +302,7 @@ class PipelineMetricsRepository {
 
     $sql = "SELECT id, email_code, name, type_of_bid, total_price, issue_date, bucket
             FROM (
-              SELECT rfq.id, rfq.email_code, rfq.name, rfq.type_of_bid,
+              SELECT rfq.id, rfq.email_code, rfq.name, rfq.type_of_bid, rfq.usuario_designado,
                      " . self::VALUE_EXPR . " AS total_price, rfq.issue_date, rfq.completado,
                      " . self::STATUS_CASE . " AS bucket
               FROM rfq" . self::SERVICES_JOIN . "
@@ -322,6 +359,13 @@ class PipelineMetricsRepository {
       if ($key === 'not_submitted') return "completado = 1 AND bucket = 'not_submitted'";
       if ($key === 'no_bid')        return "completado = 1 AND bucket = 'no_bid'";
       return null;
+    }
+    if ($type === 'byUser') {
+      $key = $spec['key'] ?? '';
+      if (!in_array($key, $validKeys, true)) return null;
+      $params[':dkey']  = $key;
+      $params[':duser'] = (int)($spec['user'] ?? 0);
+      return "bucket = :dkey AND usuario_designado = :duser";
     }
     return null;
   }

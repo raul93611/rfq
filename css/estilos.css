@@ -3092,7 +3092,7 @@ h3.text-info.text-center .fa-exclamation-circle {
 }
 .pm-drawer-scrim.is-open { opacity: 1; pointer-events: auto; }
 .pm-drawer {
-  position: fixed; top: 0; right: 0; bottom: 0; width: 430px; max-width: 92%;
+  position: fixed; top: 0; right: 0; bottom: 0; width: 50vw; max-width: 92%;
   background: #fff; border-left: 1px solid var(--pm-line); box-shadow: -16px 0 40px rgba(15,22,35,0.18);
   transform: translateX(100%); transition: transform 0.32s cubic-bezier(0.22,1,0.36,1);
   z-index: 1091; display: flex; flex-direction: column;
@@ -3357,7 +3357,7 @@ input.sq-input[type="date"] { font-size: 12.5px; color: #2c3849; }
   margin-top: 16px; background: white; border: 1px solid var(--line); border-radius: var(--radius);
   padding: 14px 16px 12px; box-shadow: 0 1px 2px rgba(15,22,35,0.03);
 }
-.pt-filters-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
+.pt-filters-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 12px; }
 .pt-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
 .pt-field-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 700; color: var(--ink-700); }
 .pt-input {

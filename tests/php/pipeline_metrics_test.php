@@ -194,6 +194,42 @@ try {
   $sd = PipelineMetricsRepository::getDrillDown($conexion, $svcPeriod, ['type' => 'status', 'key' => 'award']);
   check('drill-down row value includes services subtotal', 150.0, (float)($sd[0]['value'] ?? 0));
 
+  // ---- Status by user (feature: pipeline-status-by-user.md) ----
+  echo "[Status by user]\n";
+  $mkUser = function ($name) use ($conexion) {
+    $stmt = $conexion->prepare("INSERT INTO usuarios (nombre_usuario, password, nombres, apellidos, cargo, email, status, notif_inapp, notif_email)
+                                 VALUES (:u, 'x', :n, 'Test', '3', :e, 1, 1, 0)");
+    $stmt->execute([':u' => $name, ':n' => $name, ':e' => $name . '@test.local']);
+    return (int)$conexion->lastInsertId();
+  };
+  $BU_YEAR = 2096;
+  $buPeriod = ['mode' => 'year', 'year' => $BU_YEAR];
+  $userZ = $mkUser('pm_zzz_' . uniqid()); // sorts after userA alphabetically
+  $userA = $mkUser('pm_aaa_' . uniqid());
+  $buZ1 = insertQuote($conexion, $BU_YEAR, ['usuario_designado' => $userZ, 'award' => 1, 'status' => 1, 'completado' => 1, 'type_of_bid' => 'IT']);
+  $buZ2 = insertQuote($conexion, $BU_YEAR, ['usuario_designado' => $userZ, 'completado' => 1, 'comments' => 'No comments']);
+  $buA1 = insertQuote($conexion, $BU_YEAR, ['usuario_designado' => $userA, 'status' => 1, 'completado' => 1]);
+  // usuario_designado is NOT NULL with no FK constraint; a dangling id (no matching usuarios row)
+  // is how an "unassigned" quote is represented — the INNER JOIN to usuarios excludes it.
+  insertQuote($conexion, $BU_YEAR, ['usuario_designado' => 999999, 'completado' => 1]);
+
+  $byUser = PipelineMetricsRepository::getStatusByUser($conexion, $buPeriod);
+  check('byUser: 2 users with quotes (no-designated-user excluded)', 2, count($byUser));
+  check('byUser: sorted alphabetically (aaa before zzz)', $userA, $byUser[0]['userId']);
+  check('byUser: userZ total = 2', 2, $byUser[1]['total']);
+  check('byUser: userZ award count = 1', 1, $byUser[1]['counts']['award']);
+  check('byUser: userZ bid count = 1', 1, $byUser[1]['counts']['bid']);
+  check('byUser: all 10 status keys present, zero-filled', 10, count($byUser[0]['counts']));
+
+  $mFull = PipelineMetricsRepository::getMetrics($conexion, $buPeriod);
+  check('getMetrics() wires byUser through', count($byUser), count($mFull['byUser']));
+
+  $dUserAward = PipelineMetricsRepository::getDrillDown($conexion, $buPeriod, ['type' => 'byUser', 'user' => $userZ, 'key' => 'award']);
+  check('drill byUser scoped to userZ+award returns 1', 1, count($dUserAward));
+  check('drill byUser row is the right quote', $buZ1, $dUserAward[0]['id'] ?? null);
+  $dUserWrong = PipelineMetricsRepository::getDrillDown($conexion, $buPeriod, ['type' => 'byUser', 'user' => $userA, 'key' => 'award']);
+  check('drill byUser scoped to userA+award returns 0 (userA has no award)', 0, count($dUserWrong));
+
 } finally {
   $conexion->rollBack(); // leave the DB exactly as we found it
 }

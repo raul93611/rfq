@@ -5,12 +5,14 @@ abstract class ValidadorCotizacion {
   protected $email_code;
   protected $issue_date;
   protected $end_date;
+  protected $internal_due_date;
   protected $usuario_designado;
   protected $type_of_bid;
   protected $canal;
   protected $error_email_code;
   protected $error_issue_date;
   protected $error_end_date;
+  protected $error_internal_due_date;
 
   public function __construct() {
 
@@ -54,6 +56,15 @@ abstract class ValidadorCotizacion {
     return '';
   }
 
+  protected function validar_internal_due_date($internal_due_date) {
+    if (!$this->variable_iniciada($internal_due_date)) {
+      return 'Must be fill out.';
+    } else {
+      $this->internal_due_date = $internal_due_date;
+    }
+    return '';
+  }
+
   public function obtener_email_code() {
     return $this->email_code;
   }
@@ -64,6 +75,10 @@ abstract class ValidadorCotizacion {
 
   public function obtener_end_date() {
     return $this->end_date;
+  }
+
+  public function obtener_internal_due_date() {
+    return $this->internal_due_date;
   }
 
   public function obtener_usuario_designado() {
@@ -90,6 +105,10 @@ abstract class ValidadorCotizacion {
     return $this->error_end_date;
   }
 
+  public function obtener_error_internal_due_date() {
+    return $this->error_internal_due_date;
+  }
+
   public function mostrar_email_code() {
     if ($this->email_code != '') {
       echo 'value="' . $this->email_code . '"';
@@ -105,6 +124,12 @@ abstract class ValidadorCotizacion {
   public function mostrar_end_date() {
     if ($this->end_date != '') {
       echo 'value="' . $this->end_date . '"';
+    }
+  }
+
+  public function mostrar_internal_due_date() {
+    if ($this->internal_due_date != '') {
+      echo 'value="' . $this->internal_due_date . '"';
     }
   }
 
@@ -126,8 +151,15 @@ abstract class ValidadorCotizacion {
     }
   }
 
+  public function mostrar_error_internal_due_date() {
+    if ($this->error_internal_due_date != '') {
+      echo $this->aviso_inicio . $this->error_internal_due_date . $this->aviso_cierre;
+    }
+  }
+
   public function registro_cotizacion_valida() {
-    if ($this->error_email_code == '' && $this->error_issue_date == '' && $this->error_end_date == '') {
+    if ($this->error_email_code == '' && $this->error_issue_date == '' && $this->error_end_date == ''
+      && $this->error_internal_due_date == '') {
       return true;
     } else {
       return false;
