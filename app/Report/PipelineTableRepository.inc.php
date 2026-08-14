@@ -116,6 +116,10 @@ class PipelineTableRepository {
       $params[':uid'] = (int)$filters['user'];
       $inner[] = "rfq.usuario_designado = :uid";
     }
+    if (!empty($filters['dueDate'])) {
+      $clause = self::dueDateClause($filters['dueDate']);
+      if ($clause !== null) $inner[] = $clause;
+    }
 
     $statusWhere = '';
     if (!empty($filters['statuses']) && is_array($filters['statuses'])) {
@@ -129,6 +133,17 @@ class PipelineTableRepository {
     }
 
     return [implode(' AND ', $inner), $statusWhere, $params];
+  }
+
+  /** Internal Due Date preset WHERE fragment, purely date-based (server CURDATE()). */
+  private static function dueDateClause($preset) {
+    switch ($preset) {
+      case 'today':    return "DATE(rfq.internal_due_date) = CURDATE()";
+      case 'tomorrow': return "DATE(rfq.internal_due_date) = CURDATE() + INTERVAL 1 DAY";
+      case 'week':     return "DATE(rfq.internal_due_date) BETWEEN CURDATE() AND CURDATE() + INTERVAL 7 DAY";
+      case 'overdue':  return "DATE(rfq.internal_due_date) < CURDATE()";
+      default:         return null;
+    }
   }
 
   /** Period WHERE fragment on rfq.created_at. Adds a custom from/to range for the table. */

@@ -1,5 +1,10 @@
 <?php
 if (isset($_POST['save_information'])) {
+  if (empty($_POST['internal_due_date'])) {
+    header('Content-Type: application/json');
+    echo json_encode(['success' => false, 'message' => 'Internal Due Date must be filled out.']);
+    return;
+  }
   try {
     // Open database connection
     Conexion::abrir_conexion();

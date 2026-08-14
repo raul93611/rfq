@@ -71,7 +71,7 @@
     <div class="col-md-6">
       <div class="form-group">
         <label for="internal_due_date">Internal Due Date</label>
-        <input type="text" class="date form-control" id="internal_due_date" name="internal_due_date" placeholder="MM/DD/YYYY">
+        <input type="text" class="date form-control" id="internal_due_date" name="internal_due_date" placeholder="MM/DD/YYYY" required>
         <small class="form-text text-muted"><i class="fas fa-table mr-1" style="color:#2db4e8;"></i>Synced to the SharePoint sheet.</small>
       </div>
     </div>

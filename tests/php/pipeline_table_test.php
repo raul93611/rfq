@@ -92,6 +92,26 @@ try {
   $values = array_column($channels, 'value');
   check('distinct channels includes our test channel', true, in_array('FedBid', $values, true));
 
+  // --- Internal Due Date filter (feature: internal-due-date.md) ---
+  $today    = $mkRfq(['internal_due_date' => date('Y-m-d')]);
+  $tomorrow = $mkRfq(['internal_due_date' => date('Y-m-d', strtotime('+1 day'))]);
+  $inFive   = $mkRfq(['internal_due_date' => date('Y-m-d', strtotime('+5 day'))]);
+  $overdue  = $mkRfq(['internal_due_date' => date('Y-m-d', strtotime('-2 day'))]);
+  $noDue    = $mkRfq(['internal_due_date' => null]);
+
+  $dToday = PipelineTableRepository::getPage($c, $year, array_merge($noF, ['dueDate' => 'today']), 0);
+  check('dueDate=today -> 1', 1, $dToday['total']);
+  $dTomorrow = PipelineTableRepository::getPage($c, $year, array_merge($noF, ['dueDate' => 'tomorrow']), 0);
+  check('dueDate=tomorrow -> 1', 1, $dTomorrow['total']);
+  $dWeek = PipelineTableRepository::getPage($c, $year, array_merge($noF, ['dueDate' => 'week']), 0);
+  check('dueDate=week (rolling 0-7 days, incl. today/tomorrow) -> 3', 3, $dWeek['total']);
+  $dOverdue = PipelineTableRepository::getPage($c, $year, array_merge($noF, ['dueDate' => 'overdue']), 0);
+  check('dueDate=overdue -> 1', 1, $dOverdue['total']);
+
+  // AND-combines with the period: same due date, wrong year -> 0 rows
+  $dWrongYear = PipelineTableRepository::getPage($c, ['mode' => 'year', 'year' => 2098], array_merge($noF, ['dueDate' => 'today']), 0);
+  check('dueDate=today + non-matching period -> 0 (AND-combined)', 0, $dWrongYear['total']);
+
 } finally {
   $c->rollBack();
   Conexion::cerrar_conexion();

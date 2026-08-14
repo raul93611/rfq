@@ -17,7 +17,7 @@
   var STATUS_BY_KEY = {};
   STATUSES.forEach(function (s) { STATUS_BY_KEY[s.key] = s; });
 
-  var EMPTY_FILTERS = function () { return { quoteId: '', channel: '', emailCode: '', statuses: [], bidType: '', user: '' }; };
+  var EMPTY_FILTERS = function () { return { quoteId: '', channel: '', emailCode: '', statuses: [], bidType: '', user: '', dueDate: '' }; };
 
   var st = {
     period: null,
@@ -52,6 +52,7 @@
     if (f.statuses.length) n++;
     if (f.bidType) n++;
     if (f.user) n++;
+    if (f.dueDate) n++;
     return n;
   }
 
@@ -65,6 +66,7 @@
     if (f.emailCode.trim()) q.push('emailCode=' + encodeURIComponent(f.emailCode.trim()));
     if (f.bidType) q.push('bidType=' + encodeURIComponent(f.bidType));
     if (f.user) q.push('user=' + encodeURIComponent(f.user));
+    if (f.dueDate) q.push('dueDate=' + encodeURIComponent(f.dueDate));
     f.statuses.forEach(function (k) { q.push('statuses[]=' + encodeURIComponent(k)); });
     return q.join('&');
   }
@@ -213,14 +215,14 @@
       var el = document.getElementById(id);
       if (el) el.addEventListener('input', function () { st.filters[map[id]] = el.value; onFilterChange(); });
     });
-    ['pt-f-channel', 'pt-f-bidType', 'pt-f-user'].forEach(function (id) {
+    ['pt-f-channel', 'pt-f-bidType', 'pt-f-user', 'pt-f-dueDate'].forEach(function (id) {
       var el = document.getElementById(id), key = id.replace('pt-f-', '');
       if (el) el.addEventListener('change', function () { st.filters[key] = el.value; onFilterChange(true); });
     });
     var clear = $('#pt-clear');
     if (clear) clear.addEventListener('click', function () {
       st.filters = EMPTY_FILTERS();
-      ['pt-f-quoteId', 'pt-f-emailCode', 'pt-f-channel', 'pt-f-bidType', 'pt-f-user'].forEach(function (id) {
+      ['pt-f-quoteId', 'pt-f-emailCode', 'pt-f-channel', 'pt-f-bidType', 'pt-f-user', 'pt-f-dueDate'].forEach(function (id) {
         var el = document.getElementById(id); if (el) el.value = '';
       });
       syncStatusMs();

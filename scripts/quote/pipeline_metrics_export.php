@@ -22,7 +22,7 @@ if ($mode === 'quarter') $period['quarter'] = max(1, min(4, (int)($_GET['quarter
 if ($mode === 'month')   $period['month']   = max(1, min(12, (int)($_GET['month'] ?? date('n'))));
 
 $chart = $_GET['chart'] ?? 'all';
-$valid = ['status', 'winloss', 'awards', 'submitted', 'pricing'];
+$valid = ['status', 'winloss', 'awards', 'submitted', 'pricing', 'byUser'];
 $which = in_array($chart, $valid, true) ? [$chart] : $valid;
 
 Conexion::abrir_conexion();
@@ -103,6 +103,15 @@ foreach ($which as $key) {
     $rows = array_map(fn($b) => [$b['label'], $b['count']], $m['pricing']['buckets']);
     $rows[] = ['Total priced bids', $m['pricing']['total']];
     $addSheet('Pricing Effort', ['Outcome', 'Count'], $rows);
+  } elseif ($key === 'byUser') {
+    $statusLabels = array_column(PipelineMetricsRepository::STATUSES, 'label');
+    $statusKeys   = array_column(PipelineMetricsRepository::STATUSES, 'key');
+    $rows = array_map(function ($u) use ($statusKeys) {
+      $row = [$u['userName']];
+      foreach ($statusKeys as $sk) { $row[] = $u['counts'][$sk]; }
+      return $row;
+    }, $m['byUser']);
+    $addSheet('Status by User', array_merge(['User'], $statusLabels), $rows);
   }
 }
 

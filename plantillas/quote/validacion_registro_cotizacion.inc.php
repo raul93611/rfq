@@ -12,6 +12,7 @@ if (isset($_POST['registrar_cotizacion'])) {
     $_POST['email_code'],
     $_POST['issue_date'],
     $_POST['end_date'],
+    $_POST['internal_due_date'] ?? '',
     $_POST['type_of_bid'],
     $_POST['usuario_designado'],
     $_POST['canal']
@@ -100,7 +101,7 @@ function createAndInsertQuote($validador, $usuario_designado) {
     'site_visit'       => isset($_POST['site_visit'])  && $_POST['site_visit']  !== '' ? (int)$_POST['site_visit']  : null,
     'resumes'          => isset($_POST['resumes'])     && $_POST['resumes']     !== '' ? (int)$_POST['resumes']     : null,
     'qa_deadline'      => !empty($_POST['qa_deadline'])      ? $_POST['qa_deadline']      : null,
-    'internal_due_date'=> !empty($_POST['internal_due_date'])? $_POST['internal_due_date']: null,
+    'internal_due_date'=> $validador->obtener_internal_due_date(),
     'qa'               => isset($_POST['qa'])             && $_POST['qa']             !== '' ? (int)$_POST['qa']             : null,
   ]);
 

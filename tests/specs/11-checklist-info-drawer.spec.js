@@ -88,11 +88,23 @@ test.describe('Quote Checklist & Info Drawer', () => {
   test('saving the information tab succeeds via AJAX and shows an inline success pill', async ({ page }) => {
     await page.click('#qed-open-information');
     await page.fill('#reference_url', 'https://example.com/pw-test');
+    await page.fill('#internal_due_date', '02/15/2026'); // required field — see internal-due-date feature
     await Promise.all([
       page.waitForResponse((res) => res.url().includes('/quote/save_information/') && res.status() === 200),
       page.click('#qed-information-save-btn'),
     ]);
     await expect(page.locator('#qed-information-save-pill')).toHaveClass(/is-shown/);
+    await expect(page.locator('#qed-drawer')).toHaveClass(/is-open/);
+  });
+
+  test('saving the information tab with Internal Due Date blank fails and shows the error banner', async ({ page }) => {
+    await page.click('#qed-open-information');
+    await page.fill('#internal_due_date', '');
+    await Promise.all([
+      page.waitForResponse((res) => res.url().includes('/quote/save_information/') && res.status() === 200),
+      page.click('#qed-information-save-btn'),
+    ]);
+    await expect(page.locator('#qed-information-error')).toBeVisible();
     await expect(page.locator('#qed-drawer')).toHaveClass(/is-open/);
   });
 

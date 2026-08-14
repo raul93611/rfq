@@ -78,8 +78,9 @@
       <div class="form-group">
         <label for="internal_due_date">Internal Due Date</label>
         <input type="text" class="date form-control" id="internal_due_date" name="internal_due_date"
-               placeholder="MM/DD/YYYY" value="<?= htmlspecialchars($_POST['internal_due_date'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
+               placeholder="MM/DD/YYYY" required <?php $validador->mostrar_internal_due_date(); ?>>
         <small class="form-text text-muted"><i class="fas fa-table mr-1" style="color:#2db4e8;"></i>Synced to the SharePoint sheet.</small>
+        <?php $validador->mostrar_error_internal_due_date(); ?>
       </div>
     </div>
   </div>

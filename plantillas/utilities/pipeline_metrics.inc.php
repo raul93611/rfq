@@ -126,6 +126,7 @@ $pm_statuses  = PipelineMetricsRepository::STATUSES;
         <?php
         $pm_cards = [
           ['key' => 'status',    'span' => 'full', 'title' => 'Status distribution',           'hint' => 'All pipeline buckets'],
+          ['key' => 'byUser',    'span' => 'full', 'title' => 'Status by user',                 'hint' => 'Per-user pipeline breakdown'],
           ['key' => 'winloss',   'span' => '',     'title' => 'Win / Loss rate',                'hint' => 'Awarded · No Award · Pending'],
           ['key' => 'awards',    'span' => '',     'title' => 'Awards by service category',     'hint' => 'Won bids per category'],
           ['key' => 'submitted', 'span' => '',     'title' => 'Submitted by service category',  'hint' => 'Submissions per category'],
@@ -209,6 +210,18 @@ $pm_statuses  = PipelineMetricsRepository::STATUSES;
                   <?php foreach ($pm_users as $u): ?>
                     <option value="<?= (int)$u['id']; ?>"><?= htmlspecialchars($u['nombre_usuario']); ?></option>
                   <?php endforeach; ?>
+                </select>
+              </div>
+            </div>
+            <div class="pt-field">
+              <span class="pt-field-label">Internal Due Date</span>
+              <div class="pt-select-wrap">
+                <select class="pt-input pt-select" id="pt-f-dueDate">
+                  <option value="">Any due date</option>
+                  <option value="today">Today</option>
+                  <option value="tomorrow">Tomorrow</option>
+                  <option value="week">Next 7 days</option>
+                  <option value="overdue">Overdue</option>
                 </select>
               </div>
             </div>

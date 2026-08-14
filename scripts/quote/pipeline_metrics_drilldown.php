@@ -6,6 +6,7 @@
  *   type=category bucket=awards|submitted  category=<type_of_bid>
  *   type=priced   key=submitted|not_submitted|no_bid
  *   type=winloss  key=won|lost|pending
+ *   type=byUser   key=<status key>  user=<usuario_designado id>
  */
 if (!ControlSesion::sesion_iniciada()) {
   http_response_code(401);
@@ -22,7 +23,7 @@ if ($mode === 'quarter') $period['quarter'] = max(1, min(4, (int)($_GET['quarter
 if ($mode === 'month')   $period['month']   = max(1, min(12, (int)($_GET['month'] ?? date('n'))));
 
 $spec = ['type' => $_GET['type'] ?? ''];
-foreach (['key', 'bucket', 'category'] as $k) {
+foreach (['key', 'bucket', 'category', 'user'] as $k) {
   if (isset($_GET[$k])) $spec[$k] = $_GET[$k];
 }
 
