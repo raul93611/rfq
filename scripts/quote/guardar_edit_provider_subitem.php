@@ -3,7 +3,9 @@ if (isset($_POST['guardar_cambios_provider_subitem'])) {
   // Sanitize and validate inputs
   $id_provider_subitem = filter_input(INPUT_POST, 'id_provider_subitem', FILTER_VALIDATE_INT);
   $id_rfq = filter_input(INPUT_POST, 'id_rfq', FILTER_VALIDATE_INT);
-  $provider = filter_input(INPUT_POST, 'provider', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+  // Stored raw -- HTML-escaping here would double-encode on display, since
+  // RepositorioItem::renderProvidersList() already escapes at render time.
+  $provider = trim((string) filter_input(INPUT_POST, 'provider', FILTER_UNSAFE_RAW));
   $price = filter_input(INPUT_POST, 'price', FILTER_VALIDATE_FLOAT);
 
   // Original values for audit trail (not sanitized as they are for comparison)
@@ -11,7 +13,7 @@ if (isset($_POST['guardar_cambios_provider_subitem'])) {
   $price_original = $_POST['price_original'];
 
   // Validate required inputs
-  if ($id_provider_subitem && $id_rfq && $provider && $price !== false) {
+  if ($id_provider_subitem && $id_rfq && $provider !== '' && $price !== false) {
     try {
       // Open database connection
       Conexion::abrir_conexion();

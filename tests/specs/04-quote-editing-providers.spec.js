@@ -55,6 +55,36 @@ test.describe('Quote Editing — Providers', () => {
     }
   });
 
+  test('provider name with & round-trips through the real add-provider form without double-escaping', async ({ page }) => {
+    // bugs/provider-name-double-html-escaping.md — guardar_add_provider.php used to
+    // HTML-encode `provider` before storage, then RepositorioItem::renderProvidersList()
+    // encoded it again on render, so "D&H" showed as literal "D&amp;H" on screen. Drives
+    // the real HTTP form (unlike the PHP-layer test, which can't exercise
+    // filter_input(INPUT_POST, ...) from a CLI request) to prove the full round trip.
+    const { query } = require('../helpers/db');
+
+    const addBtn = await openKebabFor(page, '.iem-add-provider');
+    await addBtn.click();
+    await page.waitForSelector('#add-provider-modal.show');
+
+    await page.fill('#add-provider-modal [name="provider"]', 'D&H');
+    await page.fill('#add-provider-modal [name="price"]', '12.34');
+
+    const toastPromise = page.waitForSelector('.toast-success', { timeout: 10000 });
+    await page.click('#add-provider-modal .iem-save-btn');
+    await toastPromise;
+
+    await expect(page.locator('.it-prov-name', { hasText: 'D&H' })).toBeVisible();
+    await expect(page.locator('.it-prov-name', { hasText: 'D&amp;H' })).toHaveCount(0);
+
+    const rows = await query('SELECT id, provider FROM provider WHERE id_item = ? AND provider LIKE ?', [itemId, 'D%H']);
+    expect(rows.length).toBeGreaterThan(0);
+    if (rows.length) {
+      expect(rows[0].provider).toBe('D&H'); // stored raw, not "D&amp;H"
+      await query('DELETE FROM provider WHERE id = ?', [rows[0].id]);
+    }
+  });
+
   test('edit provider button opens populated edit modal', async ({ page }) => {
     // The provider link is inside the item row
     await page.locator('.iem-edit-provider').first().click();
