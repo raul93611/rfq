@@ -44,4 +44,11 @@ test.describe('Quote List & Navigation', () => {
     await page.goto(`http://localhost/rfq/perfil/quote/editar_cotizacion/${rfqId}`);
     await expect(page.locator('#bar-total-price')).toBeVisible();
   });
+
+  test('New Quote form loads with End Date blank, not prepopulated with today', async ({ page }) => {
+    // feature: end-date-pipeline-table.md -- #end_date's daterangepicker used to
+    // autoUpdateInput on init and silently fill in today's date/time.
+    await page.goto('http://localhost/rfq/perfil/quote/nuevo');
+    await expect(page.locator('#end_date')).toHaveValue('');
+  });
 });

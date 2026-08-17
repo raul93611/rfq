@@ -112,6 +112,39 @@ try {
   $dWrongYear = PipelineTableRepository::getPage($c, ['mode' => 'year', 'year' => 2098], array_merge($noF, ['dueDate' => 'today']), 0);
   check('dueDate=today + non-matching period -> 0 (AND-combined)', 0, $dWrongYear['total']);
 
+  // row output carries the two date columns (feature: end-date-pipeline-table.md)
+  $byId2 = [];
+  foreach ($dToday['rows'] as $r) $byId2[$r['id']] = $r;
+  check('row carries internalDueDate as m/d/Y', date('m/d/Y'), $byId2[$today]['internalDueDate']);
+  check('row with no internal_due_date shows em dash', '—', array_column($all['rows'], 'internalDueDate', 'id')[$qBid] ?? null);
+  check('row carries endDate as the raw stored string', true, isset($byId2[$today]['endDate']));
+
+  // --- End Date filter (feature: end-date-pipeline-table.md) ---
+  $eToday    = $mkRfq(['end_date' => date('m/d/Y', strtotime('today')) . ' 09:00']);
+  $eTomorrow = $mkRfq(['end_date' => date('m/d/Y', strtotime('+1 day')) . ' 09:00']);
+  $eInFive   = $mkRfq(['end_date' => date('m/d/Y', strtotime('+5 day')) . ' 09:00']);
+  $eOverdue  = $mkRfq(['end_date' => date('m/d/Y', strtotime('-2 day')) . ' 09:00']);
+  $eNone     = $mkRfq(['end_date' => '']);
+
+  $eTodayPage = PipelineTableRepository::getPage($c, $year, array_merge($noF, ['endDate' => 'today']), 0);
+  check('endDate=today -> 1', 1, $eTodayPage['total']);
+  check('endDate=today row shows the raw MM/DD/YYYY HH:mm string', date('m/d/Y') . ' 09:00', $eTodayPage['rows'][0]['endDate']);
+  $eTomorrowPage = PipelineTableRepository::getPage($c, $year, array_merge($noF, ['endDate' => 'tomorrow']), 0);
+  check('endDate=tomorrow -> 1', 1, $eTomorrowPage['total']);
+  $eWeekPage = PipelineTableRepository::getPage($c, $year, array_merge($noF, ['endDate' => 'week']), 0);
+  check('endDate=week (rolling 0-7 days, incl. today/tomorrow) -> 3', 3, $eWeekPage['total']);
+  $eOverduePage = PipelineTableRepository::getPage($c, $year, array_merge($noF, ['endDate' => 'overdue']), 0);
+  check('endDate=overdue -> 1', 1, $eOverduePage['total']);
+
+  // AND-combines with Internal Due Date: today's due date + today's end date -> just the
+  // one row that matches both (qToday from the dueDate block has no end_date set).
+  $bothToday = PipelineTableRepository::getPage($c, $year, array_merge($noF, ['dueDate' => 'today', 'endDate' => 'today']), 0);
+  check('dueDate=today AND endDate=today -> 0 (no single row matches both)', 0, $bothToday['total']);
+
+  // AND-combines with the period: same end date, wrong year -> 0 rows
+  $eWrongYear = PipelineTableRepository::getPage($c, ['mode' => 'year', 'year' => 2098], array_merge($noF, ['endDate' => 'today']), 0);
+  check('endDate=today + non-matching period -> 0 (AND-combined)', 0, $eWrongYear['total']);
+
 } finally {
   $c->rollBack();
   Conexion::cerrar_conexion();

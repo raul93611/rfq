@@ -108,6 +108,29 @@ test.describe('Quote Checklist & Info Drawer', () => {
     await expect(page.locator('#qed-drawer')).toHaveClass(/is-open/);
   });
 
+  test('saving the information tab with End Date blank fails and shows the error banner', async ({ page }) => {
+    // feature: end-date-pipeline-table.md -- End Date required the same way as Internal Due Date
+    await page.click('#qed-open-information');
+    await page.fill('#end_date', '');
+    await Promise.all([
+      page.waitForResponse((res) => res.url().includes('/quote/save_information/') && res.status() === 200),
+      page.click('#qed-information-save-btn'),
+    ]);
+    await expect(page.locator('#qed-information-error')).toBeVisible();
+    await expect(page.locator('#qed-drawer')).toHaveClass(/is-open/);
+  });
+
+  test('saving the information tab with End Date filled in succeeds as normal', async ({ page }) => {
+    await page.click('#qed-open-information');
+    await page.fill('#end_date', '12/31/2026 17:00');
+    await Promise.all([
+      page.waitForResponse((res) => res.url().includes('/quote/save_information/') && res.status() === 200),
+      page.click('#qed-information-save-btn'),
+    ]);
+    await expect(page.locator('#qed-information-save-pill')).toHaveClass(/is-shown/);
+    await expect(page.locator('#qed-drawer')).toHaveClass(/is-open/);
+  });
+
   test('old /quote/checklist/{id} URL redirects to the quote page with the drawer auto-open on Checklist', async ({ page }) => {
     await page.goto(`http://localhost/rfq/perfil/quote/checklist/${rfqId}`);
     await page.waitForSelector('#qed-drawer.is-open');
