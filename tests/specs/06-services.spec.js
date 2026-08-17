@@ -21,6 +21,21 @@ test.describe('Services', () => {
     await expect(page.locator('#services_section .service_item').first()).toBeVisible();
   });
 
+  test('services table scrolls horizontally on a narrow viewport instead of squeezing the description column', async ({ page }) => {
+    // bugs/items-table-narrow-description-columns.md — same root cause as the Items table:
+    // .it-table.is-services had no min-width, so the description column got squeezed instead
+    // of the existing overflow-x:auto wrapper engaging.
+    await page.setViewportSize({ width: 700, height: 900 });
+    const table = page.locator('#services_table table.it-table.is-services');
+    await expect(table).toBeVisible();
+
+    const minWidth = await table.evaluate((el) => parseFloat(getComputedStyle(el).minWidth) || 0);
+    expect(minWidth).toBeGreaterThanOrEqual(750);
+
+    const overflow = await page.locator('#services_table').evaluate((el) => el.scrollWidth - el.clientWidth);
+    expect(overflow).toBeGreaterThan(0);
+  });
+
   test('add service button opens modal', async ({ page }) => {
     await page.click('#add_service');
     await expect(page.locator('#add_service_modal')).toBeVisible();

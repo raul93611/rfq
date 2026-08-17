@@ -3795,7 +3795,8 @@ textarea.it-input { height: auto; min-height: 50px; padding: 7px 10px; resize: v
 
 /* ============ Table (real <table>/<tr>/<td> — see header comment) ============ */
 .it-table-scroll { overflow-x: auto; }
-.it-table { width: 100%; border-collapse: separate; border-spacing: 0; table-layout: fixed; font-size: 12.5px; }
+.it-table { width: 100%; min-width: 1360px; border-collapse: separate; border-spacing: 0; table-layout: fixed; font-size: 12.5px; }
+.it-table.is-services { min-width: 750px; }
 .it-table th, .it-table td { box-sizing: border-box; }
 
 .it-group th { background: var(--navy-50); border-bottom: 1px solid #e7ebf3; position: sticky; top: 0; z-index: 3; padding: 5px 9px 4px; font-size: 10.5px; text-transform: uppercase; letter-spacing: .02em; font-weight: 700; color: var(--ink-500); text-align: left; white-space: nowrap; overflow: hidden; }

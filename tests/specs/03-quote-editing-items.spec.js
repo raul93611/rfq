@@ -40,6 +40,24 @@ test.describe('Quote Editing — Items', () => {
     await expect(menu.locator('.dropdown-item', { hasText: 'PDF - Items table' })).toBeVisible();
   });
 
+  test('items table scrolls horizontally on a narrow viewport instead of squeezing description columns', async ({ page }) => {
+    // bugs/items-table-narrow-description-columns.md — .it-table had no min-width, so on a
+    // narrow (~13-14") viewport the auto description columns got squeezed toward zero instead
+    // of the existing overflow-x:auto wrapper ever engaging.
+    await page.setViewportSize({ width: 1300, height: 900 });
+    const table = page.locator('#tabla_items');
+    await expect(table).toBeVisible();
+
+    const minWidth = await table.evaluate((el) => parseFloat(getComputedStyle(el).minWidth) || 0);
+    expect(minWidth).toBeGreaterThanOrEqual(1360);
+
+    const overflow = await page.locator('#table_items_container').evaluate((el) => el.scrollWidth - el.clientWidth);
+    expect(overflow).toBeGreaterThan(0);
+
+    const descWidth = await page.locator('#tabla_items .it-td-spec').first().evaluate((el) => el.getBoundingClientRect().width);
+    expect(descWidth).toBeGreaterThanOrEqual(200);
+  });
+
   test('add item button opens modal', async ({ page }) => {
     await page.click('[data-target="#add-item-modal"]');
     await expect(page.locator('#add-item-modal')).toBeVisible();
