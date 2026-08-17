@@ -5,6 +5,11 @@ if (isset($_POST['save_information'])) {
     echo json_encode(['success' => false, 'message' => 'Internal Due Date must be filled out.']);
     return;
   }
+  if (empty($_POST['end_date'])) {
+    header('Content-Type: application/json');
+    echo json_encode(['success' => false, 'message' => 'End Date must be filled out.']);
+    return;
+  }
   try {
     // Open database connection
     Conexion::abrir_conexion();

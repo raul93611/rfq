@@ -148,7 +148,10 @@ $(document).ready(function () {
     timePicker24Hour: true,
     locale: { format: 'MM/DD/YYYY HH:mm' },
   };
-  initializeDatePicker('#end_date', dateTimeOptions);
+  // autoUpdateInput: false only for #end_date -- without it, daterangepicker fills the
+  // field with today's date/time on init instead of leaving it blank for the user to
+  // pick. #qa_deadline keeps the shared dateTimeOptions default (autoUpdateInput: true).
+  initializeDatePicker('#end_date', { ...dateTimeOptions, autoUpdateInput: false });
   initializeDatePicker('#qa_deadline', dateTimeOptions);
   /************************************ DATATABLES JQUERY CONFIGURATION **************************/
   function initializeDataTable(selector, options) {

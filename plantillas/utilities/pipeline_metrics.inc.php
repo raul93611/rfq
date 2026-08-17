@@ -225,6 +225,18 @@ $pm_statuses  = PipelineMetricsRepository::STATUSES;
                 </select>
               </div>
             </div>
+            <div class="pt-field">
+              <span class="pt-field-label">End Date</span>
+              <div class="pt-select-wrap">
+                <select class="pt-input pt-select" id="pt-f-endDate">
+                  <option value="">Any end date</option>
+                  <option value="today">Today</option>
+                  <option value="tomorrow">Tomorrow</option>
+                  <option value="week">Next 7 days</option>
+                  <option value="overdue">Overdue</option>
+                </select>
+              </div>
+            </div>
           </div>
           <div class="pt-filters-foot">
             <span class="pt-filters-count" id="pt-filters-count">No filters applied</span>
@@ -243,12 +255,12 @@ $pm_statuses  = PipelineMetricsRepository::STATUSES;
           <div class="pt-table-wrap">
             <table class="pt-table">
               <colgroup>
-                <col class="pt-col-id"><col class="pt-col-created"><col class="pt-col-channel"><col class="pt-col-email">
+                <col class="pt-col-id"><col class="pt-col-created"><col class="pt-col-duedate"><col class="pt-col-enddate"><col class="pt-col-channel"><col class="pt-col-email">
                 <col class="pt-col-status"><col class="pt-col-type"><col class="pt-col-user">
               </colgroup>
               <thead>
                 <tr>
-                  <th>Quote ID</th><th>Created</th><th>Channel</th><th>Code</th><th>Status</th>
+                  <th>Quote ID</th><th>Created</th><th>Internal Due Date</th><th>End Date</th><th>Channel</th><th>Code</th><th>Status</th>
                   <th>Type of Bid</th><th>Designated User</th>
                 </tr>
               </thead>

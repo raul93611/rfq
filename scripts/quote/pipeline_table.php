@@ -2,7 +2,7 @@
 /**
  * JSON: one page of the Bid Pipeline Metrics "Table" view.
  * Params (GET): period (mode=year|quarter|month|custom, year, quarter, month, from, to),
- *   page, and filters: quoteId, channel, emailCode, statuses[], bidType, user, dueDate.
+ *   page, and filters: quoteId, channel, emailCode, statuses[], bidType, user, dueDate, endDate.
  * Each row carries everything the Quote Summary modal needs (name, value, docs, context).
  */
 if (!ControlSesion::sesion_iniciada()) {
@@ -30,6 +30,9 @@ if (!is_array($statuses)) $statuses = [$statuses];
 $dueDate = trim((string)($_GET['dueDate'] ?? ''));
 $dueDate = in_array($dueDate, ['today', 'tomorrow', 'week', 'overdue'], true) ? $dueDate : '';
 
+$endDate = trim((string)($_GET['endDate'] ?? ''));
+$endDate = in_array($endDate, ['today', 'tomorrow', 'week', 'overdue'], true) ? $endDate : '';
+
 $filters = [
   'quoteId'   => trim((string)($_GET['quoteId'] ?? '')),
   'channel'   => trim((string)($_GET['channel'] ?? '')),
@@ -38,6 +41,7 @@ $filters = [
   'bidType'   => trim((string)($_GET['bidType'] ?? '')),
   'user'      => trim((string)($_GET['user'] ?? '')),
   'dueDate'   => $dueDate,
+  'endDate'   => $endDate,
 ];
 $page = max(0, (int)($_GET['page'] ?? 0));
 

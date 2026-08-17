@@ -2,11 +2,13 @@
 if (isset($_POST['guardar_provider'])) {
   // Sanitize and validate inputs
   $id_item = filter_input(INPUT_POST, 'id_item', FILTER_VALIDATE_INT);
-  $provider = filter_input(INPUT_POST, 'provider', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+  // Stored raw -- HTML-escaping here would double-encode on display, since
+  // RepositorioItem::renderProvidersList() already escapes at render time.
+  $provider = trim((string) filter_input(INPUT_POST, 'provider', FILTER_UNSAFE_RAW));
   $price = filter_input(INPUT_POST, 'price', FILTER_VALIDATE_FLOAT);
 
   // Validate required inputs
-  if ($id_item && $provider && $price !== false) {
+  if ($id_item && $provider !== '' && $price !== false) {
     try {
       // Open database connection
       Conexion::abrir_conexion();

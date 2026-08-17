@@ -34,9 +34,10 @@ class PipelineTableRepository {
     $total = (int)self::scalar($conexion, $countSql, $params);
 
     $offset = $page * self::PAGE_SIZE;
-    $rowsSql = "SELECT id, email_code, canal, type_of_bid, name, designated_username, value, bucket, created_at
+    $rowsSql = "SELECT id, email_code, canal, type_of_bid, name, designated_username, value, bucket, created_at, internal_due_date, end_date
       FROM (
         SELECT rfq.id, rfq.email_code, rfq.canal, rfq.type_of_bid, rfq.name, rfq.created_at,
+               rfq.internal_due_date, rfq.end_date,
                u.nombre_usuario AS designated_username,
                " . PipelineMetricsRepository::VALUE_EXPR . " AS value,
                " . PipelineMetricsRepository::STATUS_CASE . " AS bucket
@@ -68,6 +69,8 @@ class PipelineTableRepository {
         'name'        => $name !== '' ? $name : ('Proposal #' . $r['id']),
         'value'       => (float)$r['value'],
         'created'     => !empty($r['created_at']) ? date('m/d/Y', strtotime($r['created_at'])) : '—',
+        'internalDueDate' => !empty($r['internal_due_date']) ? date('m/d/Y', strtotime($r['internal_due_date'])) : '—',
+        'endDate'         => !empty($r['end_date']) ? $r['end_date'] : '—',
       ];
     }, $rows);
 
@@ -120,6 +123,10 @@ class PipelineTableRepository {
       $clause = self::dueDateClause($filters['dueDate']);
       if ($clause !== null) $inner[] = $clause;
     }
+    if (!empty($filters['endDate'])) {
+      $clause = self::endDateClause($filters['endDate']);
+      if ($clause !== null) $inner[] = $clause;
+    }
 
     $statusWhere = '';
     if (!empty($filters['statuses']) && is_array($filters['statuses'])) {
@@ -142,6 +149,25 @@ class PipelineTableRepository {
       case 'tomorrow': return "DATE(rfq.internal_due_date) = CURDATE() + INTERVAL 1 DAY";
       case 'week':     return "DATE(rfq.internal_due_date) BETWEEN CURDATE() AND CURDATE() + INTERVAL 7 DAY";
       case 'overdue':  return "DATE(rfq.internal_due_date) < CURDATE()";
+      default:         return null;
+    }
+  }
+
+  /**
+   * End Date preset WHERE fragment. rfq.end_date is a VARCHAR ("MM/DD/YYYY HH:mm"), not a
+   * DATE column, so it needs STR_TO_DATE like RepositorioRfq's end_date sort clause.
+   * NULLIF blanks out '' first -- end_date is NOT NULL with no column default, so an unset
+   * value is '' rather than SQL NULL, and STR_TO_DATE('', ...) parses that as the zero date
+   * 0000-00-00 (which satisfies "< CURDATE()") instead of failing to NULL like a genuinely
+   * malformed string does.
+   */
+  private static function endDateClause($preset) {
+    $col = 'STR_TO_DATE(NULLIF(rfq.end_date, ""), "%m/%d/%Y %H:%i")';
+    switch ($preset) {
+      case 'today':    return "DATE($col) = CURDATE()";
+      case 'tomorrow': return "DATE($col) = CURDATE() + INTERVAL 1 DAY";
+      case 'week':     return "DATE($col) BETWEEN CURDATE() AND CURDATE() + INTERVAL 7 DAY";
+      case 'overdue':  return "DATE($col) < CURDATE()";
       default:         return null;
     }
   }
