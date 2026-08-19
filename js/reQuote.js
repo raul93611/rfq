@@ -24,6 +24,18 @@ $(document).ready(function () {
       const profitRq = (totalGanado - total).toFixed(2);
       const percentageProfitRq = ((profitRq / totalGanado) * 100).toFixed(2);
       $('#profit_rq').html(`$ ${profitRq}<br>${percentageProfitRq}%`);
+
+      // Sticky bottom bar — Total Price is the original quote's fixed client-facing price
+      // (items + services, unaffected by re-quoting); Total Profit/Profit % track live
+      // items cost the same way the Items table TOTAL row does. Services are excluded
+      // here too, so they stay margin-neutral regardless of payment terms — matching the
+      // main Quote page (bugs/re-quote-cc-profit-mismatch.md).
+      const quoteTotalPrice = parseFloat(window.RE_QUOTE_TOTAL_PRICE) || 0;
+      const barProfit = (quoteTotalPrice - total).toFixed(2);
+      const barProfitPct = (quoteTotalPrice ? (barProfit / quoteTotalPrice) * 100 : 0).toFixed(2);
+      $('#rq-bar-total-price').text(`$${quoteTotalPrice.toFixed(2)}`);
+      $('#rq-bar-total-profit').text(`$${barProfit}`);
+      $('#rq-bar-profit-pct').text(`${barProfitPct}%`);
     };
 
     // Periodically recalculate totals
