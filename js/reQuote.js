@@ -26,12 +26,15 @@ $(document).ready(function () {
       $('#profit_rq').html(`$ ${profitRq}<br>${percentageProfitRq}%`);
 
       // Sticky bottom bar — Total Price is the original quote's fixed client-facing price
-      // (items + services, unaffected by re-quoting); Total Profit/Profit % track live
-      // items cost the same way the Items table TOTAL row does. Services are excluded
-      // here too, so they stay margin-neutral regardless of payment terms — matching the
-      // main Quote page (bugs/re-quote-cc-profit-mismatch.md).
+      // (items + services, unaffected by re-quoting); Total Profit/Profit % track the live
+      // re-quote cost: items cost (above) plus the re-quote services cost, which is its own
+      // independently re-solicited line (re_quote_services), not the original quote's
+      // services price — same design as items, and CC there is a real cost, not neutral.
+      // #total_service is kept current by calcServices() below on the same 100ms cadence.
       const quoteTotalPrice = parseFloat(window.RE_QUOTE_TOTAL_PRICE) || 0;
-      const barProfit = (quoteTotalPrice - total).toFixed(2);
+      const servicesCostLive = parseFloat($('#total_service').text().replace('$', '').trim()) || 0;
+      const totalCostLive = total + servicesCostLive;
+      const barProfit = (quoteTotalPrice - totalCostLive).toFixed(2);
       const barProfitPct = (quoteTotalPrice ? (barProfit / quoteTotalPrice) * 100 : 0).toFixed(2);
       $('#rq-bar-total-price').text(`$${quoteTotalPrice.toFixed(2)}`);
       $('#rq-bar-total-profit').text(`$${barProfit}`);

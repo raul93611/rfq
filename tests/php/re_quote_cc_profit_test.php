@@ -1,21 +1,24 @@
 <?php
 /**
- * Integration test for: Re-Quote Total Profit wrong after switching Services
- * Payment Terms to Net 30/CC (bugs/re-quote-cc-profit-mismatch.md).
+ * Characterization test for Rfq::obtener_re_quote_total_cost()'s services term.
  *
- * Root cause: Rfq::obtener_re_quote_total_cost() summed re_quote_services.total_price
- * as the services-cost term, while Rfq::obtener_quote_total_price() (the price side of
- * the same profit subtraction) sums the original, untouched `services` table. On Save,
- * ReQuoteServiceRepository::calc_items_with_CC() inflates only re_quote_services.total_price
- * by 3% for Net 30/CC, so that markup no longer cancels between price and cost — it comes
- * straight off Total Profit as a phantom cost, even though services are meant to be
- * margin-neutral on the re-quote page, same as on the main Quote page (confirmed
- * intent — see bug file).
+ * A prior fix attempt (reverted) assumed re-quote services should always be
+ * margin-neutral, like on the main Quote page, and made this method add
+ * getTotalQuoteServices() (the original `services` table) instead of
+ * ReQuoteServiceRepository::get_total() (the `re_quote_services` table). That
+ * assumption was wrong: per commit b3fb2904 ("Services in the Re-Quote",
+ * 2022-09-24 — pre-dating any AI involvement in this repo, and unchanged ever
+ * since), re-quote services are DELIBERATELY their own independent cost line,
+ * exactly mirroring how items work — the client-facing price stays pinned to
+ * the original quote's `services` table, while `re_quote_services` is the
+ * re-solicited cost estimate. A Net 30/CC markup on re_quote_services is a
+ * real cost, same as the items-side CC fee, and SHOULD move Total Profit.
  *
- * Fix: obtener_re_quote_total_cost() now adds getTotalQuoteServices() (the same source
- * obtener_quote_total_price() uses) instead of the re_quote_services total, so services
- * cancel out of the re-quote profit calc regardless of payment terms — exactly like the
- * main Quote page.
+ * This test locks in that intended behavior so it doesn't get "fixed" away
+ * again. The actual bug reported against quote #118063 (Total Profit jumping
+ * to a value disconnected from any live edit after toggling Net 30/CC) was
+ * the bottom summary bar being frozen, page-load-only PHP — see the live-bar
+ * wiring in js/reQuote.js / plantillas/re_quote/re_quote.inc.php instead.
  *
  * Transaction-isolated (ROLLBACK).
  * Run:  docker exec lamp-php83 php /var/www/html/rfq/tests/php/re_quote_cc_profit_test.php
@@ -65,7 +68,8 @@ try {
       VALUES (:rfq, 'Install labor', 1, 100.00, 100.00)");
   $stmt->execute([':rfq' => $rfqId]);
 
-  // Re-quote: items cost re-solicited to 800 (unchanged), services copied at Net 30 (100).
+  // Re-quote: items cost re-solicited to 800 (unchanged), services copied at Net 30 (100),
+  // matching what ReQuoteRepository::create_re_quote() does on a fresh re-quote.
   $stmt = $c->prepare("INSERT INTO re_quotes (id_rfq, total_cost, total_price, payment_terms, taxes,
       profit, additional, shipping_cost, shipping, services_payment_term)
       VALUES (:rfq, 800.00, 1000.00, 'Net 30', 0, 0, '', 0, '', 'Net 30')");
@@ -78,16 +82,21 @@ try {
 
   $quote = RepositorioRfq::obtener_cotizacion_por_id($c, $rfqId);
 
-  echo "[baseline: re-quote services still at Net 30, matching original quote]\n";
-  check('items+services price is $1100 (Total Price)', 1100.00, $quote->obtener_quote_total_price());
-  check('re-quote profit is $200 (1000 items price - 800 items cost, services cancel)', 200.00, $quote->obtener_re_quote_profit());
+  echo "[baseline: re-quote services match the original quote's services 1:1, freshly copied]\n";
+  check('Total Price is $1100 (1000 items + 100 original services)', 1100.00, $quote->obtener_quote_total_price());
+  check('re-quote profit is $200 (1000+100 price - 800+100 cost)', 200.00, $quote->obtener_re_quote_profit());
 
   echo "\n[switching re-quote Services Payment Terms to Net 30/CC and saving]\n";
   ReQuoteServiceRepository::calc_items_with_CC($c, 'Net 30/CC', $reQuoteId);
 
   check('re_quote_services total_price inflated to $103 by the CC markup', 103.00, ReQuoteServiceRepository::get_total($c, $reQuoteId));
-  check('Total Price is unaffected by the re-quote services CC toggle', 1100.00, $quote->obtener_quote_total_price());
-  check('re-quote profit stays $200 — CC on services must not move profit, same as the main Quote page', 200.00, $quote->obtener_re_quote_profit());
+  check('Total Price (client-facing, from the original quote) is unaffected by the re-quote CC toggle', 1100.00, $quote->obtener_quote_total_price());
+  check('re-quote profit drops to $197 — CC is a real re-solicited cost, same as it is for items', 197.00, $quote->obtener_re_quote_profit());
+
+  echo "\n[an independent re-costing edit to a re_quote_services row also moves profit, as intended]\n";
+  $svc = ReQuoteServiceRepository::get_services($c, $reQuoteId)[0];
+  ReQuoteServiceRepository::edit_service($c, $svc->get_id(), $svc->get_description(), 1, 130.00, 130.00);
+  check('re-quote profit reflects the re-costed service (1100 - (800+130) = 170)', 170.00, $quote->obtener_re_quote_profit());
 
 } finally {
   $c->rollBack();

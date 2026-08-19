@@ -154,10 +154,10 @@ Quote Edit only (Re-Quote/Fulfillment untouched). `it-*` namespace. Rows stay re
 
 Test: `tests/php/commercial_moving_test.php`, `tests/js/payment_split.test.js`, Playwright `03`–`08`/`13`.
 
-### Post-launch fixes: table min-width, provider escaping, re-quote CC margin
+### Post-launch fixes: table min-width, provider escaping, re-quote bottom bar
 
 `.it-table`/`.it-table.is-services` needed `min-width` (1360px/750px) so the existing `overflow-x: auto` wrapper engages on ~13-14" laptops instead of squeezing description columns to zero.
 
 Provider names were double-HTML-escaped — now stored raw, escaped only at render (`renderProvidersList()`). `sql/provider_name_unescape_backfill.sql` (idempotent) decodes already-double-escaped rows; **run on production**. Re-quote provider paths intentionally left alone — fixing them there would trade a cosmetic bug for a stored-XSS hole. Tests: `tests/specs/03-quote-editing-items.spec.js`, `tests/specs/06-services.spec.js`, `tests/php/provider_name_escaping_test.php`, `tests/specs/04-quote-editing-providers.spec.js`.
 
-Re-quote services are margin-neutral regardless of payment terms, matching the main Quote page: `obtener_re_quote_total_cost()` adds `getTotalQuoteServices()` (same source as `obtener_quote_total_price()`), not `re_quote_services`'s own total — otherwise Net 30/CC inflates only the cost side 3%, landing on Total Profit as a phantom cost. Bottom bar (`#rq-bar-*`) now live via `js/reQuote.js`'s polling loop. Test: `tests/php/re_quote_cc_profit_test.php`.
+**Re-quote services are their own re-solicited cost line, not margin-neutral** — `obtener_re_quote_total_cost()` deliberately sums `re_quote_services` (not the original quote's `services`), unchanged since 2022 (`b3fb2904`): mirrors items, where client price stays pinned to the original quote while cost gets re-solicited, so Net 30/CC on re-quote services is a real cost, same as it is for items. Don't "fix" this into cancelling to zero — that was tried and reverted. The bottom bar (`#rq-bar-*`) previously never updated after page load (frozen server-rendered PHP) even though the Items table above it recalculated live; now `js/reQuote.js`'s existing polling loop keeps it current, combining live items cost with `#total_service` (kept current by `calcServices()` on the same tick). Test: `tests/php/re_quote_cc_profit_test.php`.
