@@ -4,9 +4,9 @@
  * Daily RFQ Digest Email
  *
  * Sends one HTML email to every active Admin-role user summarizing quote activity:
- * quotes created/submitted/awarded on the previous calendar day, and quotes whose Internal
- * Due Date is today — always sent, even when every section is empty (doubles as a heartbeat
- * that the job is still running).
+ * quotes created/submitted/awarded on the previous calendar day, and quotes whose End Date
+ * is today — always sent, even when every section is empty (doubles as a heartbeat that the
+ * job is still running).
  *
  * Day-boundary math runs in America/New_York regardless of the underlying server/container
  * timezone, so this must NOT rely on the OS default (droplets commonly default to UTC).

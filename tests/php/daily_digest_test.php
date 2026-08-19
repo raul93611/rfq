@@ -64,6 +64,8 @@ try {
   $sentinel_yesterday = '2098-04-10';
   $sentinel_today      = '2098-04-11';
   $off_date            = '2098-04-01';
+  $empty_check_date    = '2098-04-15';
+  $long_name           = 'Traffic Management Center Server Upgrade (The City of Edmond, Oklahoma, is seeking a qualified vendor)';
 
   // --- Created ---
   $created_id = insertQuote($conexion, ['created_at' => $sentinel_yesterday, 'client' => 'Wake County PS', 'canal' => 'FedBid', 'name' => 'Classroom AV Modernization']);
@@ -78,7 +80,11 @@ try {
   $awarded_id = insertQuote($conexion, ['fecha_award' => $sentinel_yesterday, 'award' => 1, 'client' => 'Maricopa County', 'name' => 'Surveillance Expansion']);
   insertQuote($conexion, ['fecha_award' => $sentinel_yesterday, 'award' => 1, 'deleted' => 1]);
 
-  // --- Due today: none inserted, exercises the empty-state path ---
+  // --- Due today ---
+  $due_id = insertQuote($conexion, ['end_date' => '04/11/2098 09:00', 'internal_due_date' => $off_date, 'client' => 'Denver Water', 'canal' => 'FBO', 'name' => $long_name]);
+  insertQuote($conexion, ['end_date' => '04/11/2098 09:00', 'deleted' => 1]); // excluded: deleted
+  insertQuote($conexion, ['end_date' => '04/01/2098 09:00']); // excluded: wrong end_date
+  insertQuote($conexion, ['internal_due_date' => $sentinel_today, 'end_date' => '04/01/2098 09:00']); // excluded: internal_due_date matches today but end_date doesn't -- Due Today keys off end_date, not internal_due_date
 
   echo "[Created]\n";
   $created_rows = DigestRepository::getCreatedOn($conexion, $sentinel_yesterday);
@@ -96,9 +102,14 @@ try {
   check('awarded excludes deleted', 1, count($awarded_rows));
   check('awarded row is the right quote', $awarded_id, (int)$awarded_rows[0]['id']);
 
-  echo "[Due today — empty]\n";
+  echo "[Due today]\n";
   $due_rows = DigestRepository::getDueOn($conexion, $sentinel_today);
-  check('due today is empty', 0, count($due_rows));
+  check('due today keys off end_date not internal_due_date', 1, count($due_rows));
+  check('due today row is the right quote', $due_id, (int)$due_rows[0]['id']);
+
+  echo "[Due today — empty]\n";
+  $empty_due_rows = DigestRepository::getDueOn($conexion, $empty_check_date);
+  check('due today is empty for a date with no matching end_date', 0, count($empty_due_rows));
 
   echo "[Dedup log]\n";
   check('not sent yet for sentinel date', false, DigestRepository::hasSentOn($conexion, $sentinel_today));
@@ -141,8 +152,20 @@ try {
   check('renders created quote link to the quote page', true, str_contains($html, EDITAR_COTIZACION . '/' . $created_id));
   check('translates FedBid channel to Unison', true, str_contains($html, 'Unison'));
   check('translates FBO channel to SAM', true, str_contains($html, 'SAM'));
-  check('renders empty state for Due Today', true, str_contains($html, 'No quotes due today.'));
   check('does not render empty state for a populated section', false, str_contains($html, 'No quotes created yesterday.'));
+
+  echo "[Container width]\n";
+  check('container widened to 680px', true, str_contains($html, 'width:680px;max-width:680px'));
+
+  echo "[Section order]\n";
+  $pos_due = strpos($html, '>Due Today</span>');
+  $pos_created = strpos($html, '>Created</span>');
+  check('Due Today section renders before Created section', true, $pos_due !== false && $pos_created !== false && $pos_due < $pos_created);
+
+  echo "[Name truncation]\n";
+  $expected_truncated = htmlspecialchars(mb_substr($long_name, 0, 70) . '…', ENT_QUOTES, 'UTF-8');
+  check('long due-quote name is truncated', true, str_contains($html, $expected_truncated));
+  check('full long due-quote name is not rendered', false, str_contains($html, htmlspecialchars($long_name, ENT_QUOTES, 'UTF-8')));
 
   echo "[Safe no-op when mailbox disconnected]\n";
   NotificationMailboxRepository::clear($conexion);

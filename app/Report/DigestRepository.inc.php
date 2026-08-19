@@ -4,9 +4,9 @@
  * DigestRepository
  *
  * Backing queries for the Daily RFQ Digest cron (scripts/cron/daily_digest.php): the four
- * "what happened" lists (Created/Submitted/Awarded on a given day, Due on a given day) plus
- * the digest_send_log dedup guard. All four list queries share the same shape so the email
- * template can render them identically.
+ * "what happened" lists (Created/Submitted/Awarded on a given day, Due (by End Date) on a
+ * given day) plus the digest_send_log dedup guard. All four list queries share the same row
+ * shape so the email template can render them identically.
  */
 class DigestRepository {
 
@@ -44,9 +44,29 @@ class DigestRepository {
     return self::selectByDate($conexion, 'fecha_award', $date);
   }
 
-  /** Quotes whose Internal Due Date is the given calendar date. */
+  /**
+   * Quotes whose End Date is the given calendar date. rfq.end_date is a VARCHAR
+   * ("MM/DD/YYYY HH:mm"), not a DATE column, and is NOT NULL with no default, so an unset
+   * value is '' rather than SQL NULL -- NULLIF blanks that out first, mirroring
+   * PipelineTableRepository::endDateClause().
+   */
   public static function getDueOn($conexion, $date) {
-    return self::selectByDate($conexion, 'internal_due_date', $date);
+    $rows = [];
+    if (!isset($conexion)) return $rows;
+    try {
+      $sql = "SELECT rfq.id, rfq.name, rfq.client, rfq.canal, usuarios.nombres, usuarios.apellidos
+              FROM rfq
+              LEFT JOIN usuarios ON rfq.usuario_designado = usuarios.id
+              WHERE rfq.deleted = 0 AND DATE(STR_TO_DATE(NULLIF(rfq.end_date, ''), '%m/%d/%Y %H:%i')) = :date
+              ORDER BY rfq.id";
+      $stmt = $conexion->prepare($sql);
+      $stmt->bindValue(':date', $date, PDO::PARAM_STR);
+      $stmt->execute();
+      $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $ex) {
+      error_log('DigestRepository::getDueOn error: ' . $ex->getMessage());
+    }
+    return $rows;
   }
 
   /** True when a digest run already completed for the given calendar date. */
