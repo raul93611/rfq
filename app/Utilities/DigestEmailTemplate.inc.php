@@ -15,10 +15,10 @@
 class DigestEmailTemplate {
 
   private const SECTIONS = [
+    'due'       => ['title' => 'Due Today', 'bar' => '#d97706', 'icon_bg' => '#fdf2dc', 'icon_color' => '#d97706', 'icon_glyph' => '!',       'period' => 'today',     'empty' => 'No quotes due today.'],
     'created'   => ['title' => 'Created',   'bar' => '#2db4e8', 'icon_bg' => '#e6f5fc', 'icon_color' => '#1aa2dc', 'icon_glyph' => '+',       'period' => 'yesterday', 'empty' => 'No quotes created yesterday.'],
     'submitted' => ['title' => 'Submitted', 'bar' => '#4f6ef0', 'icon_bg' => '#eef1fd', 'icon_color' => '#4f6ef0', 'icon_glyph' => '&rarr;',  'period' => 'yesterday', 'empty' => 'No quotes submitted yesterday.'],
     'awarded'   => ['title' => 'Awarded',   'bar' => '#16a34a', 'icon_bg' => '#e8f6ec', 'icon_color' => '#15803d', 'icon_glyph' => '&#10003;', 'period' => 'yesterday', 'empty' => 'No quotes awarded yesterday.'],
-    'due'       => ['title' => 'Due Today', 'bar' => '#d97706', 'icon_bg' => '#fdf2dc', 'icon_color' => '#d97706', 'icon_glyph' => '!',       'period' => 'today',     'empty' => 'No quotes due today.'],
   ];
 
   /**
@@ -74,8 +74,8 @@ a:hover{color:#2db4e8}
 <div style="display:none;max-height:0;overflow:hidden;opacity:0;mso-hide:all;font-size:1px;line-height:1px;color:#f1f3f7;">' . $preheader . $preheader_pad . '</div>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f1f3f7;">
 <tr><td align="center" style="padding:32px 16px;">
-<!--[if mso]><table role="presentation" width="600" align="center" cellpadding="0" cellspacing="0" border="0"><tr><td><![endif]-->
-<table role="presentation" class="container" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px;max-width:600px;background:#ffffff;border:1px solid #e3e7ee;border-radius:12px;box-shadow:0 1px 3px rgba(15,22,35,0.08);">
+<!--[if mso]><table role="presentation" width="680" align="center" cellpadding="0" cellspacing="0" border="0"><tr><td><![endif]-->
+<table role="presentation" class="container" width="680" cellpadding="0" cellspacing="0" border="0" style="width:680px;max-width:680px;background:#ffffff;border:1px solid #e3e7ee;border-radius:12px;box-shadow:0 1px 3px rgba(15,22,35,0.08);">
 
 <tr><td class="pad-side" bgcolor="#14202f" style="background:#14202f;padding:24px 32px 22px;border-radius:12px 12px 0 0;">
 <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
@@ -153,7 +153,7 @@ a:hover{color:#2db4e8}
   private static function renderRow(array $row, $border) {
     $url = htmlspecialchars(EDITAR_COTIZACION . '/' . $row['id'], ENT_QUOTES, 'UTF-8');
     $quote_num = htmlspecialchars('#' . $row['id'], ENT_QUOTES, 'UTF-8');
-    $name = htmlspecialchars($row['name'] ?? '', ENT_QUOTES, 'UTF-8');
+    $name = htmlspecialchars(self::truncate($row['name'] ?? ''), ENT_QUOTES, 'UTF-8');
     $client = htmlspecialchars($row['client'] ?? '—', ENT_QUOTES, 'UTF-8');
     $channel = htmlspecialchars(self::channelLabel($row['canal'] ?? ''), ENT_QUOTES, 'UTF-8');
     $designated = htmlspecialchars(trim(($row['nombres'] ?? '') . ' ' . ($row['apellidos'] ?? '')) ?: '—', ENT_QUOTES, 'UTF-8');
@@ -165,6 +165,16 @@ a:hover{color:#2db4e8}
 <td width="30%" style="padding:10px 4px;' . $border . 'font-family:Arial,Helvetica,sans-serif;font-size:12.5px;vertical-align:top;"><div style="color:#2c3849;font-weight:600;">' . $client . '</div><div style="color:#7d8ba0;font-size:11px;margin-top:2px;">' . $channel . '</div></td>
 <td width="24%" style="padding:10px 0 10px 4px;' . $border . 'font-family:Arial,Helvetica,sans-serif;font-size:12.5px;color:#2c3849;vertical-align:top;">' . $designated . '</td>
 </tr>';
+  }
+
+  /**
+   * PHP-side truncation rather than CSS text-overflow: the classic Outlook rendering path
+   * (MSO conditional comments, mso-table-lspace) doesn't reliably support CSS ellipsis, so
+   * cutting the string server-side is the only approach guaranteed to work across clients.
+   */
+  private static function truncate($name, $max = 70) {
+    if (mb_strlen($name) <= $max) return $name;
+    return mb_substr($name, 0, $max) . '…';
   }
 
   private static function channelLabel($canal) {
