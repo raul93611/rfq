@@ -48,7 +48,7 @@ $(document).ready(function () {
   $('#re_quote_form').submit(function () {
     // Recalculate totals before submitting
     const totalGanado = parseFloat($('#total_ganado').html().split(' ')[1]);
-    const paymentTermsMultiplier = $('input:radio[name=payment_terms]:checked').val() === 'Net 30/CC' ? 0.029 : 0;
+    const paymentTermsMultiplier = $('[name=payment_terms]').val() === 'Net 30/CC' ? 0.029 : 0;
     const paymentTerms = totalGanado * paymentTermsMultiplier;
 
     const totales = $('#re_quote_data tr').map((_, row) => {
@@ -82,7 +82,10 @@ $(document).ready(function () {
 
   // Calculate service totals
   const calcServices = () => {
-    const paymentTermsMultiplier = $('[name=services_payment_term]').val() === 'Net 30/CC' ? 1.0299 : 1;
+    // 1.03 matches the multiplier ReQuoteServiceRepository::calc_items_with_CC() persists
+    // server-side on Save — this preview must agree with what actually gets saved, or the
+    // live total and the saved/PDF total silently diverge by a few cents to a few dollars.
+    const paymentTermsMultiplier = $('[name=services_payment_term]').val() === 'Net 30/CC' ? 1.03 : 1;
     let totalServices = 0;
 
     $('#services_table tbody .service_item').each(function (i) {
