@@ -66,15 +66,15 @@ try {
           <div class="quote-action-bar__totals">
             <div class="quote-action-total">
               <span class="quote-action-total__label">Total Price</span>
-              <span class="quote-action-total__value">$<?= number_format($quote->obtener_quote_total_price(), 2); ?></span>
+              <span class="quote-action-total__value" id="rq-bar-total-price">$<?= number_format($quote->obtener_quote_total_price(), 2); ?></span>
             </div>
             <div class="quote-action-total">
               <span class="quote-action-total__label">Total Profit</span>
-              <span class="quote-action-total__value">$<?= number_format($quote->obtener_re_quote_profit(), 2); ?></span>
+              <span class="quote-action-total__value" id="rq-bar-total-profit">$<?= number_format($quote->obtener_re_quote_profit(), 2); ?></span>
             </div>
             <div class="quote-action-total">
               <span class="quote-action-total__label">Profit %</span>
-              <span class="quote-action-total__value"><?= number_format($quote->obtener_re_quote_profit_percentage(), 2); ?>%</span>
+              <span class="quote-action-total__value" id="rq-bar-profit-pct"><?= number_format($quote->obtener_re_quote_profit_percentage(), 2); ?>%</span>
             </div>
           </div>
         </div>
@@ -89,6 +89,11 @@ include_once 'plantillas/re_quote/modals/audit_trails_modal.inc.php';
 include_once 'modals/edit_service_modal.inc.php';
 ?>
 
+<script>
+  // Original quote's client-facing price (items + services) — fixed for the life of the
+  // re-quote; only the cost side (items table + payment terms) changes while re-quoting.
+  window.RE_QUOTE_TOTAL_PRICE = <?= json_encode((float) $quote->obtener_quote_total_price()); ?>;
+</script>
 <script src="<?= asset_url('js/payment_split.js'); ?>"></script>
 <script src="<?= asset_url('js/reQuote.js'); ?>"></script>
 <script src="<?= asset_url('js/audit_trail.js'); ?>"></script>

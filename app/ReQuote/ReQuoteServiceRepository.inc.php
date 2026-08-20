@@ -187,7 +187,12 @@ class ReQuoteServiceRepository {
     $payment_term = $payment_term == 'Net 30/CC' ? 1.03 : 1;
     if (isset($connection)) {
       try {
-        $sql = 'UPDATE re_quote_services SET total_price = quantity * (unit_price * :payment_term) WHERE id_re_quote = :id_re_quote';
+        // Cast the bound param to DECIMAL — as a plain placeholder MySQL evaluates the
+        // multiplication in DOUBLE, so exact .xx5 ties round differently than PHP/JS
+        // number_format/toFixed do everywhere else this number is shown. Mirrors the
+        // same fix already applied to ServiceRepository::calc_items_with_CC() for the
+        // main quote (sql/services_net30cc_rounding_fix.sql).
+        $sql = 'UPDATE re_quote_services SET total_price = quantity * ROUND(unit_price * CAST(:payment_term AS DECIMAL(10,4)), 2) WHERE id_re_quote = :id_re_quote';
         $sentence = $connection->prepare($sql);
         $sentence->bindValue(':id_re_quote', $id_re_quote, PDO::PARAM_STR);
         $sentence->bindValue(':payment_term', $payment_term, PDO::PARAM_STR);

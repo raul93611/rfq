@@ -24,6 +24,21 @@ $(document).ready(function () {
       const profitRq = (totalGanado - total).toFixed(2);
       const percentageProfitRq = ((profitRq / totalGanado) * 100).toFixed(2);
       $('#profit_rq').html(`$ ${profitRq}<br>${percentageProfitRq}%`);
+
+      // Sticky bottom bar — Total Price is the original quote's fixed client-facing price
+      // (items + services, unaffected by re-quoting); Total Profit/Profit % track the live
+      // re-quote cost: items cost (above) plus the re-quote services cost, which is its own
+      // independently re-solicited line (re_quote_services), not the original quote's
+      // services price — same design as items, and CC there is a real cost, not neutral.
+      // #total_service is kept current by calcServices() below on the same 100ms cadence.
+      const quoteTotalPrice = parseFloat(window.RE_QUOTE_TOTAL_PRICE) || 0;
+      const servicesCostLive = parseFloat($('#total_service').text().replace('$', '').trim()) || 0;
+      const totalCostLive = total + servicesCostLive;
+      const barProfit = (quoteTotalPrice - totalCostLive).toFixed(2);
+      const barProfitPct = (quoteTotalPrice ? (barProfit / quoteTotalPrice) * 100 : 0).toFixed(2);
+      $('#rq-bar-total-price').text(`$${quoteTotalPrice.toFixed(2)}`);
+      $('#rq-bar-total-profit').text(`$${barProfit}`);
+      $('#rq-bar-profit-pct').text(`${barProfitPct}%`);
     };
 
     // Periodically recalculate totals
@@ -33,7 +48,7 @@ $(document).ready(function () {
   $('#re_quote_form').submit(function () {
     // Recalculate totals before submitting
     const totalGanado = parseFloat($('#total_ganado').html().split(' ')[1]);
-    const paymentTermsMultiplier = $('input:radio[name=payment_terms]:checked').val() === 'Net 30/CC' ? 0.029 : 0;
+    const paymentTermsMultiplier = $('[name=payment_terms]').val() === 'Net 30/CC' ? 0.029 : 0;
     const paymentTerms = totalGanado * paymentTermsMultiplier;
 
     const totales = $('#re_quote_data tr').map((_, row) => {
@@ -67,7 +82,10 @@ $(document).ready(function () {
 
   // Calculate service totals
   const calcServices = () => {
-    const paymentTermsMultiplier = $('[name=services_payment_term]').val() === 'Net 30/CC' ? 1.0299 : 1;
+    // 1.03 matches the multiplier ReQuoteServiceRepository::calc_items_with_CC() persists
+    // server-side on Save — this preview must agree with what actually gets saved, or the
+    // live total and the saved/PDF total silently diverge by a few cents to a few dollars.
+    const paymentTermsMultiplier = $('[name=services_payment_term]').val() === 'Net 30/CC' ? 1.03 : 1;
     let totalServices = 0;
 
     $('#services_table tbody .service_item').each(function (i) {
