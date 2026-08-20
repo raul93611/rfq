@@ -254,5 +254,29 @@
     </table>
   <?php endif; ?>
 
+  <!-- ── Report Total ── -->
+  <?php
+    $report_total_price  = $cotizacion->obtener_quote_total_price();
+    $report_total_profit = $cotizacion->obtener_re_quote_profit();
+    $report_profit_pct   = $cotizacion->obtener_re_quote_profit_percentage();
+  ?>
+  <div class="section-title">Report Total</div>
+  <table class="items-table" cellspacing="0" cellpadding="0">
+    <tbody>
+      <tr class="total-row">
+        <td style="text-align:right;">TOTAL PRICE</td>
+        <td style="text-align:right;">$ <?= number_format($report_total_price, 2) ?></td>
+      </tr>
+      <tr class="profit-row">
+        <td style="text-align:right;">TOTAL PROFIT</td>
+        <td style="text-align:right;">$ <?= number_format($report_total_profit, 2) ?></td>
+      </tr>
+      <tr class="profit-row">
+        <td style="text-align:right;">PROFIT %</td>
+        <td style="text-align:right;"><?= number_format($report_profit_pct, 2) ?>%</td>
+      </tr>
+    </tbody>
+  </table>
+
 </body>
 </html>
