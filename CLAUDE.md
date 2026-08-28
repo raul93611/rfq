@@ -167,3 +167,7 @@ Provider names were double-HTML-escaped — now stored raw, escaped only at rend
 **Re-quote PDF was missing the combined report total** — `herramientas/pdfTemplates/re_quote.inc.php` showed per-table totals for Items and Services but never the report-wide Total Price/Total Profit/Profit % the web app's bottom bar shows. Fixed by adding a "Report Total" section after the Services table, calling `$cotizacion->obtener_quote_total_price()`/`obtener_re_quote_profit()`/`obtener_re_quote_profit_percentage()` directly in the template (same pattern already used for the Items-table totals above it) — no new calc logic, reuses `.total-row`/`.profit-row` CSS. Test: `tests/php/re_quote_pdf_report_total_test.php`.
 
 **Add modals now close on save** — the 4 add-flow modals (Item, Subitem, Provider, Provider-Subitem) kept the form open for rapid re-entry after save (`29f25556`); switched to the same close-on-save pattern the edit modals already use (`iem-discard` flag + `modal('hide')`) since rapid entry ended up slowing users down more than it helped. Tests: Playwright `03`–`05`.
+
+## Known Bugs
+
+- **planned** — Items table scroll resets to top after adding/editing a provider (or any items-table mutation). See [bugs/items-table-scroll-reset-on-refresh.md](bugs/items-table-scroll-reset-on-refresh.md).
