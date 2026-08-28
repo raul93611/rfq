@@ -325,6 +325,7 @@ $(document).ready(function () {
   }
 
   function refreshItemsTable() {
+    var scrollY = window.scrollY;
     $.get('/rfq/quote/get_items_table/' + rfqId(), function (html) {
       // Replaces the whole section (not just '#items', the <tbody> inside the table) —
       // that table only exists in the DOM once the quote has at least one item, so
@@ -333,6 +334,7 @@ $(document).ready(function () {
       $('#items-section-wrapper').html(html);
       if (typeof window.iemReinitCalc === 'function') window.iemReinitCalc();
       syncIdInputs();
+      window.scrollTo(0, scrollY);
     });
   }
 
