@@ -91,6 +91,8 @@ test.describe('Quote Editing — Items', () => {
     await page.click('#add-item-modal .iem-save-btn');
     await toastPromise;
 
+    await expect(page.locator('#add-item-modal')).not.toBeVisible();
+
     // Verify in DB and clean up
     const rows = await query('SELECT id FROM item WHERE id_rfq = ? AND brand_project = ?', [id, 'PW-Brand-New']);
     expect(rows.length).toBeGreaterThan(0);
