@@ -187,4 +187,73 @@ test.describe('Quote Editing — Items', () => {
       await query('DELETE FROM rfq WHERE id = ?', [emptyRfqId]);
     }
   });
+
+  test('scroll position is restored after adding a provider refreshes the items table', async ({ page }) => {
+    // bugs/items-table-scroll-reset-on-refresh.md — #table_items_container is its own
+    // scrollable pane (overflow: auto; max-height: 700px, sticky thead — css/estilos.css)
+    // rendered by RepositorioItem::escribir_items(). refreshItemsTable() replaces the whole
+    // #items-section-wrapper via .html(), so #table_items_container is recreated from
+    // scratch on every items-table mutation and its scrollTop resets to 0 unless the old
+    // value is explicitly carried over to the new element.
+    const { query } = require('../helpers/db');
+    const { rfqId: id, userId } = fixtures();
+
+    const values = [];
+    const params = [];
+    for (let i = 0; i < 25; i++) {
+      values.push('(?, ?, 0, ?, ?, ?, ?, ?, ?, 1, 10.00, 10.00, \'\', \'\', \'\')');
+      params.push(id, userId, 'ScrollBrand', 'ScrollBrand', 'SCROLL-PN-' + i, 'SCROLL-PN-' + i,
+        'Scroll Test Item ' + i, 'Scroll Test Item ' + i);
+    }
+    await query(
+      `INSERT INTO item (id_rfq, id_usuario, provider_menor, brand, brand_project, part_number,
+        part_number_project, description, description_project, quantity, unit_price, total_price,
+        comments, website, additional)
+       VALUES ${values.join(',')}`,
+      params
+    );
+
+    try {
+      await page.goto(`http://localhost/rfq/perfil/quote/editar_cotizacion/${id}`);
+      await page.waitForSelector('#tabla_items');
+
+      await page.evaluate(() => {
+        const el = document.getElementById('table_items_container');
+        el.scrollTop = el.scrollHeight;
+      });
+      expect(await page.evaluate(() => document.getElementById('table_items_container').scrollTop)).toBeGreaterThan(0);
+
+      // Scope to the kebab-menu variant — renderProvidersList() also emits an inline
+      // "No providers" .it-prov-add.iem-add-provider button for provider-less items,
+      // which isn't behind a kebab wrap and would break openKebabFor's ancestor lookup.
+      const addBtnCount = await page.locator('.it-menu-item.iem-add-provider').count();
+      const addBtn = await openKebabFor(page, '.it-menu-item.iem-add-provider', addBtnCount - 1);
+      await addBtn.click();
+      await page.waitForSelector('#add-provider-modal.show');
+
+      await page.fill('#add-provider-modal [name="provider"]', 'PW-ScrollProvider');
+      await page.fill('#add-provider-modal [name="price"]', '5.00');
+
+      // Baseline is taken here, right before Save triggers refreshItemsTable()'s AJAX
+      // swap — opening the kebab/modal can itself scroll the container to bring the target
+      // into view, which is normal interaction, not the bug under test.
+      const scrollBefore = await page.evaluate(() => document.getElementById('table_items_container').scrollTop);
+
+      const toastPromise = page.waitForSelector('.toast-success', { timeout: 10000 });
+      await page.click('#add-provider-modal .iem-save-btn');
+      await toastPromise;
+
+      await expect(page.locator('#add-provider-modal')).not.toBeVisible();
+      await page.waitForTimeout(300);
+
+      const scrollAfter = await page.evaluate(() => document.getElementById('table_items_container').scrollTop);
+      // Small tolerance for the new provider row's own height affecting the scroll-height
+      // computation slightly — the bug reproduces as a near-total reset (hundreds of px),
+      // not a rounding-sized wobble.
+      expect(Math.abs(scrollAfter - scrollBefore)).toBeLessThanOrEqual(20);
+    } finally {
+      await query('DELETE FROM provider WHERE id_item IN (SELECT id FROM item WHERE id_rfq = ? AND brand = ?)', [id, 'ScrollBrand']);
+      await query('DELETE FROM item WHERE id_rfq = ? AND brand = ?', [id, 'ScrollBrand']);
+    }
+  });
 });
