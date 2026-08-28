@@ -325,7 +325,11 @@ $(document).ready(function () {
   }
 
   function refreshItemsTable() {
-    var scrollY = window.scrollY;
+    // #table_items_container (RepositorioItem::escribir_items()) is its own scrollable
+    // pane (overflow: auto; max-height: 700px — see css/estilos.css) with a sticky thead.
+    // It gets replaced wholesale below, so the new element starts at scrollTop 0 unless
+    // we carry the old one's position over explicitly.
+    var scrollTop = $('#table_items_container').scrollTop();
     $.get('/rfq/quote/get_items_table/' + rfqId(), function (html) {
       // Replaces the whole section (not just '#items', the <tbody> inside the table) —
       // that table only exists in the DOM once the quote has at least one item, so
@@ -334,7 +338,7 @@ $(document).ready(function () {
       $('#items-section-wrapper').html(html);
       if (typeof window.iemReinitCalc === 'function') window.iemReinitCalc();
       syncIdInputs();
-      window.scrollTo(0, scrollY);
+      $('#table_items_container').scrollTop(scrollTop);
     });
   }
 

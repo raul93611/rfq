@@ -189,14 +189,12 @@ test.describe('Quote Editing — Items', () => {
   });
 
   test('scroll position is restored after adding a provider refreshes the items table', async ({ page }) => {
-    // bugs/items-table-scroll-reset-on-refresh.md — refreshItemsTable() did a full HTML swap
-    // of #items-section-wrapper with no scroll-position handling. A real Chrome run of the
-    // literal repro (scroll down, add a provider, save) doesn't visibly move window.scrollY
-    // here — jQuery's .html() sets innerHTML in one shot with no intermediate empty state to
-    // clamp against — so this asserts the actual contract from the bug's fix plan instead:
-    // refreshItemsTable() must explicitly restore the pre-refresh scroll position afterward.
-    // A window.scrollTo spy catches that regardless of whether a given swap happens to move
-    // the visible scrollbar.
+    // bugs/items-table-scroll-reset-on-refresh.md — #table_items_container is its own
+    // scrollable pane (overflow: auto; max-height: 700px, sticky thead — css/estilos.css)
+    // rendered by RepositorioItem::escribir_items(). refreshItemsTable() replaces the whole
+    // #items-section-wrapper via .html(), so #table_items_container is recreated from
+    // scratch on every items-table mutation and its scrollTop resets to 0 unless the old
+    // value is explicitly carried over to the new element.
     const { query } = require('../helpers/db');
     const { rfqId: id, userId } = fixtures();
 
@@ -219,27 +217,11 @@ test.describe('Quote Editing — Items', () => {
       await page.goto(`http://localhost/rfq/perfil/quote/editar_cotizacion/${id}`);
       await page.waitForSelector('#tabla_items');
 
-      await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
-      expect(await page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
-
       await page.evaluate(() => {
-        window.__scrollToCalls = [];
-        const original = window.scrollTo.bind(window);
-        window.scrollTo = function (...args) {
-          window.__scrollToCalls.push(args);
-          return original(...args);
-        };
+        const el = document.getElementById('table_items_container');
+        el.scrollTop = el.scrollHeight;
       });
-
-      // Read window.scrollY at the exact moment refreshItemsTable()'s AJAX request fires —
-      // this is what the fix's `var scrollY = window.scrollY` line captures. Reading it
-      // earlier (e.g. right before the Save click) is unreliable: clicking/focus changes on
-      // the way there can themselves nudge the scroll position before the request ever fires.
-      let scrollAtRequestTime = null;
-      await page.route('**/quote/get_items_table/*', async (route) => {
-        scrollAtRequestTime = await page.evaluate(() => window.scrollY);
-        await route.continue();
-      });
+      expect(await page.evaluate(() => document.getElementById('table_items_container').scrollTop)).toBeGreaterThan(0);
 
       // Scope to the kebab-menu variant — renderProvidersList() also emits an inline
       // "No providers" .it-prov-add.iem-add-provider button for provider-less items,
@@ -252,6 +234,11 @@ test.describe('Quote Editing — Items', () => {
       await page.fill('#add-provider-modal [name="provider"]', 'PW-ScrollProvider');
       await page.fill('#add-provider-modal [name="price"]', '5.00');
 
+      // Baseline is taken here, right before Save triggers refreshItemsTable()'s AJAX
+      // swap — opening the kebab/modal can itself scroll the container to bring the target
+      // into view, which is normal interaction, not the bug under test.
+      const scrollBefore = await page.evaluate(() => document.getElementById('table_items_container').scrollTop);
+
       const toastPromise = page.waitForSelector('.toast-success', { timeout: 10000 });
       await page.click('#add-provider-modal .iem-save-btn');
       await toastPromise;
@@ -259,10 +246,11 @@ test.describe('Quote Editing — Items', () => {
       await expect(page.locator('#add-provider-modal')).not.toBeVisible();
       await page.waitForTimeout(300);
 
-      expect(scrollAtRequestTime).toBeGreaterThan(0);
-      const calls = await page.evaluate(() => window.__scrollToCalls);
-      const restoredOriginalScroll = calls.some(([, y]) => Math.abs(y - scrollAtRequestTime) <= 5);
-      expect(restoredOriginalScroll).toBe(true);
+      const scrollAfter = await page.evaluate(() => document.getElementById('table_items_container').scrollTop);
+      // Small tolerance for the new provider row's own height affecting the scroll-height
+      // computation slightly — the bug reproduces as a near-total reset (hundreds of px),
+      // not a rounding-sized wobble.
+      expect(Math.abs(scrollAfter - scrollBefore)).toBeLessThanOrEqual(20);
     } finally {
       await query('DELETE FROM provider WHERE id_item IN (SELECT id FROM item WHERE id_rfq = ? AND brand = ?)', [id, 'ScrollBrand']);
       await query('DELETE FROM item WHERE id_rfq = ? AND brand = ?', [id, 'ScrollBrand']);
