@@ -47,6 +47,8 @@ test.describe('Quote Editing — Providers', () => {
     await page.click('#add-provider-modal .iem-save-btn');
     await toastPromise;
 
+    await expect(page.locator('#add-provider-modal')).not.toBeVisible();
+
     // Verify in DB and clean up
     const rows = await query('SELECT id FROM provider WHERE id_item = ? AND provider = ?', [itemId, 'PW-Provider-New']);
     expect(rows.length).toBeGreaterThan(0);

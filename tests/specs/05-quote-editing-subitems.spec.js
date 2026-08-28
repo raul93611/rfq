@@ -52,6 +52,8 @@ test.describe('Quote Editing — Subitems', () => {
     await page.click('#add-subitem-modal .iem-save-btn');
     await toastPromise;
 
+    await expect(page.locator('#add-subitem-modal')).not.toBeVisible();
+
     // Verify in DB and clean up
     const rows = await query('SELECT id FROM subitems WHERE id_item = ? AND brand_project = ?', [itemId, 'PW-Sub-Brand']);
     expect(rows.length).toBeGreaterThan(0);
@@ -115,6 +117,8 @@ test.describe('Quote Editing — Subitems', () => {
     const toastPromise = page.waitForSelector('.toast-success', { timeout: 10000 });
     await page.click('#add-provider-subitem-modal .iem-save-btn');
     await toastPromise;
+
+    await expect(page.locator('#add-provider-subitem-modal')).not.toBeVisible();
 
     // Verify in DB and clean up
     const rows = await query('SELECT id FROM provider_subitems WHERE id_subitem = ? AND provider = ?', [subitemId, 'PW-SubProvider']);
