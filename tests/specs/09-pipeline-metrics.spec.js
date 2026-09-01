@@ -95,16 +95,20 @@ test.describe('Bid Pipeline Metrics — Table view', () => {
     await page.waitForResponse((res) => res.url().includes('/quote/pipeline_table'));
   });
 
-  test('table has an End Date filter next to Internal Due Date, both with the four date presets', async ({ page }) => {
-    // feature: end-date-pipeline-table.md
+  test('table has an End Date range filter next to Internal Due Date', async ({ page }) => {
+    // feature: pipeline-table-end-date-range-filter.md
     const dueDate = page.locator('#pt-f-dueDate');
-    const endDate = page.locator('#pt-f-endDate');
-    await expect(endDate).toBeVisible();
-    const options = await endDate.locator('option').allTextContents();
-    expect(options).toEqual(['Any end date', 'Today', 'Tomorrow', 'Next 7 days', 'Overdue']);
+    const endDateFrom = page.locator('#pt-f-endDateFrom');
+    const endDateTo = page.locator('#pt-f-endDateTo');
+    await expect(endDateFrom).toBeVisible();
+    await expect(endDateTo).toBeVisible();
+    const labels = await page.locator('.pt-filters-grid .pt-field-label').allTextContents();
+    const dueDateIdx = labels.indexOf('Internal Due Date');
+    const endDateIdx = labels.indexOf('End Date');
+    expect(endDateIdx).toBe(dueDateIdx + 1);
     // Internal Due Date field comes immediately before End Date in the filter row.
     const dueDateBox = await dueDate.locator('xpath=..').boundingBox();
-    const endDateBox = await endDate.locator('xpath=..').boundingBox();
+    const endDateBox = await endDateFrom.locator('xpath=..').boundingBox();
     expect(endDateBox.x).toBeGreaterThan(dueDateBox.x);
   });
 
@@ -113,20 +117,21 @@ test.describe('Bid Pipeline Metrics — Table view', () => {
     expect(headers.slice(0, 4)).toEqual(['Quote ID', 'Created', 'Internal Due Date', 'End Date']);
   });
 
-  test('End Date filter re-queries the server with the selected preset', async ({ page }) => {
+  test('End Date filter re-queries the server with the selected range', async ({ page }) => {
     const [req] = await Promise.all([
-      page.waitForRequest((r) => r.url().includes('/quote/pipeline_table') && r.url().includes('endDate=today')),
-      page.selectOption('#pt-f-endDate', 'today'),
+      page.waitForRequest((r) => r.url().includes('/quote/pipeline_table') && r.url().includes('endDateFrom=2020-01-01')),
+      page.fill('#pt-f-endDateFrom', '2020-01-01'),
     ]);
-    expect(req.url()).toContain('endDate=today');
+    expect(req.url()).toContain('endDateFrom=2020-01-01');
   });
 
-  test('Clear filters resets the End Date select back to "Any end date"', async ({ page }) => {
-    await page.selectOption('#pt-f-endDate', 'overdue');
-    await expect(page.locator('#pt-f-endDate')).toHaveValue('overdue');
+  test('End Date filter counts as one active filter and Clear filters resets both inputs', async ({ page }) => {
+    await page.fill('#pt-f-endDateFrom', '2020-01-01');
     await page.waitForResponse((res) => res.url().includes('/quote/pipeline_table'));
+    await expect(page.locator('#pt-filters-count')).toHaveText('1 filter applied');
     await page.click('#pt-clear');
-    await expect(page.locator('#pt-f-endDate')).toHaveValue('');
+    await expect(page.locator('#pt-f-endDateFrom')).toHaveValue('');
+    await expect(page.locator('#pt-f-endDateTo')).toHaveValue('');
   });
 
   // feature: pipeline-table-submitted-date-filter.md

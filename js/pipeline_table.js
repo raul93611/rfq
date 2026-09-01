@@ -17,7 +17,7 @@
   var STATUS_BY_KEY = {};
   STATUSES.forEach(function (s) { STATUS_BY_KEY[s.key] = s; });
 
-  var EMPTY_FILTERS = function () { return { quoteId: '', channel: '', emailCode: '', statuses: [], bidType: '', user: '', dueDate: '', endDate: '', submittedFrom: '', submittedTo: '' }; };
+  var EMPTY_FILTERS = function () { return { quoteId: '', channel: '', emailCode: '', statuses: [], bidType: '', user: '', dueDate: '', endDateFrom: '', endDateTo: '', submittedFrom: '', submittedTo: '' }; };
 
   var st = {
     period: null,
@@ -53,7 +53,7 @@
     if (f.bidType) n++;
     if (f.user) n++;
     if (f.dueDate) n++;
-    if (f.endDate) n++;
+    if (f.endDateFrom || f.endDateTo) n++;
     if (f.submittedFrom || f.submittedTo) n++;
     return n;
   }
@@ -69,7 +69,8 @@
     if (f.bidType) q.push('bidType=' + encodeURIComponent(f.bidType));
     if (f.user) q.push('user=' + encodeURIComponent(f.user));
     if (f.dueDate) q.push('dueDate=' + encodeURIComponent(f.dueDate));
-    if (f.endDate) q.push('endDate=' + encodeURIComponent(f.endDate));
+    if (f.endDateFrom) q.push('endDateFrom=' + encodeURIComponent(f.endDateFrom));
+    if (f.endDateTo) q.push('endDateTo=' + encodeURIComponent(f.endDateTo));
     if (f.submittedFrom) q.push('submittedFrom=' + encodeURIComponent(f.submittedFrom));
     if (f.submittedTo) q.push('submittedTo=' + encodeURIComponent(f.submittedTo));
     f.statuses.forEach(function (k) { q.push('statuses[]=' + encodeURIComponent(k)); });
@@ -223,14 +224,14 @@
       var el = document.getElementById(id);
       if (el) el.addEventListener('input', function () { st.filters[map[id]] = el.value; onFilterChange(); });
     });
-    ['pt-f-channel', 'pt-f-bidType', 'pt-f-user', 'pt-f-dueDate', 'pt-f-endDate', 'pt-f-submittedFrom', 'pt-f-submittedTo'].forEach(function (id) {
+    ['pt-f-channel', 'pt-f-bidType', 'pt-f-user', 'pt-f-dueDate', 'pt-f-endDateFrom', 'pt-f-endDateTo', 'pt-f-submittedFrom', 'pt-f-submittedTo'].forEach(function (id) {
       var el = document.getElementById(id), key = id.replace('pt-f-', '');
       if (el) el.addEventListener('change', function () { st.filters[key] = el.value; onFilterChange(true); });
     });
     var clear = $('#pt-clear');
     if (clear) clear.addEventListener('click', function () {
       st.filters = EMPTY_FILTERS();
-      ['pt-f-quoteId', 'pt-f-emailCode', 'pt-f-channel', 'pt-f-bidType', 'pt-f-user', 'pt-f-dueDate', 'pt-f-endDate', 'pt-f-submittedFrom', 'pt-f-submittedTo'].forEach(function (id) {
+      ['pt-f-quoteId', 'pt-f-emailCode', 'pt-f-channel', 'pt-f-bidType', 'pt-f-user', 'pt-f-dueDate', 'pt-f-endDateFrom', 'pt-f-endDateTo', 'pt-f-submittedFrom', 'pt-f-submittedTo'].forEach(function (id) {
         var el = document.getElementById(id); if (el) el.value = '';
       });
       syncStatusMs();

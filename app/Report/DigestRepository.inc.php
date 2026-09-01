@@ -47,8 +47,8 @@ class DigestRepository {
   /**
    * Quotes whose End Date is the given calendar date. rfq.end_date is a VARCHAR
    * ("MM/DD/YYYY HH:mm"), not a DATE column, and is NOT NULL with no default, so an unset
-   * value is '' rather than SQL NULL -- NULLIF blanks that out first, mirroring
-   * PipelineTableRepository::endDateClause().
+   * value is '' rather than SQL NULL -- NULLIF blanks that out first, mirroring the same
+   * handling in PipelineTableRepository::buildWhere()'s End Date range filter.
    */
   public static function getDueOn($conexion, $date) {
     $rows = [];

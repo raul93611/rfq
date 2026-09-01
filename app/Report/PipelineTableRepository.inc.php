@@ -124,9 +124,20 @@ class PipelineTableRepository {
       $clause = self::dueDateClause($filters['dueDate']);
       if ($clause !== null) $inner[] = $clause;
     }
-    if (!empty($filters['endDate'])) {
-      $clause = self::endDateClause($filters['endDate']);
-      if ($clause !== null) $inner[] = $clause;
+    if (!empty($filters['endDateFrom']) || !empty($filters['endDateTo'])) {
+      // rfq.end_date is a VARCHAR ("MM/DD/YYYY HH:mm"), NOT NULL with no column default, so an
+      // unset value is '' rather than SQL NULL -- NULLIF blanks that out first, since
+      // STR_TO_DATE('', ...) would otherwise parse to the zero date 0000-00-00.
+      $endCol = 'STR_TO_DATE(NULLIF(rfq.end_date, ""), "%m/%d/%Y %H:%i")';
+      $inner[] = "$endCol IS NOT NULL";
+      if (!empty($filters['endDateFrom'])) {
+        $params[':efrom'] = (string)$filters['endDateFrom'];
+        $inner[] = "DATE($endCol) >= :efrom";
+      }
+      if (!empty($filters['endDateTo'])) {
+        $params[':eto'] = (string)$filters['endDateTo'];
+        $inner[] = "DATE($endCol) <= :eto";
+      }
     }
     if (!empty($filters['submittedFrom']) || !empty($filters['submittedTo'])) {
       $inner[] = "rfq.fecha_submitted IS NOT NULL";
@@ -161,25 +172,6 @@ class PipelineTableRepository {
       case 'tomorrow': return "DATE(rfq.internal_due_date) = CURDATE() + INTERVAL 1 DAY";
       case 'week':     return "DATE(rfq.internal_due_date) BETWEEN CURDATE() AND CURDATE() + INTERVAL 7 DAY";
       case 'overdue':  return "DATE(rfq.internal_due_date) < CURDATE()";
-      default:         return null;
-    }
-  }
-
-  /**
-   * End Date preset WHERE fragment. rfq.end_date is a VARCHAR ("MM/DD/YYYY HH:mm"), not a
-   * DATE column, so it needs STR_TO_DATE like RepositorioRfq's end_date sort clause.
-   * NULLIF blanks out '' first -- end_date is NOT NULL with no column default, so an unset
-   * value is '' rather than SQL NULL, and STR_TO_DATE('', ...) parses that as the zero date
-   * 0000-00-00 (which satisfies "< CURDATE()") instead of failing to NULL like a genuinely
-   * malformed string does.
-   */
-  private static function endDateClause($preset) {
-    $col = 'STR_TO_DATE(NULLIF(rfq.end_date, ""), "%m/%d/%Y %H:%i")';
-    switch ($preset) {
-      case 'today':    return "DATE($col) = CURDATE()";
-      case 'tomorrow': return "DATE($col) = CURDATE() + INTERVAL 1 DAY";
-      case 'week':     return "DATE($col) BETWEEN CURDATE() AND CURDATE() + INTERVAL 7 DAY";
-      case 'overdue':  return "DATE($col) < CURDATE()";
       default:         return null;
     }
   }
