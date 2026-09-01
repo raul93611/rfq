@@ -2,7 +2,8 @@
 /**
  * JSON: one page of the Bid Pipeline Metrics "Table" view.
  * Params (GET): period (mode=year|quarter|month|custom, year, quarter, month, from, to),
- *   page, and filters: quoteId, channel, emailCode, statuses[], bidType, user, dueDate, endDate.
+ *   page, and filters: quoteId, channel, emailCode, statuses[], bidType, user, dueDate, endDate,
+ *   submittedFrom, submittedTo.
  * Each row carries everything the Quote Summary modal needs (name, value, docs, context).
  */
 if (!ControlSesion::sesion_iniciada()) {
@@ -33,15 +34,22 @@ $dueDate = in_array($dueDate, ['today', 'tomorrow', 'week', 'overdue'], true) ? 
 $endDate = trim((string)($_GET['endDate'] ?? ''));
 $endDate = in_array($endDate, ['today', 'tomorrow', 'week', 'overdue'], true) ? $endDate : '';
 
+$submittedFrom = trim((string)($_GET['submittedFrom'] ?? ''));
+$submittedFrom = preg_match('/^\d{4}-\d{2}-\d{2}$/', $submittedFrom) ? $submittedFrom : '';
+$submittedTo = trim((string)($_GET['submittedTo'] ?? ''));
+$submittedTo = preg_match('/^\d{4}-\d{2}-\d{2}$/', $submittedTo) ? $submittedTo : '';
+
 $filters = [
-  'quoteId'   => trim((string)($_GET['quoteId'] ?? '')),
-  'channel'   => trim((string)($_GET['channel'] ?? '')),
-  'emailCode' => trim((string)($_GET['emailCode'] ?? '')),
-  'statuses'  => $statuses,
-  'bidType'   => trim((string)($_GET['bidType'] ?? '')),
-  'user'      => trim((string)($_GET['user'] ?? '')),
-  'dueDate'   => $dueDate,
-  'endDate'   => $endDate,
+  'quoteId'       => trim((string)($_GET['quoteId'] ?? '')),
+  'channel'       => trim((string)($_GET['channel'] ?? '')),
+  'emailCode'     => trim((string)($_GET['emailCode'] ?? '')),
+  'statuses'      => $statuses,
+  'bidType'       => trim((string)($_GET['bidType'] ?? '')),
+  'user'          => trim((string)($_GET['user'] ?? '')),
+  'dueDate'       => $dueDate,
+  'endDate'       => $endDate,
+  'submittedFrom' => $submittedFrom,
+  'submittedTo'   => $submittedTo,
 ];
 $page = max(0, (int)($_GET['page'] ?? 0));
 

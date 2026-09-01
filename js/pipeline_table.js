@@ -17,7 +17,7 @@
   var STATUS_BY_KEY = {};
   STATUSES.forEach(function (s) { STATUS_BY_KEY[s.key] = s; });
 
-  var EMPTY_FILTERS = function () { return { quoteId: '', channel: '', emailCode: '', statuses: [], bidType: '', user: '', dueDate: '', endDate: '' }; };
+  var EMPTY_FILTERS = function () { return { quoteId: '', channel: '', emailCode: '', statuses: [], bidType: '', user: '', dueDate: '', endDate: '', submittedFrom: '', submittedTo: '' }; };
 
   var st = {
     period: null,
@@ -54,6 +54,7 @@
     if (f.user) n++;
     if (f.dueDate) n++;
     if (f.endDate) n++;
+    if (f.submittedFrom || f.submittedTo) n++;
     return n;
   }
 
@@ -69,6 +70,8 @@
     if (f.user) q.push('user=' + encodeURIComponent(f.user));
     if (f.dueDate) q.push('dueDate=' + encodeURIComponent(f.dueDate));
     if (f.endDate) q.push('endDate=' + encodeURIComponent(f.endDate));
+    if (f.submittedFrom) q.push('submittedFrom=' + encodeURIComponent(f.submittedFrom));
+    if (f.submittedTo) q.push('submittedTo=' + encodeURIComponent(f.submittedTo));
     f.statuses.forEach(function (k) { q.push('statuses[]=' + encodeURIComponent(k)); });
     return q.join('&');
   }
@@ -95,7 +98,7 @@
     $('#pt-card-sub').textContent = st.total + (st.total === 1 ? ' quote' : ' quotes') + ' in this period';
 
     if (st.rows.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="9"><div class="pt-empty">'
+      tbody.innerHTML = '<tr><td colspan="10"><div class="pt-empty">'
         + '<div class="pt-empty-ico"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l3-3 3 2 4-5" opacity="0.45"/></svg></div>'
         + '<div class="pt-empty-title">No data for this period</div>'
         + '<div class="pt-empty-sub">' + (anyFilters ? 'Try removing a filter, or a different period.' : 'Try a different year, quarter, or month.') + '</div>'
@@ -107,6 +110,7 @@
           + '<td class="pt-td-mono">' + esc(b.created) + '</td>'
           + '<td class="pt-td-mono">' + esc(b.internalDueDate) + '</td>'
           + '<td class="pt-td-mono">' + esc(b.endDate) + '</td>'
+          + '<td class="pt-td-mono">' + esc(b.submitted) + '</td>'
           + '<td class="pt-td-ellip" title="' + esc(b.channel) + '">' + esc(b.channel) + '</td>'
           + '<td class="pt-td-mono">' + esc(b.emailCode) + '</td>'
           + '<td>' + statusPill(b.status) + '</td>'
@@ -219,14 +223,14 @@
       var el = document.getElementById(id);
       if (el) el.addEventListener('input', function () { st.filters[map[id]] = el.value; onFilterChange(); });
     });
-    ['pt-f-channel', 'pt-f-bidType', 'pt-f-user', 'pt-f-dueDate', 'pt-f-endDate'].forEach(function (id) {
+    ['pt-f-channel', 'pt-f-bidType', 'pt-f-user', 'pt-f-dueDate', 'pt-f-endDate', 'pt-f-submittedFrom', 'pt-f-submittedTo'].forEach(function (id) {
       var el = document.getElementById(id), key = id.replace('pt-f-', '');
       if (el) el.addEventListener('change', function () { st.filters[key] = el.value; onFilterChange(true); });
     });
     var clear = $('#pt-clear');
     if (clear) clear.addEventListener('click', function () {
       st.filters = EMPTY_FILTERS();
-      ['pt-f-quoteId', 'pt-f-emailCode', 'pt-f-channel', 'pt-f-bidType', 'pt-f-user', 'pt-f-dueDate', 'pt-f-endDate'].forEach(function (id) {
+      ['pt-f-quoteId', 'pt-f-emailCode', 'pt-f-channel', 'pt-f-bidType', 'pt-f-user', 'pt-f-dueDate', 'pt-f-endDate', 'pt-f-submittedFrom', 'pt-f-submittedTo'].forEach(function (id) {
         var el = document.getElementById(id); if (el) el.value = '';
       });
       syncStatusMs();

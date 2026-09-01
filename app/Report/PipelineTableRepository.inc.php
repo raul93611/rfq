@@ -34,10 +34,10 @@ class PipelineTableRepository {
     $total = (int)self::scalar($conexion, $countSql, $params);
 
     $offset = $page * self::PAGE_SIZE;
-    $rowsSql = "SELECT id, email_code, canal, type_of_bid, name, designated_username, value, bucket, created_at, internal_due_date, end_date
+    $rowsSql = "SELECT id, email_code, canal, type_of_bid, name, designated_username, value, bucket, created_at, internal_due_date, end_date, fecha_submitted
       FROM (
         SELECT rfq.id, rfq.email_code, rfq.canal, rfq.type_of_bid, rfq.name, rfq.created_at,
-               rfq.internal_due_date, rfq.end_date,
+               rfq.internal_due_date, rfq.end_date, rfq.fecha_submitted,
                u.nombre_usuario AS designated_username,
                " . PipelineMetricsRepository::VALUE_EXPR . " AS value,
                " . PipelineMetricsRepository::STATUS_CASE . " AS bucket
@@ -71,6 +71,7 @@ class PipelineTableRepository {
         'created'     => !empty($r['created_at']) ? date('m/d/Y', strtotime($r['created_at'])) : '—',
         'internalDueDate' => !empty($r['internal_due_date']) ? date('m/d/Y', strtotime($r['internal_due_date'])) : '—',
         'endDate'         => !empty($r['end_date']) ? $r['end_date'] : '—',
+        'submitted'       => !empty($r['fecha_submitted']) ? date('m/d/Y', strtotime($r['fecha_submitted'])) : '—',
       ];
     }, $rows);
 
@@ -126,6 +127,17 @@ class PipelineTableRepository {
     if (!empty($filters['endDate'])) {
       $clause = self::endDateClause($filters['endDate']);
       if ($clause !== null) $inner[] = $clause;
+    }
+    if (!empty($filters['submittedFrom']) || !empty($filters['submittedTo'])) {
+      $inner[] = "rfq.fecha_submitted IS NOT NULL";
+      if (!empty($filters['submittedFrom'])) {
+        $params[':sfrom'] = (string)$filters['submittedFrom'];
+        $inner[] = "rfq.fecha_submitted >= :sfrom";
+      }
+      if (!empty($filters['submittedTo'])) {
+        $params[':sto'] = (string)$filters['submittedTo'];
+        $inner[] = "rfq.fecha_submitted <= :sto";
+      }
     }
 
     $statusWhere = '';
