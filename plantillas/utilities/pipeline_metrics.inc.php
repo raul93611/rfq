@@ -233,16 +233,12 @@ $pm_statuses  = PipelineMetricsRepository::STATUSES;
                 </select>
               </div>
             </div>
-            <div class="pt-field">
+            <div class="pt-field pt-field-wide">
               <span class="pt-field-label">End Date</span>
-              <div class="pt-select-wrap">
-                <select class="pt-input pt-select" id="pt-f-endDate">
-                  <option value="">Any end date</option>
-                  <option value="today">Today</option>
-                  <option value="tomorrow">Tomorrow</option>
-                  <option value="week">Next 7 days</option>
-                  <option value="overdue">Overdue</option>
-                </select>
+              <div class="pt-daterange">
+                <input type="date" class="pt-input pt-date" id="pt-f-endDateFrom" aria-label="End Date from">
+                <span class="pt-date-sep">to</span>
+                <input type="date" class="pt-input pt-date" id="pt-f-endDateTo" aria-label="End Date to">
               </div>
             </div>
           </div>
