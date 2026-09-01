@@ -145,6 +145,38 @@ try {
   $eWrongYear = PipelineTableRepository::getPage($c, ['mode' => 'year', 'year' => 2098], array_merge($noF, ['endDate' => 'today']), 0);
   check('endDate=today + non-matching period -> 0 (AND-combined)', 0, $eWrongYear['total']);
 
+  // --- Submitted Date filter (feature: pipeline-table-submitted-date-filter.md) ---
+  $sMar10 = $mkRfq(['fecha_submitted' => '2099-03-10']);
+  $sMar20 = $mkRfq(['fecha_submitted' => '2099-03-20']);
+  $sApr01 = $mkRfq(['fecha_submitted' => '2099-04-01']);
+  $sNone  = $mkRfq(['fecha_submitted' => null]);
+
+  $sFrom = PipelineTableRepository::getPage($c, $year, array_merge($noF, ['submittedFrom' => '2099-03-15']), 0);
+  check('submittedFrom=2099-03-15 -> 2 (Mar 20 + Apr 01, on/after)', 2, $sFrom['total']);
+
+  $sTo = PipelineTableRepository::getPage($c, $year, array_merge($noF, ['submittedTo' => '2099-03-15']), 0);
+  check('submittedTo=2099-03-15 -> 1 (Mar 10, on/before)', 1, $sTo['total']);
+
+  $sBoth = PipelineTableRepository::getPage($c, $year, array_merge($noF, ['submittedFrom' => '2099-03-01', 'submittedTo' => '2099-03-31']), 0);
+  check('submittedFrom+To spanning March -> 2 (Mar 10 + Mar 20, inclusive)', 2, $sBoth['total']);
+
+  $byIdSubmitted = [];
+  foreach ($sBoth['rows'] as $r) $byIdSubmitted[$r['id']] = $r;
+  check('never-submitted row excluded when Submitted Date filter is active', false, isset($byIdSubmitted[$sNone]));
+
+  $sInverted = PipelineTableRepository::getPage($c, $year, array_merge($noF, ['submittedFrom' => '2099-04-01', 'submittedTo' => '2099-03-01']), 0);
+  check('inverted submitted range -> 0, no error', 0, $sInverted['total']);
+
+  // AND-combines with the period: same submitted date, wrong year -> 0 rows
+  $sWrongYear = PipelineTableRepository::getPage($c, ['mode' => 'year', 'year' => 2098], array_merge($noF, ['submittedFrom' => '2099-03-01']), 0);
+  check('submittedFrom + non-matching period -> 0 (AND-combined)', 0, $sWrongYear['total']);
+
+  // row output carries the formatted 'submitted' field
+  $sFromById = [];
+  foreach ($sFrom['rows'] as $r) $sFromById[$r['id']] = $r;
+  check('row carries submitted as m/d/Y', '03/20/2099', $sFromById[$sMar20]['submitted']);
+  check('row with no fecha_submitted shows em dash', '—', array_column($all['rows'], 'submitted', 'id')[$qBid] ?? null);
+
 } finally {
   $c->rollBack();
   Conexion::cerrar_conexion();

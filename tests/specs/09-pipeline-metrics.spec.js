@@ -128,4 +128,38 @@ test.describe('Bid Pipeline Metrics — Table view', () => {
     await page.click('#pt-clear');
     await expect(page.locator('#pt-f-endDate')).toHaveValue('');
   });
+
+  // feature: pipeline-table-submitted-date-filter.md
+  test('table has a Submitted Date range filter right after Designated User and before Internal Due Date', async ({ page }) => {
+    await expect(page.locator('#pt-f-submittedFrom')).toBeVisible();
+    await expect(page.locator('#pt-f-submittedTo')).toBeVisible();
+    const labels = await page.locator('.pt-filters-grid .pt-field-label').allTextContents();
+    const userIdx = labels.indexOf('Designated User');
+    const submittedIdx = labels.indexOf('Submitted Date');
+    const dueDateIdx = labels.indexOf('Internal Due Date');
+    expect(submittedIdx).toBe(userIdx + 1);
+    expect(dueDateIdx).toBe(submittedIdx + 1);
+  });
+
+  test('table shows a Submitted column right after End Date', async ({ page }) => {
+    const headers = await page.locator('.pt-table thead th').allTextContents();
+    expect(headers.slice(0, 5)).toEqual(['Quote ID', 'Created', 'Internal Due Date', 'End Date', 'Submitted']);
+  });
+
+  test('Submitted Date filter re-queries the server with the selected range', async ({ page }) => {
+    const [req] = await Promise.all([
+      page.waitForRequest((r) => r.url().includes('/quote/pipeline_table') && r.url().includes('submittedFrom=2020-01-01')),
+      page.fill('#pt-f-submittedFrom', '2020-01-01'),
+    ]);
+    expect(req.url()).toContain('submittedFrom=2020-01-01');
+  });
+
+  test('Submitted Date filter counts as one active filter and Clear filters resets both inputs', async ({ page }) => {
+    await page.fill('#pt-f-submittedFrom', '2020-01-01');
+    await page.waitForResponse((res) => res.url().includes('/quote/pipeline_table'));
+    await expect(page.locator('#pt-filters-count')).toHaveText('1 filter applied');
+    await page.click('#pt-clear');
+    await expect(page.locator('#pt-f-submittedFrom')).toHaveValue('');
+    await expect(page.locator('#pt-f-submittedTo')).toHaveValue('');
+  });
 });

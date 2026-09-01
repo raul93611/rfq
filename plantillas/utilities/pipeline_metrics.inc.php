@@ -213,6 +213,14 @@ $pm_statuses  = PipelineMetricsRepository::STATUSES;
                 </select>
               </div>
             </div>
+            <div class="pt-field pt-field-wide">
+              <span class="pt-field-label">Submitted Date</span>
+              <div class="pt-daterange">
+                <input type="date" class="pt-input pt-date" id="pt-f-submittedFrom" aria-label="Submitted Date from">
+                <span class="pt-date-sep">to</span>
+                <input type="date" class="pt-input pt-date" id="pt-f-submittedTo" aria-label="Submitted Date to">
+              </div>
+            </div>
             <div class="pt-field">
               <span class="pt-field-label">Internal Due Date</span>
               <div class="pt-select-wrap">
@@ -255,12 +263,12 @@ $pm_statuses  = PipelineMetricsRepository::STATUSES;
           <div class="pt-table-wrap">
             <table class="pt-table">
               <colgroup>
-                <col class="pt-col-id"><col class="pt-col-created"><col class="pt-col-duedate"><col class="pt-col-enddate"><col class="pt-col-channel"><col class="pt-col-email">
+                <col class="pt-col-id"><col class="pt-col-created"><col class="pt-col-duedate"><col class="pt-col-enddate"><col class="pt-col-submitted"><col class="pt-col-channel"><col class="pt-col-email">
                 <col class="pt-col-status"><col class="pt-col-type"><col class="pt-col-user">
               </colgroup>
               <thead>
                 <tr>
-                  <th>Quote ID</th><th>Created</th><th>Internal Due Date</th><th>End Date</th><th>Channel</th><th>Code</th><th>Status</th>
+                  <th>Quote ID</th><th>Created</th><th>Internal Due Date</th><th>End Date</th><th>Submitted</th><th>Channel</th><th>Code</th><th>Status</th>
                   <th>Type of Bid</th><th>Designated User</th>
                 </tr>
               </thead>
