@@ -50,7 +50,7 @@
     $popEnd = $cotizacion_recuperada->obtener_pop_end_date();
     if ($popStart || $popEnd) {
       if ($popStart && $popEnd) {
-        $popValue = htmlspecialchars(formatPopDuration($popStart, $popEnd))
+        $popValue = '<span class="quote-info-value-duration">' . htmlspecialchars(formatPopDuration($popStart, $popEnd)) . '</span>'
           . '<div class="quote-info-value-sub">' . date('n/j/Y', strtotime($popStart)) . ' – ' . date('n/j/Y', strtotime($popEnd)) . '</div>';
       } else {
         $popValue = date('n/j/Y', strtotime($popStart ?: $popEnd));

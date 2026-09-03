@@ -1428,11 +1428,20 @@ tfoot th:first-child {
   font-size: 12px;
 }
 
+.quote-info-value-duration {
+  display: block;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--color-primary);
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+
 .quote-info-value-sub {
   font-size: 11px;
   font-weight: 500;
   color: #8896a5;
-  margin-top: 2px;
+  margin-top: 4px;
 }
 
 /* Primary info row — 4 fixed columns, more prominent */
