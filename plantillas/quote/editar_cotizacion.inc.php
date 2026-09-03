@@ -14,6 +14,19 @@ Conexion::cerrar_conexion();
 if (is_null($cotizacion_recuperada)) {
   Redireccion::redirigir1(ERROR);
 }
+
+// Deterministic color per Type of Contract value (free-form string, no fixed enum) —
+// same hash + palette as categoryColor() in js/pipeline_metrics.js, so a type reads
+// the same color here as it does on the Bid Pipeline Charts.
+function contractTypeColor($name) {
+  if (!$name) return '#9aa6b6';
+  $palette = ['#2db4e8', '#4f6ef0', '#16a34a', '#d97706', '#7c5cf0', '#0e7490', '#14b8a6', '#f0734f', '#dc2626', '#1aa2dc', '#9333ea', '#b45309'];
+  $hash = 0;
+  foreach (str_split($name) as $ch) {
+    $hash = ($hash * 31 + ord($ch)) & 0xFFFFFFFF;
+  }
+  return $palette[$hash % count($palette)];
+}
 ?>
 <div class="content-wrapper">
 
@@ -23,7 +36,13 @@ if (is_null($cotizacion_recuperada)) {
         Proposal #<?= htmlspecialchars($cotizacion_recuperada->obtener_id(), ENT_QUOTES, 'UTF-8'); ?>
       </h1>
       <p class="page-subtitle" style="margin-bottom:6px;">
-        <?= htmlspecialchars($cotizacion_recuperada->obtener_type_of_contract() ?? 'No contract type specified', ENT_QUOTES, 'UTF-8'); ?>
+        <?php
+        $contractType = $cotizacion_recuperada->obtener_type_of_contract();
+        $contractTypeLabel = $contractType ?: 'No contract type specified';
+        ?>
+        <span class="contract-type-pill" style="--ct:<?= contractTypeColor($contractType); ?>;">
+          <span class="contract-type-pill-dot"></span><?= htmlspecialchars($contractTypeLabel, ENT_QUOTES, 'UTF-8'); ?>
+        </span>
       </p>
       <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:4px;">
         <?php
