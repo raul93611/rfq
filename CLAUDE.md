@@ -8,6 +8,13 @@ All built. Detail for most lives in the matching `###` section below.
 
 Quote Inline Editing · SharePoint Sheet Sync · Comment Mentions & Notifications · Bid Requirement Fields (Site Visit/Q&A Deadline/Resumes) · Bid Pipeline Sync Controls · Bid Pipeline Metrics Dashboard · Pipeline Table View · 3-Year Annual Awards Comparison · Quote Lifecycle Audit Events · Write-Once Sheet Sync · Advanced Quote Search · Commercial Moving bid type + 50/50 payment term · Shared Notification Mailbox · Daily RFQ Digest Email · Quote Checklist & Info Drawer · Documents Drawer Tab + Custom File Widget · Import Items Enhancements (template download, append/replace mode, provider import) · Items & Services Table Redesign · Internal Due Date Table Filter + Required Field · Pipeline Status by User + Wider Drill-down Drawer · End Date Required + Pipeline Table Due-Date Columns · Pipeline Table Submitted Date Filter · Pipeline Table End Date Range Filter
 
+**Planned:** Period of Performance (optional PoP date range on quote info card) — planned. [features/period-of-performance.md](features/period-of-performance.md)
+**Planned:** Pipeline Type of Contract Breakdown (donut chart + table column/filter) — planned. [features/pipeline-type-of-contract.md](features/pipeline-type-of-contract.md)
+
+## Known Bugs
+
+- Remove "Submitted Invoice" status, migrate existing quotes to Invoice — planned. [bugs/remove-submitted-invoice-status.md](bugs/remove-submitted-invoice-status.md)
+
 ## Environment
 
 PHP app on a LAMP stack inside Docker (`docker-compose-lamp`), served at `http://localhost/rfq/`.
@@ -87,7 +94,7 @@ Mirrored by Sources Sought (`quote/sources_sought`) and No Award (`quote/no_awar
 
 **End Date column + required field** — `rfq.end_date` is `VARCHAR` (`MM/DD/YYYY HH:mm`), not a DATE column: needs `STR_TO_DATE(NULLIF(rfq.end_date, ''), "%m/%d/%Y %H:%i")` (unset is `''`, not SQL NULL). Required in the New Quote form + Information drawer; column sits right after `Created`. New Quote form's `#end_date` picker needs its own `autoUpdateInput: false` (not the shared `dateTimeOptions`) or daterangepicker fills today's date/time on init.
 
-**End Date + Submitted Date filters** — both from/to ranges, AND-combined like every other filter; a row with a blank/never-set date never matches once either bound is set; inverted range = empty, no error; counts as one active filter regardless of which bound(s) are set. Submitted Date is on `rfq.fecha_submitted` (nullable `DATE`, no migration); End Date reuses the `STR_TO_DATE`/`NULLIF` handling above. Both fields are double-width `.pt-field-wide`, reusing the same `.pt-daterange`/`.pt-date` pattern (ported from the Claude Design handoff — parallel to the `pm-daterange` custom-period picker but scoped to the `pt-` namespace); Submitted Date sits right after Designated User, End Date right after Internal Due Date. Tests: `tests/php/pipeline_table_test.php`, `tests/php/internal_due_date_test.php`, `tests/specs/09-pipeline-metrics.spec.js`, `tests/specs/11-checklist-info-drawer.spec.js`, `tests/specs/02-quote-list.spec.js`.
+**End Date + Submitted Date filters** — both from/to ranges, AND-combined like every other filter; a row with a blank/never-set date never matches once either bound is set; inverted range = empty, no error; counts as one active filter regardless of which bound(s) are set. Submitted Date is on `rfq.fecha_submitted` (nullable `DATE`, no migration); End Date reuses the `STR_TO_DATE`/`NULLIF` handling above. Both fields are double-width `.pt-field-wide`, reusing the same `.pt-daterange`/`.pt-date` pattern (parallel to the `pm-daterange` picker, `pt-` namespace); Submitted Date sits right after Designated User, End Date right after Internal Due Date. Tests: `tests/php/pipeline_table_test.php`, `tests/php/internal_due_date_test.php`, `tests/specs/09-pipeline-metrics.spec.js`, `tests/specs/11-checklist-info-drawer.spec.js`, `tests/specs/02-quote-list.spec.js`.
 
 ### Charts Tab — Annual Awards (3-year)
 
@@ -146,24 +153,17 @@ Template download, Append/Replace mode, provider import — `scripts/quote/impor
 
 Test: `tests/php/import_items_test.php`, `tests/specs/13-import-items.spec.js`.
 
-### Items & Services Table Redesign
+### Items & Services Table Redesign (+ post-launch fixes, Re-Quote)
 
 Quote Edit only (Re-Quote/Fulfillment untouched). `it-*` namespace. Rows stay real `<table>`/`<tr>`/`<td>` for `js/quote.js`'s `td:eq()` calc loop — column count 13→12 (Website folded into description), shifting indices in `calcQuoteTable()`/`populateCalcArrays()`.
 
 - **Kebab menu**: `renderKebab()` wraps edit/delete in a `.it-menu` popover. Specs call `openKebabFor()` (`tests/helpers/kebab.js`) first.
 - **Descriptions**: server truncation gone — CSS (`grid-template-rows: 0fr/1fr`) condenses by default, `[data-toggle-desc]` expands.
-- **Providers**: `renderProvidersList()` sorts cheapest-first, highlights ties.
+- **Providers**: `renderProvidersList()` sorts cheapest-first, highlights ties; names store raw, escaped only at render — `sql/provider_name_unescape_backfill.sql` (idempotent, **run on production**) decodes legacy double-escaped rows. Re-quote provider paths deliberately left as-is — fixing them there would trade a cosmetic bug for a stored-XSS hole.
+- **Post-launch**: `.it-table`/`.it-table.is-services` need `min-width` (1360px/750px) so `overflow-x: auto` engages instead of squeezing columns to zero on ~13-14" laptops. `refreshItemsTable()` is the single choke point behind every items-table mutation — fully replaces `#items-section-wrapper`, resetting `#table_items_container`'s `scrollTop` to 0 unless captured/restored around the AJAX call.
 
-Test: `tests/php/commercial_moving_test.php`, `tests/js/payment_split.test.js`, Playwright `03`–`08`/`13`.
-
-### Post-launch fixes (Items & Services Table Redesign, Re-Quote)
-
-`.it-table`/`.it-table.is-services` need `min-width` (1360px/750px) so `overflow-x: auto` engages instead of squeezing columns to zero on ~13-14" laptops.
-
-Provider names store raw, escaped only at render (`renderProvidersList()`); `sql/provider_name_unescape_backfill.sql` (idempotent, **run on production**) decodes legacy double-escaped rows. Re-quote provider paths deliberately left as-is — fixing them there would trade a cosmetic bug for a stored-XSS hole. Tests: `tests/specs/03-quote-editing-items.spec.js`, `tests/specs/06-services.spec.js`, `tests/php/provider_name_escaping_test.php`, `tests/specs/04-quote-editing-providers.spec.js`.
+Test: `tests/php/commercial_moving_test.php`, `tests/js/payment_split.test.js`, `tests/php/provider_name_escaping_test.php`, Playwright `03`–`08`/`13`.
 
 **Re-quote services are their own re-solicited cost line, not margin-neutral** — `obtener_re_quote_total_cost()` sums `re_quote_services`, not the original quote's `services`: client price stays pinned to the original quote while cost gets re-solicited, so Net 30/CC on re-quote services is a real cost, same as for items. Don't "fix" this into cancelling to zero — tried and reverted. Test: `tests/php/re_quote_cc_profit_test.php`.
 
 **Re-quote CC payment terms**: the submit handler and `calcServices()`'s live preview must both select on `$('[name=payment_terms]')` (not a stale `input:radio` selector) and use the same `1.03` CC-fee constant `ReQuoteServiceRepository::calc_items_with_CC()` persists with — either mismatch silently diverges the on-screen preview from the saved/PDF total without erroring. Test: `tests/specs/14-re-quote-cc-payment-terms.spec.js`.
-
-**Items table scroll reset**: `refreshItemsTable()` (`js/quote.js`) is the single choke point behind every items-table mutation (add/edit/delete item, subitem, provider); it fully replaces `#items-section-wrapper`, resetting `#table_items_container`'s `scrollTop` to 0 unless captured before the AJAX call and restored after. Test: `tests/specs/03-quote-editing-items.spec.js`.
