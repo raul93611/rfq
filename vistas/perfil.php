@@ -247,9 +247,6 @@ switch ($partes_ruta[2] ?? null) {
       case 'invoice_quotes':
         include_once 'plantillas/invoice/invoice_quotes.inc.php';
         break;
-      case 'submitted_invoice_quotes':
-        include_once 'plantillas/submitted_invoice/submitted_invoice_quotes.inc.php';
-        break;
       default:
         break;
     }
