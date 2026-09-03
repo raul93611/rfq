@@ -2,7 +2,7 @@
 
 Eliminate the "Submitted Invoice" status entirely and migrate all quotes currently in it back to "Invoice."
 
-Status: planned
+Status: fixed
 
 ## Steps to Reproduce (current behavior)
 
