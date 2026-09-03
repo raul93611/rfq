@@ -823,7 +823,9 @@ class RepositorioRfq {
     $resumes = null,
     $qa_deadline = null,
     $internal_due_date = null,
-    $qa = null
+    $qa = null,
+    $pop_start_date = null,
+    $pop_end_date = null
   ) {
     $cotizacion_editada = false;
     if (isset($conexion)) {
@@ -847,7 +849,9 @@ class RepositorioRfq {
         resumes = :resumes,
         qa_deadline = STR_TO_DATE(:qa_deadline, '%m/%d/%Y %H:%i'),
         internal_due_date = STR_TO_DATE(:internal_due_date, '%m/%d/%Y'),
-        qa = :qa
+        qa = :qa,
+        pop_start_date = :pop_start_date,
+        pop_end_date = :pop_end_date
         WHERE id = :id_rfq
         ";
         $sentencia = $conexion->prepare($sql);
@@ -870,6 +874,8 @@ class RepositorioRfq {
         $sentencia->bindValue(':qa_deadline', $qa_deadline, PDO::PARAM_STR);
         $sentencia->bindValue(':internal_due_date', $internal_due_date, PDO::PARAM_STR);
         $sentencia->bindValue(':qa', $qa, PDO::PARAM_INT);
+        $sentencia->bindValue(':pop_start_date', $pop_start_date, PDO::PARAM_STR);
+        $sentencia->bindValue(':pop_end_date', $pop_end_date, PDO::PARAM_STR);
         $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia->execute();
         if ($sentencia) {

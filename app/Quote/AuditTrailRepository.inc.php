@@ -145,6 +145,10 @@ class AuditTrailRepository {
     $ship_to_original,
     $comments,
     $comments_original,
+    $pop_start_date,
+    $pop_start_date_original,
+    $pop_end_date,
+    $pop_end_date_original,
     $id_rfq
   ) {
     if ($type_of_bid != $type_of_bid_original) {
@@ -179,6 +183,18 @@ class AuditTrailRepository {
     }
     if ($comments != $comments_original) {
       self::create_audit_trail_modified($connection, 'Comments', $comments, $comments_original, $id_rfq);
+    }
+    if ($pop_start_date != $pop_start_date_original || $pop_end_date != $pop_end_date_original) {
+      $formatPop = function ($start, $end) {
+        if (empty($start) && empty($end)) return '';
+        if (!empty($start) && !empty($end)) return $start . ' – ' . $end;
+        return $start ?: $end;
+      };
+      self::create_audit_trail_modified(
+        $connection, 'Period of Performance',
+        $formatPop($pop_start_date, $pop_end_date), $formatPop($pop_start_date_original, $pop_end_date_original),
+        $id_rfq
+      );
     }
   }
 

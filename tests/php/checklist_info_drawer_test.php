@@ -131,7 +131,8 @@ try {
   check('save_information reports success', true, $ok2);
   AuditTrailRepository::information_events(
     $conexion, 'IT', 'IT', '01/01/1999', '01/01/1999', '01/01/1999', '01/01/1999', '', '', '', '',
-    'BEST WAY', 'GROUND', 'CID-TEST', 'CID-TEST', '1', '1', 'CIDTEST', 'CIDTEST', '', '', 'No comments', 'No comments', $idInfo
+    'BEST WAY', 'GROUND', 'CID-TEST', 'CID-TEST', '1', '1', 'CIDTEST', 'CIDTEST', '', '', 'No comments', 'No comments',
+    '', '', '', '', $idInfo
   );
   $rowsInfo = readAudit($conexion, $idInfo);
   check('exactly one field_modified row (only ship via changed)', 1, count($rowsInfo));
