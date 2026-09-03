@@ -132,7 +132,7 @@ try {
   AuditTrailRepository::information_events(
     $conexion, 'IT', 'IT', '01/01/1999', '01/01/1999', '01/01/1999', '01/01/1999', '', '', '', '',
     'BEST WAY', 'GROUND', 'CID-TEST', 'CID-TEST', '1', '1', 'CIDTEST', 'CIDTEST', '', '', 'No comments', 'No comments',
-    '', '', '', '', $idInfo
+    $idInfo
   );
   $rowsInfo = readAudit($conexion, $idInfo);
   check('exactly one field_modified row (only ship via changed)', 1, count($rowsInfo));

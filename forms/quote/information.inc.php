@@ -123,22 +123,6 @@
                    value="<?= $quote->obtener_expiration_date() ? RepositorioComment::mysql_date_to_english_format($quote->obtener_expiration_date()) : ''; ?>">
           </div>
         </div>
-        <div class="form-row">
-          <div class="form-group col-md-6 mb-0">
-            <label for="pop_start_date">Period of Performance</label>
-            <div class="pt-daterange">
-              <input type="date" class="pt-input pt-date" id="pop_start_date" name="pop_start_date"
-                     value="<?= htmlspecialchars($quote->obtener_pop_start_date() ?? '', ENT_QUOTES, 'UTF-8'); ?>" aria-label="Period of Performance start">
-              <span class="pt-date-sep">to</span>
-              <input type="date" class="pt-input pt-date" id="pop_end_date" name="pop_end_date"
-                     value="<?= htmlspecialchars($quote->obtener_pop_end_date() ?? '', ENT_QUOTES, 'UTF-8'); ?>" aria-label="Period of Performance end">
-              <button type="button" class="btn btn-link btn-sm p-0 ml-1" id="pop_clear" title="Clear Period of Performance">Clear</button>
-            </div>
-            <input type="hidden" name="pop_start_date_original" value="<?= htmlspecialchars($quote->obtener_pop_start_date() ?? '', ENT_QUOTES, 'UTF-8'); ?>">
-            <input type="hidden" name="pop_end_date_original" value="<?= htmlspecialchars($quote->obtener_pop_end_date() ?? '', ENT_QUOTES, 'UTF-8'); ?>">
-            <small class="form-text text-muted">Optional — either date may be left blank.</small>
-          </div>
-        </div>
       </div>
 
       <!-- Status -->

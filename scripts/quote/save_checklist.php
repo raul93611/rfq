@@ -11,6 +11,8 @@ if (isset($_POST['save_checklist'])) {
     $estimated_delivery_date = !empty($_POST['estimated_delivery_date']) ? $_POST['estimated_delivery_date'] : null;
     $usuario = RepositorioUsuario::obtener_usuario_por_nombre_usuario($conexion, $_POST['usuario_designado']);
     $usuario_designado = $usuario->obtener_id();
+    $pop_start_date = !empty($_POST['pop_start_date']) ? $_POST['pop_start_date'] : null;
+    $pop_end_date   = !empty($_POST['pop_end_date'])   ? $_POST['pop_end_date']   : null;
 
     // Save checklist
     RepositorioRfq::save_checklist(
@@ -35,7 +37,9 @@ if (isset($_POST['save_checklist'])) {
       $_POST['gsa'],
       $_POST['client_payment_terms'],
       $_POST['bpa'] ?? null,
-      $_POST['id_rfq']
+      $_POST['id_rfq'],
+      $pop_start_date,
+      $pop_end_date
     );
 
     // Log checklist events
@@ -51,7 +55,11 @@ if (isset($_POST['save_checklist'])) {
       $_POST['designated_user_original'],
       $_POST['ship_to'],
       $_POST['ship_to_original'],
-      $_POST['id_rfq']
+      $_POST['id_rfq'],
+      $pop_start_date,
+      !empty($_POST['pop_start_date_original']) ? $_POST['pop_start_date_original'] : null,
+      $pop_end_date,
+      !empty($_POST['pop_end_date_original']) ? $_POST['pop_end_date_original'] : null
     );
 
     // Close database connection
