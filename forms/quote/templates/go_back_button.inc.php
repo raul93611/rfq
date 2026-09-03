@@ -9,8 +9,6 @@ $url = '';
 
 if ($cotizacion_recuperada->getDeleted()) {
   $url = DELETED;
-} elseif ($cotizacion_recuperada->obtener_submitted_invoice()) {
-  $url = SUBMITTED_INVOICE_QUOTES;
 } elseif ($cotizacion_recuperada->obtener_invoice()) {
   $url = INVOICE_QUOTES;
 } elseif ($cotizacion_recuperada->obtener_fullfillment()) {

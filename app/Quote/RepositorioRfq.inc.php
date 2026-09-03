@@ -823,7 +823,9 @@ class RepositorioRfq {
     $resumes = null,
     $qa_deadline = null,
     $internal_due_date = null,
-    $qa = null
+    $qa = null,
+    $pop_start_date = null,
+    $pop_end_date = null
   ) {
     $cotizacion_editada = false;
     if (isset($conexion)) {
@@ -847,7 +849,9 @@ class RepositorioRfq {
         resumes = :resumes,
         qa_deadline = STR_TO_DATE(:qa_deadline, '%m/%d/%Y %H:%i'),
         internal_due_date = STR_TO_DATE(:internal_due_date, '%m/%d/%Y'),
-        qa = :qa
+        qa = :qa,
+        pop_start_date = :pop_start_date,
+        pop_end_date = :pop_end_date
         WHERE id = :id_rfq
         ";
         $sentencia = $conexion->prepare($sql);
@@ -870,6 +874,8 @@ class RepositorioRfq {
         $sentencia->bindValue(':qa_deadline', $qa_deadline, PDO::PARAM_STR);
         $sentencia->bindValue(':internal_due_date', $internal_due_date, PDO::PARAM_STR);
         $sentencia->bindValue(':qa', $qa, PDO::PARAM_INT);
+        $sentencia->bindValue(':pop_start_date', $pop_start_date, PDO::PARAM_STR);
+        $sentencia->bindValue(':pop_end_date', $pop_end_date, PDO::PARAM_STR);
         $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia->execute();
         if ($sentencia) {
@@ -1459,15 +1465,14 @@ class RepositorioRfq {
         DATE_FORMAT(invoice_date, '%m/%d/%Y') as invoice_date, 
         type_of_contract  
         FROM rfq 
-        WHERE rfq.deleted = 0 AND 
-        fullfillment = 1 AND 
+        WHERE rfq.deleted = 0 AND
+        fullfillment = 1 AND
         invoice = 1 AND
-        (submitted_invoice IS NULL OR submitted_invoice = 0) AND
-        (id LIKE :search OR 
-        email_code LIKE :search OR 
-        canal LIKE :search OR 
-        DATE_FORMAT(invoice_date, '%m/%d/%Y') LIKE :search OR 
-        type_of_contract LIKE :search) 
+        (id LIKE :search OR
+        email_code LIKE :search OR
+        canal LIKE :search OR
+        DATE_FORMAT(invoice_date, '%m/%d/%Y') LIKE :search OR
+        type_of_contract LIKE :search)
         ORDER BY {$sort_column} {$sort_direction} LIMIT {$start}, {$length}
         ";
         $sentencia = $conexion->prepare($sql);
@@ -1488,11 +1493,10 @@ class RepositorioRfq {
       try {
         $sql = "
         SELECT COUNT(id)
-        FROM rfq 
-        WHERE rfq.deleted = 0 AND 
-        fullfillment = 1 AND 
-        invoice = 1 AND
-        (submitted_invoice IS NULL OR submitted_invoice = 0)
+        FROM rfq
+        WHERE rfq.deleted = 0 AND
+        fullfillment = 1 AND
+        invoice = 1
         ";
         $sentencia = $conexion->prepare($sql);
         $sentencia->execute();
@@ -1508,124 +1512,16 @@ class RepositorioRfq {
     if (isset($conexion)) {
       try {
         $sql = "
-        SELECT COUNT(id) 
-        FROM rfq 
-        WHERE rfq.deleted = 0 AND 
-        fullfillment = 1 AND 
-        invoice = 1 AND
-        (submitted_invoice IS NULL OR submitted_invoice = 0) AND
-        (id LIKE :search OR 
-        email_code LIKE :search OR 
-        canal LIKE :search OR 
-        DATE_FORMAT(invoice_date, '%m/%d/%Y') LIKE :search OR 
-        type_of_contract LIKE :search) 
-        ";
-        $sentencia = $conexion->prepare($sql);
-        $sentencia->bindValue(':search', $search, PDO::PARAM_STR);
-        $sentencia->execute();
-      } catch (PDOException $ex) {
-        print 'ERROR:' . $ex->getMessage() . '<br>';
-      }
-    }
-    return $sentencia->fetchColumn();
-  }
-
-  public static function getSubmittedInvoiceQuotes($conexion, $start, $length, $search, $sort_column_index, $sort_direction) {
-    $data = [];
-    $search = '%' . $search . '%';
-    switch ($sort_column_index) {
-      case 0:
-        $sort_column = 'id';
-        break;
-      case 1:
-        $sort_column = 'email_code';
-        break;
-      case 2:
-        $sort_column = 'canal';
-        break;
-      case 3:
-        $sort_column = 'rfq.submitted_invoice_date';
-        break;
-      case 4:
-        $sort_column = 'type_of_contract';
-        break;
-      default:
-        $sort_column = 'id';
-        break;
-    }
-    if (isset($conexion)) {
-      try {
-        $sql = "
-        SELECT id, 
-        email_code, 
-        CASE
-          WHEN canal = 'FedBid' THEN 'Unison'
-          WHEN canal = 'FBO' THEN 'SAM'
-          ELSE canal
-        END AS canal,
-        DATE_FORMAT(submitted_invoice_date, '%m/%d/%Y') as submitted_invoice_date, 
-        type_of_contract  
-        FROM rfq 
-        WHERE rfq.deleted = 0 AND 
-        fullfillment = 1 AND 
-        invoice = 1 AND
-        submitted_invoice = 1 AND
-        (id LIKE :search OR 
-        email_code LIKE :search OR 
-        canal LIKE :search OR 
-        DATE_FORMAT(submitted_invoice_date, '%m/%d/%Y') LIKE :search OR 
-        type_of_contract LIKE :search) 
-        ORDER BY {$sort_column} {$sort_direction} LIMIT {$start}, {$length}
-        ";
-        $sentencia = $conexion->prepare($sql);
-        $sentencia->bindValue(':search', $search, PDO::PARAM_STR);
-        $sentencia->execute();
-        while ($row = $sentencia->fetch(PDO::FETCH_ASSOC)) {
-          $data[] = $row;
-        }
-      } catch (PDOException $ex) {
-        print 'ERROR:' . $ex->getMessage() . '<br>';
-      }
-    }
-    return $data;
-  }
-
-  public static function getTotalSubmittedInvoiceQuotesCount($conexion) {
-    if (isset($conexion)) {
-      try {
-        $sql = "
         SELECT COUNT(id)
-        FROM rfq 
-        WHERE rfq.deleted = 0 AND 
-        fullfillment = 1 AND 
+        FROM rfq
+        WHERE rfq.deleted = 0 AND
+        fullfillment = 1 AND
         invoice = 1 AND
-        submitted_invoice = 1
-        ";
-        $sentencia = $conexion->prepare($sql);
-        $sentencia->execute();
-      } catch (PDOException $ex) {
-        print 'ERROR:' . $ex->getMessage() . '<br>';
-      }
-    }
-    return $sentencia->fetchColumn();
-  }
-
-  public static function getTotalFilteredSubmittedInvoiceQuotesCount($conexion, $search) {
-    $search = '%' . $search . '%';
-    if (isset($conexion)) {
-      try {
-        $sql = "
-        SELECT COUNT(id) 
-        FROM rfq 
-        WHERE rfq.deleted = 0 AND 
-        fullfillment = 1 AND 
-        invoice = 1 AND
-        submitted_invoice = 1 AND
-        (id LIKE :search OR 
-        email_code LIKE :search OR 
-        canal LIKE :search OR 
-        DATE_FORMAT(submitted_invoice_date, '%m/%d/%Y') LIKE :search OR 
-        type_of_contract LIKE :search) 
+        (id LIKE :search OR
+        email_code LIKE :search OR
+        canal LIKE :search OR
+        DATE_FORMAT(invoice_date, '%m/%d/%Y') LIKE :search OR
+        type_of_contract LIKE :search)
         ";
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindValue(':search', $search, PDO::PARAM_STR);
@@ -2409,24 +2305,6 @@ class RepositorioRfq {
     return $rfq_editado;
   }
 
-  public static function check_submitted_invoice_and_date($conexion, $id_rfq) {
-    $rfq_editado = false;
-    if (isset($conexion)) {
-      try {
-        $sql = 'UPDATE rfq SET submitted_invoice = 1, submitted_invoice_date = NOW() WHERE id = :id_rfq';
-        $sentencia = $conexion->prepare($sql);
-        $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
-        $sentencia->execute();
-        if ($sentencia) {
-          $rfq_editado = true;
-        }
-      } catch (PDOException $ex) {
-        print 'ERROR:' . $ex->getMessage() . '<br>';
-      }
-    }
-    return $rfq_editado;
-  }
-
   public static function guardar_total_price_total_cost_fedbid($conexion, $total_cost_fedbid, $total_price_fedbid, $id_rfq) {
     if (isset($conexion)) {
       try {
@@ -2558,19 +2436,6 @@ class RepositorioRfq {
     if (isset($conexion)) {
       try {
         $sql = 'UPDATE rfq SET invoice = 0 WHERE id = :id_rfq';
-        $sentencia = $conexion->prepare($sql);
-        $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
-        $sentencia->execute();
-      } catch (PDOException $ex) {
-        print 'ERROR:' . $ex->getMessage() . '<br>';
-      }
-    }
-  }
-
-  public static function remove_submitted_invoice($conexion, $id_rfq) {
-    if (isset($conexion)) {
-      try {
-        $sql = 'UPDATE rfq SET submitted_invoice = 0 WHERE id = :id_rfq';
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia->execute();

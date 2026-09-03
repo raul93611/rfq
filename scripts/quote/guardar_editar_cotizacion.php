@@ -24,7 +24,6 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
   $sources_sought = filter_input(INPUT_POST, 'sources_sought', FILTER_VALIDATE_INT);
   $fulfillment = filter_input(INPUT_POST, 'fulfillment', FILTER_SANITIZE_SPECIAL_CHARS);
   $invoice = filter_input(INPUT_POST, 'invoice', FILTER_SANITIZE_SPECIAL_CHARS);
-  $submitted_invoice = filter_input(INPUT_POST, 'submitted_invoice', FILTER_SANITIZE_SPECIAL_CHARS);
   $type_of_contract = filter_input(INPUT_POST, 'type_of_contract', FILTER_SANITIZE_SPECIAL_CHARS);
   $services_payment_term = filter_input(INPUT_POST, 'services_payment_term', FILTER_SANITIZE_SPECIAL_CHARS);
   $invoice_date = filter_input(INPUT_POST, 'invoice_date', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -172,16 +171,6 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
         Conexion::cerrar_conexion();
         $updateSheetStatus($id_rfq, $cotizacion_recuperada->getSheetRow(), 'AWARD');
         Redireccion::redirigir(INVOICE_QUOTES);
-      } elseif (!$cotizacion_recuperada->obtener_submitted_invoice() && $submitted_invoice === 'si') {
-        Conexion::abrir_conexion();
-        $conexion = Conexion::obtener_conexion();
-
-        RepositorioRfq::check_submitted_invoice_and_date($conexion, $id_rfq);
-        AuditTrailRepository::quote_status_audit_trail($conexion, 'Submitted Invoice', $id_rfq);
-
-        Conexion::cerrar_conexion();
-        $updateSheetStatus($id_rfq, $cotizacion_recuperada->getSheetRow(), 'AWARD');
-        Redireccion::redirigir(SUBMITTED_INVOICE_QUOTES);
       }
     }
 

@@ -11,6 +11,7 @@ $pm_conn      = Conexion::obtener_conexion();
 $pm_users     = RepositorioUsuario::getAllActiveUsers($pm_conn);
 usort($pm_users, fn($a, $b) => strcasecmp($a['nombre_usuario'], $b['nombre_usuario']));
 $pm_bid_types = TypeOfBidRepository::get_all($pm_conn);
+$pm_contract_types = TypeOfContractRepository::get_all($pm_conn);
 $pm_channels  = PipelineTableRepository::getDistinctChannels($pm_conn);
 Conexion::cerrar_conexion();
 $pm_statuses  = PipelineMetricsRepository::STATUSES;
@@ -126,6 +127,7 @@ $pm_statuses  = PipelineMetricsRepository::STATUSES;
         <?php
         $pm_cards = [
           ['key' => 'status',    'span' => 'full', 'title' => 'Status distribution',           'hint' => 'All pipeline buckets'],
+          ['key' => 'contractType', 'span' => 'full', 'title' => 'Quotes by Type of Contract',  'hint' => 'All quotes in period'],
           ['key' => 'byUser',    'span' => 'full', 'title' => 'Status by user',                 'hint' => 'Per-user pipeline breakdown'],
           ['key' => 'winloss',   'span' => '',     'title' => 'Win / Loss rate',                'hint' => 'Awarded · No Award · Pending'],
           ['key' => 'awards',    'span' => '',     'title' => 'Awards by service category',     'hint' => 'Won bids per category'],
@@ -203,6 +205,18 @@ $pm_statuses  = PipelineMetricsRepository::STATUSES;
               </div>
             </div>
             <div class="pt-field">
+              <span class="pt-field-label">Type of Contract</span>
+              <div class="pt-select-wrap">
+                <select class="pt-input pt-select" id="pt-f-contractType">
+                  <option value="">All</option>
+                  <?php foreach ($pm_contract_types as $ct): ?>
+                    <option value="<?= htmlspecialchars($ct->get_type_of_contract()); ?>"><?= htmlspecialchars($ct->get_type_of_contract()); ?></option>
+                  <?php endforeach; ?>
+                  <option value="Uncategorized">Uncategorized</option>
+                </select>
+              </div>
+            </div>
+            <div class="pt-field">
               <span class="pt-field-label">Designated User</span>
               <div class="pt-select-wrap">
                 <select class="pt-input pt-select" id="pt-f-user">
@@ -260,12 +274,12 @@ $pm_statuses  = PipelineMetricsRepository::STATUSES;
             <table class="pt-table">
               <colgroup>
                 <col class="pt-col-id"><col class="pt-col-created"><col class="pt-col-duedate"><col class="pt-col-enddate"><col class="pt-col-submitted"><col class="pt-col-channel"><col class="pt-col-email">
-                <col class="pt-col-status"><col class="pt-col-type"><col class="pt-col-user">
+                <col class="pt-col-status"><col class="pt-col-type"><col class="pt-col-contract"><col class="pt-col-user">
               </colgroup>
               <thead>
                 <tr>
                   <th>Quote ID</th><th>Created</th><th>Internal Due Date</th><th>End Date</th><th>Submitted</th><th>Channel</th><th>Code</th><th>Status</th>
-                  <th>Type of Bid</th><th>Designated User</th>
+                  <th>Type of Bid</th><th class="pt-th-wrap">Type of Contract</th><th>Designated User</th>
                 </tr>
               </thead>
               <tbody id="pt-tbody"></tbody>

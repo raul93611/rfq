@@ -20,7 +20,6 @@ define('EXCEL_ITEMS_TABLE', QUOTE_SC . 'excel_items_table/');
 define('REMOVE_AWARD', QUOTE_SC . 'remove_award/');
 define('REMOVE_FULFILLMENT', QUOTE_SC . 'remove_fulfillment/');
 define('REMOVE_INVOICE', QUOTE_SC . 'remove_invoice/');
-define('REMOVE_SUBMITTED_INVOICE', QUOTE_SC . 'remove_submitted_invoice/');
 define('SAVE_CHECKLIST', QUOTE_SC . 'save_checklist/');
 define('SAVE_INFORMATION', QUOTE_SC . 'save_information/');
 define('GENERATE_CHECKLIST_PDF', QUOTE_SC . 'generate_checklist_pdf/');
@@ -203,7 +202,6 @@ define('WEEKLY_PROJECTIONS_2022', PROJECTION . 'weekly_projections_2022');
 /********************************ACCOUNTING_CHECKBOX VIEWS*****************************************/
 define('ACCOUNTING', PERFIL . 'accounting/');
 define('INVOICE_QUOTES', ACCOUNTING . 'invoice_quotes');
-define('SUBMITTED_INVOICE_QUOTES', ACCOUNTING . 'submitted_invoice_quotes');
 /********************************TASKS VIEWS*****************************************/
 define('TASKS', PERFIL . 'tasks/');
 define('MY_TASKS', TASKS . 'my_tasks');

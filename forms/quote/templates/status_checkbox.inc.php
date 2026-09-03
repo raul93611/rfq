@@ -1,7 +1,6 @@
 <?php
 $canal = $cotizacion_recuperada->obtener_canal();
 $awardChecked = $cotizacion_recuperada->obtener_award() ? 'checked' : '';
-$submittedInvoiceChecked = $cotizacion_recuperada->obtener_submitted_invoice() ? 'checked' : '';
 $invoiceChecked = $cotizacion_recuperada->obtener_invoice() ? 'checked' : '';
 $fulfillmentChecked = $cotizacion_recuperada->obtener_fullfillment() ? 'checked' : '';
 $statusChecked = $cotizacion_recuperada->obtener_status() ? 'checked' : '';
@@ -14,10 +13,7 @@ if ($canal == 'Chemonics' && !$cotizacion_recuperada->obtener_award()) {
           </div>';
 } else {
   if ($cotizacion_recuperada->obtener_invoice()) {
-    echo '<div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" name="submitted_invoice" value="si" ' . $submittedInvoiceChecked . ' id="submitted_invoice">
-                <label class="custom-control-label" for="submitted_invoice">Submitted Invoice</label>
-              </div>';
+    // Invoice is terminal — no further checkbox renders.
   } elseif ($cotizacion_recuperada->isEnabledToInvoice() === true) {
     echo '<div class="custom-control custom-checkbox">
                 <input type="checkbox" class="custom-control-input" name="invoice" value="si" ' . $invoiceChecked . ' id="invoice">

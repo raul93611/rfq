@@ -230,6 +230,35 @@ try {
   $dUserWrong = PipelineMetricsRepository::getDrillDown($conexion, $buPeriod, ['type' => 'byUser', 'user' => $userA, 'key' => 'award']);
   check('drill byUser scoped to userA+award returns 0 (userA has no award)', 0, count($dUserWrong));
 
+  // ---- Type of Contract breakdown (feature: pipeline-type-of-contract.md) ----
+  echo "[Type of Contract breakdown]\n";
+  $CT_YEAR = 2095;
+  $ctPeriod = ['mode' => 'year', 'year' => $CT_YEAR];
+  insertQuote($conexion, $CT_YEAR, ['type_of_contract' => 'RFQ - VAR']);
+  insertQuote($conexion, $CT_YEAR, ['type_of_contract' => 'RFQ - VAR']);
+  insertQuote($conexion, $CT_YEAR, ['type_of_contract' => 'Professional Services']);
+  $ctBlank1 = insertQuote($conexion, $CT_YEAR, ['type_of_contract' => null]);
+  $ctBlank2 = insertQuote($conexion, $CT_YEAR, ['type_of_contract' => '']);
+
+  $ctSeries = PipelineMetricsRepository::contractTypeBreakdown($conexion, $ctPeriod);
+  $ctByCat = [];
+  foreach ($ctSeries as $c) { $ctByCat[$c['category']] = $c['count']; }
+  check('contract type: RFQ - VAR = 2', 2, $ctByCat['RFQ - VAR'] ?? 0);
+  check('contract type: Professional Services = 1', 1, $ctByCat['Professional Services'] ?? 0);
+  check('contract type: null + blank merge into one Uncategorized = 2', 2, $ctByCat['Uncategorized'] ?? 0);
+  check('contract type: exactly 3 non-zero buckets', 3, count($ctSeries));
+
+  $mCt = PipelineMetricsRepository::getMetrics($conexion, $ctPeriod);
+  check('getMetrics() wires contractType through', count($ctSeries), count($mCt['contractType']));
+
+  $dCt = PipelineMetricsRepository::getDrillDown($conexion, $ctPeriod, ['type' => 'contractType', 'category' => 'RFQ - VAR']);
+  check('drill contractType=RFQ - VAR returns 2', 2, count($dCt));
+  $dCtUncat = PipelineMetricsRepository::getDrillDown($conexion, $ctPeriod, ['type' => 'contractType', 'category' => 'Uncategorized']);
+  $dCtUncatIds = array_map(fn($r) => $r['id'], $dCtUncat);
+  check('drill contractType=Uncategorized returns both null and blank rows', true,
+    in_array($ctBlank1, $dCtUncatIds, true) && in_array($ctBlank2, $dCtUncatIds, true));
+  check('drill contractType=Uncategorized returns exactly 2', 2, count($dCtUncat));
+
 } finally {
   $conexion->rollBack(); // leave the DB exactly as we found it
 }

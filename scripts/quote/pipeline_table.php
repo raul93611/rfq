@@ -2,8 +2,8 @@
 /**
  * JSON: one page of the Bid Pipeline Metrics "Table" view.
  * Params (GET): period (mode=year|quarter|month|custom, year, quarter, month, from, to),
- *   page, and filters: quoteId, channel, emailCode, statuses[], bidType, user, dueDate,
- *   endDateFrom, endDateTo, submittedFrom, submittedTo.
+ *   page, and filters: quoteId, channel, emailCode, statuses[], bidType, contractType, user,
+ *   dueDate, endDateFrom, endDateTo, submittedFrom, submittedTo.
  * Each row carries everything the Quote Summary modal needs (name, value, docs, context).
  */
 if (!ControlSesion::sesion_iniciada()) {
@@ -47,6 +47,7 @@ $filters = [
   'emailCode'     => trim((string)($_GET['emailCode'] ?? '')),
   'statuses'      => $statuses,
   'bidType'       => trim((string)($_GET['bidType'] ?? '')),
+  'contractType'  => trim((string)($_GET['contractType'] ?? '')),
   'user'          => trim((string)($_GET['user'] ?? '')),
   'dueDate'       => $dueDate,
   'endDateFrom'   => $endDateFrom,

@@ -77,6 +77,8 @@ class Rfq {
   private $internal_due_date;
   private $qa;
   private $sources_sought;
+  private $pop_start_date;
+  private $pop_end_date;
 
   public function __construct(array $row) {
     $this->id = $row['id'] ?? null;
@@ -160,6 +162,8 @@ class Rfq {
     // Sources Sought submission sub-type. Coexists with status = 1 and is excluded
     // from win/loss math. Defaults to 0 (regular submission).
     $this->sources_sought = isset($row['sources_sought']) ? (int)$row['sources_sought'] : 0;
+    $this->pop_start_date = $row['pop_start_date'] ?? null;
+    $this->pop_end_date = $row['pop_end_date'] ?? null;
   }
 
   public function obtener_id() {
@@ -790,6 +794,14 @@ class Rfq {
 
   public function getSourcesSought() {
     return $this->sources_sought;
+  }
+
+  public function obtener_pop_start_date() {
+    return $this->pop_start_date;
+  }
+
+  public function obtener_pop_end_date() {
+    return $this->pop_end_date;
   }
 
   public function getInternalDueDate() {

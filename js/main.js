@@ -745,27 +745,4 @@ $(document).ready(function () {
       { data: 'type_of_contract' },
     ],
   });
-
-  // Initialize DataTable for #submitted_invoice_quotes_table
-  initializeDataTable('#submitted_invoice_quotes_table', {
-    ajax: {
-      url: '/rfq/submitted_invoice/submitted_invoice_quotes_table', // Custom URL
-      type: 'POST'
-    },
-    order: [[3, 'desc']], // Custom order
-    columns: [
-      {
-        data: 'id',
-        render: function (data, type) {
-          return type === 'display'
-            ? `<a href="/rfq/perfil/quote/editar_cotizacion/${data}">${data}</a>`
-            : data;
-        },
-      },
-      { data: 'email_code' },
-      { data: 'canal' },
-      { data: 'submitted_invoice_date' },
-      { data: 'type_of_contract' },
-    ],
-  });
 });

@@ -1,6 +1,5 @@
 <?php
 $statusColors = [
-  'Submitted Invoice'    => '#8e44ad',
   'Invoice'              => '#27ae60',
   'Fulfillment'          => '#2980b9',
   'Award'                => '#e67e22',
@@ -12,7 +11,6 @@ $statusColors = [
 ];
 
 $statusUrls = [
-  'submitted_invoice' => REMOVE_SUBMITTED_INVOICE,
   'invoice'           => REMOVE_INVOICE,
   'fulfillment'       => REMOVE_FULFILLMENT,
   'award'             => REMOVE_AWARD,
@@ -37,9 +35,7 @@ function renderStatus($text, $url = null, $date = null, $icon = 'fa-check') {
 
 $comments = $cotizacion_recuperada->obtener_comments();
 
-if ($cotizacion_recuperada->obtener_submitted_invoice()) {
-  renderStatus('Submitted Invoice', $statusUrls['submitted_invoice'] . $cotizacion_recuperada->obtener_id());
-} elseif ($cotizacion_recuperada->obtener_invoice()) {
+if ($cotizacion_recuperada->obtener_invoice()) {
   $invoiceDate = date("m/d/Y", strtotime($cotizacion_recuperada->obtener_invoice_date()));
   renderStatus('Invoice', $statusUrls['invoice'] . $cotizacion_recuperada->obtener_id(), $invoiceDate);
 } elseif ($cotizacion_recuperada->obtener_fullfillment()) {

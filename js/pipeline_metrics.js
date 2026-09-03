@@ -101,6 +101,7 @@
     $('#pm-subtitle').textContent = 'Reports · ' + periodLabel() + ' · ' + d.count + (d.count === 1 ? ' bid' : ' bids') + ' in pipeline';
     renderKpis(d);
     renderStatus(d);
+    renderContractType(d);
     renderByUser(d);
     renderWinLoss(d);
     renderCategory('awards', d.awardsByCategory, d);
@@ -203,6 +204,46 @@
         var tot = cur.reduce(function (a, b) { return a + b.count; }, 0);
         var pct = tot ? Math.round(it.count / tot * 100) : 0;
         return tip(it.color, it.label, state.show === 'percent' ? pct + '% · ' + it.count + ' bids' : it.count + ' bids · ' + pct + '%');
+      } },
+      states: { active: { filter: { type: 'darken', value: 0.85 } } }
+    });
+  }
+
+  /* ================= chart 1a: quotes by type of contract (donut) ================= */
+  function renderContractType(d) {
+    var data = d.contractType || [];
+    if (d.empty || data.length === 0) { setEmpty('contractType', true); return; }
+    setEmpty('contractType', false);
+    var total = data.reduce(function (a, b) { return a + b.count; }, 0);
+    mountOrUpdate('contractType', {
+      chart: {
+        type: 'donut', height: 320, fontFamily: APEX_FONT, animations: animCfg, toolbar: noToolbar,
+        events: { dataPointSelection: function (e, ctx, cf) {
+          var cur = state.data.contractType || [];
+          var it = cur[cf.dataPointIndex];
+          if (it) openDrill({ type: 'contractType', category: it.category }, it.category, categoryColor(it.category));
+        } }
+      },
+      series: data.map(function (x) { return x.count; }),
+      labels: data.map(function (x) { return x.category; }),
+      colors: data.map(function (x) { return categoryColor(x.category); }),
+      stroke: { width: 2, colors: ['#fff'] },
+      legend: { position: 'right', fontSize: '12px', labels: { colors: INK_500 }, itemMargin: { vertical: 2 },
+        markers: { width: 9, height: 9, radius: 3 },
+        formatter: function (name, opts) { return name + '  ·  ' + opts.w.globals.series[opts.seriesIndex]; } },
+      dataLabels: { enabled: false },
+      plotOptions: { pie: { donut: { size: '66%', labels: {
+        show: true,
+        name: { fontSize: '11px', color: INK_400, offsetY: 18 },
+        value: { fontSize: '26px', fontWeight: 700, color: '#0f1623', offsetY: -18, formatter: function (v) { return v; } },
+        total: { show: true, label: 'Total quotes', fontSize: '11px', color: INK_400, fontWeight: 600, formatter: function () { return String(total); } }
+      } } } },
+      tooltip: { custom: function (o) {
+        var cur = state.data.contractType || [];
+        var it = cur[o.seriesIndex];
+        var tot = cur.reduce(function (a, b) { return a + b.count; }, 0);
+        var pct = tot ? Math.round(it.count / tot * 100) : 0;
+        return tip(categoryColor(it.category), it.category, state.show === 'percent' ? pct + '% · ' + it.count + ' quotes' : it.count + ' quotes · ' + pct + '%');
       } },
       states: { active: { filter: { type: 'darken', value: 0.85 } } }
     });

@@ -376,10 +376,6 @@ switch ($partes_ruta[1] ?? null) {
         $id_rfq = $partes_ruta[3];
         $ruta_elegida = 'scripts/quote/remove_invoice.php';
         break;
-      case 'remove_submitted_invoice':
-        $id_rfq = $partes_ruta[3];
-        $ruta_elegida = 'scripts/quote/remove_submitted_invoice.php';
-        break;
       case 'delete_document':
         $id_rfq = $partes_ruta[3];
         $archivo = $partes_ruta[4];
@@ -827,15 +823,6 @@ switch ($partes_ruta[1] ?? null) {
     switch ($partes_ruta[2]) {
       case 'invoice_quotes_table':
         $ruta_elegida = 'scripts/invoice/invoice_quotes_table.php';
-        break;
-      default:
-        break;
-    }
-    break;
-  case 'submitted_invoice':
-    switch ($partes_ruta[2]) {
-      case 'submitted_invoice_quotes_table':
-        $ruta_elegida = 'scripts/submitted_invoice/submitted_invoice_quotes_table.php';
         break;
       default:
         break;

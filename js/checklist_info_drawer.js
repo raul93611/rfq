@@ -254,6 +254,21 @@
   if (checklistForm) checklistForm.addEventListener('submit', function (e) { e.preventDefault(); saveTab('checklist'); });
   if (informationForm) informationForm.addEventListener('submit', function (e) { e.preventDefault(); saveTab('information'); });
 
+  /* ---------- Period of Performance: clear control + start/end ordering ---------- */
+  var popStartInput = $('#pop_start_date'), popEndInput = $('#pop_end_date'), popClearBtn = $('#pop_clear');
+  if (popStartInput && popEndInput) {
+    popStartInput.addEventListener('change', function () { popEndInput.min = popStartInput.value || ''; });
+    popEndInput.addEventListener('change', function () { popStartInput.max = popEndInput.value || ''; });
+    popEndInput.min = popStartInput.value || '';
+    popStartInput.max = popEndInput.value || '';
+  }
+  if (popClearBtn) {
+    popClearBtn.addEventListener('click', function () {
+      if (popStartInput) { popStartInput.value = ''; popStartInput.max = ''; }
+      if (popEndInput) { popEndInput.value = ''; popEndInput.min = ''; }
+    });
+  }
+
   /* ---------- Documents tab — dropzone/upload widget + live count ---------- */
 
   function updateDocumentsCount(count) {
