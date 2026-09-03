@@ -6,14 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 All built. Detail for most lives in the matching `###` section below.
 
-Quote Inline Editing · SharePoint Sheet Sync · Comment Mentions & Notifications · Bid Requirement Fields (Site Visit/Q&A Deadline/Resumes) · Bid Pipeline Sync Controls · Bid Pipeline Metrics Dashboard · Pipeline Table View · 3-Year Annual Awards Comparison · Quote Lifecycle Audit Events · Write-Once Sheet Sync · Advanced Quote Search · Commercial Moving bid type + 50/50 payment term · Shared Notification Mailbox · Daily RFQ Digest Email · Quote Checklist & Info Drawer · Documents Drawer Tab + Custom File Widget · Import Items Enhancements (template download, append/replace mode, provider import) · Items & Services Table Redesign · Internal Due Date Table Filter + Required Field · Pipeline Status by User + Wider Drill-down Drawer · End Date Required + Pipeline Table Due-Date Columns · Pipeline Table Submitted Date Filter · Pipeline Table End Date Range Filter
-
-**Planned:** Period of Performance (optional PoP date range on quote info card) — planned. [features/period-of-performance.md](features/period-of-performance.md)
-**Planned:** Pipeline Type of Contract Breakdown (donut chart + table column/filter) — planned. [features/pipeline-type-of-contract.md](features/pipeline-type-of-contract.md)
-
-## Known Bugs
-
-- Remove "Submitted Invoice" status, migrate existing quotes to Invoice — planned. [bugs/remove-submitted-invoice-status.md](bugs/remove-submitted-invoice-status.md)
+Quote Inline Editing · SharePoint Sheet Sync · Comment Mentions & Notifications · Bid Requirement Fields (Site Visit/Q&A Deadline/Resumes) · Bid Pipeline Sync Controls · Bid Pipeline Metrics Dashboard · Pipeline Table View · 3-Year Annual Awards Comparison · Quote Lifecycle Audit Events · Write-Once Sheet Sync · Advanced Quote Search · Commercial Moving bid type + 50/50 payment term · Shared Notification Mailbox · Daily RFQ Digest Email · Quote Checklist & Info Drawer · Documents Drawer Tab + Custom File Widget · Import Items Enhancements (template download, append/replace mode, provider import) · Items & Services Table Redesign · Internal Due Date Table Filter + Required Field · Pipeline Status by User + Wider Drill-down Drawer · End Date Required + Pipeline Table Due-Date Columns · Pipeline Table Submitted Date Filter · Pipeline Table End Date Range Filter · Period of Performance · Pipeline Type of Contract Breakdown
 
 ## Environment
 
@@ -50,7 +43,7 @@ Conexion::cerrar_conexion();
 
 **Routes:** constants in [app/Bootstrap/routes.inc.php](app/Bootstrap/routes.inc.php); new routes need a constant there + a `case` in `index.php`.
 
-**Quote status flow:** `Rfq` progresses Created → Completed → Submitted → Award → Fulfillment → Invoice; `comments` encodes special statuses (No Bid, Cancelled, Not submitted). `isEnabledToFulfillment()`/`isEnabledToInvoice()` enforce transition prerequisites.
+**Quote status flow:** `Rfq` progresses Created → Completed → Submitted → Award → Fulfillment → Invoice (terminal — "Submitted Invoice" was removed; `submitted_invoice` column/getter kept for compatibility, run `sql/submitted_invoice_removal_backfill.sql` on prod). `comments` encodes special statuses (No Bid, Cancelled, Not submitted). `isEnabledToFulfillment()`/`isEnabledToInvoice()` enforce transition prerequisites.
 
 ### SharePoint Sheet Sync — write-once create-or-link
 
@@ -82,7 +75,7 @@ Action types: `status_change`, `field_modified`, `item_modified/created/deleted`
 
 **Win/Loss:** denominator = `submitted`+`award`+lost (`no_award_*`); sources-sought excluded. **Dollar-value:** every figure = product total + services subtotal (`SERVICES_JOIN`/`VALUE_EXPR`), never `rfq.total_price` alone.
 
-Mirrored by Sources Sought (`quote/sources_sought`) and No Award (`quote/no_award`, + Reason column). **Status by user**: one stacked bar per designated user (`getStatusByUser()`, INNER JOIN `usuarios`). Drill-down `byUser` needs `usuario_designado` in `getDrillDown()`'s inner subquery SELECT only. `.pm-drawer` is `50vw`. Tests: `tests/php/pipeline_metrics_test.php`, `tests/specs/09-pipeline-metrics.spec.js`.
+Mirrored by Sources Sought (`quote/sources_sought`) and No Award (`quote/no_award`, + Reason column). **Status by user**: one stacked bar per designated user (`getStatusByUser()`, INNER JOIN `usuarios`). Drill-down `byUser` needs `usuario_designado` in `getDrillDown()`'s inner subquery SELECT only. **Type of Contract donut** (`contractTypeBreakdown()`) sits right after Status distribution; category is the raw `type_of_contract` string, not a fixed enum — blank/null merge into one `Uncategorized` bucket via `COALESCE(NULLIF(...))`. `.pm-drawer` is `50vw`. Tests: `tests/php/pipeline_metrics_test.php`, `tests/specs/09-pipeline-metrics.spec.js`.
 
 ### Pipeline Table View
 
@@ -94,7 +87,7 @@ Mirrored by Sources Sought (`quote/sources_sought`) and No Award (`quote/no_awar
 
 **End Date column + required field** — `rfq.end_date` is `VARCHAR` (`MM/DD/YYYY HH:mm`), not a DATE column: needs `STR_TO_DATE(NULLIF(rfq.end_date, ''), "%m/%d/%Y %H:%i")` (unset is `''`, not SQL NULL). Required in the New Quote form + Information drawer; column sits right after `Created`. New Quote form's `#end_date` picker needs its own `autoUpdateInput: false` (not the shared `dateTimeOptions`) or daterangepicker fills today's date/time on init.
 
-**End Date + Submitted Date filters** — both from/to ranges, AND-combined like every other filter; a row with a blank/never-set date never matches once either bound is set; inverted range = empty, no error; counts as one active filter regardless of which bound(s) are set. Submitted Date is on `rfq.fecha_submitted` (nullable `DATE`, no migration); End Date reuses the `STR_TO_DATE`/`NULLIF` handling above. Both fields are double-width `.pt-field-wide`, reusing the same `.pt-daterange`/`.pt-date` pattern (parallel to the `pm-daterange` picker, `pt-` namespace); Submitted Date sits right after Designated User, End Date right after Internal Due Date. Tests: `tests/php/pipeline_table_test.php`, `tests/php/internal_due_date_test.php`, `tests/specs/09-pipeline-metrics.spec.js`, `tests/specs/11-checklist-info-drawer.spec.js`, `tests/specs/02-quote-list.spec.js`.
+**End Date + Submitted Date filters** — both from/to ranges, AND-combined like every other filter; a row with a blank/never-set date never matches once either bound is set; inverted range = empty, no error; counts as one active filter regardless of which bound(s) are set. Submitted Date is on `rfq.fecha_submitted` (nullable `DATE`, no migration); End Date reuses the `STR_TO_DATE`/`NULLIF` handling above. Both fields are double-width `.pt-field-wide`, reusing the same `.pt-daterange`/`.pt-date` pattern (parallel to the `pm-daterange` picker, `pt-` namespace); Submitted Date sits right after Designated User, End Date right after Internal Due Date. **Type of Contract** filter (single-select, `TypeOfContractRepository::get_all` + "Uncategorized") and column both sit right after Type of Bid. Tests: `tests/php/pipeline_table_test.php`, `tests/php/internal_due_date_test.php`, `tests/specs/09-pipeline-metrics.spec.js`, `tests/specs/11-checklist-info-drawer.spec.js`, `tests/specs/02-quote-list.spec.js`.
 
 ### Charts Tab — Annual Awards (3-year)
 
@@ -135,6 +128,8 @@ Contract-info cards on `perfil/quote/editar_cotizacion/{id}` are denser; old Che
 **Save endpoints** always return JSON (no redirect). Client must manually append `save_checklist=1`/`save_information=1` — `FormData`/`.serialize()` never include the submitting button's `name`, which these scripts gate on.
 
 **Old `/quote/checklist/{id}`/`/quote/information/{id}`** redirect via `Redireccion::redirigir1` (client `<script>`), not `header()` — `perfil.php` echoes the page shell first, so a header redirect fails silently. Test: `tests/php/checklist_info_drawer_test.php`, `tests/specs/11-checklist-info-drawer.spec.js`.
+
+**Period of Performance** — optional `pop_start_date`/`pop_end_date` on `rfq`, editable only in the Information drawer (not New Quote). Shown on the Quote Edit info card's secondary row only when at least one date is set — omitted entirely (not a dash) when both are blank. Logged as one `field_modified` event covering both columns. Test: `tests/php/period_of_performance_test.php`.
 
 ### Documents Drawer Tab + Custom File Widget
 
