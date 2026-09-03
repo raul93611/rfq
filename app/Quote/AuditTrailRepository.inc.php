@@ -102,7 +102,11 @@ class AuditTrailRepository {
     $designated_user_original,
     $ship_to,
     $ship_to_original,
-    $id_rfq
+    $id_rfq,
+    $pop_start_date = null,
+    $pop_start_date_original = null,
+    $pop_end_date = null,
+    $pop_end_date_original = null
   ) {
     if ($contract_number != $contract_number_original) {
       self::create_audit_trail_modified($connection, 'Contract Number', $contract_number, $contract_number_original, $id_rfq);
@@ -118,6 +122,18 @@ class AuditTrailRepository {
     }
     if ($ship_to != $ship_to_original) {
       self::create_audit_trail_modified($connection, 'Ship To', $ship_to, $ship_to_original, $id_rfq);
+    }
+    if ($pop_start_date != $pop_start_date_original || $pop_end_date != $pop_end_date_original) {
+      $formatPop = function ($start, $end) {
+        if (empty($start) && empty($end)) return '';
+        if (!empty($start) && !empty($end)) return $start . ' – ' . $end;
+        return $start ?: $end;
+      };
+      self::create_audit_trail_modified(
+        $connection, 'Period of Performance',
+        $formatPop($pop_start_date, $pop_end_date), $formatPop($pop_start_date_original, $pop_end_date_original),
+        $id_rfq
+      );
     }
   }
 
@@ -145,10 +161,6 @@ class AuditTrailRepository {
     $ship_to_original,
     $comments,
     $comments_original,
-    $pop_start_date,
-    $pop_start_date_original,
-    $pop_end_date,
-    $pop_end_date_original,
     $id_rfq
   ) {
     if ($type_of_bid != $type_of_bid_original) {
@@ -183,18 +195,6 @@ class AuditTrailRepository {
     }
     if ($comments != $comments_original) {
       self::create_audit_trail_modified($connection, 'Comments', $comments, $comments_original, $id_rfq);
-    }
-    if ($pop_start_date != $pop_start_date_original || $pop_end_date != $pop_end_date_original) {
-      $formatPop = function ($start, $end) {
-        if (empty($start) && empty($end)) return '';
-        if (!empty($start) && !empty($end)) return $start . ' – ' . $end;
-        return $start ?: $end;
-      };
-      self::create_audit_trail_modified(
-        $connection, 'Period of Performance',
-        $formatPop($pop_start_date, $pop_end_date), $formatPop($pop_start_date_original, $pop_end_date_original),
-        $id_rfq
-      );
     }
   }
 

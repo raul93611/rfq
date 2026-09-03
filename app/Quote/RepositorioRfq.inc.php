@@ -741,32 +741,36 @@ class RepositorioRfq {
     $gsa,
     $client_payment_terms,
     $bpa,
-    $id_rfq
+    $id_rfq,
+    $pop_start_date = null,
+    $pop_end_date = null
   ) {
     $cotizacion_editada = false;
     if (isset($conexion)) {
       try {
-        $sql = "UPDATE rfq SET 
-        ship_to = :ship_to, 
-        usuario_designado = :usuario_designado, 
-        email_code = :email_code, 
-        canal = :canal, 
-        contract_number = :contract_number, 
-        city = :city, 
-        zip_code = :zip_code, 
-        state = :state, 
-        client = :client, 
-        set_side = :set_side, 
-        poc = :poc, 
-        co = :co, 
-        estimated_delivery_date = STR_TO_DATE(:estimated_delivery_date, '%m/%d/%Y'), 
+        $sql = "UPDATE rfq SET
+        ship_to = :ship_to,
+        usuario_designado = :usuario_designado,
+        email_code = :email_code,
+        canal = :canal,
+        contract_number = :contract_number,
+        city = :city,
+        zip_code = :zip_code,
+        state = :state,
+        client = :client,
+        set_side = :set_side,
+        poc = :poc,
+        co = :co,
+        estimated_delivery_date = STR_TO_DATE(:estimated_delivery_date, '%m/%d/%Y'),
         file_document = :file_document,
         accounting = :accounting,
         shipping_address = :shipping_address,
         special_requirements = :special_requirements,
         gsa = :gsa,
         client_payment_terms = :client_payment_terms,
-        bpa = :bpa
+        bpa = :bpa,
+        pop_start_date = :pop_start_date,
+        pop_end_date = :pop_end_date
         WHERE id = :id_rfq
         ";
         $sentencia = $conexion->prepare($sql);
@@ -790,6 +794,8 @@ class RepositorioRfq {
         $sentencia->bindValue(':gsa', $gsa, PDO::PARAM_STR);
         $sentencia->bindValue(':client_payment_terms', $client_payment_terms, PDO::PARAM_STR);
         $sentencia->bindValue(':bpa', $bpa, PDO::PARAM_STR);
+        $sentencia->bindValue(':pop_start_date', $pop_start_date, PDO::PARAM_STR);
+        $sentencia->bindValue(':pop_end_date', $pop_end_date, PDO::PARAM_STR);
         $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia->execute();
         if ($sentencia) {
@@ -823,9 +829,7 @@ class RepositorioRfq {
     $resumes = null,
     $qa_deadline = null,
     $internal_due_date = null,
-    $qa = null,
-    $pop_start_date = null,
-    $pop_end_date = null
+    $qa = null
   ) {
     $cotizacion_editada = false;
     if (isset($conexion)) {
@@ -849,9 +853,7 @@ class RepositorioRfq {
         resumes = :resumes,
         qa_deadline = STR_TO_DATE(:qa_deadline, '%m/%d/%Y %H:%i'),
         internal_due_date = STR_TO_DATE(:internal_due_date, '%m/%d/%Y'),
-        qa = :qa,
-        pop_start_date = :pop_start_date,
-        pop_end_date = :pop_end_date
+        qa = :qa
         WHERE id = :id_rfq
         ";
         $sentencia = $conexion->prepare($sql);
@@ -874,8 +876,6 @@ class RepositorioRfq {
         $sentencia->bindValue(':qa_deadline', $qa_deadline, PDO::PARAM_STR);
         $sentencia->bindValue(':internal_due_date', $internal_due_date, PDO::PARAM_STR);
         $sentencia->bindValue(':qa', $qa, PDO::PARAM_INT);
-        $sentencia->bindValue(':pop_start_date', $pop_start_date, PDO::PARAM_STR);
-        $sentencia->bindValue(':pop_end_date', $pop_end_date, PDO::PARAM_STR);
         $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia->execute();
         if ($sentencia) {

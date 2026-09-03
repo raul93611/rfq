@@ -27,8 +27,6 @@ if (isset($_POST['save_information'])) {
     $qa_deadline       = !empty($_POST['qa_deadline'])       ? $_POST['qa_deadline']       : null;
     $internal_due_date = !empty($_POST['internal_due_date']) ? $_POST['internal_due_date'] : null;
     $qa                = isset($_POST['qa'])          && $_POST['qa']          !== '' ? (int)$_POST['qa']          : null;
-    $pop_start_date    = !empty($_POST['pop_start_date']) ? $_POST['pop_start_date'] : null;
-    $pop_end_date      = !empty($_POST['pop_end_date'])   ? $_POST['pop_end_date']   : null;
 
     // Save information
     RepositorioRfq::save_information(
@@ -52,9 +50,7 @@ if (isset($_POST['save_information'])) {
       $resumes,
       $qa_deadline,
       $internal_due_date,
-      $qa,
-      $pop_start_date,
-      $pop_end_date
+      $qa
     );
 
     // Persist description
@@ -126,10 +122,6 @@ if (isset($_POST['save_information'])) {
       $_POST['ship_to_original'],
       $_POST['comments'],
       $_POST['comments_original'],
-      $pop_start_date,
-      !empty($_POST['pop_start_date_original']) ? $_POST['pop_start_date_original'] : null,
-      $pop_end_date,
-      !empty($_POST['pop_end_date_original']) ? $_POST['pop_end_date_original'] : null,
       $_POST['id_rfq']
     );
 

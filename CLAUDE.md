@@ -129,7 +129,7 @@ Contract-info cards on `perfil/quote/editar_cotizacion/{id}` are denser; old Che
 
 **Old `/quote/checklist/{id}`/`/quote/information/{id}`** redirect via `Redireccion::redirigir1` (client `<script>`), not `header()` — `perfil.php` echoes the page shell first, so a header redirect fails silently. Test: `tests/php/checklist_info_drawer_test.php`, `tests/specs/11-checklist-info-drawer.spec.js`.
 
-**Period of Performance** — optional `pop_start_date`/`pop_end_date` on `rfq`, editable only in the Information drawer (not New Quote). Shown on the Quote Edit info card's secondary row only when at least one date is set — omitted entirely (not a dash) when both are blank. Logged as one `field_modified` event covering both columns. Test: `tests/php/period_of_performance_test.php`.
+**Period of Performance** — optional `pop_start_date`/`pop_end_date` on `rfq`, editable only in the Checklist drawer (not New Quote; moved off the Information drawer after initial launch). Shown on the Quote Edit info card's secondary row as a bold duration (`DateTime::diff()`, e.g. "3 months") with the exact dates as a muted sub-line, only when at least one date is set — omitted entirely (not a dash) when both are blank. Logged as one `field_modified` event via `checklist_events()`, covering both columns. Test: `tests/php/period_of_performance_test.php`.
 
 ### Documents Drawer Tab + Custom File Widget
 
