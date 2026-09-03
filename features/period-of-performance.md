@@ -2,7 +2,7 @@
 
 Optional date range on a quote representing the period during which the awarded contract is active, editable from the Information drawer and shown on the Quote Edit page's info card only when set.
 
-**Status:** planned
+**Status:** built
 
 ## User Flow
 
