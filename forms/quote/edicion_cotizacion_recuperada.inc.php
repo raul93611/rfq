@@ -37,12 +37,24 @@
     if ($refUrl) {
       $secondaryFields[] = ['label' => 'Reference URL', 'value' => '<a target="_blank" href="' . htmlspecialchars($refUrl) . '">' . htmlspecialchars($refUrl) . '</a>', 'icon' => 'fa-external-link-alt'];
     }
+    // Human duration between two dates, e.g. "1 year, 2 months" / "3 months" / "5 days".
+    function formatPopDuration($start, $end) {
+      $diff = (new DateTime($start))->diff(new DateTime($end));
+      $parts = [];
+      if ($diff->y > 0) $parts[] = $diff->y . ' year' . ($diff->y > 1 ? 's' : '');
+      if ($diff->m > 0) $parts[] = $diff->m . ' month' . ($diff->m > 1 ? 's' : '');
+      if (!$parts && $diff->d > 0) $parts[] = $diff->d . ' day' . ($diff->d > 1 ? 's' : '');
+      return $parts ? implode(', ', $parts) : 'Same day';
+    }
     $popStart = $cotizacion_recuperada->obtener_pop_start_date();
     $popEnd = $cotizacion_recuperada->obtener_pop_end_date();
     if ($popStart || $popEnd) {
-      $popValue = ($popStart && $popEnd)
-        ? date('n/j/Y', strtotime($popStart)) . ' – ' . date('n/j/Y', strtotime($popEnd))
-        : date('n/j/Y', strtotime($popStart ?: $popEnd));
+      if ($popStart && $popEnd) {
+        $popValue = htmlspecialchars(formatPopDuration($popStart, $popEnd))
+          . '<div class="quote-info-value-sub">' . date('n/j/Y', strtotime($popStart)) . ' – ' . date('n/j/Y', strtotime($popEnd)) . '</div>';
+      } else {
+        $popValue = date('n/j/Y', strtotime($popStart ?: $popEnd));
+      }
       $secondaryFields[] = ['label' => 'Period of Performance', 'value' => $popValue, 'icon' => 'fa-calendar-alt'];
     }
     ?>

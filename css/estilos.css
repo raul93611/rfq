@@ -1428,6 +1428,13 @@ tfoot th:first-child {
   font-size: 12px;
 }
 
+.quote-info-value-sub {
+  font-size: 11px;
+  font-weight: 500;
+  color: #8896a5;
+  margin-top: 2px;
+}
+
 /* Primary info row — 4 fixed columns, more prominent */
 .quote-info-primary {
   grid-template-columns: repeat(4, 1fr);
