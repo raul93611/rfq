@@ -85,6 +85,30 @@ test.describe('Bid Pipeline Metrics dashboard', () => {
     await page.waitForTimeout(1000);
     await expect(page.locator('[data-card="status"] [data-empty]')).toBeVisible();
   });
+
+  // feature: pipeline-type-of-contract.md
+  test('Quotes by Type of Contract donut renders right after Status distribution', async ({ page }) => {
+    await gotoDataRichYear(page);
+    const cardKeys = await page.locator('.pm-grid > [data-card]').evaluateAll(
+      (els) => els.map((el) => el.dataset.card)
+    );
+    const statusIdx = cardKeys.indexOf('status');
+    expect(cardKeys[statusIdx + 1]).toBe('contractType');
+    await expect(page.locator('[data-card="contractType"] .pm-card-title')).toHaveText('Quotes by Type of Contract');
+    await expect(page.locator('#pm-chart-contractType .apexcharts-canvas')).toBeVisible();
+  });
+
+  test('clicking a Type of Contract slice opens the drill-down drawer', async ({ page }) => {
+    await gotoDataRichYear(page);
+    await page.waitForSelector('#pm-chart-contractType .apexcharts-canvas', { timeout: 15000 });
+    // click the smallest slice, not the first (DESC-sorted by count): a slice covering
+    // most of the ring has a bounding box centered on the empty donut hole, so a
+    // force-click there misses the visible arc entirely.
+    const slice = page.locator('#pm-chart-contractType .apexcharts-pie-area').last();
+    await slice.click({ force: true });
+    await expect(page.locator('#pm-drawer')).toHaveClass(/is-open/);
+    await expect(page.locator('#pm-drawer-meta')).toContainText('quote');
+  });
 });
 
 test.describe('Bid Pipeline Metrics — Table view', () => {
@@ -166,5 +190,29 @@ test.describe('Bid Pipeline Metrics — Table view', () => {
     await page.click('#pt-clear');
     await expect(page.locator('#pt-f-submittedFrom')).toHaveValue('');
     await expect(page.locator('#pt-f-submittedTo')).toHaveValue('');
+  });
+
+  // feature: pipeline-type-of-contract.md
+  test('Type of Contract filter appears right after Type of Bid and Type of Contract column right after Type of Bid column', async ({ page }) => {
+    const labels = await page.locator('.pt-filters-grid .pt-field-label').allTextContents();
+    const bidTypeIdx = labels.indexOf('Type of Bid');
+    expect(labels[bidTypeIdx + 1]).toBe('Type of Contract');
+    await expect(page.locator('#pt-f-contractType')).toBeVisible();
+
+    const headers = await page.locator('.pt-table thead th').allTextContents();
+    const headerBidTypeIdx = headers.indexOf('Type of Bid');
+    expect(headers[headerBidTypeIdx + 1]).toBe('Type of Contract');
+  });
+
+  test('Type of Contract filter re-queries the server and counts as one active filter', async ({ page }) => {
+    const value = await page.locator('#pt-f-contractType option').nth(1).getAttribute('value');
+    const [req] = await Promise.all([
+      page.waitForRequest((r) => r.url().includes('/quote/pipeline_table') && r.url().includes('contractType=')),
+      page.selectOption('#pt-f-contractType', value),
+    ]);
+    expect(req.url()).toContain('contractType=' + encodeURIComponent(value));
+    await expect(page.locator('#pt-filters-count')).toHaveText('1 filter applied');
+    await page.click('#pt-clear');
+    await expect(page.locator('#pt-f-contractType')).toHaveValue('');
   });
 });

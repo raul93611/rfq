@@ -182,6 +182,32 @@ try {
   check('row carries submitted as m/d/Y', '03/20/2099', $sFromById[$sMar20]['submitted']);
   check('row with no fecha_submitted shows em dash', '—', array_column($all['rows'], 'submitted', 'id')[$qBid] ?? null);
 
+  // --- Type of Contract filter + column (feature: pipeline-type-of-contract.md) ---
+  $ctVar  = $mkRfq(['type_of_contract' => 'RFQ - VAR']);
+  $ctProf = $mkRfq(['type_of_contract' => 'Professional Services']);
+  $ctNone = $mkRfq(['type_of_contract' => null]);
+
+  $ctFilter = PipelineTableRepository::getPage($c, $year, array_merge($noF, ['contractType' => 'RFQ - VAR']), 0);
+  $ctFilterIds = array_column($ctFilter['rows'], 'id');
+  check('contractType filter -> only the RFQ - VAR row', [$ctVar], $ctFilterIds);
+
+  $ctUncatFilter = PipelineTableRepository::getPage($c, $year, array_merge($noF, ['contractType' => 'Uncategorized']), 0);
+  $ctUncatIds = array_column($ctUncatFilter['rows'], 'id');
+  check('contractType=Uncategorized filter includes the blank row', true, in_array($ctNone, $ctUncatIds, true));
+  check('contractType=Uncategorized filter excludes the RFQ - VAR row', false, in_array($ctVar, $ctUncatIds, true));
+
+  $byIdCt = [];
+  foreach ($all['rows'] as $r) $byIdCt[$r['id']] = $r;
+  $ctAll = PipelineTableRepository::getPage($c, $year, $noF, 0);
+  $byIdCtAll = [];
+  foreach ($ctAll['rows'] as $r) $byIdCtAll[$r['id']] = $r;
+  check('row carries typeOfContract label', 'RFQ - VAR', $byIdCtAll[$ctVar]['typeOfContract'] ?? null);
+  check('row with no type_of_contract shows Uncategorized', 'Uncategorized', $byIdCtAll[$ctNone]['typeOfContract'] ?? null);
+
+  // AND-combines with another filter (bidType + contractType together narrows further)
+  $ctAndBid = PipelineTableRepository::getPage($c, $year, array_merge($noF, ['contractType' => 'RFQ - VAR', 'bidType' => 'IT']), 0);
+  check('contractType + bidType AND-combine -> still just the one matching row', 1, $ctAndBid['total']);
+
 } finally {
   $c->rollBack();
   Conexion::cerrar_conexion();

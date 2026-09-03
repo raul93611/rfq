@@ -17,7 +17,7 @@
   var STATUS_BY_KEY = {};
   STATUSES.forEach(function (s) { STATUS_BY_KEY[s.key] = s; });
 
-  var EMPTY_FILTERS = function () { return { quoteId: '', channel: '', emailCode: '', statuses: [], bidType: '', user: '', dueDate: '', endDateFrom: '', endDateTo: '', submittedFrom: '', submittedTo: '' }; };
+  var EMPTY_FILTERS = function () { return { quoteId: '', channel: '', emailCode: '', statuses: [], bidType: '', contractType: '', user: '', dueDate: '', endDateFrom: '', endDateTo: '', submittedFrom: '', submittedTo: '' }; };
 
   var st = {
     period: null,
@@ -51,6 +51,7 @@
     if (f.emailCode.trim()) n++;
     if (f.statuses.length) n++;
     if (f.bidType) n++;
+    if (f.contractType) n++;
     if (f.user) n++;
     if (f.dueDate) n++;
     if (f.endDateFrom || f.endDateTo) n++;
@@ -67,6 +68,7 @@
     if (f.channel) q.push('channel=' + encodeURIComponent(f.channel));
     if (f.emailCode.trim()) q.push('emailCode=' + encodeURIComponent(f.emailCode.trim()));
     if (f.bidType) q.push('bidType=' + encodeURIComponent(f.bidType));
+    if (f.contractType) q.push('contractType=' + encodeURIComponent(f.contractType));
     if (f.user) q.push('user=' + encodeURIComponent(f.user));
     if (f.dueDate) q.push('dueDate=' + encodeURIComponent(f.dueDate));
     if (f.endDateFrom) q.push('endDateFrom=' + encodeURIComponent(f.endDateFrom));
@@ -99,7 +101,7 @@
     $('#pt-card-sub').textContent = st.total + (st.total === 1 ? ' quote' : ' quotes') + ' in this period';
 
     if (st.rows.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="10"><div class="pt-empty">'
+      tbody.innerHTML = '<tr><td colspan="11"><div class="pt-empty">'
         + '<div class="pt-empty-ico"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l3-3 3 2 4-5" opacity="0.45"/></svg></div>'
         + '<div class="pt-empty-title">No data for this period</div>'
         + '<div class="pt-empty-sub">' + (anyFilters ? 'Try removing a filter, or a different period.' : 'Try a different year, quarter, or month.') + '</div>'
@@ -116,6 +118,7 @@
           + '<td class="pt-td-mono">' + esc(b.emailCode) + '</td>'
           + '<td>' + statusPill(b.status) + '</td>'
           + '<td>' + esc(b.bidType) + '</td>'
+          + '<td class="pt-td-wrap" title="' + esc(b.typeOfContract) + '">' + esc(b.typeOfContract) + '</td>'
           + '<td class="pt-td-ellip" title="' + esc(b.user) + '">' + esc(b.user) + '</td>'
           + '</tr>';
       }).join('');
@@ -224,14 +227,14 @@
       var el = document.getElementById(id);
       if (el) el.addEventListener('input', function () { st.filters[map[id]] = el.value; onFilterChange(); });
     });
-    ['pt-f-channel', 'pt-f-bidType', 'pt-f-user', 'pt-f-dueDate', 'pt-f-endDateFrom', 'pt-f-endDateTo', 'pt-f-submittedFrom', 'pt-f-submittedTo'].forEach(function (id) {
+    ['pt-f-channel', 'pt-f-bidType', 'pt-f-contractType', 'pt-f-user', 'pt-f-dueDate', 'pt-f-endDateFrom', 'pt-f-endDateTo', 'pt-f-submittedFrom', 'pt-f-submittedTo'].forEach(function (id) {
       var el = document.getElementById(id), key = id.replace('pt-f-', '');
       if (el) el.addEventListener('change', function () { st.filters[key] = el.value; onFilterChange(true); });
     });
     var clear = $('#pt-clear');
     if (clear) clear.addEventListener('click', function () {
       st.filters = EMPTY_FILTERS();
-      ['pt-f-quoteId', 'pt-f-emailCode', 'pt-f-channel', 'pt-f-bidType', 'pt-f-user', 'pt-f-dueDate', 'pt-f-endDateFrom', 'pt-f-endDateTo', 'pt-f-submittedFrom', 'pt-f-submittedTo'].forEach(function (id) {
+      ['pt-f-quoteId', 'pt-f-emailCode', 'pt-f-channel', 'pt-f-bidType', 'pt-f-contractType', 'pt-f-user', 'pt-f-dueDate', 'pt-f-endDateFrom', 'pt-f-endDateTo', 'pt-f-submittedFrom', 'pt-f-submittedTo'].forEach(function (id) {
         var el = document.getElementById(id); if (el) el.value = '';
       });
       syncStatusMs();
@@ -265,6 +268,7 @@
       + '<div class="qs-field"><span class="qs-field-label">Designated User</span><span class="qs-field-val">' + esc(b.user) + '</span></div>'
       + '<div class="qs-field"><span class="qs-field-label">Channel</span><span class="qs-field-val">' + esc(b.channel) + '</span></div>'
       + '<div class="qs-field"><span class="qs-field-label">Type of Bid</span><span class="qs-field-val">' + esc(b.bidType) + '</span></div>'
+      + '<div class="qs-field"><span class="qs-field-label">Type of Contract</span><span class="qs-field-val">' + esc(b.typeOfContract) + '</span></div>'
       + '<div class="qs-field"><span class="qs-field-label">Created</span><span class="qs-field-val">' + esc(b.created) + '</span></div>'
       + '</div></div></div>'
       + '<div class="qs-foot">'

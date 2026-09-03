@@ -193,6 +193,7 @@ class PipelineMetricsRepository {
       'submittedByCategory' => self::categoryBreakdown($conexion, $period, 'submitted'),
       'pricing'             => self::pricingEffort($conexion, $period),
       'byUser'              => self::getStatusByUser($conexion, $period),
+      'contractType'        => self::contractTypeBreakdown($conexion, $period),
     ];
   }
 
@@ -259,6 +260,26 @@ class PipelineMetricsRepository {
   }
 
   /**
+   * Type of Contract breakdown over ALL quotes in the period (not status-filtered) —
+   * same "what does my whole pipeline look like by X" shape as the Status distribution
+   * donut. Blank/null values merge into a single 'Uncategorized' bucket. Only non-zero
+   * categories are returned (feature: pipeline-type-of-contract.md).
+   */
+  public static function contractTypeBreakdown($conexion, array $period) {
+    [$periodSql, $params] = self::periodClause($period);
+
+    $sql = "SELECT COALESCE(NULLIF(rfq.type_of_contract, ''), 'Uncategorized') AS category, COUNT(*) AS cnt
+            FROM rfq
+            WHERE rfq.deleted = 0 AND $periodSql
+            GROUP BY category
+            HAVING cnt > 0
+            ORDER BY cnt DESC, category ASC";
+    $rows = self::run($conexion, $sql, $params);
+
+    return array_map(fn($r) => ['category' => $r['category'], 'count' => (int)$r['cnt']], $rows);
+  }
+
+  /**
    * Pricing effort: of completed (priced) bids, how many landed in Submitted /
    * Not Submitted / No Bid. Total is the count of priced bids reached.
    */
@@ -303,6 +324,7 @@ class PipelineMetricsRepository {
     $sql = "SELECT id, email_code, name, type_of_bid, total_price, issue_date, bucket
             FROM (
               SELECT rfq.id, rfq.email_code, rfq.name, rfq.type_of_bid, rfq.usuario_designado,
+                     rfq.type_of_contract,
                      " . self::VALUE_EXPR . " AS total_price, rfq.issue_date, rfq.completado,
                      " . self::STATUS_CASE . " AS bucket
               FROM rfq" . self::SERVICES_JOIN . "
@@ -359,6 +381,14 @@ class PipelineMetricsRepository {
       if ($key === 'not_submitted') return "completado = 1 AND bucket = 'not_submitted'";
       if ($key === 'no_bid')        return "completado = 1 AND bucket = 'no_bid'";
       return null;
+    }
+    if ($type === 'contractType') {
+      $val = $spec['category'] ?? '';
+      if ($val === '' || $val === 'Uncategorized') {
+        return "(type_of_contract IS NULL OR type_of_contract = '')";
+      }
+      $params[':dct'] = $val;
+      return "type_of_contract = :dct";
     }
     if ($type === 'byUser') {
       $key = $spec['key'] ?? '';

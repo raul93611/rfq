@@ -34,9 +34,9 @@ class PipelineTableRepository {
     $total = (int)self::scalar($conexion, $countSql, $params);
 
     $offset = $page * self::PAGE_SIZE;
-    $rowsSql = "SELECT id, email_code, canal, type_of_bid, name, designated_username, value, bucket, created_at, internal_due_date, end_date, fecha_submitted
+    $rowsSql = "SELECT id, email_code, canal, type_of_bid, type_of_contract, name, designated_username, value, bucket, created_at, internal_due_date, end_date, fecha_submitted
       FROM (
-        SELECT rfq.id, rfq.email_code, rfq.canal, rfq.type_of_bid, rfq.name, rfq.created_at,
+        SELECT rfq.id, rfq.email_code, rfq.canal, rfq.type_of_bid, rfq.type_of_contract, rfq.name, rfq.created_at,
                rfq.internal_due_date, rfq.end_date, rfq.fecha_submitted,
                u.nombre_usuario AS designated_username,
                " . PipelineMetricsRepository::VALUE_EXPR . " AS value,
@@ -62,6 +62,7 @@ class PipelineTableRepository {
         'emailCode'   => $r['email_code'] !== '' && $r['email_code'] !== null ? $r['email_code'] : '—',
         'channel'     => self::displayChannel($r['canal']),
         'bidType'     => $r['type_of_bid'] !== '' && $r['type_of_bid'] !== null ? $r['type_of_bid'] : 'Uncategorized',
+        'typeOfContract' => $r['type_of_contract'] !== '' && $r['type_of_contract'] !== null ? $r['type_of_contract'] : 'Uncategorized',
         'user'        => $r['designated_username'] !== null ? $r['designated_username'] : 'Unassigned',
         'status'      => $r['bucket'],
         'statusLabel' => $labels[$r['bucket']] ?? $r['bucket'],
@@ -115,6 +116,14 @@ class PipelineTableRepository {
     if (!empty($filters['bidType'])) {
       $params[':bt'] = $filters['bidType'];
       $inner[] = "rfq.type_of_bid = :bt";
+    }
+    if (!empty($filters['contractType'])) {
+      if ($filters['contractType'] === 'Uncategorized') {
+        $inner[] = "(rfq.type_of_contract IS NULL OR rfq.type_of_contract = '')";
+      } else {
+        $params[':ct'] = $filters['contractType'];
+        $inner[] = "rfq.type_of_contract = :ct";
+      }
     }
     if (!empty($filters['user'])) {
       $params[':uid'] = (int)$filters['user'];
