@@ -2,7 +2,7 @@
 
 Add the existing `rfq.type_of_contract` field (RFQ, RFP Maintenance, RFP Installation, Professional Services, Moving and Logistics) as a new breakdown dimension on the Bid Pipeline page: a donut chart in Charts view, and a column + filter in Table view.
 
-**Status:** planned
+**Status:** built
 
 ## Why
 
