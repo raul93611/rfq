@@ -1,6 +1,6 @@
 # Proposal PDF uses services payment terms even when there are no service items
 
-Status: planned
+Status: fixed
 
 When a quote is flagged as a services-type bid but has zero service line items, the generated Proposal PDF still displays the services-specific payment terms instead of falling back to the item-level payment terms.
 

@@ -12,11 +12,11 @@ try {
     if ($cotizacion->isServices()) {
         $services = ServiceRepository::get_services($conexion, $id_rfq);
         $total_service = ServiceRepository::get_total($conexion, $id_rfq);
-        $payment_terms = $cotizacion->obtener_services_payment_term() ?? $cotizacion->obtener_payment_terms();
     } else {
+        $services = [];
         $total_service = 0;
-        $payment_terms = $cotizacion->obtener_payment_terms();
     }
+    $payment_terms = ProposalRepository::resolve_payment_terms($cotizacion, $services);
 } finally {
     // Ensure the database connection is closed
     Conexion::cerrar_conexion();
