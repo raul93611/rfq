@@ -8,6 +8,15 @@ class ProposalRepository{
     return $term === self::PAYMENT_TERM_SPLIT;
   }
 
+  // A services-type quote only warrants the services-specific payment term when it
+  // actually has service line items — otherwise fall back to the item-level term.
+  public static function resolve_payment_terms($cotizacion, array $services){
+    if ($cotizacion->isServices() && !empty($services)) {
+      return $cotizacion->obtener_services_payment_term() ?? $cotizacion->obtener_payment_terms();
+    }
+    return $cotizacion->obtener_payment_terms();
+  }
+
   /* Half the total, always summing back to the exact total. Odd cents go to the
      upfront half so the pair reconciles cleanly (8749.55 -> 4374.78 + 4374.77). */
   public static function split_5050($total){

@@ -107,6 +107,8 @@ Bid type "Commercial Moving" + payment term `50% Upfront / 50% on Completion`, s
 
 **No calc change:** 50/50 is a schedule, ×1 like Net 30 — every calc/PDF path only special-cases `Net 30/CC`. Quote-wide **all-or-nothing** mirroring in `js/quote.js`/`js/reQuote.js`. Split shown via `js/payment_split.js`; re-quote cost sheet gets no split block. Tests: `tests/js/payment_split.test.js`, `tests/php/commercial_moving_test.php`.
 
+**Proposal PDF payment terms:** `ProposalRepository::resolve_payment_terms($cotizacion, $services)` (used by `scripts/utilities/proposal.php`) picks `services_payment_term` only when the quote is services-type **and** has at least one service line item — a services-type quote with zero service items falls back to the item-level `payment_terms`, same as a non-services quote. Test: `tests/php/proposal_payment_terms_test.php`.
+
 ### Shared Notification Mailbox
 
 One admin-connected MS mailbox sends **all** system emails (mentions + Daily Digest), replacing the per-user connection that silently failed when the actor hadn't connected. `NotificationEmail::send()`/`::sendCustom()` both funnel through the same Graph `/me/sendMail` call and silent-no-op-when-disconnected gate.
@@ -129,7 +131,7 @@ Contract-info cards on `perfil/quote/editar_cotizacion/{id}` are denser; old Che
 
 **Old `/quote/checklist/{id}`/`/quote/information/{id}`** redirect via `Redireccion::redirigir1` (client `<script>`), not `header()` — `perfil.php` echoes the page shell first, so a header redirect fails silently. Test: `tests/php/checklist_info_drawer_test.php`, `tests/specs/11-checklist-info-drawer.spec.js`.
 
-**Period of Performance** — optional `pop_start_date`/`pop_end_date` on `rfq`, editable only in the Checklist drawer (not New Quote; moved off the Information drawer after initial launch). Shown on the Quote Edit info card's secondary row as a bold duration (`DateTime::diff()`, e.g. "3 months") with the exact dates as a muted sub-line, only when at least one date is set — omitted entirely (not a dash) when both are blank. Logged as one `field_modified` event via `checklist_events()`, covering both columns. Test: `tests/php/period_of_performance_test.php`.
+**Period of Performance** — optional `pop_start_date`/`pop_end_date` on `rfq`, editable only in the Checklist drawer (not New Quote; moved off the Information drawer after initial launch). Shown on the Quote Edit info card's secondary row as a bold duration (`DateTime::diff()`, e.g. "3 months") with the exact dates as a muted sub-line, only when at least one date is set — omitted entirely (not a dash) when both are blank. Logged as one `field_modified` event via `checklist_events()`, covering both columns. Formatting lives in `Rfq::getPeriodOfPerformanceDisplay()`, shared by the initial page render and `save_checklist.php`'s AJAX response so `js/checklist_info_drawer.js` can repaint the `#qed-pop-cell` info-card cell live after a save (create/update/remove) — same pattern as `sheet_sync.js`'s `ssRepaint`. Test: `tests/php/period_of_performance_test.php`.
 
 ### Documents Drawer Tab + Custom File Widget
 

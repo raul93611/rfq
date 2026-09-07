@@ -86,7 +86,11 @@ if (isset($_POST['save_checklist'])) {
     Conexion::cerrar_conexion();
 
     header('Content-Type: application/json');
-    echo json_encode(['success' => true, 'checklistCount' => $savedQuote->getChecklistCompletionCount()]);
+    echo json_encode([
+      'success' => true,
+      'checklistCount' => $savedQuote->getChecklistCompletionCount(),
+      'periodOfPerformance' => $savedQuote->getPeriodOfPerformanceDisplay(),
+    ]);
   } catch (Exception $e) {
     // Ensure the connection is closed in case of an error
     if (isset($conexion)) {
