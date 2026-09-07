@@ -162,3 +162,8 @@ Test: `tests/php/commercial_moving_test.php`, `tests/js/payment_split.test.js`, 
 **Re-quote services are their own re-solicited cost line, not margin-neutral** — `obtener_re_quote_total_cost()` sums `re_quote_services`, not the original quote's `services`: client price stays pinned to the original quote while cost gets re-solicited, so Net 30/CC on re-quote services is a real cost, same as for items. Don't "fix" this into cancelling to zero — tried and reverted. Test: `tests/php/re_quote_cc_profit_test.php`.
 
 **Re-quote CC payment terms**: the submit handler and `calcServices()`'s live preview must both select on `$('[name=payment_terms]')` (not a stale `input:radio` selector) and use the same `1.03` CC-fee constant `ReQuoteServiceRepository::calc_items_with_CC()` persists with — either mismatch silently diverges the on-screen preview from the saved/PDF total without erroring. Test: `tests/specs/14-re-quote-cc-payment-terms.spec.js`.
+
+## Known Bugs
+
+- `planned` — Period of Performance info card doesn't refresh after saving in the Checklist drawer; needs page reload. See `bugs/period-of-performance-stale-info-card.md`.
+- `planned` — Proposal PDF shows services payment terms even when a services-type quote has zero service items. See `bugs/proposal-payment-terms-empty-services.md`.
