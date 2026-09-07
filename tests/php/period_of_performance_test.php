@@ -11,6 +11,11 @@
  *     for Period of Performance when either date changes, and none when unchanged —
  *     same convention as every other Checklist drawer field.
  *
+ * Also covers Rfq::getPeriodOfPerformanceDisplay() — the shared formatter used by both
+ * the initial page render (forms/quote/edicion_cotizacion_recuperada.inc.php) and the
+ * save_checklist.php AJAX response, so the info card can repaint live after a save
+ * instead of requiring a page reload.
+ *
  * Transaction-isolated (ROLLBACK), same pattern as checklist_info_drawer_test.php.
  * Run:  docker exec lamp-php84 php /var/www/html/rfq/tests/php/period_of_performance_test.php
  */
@@ -133,6 +138,33 @@ try {
   $idNoPop = insertQuote($conexion, ['contract_number' => 'ORIG-2']);
   AuditTrailRepository::checklist_events($conexion, 'ORIG-2', 'ORIG-2', 'CID-TEST', 'CID-TEST', 'CIDTEST', 'CIDTEST', '1', '1', '', '', $idNoPop);
   check('no rows written when PoP args are omitted entirely', 0, count(readAudit($conexion, $idNoPop)));
+
+  echo "[getPeriodOfPerformanceDisplay: neither date set]\n";
+  $qNone = new Rfq(['pop_start_date' => null, 'pop_end_date' => null]);
+  check('null when both dates blank', null, $qNone->getPeriodOfPerformanceDisplay());
+
+  echo "[getPeriodOfPerformanceDisplay: both dates set — duration + date range]\n";
+  $qBoth = new Rfq(['pop_start_date' => '2027-01-01', 'pop_end_date' => '2027-04-01']);
+  $bothDisplay = $qBoth->getPeriodOfPerformanceDisplay();
+  check('duration computed for a 3-month range', '3 months', $bothDisplay['duration']);
+  check('display shows the formatted date range', '1/1/2027 – 4/1/2027', $bothDisplay['display']);
+
+  echo "[getPeriodOfPerformanceDisplay: only start date set — no duration]\n";
+  $qStartOnly = new Rfq(['pop_start_date' => '2027-06-01', 'pop_end_date' => null]);
+  $startOnlyDisplay = $qStartOnly->getPeriodOfPerformanceDisplay();
+  check('duration null when only one date is set', null, $startOnlyDisplay['duration']);
+  check('display shows the single date', '6/1/2027', $startOnlyDisplay['display']);
+
+  echo "[getPeriodOfPerformanceDisplay: only end date set — no duration]\n";
+  $qEndOnly = new Rfq(['pop_start_date' => null, 'pop_end_date' => '2027-09-15']);
+  $endOnlyDisplay = $qEndOnly->getPeriodOfPerformanceDisplay();
+  check('duration null when only end date is set', null, $endOnlyDisplay['duration']);
+  check('display shows the single date', '9/15/2027', $endOnlyDisplay['display']);
+
+  echo "[save_checklist.php JSON payload shape: periodOfPerformance mirrors getPeriodOfPerformanceDisplay]\n";
+  $savedFullDisplay = $savedFull->getPeriodOfPerformanceDisplay();
+  check('saved quote (full range) has a non-null display payload', true, $savedFullDisplay !== null);
+  check('saved quote (full range) duration matches a year range', '11 months', $savedFullDisplay['duration']);
 
 } finally {
   $conexion->rollBack();

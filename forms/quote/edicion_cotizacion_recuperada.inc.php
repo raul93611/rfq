@@ -37,30 +37,18 @@
     if ($refUrl) {
       $secondaryFields[] = ['label' => 'Reference URL', 'value' => '<a target="_blank" href="' . htmlspecialchars($refUrl) . '">' . htmlspecialchars($refUrl) . '</a>', 'icon' => 'fa-external-link-alt'];
     }
-    // Human duration between two dates, e.g. "1 year, 2 months" / "3 months" / "5 days".
-    function formatPopDuration($start, $end) {
-      $diff = (new DateTime($start))->diff(new DateTime($end));
-      $parts = [];
-      if ($diff->y > 0) $parts[] = $diff->y . ' year' . ($diff->y > 1 ? 's' : '');
-      if ($diff->m > 0) $parts[] = $diff->m . ' month' . ($diff->m > 1 ? 's' : '');
-      if (!$parts && $diff->d > 0) $parts[] = $diff->d . ' day' . ($diff->d > 1 ? 's' : '');
-      return $parts ? implode(', ', $parts) : 'Same day';
-    }
-    $popStart = $cotizacion_recuperada->obtener_pop_start_date();
-    $popEnd = $cotizacion_recuperada->obtener_pop_end_date();
-    if ($popStart || $popEnd) {
-      if ($popStart && $popEnd) {
-        $popValue = '<span class="quote-info-value-duration">' . htmlspecialchars(formatPopDuration($popStart, $popEnd)) . '</span>'
-          . '<div class="quote-info-value-sub">' . date('n/j/Y', strtotime($popStart)) . ' – ' . date('n/j/Y', strtotime($popEnd)) . '</div>';
-      } else {
-        $popValue = date('n/j/Y', strtotime($popStart ?: $popEnd));
-      }
-      $secondaryFields[] = ['label' => 'Period of Performance', 'value' => $popValue, 'icon' => 'fa-calendar-alt'];
+    $pop = $cotizacion_recuperada->getPeriodOfPerformanceDisplay();
+    if ($pop) {
+      $popValue = $pop['duration']
+        ? '<span class="quote-info-value-duration">' . htmlspecialchars($pop['duration']) . '</span>'
+          . '<div class="quote-info-value-sub">' . htmlspecialchars($pop['display']) . '</div>'
+        : htmlspecialchars($pop['display']);
+      $secondaryFields[] = ['id' => 'qed-pop-cell', 'label' => 'Period of Performance', 'value' => $popValue, 'icon' => 'fa-calendar-alt'];
     }
     ?>
     <div class="quote-info-grid quote-info-secondary">
       <?php foreach ($secondaryFields as $field): ?>
-        <div class="quote-info-cell">
+        <div class="quote-info-cell"<?= isset($field['id']) ? ' id="' . htmlspecialchars($field['id']) . '"' : ''; ?>>
           <div class="quote-info-label">
             <i class="fas <?= $field['icon']; ?>"></i> <?= $field['label']; ?>
           </div>

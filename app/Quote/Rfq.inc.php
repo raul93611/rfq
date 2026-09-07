@@ -804,6 +804,37 @@ class Rfq {
     return $this->pop_end_date;
   }
 
+  // Shared by the initial page render (edicion_cotizacion_recuperada.inc.php) and the
+  // save_checklist.php AJAX response, so the info card's live repaint after a save uses
+  // identical formatting to the server-rendered markup. Null when both dates are blank.
+  public function getPeriodOfPerformanceDisplay() {
+    $start = $this->pop_start_date;
+    $end = $this->pop_end_date;
+    if (!$start && !$end) {
+      return null;
+    }
+    if ($start && $end) {
+      return [
+        'duration' => self::formatPopDuration($start, $end),
+        'display' => date('n/j/Y', strtotime($start)) . ' – ' . date('n/j/Y', strtotime($end)),
+      ];
+    }
+    return [
+      'duration' => null,
+      'display' => date('n/j/Y', strtotime($start ?: $end)),
+    ];
+  }
+
+  // Human duration between two dates, e.g. "1 year, 2 months" / "3 months" / "5 days".
+  public static function formatPopDuration($start, $end) {
+    $diff = (new DateTime($start))->diff(new DateTime($end));
+    $parts = [];
+    if ($diff->y > 0) $parts[] = $diff->y . ' year' . ($diff->y > 1 ? 's' : '');
+    if ($diff->m > 0) $parts[] = $diff->m . ' month' . ($diff->m > 1 ? 's' : '');
+    if (!$parts && $diff->d > 0) $parts[] = $diff->d . ' day' . ($diff->d > 1 ? 's' : '');
+    return $parts ? implode(', ', $parts) : 'Same day';
+  }
+
   public function getInternalDueDate() {
     return $this->internal_due_date;
   }

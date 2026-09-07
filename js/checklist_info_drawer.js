@@ -190,6 +190,38 @@
     }
   }
 
+  /* ---------- live Period of Performance info-card cell ---------- */
+
+  // Mirrors Rfq::getPeriodOfPerformanceDisplay()'s markup from
+  // forms/quote/edicion_cotizacion_recuperada.inc.php so the AJAX repaint matches the
+  // server-rendered cell exactly (duration + sub-line dates, or a single plain date).
+  function updatePopCell(pop) {
+    var cell = $('#qed-pop-cell');
+    if (!pop) {
+      if (cell) cell.remove();
+      return;
+    }
+    if (!cell) {
+      var container = $('.quote-info-secondary');
+      if (!container) return;
+      cell = document.createElement('div');
+      cell.id = 'qed-pop-cell';
+      cell.className = 'quote-info-cell';
+      cell.innerHTML =
+        '<div class="quote-info-label"><i class="fas fa-calendar-alt"></i> Period of Performance</div>' +
+        '<div class="quote-info-value quote-info-value--secondary"></div>';
+      container.appendChild(cell);
+    }
+    var valueEl = cell.querySelector('.quote-info-value');
+    if (pop.duration) {
+      valueEl.innerHTML = '<span class="quote-info-value-duration"></span><div class="quote-info-value-sub"></div>';
+      valueEl.querySelector('.quote-info-value-duration').textContent = pop.duration;
+      valueEl.querySelector('.quote-info-value-sub').textContent = pop.display;
+    } else {
+      valueEl.textContent = pop.display;
+    }
+  }
+
   /* ---------- AJAX save ---------- */
 
   function showSavedPill(pill) {
@@ -233,6 +265,9 @@
           showSavedPill(pill);
           if (which === 'checklist' && typeof result.data.checklistCount === 'number') {
             updateChecklistCount(result.data.checklistCount);
+          }
+          if (which === 'checklist' && 'periodOfPerformance' in result.data) {
+            updatePopCell(result.data.periodOfPerformance);
           }
           if (which === 'information' && result.data.sheetSync && typeof window.ssRepaint === 'function') {
             var ss = result.data.sheetSync;

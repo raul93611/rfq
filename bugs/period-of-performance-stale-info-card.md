@@ -1,6 +1,6 @@
 # Period of Performance doesn't refresh on info card after saving
 
-Status: planned
+Status: fixed
 
 Setting Period of Performance in the Checklist drawer saves correctly, but the quote's info card keeps showing the old value (or nothing) until the page is reloaded.
 
