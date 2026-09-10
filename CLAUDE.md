@@ -6,9 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 All built. Detail for most lives in the matching `###` section below.
 
-Quote Inline Editing · SharePoint Sheet Sync · Comment Mentions & Notifications · Bid Requirement Fields (Site Visit/Q&A Deadline/Resumes) · Bid Pipeline Sync Controls · Bid Pipeline Metrics Dashboard · Pipeline Table View · 3-Year Annual Awards Comparison · Quote Lifecycle Audit Events · Write-Once Sheet Sync · Advanced Quote Search · Commercial Moving bid type + 50/50 payment term · Shared Notification Mailbox · Daily RFQ Digest Email · Quote Checklist & Info Drawer · Documents Drawer Tab + Custom File Widget · Import Items Enhancements (template download, append/replace mode, provider import) · Items & Services Table Redesign · Internal Due Date Table Filter + Required Field · Pipeline Status by User + Wider Drill-down Drawer · End Date Required + Pipeline Table Due-Date Columns · Pipeline Table Submitted Date Filter · Pipeline Table End Date Range Filter · Period of Performance · Pipeline Type of Contract Breakdown
-
-Planned: Working on It Pipeline Status ([features/pipeline-working-on-it-status.md](features/pipeline-working-on-it-status.md))
+Quote Inline Editing · SharePoint Sheet Sync · Comment Mentions & Notifications · Bid Requirement Fields (Site Visit/Q&A Deadline/Resumes) · Bid Pipeline Sync Controls · Bid Pipeline Metrics Dashboard · Pipeline Table View · 3-Year Annual Awards Comparison · Quote Lifecycle Audit Events · Write-Once Sheet Sync · Advanced Quote Search · Commercial Moving bid type + 50/50 payment term · Shared Notification Mailbox · Daily RFQ Digest Email · Quote Checklist & Info Drawer · Documents Drawer Tab + Custom File Widget · Import Items Enhancements (template download, append/replace mode, provider import) · Items & Services Table Redesign · Internal Due Date Table Filter + Required Field · Pipeline Status by User + Wider Drill-down Drawer · End Date Required + Pipeline Table Due-Date Columns · Pipeline Table Submitted Date Filter · Pipeline Table End Date Range Filter · Period of Performance · Pipeline Type of Contract Breakdown · Working on It Pipeline Status
 
 ## Environment
 
@@ -73,7 +71,7 @@ Action types: `status_change`, `field_modified`, `item_modified/created/deleted`
 
 `rfq.created_at` (auto-stamped) is the cohort date, replacing hand-typed `issue_date` whose unparseable values silently dropped rows. **On prod also run `sql/quote_created_at_revert_backfill.sql`** to NULL the local `issue_date` backfill.
 
-`PipelineMetricsRepository::STATUS_CASE` mirrors `Rfq::getSheetStatus()` — keep in sync (10 buckets: tbd, bid, no_bid, submitted, submitted_ss, award, no_award_pricing, no_award_technical, cancelled, not_submitted).
+`PipelineMetricsRepository::STATUS_CASE` mirrors `Rfq::getSheetStatus()` — keep in sync (11 buckets: tbd, working_on_it, bid, no_bid, submitted, submitted_ss, award, no_award_pricing, no_award_technical, cancelled, not_submitted). `working_on_it` (`comments = 'Working on it'`, violet `#8b5cf6`) is checked after the `completado = 1` bid clause, so pricing always wins once a quote is priced; it's in `PENDING_KEYS`, not `SUBMITTED_KEYS`/`WON_KEYS`/`LOST_KEYS`. Every consumer (Table filter, Advanced Search, Excel export) reads `STATUSES` dynamically, so no other file needed a change.
 
 **Win/Loss:** denominator = `submitted`+`award`+lost (`no_award_*`); sources-sought excluded. **Dollar-value:** every figure = product total + services subtotal (`SERVICES_JOIN`/`VALUE_EXPR`), never `rfq.total_price` alone.
 
@@ -99,7 +97,7 @@ Mirrored by Sources Sought (`quote/sources_sought`) and No Award (`quote/no_awar
 
 ### Advanced Quote Search
 
-`perfil/search_quotes` **Advanced** toggle expands a filter panel (status multi-select over the 10 pipeline buckets, designated user, bid/contract type, date range + field, price range, client, state — AND-combined) + a Status pill column. Off = identical to basic. Empty search = all non-deleted quotes; inverted ranges = empty state, no error.
+`perfil/search_quotes` **Advanced** toggle expands a filter panel (status multi-select over the 11 pipeline buckets, designated user, bid/contract type, date range + field, price range, client, state — AND-combined) + a Status pill column. Off = identical to basic. Empty search = all non-deleted quotes; inverted ranges = empty state, no error.
 
 Separate backend pair (`getAdvancedSearchedQuotes`/`...Count`); status reuses `STATUS_CASE` verbatim. `js/searchQuotes.js` swaps DataTable column sets. Tests: `tests/php/advanced_search_test.php`, `tests/specs/10-advanced-search.spec.js` (`PW_CHANNEL=chrome`).
 
