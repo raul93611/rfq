@@ -86,17 +86,21 @@ try {
   $ids['bid'] = insertQuote($conexion, $YEAR, ['completado' => 1, 'comments' => 'No comments']);
   $ids['tbd'] = insertQuote($conexion, $YEAR, ['completado' => 0, 'comments' => 'No comments']);
   $ids['can'] = insertQuote($conexion, $YEAR, ['completado' => 1, 'comments' => 'Cancelled']);
+  // "Working on it" bucket (feature: pipeline-working-on-it-status.md)
+  $ids['woi'] = insertQuote($conexion, $YEAR, ['completado' => 0, 'comments' => 'Working on it', 'total_price' => 15]);
+  // pricing wins once completado=1, even if comments still says "Working on it" -> buckets as 'bid'
+  $ids['woiPriced'] = insertQuote($conexion, $YEAR, ['completado' => 1, 'comments' => 'Working on it', 'total_price' => 25]);
 
   $m = PipelineMetricsRepository::getMetrics($conexion, $period);
 
   // ---- KPIs ----
   echo "[KPIs]\n";
-  check('total pipeline count', 12, $m['count']);
-  check('totalValue sum', 665.0, (float)$m['totalValue']);
+  check('total pipeline count', 14, $m['count']);
+  check('totalValue sum', 705.0, (float)$m['totalValue']);
   check('submittedCount (all submitted-keys)', 7, $m['submittedCount']);
   check('awardedCount', 2, $m['awardedCount']);
   check('lostCount', 2, $m['lostCount']);
-  check('pendingCount (tbd+bid+submitted+ss)', 5, $m['pendingCount']);
+  check('pendingCount (tbd+working_on_it+bid+submitted+ss)', 7, $m['pendingCount']);
 
   // ---- status distribution ----
   echo "[Status distribution]\n";
@@ -109,10 +113,11 @@ try {
   check('status: submitted_ss=1', 1, $byKey['submitted_ss']);
   check('status: not_submitted=1', 1, $byKey['not_submitted']);
   check('status: no_bid=1', 1, $byKey['no_bid']);
-  check('status: bid=1', 1, $byKey['bid']);
+  check('status: bid=2 (original bid + Working on it once priced)', 2, $byKey['bid']);
   check('status: tbd=1', 1, $byKey['tbd']);
   check('status: cancelled=1', 1, $byKey['cancelled']);
-  check('status series has all 10 buckets', 10, count($m['status']));
+  check('status: working_on_it=1 (priced one buckets as bid instead)', 1, $byKey['working_on_it']);
+  check('status series has all 11 buckets', 11, count($m['status']));
 
   // ---- win/loss math (denom = submitted(2)+award(2)+lost(2) = 6; rate = 2/6) ----
   echo "[Win/Loss]\n";
@@ -140,7 +145,7 @@ try {
   echo "[Pricing effort]\n";
   $pb = [];
   foreach ($m['pricing']['buckets'] as $b) { $pb[$b['key']] = $b['count']; }
-  check('pricing total (completado=1)', 11, $m['pricing']['total']);
+  check('pricing total (completado=1)', 12, $m['pricing']['total']);
   check('pricing submitted (submitted-keys, priced)', 7, $pb['submitted']);
   check('pricing not_submitted', 1, $pb['not_submitted']);
   check('pricing no_bid', 1, $pb['no_bid']);
@@ -155,6 +160,9 @@ try {
   check('drill category Services submitted returns 4', 4, count($d3));
   $d4 = PipelineMetricsRepository::getDrillDown($conexion, $period, ['type' => 'priced', 'key' => 'no_bid']);
   check('drill priced no_bid returns 1', 1, count($d4));
+  $d5 = PipelineMetricsRepository::getDrillDown($conexion, $period, ['type' => 'status', 'key' => 'working_on_it']);
+  check('drill status=working_on_it returns 1 (the unpriced one only)', 1, count($d5));
+  check('drill working_on_it row is the unpriced quote', $ids['woi'], $d5[0]['id'] ?? null);
   $hasShape = !empty($d) && isset($d[0]['id'], $d[0]['code'], $d[0]['name'], $d[0]['category'], $d[0]['value'], $d[0]['status']);
   check('drill row shape has required fields', true, $hasShape);
 
@@ -168,11 +176,11 @@ try {
   // ---- quarter/month scoping (rows are in Q1 / March) ----
   echo "[Period scoping]\n";
   $q1 = PipelineMetricsRepository::getMetrics($conexion, ['mode' => 'quarter', 'year' => $YEAR, 'quarter' => 1]);
-  check('Q1 count = 12', 12, $q1['count']);
+  check('Q1 count = 14', 14, $q1['count']);
   $q2 = PipelineMetricsRepository::getMetrics($conexion, ['mode' => 'quarter', 'year' => $YEAR, 'quarter' => 2]);
   check('Q2 count = 0', 0, $q2['count']);
   $mar = PipelineMetricsRepository::getMetrics($conexion, ['mode' => 'month', 'year' => $YEAR, 'month' => 3]);
-  check('March count = 12', 12, $mar['count']);
+  check('March count = 14', 14, $mar['count']);
   $apr = PipelineMetricsRepository::getMetrics($conexion, ['mode' => 'month', 'year' => $YEAR, 'month' => 4]);
   check('April count = 0', 0, $apr['count']);
 
@@ -219,7 +227,7 @@ try {
   check('byUser: userZ total = 2', 2, $byUser[1]['total']);
   check('byUser: userZ award count = 1', 1, $byUser[1]['counts']['award']);
   check('byUser: userZ bid count = 1', 1, $byUser[1]['counts']['bid']);
-  check('byUser: all 10 status keys present, zero-filled', 10, count($byUser[0]['counts']));
+  check('byUser: all 11 status keys present, zero-filled', 11, count($byUser[0]['counts']));
 
   $mFull = PipelineMetricsRepository::getMetrics($conexion, $buPeriod);
   check('getMetrics() wires byUser through', count($byUser), count($mFull['byUser']));

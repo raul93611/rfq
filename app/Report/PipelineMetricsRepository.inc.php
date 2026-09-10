@@ -27,12 +27,14 @@ class PipelineMetricsRepository {
       WHEN rfq.comments = 'Cancelled' THEN 'cancelled'
       WHEN rfq.comments IN ('No Bid','Manufacturer in the Bid','Expired due date','Supplier did not provide a quote','Others') THEN 'no_bid'
       WHEN rfq.completado = 1 THEN 'bid'
+      WHEN rfq.comments = 'Working on it' THEN 'working_on_it'
       ELSE 'tbd'
     END";
 
-  /** Ordered status vocabulary — the 10 buckets, with display label + chart color. */
+  /** Ordered status vocabulary — the 11 buckets, with display label + chart color. */
   const STATUSES = [
     ['key' => 'tbd',                'label' => 'TBD',                        'color' => '#9aa6b6'],
+    ['key' => 'working_on_it',      'label' => 'Working on it',              'color' => '#8b5cf6'],
     ['key' => 'bid',                'label' => 'Bid',                        'color' => '#2db4e8'],
     ['key' => 'no_bid',             'label' => 'No Bid',                     'color' => '#7d8ba0'],
     ['key' => 'submitted',          'label' => 'Submitted',                  'color' => '#4f6ef0'],
@@ -48,7 +50,7 @@ class PipelineMetricsRepository {
   const SUBMITTED_KEYS = ['submitted', 'submitted_ss', 'award', 'no_award_pricing', 'no_award_technical'];
   const WON_KEYS       = ['award'];
   const LOST_KEYS      = ['no_award_pricing', 'no_award_technical'];
-  const PENDING_KEYS   = ['tbd', 'bid', 'submitted', 'submitted_ss'];
+  const PENDING_KEYS   = ['tbd', 'working_on_it', 'bid', 'submitted', 'submitted_ss'];
 
   /** Pricing-effort sub-buckets (of completed/priced bids). */
   const PRICING_BUCKETS = [

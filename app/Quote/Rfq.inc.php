@@ -789,6 +789,9 @@ class Rfq {
     if ($this->completado == 1) {
       return 'BID';
     }
+    if ($this->comments === 'Working on it') {
+      return 'WORKING ON IT';
+    }
     return 'TBD';
   }
 

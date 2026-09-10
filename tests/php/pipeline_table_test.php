@@ -59,12 +59,13 @@ try {
   $qBid       = $mkRfq(['completado' => 1]);                       // 'bid'
   $qSubmitted = $mkRfq(['completado' => 1, 'status' => 1]);        // 'submitted'
   $qAward     = $mkRfq(['completado' => 1, 'award' => 1, 'usuario_designado' => $userB]); // 'award'
+  $qWoi       = $mkRfq(['completado' => 0, 'comments' => 'Working on it']); // 'working_on_it' (feature: pipeline-working-on-it-status.md)
 
   $year = ['mode' => 'year', 'year' => 2099];
   $noF  = ['quoteId' => '', 'channel' => '', 'emailCode' => '', 'statuses' => [], 'bidType' => '', 'user' => ''];
 
   $all = PipelineTableRepository::getPage($c, $year, $noF, 0);
-  check('table: 3 quotes in 2099', 3, $all['total']);
+  check('table: 4 quotes in 2099', 4, $all['total']);
 
   $byId = [];
   foreach ($all['rows'] as $r) $byId[$r['id']] = $r;
@@ -76,13 +77,18 @@ try {
   $awardOnly = PipelineTableRepository::getPage($c, $year, array_merge($noF, ['statuses' => ['award']]), 0);
   check('status filter award -> 1', 1, $awardOnly['total']);
 
+  // "Working on it" status filter (feature: pipeline-working-on-it-status.md)
+  $woiOnly = PipelineTableRepository::getPage($c, $year, array_merge($noF, ['statuses' => ['working_on_it']]), 0);
+  check('status filter working_on_it -> 1', 1, $woiOnly['total']);
+  check('status filter working_on_it -> the right row', $qWoi, $woiOnly['rows'][0]['id'] ?? null);
+
   // designated-user filter (qAward is assigned to userB)
   $userFilter = PipelineTableRepository::getPage($c, $year, array_merge($noF, ['user' => $userB]), 0);
   check('designated-user filter -> 1', 1, $userFilter['total']);
 
   // custom range covering June 2099
   $custom = PipelineTableRepository::getPage($c, ['mode' => 'custom', 'from' => '2099-01-01', 'to' => '2099-12-31'], $noF, 0);
-  check('custom range covering the rows -> 3', 3, $custom['total']);
+  check('custom range covering the rows -> 4', 4, $custom['total']);
   // inverted range -> empty, no error
   $inverted = PipelineTableRepository::getPage($c, ['mode' => 'custom', 'from' => '2099-12-31', 'to' => '2099-01-01'], $noF, 0);
   check('inverted custom range -> 0', 0, $inverted['total']);
