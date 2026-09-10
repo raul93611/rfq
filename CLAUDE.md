@@ -8,6 +8,8 @@ All built. Detail for most lives in the matching `###` section below.
 
 Quote Inline Editing · SharePoint Sheet Sync · Comment Mentions & Notifications · Bid Requirement Fields (Site Visit/Q&A Deadline/Resumes) · Bid Pipeline Sync Controls · Bid Pipeline Metrics Dashboard · Pipeline Table View · 3-Year Annual Awards Comparison · Quote Lifecycle Audit Events · Write-Once Sheet Sync · Advanced Quote Search · Commercial Moving bid type + 50/50 payment term · Shared Notification Mailbox · Daily RFQ Digest Email · Quote Checklist & Info Drawer · Documents Drawer Tab + Custom File Widget · Import Items Enhancements (template download, append/replace mode, provider import) · Items & Services Table Redesign · Internal Due Date Table Filter + Required Field · Pipeline Status by User + Wider Drill-down Drawer · End Date Required + Pipeline Table Due-Date Columns · Pipeline Table Submitted Date Filter · Pipeline Table End Date Range Filter · Period of Performance · Pipeline Type of Contract Breakdown
 
+Planned: Working on It Pipeline Status ([features/pipeline-working-on-it-status.md](features/pipeline-working-on-it-status.md))
+
 ## Environment
 
 PHP app on a LAMP stack inside Docker (`docker-compose-lamp`), served at `http://localhost/rfq/`.
