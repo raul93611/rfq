@@ -49,6 +49,11 @@ On production only, also run `sql/quote_created_at_revert_backfill.sql` after
 `quote_created_at_migration.sql` (see that file's header — local keeps a historical
 backfill that prod should not).
 
+Also run `sql/rfq_name_unescape_backfill.sql` **once** on production: it decodes quote
+names that New Quote used to HTML-escape at save time (`&amp;` → `&`). It decodes one
+level per run, so don't re-run it. Rows already written to the SharePoint sheet keep the
+old text in column D (sync is write-once) — fix those cells by hand if needed.
+
 `quote_watchers_drop.sql` drops the retired `quote_watchers` table. Skip it if this
 environment never ran `quote_watchers_migration.sql`.
 

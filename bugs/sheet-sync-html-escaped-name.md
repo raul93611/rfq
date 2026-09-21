@@ -2,7 +2,7 @@
 
 Quote names containing `&` (or other HTML-special characters) sync to the SharePoint pipeline sheet as their HTML entity (`&amp;`) instead of the literal character.
 
-**Status:** planned
+**Status:** fixed
 
 ## Steps to Reproduce
 

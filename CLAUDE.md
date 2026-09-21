@@ -8,10 +8,6 @@ All built. Detail for most lives in the matching `###` section below.
 
 Quote Inline Editing · SharePoint Sheet Sync · Comment Mentions & Notifications · Bid Requirement Fields (Site Visit/Q&A Deadline/Resumes) · Bid Pipeline Sync Controls · Bid Pipeline Metrics Dashboard · Pipeline Table View · 3-Year Annual Awards Comparison · Quote Lifecycle Audit Events · Write-Once Sheet Sync · Advanced Quote Search · Commercial Moving bid type + 50/50 payment term · Shared Notification Mailbox · Daily RFQ Digest Email · Quote Checklist & Info Drawer · Documents Drawer Tab + Custom File Widget · Import Items Enhancements (template download, append/replace mode, provider import) · Items & Services Table Redesign · Internal Due Date Table Filter + Required Field · Pipeline Status by User + Wider Drill-down Drawer · End Date Required + Pipeline Table Due-Date Columns · Pipeline Table Submitted Date Filter · Pipeline Table End Date Range Filter · Period of Performance · Pipeline Type of Contract Breakdown · Working on It Pipeline Status
 
-## Known Bugs
-
-- **Sheet Sync Shows HTML-Escaped Characters in Opportunity Name** — status: planned. Quote `name` is HTML-escaped at save time on creation, so `&` syncs to the sheet (and renders elsewhere) as `&amp;`. See [bugs/sheet-sync-html-escaped-name.md](bugs/sheet-sync-html-escaped-name.md).
-
 ## Environment
 
 PHP app on a LAMP stack inside Docker (`docker-compose-lamp`), served at `http://localhost/rfq/`.
@@ -24,7 +20,7 @@ PHP app on a LAMP stack inside Docker (`docker-compose-lamp`), served at `http:/
 
 **Generate users:** `/genera_usuario`.
 
-**Tests:** PHP (`tests/php/`, `docker exec lamp-php83 php /var/www/html/rfq/tests/php/<file>`); Node (`tests/js/`, `node --test`); Playwright (`tests/specs/`, `cd tests && PW_CHANNEL=chrome npx playwright test`). No lint.
+**Tests:** PHP (`tests/php/`, `docker exec lamp-php84 php /var/www/html/rfq/tests/php/<file>`); Node (`tests/js/`, `node --test`); Playwright (`tests/specs/`, `cd tests && PW_CHANNEL=chrome npx playwright test`). No lint.
 
 ## Architecture
 
@@ -56,6 +52,7 @@ Non-destructive: may create a missing row, never overwrites/deletes an existing 
 - Persists only on **establishment** (created, linked to a new row, or prior status ≠ `synced`): status update + audit event. No-op = zero Graph writes, no audit row. Delete never touches the sheet.
 - **`sync_to_sheet` is the sole auto-sync gate** (not bid type, not child/master-link). `Sync to Sheet` → create-or-link + flag=1; `Break Sync` → flag=0 (keeps `sheet_row`); `copyRfq` → 0.
 - **Columns:** app owns A,B,C,D,G,H,J,L,M,N,Q,T; **E,F,I,K,O,P,R,S are human-owned**, blanked only on a brand-new row.
+- **`rfq.name` is stored raw** (`trim()` only — New Quote and `save_information.php` alike). Never `htmlspecialchars()` at save: column D is plain text and render sites already escape on output. Legacy escaped rows: run `sql/rfq_name_unescape_backfill.sql` **once** on prod (decodes one level per run). Test: `tests/php/quote_name_escaping_test.php`.
 
 ### Unified Audit Trail
 
