@@ -96,7 +96,7 @@ function createAndInsertQuote($validador, $usuario_designado) {
     'bpa' => null,
     'reference_url' => Input::test_input($_POST["reference_url"]),
     'priority' => isset($_POST['priority_level']) ? $_POST['priority_level'] : null,
-    'name' => !empty($_POST['name']) ? htmlspecialchars(trim($_POST['name']), ENT_QUOTES, 'UTF-8') : null,
+    'name' => !empty($_POST['name']) ? trim($_POST['name']) : null,
     'sync_to_sheet'    => isset($_POST['sync_to_sheet']) ? 1 : 0,
     'site_visit'       => isset($_POST['site_visit'])  && $_POST['site_visit']  !== '' ? (int)$_POST['site_visit']  : null,
     'resumes'          => isset($_POST['resumes'])     && $_POST['resumes']     !== '' ? (int)$_POST['resumes']     : null,
