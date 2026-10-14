@@ -417,5 +417,14 @@ class AuditTrailRepository {
     $audit_trail = new AuditTrail('', $id_rfq, $_SESSION['user']->obtener_nombre_usuario(), 'document_updated', $_SESSION['user']->obtener_id(), $message, '');
     self::insert_audit_trail($connection, $audit_trail);
   }
+
+  // ---- Partner Opportunity Sync events (Sync filter tab) ----
+  // Unlike the helpers above these take an explicit actor: most partner events fire from a webhook
+  // or cron with no session, and are attributed to the "Partner Integration" service user.
+  // $type: partner_link | partner_unlink | partner_sync_in | partner_removed
+  public static function partner_event($connection, $type, $message, $id_rfq, $username, $id_user) {
+    $audit_trail = new AuditTrail('', $id_rfq, $username, $type, $id_user, $message, '');
+    self::insert_audit_trail($connection, $audit_trail);
+  }
 }
 ?>
