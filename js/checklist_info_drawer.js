@@ -276,7 +276,7 @@
             var tone = ss.status === 'synced' ? 'synced' : (ss.status === 'failed' ? 'failed' : 'never');
             window.ssRepaint(tone, ss.syncAt);
           }
-          if (which === 'information' && result.data.partner && window.PartnerShare) {
+          if (result.data.partner && window.PartnerShare) {
             window.PartnerShare.repaint(result.data.partner);
           }
         } else {

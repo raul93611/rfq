@@ -181,12 +181,7 @@ if (isset($_POST['save_information'])) {
         'row'    => $finalQuote->getSheetRow(),
       ],
       // Repaints the header badges + Solicitation # info card without a reload (js/partner_share.js).
-      'partner' => [
-        'state'           => $finalQuote->getPartnerLinkState(),
-        'syncedAt'        => $finalQuote->getPartnerSharedUpdatedAt() ? gmdate('c', strtotime($finalQuote->getPartnerSharedUpdatedAt() . ' UTC')) : null,
-        'needsAssignment' => (int)$finalQuote->getPartnerNeedsAssignment() === 1,
-        'solicitation'    => (string)$finalQuote->getSolicitationNumber(),
-      ],
+      'partner' => $finalQuote->getPartnerSummary(),
     ]);
   } catch (Exception $e) {
     // Ensure the connection is closed in case of an error

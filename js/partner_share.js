@@ -109,7 +109,8 @@
     badge.addEventListener('click', function () {
       var open = document.getElementById('qed-open-information');
       if (open) open.click();
-      var owner = document.querySelector('[data-pp-owner]');
+      // The owner field also exists on the Checklist tab; the badge points at Information's.
+      var owner = document.querySelector('#information_form [data-pp-owner]') || document.querySelector('[data-pp-owner]');
       if (owner) {
         owner.classList.add('is-hl');
         var select = owner.querySelector('select');

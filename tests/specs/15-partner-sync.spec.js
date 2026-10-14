@@ -11,7 +11,7 @@ function fixtures() {
   return JSON.parse(fs.readFileSync(path.join(__dirname, '../.fixtures.json'), 'utf-8'));
 }
 
-const DOCS_ROOT = path.join(__dirname, '../../documentos');
+const AUTH_FILE = path.join(__dirname, '../.auth/session.json');
 
 async function resetPartnerState(rfqId) {
   await query(
@@ -24,6 +24,16 @@ async function resetPartnerState(rfqId) {
 
 // The custom checkbox hides the native input, so click its label like a user would.
 const shareToggle = (page) => page.locator('label.sync-check[for="share_with_partner"]');
+
+// Choose an owner different from the one currently selected (positions shift when the current
+// owner is not in the RFQ-role list and is injected as the first option).
+async function chooseOtherOwner(page, selector) {
+  const other = await page.locator(selector).evaluate((sel) => {
+    const o = Array.from(sel.options).find((x) => x.value !== sel.value);
+    return o ? o.value : null;
+  });
+  await page.selectOption(selector, other);
+}
 
 test.describe('Partner sync — New Quote form', () => {
   test('Solicitation # is optional until Share with partner is on, then requires a value inline', async ({ page }) => {
@@ -103,6 +113,67 @@ test.describe('Partner sync — Information drawer + header badges', () => {
     await expect(page.locator('#share_with_partner')).toBeChecked();
   });
 
+  test('Needs assignment: the badge opens the owner hint; saving unchanged keeps it, choosing an owner clears it', async ({ page }) => {
+    const { userId } = fixtures();
+    await query(`UPDATE rfq SET share_with_partner = 1, solicitation_number = 'PW-ASSIGN', solicitation_key = 'PW-ASSIGN',
+      partner_record_id = 'P-ASSIGN', partner_linked_at = UTC_TIMESTAMP(), partner_shared_updated_at = UTC_TIMESTAMP(),
+      partner_needs_assignment = 1, usuario_designado = ? WHERE id = ?`, [userId, rfqId]);
+    await page.reload();
+    const badge = page.locator('[data-testid="badge-needs-assignment"]');
+    await expect(badge).toBeVisible();
+    await expect(page.locator('[data-testid="badge-linked"]')).toBeVisible();
+
+    // The badge opens the Information drawer on the flagged owner field.
+    await page.click('#pp-assign-badge');
+    await expect(page.locator('#qed-drawer')).toHaveClass(/is-open/);
+    // The owner field exists on both the Checklist and Information tabs; the badge points at Information's.
+    await expect(page.locator('#information_form [data-pp-owner]')).toHaveClass(/is-hl/);
+    await expect(page.locator('#information_form [data-pp-owner] .pp-hint')).toContainText('Choose who should own this quote');
+
+    // Saving without choosing must neither clear the flag nor hand the quote to the first user in the list.
+    await page.fill('#internal_due_date', '02/15/2026');
+    await Promise.all([
+      page.waitForResponse((res) => res.url().includes('/quote/save_information/') && res.status() === 200),
+      page.click('#qed-information-save-btn'),
+    ]);
+    let [row] = await query('SELECT partner_needs_assignment AS n, usuario_designado AS u FROM rfq WHERE id = ?', [rfqId]);
+    expect(row.n).toBe(1);
+    expect(row.u).toBe(userId);
+    await expect(badge).toBeVisible();
+
+    // Choosing a different owner resolves it, live.
+    await chooseOtherOwner(page, '#information_form #usuario_designado');
+    await Promise.all([
+      page.waitForResponse((res) => res.url().includes('/quote/save_information/') && res.status() === 200),
+      page.click('#qed-information-save-btn'),
+    ]);
+    [row] = await query('SELECT partner_needs_assignment AS n, usuario_designado AS u FROM rfq WHERE id = ?', [rfqId]);
+    expect(row.n).toBe(0);
+    expect(row.u).not.toBe(userId);
+    await expect(page.locator('[data-testid="badge-needs-assignment"]')).toHaveCount(0);
+    await expect(page.locator('[data-testid="badge-linked"]')).toBeVisible();
+  });
+
+  test('Needs assignment also clears when the owner is chosen on the Checklist tab', async ({ page }) => {
+    const { userId } = fixtures();
+    await query(`UPDATE rfq SET share_with_partner = 1, solicitation_number = 'PW-ASSIGN2', solicitation_key = 'PW-ASSIGN2',
+      partner_record_id = 'P-ASSIGN2', partner_linked_at = UTC_TIMESTAMP(), partner_shared_updated_at = UTC_TIMESTAMP(),
+      partner_needs_assignment = 1, usuario_designado = ? WHERE id = ?`, [userId, rfqId]);
+    await page.reload();
+    await expect(page.locator('[data-testid="badge-needs-assignment"]')).toBeVisible();
+
+    await page.click('#qed-open-checklist');
+    await chooseOtherOwner(page, '#cl_usuario_designado');
+    await Promise.all([
+      page.waitForResponse((res) => res.url().includes('/quote/save_checklist/') && res.status() === 200),
+      page.click('#qed-checklist-save-btn'),
+    ]);
+    const [row] = await query('SELECT partner_needs_assignment AS n, usuario_designado AS u FROM rfq WHERE id = ?', [rfqId]);
+    expect(row.n).toBe(0);
+    expect(row.u).not.toBe(userId);
+    await expect(page.locator('[data-testid="badge-needs-assignment"]')).toHaveCount(0);
+  });
+
   test('turning sharing off removes the badge and queues a removed notice', async ({ page }) => {
     await query("UPDATE rfq SET share_with_partner = 1, solicitation_number = 'PW-OFF', solicitation_key = 'PW-OFF', partner_shared_updated_at = UTC_TIMESTAMP() WHERE id = ?", [rfqId]);
     await page.reload();
@@ -122,23 +193,32 @@ test.describe('Partner sync — Information drawer + header badges', () => {
 });
 
 test.describe('Partner sync — Documents drawer per-file share', () => {
-  let rfqId, dir;
+  // Files are created through the app itself (its upload endpoint + its real checklist-PDF
+  // generator), never by writing to documentos/ from the host: that folder is owned by the web
+  // server user once any spec uploads to it, and writing there as the host user fails with EACCES.
+  let rfqId;
   const upload = 'pw-share-me.pdf';
-  const generated = 'PWCODE(proposal).pdf';
+  const generated = 'TEST001(checklist).pdf'; // "<code>(checklist).pdf" — the fixture quote's code is TEST001
 
-  test.beforeAll(async () => {
-    ({ rfqId } = fixtures());
-    dir = path.join(DOCS_ROOT, String(rfqId));
-    fs.mkdirSync(dir, { recursive: true });
-    fs.writeFileSync(path.join(dir, upload), 'uploaded by a user');
-    fs.writeFileSync(path.join(dir, generated), 'generated by the app');
-  });
-  test.afterAll(async () => {
-    for (const f of [upload, generated]) { try { fs.unlinkSync(path.join(dir, f)); } catch (e) { /* already gone */ } }
-    try { fs.rmdirSync(dir); } catch (e) { /* other files remain — fine */ }
+  test.beforeAll(() => { ({ rfqId } = fixtures()); });
+  test.afterAll(async ({ browser }) => {
+    const ctx = await browser.newContext({ storageState: AUTH_FILE });
+    for (const f of [upload, generated]) {
+      await ctx.request.post(`http://localhost/rfq/quote/delete_document/${rfqId}/${encodeURIComponent(f)}`, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+    }
+    await ctx.close();
     await resetPartnerState(rfqId);
   });
-  test.beforeEach(async () => { await resetPartnerState(rfqId); });
+  test.beforeEach(async ({ page }) => {
+    await resetPartnerState(rfqId);
+    const up = await page.request.post(`http://localhost/rfq/quote/load_img/${rfqId}`, {
+      headers: { 'X-Requested-With': 'XMLHttpRequest' },
+      multipart: { 'archivos_ejemplo[]': { name: upload, mimeType: 'application/pdf', buffer: Buffer.from('uploaded by a user') } },
+    });
+    expect((await up.json()).result).toBe('1');
+    // The app's own generator writes "<code>(checklist).pdf" into the quote folder.
+    expect((await page.request.get(`http://localhost/rfq/quote/generate_checklist_pdf/${rfqId}`)).ok()).toBe(true);
+  });
 
   const rowFor = (page, name) => page.locator('.doc-file-row', { hasText: name });
 

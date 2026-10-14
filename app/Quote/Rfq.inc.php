@@ -876,6 +876,16 @@ class Rfq {
     return $this->partner_shared_updated_at;
   }
 
+  /** The partner state the UI repaints after a save: header badges + Solicitation # card. */
+  public function getPartnerSummary() {
+    return [
+      'state'           => $this->getPartnerLinkState(),
+      'syncedAt'        => $this->partner_shared_updated_at ? gmdate('c', strtotime($this->partner_shared_updated_at . ' UTC')) : null,
+      'needsAssignment' => (int)$this->partner_needs_assignment === 1,
+      'solicitation'    => (string)$this->solicitation_number,
+    ];
+  }
+
   public function getQa() {
     return $this->qa;
   }
