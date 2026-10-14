@@ -135,6 +135,7 @@ $flash_disconnected = isset($_GET['mailbox_disconnected']);
   </div>
 </div>
 
+<script src="<?= asset_url('js/partner_share.js'); ?>"></script>
 <script src="<?= asset_url('js/partner_admin.js'); ?>"></script>
 <script>
 (function () {

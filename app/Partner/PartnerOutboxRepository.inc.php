@@ -19,12 +19,12 @@ class PartnerOutboxRepository {
    * sent absorbs this one (the fetch the partner makes is authoritative), so a burst of edits is
    * one webhook, not many. Returns false when coalesced.
    */
-  public static function enqueue($conexion, $idRfq, $event, array $payload, $nowTs = null) {
+  public static function enqueue($conexion, $idRfq, $event, array $payload) {
     $stmt = $conexion->prepare('SELECT COUNT(*) FROM partner_webhook_outbox
         WHERE id_rfq = :r AND event = :e AND delivered_at IS NULL AND failed_at IS NULL');
     $stmt->execute([':r' => $idRfq, ':e' => $event]);
     if ((int)$stmt->fetchColumn() > 0) return false;
-    $now = $nowTs ?: time();
+    $now = time();
     $conexion->prepare('INSERT INTO partner_webhook_outbox (id_rfq, event, payload, attempts, next_attempt_at, created_at)
         VALUES (:r, :e, :p, 0, :n, :c)')
       ->execute([':r' => $idRfq, ':e' => $event, ':p' => json_encode($payload), ':n' => self::utc($now), ':c' => self::utc($now)]);

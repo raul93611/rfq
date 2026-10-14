@@ -95,9 +95,8 @@ class PartnerSyncService {
     return $id === false ? null : (int)$id;
   }
 
-  /** ['username','id'] for the audit trail: an explicit actor, else the session user, else the service user. */
-  private static function actor($conexion, array $ctx = []) {
-    if (!empty($ctx['actor'])) return $ctx['actor'];
+  /** ['username','id'] for the audit trail: the session user when there is one, else the service user. */
+  private static function actor($conexion) {
     if (!empty($_SESSION['user']) && is_object($_SESSION['user'])) {
       return ['username' => $_SESSION['user']->obtener_nombre_usuario(), 'id' => $_SESSION['user']->obtener_id()];
     }
@@ -117,13 +116,13 @@ class PartnerSyncService {
   /* ------------------------------------------------------------------ payload */
 
   /** The light notice body queued in the outbox: what changed, never the data itself. */
-  public static function noticePayload(array $row, $event, $nowTs = null) {
+  public static function noticePayload(array $row, $event) {
     return [
       'event' => $event,
       'elogic_id' => (int)$row['id'],
       'solicitation_number' => $row['solicitation_number'],
       'record_id' => $row['partner_record_id'],
-      'occurred_at' => gmdate('Y-m-d\TH:i:s\Z', $nowTs ?: time()),
+      'occurred_at' => gmdate('Y-m-d\TH:i:s\Z'),
     ];
   }
 
@@ -170,14 +169,13 @@ class PartnerSyncService {
 
   /**
    * Bring one quote's partner state in line with reality. Idempotent: calling it twice changes
-   * nothing the second time. ctx: nowTs, actor ['username','id'], reason (for the unlink audit line).
+   * nothing the second time. ctx: reason (for the unlink audit line).
    * Returns ['action' => none|shared|updated|restored|tombstoned].
    */
   public static function reconcile($conexion, $idRfq, array $ctx = []) {
     $row = PartnerShareRepository::row($conexion, $idRfq);
     if (!$row) return ['action' => 'none'];
-    $now = $ctx['nowTs'] ?? time();
-    $nowUtc = self::utc($now);
+    $nowUtc = self::utc();
     $isShared = (int)$row['share_with_partner'] === 1 && (int)$row['deleted'] === 0;
 
     if ($isShared) {
@@ -188,11 +186,10 @@ class PartnerSyncService {
       if ($restored || $first || $hash !== $row['partner_payload_hash']) {
         $conexion->prepare('UPDATE rfq SET partner_shared_updated_at = :t, partner_payload_hash = :h, partner_removed_at = NULL WHERE id = :id')
           ->execute([':t' => $nowUtc, ':h' => $hash, ':id' => $idRfq]);
-        PartnerOutboxRepository::enqueue($conexion, $idRfq, 'opportunity.updated',
-          self::noticePayload($row, 'opportunity.updated', $now), $now);
+        PartnerOutboxRepository::enqueue($conexion, $idRfq, 'opportunity.updated', self::noticePayload($row, 'opportunity.updated'));
         $action = $restored ? 'restored' : ($first ? 'shared' : 'updated');
       }
-      PartnerDocumentRepository::reconcileShared($conexion, $idRfq, $now);
+      PartnerDocumentRepository::reconcileShared($conexion, $idRfq);
       return ['action' => $action];
     }
 
@@ -201,44 +198,39 @@ class PartnerSyncService {
       $wasLinked = $row['partner_record_id'] !== null;
       $conexion->prepare('UPDATE rfq SET partner_removed_at = :t, partner_record_id = NULL, partner_linked_at = NULL WHERE id = :id')
         ->execute([':t' => $nowUtc, ':id' => $idRfq]);
-      PartnerOutboxRepository::enqueue($conexion, $idRfq, 'opportunity.removed',
-        self::noticePayload($row, 'opportunity.removed', $now), $now);
+      PartnerOutboxRepository::enqueue($conexion, $idRfq, 'opportunity.removed', self::noticePayload($row, 'opportunity.removed'));
       self::audit($conexion, 'partner_unlink',
         '<b>Unlinked from partner</b> · ' . self::esc($ctx['reason'] ?? ((int)$row['deleted'] === 1 ? 'Quote deleted' : 'Share with partner turned off')),
-        $idRfq, self::actor($conexion, $ctx));
+        $idRfq, self::actor($conexion));
       return ['action' => 'tombstoned', 'was_linked' => $wasLinked];
     }
     return ['action' => 'none'];
   }
 
   /** Cron safety net: reconcile every quote that is shared or was shared and not yet tombstoned. */
-  public static function scanAll($conexion, array $ctx = []) {
+  public static function scanAll($conexion) {
     $ids = $conexion->query('SELECT id FROM rfq
         WHERE (share_with_partner = 1 AND (deleted = 0 OR partner_removed_at IS NULL))
            OR (share_with_partner = 0 AND partner_removed_at IS NULL AND (partner_shared_updated_at IS NOT NULL OR partner_record_id IS NOT NULL))')
       ->fetchAll(PDO::FETCH_COLUMN);
-    foreach ($ids as $id) self::reconcile($conexion, (int)$id, $ctx);
+    foreach ($ids as $id) self::reconcile($conexion, (int)$id);
     return count($ids);
   }
 
   /* ------------------------------------------------------------------ inbound */
 
-  /** Accept the partner's record under either spelling of the identifier; fills every key we read. */
+  /** The partner's record in the one shape the rest of this class reads (`id` is accepted for `record_id`). */
   public static function normalizeIncoming(array $raw) {
-    $pick = function (array $keys) use ($raw) {
-      foreach ($keys as $k) if (array_key_exists($k, $raw) && $raw[$k] !== null) return $raw[$k];
-      return null;
-    };
     return [
-      'record_id' => trim((string)$pick(['record_id', 'id'])),
-      'solicitation_number' => trim((string)$pick(['solicitation_number', 'solicitation'])),
-      'name' => $pick(['name', 'title', 'description']),
-      'agency' => $pick(['agency', 'client']),
-      'issue_date' => $pick(['issue_date']),
-      'end_date' => $pick(['end_date', 'due_date']),
-      'status' => $pick(['status']) === null ? null : strtolower(trim((string)$pick(['status']))),
-      'assignee_email' => $pick(['assignee_email', 'assignee']),
-      'shared_updated_at' => $pick(['shared_updated_at', 'updated_at']),
+      'record_id' => trim((string)($raw['record_id'] ?? $raw['id'] ?? '')),
+      'solicitation_number' => trim((string)($raw['solicitation_number'] ?? '')),
+      'name' => $raw['name'] ?? null,
+      'agency' => $raw['agency'] ?? null,
+      'issue_date' => $raw['issue_date'] ?? null,
+      'end_date' => $raw['end_date'] ?? null,
+      'status' => isset($raw['status']) ? strtolower(trim((string)$raw['status'])) : null,
+      'assignee_email' => $raw['assignee_email'] ?? null,
+      'shared_updated_at' => $raw['shared_updated_at'] ?? null,
       'removed' => !empty($raw['removed']),
       // null = "this notice did not carry a file list" (must not be read as "all files removed")
       'files' => isset($raw['files']) && is_array($raw['files']) ? $raw['files'] : null,
@@ -610,42 +602,44 @@ class PartnerSyncService {
     $now = $nowTs ?: time();
     $s = PartnerIntegrationRepository::get($conexion);
     $out = ['sent' => 0, 'retry' => 0, 'failed' => 0, 'skipped' => false];
-    if ((int)$s['enabled'] !== 1 || empty($s['partner_webhook_url']) || empty($s['signing_secret'])) {
+    if (!self::canDeliver($s)) {
       $out['skipped'] = true;
       return $out;
     }
     foreach (PartnerOutboxRepository::due($conexion, $now) as $row) {
-      $headers = ['Content-Type' => 'application/json', 'Accept' => 'application/json',
-                  'X-Event' => $row['event'], 'X-Timestamp' => (string)$now,
-                  'X-Signature' => self::sign($s['signing_secret'], (string)$now, $row['payload'])];
-      if (!empty($s['partner_token'])) $headers['Authorization'] = 'Bearer ' . $s['partner_token'];
-      $r = self::request('POST', $s['partner_webhook_url'], $headers, $row['payload'], 10);
-      $ok = $r['status'] >= 200 && $r['status'] <= 299;
-      $err = $ok ? null : ($r['error'] ?: 'HTTP ' . $r['status'] . ' — partner service did not accept the notice');
-      $res = PartnerOutboxRepository::recordResult($conexion, $row, $ok, $err, $now);
-      if ($ok) PartnerIntegrationRepository::markWebhookSuccess($conexion, self::utc($now));
+      $res = self::deliver($conexion, $s, $row, $now);
       $out[$res === 'delivered' ? 'sent' : $res]++;
     }
     return $out;
+  }
+
+  private static function canDeliver(array $s) {
+    return (int)$s['enabled'] === 1 && !empty($s['partner_webhook_url']) && !empty($s['signing_secret']);
+  }
+
+  /** One signed POST of an outbox row, recorded either way. Returns 'delivered' | 'retry' | 'failed'. */
+  private static function deliver($conexion, array $s, array $row, $now) {
+    $headers = ['Content-Type' => 'application/json', 'Accept' => 'application/json',
+                'X-Event' => $row['event'], 'X-Timestamp' => (string)$now,
+                'X-Signature' => self::sign($s['signing_secret'], (string)$now, $row['payload'])];
+    if (!empty($s['partner_token'])) $headers['Authorization'] = 'Bearer ' . $s['partner_token'];
+    $r = self::request('POST', $s['partner_webhook_url'], $headers, $row['payload'], 10);
+    $ok = $r['status'] >= 200 && $r['status'] <= 299;
+    $err = $ok ? null : ($r['error'] ?: 'HTTP ' . $r['status'] . ' — partner service did not accept the notice');
+    $res = PartnerOutboxRepository::recordResult($conexion, $row, $ok, $err, $now);
+    if ($ok) PartnerIntegrationRepository::markWebhookSuccess($conexion, self::utc($now));
+    return $res;
   }
 
   /** One immediate attempt for a parked row (admin Retry). Returns 'delivered' | 'retry' | 'failed' | 'skipped'. */
   public static function retryNow($conexion, $outboxId) {
     $now = time();
     $s = PartnerIntegrationRepository::get($conexion);
-    if ((int)$s['enabled'] !== 1 || empty($s['partner_webhook_url']) || empty($s['signing_secret'])) return 'skipped';
+    if (!self::canDeliver($s)) return 'skipped';
     PartnerOutboxRepository::retry($conexion, $outboxId, $now);
     $row = PartnerOutboxRepository::find($conexion, $outboxId);
     if (!$row || $row['delivered_at'] !== null || $row['failed_at'] !== null) return 'skipped';
-    $headers = ['Content-Type' => 'application/json', 'Accept' => 'application/json', 'X-Event' => $row['event'],
-                'X-Timestamp' => (string)$now, 'X-Signature' => self::sign($s['signing_secret'], (string)$now, $row['payload'])];
-    if (!empty($s['partner_token'])) $headers['Authorization'] = 'Bearer ' . $s['partner_token'];
-    $r = self::request('POST', $s['partner_webhook_url'], $headers, $row['payload'], 10);
-    $ok = $r['status'] >= 200 && $r['status'] <= 299;
-    $res = PartnerOutboxRepository::recordResult($conexion, $row, $ok,
-      $ok ? null : ($r['error'] ?: 'HTTP ' . $r['status'] . ' — partner service did not accept the notice'), $now);
-    if ($ok) PartnerIntegrationRepository::markWebhookSuccess($conexion, self::utc($now));
-    return $res;
+    return self::deliver($conexion, $s, $row, $now);
   }
 
   /** Fetch one record from the partner (webhook follow-up). Returns the decoded record or null. */

@@ -29,16 +29,7 @@
     }).catch(function () { return { ok: false, d: { message: 'The server did not respond.' } }; });
   }
 
-  function ago(iso) {
-    var t = Date.parse(iso);
-    if (isNaN(t)) return '';
-    var s = Math.max(0, Math.round((Date.now() - t) / 1000));
-    if (s < 60) return 'just now';
-    if (s < 3600) return Math.round(s / 60) + ' min ago';
-    if (s < 86400) return Math.round(s / 3600) + ' h ago';
-    return Math.round(s / 86400) + ' d ago';
-  }
-  $$('[data-pp-ago]').forEach(function (el) { el.textContent = ago(el.getAttribute('data-pp-ago')); });
+  // Relative times ([data-pp-ago]) are filled by js/partner_share.js on load.
 
   /* ---------- toasts ---------- */
   var toasts = document.createElement('div');

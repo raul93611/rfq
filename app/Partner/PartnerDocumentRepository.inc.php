@@ -83,7 +83,7 @@ class PartnerDocumentRepository {
    * partner-origin file, missing file, or the quote itself is not shared). A no-op change returns
    * true without queueing anything. A real change queues exactly one notice.
    */
-  public static function setShared($conexion, $idRfq, $fileName, $shared, $nowTs = null) {
+  public static function setShared($conexion, $idRfq, $fileName, $shared) {
     $name = self::safeName($fileName);
     if ($name === null || self::isGenerated($name) || !is_file(self::folder($idRfq) . '/' . $name)) return false;
     $quote = PartnerShareRepository::row($conexion, $idRfq);
@@ -95,13 +95,13 @@ class PartnerDocumentRepository {
     $wasShared = (int)$doc['shared'] === 1 && $doc['removed_at'] === null;
     if ($wasShared === (bool)$shared) return true;
 
-    $now = gmdate('Y-m-d H:i:s', $nowTs ?: time());
+    $now = gmdate('Y-m-d H:i:s');
     $path = self::folder($idRfq) . '/' . $name;
     $conexion->prepare('UPDATE partner_documents SET shared = :s, size_bytes = :z, sha256 = :h, shared_updated_at = :t, removed_at = NULL
         WHERE id = :id')
       ->execute([':s' => $shared ? 1 : 0, ':z' => filesize($path), ':h' => hash_file('sha256', $path), ':t' => $now, ':id' => $doc['id']]);
     PartnerOutboxRepository::enqueue($conexion, $idRfq, $shared ? 'document.shared' : 'document.removed',
-      PartnerSyncService::noticePayload($quote, $shared ? 'document.shared' : 'document.removed', $nowTs), $nowTs);
+      PartnerSyncService::noticePayload($quote, $shared ? 'document.shared' : 'document.removed'));
     return true;
   }
 
@@ -148,24 +148,24 @@ class PartnerDocumentRepository {
    * under the same name) or that disappeared. Updates the rows and queues one notice per kind.
    * Returns the number of changes found.
    */
-  public static function reconcileShared($conexion, $idRfq, $nowTs = null) {
+  public static function reconcileShared($conexion, $idRfq) {
     $quote = PartnerShareRepository::row($conexion, $idRfq);
     if (!$quote || (int)$quote['share_with_partner'] !== 1 || (int)$quote['deleted'] === 1) return 0;
     $stmt = $conexion->prepare('SELECT * FROM partner_documents WHERE id_rfq = :r AND shared = 1
         AND partner_file_id IS NULL AND removed_at IS NULL');
     $stmt->execute([':r' => $idRfq]);
     $changes = 0;
-    $now = gmdate('Y-m-d H:i:s', $nowTs ?: time());
+    $now = gmdate('Y-m-d H:i:s');
     foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $d) {
       $path = self::folder($idRfq) . '/' . $d['file_name'];
       if (!is_file($path)) {
         $conexion->prepare('UPDATE partner_documents SET removed_at = :t, shared_updated_at = :t WHERE id = :id')->execute([':t' => $now, ':id' => $d['id']]);
-        PartnerOutboxRepository::enqueue($conexion, $idRfq, 'document.removed', PartnerSyncService::noticePayload($quote, 'document.removed', $nowTs), $nowTs);
+        PartnerOutboxRepository::enqueue($conexion, $idRfq, 'document.removed', PartnerSyncService::noticePayload($quote, 'document.removed'));
         $changes++;
       } elseif (hash_file('sha256', $path) !== $d['sha256']) {
         $conexion->prepare('UPDATE partner_documents SET sha256 = :h, size_bytes = :z, shared_updated_at = :t WHERE id = :id')
           ->execute([':h' => hash_file('sha256', $path), ':z' => filesize($path), ':t' => $now, ':id' => $d['id']]);
-        PartnerOutboxRepository::enqueue($conexion, $idRfq, 'document.shared', PartnerSyncService::noticePayload($quote, 'document.shared', $nowTs), $nowTs);
+        PartnerOutboxRepository::enqueue($conexion, $idRfq, 'document.shared', PartnerSyncService::noticePayload($quote, 'document.shared'));
         $changes++;
       }
     }
