@@ -13,6 +13,7 @@ spl_autoload_register(function ($class) {
     'ReQuote' => ['ReQuote', 'ReQuoteRepository', 'ReQuoteItem', 'ReQuoteItemRepository', 'ReQuoteProvider', 'ReQuoteProviderRepository', 'ReQuoteSubitem', 'ReQuoteSubitemRepository', 'ReQuoteSubitemProvider', 'ReQuoteSubitemProviderRepository', 'ReQuoteAuditTrail', 'ReQuoteAuditTrailRepository', 'ReQuoteService', 'ReQuoteServiceRepository'],
     'Utilities' => ['PDFGenerator', 'ProposalRepository', 'ExcelRepository', 'Input', 'Email', 'TeamsIntegration', 'GraphApiClient', 'NotificationEmail', 'DigestEmailTemplate'],
     'Setting' => ['NotificationMailboxRepository'],
+    'Partner' => ['PartnerIntegrationRepository', 'PartnerShareRepository', 'PartnerDocumentRepository', 'PartnerOutboxRepository', 'PartnerSyncService', 'PartnerApi'],
     'TypeOfBid' => ['TypeOfBid', 'TypeOfBidRepository'],
     'Service' => ['Service', 'ServiceRepository'],
     'Tracking' => ['Tracking', 'TrackingRepository', 'TrackingSubitem', 'TrackingSubitemRepository'],
@@ -123,6 +124,10 @@ switch ($partes_ruta[1] ?? null) {
         break;
       case 'break_sheet_sync':
         $ruta_elegida = 'scripts/quote/break_sheet_sync.php';
+        break;
+      case 'partner_share_file':
+        $id_rfq = $partes_ruta[3] ?? '';
+        $ruta_elegida = 'scripts/quote/partner_share_file.php';
         break;
       case 'notifications':
         switch ($partes_ruta[3]) {
@@ -465,9 +470,17 @@ switch ($partes_ruta[1] ?? null) {
             break;
         }
         break;
+      case 'partner':
+        $ruta_elegida = 'scripts/admin/partner_action.php';
+        break;
       default:
         break;
     }
+    break;
+  case 'api':
+    // Partner-facing, token-authenticated (no session): api/partner/{opportunities|files|webhook}
+    $partner_segments = array_slice($partes_ruta, 2);
+    $ruta_elegida = 'scripts/api/partner.php';
     break;
   case 're_quote_sc':
     switch ($partes_ruta[2]) {

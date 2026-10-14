@@ -74,6 +74,13 @@
             </select>
           </div>
         </div>
+        <?php
+        $ps_solicitation = (string)$quote->getSolicitationNumber();
+        $ps_share = (int)$quote->getShareWithPartner() === 1;
+        $ps_error = null;
+        $ps_small = true;
+        include 'forms/quote/partner_share_fields.inc.php';
+        ?>
       </div>
 
       <!-- Assignment -->

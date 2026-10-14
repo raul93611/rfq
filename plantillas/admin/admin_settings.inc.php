@@ -39,10 +39,10 @@ $flash_disconnected = isset($_GET['mailbox_disconnected']);
         </div>
       <?php endif; ?>
 
-      <div class="ac-grid" style="max-width:720px;">
+      <div class="ac-grid pp-wide">
 
         <!-- Notification Mailbox card -->
-        <div class="ac-card">
+        <div class="ac-card is-narrow">
           <div class="ac-card-head">
             <div class="ac-card-head-icon ac-card-head-icon-ms">
               <div class="ac-ms-logo">
@@ -120,6 +120,8 @@ $flash_disconnected = isset($_GET['mailbox_disconnected']);
           </div>
         </div>
 
+        <?php include 'plantillas/admin/partner_integration.inc.php'; ?>
+
       </div><!-- /ac-grid -->
     </div>
   </div>
@@ -133,6 +135,7 @@ $flash_disconnected = isset($_GET['mailbox_disconnected']);
   </div>
 </div>
 
+<script src="<?= asset_url('js/partner_admin.js'); ?>"></script>
 <script>
 (function () {
   var btn = document.getElementById('mailbox_connect_btn');

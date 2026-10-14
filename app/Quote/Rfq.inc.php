@@ -79,6 +79,13 @@ class Rfq {
   private $sources_sought;
   private $pop_start_date;
   private $pop_end_date;
+  private $share_with_partner;
+  private $solicitation_number;
+  private $partner_record_id;
+  private $partner_linked_at;
+  private $partner_shared_updated_at;
+  private $partner_removed_at;
+  private $partner_needs_assignment;
 
   public function __construct(array $row) {
     $this->id = $row['id'] ?? null;
@@ -164,6 +171,14 @@ class Rfq {
     $this->sources_sought = isset($row['sources_sought']) ? (int)$row['sources_sought'] : 0;
     $this->pop_start_date = $row['pop_start_date'] ?? null;
     $this->pop_end_date = $row['pop_end_date'] ?? null;
+    // Partner Opportunity Sync (see PartnerSyncService). Unshared by default.
+    $this->share_with_partner = isset($row['share_with_partner']) ? (int)$row['share_with_partner'] : 0;
+    $this->solicitation_number = $row['solicitation_number'] ?? null;
+    $this->partner_record_id = $row['partner_record_id'] ?? null;
+    $this->partner_linked_at = $row['partner_linked_at'] ?? null;
+    $this->partner_shared_updated_at = $row['partner_shared_updated_at'] ?? null;
+    $this->partner_removed_at = $row['partner_removed_at'] ?? null;
+    $this->partner_needs_assignment = isset($row['partner_needs_assignment']) ? (int)$row['partner_needs_assignment'] : 0;
   }
 
   public function obtener_id() {
@@ -840,6 +855,34 @@ class Rfq {
 
   public function getInternalDueDate() {
     return $this->internal_due_date;
+  }
+
+  public function getShareWithPartner() {
+    return $this->share_with_partner;
+  }
+
+  public function getSolicitationNumber() {
+    return $this->solicitation_number;
+  }
+
+  public function getPartnerNeedsAssignment() {
+    return $this->partner_needs_assignment;
+  }
+
+  /** off | waiting (shared, no partner record pinned yet) | linked. Drives the header badges. */
+  public function getPartnerLinkState() {
+    if (!$this->share_with_partner) return 'off';
+    return $this->partner_record_id !== null ? 'linked' : 'waiting';
+  }
+
+  /** UTC datetime the partner link was established, or null. */
+  public function getPartnerLinkedAt() {
+    return $this->partner_linked_at;
+  }
+
+  /** UTC datetime of the last exchanged shared-field save (ours or theirs) — the "last synced" time. */
+  public function getPartnerSharedUpdatedAt() {
+    return $this->partner_shared_updated_at;
   }
 
   public function getQa() {

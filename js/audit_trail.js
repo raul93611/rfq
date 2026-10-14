@@ -25,7 +25,13 @@
     'sheet_row_created':{ label: 'Created in sheet', color: '#7c3aed', bg: '#f3eefe', fg: '#6d28d9', group: 'sync', syncType: 'synced',   sheetOp: 'rowCreated' },
     'sheet_row_linked': { label: 'Linked to row',    color: '#0e8fbf', bg: '#e7f4fb', fg: '#0b6f93', group: 'sync', syncType: 'synced',   sheetOp: 'rowLinked'  },
     'sync_to_sheet':    { label: 'Synced',           color: '#7c3aed', bg: '#f1ebfc', fg: '#6d28d9', group: 'sync', syncType: 'synced',   sheetOp: 'synced'     },
-    'break_sync':       { label: 'Unsynced',         color: '#d97706', bg: '#fdf1de', fg: '#b45309', group: 'sync', syncType: 'unsynced', sheetOp: 'unsynced'   }
+    'break_sync':       { label: 'Unsynced',         color: '#d97706', bg: '#fdf1de', fg: '#b45309', group: 'sync', syncType: 'unsynced', sheetOp: 'unsynced'   },
+    // Partner Opportunity Sync — same Sync tab. syncType 'partner' renders each as its own compact
+    // row (never folded into "N automatic syncs"); the actor decides the Partner / Manual tag.
+    'partner_link':     { label: 'Linked to partner',     color: '#4f46e5', bg: '#eceafd', fg: '#4338ca', group: 'sync', syncType: 'partner', sheetOp: 'pLinked'   },
+    'partner_unlink':   { label: 'Unlinked from partner', color: '#d97706', bg: '#fdf1de', fg: '#b45309', group: 'sync', syncType: 'partner', sheetOp: 'pUnlinked' },
+    'partner_sync_in':  { label: 'Received from partner', color: '#0f766e', bg: '#e0f4f1', fg: '#0f766e', group: 'sync', syncType: 'partner', sheetOp: 'pReceived' },
+    'partner_removed':  { label: 'Removed from partner',  color: '#dc2626', bg: '#fbe9e9', fg: '#b91c1c', group: 'sync', syncType: 'partner', sheetOp: 'pRemoved'  }
   };
   var AT_DEFAULT = { label: 'Modified', color: '#2563eb', bg: '#e8f0fc', fg: '#1d4ed8', group: 'edits' };
 
@@ -165,7 +171,7 @@
           run.forEach(function (r) { units.push({ kind: 'sync', e: r }); });
         }
         i = j;
-      } else if (st === 'unsynced') {
+      } else if (st === 'unsynced' || st === 'partner') {
         units.push({ kind: 'sync', e: items[i] }); i++;
       } else {
         units.push({ kind: 'entry', e: items[i] }); i++;
@@ -184,8 +190,12 @@
       rowCreated: '<rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="8.5" x2="21" y2="8.5"/><line x1="12" y1="12" x2="12" y2="18"/><line x1="9" y1="15" x2="15" y2="15"/>',
       rowLinked:  '<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>',
       unsynced:   '<path d="M18.84 12.25l1.72-1.71a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M5.17 11.75l-1.71 1.71a5 5 0 0 0 7.07 7.07l1.71-1.71"/><line x1="2" y1="2" x2="22" y2="22"/>',
-      synced:     '<polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>'
+      synced:     '<polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>',
+      pReceived:  '<line x1="17" y1="7" x2="7" y2="17"/><polyline points="17 17 7 17 7 7"/>',
+      pRemoved:   '<circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/>'
     };
+    paths.pLinked = paths.rowLinked;
+    paths.pUnlinked = paths.unsynced;
     return open + (paths[op] || paths.synced) + '</svg>';
   }
 
@@ -201,6 +211,9 @@
       '<div class="at-sync-line at-sync-line-' + op + '">' +
         '<span class="at-sync-ic at-sync-ic-' + op + '">' + atSyncGlyph(op) + '</span>' +
         '<span class="at-sync-text">' + e.audit_trail + '</span>' +
+        (t.syncType === 'partner'
+          ? '<span class="at-sync-tag">' + (e.username === 'Partner Integration' ? 'Partner' : 'Manual') + '</span>'
+          : '') +
         '<span class="at-sync-spacer"></span>' +
         '<span class="at-sync-actor">' + atEsc(e.username) + '</span>' +
         '<span class="at-sync-ts">' + atEsc(atTimeShort(e.created_date)) + '</span>' +

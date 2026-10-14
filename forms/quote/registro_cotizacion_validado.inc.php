@@ -55,6 +55,13 @@
     </div>
   </div>
 
+  <?php
+  $ps_solicitation = $_POST['solicitation_number'] ?? '';
+  $ps_share = isset($_POST['share_with_partner']);
+  $ps_error = $partner_solicitation_error ?? null;
+  include 'forms/quote/partner_share_fields.inc.php';
+  ?>
+
   <div class="form-row">
     <div class="col-md-6">
       <div class="form-group">

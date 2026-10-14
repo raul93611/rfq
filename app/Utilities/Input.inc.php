@@ -2,11 +2,18 @@
 class Input {
   public static function print_designated_user($quote, $idPrefix = '') {
     ?>
-      <div class="form-group">
+      <?php $needsOwner = method_exists($quote, 'getPartnerNeedsAssignment') && $quote->getPartnerNeedsAssignment(); ?>
+      <div class="form-group<?= $needsOwner ? ' pp-owner' : ''; ?>" <?= $needsOwner ? 'data-pp-owner' : ''; ?>>
         <?php
         Conexion::abrir_conexion();
         $usuarios = RepositorioUsuario::obtener_usuarios_rfq(Conexion::obtener_conexion());
         $designated_user = self::get_designated_user($quote);
+        // Partner quotes start on the default owner, who may not hold the RFQ role and so is not in
+        // $usuarios. Resolve the name directly so the "original" value (and the option below) are real.
+        if ($needsOwner && $designated_user === '') {
+          $currentOwner = RepositorioUsuario::obtener_usuario_por_id(Conexion::obtener_conexion(), $quote->obtener_usuario_designado());
+          $designated_user = $currentOwner ? $currentOwner->obtener_nombre_usuario() : '';
+        }
         Conexion::cerrar_conexion();
         ?>
         <?php
@@ -16,6 +23,11 @@ class Input {
           <input type="hidden" name="designated_user_original" value="<?= $designated_user; ?>">
           <select id="<?= $idPrefix; ?>usuario_designado" class="form-control form-control-sm" name="usuario_designado">
             <?php
+            // Partner quotes start on the default owner, who may not hold the RFQ role. Keep them
+            // selectable so saving without choosing does not silently hand the quote to the first user.
+            if ($needsOwner && $designated_user !== '' && !in_array($quote->obtener_usuario_designado(), array_map(function ($u) { return $u->obtener_id(); }, $usuarios))) {
+              echo '<option selected>' . htmlspecialchars($designated_user, ENT_QUOTES, 'UTF-8') . '</option>';
+            }
             foreach ($usuarios as $usuario) {
             ?>
               <option <?php
@@ -27,6 +39,9 @@ class Input {
             }
             ?>
           </select>
+          <?php if ($needsOwner): ?>
+            <div class="pp-hint"><i class="fas fa-exclamation-triangle"></i>Auto-assigned to the default owner. Choose who should own this quote.</div>
+          <?php endif; ?>
         <?php
         }
         ?>

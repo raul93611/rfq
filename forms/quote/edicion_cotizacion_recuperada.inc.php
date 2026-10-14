@@ -28,11 +28,18 @@
 
     <!-- Secondary fields -->
     <?php
-    $secondaryFields = [
+    $secondaryFields = [];
+    // Partner Opportunity Sync: shown only once a Solicitation # exists. js/partner_share.js adds /
+    // updates / removes this cell live after an Information save.
+    $solNumber = trim((string)$cotizacion_recuperada->getSolicitationNumber());
+    if ($solNumber !== '') {
+      $secondaryFields[] = ['id' => 'qed-sol-cell', 'label' => 'Solicitation #', 'value' => '<span class="pp-mono">' . htmlspecialchars($solNumber, ENT_QUOTES, 'UTF-8') . '</span>', 'icon' => 'fa-hashtag'];
+    }
+    $secondaryFields = array_merge($secondaryFields, [
       ['label' => 'Client',   'value' => $cotizacion_recuperada->obtener_client(),                                    'icon' => 'fa-building'],
       ['label' => 'Bill To',  'value' => nl2br(htmlspecialchars($cotizacion_recuperada->obtener_address())),          'icon' => 'fa-map-marker-alt'],
       ['label' => 'Ship To',  'value' => nl2br(htmlspecialchars($cotizacion_recuperada->obtener_ship_to())),          'icon' => 'fa-shipping-fast'],
-    ];
+    ]);
     $refUrl = $cotizacion_recuperada->getReferenceUrl();
     if ($refUrl) {
       $secondaryFields[] = ['label' => 'Reference URL', 'value' => '<a target="_blank" href="' . htmlspecialchars($refUrl) . '">' . htmlspecialchars($refUrl) . '</a>', 'icon' => 'fa-external-link-alt'];
