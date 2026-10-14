@@ -4261,3 +4261,4 @@ tr.it-row.is-sub .it-td.it-price-total { font-size: 14px; font-weight: 700; }
 
 /* [hidden] must win over the display set by the component classes above */
 .pp-empty[hidden], .pp-table[hidden], .pp-banner-wrap[hidden], .pp-form-error[hidden] { display: none; }
+.pp-inc .pp-sub { white-space: normal; }

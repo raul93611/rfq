@@ -105,12 +105,12 @@ $pp_reason = [
     <div class="pp-status-item">
       <span class="ac-status-dot <?= $pp_enabled ? 'ac-status-dot-connected' : 'ac-status-dot-disconnected'; ?>"></span>
       Last pull: <strong data-testid="last-pull"><?= $pp_e($pp_et($pp['last_pull_at']) ?: 'Never'); ?></strong>
-      <?php if ($pp['last_pull_at']): ?>(<span data-pp-ago="<?= $pp_e($pp_iso($pp['last_pull_at'])); ?>"></span>)<?php endif; ?>
+      <?php if ($pp['last_pull_at']): ?><span>(<span data-pp-ago="<?= $pp_e($pp_iso($pp['last_pull_at'])); ?>"></span>)</span><?php endif; ?>
     </div>
     <div class="pp-status-item">
       <span class="ac-status-dot <?= $pp_enabled ? 'ac-status-dot-connected' : 'ac-status-dot-disconnected'; ?>"></span>
       Last successful webhook: <strong data-testid="last-webhook"><?= $pp_e($pp_et($pp['last_webhook_success_at']) ?: 'Never'); ?></strong>
-      <?php if ($pp['last_webhook_success_at']): ?>(<span data-pp-ago="<?= $pp_e($pp_iso($pp['last_webhook_success_at'])); ?>"></span>)<?php endif; ?>
+      <?php if ($pp['last_webhook_success_at']): ?><span>(<span data-pp-ago="<?= $pp_e($pp_iso($pp['last_webhook_success_at'])); ?>"></span>)</span><?php endif; ?>
     </div>
   </div>
 
