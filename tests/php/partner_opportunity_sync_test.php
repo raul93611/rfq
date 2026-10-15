@@ -213,6 +213,30 @@ try {
   check('…and only one on repeat', $base + 1, outboxCount($c, $shared, 'opportunity.updated'));
   check('payload hash moved with the shared field', true, quoteRow($c, $shared)['partner_payload_hash'] !== $before['partner_payload_hash']);
 
+  // ---------------------------------------------------------------- 11b. newest notice supersedes a waiting one
+  echo "-- 11b. newest notice wins\n";
+  $flip = mkQuote($c, ['name' => 'Flip flop']);
+  $pending = function ($id) use ($c) {
+    $st = $c->prepare('SELECT event FROM partner_webhook_outbox WHERE id_rfq = :i AND delivered_at IS NULL AND failed_at IS NULL ORDER BY id');
+    $st->execute([':i' => $id]);
+    return $st->fetchAll(PDO::FETCH_COLUMN);
+  };
+  PartnerShareRepository::saveShareSettings($c, $flip, true, "FLIP-$run");
+  PartnerSyncService::reconcile($c, $flip);
+  check('share queues one update', ['opportunity.updated'], $pending($flip));
+  PartnerShareRepository::saveShareSettings($c, $flip, false, "FLIP-$run");
+  PartnerSyncService::reconcile($c, $flip);
+  check('unshare supersedes the waiting update', ['opportunity.removed'], $pending($flip));
+  PartnerShareRepository::saveShareSettings($c, $flip, true, "FLIP-$run");
+  PartnerSyncService::reconcile($c, $flip);
+  check('re-share supersedes the waiting removal — no stale "removed" is left to be delivered last', ['opportunity.updated'], $pending($flip));
+  mkdir("$tmpDocs/$flip", 0777, true);
+  file_put_contents("$tmpDocs/$flip/Plan.pdf", 'PLAN');
+  PartnerDocumentRepository::setShared($c, $flip, 'Plan.pdf', true);
+  check('file share queues a document notice after the update', ['opportunity.updated', 'document.shared'], $pending($flip));
+  PartnerDocumentRepository::setShared($c, $flip, 'Plan.pdf', false);
+  check('file unshare supersedes the waiting file share, other family untouched', ['opportunity.updated', 'document.removed'], $pending($flip));
+
   // ---------------------------------------------------------------- 5. webhook
   echo "-- 5. webhook signature\n";
   $secret = 'whsec_test';

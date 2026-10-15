@@ -15,20 +15,20 @@ class PartnerOutboxRepository {
   private static function utc($ts) { return gmdate('Y-m-d H:i:s', $ts); }
 
   /**
-   * Queue one notice. A notice of the same event for the same quote that is still waiting to be
-   * sent absorbs this one (the fetch the partner makes is authoritative), so a burst of edits is
-   * one webhook, not many. Returns false when coalesced.
+   * Queue one notice. A notice only says "this quote changed — fetch it", so the newest one in a
+   * family (opportunity.* / document.*) supersedes any still-waiting one and goes to the back of the
+   * queue. Keeping the older row would let a stale "removed" queued before a later re-share be
+   * delivered AFTER the update and tell the partner a shared quote is gone.
+   * A burst of edits is therefore one webhook, and its position is the latest change's.
    */
   public static function enqueue($conexion, $idRfq, $event, array $payload) {
-    $stmt = $conexion->prepare('SELECT COUNT(*) FROM partner_webhook_outbox
-        WHERE id_rfq = :r AND event = :e AND delivered_at IS NULL AND failed_at IS NULL');
-    $stmt->execute([':r' => $idRfq, ':e' => $event]);
-    if ((int)$stmt->fetchColumn() > 0) return false;
+    $conexion->prepare('DELETE FROM partner_webhook_outbox
+        WHERE id_rfq = :r AND event LIKE :f AND delivered_at IS NULL AND failed_at IS NULL')
+      ->execute([':r' => $idRfq, ':f' => strtok($event, '.') . '.%']);
     $now = time();
     $conexion->prepare('INSERT INTO partner_webhook_outbox (id_rfq, event, payload, attempts, next_attempt_at, created_at)
         VALUES (:r, :e, :p, 0, :n, :c)')
       ->execute([':r' => $idRfq, ':e' => $event, ':p' => json_encode($payload), ':n' => self::utc($now), ':c' => self::utc($now)]);
-    return true;
   }
 
   public static function due($conexion, $nowTs, $limit = 50) {
