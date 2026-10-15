@@ -13,6 +13,20 @@ function fixtures() {
 
 const AUTH_FILE = path.join(__dirname, '../.auth/session.json');
 
+// partner_integration is a single shared row. A developer's real settings (tokens, URLs, secrets)
+// live in it, so the admin specs snapshot it first and put it back EXACTLY as found.
+const INTEGRATION_COLS = ['enabled', 'issued_token_hash', 'issued_token_last4', 'token_created_at', 'token_created_by',
+  'token_revoked_at', 'token_last_used_at', 'partner_base_url', 'partner_token', 'partner_webhook_url', 'signing_secret',
+  'last_pull_at', 'last_webhook_success_at'];
+async function snapshotIntegration() {
+  const [row] = await query(`SELECT ${INTEGRATION_COLS.map((c) => `CAST(${c} AS CHAR) AS ${c}`).join(', ')} FROM partner_integration WHERE id = 1`);
+  return row;
+}
+async function restoreIntegration(row) {
+  await query(`UPDATE partner_integration SET ${INTEGRATION_COLS.map((c) => `${c} = ?`).join(', ')} WHERE id = 1`,
+    INTEGRATION_COLS.map((c) => row[c]));
+}
+
 async function resetPartnerState(rfqId) {
   await query(
     `UPDATE rfq SET share_with_partner = 0, solicitation_number = NULL, solicitation_key = NULL, partner_record_id = NULL,
@@ -327,18 +341,17 @@ test.describe('Partner sync — admin Partner Integration card', () => {
   // The harness user is not an admin and the session caches the role at login, so promote the user
   // and sign in fresh for this block, then restore both.
   test.use({ storageState: { cookies: [], origins: [] } });
-  let rfqId;
+  let rfqId, integrationBefore;
 
   test.beforeAll(async () => {
     ({ rfqId } = fixtures());
+    integrationBefore = await snapshotIntegration();
     await query("UPDATE usuarios SET cargo = '1' WHERE nombre_usuario = 'pw_test_user'");
     await query("DELETE FROM partner_review WHERE partner_record_id LIKE 'PW-REC-%'");
   });
   test.afterAll(async () => {
     await query("UPDATE usuarios SET cargo = 'QA' WHERE nombre_usuario = 'pw_test_user'");
-    await query(`UPDATE partner_integration SET enabled = 0, issued_token_hash = NULL, issued_token_last4 = NULL, token_created_at = NULL,
-      token_created_by = NULL, token_revoked_at = NULL, partner_base_url = NULL, partner_webhook_url = NULL, partner_token = NULL,
-      signing_secret = NULL, last_pull_at = NULL WHERE id = 1`);
+    await restoreIntegration(integrationBefore);
     await query("DELETE FROM partner_review WHERE partner_record_id LIKE 'PW-REC-%'");
     await query("DELETE FROM partner_webhook_outbox WHERE id_rfq = ? OR last_error LIKE '%PW-RETRY%'", [rfqId]);
     await resetPartnerState(rfqId);
