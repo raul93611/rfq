@@ -1,0 +1,230 @@
+openapi: 3.1.0
+info:
+  title: Partner endpoints expected by E-logic
+  version: 1.0.0
+  summary: The contract the partner platform implements so E-logic can pull from it and notify it.
+  description: |
+    These are the endpoints **E-logic calls on the partner's platform**. Treat this as a server-side
+    contract: generate stubs from it, or check your implementation against it.
+
+    **Authentication.** E-logic sends `Authorization: Bearer <partner token>` on every call
+    (the token the partner issues to E-logic). The webhook is additionally signed:
+    `X-Signature` is the lowercase hex HMAC-SHA256 of `{X-Timestamp}.{raw request body}` keyed with the
+    shared signing secret, and `X-Timestamp` is Unix time in seconds. Verify the signature on the raw
+    body and reject a timestamp more than 5 minutes from your clock.
+
+    **Files.** Every `download_url` must be on the **same host** as the base URL. E-logic sends the
+    token only to that host and skips a file served from any other one (for example a CDN).
+
+    The field list is **provisional** until the two sides agree it; see the integration guide.
+servers:
+  - url: https://{host}/{basePath}
+    description: The partner's API base URL, as configured in E-logic Admin Settings.
+    variables:
+      host:
+        default: api.partner.example
+      basePath:
+        default: v2
+security:
+  - bearerAuth: []
+paths:
+  /opportunities:
+    get:
+      operationId: listChanged
+      summary: Opportunities shared with E-logic that changed after a timestamp
+      description: |
+        Called every 15 minutes as the catch-up for missed webhooks. **Must include withdrawn records**
+        (`removed: true`), so that a missed notice is still caught. E-logic keeps its own cursor and
+        re-applying an unchanged record is a no-op.
+      parameters:
+        - name: changed_since
+          in: query
+          required: true
+          description: ISO-8601 UTC timestamp.
+          schema: { type: string, format: date-time }
+          example: "2026-10-15T10:00:00Z"
+        - name: limit
+          in: query
+          schema: { type: integer, default: 100 }
+        - name: cursor
+          in: query
+          description: The opaque `next_cursor` of the previous page.
+          schema: { type: string }
+      responses:
+        "200":
+          description: One page, in a stable order.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/RecordPage" }
+        "401":
+          description: Bad or missing token.
+  /opportunities/{ref}:
+    get:
+      operationId: getRecord
+      summary: One record, by your record id or by solicitation number
+      description: |
+        Called after a webhook notice. E-logic passes `record_id` when the notice carried one and the
+        solicitation number otherwise; accept both.
+      parameters:
+        - name: ref
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: The record, either wrapped in `data` or bare.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/RecordEnvelope"
+                  - $ref: "#/components/schemas/PartnerRecord"
+        "404":
+          description: Unknown record.
+  /files/{file_id}:
+    get:
+      operationId: downloadFile
+      summary: Download a file listed on a record
+      description: |
+        Illustrative path; E-logic follows whatever `download_url` the record carries. Return the raw
+        bytes. Maximum 50 MB per file; E-logic waits 30 seconds. If `sha256` is provided E-logic verifies
+        it and discards a mismatching download.
+      parameters:
+        - name: file_id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: The raw file.
+          content:
+            application/octet-stream:
+              schema: { type: string, format: binary }
+        "404":
+          description: Unknown or no longer shared.
+  /hook:
+    post:
+      operationId: receiveElogicNotice
+      summary: Webhook receiver for E-logic's change notices
+      description: |
+        The URL is configured in E-logic Admin Settings (any path). Answer `2xx` within **10 seconds**.
+        Delivery is at-least-once, so be idempotent. Failures are retried after 1 minute, 5 minutes,
+        30 minutes, 2 hours and 12 hours, then the notice is parked as failed. A notice only says what
+        changed: fetch E-logic's API for the data.
+      parameters:
+        - name: X-Event
+          in: header
+          schema: { $ref: "#/components/schemas/ElogicEvent" }
+        - name: X-Timestamp
+          in: header
+          required: true
+          schema: { type: string, pattern: "^[0-9]+$" }
+        - name: X-Signature
+          in: header
+          required: true
+          schema: { type: string, pattern: "^[0-9a-f]{64}$" }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ElogicNotice" }
+      responses:
+        "200":
+          description: Accepted. Any 2xx counts as delivered.
+        "401":
+          description: Invalid signature or stale timestamp.
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: The token the partner issues to E-logic.
+  schemas:
+    FileRef:
+      type: object
+      required: [id, name, download_url]
+      properties:
+        id: { type: string, example: F-88 }
+        name:
+          type: string
+          description: E-logic sanitizes it to letters, digits, `-`, `_` and `.`.
+          example: Amendment_0001.pdf
+        size: { type: integer, description: Bytes. }
+        sha256: { type: string, description: Hex SHA-256; verified if present., pattern: "^[0-9a-f]{64}$" }
+        updated_at: { type: string, format: date-time }
+        download_url:
+          type: string
+          format: uri
+          description: Must be on the same host as the base URL.
+    PartnerRecord:
+      type: object
+      required: [record_id, solicitation_number, shared_updated_at]
+      properties:
+        record_id:
+          type: string
+          description: Your stable internal id. E-logic pins the link to it after the first match (`id` is accepted as an alias).
+          example: P-1042
+        solicitation_number: { type: string, example: FA8307-26-Q-0021 }
+        name: { type: string, description: Title / scope summary. }
+        agency: { type: string }
+        issue_date:
+          type: string
+          description: A date (`YYYY-MM-DD`) or an ISO-8601 timestamp.
+        end_date:
+          type: string
+          description: ISO-8601 with `Z` or an offset. E-logic stores it in US Eastern time.
+        status:
+          type: string
+          description: |
+            Only `no_bid`, `cancelled` and `not_submitted` are applied, and only before Award.
+            Anything else is ignored.
+          examples: [no_bid, cancelled, not_submitted]
+        assignee_email:
+          type: string
+          description: Used only to pick the owner when E-logic creates the quote; never applied to an existing quote.
+        shared_updated_at:
+          type: string
+          format: date-time
+          description: |
+            UTC time of the last save of the shared fields. A value at or before E-logic's own is
+            ignored; a newer one is applied (latest save wins).
+        removed:
+          type: boolean
+          default: false
+          description: True when you stopped sharing the record. Keep returning it from the list.
+        files:
+          type: array
+          description: |
+            The complete shared file list. Omit the key when you have no file information to send; an
+            empty array means "no shared files", and a file missing from the array is marked removed.
+          items: { $ref: "#/components/schemas/FileRef" }
+    RecordEnvelope:
+      type: object
+      required: [data]
+      properties:
+        data: { $ref: "#/components/schemas/PartnerRecord" }
+    RecordPage:
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: array
+          items: { $ref: "#/components/schemas/PartnerRecord" }
+        next_cursor: { type: [string, "null"] }
+        server_time: { type: string, format: date-time }
+    ElogicEvent:
+      type: string
+      enum:
+        - opportunity.updated
+        - opportunity.removed
+        - document.shared
+        - document.removed
+    ElogicNotice:
+      type: object
+      required: [event, elogic_id, occurred_at]
+      properties:
+        event: { $ref: "#/components/schemas/ElogicEvent" }
+        elogic_id: { type: integer, example: 118063 }
+        solicitation_number: { type: [string, "null"] }
+        record_id: { type: [string, "null"], description: Your record id once linked; null before. }
+        occurred_at: { type: string, format: date-time }
