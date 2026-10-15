@@ -22,10 +22,10 @@ info:
     The field list is **provisional** until the two sides agree it; see the integration guide.
 servers:
   - url: https://{host}/rfq/api/partner
-    description: E-logic production (the host is given to you together with your token)
+    description: E-logic production
     variables:
       host:
-        default: e-logic.example
+        default: app.e-logic.us
 security:
   - bearerAuth: []
 tags:
