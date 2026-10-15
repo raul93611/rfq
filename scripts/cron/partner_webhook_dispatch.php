@@ -24,8 +24,13 @@ foreach (['PartnerIntegrationRepository', 'PartnerShareRepository', 'PartnerDocu
           'PartnerOutboxRepository', 'PartnerSyncService'] as $cls) require_once $root . "app/Partner/$cls.inc.php";
 
 // One run at a time: a slow partner must not let the next minute's run double-send.
-$lock = fopen(sys_get_temp_dir() . '/partner_webhook_dispatch.lock', 'c');
-if (!$lock || !flock($lock, LOCK_EX | LOCK_NB)) { echo "Previous dispatch still running, skipping.\n"; exit(0); }
+try {
+  $lock = PartnerSyncService::acquireLock('partner_webhook_dispatch');
+} catch (RuntimeException $e) {
+  fwrite(STDERR, $e->getMessage() . "\n");
+  exit(1);
+}
+if (!$lock) { echo "Previous dispatch still running, skipping.\n"; exit(0); }
 
 $conexion = Conexion::obtener_conexion();
 if (!PartnerIntegrationRepository::isEnabled($conexion)) { echo "Partner Integration disabled, skipping.\n"; exit(0); }

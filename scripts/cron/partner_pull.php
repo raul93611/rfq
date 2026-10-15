@@ -24,8 +24,13 @@ require_once $root . 'app/Utilities/Input.inc.php';
 foreach (['PartnerIntegrationRepository', 'PartnerShareRepository', 'PartnerDocumentRepository',
           'PartnerOutboxRepository', 'PartnerSyncService'] as $cls) require_once $root . "app/Partner/$cls.inc.php";
 
-$lock = fopen(sys_get_temp_dir() . '/partner_pull.lock', 'c');
-if (!$lock || !flock($lock, LOCK_EX | LOCK_NB)) { echo "Previous pull still running, skipping.\n"; exit(0); }
+try {
+  $lock = PartnerSyncService::acquireLock('partner_pull');
+} catch (RuntimeException $e) {
+  fwrite(STDERR, $e->getMessage() . "\n");
+  exit(1);
+}
+if (!$lock) { echo "Previous pull still running, skipping.\n"; exit(0); }
 
 $conexion = Conexion::obtener_conexion();
 $r = PartnerSyncService::pull($conexion);

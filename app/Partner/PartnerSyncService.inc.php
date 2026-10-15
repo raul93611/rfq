@@ -597,6 +597,20 @@ class PartnerSyncService {
 
   /* ------------------------------------------------------------------ dispatch + pull */
 
+  /**
+   * Exclusive, non-blocking run lock for a cron job. Returns the handle (keep it alive for the
+   * whole run) or null when another run holds it. Throws when the lock file cannot be opened —
+   * that is a setup problem and must not be reported as "another run is in progress".
+   * The file is made world-writable so the cron user and a person running the job by hand share it.
+   */
+  public static function acquireLock($name) {
+    $path = sys_get_temp_dir() . '/' . $name . '.lock';
+    $h = @fopen($path, 'c');
+    if (!$h) throw new RuntimeException("Cannot open lock file $path — check its owner and permissions.");
+    @chmod($path, 0666);
+    return flock($h, LOCK_EX | LOCK_NB) ? $h : null;
+  }
+
   /** Drain the outbox. Returns ['sent' => n, 'retry' => n, 'failed' => n, 'skipped' => bool]. */
   public static function dispatchDue($conexion, $nowTs = null) {
     $now = $nowTs ?: time();
