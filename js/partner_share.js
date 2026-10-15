@@ -17,6 +17,9 @@
   var req = document.getElementById('pp-sol-req');
   var errText = document.querySelector('#pp-sol-error span');
   var touched = !!(group && group.classList.contains('has-pp-error'));
+  // An error rendered by the server (duplicate number on New Quote) must survive the first paint():
+  // it is not a "blank field" error, so it stays until the user edits the field or the toggle.
+  if (touched) group.classList.add('has-pp-server');
 
   function isBlank() { return !sol || !sol.value.trim(); }
 

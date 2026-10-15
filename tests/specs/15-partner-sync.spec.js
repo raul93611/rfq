@@ -60,6 +60,51 @@ test.describe('Partner sync — New Quote form', () => {
   });
 });
 
+test.describe('Partner sync — New Quote server-side duplicate', () => {
+  const code = 'PW-DUPCODE-' + Date.now();
+  test.afterEach(async () => {
+    // Safety net: if the duplicate guard ever regressed, a quote would have been created — remove it.
+    const rows = await query('SELECT id FROM rfq WHERE email_code = ?', [code]);
+    for (const r of rows) {
+      await query('DELETE FROM audit_trails WHERE id_rfq = ?', [r.id]);
+      await query('DELETE FROM rfq WHERE id = ?', [r.id]);
+    }
+    await resetPartnerState(fixtures().rfqId);
+  });
+
+  test('a Solicitation # already used by another quote re-renders the form with the inline error and creates nothing', async ({ page }) => {
+    const { rfqId } = fixtures();
+    await query("UPDATE rfq SET solicitation_number = 'PW-DUP-1', solicitation_key = 'PW-DUP-1' WHERE id = ?", [rfqId]);
+
+    await page.goto('http://localhost/rfq/perfil/quote/nuevo');
+    await page.fill('#email_code', code);
+    if (await page.locator('#sync_to_sheet').isChecked()) await page.locator('label.sync-check[for="sync_to_sheet"]').click();
+    await shareToggle(page).click();
+    await page.fill('#solicitation_number', ' pw-dup-1 '); // lowercase + padding: the match is normalized
+    await page.fill('#issue_date', '10/12/2026');
+    await page.fill('#end_date', '10/19/2026 00:00');
+    await page.fill('#internal_due_date', '10/26/2026');
+    await Promise.all([
+      page.waitForNavigation(),
+      page.click('[name="registrar_cotizacion"]'),
+    ]);
+
+    // Server re-render: the message is visible (this is the path that used to be wiped on load)…
+    const err = page.locator('[data-testid="solicitation-error"]');
+    await expect(err).toBeVisible();
+    await expect(err).toContainText('already uses this Solicitation #');
+    // …what was typed is kept, sharing stays on, and nothing was created.
+    await expect(page.locator('#email_code')).toHaveValue(code);
+    await expect(page.locator('#solicitation_number')).toHaveValue(' pw-dup-1 ');
+    await expect(page.locator('#share_with_partner')).toBeChecked();
+    expect((await query('SELECT COUNT(*) AS n FROM rfq WHERE email_code = ?', [code]))[0].n).toBe(0);
+
+    // Editing the field clears it.
+    await page.fill('#solicitation_number', 'PW-DUP-2');
+    await expect(err).toBeHidden();
+  });
+});
+
 test.describe('Partner sync — Information drawer + header badges', () => {
   let rfqId;
   test.beforeEach(async ({ page }) => {
