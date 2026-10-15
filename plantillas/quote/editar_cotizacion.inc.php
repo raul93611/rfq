@@ -50,6 +50,7 @@ function contractTypeColor($name) {
         include 'templates/multi_year_project_dropdown.inc.php';
         ?>
       </div>
+      <?php include 'plantillas/quote/templates/partner_badges.inc.php'; ?>
     </div>
 
     <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px;">
@@ -177,5 +178,6 @@ include_once 'plantillas/quote/modals/edit_provider_subitem_modal.inc.php';
 <script src="<?= asset_url('js/audit_trail.js'); ?>"></script>
 <script src="<?= asset_url('js/sheet_sync.js'); ?>"></script>
 <script src="<?= asset_url('js/sources_sought.js'); ?>"></script>
+<script src="<?= asset_url('js/partner_share.js'); ?>"></script>
 <script src="<?= asset_url('js/checklist_info_drawer.js'); ?>"></script>
 <script src="<?= asset_url('js/import_items_modal.js'); ?>"></script>

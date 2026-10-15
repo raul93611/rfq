@@ -24,6 +24,13 @@ try {
   // Create audit trail
   AuditTrailRepository::quote_status_audit_trail($conexion, 'Deleted', $id_rfq);
 
+  // Partner sync: a deleted shared quote becomes a tombstone + removed notice. Never fatal.
+  try {
+    PartnerSyncService::reconcile($conexion, (int)$id_rfq, ['reason' => 'Quote deleted']);
+  } catch (Throwable $partnerEx) {
+    error_log('Partner reconcile after delete failed: ' . $partnerEx->getMessage());
+  }
+
   // Close the database connection
   Conexion::cerrar_conexion();
 

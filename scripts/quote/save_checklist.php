@@ -82,6 +82,12 @@ if (isset($_POST['save_checklist'])) {
     // Re-fetch for the live "N of 10" completeness count the drawer's status card
     // and tab badge show after saving.
     Conexion::abrir_conexion();
+    // Partner Opportunity Sync: the owner can be chosen on this tab as well as on Information, so
+    // picking a different one resolves "Needs assignment" here too (before the re-fetch below).
+    if (($_POST['usuario_designado'] ?? '') !== ($_POST['designated_user_original'] ?? '')) {
+      Conexion::obtener_conexion()->prepare('UPDATE rfq SET partner_needs_assignment = 0 WHERE id = :id')
+        ->execute([':id' => $_POST['id_rfq']]);
+    }
     $savedQuote = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $_POST['id_rfq']);
     Conexion::cerrar_conexion();
 
@@ -90,6 +96,7 @@ if (isset($_POST['save_checklist'])) {
       'success' => true,
       'checklistCount' => $savedQuote->getChecklistCompletionCount(),
       'periodOfPerformance' => $savedQuote->getPeriodOfPerformanceDisplay(),
+      'partner' => $savedQuote->getPartnerSummary(),
     ]);
   } catch (Exception $e) {
     // Ensure the connection is closed in case of an error

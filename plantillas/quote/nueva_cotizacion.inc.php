@@ -32,6 +32,7 @@ include_once 'plantillas/quote/validacion_registro_cotizacion.inc.php';
 
 </div>
 
+<script src="<?= asset_url('js/partner_share.js'); ?>"></script>
 <script>
 $(function () {
   $('#create_master_proposal').select2({

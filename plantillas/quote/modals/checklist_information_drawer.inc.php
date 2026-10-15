@@ -21,6 +21,7 @@ $quote = $cotizacion_recuperada;
       <button type="button" class="qed-tab" data-tab="information" id="qed-tab-information">Information</button>
       <button type="button" class="qed-tab" data-tab="documents" id="qed-tab-documents">
         Documents <span class="qed-tab-count" id="qed-tab-documents-count"><?= (int)$qedDocCount; ?></span>
+        <span class="pp-tab-shared" id="qed-tab-documents-shared" data-testid="shared-count" hidden><i class="fas fa-share-alt"></i><span>0</span> shared</span>
       </button>
     </div>
   </div>
@@ -80,6 +81,11 @@ $quote = $cotizacion_recuperada;
       </button>
     </div>
     <div class="qed-panel-scroll">
+      <?php // Shown while the quote's "Share with partner" is off — per-file checkboxes are disabled until it is on. ?>
+      <div class="pp-note" id="pp-docs-note" data-testid="sharing-off-note"<?= (int)$quote->getShareWithPartner() === 1 ? ' hidden' : ''; ?>>
+        <i class="fas fa-lock"></i>
+        <span>Sharing is off for this quote. <button type="button" id="pp-docs-note-btn">Turn on Share with partner</button> to send files.</span>
+      </div>
       <div class="doc-widget" id="qed-documents-widget" data-id-rfq="<?= htmlspecialchars($id_rfq, ENT_QUOTES, 'UTF-8'); ?>">
         <div class="doc-dropzone">
           <div class="doc-dropzone-icon"><i class="fas fa-upload"></i></div>

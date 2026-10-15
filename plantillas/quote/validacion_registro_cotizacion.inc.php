@@ -1,4 +1,8 @@
 <?php
+// Set when "Share with partner" is on and the Solicitation # is blank or already in use; the form
+// partial (forms/quote/partner_share_fields.inc.php) renders it inline.
+$partner_solicitation_error = null;
+
 if (isset($_POST['registrar_cotizacion'])) {
   Conexion::abrir_conexion();
 
@@ -18,9 +22,16 @@ if (isset($_POST['registrar_cotizacion'])) {
     $_POST['canal']
   );
 
+  // Partner Opportunity Sync: required only while sharing; normalized key unique among live quotes.
+  $partner_solicitation_error = PartnerShareRepository::validateSolicitation(
+    Conexion::obtener_conexion(), isset($_POST['share_with_partner']), $_POST['solicitation_number'] ?? '', null
+  );
+
   Conexion::cerrar_conexion();
 
-  if ($validador->registro_cotizacion_valida()) {
+  // Evaluate both so every error shows at once, not one per submit.
+  $registro_valido = $validador->registro_cotizacion_valida();
+  if ($registro_valido && $partner_solicitation_error === null) {
     // Proceed to create and insert the quote
     createAndInsertQuote($validador, $usuario_designado);
   }
@@ -112,6 +123,20 @@ function createAndInsertQuote($validador, $usuario_designado) {
   logAuditTrails($id_rfq, $validador);
   // Single lifecycle marker alongside the per-field creation entries (Status tab).
   AuditTrailRepository::quote_created_audit_trail(Conexion::obtener_conexion(), $id_rfq);
+
+  // Partner Opportunity Sync: persist the Solicitation # (+ share gate) and queue the first notice.
+  // Persisting is part of creating the quote; the reconcile is a follow-up and never fails it.
+  if ($cotizacion_insertada) {
+    PartnerShareRepository::saveShareSettings(Conexion::obtener_conexion(), $id_rfq, isset($_POST['share_with_partner']), $_POST['solicitation_number'] ?? '');
+    if (trim($_POST['solicitation_number'] ?? '') !== '') {
+      AuditTrailRepository::create_audit_trail_modified(Conexion::obtener_conexion(), 'Solicitation #', trim($_POST['solicitation_number']), '', $id_rfq);
+    }
+    try {
+      PartnerSyncService::reconcile(Conexion::obtener_conexion(), (int)$id_rfq);
+    } catch (Throwable $partnerEx) {
+      error_log('Partner reconcile after quote create failed: ' . $partnerEx->getMessage());
+    }
+  }
 
   // Auto-sync to the SharePoint sheet when the user opted in via the "Sync to pipeline"
   // checkbox. The checkbox is the sole gate — bid type only sets its default in the form,

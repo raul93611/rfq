@@ -1,167 +1,80 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Guidance for Claude Code when working in this repository.
 
 ## Feature Inventory
 
-All built. Detail for most lives in the matching `###` section below.
+All built. Detail for the non-obvious ones is in the `###` sections below.
 
-Quote Inline Editing · SharePoint Sheet Sync · Comment Mentions & Notifications · Bid Requirement Fields (Site Visit/Q&A Deadline/Resumes) · Bid Pipeline Sync Controls · Bid Pipeline Metrics Dashboard · Pipeline Table View · 3-Year Annual Awards Comparison · Quote Lifecycle Audit Events · Write-Once Sheet Sync · Advanced Quote Search · Commercial Moving bid type + 50/50 payment term · Shared Notification Mailbox · Daily RFQ Digest Email · Quote Checklist & Info Drawer · Documents Drawer Tab + Custom File Widget · Import Items Enhancements (template download, append/replace mode, provider import) · Items & Services Table Redesign · Internal Due Date Table Filter + Required Field · Pipeline Status by User + Wider Drill-down Drawer · End Date Required + Pipeline Table Due-Date Columns · Pipeline Table Submitted Date Filter · Pipeline Table End Date Range Filter · Period of Performance · Pipeline Type of Contract Breakdown · Working on It Pipeline Status
+Quote Inline Editing · SharePoint Sheet Sync (write-once) · Comment Mentions & Notifications · Bid Requirement Fields · Bid Pipeline Sync Controls · Pipeline Metrics Dashboard · Pipeline Table View (Internal Due / End Date / Submitted Date / Type of Contract filters, Status by User) · 3-Year Annual Awards · Quote Lifecycle Audit Events · Advanced Quote Search · Commercial Moving + 50/50 term · Shared Notification Mailbox · Daily RFQ Digest · Checklist & Info Drawer (+ Period of Performance) · Documents Drawer · Import Items Enhancements · Items & Services Table Redesign · Working on It status · **Partner Opportunity Sync**
 
 ## Environment
 
 PHP app on a LAMP stack inside Docker (`docker-compose-lamp`), served at `http://localhost/rfq/`.
 
-**Setup (README):** create `/tmp` at project root; disable MySQL strict mode (`sql_mode=""` under `[mysqld]` in `my.cnf`, restart MySQL); prod also needs the `xmlwriter` PHP module.
-
-**Install:** `composer install`
-
-**Database:** `elogicnewdb` on `database:3306`. Schema: [sql/elogic.sql](sql/elogic.sql). Credentials/server URL hardcoded in [app/Bootstrap/config.inc.php](app/Bootstrap/config.inc.php) (`SERVIDOR`).
-
-**Generate users:** `/genera_usuario`.
-
-**Tests:** PHP (`tests/php/`, `docker exec lamp-php84 php /var/www/html/rfq/tests/php/<file>`); Node (`tests/js/`, `node --test`); Playwright (`tests/specs/`, `cd tests && PW_CHANNEL=chrome npx playwright test`). No lint.
+- **Setup:** create `/tmp` at project root; disable MySQL strict mode (`sql_mode=""` under `[mysqld]`, restart); prod also needs the `xmlwriter` PHP module. `composer install`. Users: `/genera_usuario`.
+- **Database:** `elogicnewdb` on `database:3306`, schema [sql/elogic.sql](sql/elogic.sql), migrations in `sql/` (run once per environment — list in [DEPLOYMENT.md](DEPLOYMENT.md)). There is **no `.env`**: config constants live in `app/Bootstrap/config.inc.php`, which is **gitignored** — a new constant must be added by hand on every environment, so code must degrade safely when one is undefined.
+- **Tests:** PHP `tests/php/` (`docker exec lamp-php83 php /var/www/html/rfq/tests/php/<file>`; DB-backed, transaction-rolled-back, so **no DDL inside a test**); Node `tests/js/` (`node --test`); Playwright `tests/specs/` (`cd tests && PW_CHANNEL=chrome npx playwright test`). No lint. PHP is not on the host.
+- **Line endings:** many files are CRLF (`Rfq.inc.php`, `index.php`, `estilos.css`, several quote templates). A script that reads/writes in text mode silently rewrites the whole file to LF and produces a 1000-line diff — check `git diff --stat` after scripted edits.
 
 ## Architecture
 
 Custom PHP MVC-like app, no framework.
 
-**Request lifecycle:** every request hits [index.php](index.php), which autoloads `app/{Domain}/{ClassName}.inc.php` and `switch`es the URL to a **script** in `scripts/` (AJAX handlers, JSON/HTML fragments) or a **view** in `vistas/` (full pages, `plantillas/` partials).
+**Request lifecycle:** every request hits [index.php](index.php), which autoloads from a **whitelist map** (a new class must be added to `$subfolder` there or it will not load), then `switch`es the URL to a **script** in `scripts/` (AJAX/JSON) or a **view** in `vistas/` (`plantillas/` partials). `vistas/perfil.php` echoes the page shell *before* dispatching to a template, so a redirect from inside a `plantillas/` view must use `Redireccion::redirigir1()` (client `<script>`), not `header()`.
 
-**Directories:** `app/` domain classes (`{Entity}.inc.php` + `Repositorio{Entity}.inc.php`/`{Entity}Repository.inc.php` static PDO methods; `Bootstrap/` = `Conexion`, `ControlSesion`, `Redireccion`, config/routes; `Utilities/` = `PDFGenerator` (mPDF), `ExcelRepository` (PhpSpreadsheet), `ProposalRepository`, `Email`, `TeamsIntegration`, `Input`) · `scripts/` action handlers · `vistas/` entry points (`home.php` login, `perfil.php` dashboard) · `plantillas/` template partials · `js/` per-module jQuery · `css/estilos.css` single stylesheet.
+**Directories:** `app/{Domain}/` (`{Entity}.inc.php` + `Repositorio{Entity}`/`{Entity}Repository` static PDO methods; `Bootstrap/` config/routes/session; `Utilities/` PDF, Excel, Email, Input) · `scripts/` handlers (`cron/` CLI jobs, `api/` token-auth partner API) · `vistas/` pages · `plantillas/` partials · `forms/` · `js/` per-module jQuery · `css/estilos.css` single stylesheet, ported designs use their own `--{prefix}-*` token block and namespace (`pm-`, `qed-`, `it-`, `at-`, `ac-`, `pp-`).
 
-Local CSS/JS go through `asset_url('js/file.js')` — appends `?v=<filemtime>` to bust stale caches after deploy. Never bare `RUTA_CSS`/`RUTA_JS`.
+Local CSS/JS go through `asset_url('js/file.js')` (cache-busts on mtime). Never bare `RUTA_CSS`/`RUTA_JS`.
 
-**DB access** always via the `Conexion` singleton:
-```php
-Conexion::abrir_conexion();
-$result = SomeRepository::some_method(Conexion::obtener_conexion(), $param);
-Conexion::cerrar_conexion();
-```
+**DB access** via the `Conexion` singleton (`Conexion::abrir_conexion(); …obtener_conexion()`); persistent PDO, `cerrar_conexion()` is a no-op.
 
-**Domains:** Quote, ReQuote (vendor re-quoting), Fulfillment, Tracking, Invoice, SalesCommission, Projection, Task, Personnel, Service, Provider, PaymentTerm, Room, TypeOfBid, TypeOfContract, TypeOfProject.
+**Domains:** Quote, ReQuote, Fulfillment, Tracking, Invoice, SalesCommission, Projection, Task, Personnel, Service, Provider, PaymentTerm, Room, TypeOfBid/Contract/Project, Partner.
 
-**Routes:** constants in [app/Bootstrap/routes.inc.php](app/Bootstrap/routes.inc.php); new routes need a constant there + a `case` in `index.php`.
+**Routes:** constants in [app/Bootstrap/routes.inc.php](app/Bootstrap/routes.inc.php) + a `case` in `index.php`.
 
-**Quote status flow:** `Rfq` progresses Created → Completed → Submitted → Award → Fulfillment → Invoice (terminal — "Submitted Invoice" was removed; `submitted_invoice` column/getter kept for compatibility, run `sql/submitted_invoice_removal_backfill.sql` on prod). `comments` encodes special statuses (No Bid, Cancelled, Not submitted). `isEnabledToFulfillment()`/`isEnabledToInvoice()` enforce transition prerequisites.
+**Quote status flow:** `Rfq` Created → Completed → Submitted → Award → Fulfillment → Invoice (terminal). `comments` encodes No Bid / Cancelled / Not submitted / Working on it. `Rfq::getSheetStatus()` is the canonical bucket logic.
 
 ### SharePoint Sheet Sync — write-once create-or-link
 
-Non-destructive: may create a missing row, never overwrites/deletes an existing one. Every path routes through `SheetSyncService::createOrLink($quote, $designatedUsername)` → `['row','outcome']`:
-- Presence decided by **scanning column A** (PROPOSAL = quote id), never `sheet_row`. Found → `outcome='linked'`. Absent → append row, `outcome='created'`. No Graph secret → `outcome=null`.
-- Persists only on **establishment** (created, linked to a new row, or prior status ≠ `synced`): status update + audit event. No-op = zero Graph writes, no audit row. Delete never touches the sheet.
-- **`sync_to_sheet` is the sole auto-sync gate** (not bid type, not child/master-link). `Sync to Sheet` → create-or-link + flag=1; `Break Sync` → flag=0 (keeps `sheet_row`); `copyRfq` → 0.
-- **Columns:** app owns A,B,C,D,G,H,J,L,M,N,Q,T; **E,F,I,K,O,P,R,S are human-owned**, blanked only on a brand-new row.
-- **`rfq.name` is stored raw** (`trim()` only — New Quote and `save_information.php` alike). Never `htmlspecialchars()` at save: column D is plain text and render sites already escape on output. Legacy escaped rows: run `sql/rfq_name_unescape_backfill.sql` **once** on prod (decodes one level per run). Test: `tests/php/quote_name_escaping_test.php`.
+May create a missing row, never overwrites/deletes one. Every path goes through `SheetSyncService::createOrLink()`: presence is decided by **scanning column A** (never `sheet_row`); persists + audits only on **establishment**; no-op = zero Graph writes. **`sync_to_sheet` is the sole auto-sync gate.** App owns columns A,B,C,D,G,H,J,L,M,N,Q,T; E,F,I,K,O,P,R,S are human-owned. **`rfq.name` is stored raw** (`trim()` only) — never `htmlspecialchars()` at save, escape at render; legacy rows: run `sql/rfq_name_unescape_backfill.sql` once on prod.
 
 ### Unified Audit Trail
 
-Quote/re-quote/fulfillment each write their own table (`audit_trails`, `re_quote_audit_trails`, `fulfillment_audit_trails`), merged by `POST quote/load_unified_audit_trail` (re-quote joined via `id_rfq`, sorted `created_date DESC`). `js/audit_trail.js`.
+Quote / re-quote / fulfillment audit tables merged by `quote/load_unified_audit_trail`; `js/audit_trail.js`. Sync-group types: `sheet_row_created/linked`, `break_sync`, legacy `sync_to_sheet`, and `partner_link/unlink/sync_in/removed` — rendered as compact single rows (`syncType`), never folded into "N automatic syncs". Audit messages are rendered as raw HTML: escape any dynamic value you put in one.
 
-Action types: `status_change`, `field_modified`, `item_modified/created/deleted`, `invoice_created/updated/deleted`, `document_updated`, `net_30`, `quote_created` (Status group); Sync group (quote only): `sheet_row_created`/`sheet_row_linked`, `break_sync`, legacy `sync_to_sheet`. Logged **once on establishment only**. Filter tabs All/Status/Edits/Items/Invoices/Sync — 3+ consecutive sync events collapse to "N automatic syncs". `at-*` CSS namespace.
+### Comment Mentions, Mailbox, Digest
 
-### Comment Mentions & Notifications
+`@mention` → `NotificationRepository::parseMentions()` → notification rows + SSE bell (`notifications_stream.php`, 3s poll) + email. **One admin-connected MS mailbox sends all system email** (`NotificationMailboxRepository`, OAuth reused via `ms_oauth_target='mailbox'`; admin UI `perfil/admin/settings`). Daily Digest (`scripts/cron/daily_digest.php`, 6am America/New_York, `digest_send_log` dedupes per date) goes to every active Admin via that mailbox.
 
-`sql/notifications_migration.sql` adds MS token columns to `usuarios` + a `notifications` table. `js/mentions.js` (@mention autocomplete on `#comment_rfq`), `NotificationRepository::parseMentions()`, SSE stream (`notifications_stream.php`, 3s poll) drives the navbar bell. `guardar_comment.php` parses @mentions → notifications → emails via the Shared Notification Mailbox. `nf-*`/`ac-*`/`cm-*` namespaces.
+### Pipeline Metrics, Table View, Annual Awards, Advanced Search
 
-**Routes:** `perfil/account`, `perfil/notifications`, `user/microsoft/{connect,callback,disconnect}`, `user/account/{update_profile,update_password}`, `quote/notifications/{stream,list,mark_read,users_for_mention}`.
+All aggregation is **SQL**, never loaded `Rfq` objects. Cohort date is `rfq.created_at` (prod also runs `sql/quote_created_at_revert_backfill.sql`). `PipelineMetricsRepository::STATUS_CASE` must mirror `Rfq::getSheetStatus()` (11 buckets); every consumer reads `STATUSES` dynamically. Win/loss denominator = submitted+award+lost, sources-sought excluded; dollar value = product total **+ services subtotal**. Table view (`PipelineTableRepository`, `js/pipeline_table.js`): server-paginated, filters AND-combined, a blank date never matches once a bound is set, no quote watchers (removed deliberately). `rfq.end_date` is a `VARCHAR` `MM/DD/YYYY HH:mm` — needs `STR_TO_DATE(NULLIF(end_date,''),'%m/%d/%Y %H:%i')`. Drill-down `byUser` needs `usuario_designado` in `getDrillDown()`'s inner SELECT; the Type of Contract bucket is the raw string (blank/null → `Uncategorized`). Annual Awards count by **award date** (`fecha_award`), not issue date, on purpose. Advanced Search reuses `STATUS_CASE` verbatim.
 
-### Bid Pipeline Metrics Dashboard
+### Quote Edit drawer (Checklist / Information / Documents)
 
-`perfil/reports/pipeline_metrics` — ApexCharts report reproducing the SharePoint METRICS 2026 tab. **All aggregation is SQL**, never loaded `Rfq` objects.
+Slide-over drawer `qed-*`; all tab forms stay mounted (hidden), ids prefixed `cl_`. Save endpoints always return JSON and the client must append `save_checklist=1` / `save_information=1` (FormData omits the submit button's name). Internal Due Date and End Date are required in New Quote and the Information drawer (New Quote's `#end_date` picker needs its own `autoUpdateInput: false`). Period of Performance lives in the Checklist drawer only (`Rfq::getPeriodOfPerformanceDisplay()` is shared by the page render and the AJAX repaint). Documents use `js/document_widget.js` (`doc-*`; `immediate` mode on edit, `deferred` on New Quote) and must load in `<head>` before `checklist_info_drawer.js`.
 
-`rfq.created_at` (auto-stamped) is the cohort date, replacing hand-typed `issue_date` whose unparseable values silently dropped rows. **On prod also run `sql/quote_created_at_revert_backfill.sql`** to NULL the local `issue_date` backfill.
+### Pricing notes
 
-`PipelineMetricsRepository::STATUS_CASE` mirrors `Rfq::getSheetStatus()` — keep in sync (11 buckets: tbd, working_on_it, bid, no_bid, submitted, submitted_ss, award, no_award_pricing, no_award_technical, cancelled, not_submitted). `working_on_it` (`comments = 'Working on it'`, violet `#8b5cf6`) is checked after the `completado = 1` bid clause, so pricing always wins once a quote is priced; it's in `PENDING_KEYS`, not `SUBMITTED_KEYS`/`WON_KEYS`/`LOST_KEYS`. Every consumer (Table filter, Advanced Search, Excel export) reads `STATUSES` dynamically, so no other file needed a change.
+Commercial Moving + `50% Upfront / 50% on Completion` are literal strings, no calc change (50/50 is a schedule, ×1 like Net 30; mirrored all-or-nothing in `js/quote.js`/`reQuote.js`). Proposal PDF terms: `ProposalRepository::resolve_payment_terms()` uses `services_payment_term` only for a services-type quote with at least one service line. **Re-quote services are their own re-solicited cost line**, not margin-neutral — don't "fix" them to cancel to zero. Re-quote CC: the submit handler and `calcServices()` preview must both select `$('[name=payment_terms]')` and use the same `1.03` constant as `ReQuoteServiceRepository::calc_items_with_CC()`.
 
-**Win/Loss:** denominator = `submitted`+`award`+lost (`no_award_*`); sources-sought excluded. **Dollar-value:** every figure = product total + services subtotal (`SERVICES_JOIN`/`VALUE_EXPR`), never `rfq.total_price` alone.
+### Items & Import
 
-Mirrored by Sources Sought (`quote/sources_sought`) and No Award (`quote/no_award`, + Reason column). **Status by user**: one stacked bar per designated user (`getStatusByUser()`, INNER JOIN `usuarios`). Drill-down `byUser` needs `usuario_designado` in `getDrillDown()`'s inner subquery SELECT only. **Type of Contract donut** (`contractTypeBreakdown()`) sits right after Status distribution; category is the raw `type_of_contract` string, not a fixed enum — blank/null merge into one `Uncategorized` bucket via `COALESCE(NULLIF(...))`. `.pm-drawer` is `50vw`. Tests: `tests/php/pipeline_metrics_test.php`, `tests/specs/09-pipeline-metrics.spec.js`.
+Items table rows stay real `<table>` rows for `js/quote.js`'s `td:eq()` loop (12 columns — indices in `calcQuoteTable()`/`populateCalcArrays()`); `refreshItemsTable()` is the single choke point for every mutation (capture/restore `scrollTop`). Provider/item names store raw, escaped at render (`sql/provider_name_unescape_backfill.sql` once on prod); re-quote provider paths are deliberately left as-is. Import (`scripts/quote/import_items.php`): `import_mode` append|replace; replace deletes subitems **before** items (FK).
 
-### Pipeline Table View
+### Partner Opportunity Sync
 
-`Charts | Table` toggle (`#pm-view`) swaps to a filterable, server-paginated (25/row) table over the same `created_at` cohort (`PipelineTableRepository`, `js/pipeline_table.js`). Row click opens a Quote Summary modal (real files via `quote/get_quote_files/<id>`; quick-comment reuses `#comment_rfq`/`mentions.js`).
+Two-way, token-authenticated sync of shared opportunities + solicitation files with the partner platform. Code in `app/Partner/`; the one place the partner payload is mapped is `PartnerSyncService::buildPayload()` / `normalizeIncoming()` / `applyToQuote()` (**field list is provisional until the partner's sample payload arrives**).
 
-**No Quote Watchers** — built alongside this, then removed; don't reintroduce a `watched` field/join without deliberately re-adding it.
+- **Gate:** `rfq.share_with_partner` is the sole outbound gate; Solicitation # is required only while it is on; its normalized key (`trim + UPPER + collapse spaces`) must be unique among non-deleted quotes. Partner state is never written through `insertar_cotizacion` — `PartnerShareRepository::saveShareSettings()` + `PartnerSyncService::reconcile()` run after the main save.
+- **`reconcile($c, $idRfq)`** is the one idempotent outbound call (hash of the shared payload detects real change, tombstones on unshare/delete, restores, shared-file content changes). Called from save/delete/restore/upload hooks (never allowed to fail the user action) and from `scripts/cron/partner_webhook_dispatch.php` (`scanAll`, every minute) as the safety net. Unrelated edits (pricing, items) enqueue nothing.
+- **Inbound** (`applyIncoming`/`applyRemoval`): pinned `partner_record_id` → else key match (1 = link, >1 = review) → else unkeyed quote whose Code equals the key = review `possible` → else create (service user `partner_integration`, assignee by email else default + `partner_needs_assignment`). Latest save wins on `partner_shared_updated_at` (UTC; incoming `<=` ours is ignored; we adopt *their* timestamp). **Applying incoming never enqueues a notice (no echo).** Removal detaches the link and hides the quote only if still untouched (Created, unpriced, no items, not in the sheet). Only pre-Award inbound statuses No Bid / Cancelled / Not submitted are applied.
+- **API** (`api/partner/*`, `PartnerApi::handle`, pure function): Bearer token compared by hash; any auth failure is a **bare 401** (also when disabled). Webhook additionally needs `X-Signature` = HMAC-SHA256(`{timestamp}.{body}`) and a timestamp within 5 min; the same `signing_secret` signs both directions. Only `shared=1` non-generated, non-partner-origin files are listable/downloadable.
+- **Files:** per-file marks in `partner_documents` (rows appear lazily). App-generated PDFs (`*(proposal|checklist|re_quote_items_table|trackings).pdf`) and partner-origin files can never be shared — enforced in `setShared()`, not just the UI. Inbound downloads send the partner credential **only to the partner's own host**, verify sha256, sanitize names, and never overwrite our files.
+- **Delivery:** `partner_webhook_outbox`, notices coalesce per (quote, event); back-off 1m/5m/30m/2h/12h then `failed_at` (admin Retry = one immediate attempt). `scripts/cron/partner_pull.php` (every 15 min) is the catch-up; first pull starts at enable time so enabling never imports history. Both cron scripts are CLI-only and lock against overlap (`PartnerSyncService::acquireLock`; an unopenable lock is an error, not "still running"). Run them by hand as the web user (`docker exec -u www-data …`) so files they write stay deletable from the UI.
+- **Needs assignment:** the owner field exists on **both** the Checklist and Information tabs (`Input::print_designated_user`), so both save scripts clear `partner_needs_assignment` on an owner change; an owner outside the RFQ-role list is injected as the selected option so an unchanged save doesn't swap it for the first user. `Rfq::getPartnerSummary()` is the repaint payload both saves return.
+- **Admin** (`perfil/admin/settings`, `admin/partner/{settings,token,retry,review}`, POST + `X-Requested-With`): issued token is stored hashed and shown once; stored secrets are never echoed to the page (blank field = keep). `partner_review` holds ambiguous / possible / rejected incoming records.
+- **Known limits:** permanently destroying a deleted shared quote loses its tombstone; a shared quote's "last synced" is the last shared-field save (ours or theirs), detected within a minute of the change for edits made outside the save hooks.
 
-**Internal Due Date filter** — preset dropdown (Today/Tomorrow/Next 7 days/Overdue) via `CURDATE()` in `dueDateClause()`. Required everywhere entered: New Quote form + Information drawer (`save_information.php` rejects blank).
-
-**End Date column + required field** — `rfq.end_date` is `VARCHAR` (`MM/DD/YYYY HH:mm`), not a DATE column: needs `STR_TO_DATE(NULLIF(rfq.end_date, ''), "%m/%d/%Y %H:%i")` (unset is `''`, not SQL NULL). Required in the New Quote form + Information drawer; column sits right after `Created`. New Quote form's `#end_date` picker needs its own `autoUpdateInput: false` (not the shared `dateTimeOptions`) or daterangepicker fills today's date/time on init.
-
-**End Date + Submitted Date filters** — both from/to ranges, AND-combined like every other filter; a row with a blank/never-set date never matches once either bound is set; inverted range = empty, no error; counts as one active filter regardless of which bound(s) are set. Submitted Date is on `rfq.fecha_submitted` (nullable `DATE`, no migration); End Date reuses the `STR_TO_DATE`/`NULLIF` handling above. Both fields are double-width `.pt-field-wide`, reusing the same `.pt-daterange`/`.pt-date` pattern (parallel to the `pm-daterange` picker, `pt-` namespace); Submitted Date sits right after Designated User, End Date right after Internal Due Date. **Type of Contract** filter (single-select, `TypeOfContractRepository::get_all` + "Uncategorized") and column both sit right after Type of Bid. Tests: `tests/php/pipeline_table_test.php`, `tests/php/internal_due_date_test.php`, `tests/specs/09-pipeline-metrics.spec.js`, `tests/specs/11-checklist-info-drawer.spec.js`, `tests/specs/02-quote-list.spec.js`.
-
-### Charts Tab — Annual Awards (3-year)
-
-`perfil/charts` (Chart.js). Two Annual Awards cards compare a **rolling** window (current year + 2 prior) as grouped monthly columns (`getAnnualAwardsDataByMonthForYears()`). Per-user cards hide users with no activity in either month (`activeUserSeries()` in `js/main_charts.js`).
-
-**Differs from Pipeline Metrics on purpose:** counts by **award date** (`fecha_award`) not issue date — the two pages answer different questions, no need to reconcile. Awards without `fecha_award` don't appear. Test: `tests/php/annual_awards_test.php`.
-
-### Advanced Quote Search
-
-`perfil/search_quotes` **Advanced** toggle expands a filter panel (status multi-select over the 11 pipeline buckets, designated user, bid/contract type, date range + field, price range, client, state — AND-combined) + a Status pill column. Off = identical to basic. Empty search = all non-deleted quotes; inverted ranges = empty state, no error.
-
-Separate backend pair (`getAdvancedSearchedQuotes`/`...Count`); status reuses `STATUS_CASE` verbatim. `js/searchQuotes.js` swaps DataTable column sets. Tests: `tests/php/advanced_search_test.php`, `tests/specs/10-advanced-search.spec.js` (`PW_CHANNEL=chrome`).
-
-### Commercial Moving + 50/50 Payment Term
-
-Bid type "Commercial Moving" + payment term `50% Upfront / 50% on Completion`, stored as the literal string in `rfq.payment_terms`/`services_payment_term` (no schema change). Not in `SYNCABLE_BID_TYPES`, so pipeline sync defaults off.
-
-**No calc change:** 50/50 is a schedule, ×1 like Net 30 — every calc/PDF path only special-cases `Net 30/CC`. Quote-wide **all-or-nothing** mirroring in `js/quote.js`/`js/reQuote.js`. Split shown via `js/payment_split.js`; re-quote cost sheet gets no split block. Tests: `tests/js/payment_split.test.js`, `tests/php/commercial_moving_test.php`.
-
-**Proposal PDF payment terms:** `ProposalRepository::resolve_payment_terms($cotizacion, $services)` (used by `scripts/utilities/proposal.php`) picks `services_payment_term` only when the quote is services-type **and** has at least one service line item — a services-type quote with zero service items falls back to the item-level `payment_terms`, same as a non-services quote. Test: `tests/php/proposal_payment_terms_test.php`.
-
-### Shared Notification Mailbox
-
-One admin-connected MS mailbox sends **all** system emails (mentions + Daily Digest), replacing the per-user connection that silently failed when the actor hadn't connected. `NotificationEmail::send()`/`::sendCustom()` both funnel through the same Graph `/me/sendMail` call and silent-no-op-when-disconnected gate.
-
-**OAuth reuse:** admin Connect sets `$_SESSION['ms_oauth_target']='mailbox'`; `microsoft_callback.php` branches on that flag to store in `notification_mailbox` instead of the user row — no new Azure app needed. Admin-only UI at `perfil/admin/settings`. Test: `tests/php/shared_mailbox_test.php`.
-
-### Daily RFQ Digest Email
-
-`scripts/cron/daily_digest.php` — droplet crontab, 6am America/New_York, no in-app UI. One HTML email (`DigestEmailTemplate`, 680px) to every active Admin via the Shared Mailbox. Four sections, always shown even empty, Due Today first: Due Today scopes to **today's End Date** (`getDueOn()`, `STR_TO_DATE(NULLIF(rfq.end_date, ''), '%m/%d/%Y %H:%i')`, same NULLIF handling as the Pipeline Table's End Date filter); Created/Submitted/Awarded scope to the **previous day** (`DigestRepository`, excludes `deleted=1`). Row names truncate at 70 chars server-side (Outlook doesn't support CSS `text-overflow`). `date_default_timezone_set('America/New_York')` set explicitly.
-
-`digest_send_log` (unique per date) dedupes same-day re-triggers. Test: `tests/php/daily_digest_test.php`.
-
-### Quote Checklist & Info Drawer
-
-Contract-info cards on `perfil/quote/editar_cotizacion/{id}` are denser; old Checklist/Information nav buttons are now `.qed-status-card` strips opening a slide-over drawer. Both tabs' forms stay mounted (CSS-hidden, not removed) — required prefixing `checklist.inc.php`'s colliding ids (`cl_`).
-
-**Checklist completeness** = `Rfq::getChecklistCompletionCount()` (10 fields) — Set Aside/GSA count only once moved off their default option, not merely non-empty.
-
-**Save endpoints** always return JSON (no redirect). Client must manually append `save_checklist=1`/`save_information=1` — `FormData`/`.serialize()` never include the submitting button's `name`, which these scripts gate on.
-
-**Old `/quote/checklist/{id}`/`/quote/information/{id}`** redirect via `Redireccion::redirigir1` (client `<script>`), not `header()` — `perfil.php` echoes the page shell first, so a header redirect fails silently. Test: `tests/php/checklist_info_drawer_test.php`, `tests/specs/11-checklist-info-drawer.spec.js`.
-
-**Period of Performance** — optional `pop_start_date`/`pop_end_date` on `rfq`, editable only in the Checklist drawer (not New Quote; moved off the Information drawer after initial launch). Shown on the Quote Edit info card's secondary row as a bold duration (`DateTime::diff()`, e.g. "3 months") with the exact dates as a muted sub-line, only when at least one date is set — omitted entirely (not a dash) when both are blank. Logged as one `field_modified` event via `checklist_events()`, covering both columns. Formatting lives in `Rfq::getPeriodOfPerformanceDisplay()`, shared by the initial page render and `save_checklist.php`'s AJAX response so `js/checklist_info_drawer.js` can repaint the `#qed-pop-cell` info-card cell live after a save (create/update/remove) — same pattern as `sheet_sync.js`'s `ssRepaint`. Test: `tests/php/period_of_performance_test.php`.
-
-### Documents Drawer Tab + Custom File Widget
-
-Documents moved into a third `qed-drawer` tab. kartik-v bootstrap-fileinput retired for `js/document_widget.js` (`doc-*` namespace, self-contained with or without a `qed-drawer` ancestor).
-
-`DocumentWidget.init(root, opts)`: **`immediate`** (edit page) loads via `get_quote_files`, uploads each drop on its own XHR, deletes via inline confirm; live count feeds the tab badge via `onCountChange`. **`deferred`** (create-quote, no `id_rfq` yet) stages client-side, mirrored onto `name="documentos[]"` via `new DataTransfer()`.
-
-Backend untouched. `document_widget.js` must load before `js/checklist_info_drawer.js` (calls `DocumentWidget.init` synchronously) — tagged in `<head>`. Test: `tests/php/documents_drawer_test.php`, `tests/specs/12-documents-drawer.spec.js`.
-
-### Import Items Enhancements
-
-Template download, Append/Replace mode, provider import — `scripts/quote/import_items.php` + `import_items_template.php`.
-
-- **Template**: header-only `.xlsx`, 10 item columns (0-9) + 5 Provider Name/Price pairs (10-19). `parseProviderPairs()`: skipped when Name blank; Price defaults 0 when Name present but Price blank/non-numeric.
-- **`import_mode`** (`append` default | `replace`). Replace deletes existing items (subitems first) before inserting; Rooms stay. Whole file parsed before deletion. **Gotcha:** `delete_item()` throws an FK-violation on any item with a subitem — delete subitems first.
-
-Test: `tests/php/import_items_test.php`, `tests/specs/13-import-items.spec.js`.
-
-### Items & Services Table Redesign (+ post-launch fixes, Re-Quote)
-
-Quote Edit only (Re-Quote/Fulfillment untouched). `it-*` namespace. Rows stay real `<table>`/`<tr>`/`<td>` for `js/quote.js`'s `td:eq()` calc loop — column count 13→12 (Website folded into description), shifting indices in `calcQuoteTable()`/`populateCalcArrays()`.
-
-- **Kebab menu**: `renderKebab()` wraps edit/delete in a `.it-menu` popover. Specs call `openKebabFor()` (`tests/helpers/kebab.js`) first.
-- **Descriptions**: server truncation gone — CSS (`grid-template-rows: 0fr/1fr`) condenses by default, `[data-toggle-desc]` expands.
-- **Providers**: `renderProvidersList()` sorts cheapest-first, highlights ties; names store raw, escaped only at render — `sql/provider_name_unescape_backfill.sql` (idempotent, **run on production**) decodes legacy double-escaped rows. Re-quote provider paths deliberately left as-is — fixing them there would trade a cosmetic bug for a stored-XSS hole.
-- **Post-launch**: `.it-table`/`.it-table.is-services` need `min-width` (1360px/750px) so `overflow-x: auto` engages instead of squeezing columns to zero on ~13-14" laptops. `refreshItemsTable()` is the single choke point behind every items-table mutation — fully replaces `#items-section-wrapper`, resetting `#table_items_container`'s `scrollTop` to 0 unless captured/restored around the AJAX call.
-
-Test: `tests/php/commercial_moving_test.php`, `tests/js/payment_split.test.js`, `tests/php/provider_name_escaping_test.php`, Playwright `03`–`08`/`13`.
-
-**Re-quote services are their own re-solicited cost line, not margin-neutral** — `obtener_re_quote_total_cost()` sums `re_quote_services`, not the original quote's `services`: client price stays pinned to the original quote while cost gets re-solicited, so Net 30/CC on re-quote services is a real cost, same as for items. Don't "fix" this into cancelling to zero — tried and reverted. Test: `tests/php/re_quote_cc_profit_test.php`.
-
-**Re-quote CC payment terms**: the submit handler and `calcServices()`'s live preview must both select on `$('[name=payment_terms]')` (not a stale `input:radio` selector) and use the same `1.03` CC-fee constant `ReQuoteServiceRepository::calc_items_with_CC()` persists with — either mismatch silently diverges the on-screen preview from the saved/PDF total without erroring. Test: `tests/specs/14-re-quote-cc-payment-terms.spec.js`.
+Tests: `tests/php/partner_opportunity_sync_test.php`, `tests/specs/15-partner-sync.spec.js`.

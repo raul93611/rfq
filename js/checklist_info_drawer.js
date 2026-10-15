@@ -237,6 +237,8 @@
     if (!form || !btn) return;
 
     hideError(which);
+    // Partner sharing on + blank Solicitation # → inline error, nothing is sent.
+    if (which === 'information' && window.PartnerShare && !window.PartnerShare.validate()) return;
     btn.classList.add('is-saving');
     btn.disabled = true;
     var originalHtml = btn.innerHTML;
@@ -274,8 +276,16 @@
             var tone = ss.status === 'synced' ? 'synced' : (ss.status === 'failed' ? 'failed' : 'never');
             window.ssRepaint(tone, ss.syncAt);
           }
+          if (result.data.partner && window.PartnerShare) {
+            window.PartnerShare.repaint(result.data.partner);
+          }
         } else {
-          showError(which, (result.data && result.data.message) || 'Could not save. Please try again.');
+          var failMsg = (result.data && result.data.message) || 'Could not save. Please try again.';
+          if (result.data && result.data.field === 'solicitation_number' && window.PartnerShare) {
+            window.PartnerShare.showError(failMsg);
+          } else {
+            showError(which, failMsg);
+          }
         }
       })
       .catch(function () {
@@ -315,11 +325,24 @@
 
   var documentsRoot = $('#qed-documents-widget');
   if (documentsRoot && window.DocumentWidget) {
+    var sharedPill = $('#qed-tab-documents-shared');
+    var docsNote = $('#pp-docs-note');
     window.DocumentWidget.init(documentsRoot, {
       mode: 'immediate',
       idRfq: documentsRoot.dataset.idRfq,
-      onCountChange: updateDocumentsCount
+      onCountChange: updateDocumentsCount,
+      // Partner Opportunity Sync: per-file share marks; the "N shared" pill hides at zero.
+      partnerShare: true,
+      onSharedCountChange: function (n) {
+        if (!sharedPill) return;
+        sharedPill.hidden = n === 0;
+        sharedPill.querySelector('span').textContent = n;
+      },
+      onSharingChange: function (on) { if (docsNote) docsNote.hidden = on; }
     });
+    var docsNoteBtn = $('#pp-docs-note-btn');
+    var infoTabBtn = $('#qed-tab-information');
+    if (docsNoteBtn && infoTabBtn) docsNoteBtn.addEventListener('click', function () { infoTabBtn.click(); });
   }
 
   var downloadAllBtn = $('#qed-download-all-btn');

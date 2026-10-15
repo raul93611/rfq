@@ -10,6 +10,13 @@ try {
   // Log the restoration in the audit trail
   AuditTrailRepository::quote_status_audit_trail($conexion, 'Restored', $id_rfq);
 
+  // Partner sync: a restored shared quote clears its tombstone and is announced again. Never fatal.
+  try {
+    PartnerSyncService::reconcile($conexion, (int)$id_rfq);
+  } catch (Throwable $partnerEx) {
+    error_log('Partner reconcile after restore failed: ' . $partnerEx->getMessage());
+  }
+
   // Close the database connection
   Conexion::cerrar_conexion();
 

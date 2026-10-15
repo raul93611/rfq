@@ -17,6 +17,12 @@ try {
       $conexion = Conexion::obtener_conexion();
       AuditTrailRepository::document_updated($conexion, 'deleted', $decoded_file_name, $id_rfq);
       $response['result'] = '1';
+      // Partner sync: if that file was shared, queue the removal notice. Never fatal.
+      try {
+        PartnerSyncService::reconcile($conexion, (int)$id_rfq);
+      } catch (Throwable $e) {
+        error_log('Partner reconcile after document delete failed: ' . $e->getMessage());
+      }
     } else {
       // Print error if the file could not be deleted
       print "Error deleting file: $file_path";

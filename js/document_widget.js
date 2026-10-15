@@ -48,12 +48,56 @@
     var emptyEl = root.querySelector('.doc-empty');
     if (!dropzone || !input || !listEl) return null;
 
-    // { id, name, size, blob, status: 'uploading'|'done'|'error'|'staged', progress, error }
+    // { id, name, size, blob, status: 'uploading'|'done'|'error'|'staged', progress, error,
+    //   shared, generated, fromPartner, shareError }  (last four: Partner Opportunity Sync)
     var files = [];
     var confirmingId = null;
+    // Partner sharing is a Quote Edit (immediate mode) concern: it is on only when the caller opts in
+    // and the quote itself has "Share with partner" saved on.
+    var partnerOn = !!opts.partnerShare && mode === 'immediate';
+    var partnerSharing = false;
+
+    function sharedCount() {
+      return partnerOn && partnerSharing
+        ? files.filter(function (f) { return f.status === 'done' && f.shared && !f.generated; }).length
+        : 0;
+    }
 
     function notifyCount() {
       if (typeof opts.onCountChange === 'function') opts.onCountChange(files.length);
+      if (typeof opts.onSharedCountChange === 'function') opts.onSharedCountChange(sharedCount());
+    }
+
+    function setPartnerSharing(on) {
+      partnerSharing = !!on;
+      if (typeof opts.onSharingChange === 'function') opts.onSharingChange(partnerSharing);
+      render();
+      notifyCount();
+    }
+
+    function setShared(f, value) {
+      var prev = f.shared;
+      f.shared = value;
+      f.shareError = null;
+      render();
+      notifyCount();
+      var fd = new FormData();
+      fd.append('file', f.name);
+      fd.append('shared', value ? '1' : '0');
+      var revert = function (msg) {
+        f.shared = prev;
+        f.shareError = msg;
+        render();
+        notifyCount();
+      };
+      fetch('/rfq/quote/partner_share_file/' + idRfq, {
+        method: 'POST', body: fd, credentials: 'same-origin', headers: { 'X-Requested-With': 'XMLHttpRequest' }
+      })
+        .then(function (res) { return res.json().catch(function () { return null; }).then(function (d) { return { ok: res.ok, d: d }; }); })
+        .then(function (r) {
+          if (!(r.ok && r.d && r.d.success)) revert((r.d && r.d.message) || 'Could not update sharing.');
+        })
+        .catch(function () { revert('Could not update sharing — connection error.'); });
     }
 
     function syncHiddenInput() {
@@ -72,7 +116,8 @@
     function renderRow(f) {
       var meta = fileMeta(f.name);
       var row = document.createElement('div');
-      row.className = 'doc-file-row' + (f.status === 'error' ? ' is-error' : '');
+      row.className = 'doc-file-row' + (f.status === 'error' ? ' is-error' : '') +
+        (partnerOn && partnerSharing && f.shared && !f.generated ? ' is-shared' : '');
       row.setAttribute('data-testid', 'doc-file-row');
 
       var badge = document.createElement('span');
@@ -110,7 +155,47 @@
         sizeEl.textContent = fmtSize(f.size);
         main.appendChild(sizeEl);
       }
+      if (f.shareError) {
+        var shareErr = document.createElement('span');
+        shareErr.className = 'doc-file-meta is-error-text';
+        shareErr.setAttribute('data-testid', 'doc-share-error');
+        shareErr.textContent = f.shareError;
+        main.appendChild(shareErr);
+      }
       row.appendChild(main);
+
+      if (partnerOn && f.status === 'done') {
+        if (f.generated) {
+          // App-generated PDFs carry internal pricing: never shareable (the server refuses too).
+          var internal = document.createElement('span');
+          internal.className = 'pp-internal';
+          internal.setAttribute('data-testid', 'doc-internal-only');
+          internal.appendChild(icon('fa-lock'));
+          internal.appendChild(document.createTextNode(' Internal only'));
+          row.appendChild(internal);
+        } else {
+          var lock = f.fromPartner || !partnerSharing;
+          var label = document.createElement('label');
+          label.className = 'pp-share' + (lock ? ' is-disabled' : '');
+          label.title = f.fromPartner ? 'Received from the partner'
+            : (partnerSharing ? '' : 'Turn on Share with partner in Information first');
+          var cb = document.createElement('input');
+          cb.type = 'checkbox';
+          cb.className = 'pp-share-input';
+          cb.setAttribute('data-testid', 'doc-share-checkbox');
+          cb.checked = !!f.shared;
+          cb.disabled = lock;
+          cb.addEventListener('change', function () { setShared(f, cb.checked); });
+          var box = document.createElement('span');
+          box.className = 'pp-share-box';
+          box.setAttribute('aria-hidden', 'true');
+          box.appendChild(icon('fa-check'));
+          label.appendChild(cb);
+          label.appendChild(box);
+          label.appendChild(document.createTextNode(f.fromPartner ? 'From partner' : 'Share with partner'));
+          row.appendChild(label);
+        }
+      }
 
       var actions = document.createElement('div');
       actions.className = 'doc-file-actions';
@@ -226,6 +311,8 @@
         try { data = JSON.parse(xhr.responseText); } catch (e) {}
         if (xhr.status >= 200 && xhr.status < 300 && data && data.result === '1') {
           f.status = 'done';
+          f.shared = false;
+          f.generated = false;
         } else {
           f.status = 'error';
           f.error = (data && data.error) || 'connection error';
@@ -256,6 +343,10 @@
       notifyCount();
     }
 
+    if (partnerOn) {
+      document.addEventListener('partner:sharing', function (e) { setPartnerSharing(e.detail && e.detail.sharing); });
+    }
+
     dropzone.addEventListener('click', function () { input.click(); });
     dropzone.addEventListener('dragover', function (e) { e.preventDefault(); dropzone.classList.add('is-drag'); });
     dropzone.addEventListener('dragleave', function () { dropzone.classList.remove('is-drag'); });
@@ -275,11 +366,13 @@
       fetch('/rfq/quote/get_quote_files/' + idRfq, { credentials: 'same-origin' })
         .then(function (res) { return res.json(); })
         .then(function (data) {
+          var states = (data.partner && data.partner.states) || {};
           (data.files || []).forEach(function (name) {
-            files.push({ id: nextId(), name: name, size: null, status: 'done' });
+            var st = states[name] || {};
+            files.push({ id: nextId(), name: name, size: null, status: 'done',
+              shared: !!st.shared, generated: !!st.generated, fromPartner: !!st.from_partner });
           });
-          render();
-          notifyCount();
+          setPartnerSharing(!!(data.partner && data.partner.sharing));
         })
         .catch(function () { render(); });
     } else {

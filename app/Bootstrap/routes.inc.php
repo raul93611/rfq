@@ -240,6 +240,9 @@ define('ACCOUNT_UPDATE_NOTIFICATIONS', SERVIDOR . 'user/account/update_notificat
 define('ADMIN_SETTINGS', PERFIL . 'admin/settings');
 define('MAILBOX_CONNECT', SERVIDOR . 'admin/mailbox/connect');
 define('MAILBOX_DISCONNECT', SERVIDOR . 'admin/mailbox/disconnect');
+/********************************PARTNER OPPORTUNITY SYNC****************************/
+define('PARTNER_ADMIN_ACTION', SERVIDOR . 'admin/partner');
+define('PARTNER_SHARE_FILE', SERVIDOR . 'quote/partner_share_file/');
 /******************************************************************************/
 define('EMPLOYEE_DOCS', SERVIDOR . 'employee_docs/');
 define('DOCS', SERVIDOR . 'documentos/');
