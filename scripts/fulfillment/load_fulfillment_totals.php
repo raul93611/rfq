@@ -4,13 +4,18 @@ $quote = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(),
 Conexion::cerrar_conexion();
 
 $commission_float = 0;
-switch ($quote->obtener_sales_commission()) {
-  case 'Same commission':
-    $commission_float = $quote->obtener_re_quote_rfq_profit() * 0.03;
-    break;
-  case 'Other commission':
-    $commission_float = $quote->getRfqFulfillmentProfit() * 0.03;
-    break;
+$saved_commission = $quote->obtener_saved_sales_commission();
+if ($saved_commission !== null) {
+  $commission_float = $saved_commission['amount'];
+} else {
+  switch ($quote->obtener_sales_commission()) {
+    case 'Same commission':
+      $commission_float = $quote->obtener_re_quote_rfq_profit() * 0.03;
+      break;
+    case 'Other commission':
+      $commission_float = $quote->getRfqFulfillmentProfit() * 0.03;
+      break;
+  }
 }
 ?>
 <div class="quote-action-total">

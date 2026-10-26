@@ -27,8 +27,7 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
   $type_of_contract = filter_input(INPUT_POST, 'type_of_contract', FILTER_SANITIZE_SPECIAL_CHARS);
   $services_payment_term = filter_input(INPUT_POST, 'services_payment_term', FILTER_SANITIZE_SPECIAL_CHARS);
   $invoice_date = filter_input(INPUT_POST, 'invoice_date', FILTER_SANITIZE_SPECIAL_CHARS);
-  $sales_commission = filter_input(INPUT_POST, 'sales_commission', FILTER_SANITIZE_SPECIAL_CHARS);
-  $sales_commission_comment = filter_input(INPUT_POST, 'sales_commission_comment', FILTER_SANITIZE_SPECIAL_CHARS);
+  $sales_commission_comment = trim((string)($_POST['sales_commission_comment'] ?? '')); // stored raw, escaped at render
 
   // Check required fields
   if ($id_rfq === false || $total_cost === false || $total_price === false || $shipping_cost === false) {
@@ -163,10 +162,12 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
         $conexion = Conexion::obtener_conexion();
 
         RepositorioRfq::check_invoice($conexion, $id_rfq);
-        RepositorioRfq::set_sales_commission($conexion, $invoice_date, $sales_commission, $sales_commission_comment, $id_rfq);
+        // The commission is always recalculated here from the quote's current numbers; nothing about it is posted.
+        $commission = SalesCommissionCalculator::forQuote($conexion, $id_rfq);
+        RepositorioRfq::set_sales_commission($conexion, $invoice_date, $commission, $sales_commission_comment, $id_rfq);
         $accounting_users = RepositorioUsuario::get_accounting_users($conexion);
         Email::send_email_invoice_quote($accounting_users, $cotizacion_recuperada);
-        AuditTrailRepository::quote_status_audit_trail($conexion, 'Invoice', $id_rfq);
+        AuditTrailRepository::quote_invoice_audit_trail($conexion, $id_rfq, $commission);
 
         Conexion::cerrar_conexion();
         $updateSheetStatus($id_rfq, $cotizacion_recuperada->getSheetRow(), 'AWARD');

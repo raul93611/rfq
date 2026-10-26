@@ -682,21 +682,31 @@ class RepositorioRfq {
     }
   }
 
-  public static function set_sales_commission($conexion, $invoice_date, $sales_commission, $sales_commission_comment, $id_rfq) {
+  // $commission is a SalesCommissionCalculator result: it is frozen on the quote together with the
+  // legacy `sales_commission` string so report filters/sorts keep working.
+  public static function set_sales_commission($conexion, $invoice_date, array $commission, $sales_commission_comment, $id_rfq) {
     if (isset($conexion)) {
       try {
         $sql = "
         UPDATE rfq SET 
         invoice_date = STR_TO_DATE(:invoice_date, '%m/%d/%Y'), 
         sales_commission = :sales_commission, 
-        sales_commission_comment = :sales_commission_comment 
+        sales_commission_comment = :sales_commission_comment,
+        sales_commission_amount = :amount,
+        sales_commission_basis_profit = :basis_profit,
+        sales_commission_fulfillment_pct = :fulfillment_pct,
+        sales_commission_reason = :reason
         WHERE id = :id_rfq
         ";
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia->bindValue(':invoice_date', $invoice_date, PDO::PARAM_STR);
-        $sentencia->bindValue(':sales_commission', $sales_commission, PDO::PARAM_STR);
+        $sentencia->bindValue(':sales_commission', $commission['sales_commission'], PDO::PARAM_STR);
         $sentencia->bindValue(':sales_commission_comment', $sales_commission_comment, PDO::PARAM_STR);
+        $sentencia->bindValue(':amount', $commission['amount']);
+        $sentencia->bindValue(':basis_profit', $commission['basis_profit']);
+        $sentencia->bindValue(':fulfillment_pct', $commission['fulfillment_pct']);
+        $sentencia->bindValue(':reason', $commission['reason'], PDO::PARAM_STR);
         $sentencia->execute();
       } catch (PDOException $ex) {
         print 'ERROR:' . $ex->getMessage() . '<br>';

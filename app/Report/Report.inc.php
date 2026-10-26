@@ -1673,6 +1673,7 @@ class Report {
     $month,
     $year
   ) {
+    $commissionSql = SalesCommissionCalculator::amountSql('r', 'rq');
     $data = [];
     $search = '%' . $search . '%';
     switch ($sort_column_index) {
@@ -1809,22 +1810,7 @@ class Report {
                   SUM(COALESCE(s.total_price, 0)) - COALESCE(r.total_services_fulfillment, 0) as profit_service_fulfillment,
                   r.type_of_contract,
                   r.sales_commission,
-                  CASE
-                    r.sales_commission
-                    WHEN 'Other commission' THEN ROUND(
-                      (
-                        COALESCE(r.total_price, 0) - COALESCE(r.total_fulfillment, 0)
-                      ) * 0.03,
-                      2
-                    )
-                    WHEN 'Same commission' THEN ROUND(
-                      (
-                        COALESCE(r.total_price, 0) - COALESCE(rq.total_cost, 0)
-                      ) * 0.03,
-                      2
-                    )
-                    WHEN 'No commission' THEN 0
-                  END as sales_commission_amount
+                  {$commissionSql} as sales_commission_amount
                 FROM
                   rfq r
                   LEFT JOIN services s ON r.id = s.id_rfq
@@ -1933,22 +1919,7 @@ class Report {
                   SUM(COALESCE(s.total_price, 0)) - COALESCE(r.total_services_fulfillment, 0) as profit_service_fulfillment,
                   r.type_of_contract,
                   r.sales_commission,
-                  CASE
-                    r.sales_commission
-                    WHEN 'Other commission' THEN ROUND(
-                      (
-                        COALESCE(r.total_price, 0) - COALESCE(r.total_fulfillment, 0)
-                      ) * 0.03,
-                      2
-                    )
-                    WHEN 'Same commission' THEN ROUND(
-                      (
-                        COALESCE(r.total_price, 0) - COALESCE(rq.total_cost, 0)
-                      ) * 0.03,
-                      2
-                    )
-                    WHEN 'No commission' THEN 0
-                  END as sales_commission_amount
+                  {$commissionSql} as sales_commission_amount
                 FROM
                   rfq r
                   LEFT JOIN services s ON r.id = s.id_rfq
@@ -2056,22 +2027,7 @@ class Report {
                   SUM(COALESCE(s.total_price, 0)) - COALESCE(r.total_services_fulfillment, 0) as profit_service_fulfillment,
                   r.type_of_contract,
                   r.sales_commission,
-                  CASE
-                    r.sales_commission
-                    WHEN 'Other commission' THEN ROUND(
-                      (
-                        COALESCE(r.total_price, 0) - COALESCE(r.total_fulfillment, 0)
-                      ) * 0.03,
-                      2
-                    )
-                    WHEN 'Same commission' THEN ROUND(
-                      (
-                        COALESCE(r.total_price, 0) - COALESCE(rq.total_cost, 0)
-                      ) * 0.03,
-                      2
-                    )
-                    WHEN 'No commission' THEN 0
-                  END as sales_commission_amount
+                  {$commissionSql} as sales_commission_amount
                 FROM
                   rfq r
                   LEFT JOIN services s ON r.id = s.id_rfq

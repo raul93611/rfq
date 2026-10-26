@@ -27,6 +27,7 @@ define('LINK_QUOTE', QUOTE_SC . 'link_quote/');
 define('IMPORT_ITEMS', QUOTE_SC . 'import_items/');
 define('IMPORT_ITEMS_TEMPLATE', QUOTE_SC . 'import_items_template');
 define('GET_ITEMS_TABLE', QUOTE_SC . 'get_items_table/');
+define('COMMISSION_PREVIEW', QUOTE_SC . 'commission_preview/');
 define('AUTOSAVE_QUOTE', QUOTE_SC . 'autosave/');
 define('SYNC_TO_SHEET', QUOTE_SC . 'sync_to_sheet/');
 define('BREAK_SHEET_SYNC', QUOTE_SC . 'break_sheet_sync/');

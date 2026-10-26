@@ -1,5 +1,37 @@
 <?php
-$commission_type    = $quote->obtener_sales_commission();
+$saved_commission = $quote->obtener_saved_sales_commission();
+if ($saved_commission !== null && $quote->obtener_invoice()):
+  // Auto-calculated at invoice time and frozen (see SalesCommissionCalculator). Legacy quotes fall through to the manual card below.
+  $tone = SalesCommissionCalculator::tone($saved_commission['reason']);
+  $statusIcons = include 'plantillas/utilities/commission_status_icons.inc.php';
+  $reason_label = SalesCommissionCalculator::reasonLabel($saved_commission['reason'], $saved_commission['fulfillment_pct'], $quote->obtener_type_of_contract());
+  $saved_comment = trim((string)$quote->obtener_sales_commission_comment());
+?>
+  <div class="cs-strip" data-testid="cs-strip">
+    <div class="cs-cell">
+      <span class="cs-l">Type of Contract</span>
+      <span class="cs-v" data-testid="cs-type"><?= htmlspecialchars($quote->obtener_type_of_contract() ?: '—', ENT_QUOTES, 'UTF-8') ?></span>
+    </div>
+    <div class="cs-cell">
+      <span class="cs-l">Commission</span>
+      <span class="cs-amt<?= $saved_commission['amount'] == 0 ? ' is-zero' : '' ?>" data-testid="cs-amount"><?= htmlspecialchars(SalesCommissionCalculator::money($saved_commission['amount']), ENT_QUOTES, 'UTF-8') ?></span>
+    </div>
+    <div class="cs-cell">
+      <span class="cs-l">Reason</span>
+      <span class="cs-chip <?= $tone ?>" data-testid="cs-reason">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><?= $statusIcons[$tone] ?></svg>
+        <?= htmlspecialchars($reason_label, ENT_QUOTES, 'UTF-8') ?>
+      </span>
+    </div>
+    <div class="cs-cell">
+      <span class="cs-l">Comment</span>
+      <span class="cs-cmt<?= $saved_comment === '' ? ' is-empty' : '' ?>" data-testid="cs-comment"><?= htmlspecialchars($saved_comment === '' ? '—' : $saved_comment, ENT_QUOTES, 'UTF-8') ?></span>
+    </div>
+  </div>
+<?php return; endif; ?>
+<?php
+// An auto quote whose invoice was removed has no commission until it is invoiced (and recalculated) again.
+$commission_type    = $saved_commission !== null ? null : $quote->obtener_sales_commission();
 $commission_comment = $quote->obtener_sales_commission_comment();
 
 switch ($commission_type) {

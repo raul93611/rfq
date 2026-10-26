@@ -46,6 +46,7 @@ class Rfq {
   private $net30_fulfillment;
   private $sales_commission;
   private $sales_commission_comment;
+  private $saved_sales_commission;
   private $services_payment_term;
   private $city;
   private $zip_code;
@@ -132,6 +133,12 @@ class Rfq {
     $this->net30_fulfillment = $row['net30_fulfillment'] ?? null;
     $this->sales_commission = $row['sales_commission'] ?? null;
     $this->sales_commission_comment = $row['sales_commission_comment'] ?? null;
+    // Frozen at invoice time; null = legacy quote (manual choice, see SalesCommissionCalculator::amountSql).
+    $this->saved_sales_commission = isset($row['sales_commission_amount']) ? [
+      'amount' => (float)$row['sales_commission_amount'],
+      'fulfillment_pct' => isset($row['sales_commission_fulfillment_pct']) ? (float)$row['sales_commission_fulfillment_pct'] : null,
+      'reason' => $row['sales_commission_reason'] ?? null,
+    ] : null;
     $this->services_payment_term = $row['services_payment_term'] ?? null;
     $this->city = $row['city'] ?? null;
     $this->zip_code = $row['zip_code'] ?? null;
@@ -484,6 +491,10 @@ class Rfq {
 
   public function obtener_sales_commission_comment() {
     return $this->sales_commission_comment;
+  }
+
+  public function obtener_saved_sales_commission() {
+    return $this->saved_sales_commission;
   }
 
   public function isServices() {

@@ -369,6 +369,25 @@ class AuditTrailRepository {
     self::insert_audit_trail($connection, $audit_trail);
   }
 
+  // The Invoice status event, with the frozen commission amount and basis. Rendered as raw HTML:
+  // everything dynamic goes through esc().
+  public static function invoiceMessage(array $commission): string {
+    $esc = fn($s) => htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8');
+    $amount = '<b>' . $esc(SalesCommissionCalculator::money($commission['amount'])) . '</b>';
+    if ($commission['basis']) {
+      $basis = ($commission['basis'] === 'requote' ? 're-quote' : 'fulfillment') . ' profit ' . SalesCommissionCalculator::money($commission['basis_profit']);
+      $detail = $commission['amount'] > 0 ? '3% of ' . $basis : SalesCommissionCalculator::reasonLabel($commission['reason']) . ', ' . $basis;
+    } else {
+      $detail = SalesCommissionCalculator::reasonLabel($commission['reason'], $commission['fulfillment_pct'], $commission['type_of_contract']);
+    }
+    return 'The quote was <b>Invoice</b> · Sales commission ' . $amount . ' (' . $esc($detail) . ')';
+  }
+
+  public static function quote_invoice_audit_trail($connection, $id_rfq, array $commission) {
+    $audit_trail = new AuditTrail('', $id_rfq, $_SESSION['user']->obtener_nombre_usuario(), 'status_change', $_SESSION['user']->obtener_id(), self::invoiceMessage($commission), '');
+    self::insert_audit_trail($connection, $audit_trail);
+  }
+
   // ---- Quote lifecycle events (creation + Bid Pipeline sheet sync) ----
   // Each mirrors quote_status_audit_trail: session-derived username/id, one insert_audit_trail row.
 

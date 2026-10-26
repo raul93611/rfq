@@ -151,6 +151,7 @@ class YearlyProjectionRepository {
   }
 
   public static function getMonthTotals($connection, $id) {
+    $commissionSql = SalesCommissionCalculator::amountSql('r', 'rq');
     $data = [];
     if (isset($connection)) {
       try {
@@ -177,11 +178,7 @@ class YearlyProjectionRepository {
                 COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0) AS total_cost,
                 COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - (COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0)) as profit,
                 100 * ((COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - (COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0))) / (COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0))) AS profit_percentage,
-                CASE r.sales_commission
-                  WHEN 'Other commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(r.total_fulfillment, 0)) * 0.03, 2)
-                  WHEN 'Same commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(rq.total_cost, 0)) * 0.03, 2)
-                  WHEN 'No commission' THEN 0
-                END as sales_commission
+                {$commissionSql} as sales_commission
               FROM rfq r
                 LEFT JOIN services s ON r.id = s.id_rfq
                 LEFT JOIN re_quotes rq ON r.id = rq.id_rfq
@@ -210,11 +207,7 @@ class YearlyProjectionRepository {
                 invoices_result_with_sales_commission.profit_percentage,
                 CASE invoices_result_with_sales_commission.attached_sales_commission
                   WHEN 1 THEN 
-                    CASE r.sales_commission
-                      WHEN 'Other commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(r.total_fulfillment, 0)) * 0.03, 2)
-                      WHEN 'Same commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(rq.total_cost, 0)) * 0.03, 2)
-                      WHEN 'No commission' THEN 0
-                    END
+                    {$commissionSql}
                   ELSE NULL
                 END as sales_commission
               FROM (
@@ -321,6 +314,7 @@ class YearlyProjectionRepository {
   }
 
   public static function getMonthly($connection, $start, $length, $search, $sort_column_index, $sort_direction, $id) {
+    $commissionSql = SalesCommissionCalculator::amountSql('r', 'rq');
     $data = [];
     $search = '%' . $search . '%';
     switch ($sort_column_index) {
@@ -364,11 +358,7 @@ class YearlyProjectionRepository {
                 COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0) AS total_cost,
                 COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - (COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0)) as profit,
                 100 * ((COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - (COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0))) / (COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0))) AS profit_percentage,
-                CASE r.sales_commission
-                  WHEN 'Other commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(r.total_fulfillment, 0)) * 0.03, 2)
-                  WHEN 'Same commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(rq.total_cost, 0)) * 0.03, 2)
-                  WHEN 'No commission' THEN 0
-                END as sales_commission
+                {$commissionSql} as sales_commission
               FROM rfq r
                 LEFT JOIN services s ON r.id = s.id_rfq
                 LEFT JOIN re_quotes rq ON r.id = rq.id_rfq
@@ -395,11 +385,7 @@ class YearlyProjectionRepository {
                 invoices_result_with_sales_commission.profit_percentage,
                 CASE invoices_result_with_sales_commission.attached_sales_commission
                   WHEN 1 THEN 
-                    CASE r.sales_commission
-                      WHEN 'Other commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(r.total_fulfillment, 0)) * 0.03, 2)
-                      WHEN 'Same commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(rq.total_cost, 0)) * 0.03, 2)
-                      WHEN 'No commission' THEN 0
-                    END
+                    {$commissionSql}
                   ELSE NULL
                 END as sales_commission
               FROM (
@@ -540,6 +526,7 @@ class YearlyProjectionRepository {
   }
 
   public static function getYearTotals($connection, $id) {
+    $commissionSql = SalesCommissionCalculator::amountSql('r', 'rq');
     $data = [];
     if (isset($connection)) {
       try {
@@ -581,11 +568,7 @@ class YearlyProjectionRepository {
                   COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0) AS total_cost,
                   COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - (COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0)) as profit,
                   100 * ((COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - (COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0))) / (COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0))) AS profit_percentage,
-                  CASE r.sales_commission
-                    WHEN 'Other commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(r.total_fulfillment, 0)) * 0.03, 2)
-                    WHEN 'Same commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(rq.total_cost, 0)) * 0.03, 2)
-                    WHEN 'No commission' THEN 0
-                  END as sales_commission
+                  {$commissionSql} as sales_commission
                 FROM rfq r
                   LEFT JOIN services s ON r.id = s.id_rfq
                   LEFT JOIN re_quotes rq ON r.id = rq.id_rfq
@@ -612,11 +595,7 @@ class YearlyProjectionRepository {
                   invoices_result_with_sales_commission.profit_percentage,
                   CASE invoices_result_with_sales_commission.attached_sales_commission
                     WHEN 1 THEN 
-                      CASE r.sales_commission
-                        WHEN 'Other commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(r.total_fulfillment, 0)) * 0.03, 2)
-                        WHEN 'Same commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(rq.total_cost, 0)) * 0.03, 2)
-                        WHEN 'No commission' THEN 0
-                      END
+                      {$commissionSql}
                     ELSE NULL
                   END as sales_commission
                 FROM (
@@ -722,6 +701,7 @@ class YearlyProjectionRepository {
   }
 
   public static function getMonth($connection, $start, $length, $search, $sort_column_index, $sort_direction, $id) {
+    $commissionSql = SalesCommissionCalculator::amountSql('r', 'rq');
     $data = [];
     $search = '%' . $search . '%';
     switch ($sort_column_index) {
@@ -784,11 +764,7 @@ class YearlyProjectionRepository {
               COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0) AS total_cost,
               COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - (COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0)) as profit,
               100 * ((COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - (COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0))) / (COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0))) AS profit_percentage,
-              CASE r.sales_commission
-                WHEN 'Other commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(r.total_fulfillment, 0)) * 0.03, 2)
-                WHEN 'Same commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(rq.total_cost, 0)) * 0.03, 2)
-                WHEN 'No commission' THEN 0
-              END as sales_commission,
+              {$commissionSql} as sales_commission,
               r.invoice_acceptance,
               NULL AS partial_invoice
             FROM rfq r
@@ -823,11 +799,7 @@ class YearlyProjectionRepository {
               invoices_result_with_sales_commission.profit_percentage,
               CASE invoices_result_with_sales_commission.attached_sales_commission
                 WHEN 1 THEN 
-                  CASE r.sales_commission
-                    WHEN 'Other commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(r.total_fulfillment, 0)) * 0.03, 2)
-                    WHEN 'Same commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(rq.total_cost, 0)) * 0.03, 2)
-                    WHEN 'No commission' THEN 0
-                  END
+                  {$commissionSql}
                 ELSE NULL
               END as sales_commission,
               invoices_result_with_sales_commission.invoice_acceptance,
@@ -940,6 +912,7 @@ class YearlyProjectionRepository {
   }
 
   public static function getTotalMonthCount($connection, $id) {
+    $commissionSql = SalesCommissionCalculator::amountSql('r', 'rq');
     if (isset($connection)) {
       try {
         $sql = "
@@ -956,11 +929,7 @@ class YearlyProjectionRepository {
               COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0) AS total_cost,
               COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - (COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0)) as profit,
               100 * ((COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - (COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0))) / (COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0))) AS profit_percentage,
-              CASE r.sales_commission
-                WHEN 'Other commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(r.total_fulfillment, 0)) * 0.03, 2)
-                WHEN 'Same commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(rq.total_cost, 0)) * 0.03, 2)
-                WHEN 'No commission' THEN 0
-              END as sales_commission,
+              {$commissionSql} as sales_commission,
               r.invoice_acceptance,
               NULL AS partial_invoice
             FROM rfq r
@@ -995,11 +964,7 @@ class YearlyProjectionRepository {
               invoices_result_with_sales_commission.profit_percentage,
               CASE invoices_result_with_sales_commission.attached_sales_commission
                 WHEN 1 THEN 
-                  CASE r.sales_commission
-                    WHEN 'Other commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(r.total_fulfillment, 0)) * 0.03, 2)
-                    WHEN 'Same commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(rq.total_cost, 0)) * 0.03, 2)
-                    WHEN 'No commission' THEN 0
-                  END
+                  {$commissionSql}
                 ELSE NULL
               END as sales_commission,
               invoices_result_with_sales_commission.invoice_acceptance,
@@ -1105,6 +1070,7 @@ class YearlyProjectionRepository {
   }
 
   public static function getTotalFilteredMonthCount($connection, $search, $id) {
+    $commissionSql = SalesCommissionCalculator::amountSql('r', 'rq');
     $search = '%' . $search . '%';
     if (isset($connection)) {
       try {
@@ -1122,11 +1088,7 @@ class YearlyProjectionRepository {
               COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0) AS total_cost,
               COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - (COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0)) as profit,
               100 * ((COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - (COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0))) / (COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0))) AS profit_percentage,
-              CASE r.sales_commission
-                WHEN 'Other commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(r.total_fulfillment, 0)) * 0.03, 2)
-                WHEN 'Same commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(rq.total_cost, 0)) * 0.03, 2)
-                WHEN 'No commission' THEN 0
-              END as sales_commission,
+              {$commissionSql} as sales_commission,
               r.invoice_acceptance,
               NULL AS partial_invoice
             FROM rfq r
@@ -1161,11 +1123,7 @@ class YearlyProjectionRepository {
               invoices_result_with_sales_commission.profit_percentage,
               CASE invoices_result_with_sales_commission.attached_sales_commission
                 WHEN 1 THEN 
-                  CASE r.sales_commission
-                    WHEN 'Other commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(r.total_fulfillment, 0)) * 0.03, 2)
-                    WHEN 'Same commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(rq.total_cost, 0)) * 0.03, 2)
-                    WHEN 'No commission' THEN 0
-                  END
+                  {$commissionSql}
                 ELSE NULL
               END as sales_commission,
               invoices_result_with_sales_commission.invoice_acceptance,
@@ -1274,6 +1232,7 @@ class YearlyProjectionRepository {
   }
 
   public static function getTypeOfContractChart($connection, $id) {
+    $commissionSql = SalesCommissionCalculator::amountSql('r', 'rq');
     $data = [];
     if (isset($connection)) {
       try {
@@ -1298,11 +1257,7 @@ class YearlyProjectionRepository {
               COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) AS total_price,
               (COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - 
                (COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0)) -
-               CASE r.sales_commission
-                 WHEN 'Other commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(r.total_fulfillment, 0)) * 0.03, 2)
-                 WHEN 'Same commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(rq.total_cost, 0)) * 0.03, 2)
-                 WHEN 'No commission' THEN 0
-               END) AS total_profit
+               {$commissionSql}) AS total_profit
             FROM rfq r
               LEFT JOIN services s ON r.id = s.id_rfq
               LEFT JOIN re_quotes rq ON r.id = rq.id_rfq
@@ -1324,11 +1279,7 @@ class YearlyProjectionRepository {
               (invoices_result_with_sales_commission.profit -
                CASE 
                  WHEN invoices_result_with_sales_commission.attached_sales_commission = 1 THEN
-                   CASE r.sales_commission
-                     WHEN 'Other commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(r.total_fulfillment, 0)) * 0.03, 2)
-                     WHEN 'Same commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(rq.total_cost, 0)) * 0.03, 2)
-                     WHEN 'No commission' THEN 0
-                   END
+                   {$commissionSql}
                  ELSE 0
                END) AS total_profit
             FROM (

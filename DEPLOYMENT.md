@@ -45,7 +45,8 @@ for f in sql/sheet_sync_migration.sql \
          sql/services_net30cc_rounding_fix.sql \
          sql/daily_digest_migration.sql \
          sql/quote_watchers_drop.sql \
-         sql/partner_opportunity_sync_migration.sql; do
+         sql/partner_opportunity_sync_migration.sql \
+         sql/sales_commission_auto_migration.sql; do
   docker compose exec -T database mysql -uroot -p"$DB_PASS" elogicnewdb < "$f"
 done
 ```
@@ -71,6 +72,12 @@ nine `rfq` columns, the `partner_documents` / `partner_webhook_outbox` / `partne
 `partner_review` tables, and the non-login `partner_integration` service user (status 0 — it can
 never sign in). Every existing quote stays unshared and unchanged. The integration is **off**
 until an admin enables it.
+
+`sales_commission_auto_migration.sql` (Automatic Sales Commission) adds four nullable `rfq` columns
+(`sales_commission_amount`, `_basis_profit`, `_fulfillment_pct`, `_reason`). It is **not** idempotent —
+run it once. There is no backfill: a quote with `sales_commission_amount IS NULL` is a legacy quote and
+keeps its manual commission in the fulfillment page, report, Excel export and projection. The rate (3%)
+and the 6% threshold are constants in `SalesCommissionCalculator`; no `config.inc.php` change is needed.
 
 Disable MySQL strict mode (the app relies on it): add `sql_mode = ""` under
 `[mysqld]` in `my.cnf` and restart the database container.
