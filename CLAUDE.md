@@ -4,9 +4,9 @@ Guidance for Claude Code when working in this repository.
 
 ## Feature Inventory
 
-All built. Detail for the non-obvious ones is in the `###` sections below.
+All built except those marked planned (spec in `features/`). Detail for the non-obvious ones is in the `###` sections below.
 
-Quote Inline Editing · SharePoint Sheet Sync (write-once) · Comment Mentions & Notifications · Bid Requirement Fields · Bid Pipeline Sync Controls · Pipeline Metrics Dashboard · Pipeline Table View (Internal Due / End Date / Submitted Date / Type of Contract filters, Status by User) · 3-Year Annual Awards · Quote Lifecycle Audit Events · Advanced Quote Search · Commercial Moving + 50/50 term · Shared Notification Mailbox · Daily RFQ Digest · Checklist & Info Drawer (+ Period of Performance) · Documents Drawer · Import Items Enhancements · Items & Services Table Redesign · Working on It status · **Partner Opportunity Sync**
+Quote Inline Editing · SharePoint Sheet Sync · Comment Mentions & Notifications · Bid Requirement Fields · Bid Pipeline Sync Controls · Pipeline Metrics Dashboard · Pipeline Table View · 3-Year Annual Awards · Quote Lifecycle Audit Events · Advanced Quote Search · Commercial Moving + 50/50 term · Shared Notification Mailbox · Daily RFQ Digest · Checklist & Info Drawer · Documents Drawer · Import Items Enhancements · Items & Services Table Redesign · Working on It status · **Partner Opportunity Sync** · Automatic Sales Commission (planned — `features/automatic-sales-commission.md`)
 
 ## Environment
 
