@@ -4262,3 +4262,85 @@ tr.it-row.is-sub .it-td.it-price-total { font-size: 14px; font-weight: 700; }
 /* [hidden] must win over the display set by the component classes above */
 .pp-empty[hidden], .pp-table[hidden], .pp-banner-wrap[hidden], .pp-form-error[hidden] { display: none; }
 .pp-inc .pp-sub { white-space: normal; }
+
+/* =========================================================================
+   Automatic Sales Commission (ic- / cs-) — Invoice modal breakdown card +
+   Fulfillment commission strip. Ported from the "Invoice Commission Breakdown" design.
+   ========================================================================= */
+.ic-card, .cs-strip, #sales_commission_modal {
+  --ic-ink-900:#0f1623; --ic-ink-700:#2c3849; --ic-ink-500:#5a6a7e; --ic-ink-400:#7d8ba0; --ic-ink-300:#aab4c2;
+  --ic-line:#e3e7ee; --ic-line-2:#eef1f6; --ic-navy-50:#f4f6fa;
+  --ic-sky:#2db4e8; --ic-sky-700:#0e6b94; --ic-sky-50:#e6f5fc;
+  --ic-green-50:#e8f6ec; --ic-red:#dc2626; --ic-amber-50:#fdf2dc;
+}
+#sales_commission_modal .iem-input[readonly] { cursor: pointer; background: #fff; }
+.ic-req { color: var(--ic-red); }
+.ic-opt { font-weight: 500; color: var(--ic-ink-400); text-transform: none; letter-spacing: 0; font-size: 11px; }
+.ic-date-wrap { position: relative; }
+.ic-date-wrap .iem-input { padding-right: 36px; }
+.ic-date-icon { position: absolute; right: 11px; top: 50%; transform: translateY(-50%); color: var(--ic-ink-400); pointer-events: none; }
+
+/* ---- breakdown card (modal) ---- */
+.ic-card { background: #fff; border: 1px solid var(--ic-line); border-radius: 10px; overflow: hidden; box-shadow: 0 1px 2px rgba(15,22,35,.03); }
+.ic-head { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: #fafbfd; border-bottom: 1px solid var(--ic-line-2); }
+.ic-title { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; font-weight: 700; color: var(--ic-ink-700); }
+.ic-ro { display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; color: var(--ic-ink-500); font-weight: 500; }
+.ic-kv { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 11px 14px; border-bottom: 1px solid var(--ic-line-2); font-size: 13px; }
+.ic-k { color: var(--ic-ink-500); }
+.ic-v { font-weight: 600; color: var(--ic-ink-900); }
+.ic-profit { padding: 8px 8px 10px; display: flex; flex-direction: column; gap: 3px; transition: opacity .2s; }
+.ic-pgrid { display: grid; grid-template-columns: minmax(0, 1fr) 116px 88px; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 7px; border: 1px solid transparent; font-size: 13px; }
+.ic-pgrid.is-head { padding-top: 2px; padding-bottom: 2px; font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em; font-weight: 700; color: var(--ic-ink-400); }
+.ic-pgrid .n { text-align: right; font-variant-numeric: tabular-nums; }
+.ic-pl { display: flex; align-items: center; gap: 8px; color: var(--ic-ink-700); font-weight: 500; }
+.ic-pgrid.is-used { background: var(--ic-sky-50); border-color: #bfe3f5; }
+.ic-pgrid.is-used .n, .ic-pgrid.is-used .ic-pl { color: var(--ic-ink-900); font-weight: 700; }
+.ic-used { font-size: 9.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #fff; background: var(--ic-sky-700); border-radius: 9px; padding: 2px 8px; }
+.ic-dash { color: var(--ic-ink-300); }
+.ic-card .is-neg { color: var(--ic-red); }
+.ic-pct-low { color: #92400e; font-weight: 700; background: var(--ic-amber-50); border: 1px solid #f5d98a; border-radius: 5px; padding: 1px 6px; }
+.ic-amount { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; padding: 14px 16px; background: #f1f9fd; border-top: 1px solid #d6edf8; }
+.ic-amt-l { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; font-weight: 700; color: var(--ic-sky-700); }
+.ic-amt { font-size: 38px; font-weight: 700; letter-spacing: -.02em; line-height: 1.05; font-variant-numeric: tabular-nums; color: var(--ic-ink-900); margin-top: 3px; }
+.ic-rule { display: inline-flex; align-items: center; gap: 5px; font-size: 12.5px; color: var(--ic-ink-700); font-weight: 500; padding: 5px 11px; background: #fff; border: 1px solid #d6edf8; border-radius: 14px; white-space: nowrap; margin-bottom: 4px; }
+.ic-rule b { color: var(--ic-sky-700); font-weight: 700; }
+.ic-status { display: flex; align-items: center; gap: 8px; padding: 10px 14px; font-size: 12.5px; font-weight: 600; border-top: 1px solid; }
+.ic-ok .ic-status { background: var(--ic-green-50); color: #166534; border-color: #cfe9d8; }
+.ic-under6 .ic-status { background: var(--ic-amber-50); color: #92400e; border-color: #f5d98a; }
+.ic-noprofit .ic-status { background: var(--ic-navy-50); color: var(--ic-ink-700); border-color: var(--ic-line); }
+.ic-ineligible .ic-status { background: var(--color-dark); color: #fff; border-color: var(--color-dark); font-size: 13.5px; padding: 13px 14px; }
+.ic-under6 .ic-amount, .ic-noprofit .ic-amount, .ic-ineligible .ic-amount { background: var(--ic-navy-50); border-top-color: var(--ic-line); }
+.ic-under6 .ic-amt, .ic-noprofit .ic-amt, .ic-ineligible .ic-amt,
+.ic-under6 .ic-amt-l, .ic-noprofit .ic-amt-l, .ic-ineligible .ic-amt-l { color: var(--ic-ink-400); }
+.ic-under6 .ic-rule, .ic-noprofit .ic-rule, .ic-ineligible .ic-rule,
+.ic-under6 .ic-rule b, .ic-noprofit .ic-rule b, .ic-ineligible .ic-rule b { color: var(--ic-ink-400); border-color: var(--ic-line); }
+.ic-ineligible .ic-profit { opacity: .38; }
+.ic-error { padding: 14px; border: 1px solid #f5c2c2; background: #fbe9e9; color: #991b1b; border-radius: 10px; font-size: 13px; }
+
+/* ---- skeleton ---- */
+.ic-sk { display: block; border-radius: 6px; background: linear-gradient(90deg, #eceff4 25%, #f7f8fb 50%, #eceff4 75%); background-size: 300% 100%; animation: icsh 1.3s ease-in-out infinite; }
+@keyframes icsh { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
+.ic-loading .ic-amount { background: #fafbfd; border-top-color: var(--ic-line-2); }
+.ic-loading .ic-status { background: #fafbfd; border-color: var(--ic-line-2); }
+
+/* ---- fulfillment commission strip ---- */
+.cs-strip { display: grid; grid-template-columns: 1.1fr 1fr 1.7fr 2fr; background: #fff; border: 1px solid var(--ic-line); border-radius: 12px; box-shadow: 0 1px 2px rgba(15,22,35,.03); overflow: hidden; margin-bottom: 1rem; }
+.cs-cell { padding: 14px 18px; display: flex; flex-direction: column; gap: 6px; min-width: 0; justify-content: center; }
+.cs-cell + .cs-cell { border-left: 1px solid var(--ic-line-2); }
+.cs-l { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; font-weight: 700; color: var(--ic-ink-500); }
+.cs-v { font-size: 14px; font-weight: 600; color: var(--ic-ink-900); }
+.cs-amt { font-size: 24px; font-weight: 700; letter-spacing: -.01em; font-variant-numeric: tabular-nums; line-height: 1.15; color: var(--ic-ink-900); }
+.cs-amt.is-zero { color: var(--ic-ink-400); }
+.cs-cmt { font-size: 13px; color: var(--ic-ink-700); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.cs-cmt.is-empty { color: var(--ic-ink-300); }
+.cs-chip { display: inline-flex; align-items: center; gap: 6px; align-self: flex-start; min-height: 26px; padding: 3px 11px; border-radius: 14px; font-size: 12px; font-weight: 600; border: 1px solid; line-height: 1.3; }
+.cs-chip.sky { background: var(--ic-sky-50); border-color: #bfe3f5; color: var(--ic-sky-700); }
+.cs-chip.amber { background: var(--ic-amber-50); border-color: #f5d98a; color: #92400e; }
+.cs-chip.slate { background: var(--ic-navy-50); border-color: #dde3ec; color: var(--ic-ink-700); }
+.cs-chip.dark { background: var(--color-dark); border-color: var(--color-dark); color: #fff; }
+@media (max-width: 900px) {
+  .cs-strip { grid-template-columns: 1fr 1fr; }
+  .cs-cell + .cs-cell { border-left: 0; }
+  .cs-cell:nth-child(even) { border-left: 1px solid var(--ic-line-2); }
+  .cs-cell:nth-child(n+3) { border-top: 1px solid var(--ic-line-2); }
+}

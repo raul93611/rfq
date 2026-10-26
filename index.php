@@ -24,7 +24,7 @@ spl_autoload_register(function ($class) {
     'Task' => ['Task', 'TaskRepository'],
     'TaskComment' => ['TaskComment', 'TaskCommentRepository'],
     'TypeOfContract' => ['TypeOfContract', 'TypeOfContractRepository'],
-    'SalesCommission' => ['SalesCommission', 'SalesCommissionRepository'],
+    'SalesCommission' => ['SalesCommission', 'SalesCommissionRepository', 'SalesCommissionCalculator'],
     'Invoice' => ['Invoice', 'InvoiceRepository'],
     'Personnel' => ['Personnel', 'PersonnelRepository'],
     'CalendarEvent' => ['CalendarEvent', 'CalendarEventRepository'],
@@ -195,6 +195,10 @@ switch ($partes_ruta[1] ?? null) {
       case 'get_items_table':
         $id_rfq = $partes_ruta[3];
         $ruta_elegida = 'scripts/quote/get_items_table.php';
+        break;
+      case 'commission_preview':
+        $id_rfq = $partes_ruta[3];
+        $ruta_elegida = 'scripts/quote/commission_preview.php';
         break;
       case 'autosave':
         $id_rfq = $partes_ruta[3];

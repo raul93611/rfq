@@ -252,14 +252,46 @@ $(document).ready(function () {
   const $invoiceCheckbox = $('#invoice');
   const $salesCommissionModal = $('#sales_commission_modal');
 
-  // Show the sales commission modal when the checkbox is checked
+  const $commissionBreakdown = $('#ic-breakdown');
+  const $commissionSave = $('#sales_commission_save');
+  const commissionSkeleton = $commissionBreakdown.html();
+
+  // Fetch the read-only breakdown the server would save now. Save stays disabled until it loads;
+  // the amount is recalculated again on the server when the invoice is saved.
+  function loadCommissionPreview() {
+    $commissionSave.prop('disabled', true);
+    $commissionBreakdown.html(commissionSkeleton);
+    $.get($salesCommissionModal.data('preview-url'))
+      .done(function (html) {
+        $commissionBreakdown.html(html);
+        $commissionSave.prop('disabled', false);
+      })
+      .fail(function () {
+        $commissionBreakdown.html(
+          '<div class="ic-error" data-testid="ic-error">Could not calculate the commission. ' +
+          '<a href="#" id="ic-retry">Try again</a></div>'
+        );
+      });
+  }
+
+  // Show the invoice modal (with the commission breakdown) when the checkbox is checked
   $invoiceCheckbox.on('change', function () {
     if (this.checked) {
       $salesCommissionModal.modal({
         backdrop: 'static', // Prevent modal from being closed by clicking outside
         keyboard: false     // Disable closing the modal with the Esc key
       });
+      loadCommissionPreview();
     }
+  });
+  $commissionBreakdown.on('click', '#ic-retry', function (e) {
+    e.preventDefault();
+    loadCommissionPreview();
+  });
+  // Cancel / X: close the modal and untick Invoice so nothing is submitted
+  $('#sales_commission_cancel, #sales_commission_close').on('click', function () {
+    $invoiceCheckbox.prop('checked', false);
+    $salesCommissionModal.modal('hide');
   });
   /************************* LINK QUOTE MODAL *************************/
   const $linkQuoteModal = $('#link_quote_modal');

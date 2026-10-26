@@ -1103,6 +1103,7 @@ class ExcelRepository {
     $month,
     $year
   ) {
+    $commissionSql = SalesCommissionCalculator::amountSql('r', 'rq');
     $data = [];
     if (isset($connection)) {
       try {
@@ -1167,22 +1168,7 @@ class ExcelRepository {
                   SUM(COALESCE(s.total_price, 0)) - COALESCE(r.total_services_fulfillment, 0) as profit_service_fulfillment,
                   r.type_of_contract,
                   r.sales_commission,
-                  CASE
-                    r.sales_commission
-                    WHEN 'Other commission' THEN ROUND(
-                      (
-                        COALESCE(r.total_price, 0) - COALESCE(r.total_fulfillment, 0)
-                      ) * 0.03,
-                      2
-                    )
-                    WHEN 'Same commission' THEN ROUND(
-                      (
-                        COALESCE(r.total_price, 0) - COALESCE(rq.total_cost, 0)
-                      ) * 0.03,
-                      2
-                    )
-                    WHEN 'No commission' THEN 0
-                  END as sales_commission_amount
+                  {$commissionSql} as sales_commission_amount
                 FROM
                   rfq r
                   LEFT JOIN services s ON r.id = s.id_rfq
@@ -1280,22 +1266,7 @@ class ExcelRepository {
                   SUM(COALESCE(s.total_price, 0)) - COALESCE(r.total_services_fulfillment, 0) as profit_service_fulfillment,
                   r.type_of_contract,
                   r.sales_commission,
-                  CASE
-                    r.sales_commission
-                    WHEN 'Other commission' THEN ROUND(
-                      (
-                        COALESCE(r.total_price, 0) - COALESCE(r.total_fulfillment, 0)
-                      ) * 0.03,
-                      2
-                    )
-                    WHEN 'Same commission' THEN ROUND(
-                      (
-                        COALESCE(r.total_price, 0) - COALESCE(rq.total_cost, 0)
-                      ) * 0.03,
-                      2
-                    )
-                    WHEN 'No commission' THEN 0
-                  END as sales_commission_amount
+                  {$commissionSql} as sales_commission_amount
                 FROM
                   rfq r
                   LEFT JOIN services s ON r.id = s.id_rfq
@@ -1393,22 +1364,7 @@ class ExcelRepository {
                   SUM(COALESCE(s.total_price, 0)) - COALESCE(r.total_services_fulfillment, 0) as profit_service_fulfillment,
                   r.type_of_contract,
                   r.sales_commission,
-                  CASE
-                    r.sales_commission
-                    WHEN 'Other commission' THEN ROUND(
-                      (
-                        COALESCE(r.total_price, 0) - COALESCE(r.total_fulfillment, 0)
-                      ) * 0.03,
-                      2
-                    )
-                    WHEN 'Same commission' THEN ROUND(
-                      (
-                        COALESCE(r.total_price, 0) - COALESCE(rq.total_cost, 0)
-                      ) * 0.03,
-                      2
-                    )
-                    WHEN 'No commission' THEN 0
-                  END as sales_commission_amount
+                  {$commissionSql} as sales_commission_amount
                 FROM
                   rfq r
                   LEFT JOIN services s ON r.id = s.id_rfq
@@ -1515,6 +1471,7 @@ class ExcelRepository {
     $connection,
     $id
   ) {
+    $commissionSql = SalesCommissionCalculator::amountSql('r', 'rq');
     $data = [];
     if (isset($connection)) {
       try {
@@ -1544,11 +1501,7 @@ class ExcelRepository {
               COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0) AS total_cost,
               COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - (COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0)) as profit,
               100 * ((COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0) - (COALESCE(r.total_fulfillment, 0) + COALESCE(r.total_services_fulfillment, 0))) / (COALESCE(COALESCE(r.total_price, 0) + SUM(COALESCE(s.total_price, 0)), 0))) AS profit_percentage,
-              CASE r.sales_commission
-                WHEN 'Other commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(r.total_fulfillment, 0)) * 0.03, 2)
-                WHEN 'Same commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(rq.total_cost, 0)) * 0.03, 2)
-                WHEN 'No commission' THEN 0
-              END as sales_commission,
+              {$commissionSql} as sales_commission,
               r.invoice_acceptance,
               NULL AS partial_invoice
             FROM rfq r
@@ -1583,11 +1536,7 @@ class ExcelRepository {
               invoices_result_with_sales_commission.profit_percentage,
               CASE invoices_result_with_sales_commission.attached_sales_commission
                 WHEN 1 THEN 
-                  CASE r.sales_commission
-                    WHEN 'Other commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(r.total_fulfillment, 0)) * 0.03, 2)
-                    WHEN 'Same commission' THEN ROUND((COALESCE(r.total_price, 0) - COALESCE(rq.total_cost, 0)) * 0.03, 2)
-                    WHEN 'No commission' THEN 0
-                  END
+                  {$commissionSql}
                 ELSE NULL
               END as sales_commission,
               invoices_result_with_sales_commission.invoice_acceptance,
