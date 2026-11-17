@@ -53,7 +53,7 @@ All aggregation is **SQL**, never loaded `Rfq` objects. Cohort date is `rfq.crea
 
 ### Quote Edit drawer (Checklist / Information / Documents)
 
-Slide-over drawer `qed-*`; all tab forms stay mounted (hidden), ids prefixed `cl_`. Save endpoints always return JSON and the client must append `save_checklist=1` / `save_information=1` (FormData omits the submit button's name). Internal Due Date and End Date are required in New Quote and the Information drawer (New Quote's `#end_date` picker needs its own `autoUpdateInput: false`). Period of Performance lives in the Checklist drawer only (`Rfq::getPeriodOfPerformanceDisplay()` is shared by the page render and the AJAX repaint). Documents use `js/document_widget.js` (`doc-*`; `immediate` mode on edit, `deferred` on New Quote) and must load in `<head>` before `checklist_info_drawer.js`.
+Slide-over drawer `qed-*`; all tab forms stay mounted (hidden), ids prefixed `cl_`. Save endpoints always return JSON and the client must append `save_checklist=1` / `save_information=1` (FormData omits the submit button's name). Description, Internal Due Date and End Date are required in New Quote and the Information drawer (blank Description would make the partner silently drop the quote; `buildPayload()` falls back to the Solicitation # for legacy blank rows) (New Quote's `#end_date` picker needs its own `autoUpdateInput: false`). Period of Performance lives in the Checklist drawer only (`Rfq::getPeriodOfPerformanceDisplay()` is shared by the page render and the AJAX repaint). Documents use `js/document_widget.js` (`doc-*`; `immediate` mode on edit, `deferred` on New Quote) and must load in `<head>` before `checklist_info_drawer.js`.
 
 ### Pricing notes
 
@@ -83,7 +83,3 @@ Tests: `tests/php/partner_opportunity_sync_test.php`, `tests/specs/15-partner-sy
 Calculated on the server at invoice time and **frozen** on the quote; the client posts nothing about it. `guardar_editar_cotizacion.php` → `SalesCommissionCalculator::forQuote()` → `RepositorioRfq::set_sales_commission()` writes `rfq.sales_commission_{amount,basis_profit,fulfillment_pct,reason}` plus the legacy `sales_commission` string so report filters work. **`sales_commission_amount IS NULL` = legacy quote** (manual choice + old CASE, never backfilled): check with `Rfq::obtener_saved_sales_commission()` in PHP, `SalesCommissionCalculator::amountSql('r','rq')` in SQL (queries declare `$commissionSql` — a heredoc can't call a static). Rate, the 6.00% threshold (on the *rounded* fulfillment %) and ineligible types live only in the calculator; profits are equipment-only. Invoice modal shows a read-only breakdown from `quote/commission_preview/{id}` (Save disabled until loaded); re-invoicing recalculates. Comment stored raw, escaped at render.
 
 Tests: `tests/php/sales_commission_calculator_test.php`, `tests/specs/16-sales-commission.spec.js`.
-
-## Known Bugs
-
-- `planned` — Description not required; blank name silently drops the quote on the partner side → [bugs/description-required-for-partner-sync.md](bugs/description-required-for-partner-sync.md)
