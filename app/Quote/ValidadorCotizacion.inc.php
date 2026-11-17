@@ -13,6 +13,7 @@ abstract class ValidadorCotizacion {
   protected $error_issue_date;
   protected $error_end_date;
   protected $error_internal_due_date;
+  protected $error_name;
 
   public function __construct() {
 
@@ -65,6 +66,11 @@ abstract class ValidadorCotizacion {
     return '';
   }
 
+  // Description (rfq.name). Required on every quote: the partner silently drops a nameless one.
+  protected function validar_name($name) {
+    return trim((string)$name) === '' ? 'Must be fill out.' : '';
+  }
+
   public function obtener_email_code() {
     return $this->email_code;
   }
@@ -107,6 +113,10 @@ abstract class ValidadorCotizacion {
 
   public function obtener_error_internal_due_date() {
     return $this->error_internal_due_date;
+  }
+
+  public function obtener_error_name() {
+    return $this->error_name;
   }
 
   public function mostrar_email_code() {
@@ -157,9 +167,15 @@ abstract class ValidadorCotizacion {
     }
   }
 
+  public function mostrar_error_name() {
+    if ($this->error_name != '') {
+      echo $this->aviso_inicio . $this->error_name . $this->aviso_cierre;
+    }
+  }
+
   public function registro_cotizacion_valida() {
     if ($this->error_email_code == '' && $this->error_issue_date == '' && $this->error_end_date == ''
-      && $this->error_internal_due_date == '') {
+      && $this->error_internal_due_date == '' && $this->error_name == '') {
       return true;
     } else {
       return false;

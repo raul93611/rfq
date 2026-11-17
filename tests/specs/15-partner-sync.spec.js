@@ -92,6 +92,7 @@ test.describe('Partner sync — New Quote server-side duplicate', () => {
 
     await page.goto('http://localhost/rfq/perfil/quote/nuevo');
     await page.fill('#email_code', code);
+    await page.fill('#name', 'Playwright duplicate-solicitation quote');
     if (await page.locator('#sync_to_sheet').isChecked()) await page.locator('label.sync-check[for="sync_to_sheet"]').click();
     await shareToggle(page).click();
     await page.fill('#solicitation_number', ' pw-dup-1 '); // lowercase + padding: the match is normalized

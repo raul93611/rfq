@@ -19,7 +19,8 @@ if (isset($_POST['registrar_cotizacion'])) {
     $_POST['internal_due_date'] ?? '',
     $_POST['type_of_bid'],
     $_POST['usuario_designado'],
-    $_POST['canal']
+    $_POST['canal'],
+    $_POST['name'] ?? ''
   );
 
   // Partner Opportunity Sync: required only while sharing; normalized key unique among live quotes.

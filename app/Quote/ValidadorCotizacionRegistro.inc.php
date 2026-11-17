@@ -1,6 +1,6 @@
 <?php
 class ValidadorCotizacionRegistro extends ValidadorCotizacion{
-  public function __construct($conexion, $email_code, $issue_date, $end_date, $internal_due_date, $type_of_bid, $usuario_designado, $canal){
+  public function __construct($conexion, $email_code, $issue_date, $end_date, $internal_due_date, $type_of_bid, $usuario_designado, $canal, $name){
     $this->aviso_inicio = "<label class='text-danger' role='alert'>";
     $this->aviso_cierre = "</label>";
 
@@ -16,6 +16,7 @@ class ValidadorCotizacionRegistro extends ValidadorCotizacion{
     $this-> error_issue_date = $this-> validar_issue_date($issue_date);
     $this-> error_end_date = $this-> validar_end_date($end_date);
     $this-> error_internal_due_date = $this-> validar_internal_due_date($internal_due_date);
+    $this-> error_name = $this-> validar_name($name);
   }
 }
 ?>

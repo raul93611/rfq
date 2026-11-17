@@ -1,6 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const fs = require('fs');
 const path = require('path');
+const { query } = require('../helpers/db');
 
 function fixtures() {
   return JSON.parse(fs.readFileSync(path.join(__dirname, '../.fixtures.json'), 'utf-8'));
@@ -120,6 +121,24 @@ test.describe('Quote Checklist & Info Drawer', () => {
     await expect(page.locator('#qed-drawer')).toHaveClass(/is-open/);
   });
 
+  test('saving the information tab with a blank Description fails, shows the error and keeps the old value', async ({ page }) => {
+    // bug: description-required-for-partner-sync.md. Whitespace passes the browser's `required`,
+    // so this exercises the server guard; nothing may be written.
+    const before = (await query('SELECT name FROM rfq WHERE id = ?', [rfqId]))[0].name;
+    await page.click('#qed-open-information');
+    await page.fill('#name', '   ');
+    const [res] = await Promise.all([
+      page.waitForResponse((r) => r.url().includes('/quote/save_information/') && r.status() === 200),
+      page.click('#qed-information-save-btn'),
+    ]);
+    expect(await res.json()).toMatchObject({ success: false, field: 'name' });
+    await expect(page.locator('#qed-information-error')).toBeVisible();
+    await expect(page.locator('#qed-information-error')).toContainText('Description must be filled out.');
+    await expect(page.locator('#qed-drawer')).toHaveClass(/is-open/);
+    await expect(page.locator('#name')).toHaveValue('   ');
+    expect((await query('SELECT name FROM rfq WHERE id = ?', [rfqId]))[0].name).toBe(before);
+  });
+
   test('saving the information tab with End Date filled in succeeds as normal', async ({ page }) => {
     await page.click('#qed-open-information');
     await page.fill('#end_date', '12/31/2026 17:00');
@@ -143,5 +162,40 @@ test.describe('Quote Checklist & Info Drawer', () => {
     await page.waitForSelector('#qed-drawer.is-open');
     expect(page.url()).toContain(`editar_cotizacion/${rfqId}`);
     await expect(page.locator('#qed-tab-information')).toHaveClass(/is-active/);
+  });
+});
+
+test.describe('Description required — New Quote', () => {
+  const code = 'PW-NODESC-' + Date.now();
+  test.afterEach(async () => {
+    // Safety net: if the guard ever regressed, a quote would have been created — remove it.
+    for (const r of await query('SELECT id FROM rfq WHERE email_code = ?', [code])) {
+      await query('DELETE FROM audit_trails WHERE id_rfq = ?', [r.id]);
+      await query('DELETE FROM rfq WHERE id = ?', [r.id]);
+    }
+  });
+
+  test('the Description textarea is required in the browser', async ({ page }) => {
+    await page.goto('http://localhost/rfq/perfil/quote/nuevo');
+    await expect(page.locator('#name')).toHaveAttribute('required', '');
+  });
+
+  test('a whitespace-only Description re-renders the form with the error and creates nothing', async ({ page }) => {
+    // bug: description-required-for-partner-sync.md. Whitespace passes `required`, so this hits the server.
+    await page.goto('http://localhost/rfq/perfil/quote/nuevo');
+    await page.fill('#name', '   ');
+    await page.fill('#email_code', code);
+    if (await page.locator('#sync_to_sheet').isChecked()) await page.locator('label.sync-check[for="sync_to_sheet"]').click();
+    await page.fill('#issue_date', '10/12/2026');
+    await page.fill('#end_date', '10/19/2026 00:00');
+    await page.fill('#internal_due_date', '10/26/2026');
+    await Promise.all([
+      page.waitForNavigation(),
+      page.click('[name="registrar_cotizacion"]'),
+    ]);
+
+    await expect(page.getByRole('alert').filter({ hasText: 'Must be fill out.' })).toBeVisible();
+    await expect(page.locator('#email_code')).toHaveValue(code);
+    expect((await query('SELECT COUNT(*) AS n FROM rfq WHERE email_code = ?', [code]))[0].n).toBe(0);
   });
 });
