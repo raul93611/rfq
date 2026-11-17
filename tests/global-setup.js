@@ -22,9 +22,9 @@ module.exports = async function globalSetup() {
     const [rfqResult] = await conn.execute(
       `INSERT INTO rfq (id_usuario, usuario_designado, canal, email_code, type_of_bid, issue_date, end_date,
         status, completado, award, payment_terms, address, ship_to, ship_via, taxes, profit, additional,
-        shipping_cost, shipping, fullfillment, contract_number, deleted)
+        shipping_cost, shipping, fullfillment, contract_number, deleted, name)
        VALUES (?, ?, 'GSA-Buy', 'TEST001', 'Services', '2026-01-01', '2026-12-31',
-        0, 0, 0, 'Net 30', '123 Test St', 'Test Ship', 'UPS', 0, 10, '', 0, '', 0, '', 0)`,
+        0, 0, 0, 'Net 30', '123 Test St', 'Test Ship', 'UPS', 0, 10, '', 0, '', 0, '', 0, 'Playwright fixture quote')`,
       [userId, userId]
     );
     const rfqId = rfqResult.insertId;

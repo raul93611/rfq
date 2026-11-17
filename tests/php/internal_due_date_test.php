@@ -30,13 +30,13 @@ $conexion = Conexion::obtener_conexion();
 echo "[ValidadorCotizacionRegistro — Internal Due Date required]\n";
 
 $blank = new ValidadorCotizacionRegistro(
-  $conexion, 'IDD-' . uniqid(), '01/01/2099', '01/02/2099', '', 'IT', 'RSantos', 'GSA-Buy'
+  $conexion, 'IDD-' . uniqid(), '01/01/2099', '01/02/2099', '', 'IT', 'RSantos', 'GSA-Buy', 'Test description'
 );
 check('blank internal_due_date -> "Must be fill out." error', 'Must be fill out.', $blank->obtener_error_internal_due_date());
 check('blank internal_due_date -> registro_cotizacion_valida() false', false, $blank->registro_cotizacion_valida());
 
 $filled = new ValidadorCotizacionRegistro(
-  $conexion, 'IDD-' . uniqid(), '01/01/2099', '01/02/2099', '01/15/2099', 'IT', 'RSantos', 'GSA-Buy'
+  $conexion, 'IDD-' . uniqid(), '01/01/2099', '01/02/2099', '01/15/2099', 'IT', 'RSantos', 'GSA-Buy', 'Test description'
 );
 check('filled internal_due_date -> no error', '', $filled->obtener_error_internal_due_date());
 check('filled internal_due_date -> value retained', '01/15/2099', $filled->obtener_internal_due_date());
@@ -44,7 +44,7 @@ check('filled internal_due_date -> registro_cotizacion_valida() true', true, $fi
 
 // No cross-field constraint against End Date (matches Issue Date/End Date convention).
 $anyOrder = new ValidadorCotizacionRegistro(
-  $conexion, 'IDD-' . uniqid(), '06/01/2099', '01/01/2099', '01/01/2050', 'IT', 'RSantos', 'GSA-Buy'
+  $conexion, 'IDD-' . uniqid(), '06/01/2099', '01/01/2099', '01/01/2050', 'IT', 'RSantos', 'GSA-Buy', 'Test description'
 );
 check('internal_due_date has no cross-field date constraint', true, $anyOrder->registro_cotizacion_valida());
 

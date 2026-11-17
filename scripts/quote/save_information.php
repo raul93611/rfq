@@ -1,5 +1,10 @@
 <?php
 if (isset($_POST['save_information'])) {
+  if (trim($_POST['name'] ?? '') === '') {
+    header('Content-Type: application/json');
+    echo json_encode(['success' => false, 'message' => 'Description must be filled out.', 'field' => 'name']);
+    return;
+  }
   if (empty($_POST['internal_due_date'])) {
     header('Content-Type: application/json');
     echo json_encode(['success' => false, 'message' => 'Internal Due Date must be filled out.']);

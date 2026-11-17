@@ -139,7 +139,8 @@ class PartnerSyncService {
     return [
       'solicitation_number' => $row['solicitation_number'],
       'elogic_id' => (int)$row['id'],
-      'name' => $row['name'],
+      // The partner drops a nameless record without an error; mirror the inbound fallback.
+      'name' => trim((string)$row['name']) !== '' ? trim($row['name']) : $row['solicitation_number'],
       'agency' => $row['client'],
       'issue_date' => self::localToIso($row['issue_date']),
       'end_date' => self::localToIso($row['end_date']),

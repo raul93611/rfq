@@ -2,7 +2,7 @@
 
 A quote can be saved with a blank Description; shared with the partner, it is silently not created on their side.
 
-**Status:** planned
+**Status:** fixed
 
 ## Steps to reproduce
 

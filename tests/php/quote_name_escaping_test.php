@@ -69,7 +69,7 @@ try {
     ];
     $validador = new ValidadorCotizacionRegistro(
       $c, $code, $_POST['issue_date'], $_POST['end_date'], $_POST['internal_due_date'],
-      $_POST['type_of_bid'], $uname, $_POST['canal']
+      $_POST['type_of_bid'], $uname, $_POST['canal'], $_POST['name']
     );
     ob_start();
     createAndInsertQuote($validador, $userId);
