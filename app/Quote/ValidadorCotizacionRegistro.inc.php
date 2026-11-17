@@ -8,7 +8,6 @@ class ValidadorCotizacionRegistro extends ValidadorCotizacion{
     $this-> issue_date = '';
     $this-> end_date = '';
     $this-> internal_due_date = '';
-    $this-> name = '';
     $this-> type_of_bid = $type_of_bid;
     $this-> usuario_designado = $usuario_designado;
     $this-> canal = $canal;

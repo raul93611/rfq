@@ -9,7 +9,6 @@ abstract class ValidadorCotizacion {
   protected $usuario_designado;
   protected $type_of_bid;
   protected $canal;
-  protected $name;
   protected $error_email_code;
   protected $error_issue_date;
   protected $error_end_date;
@@ -69,11 +68,7 @@ abstract class ValidadorCotizacion {
 
   // Description (rfq.name). Required on every quote: the partner silently drops a nameless one.
   protected function validar_name($name) {
-    if (trim((string)$name) === '') {
-      return 'Must be fill out.';
-    }
-    $this->name = trim($name);
-    return '';
+    return trim((string)$name) === '' ? 'Must be fill out.' : '';
   }
 
   public function obtener_email_code() {
