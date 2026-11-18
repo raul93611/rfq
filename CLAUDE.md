@@ -4,18 +4,24 @@ Guidance for Claude Code when working in this repository.
 
 ## Feature Inventory
 
-All built. Detail for the non-obvious ones is in the `###` sections below.
+All built; non-obvious ones detailed in `###` below.
 
 Quote Inline Editing · SharePoint Sheet Sync · Comment Mentions & Notifications · Bid Requirement Fields · Bid Pipeline Sync Controls · Pipeline Metrics Dashboard · Pipeline Table View · 3-Year Annual Awards · Quote Lifecycle Audit Events · Advanced Quote Search · Commercial Moving + 50/50 term · Shared Notification Mailbox · Daily RFQ Digest · Checklist & Info Drawer · Documents Drawer · Import Items Enhancements · Items & Services Table Redesign · Working on It status · **Partner Opportunity Sync** · **Automatic Sales Commission**
+
+Planned: **Retire Tracking Sheet** (`planned`) → [features/retire-tracking-sheet.md](features/retire-tracking-sheet.md)
+
+## Known Bugs
+
+- GSA proposal PDF still prints SBA 8(a) Case No / Entrance–Exit dates (`planned`) → [bugs/gsa-proposal-sba-case-info.md](bugs/gsa-proposal-sba-case-info.md)
 
 ## Environment
 
 PHP app on a LAMP stack inside Docker (`docker-compose-lamp`), served at `http://localhost/rfq/`.
 
 - **Setup:** create `/tmp` at project root; disable MySQL strict mode (`sql_mode=""` under `[mysqld]`, restart); prod also needs the `xmlwriter` PHP module. `composer install`. Users: `/genera_usuario`.
-- **Database:** `elogicnewdb` on `database:3306`, schema [sql/elogic.sql](sql/elogic.sql), migrations in `sql/` (run once per environment — list in [DEPLOYMENT.md](DEPLOYMENT.md)). There is **no `.env`**: config constants live in `app/Bootstrap/config.inc.php`, which is **gitignored** — a new constant must be added by hand on every environment, so code must degrade safely when one is undefined.
+- **Database:** `elogicnewdb` on `database:3306`, schema [sql/elogic.sql](sql/elogic.sql), migrations in `sql/` (run once per environment — list in [DEPLOYMENT.md](DEPLOYMENT.md)). There is **no `.env`**: config constants live in `app/Bootstrap/config.inc.php`, **gitignored** — add new constants by hand per environment; code must degrade safely when one is undefined.
 - **Tests:** PHP `tests/php/` (`docker exec lamp-php83 php /var/www/html/rfq/tests/php/<file>`; DB-backed, transaction-rolled-back, so **no DDL inside a test**); Node `tests/js/` (`node --test`); Playwright `tests/specs/` (`cd tests && PW_CHANNEL=chrome npx playwright test`). No lint. PHP is not on the host.
-- **Line endings:** many files are CRLF (`Rfq.inc.php`, `index.php`, `estilos.css`, several quote templates). A script that reads/writes in text mode silently rewrites the whole file to LF and produces a 1000-line diff — check `git diff --stat` after scripted edits.
+- **Line endings:** many files are CRLF (`Rfq.inc.php`, `index.php`, `estilos.css`, several quote templates). Text-mode scripted edits silently rewrite them to LF (1000-line diff) — check `git diff --stat` after.
 
 ## Architecture
 
