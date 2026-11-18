@@ -10,10 +10,6 @@
 var PipelineTableView = (function () {
   'use strict';
 
-  // Tracking columns, in sheet order. Kept in step with the <colgroup>/<thead> in
-  // plantillas/utilities/pipeline_metrics.inc.php.
-  var COLUMN_COUNT = 18;
-
   function EMPTY_FILTERS() {
     return { quoteId: '', description: '', channel: '', emailCode: '', statuses: [], bidType: '', contractType: '', user: '', dueDate: '', endDateFrom: '', endDateTo: '', submittedFrom: '', submittedTo: '', letterOfIntent: '', submissionMethod: '' };
   }
@@ -93,16 +89,16 @@ var PipelineTableView = (function () {
       + '</tr>';
   }
 
-  /** Empty state spanning every column; `width` pins it to the visible part of the scroller. */
-  function emptyRowHtml(anyFilters, width) {
-    return '<tr><td colspan="' + COLUMN_COUNT + '" class="pt-td-empty"><div class="pt-empty"' + (width ? ' style="width:' + width + 'px"' : '') + '>'
+  /** Empty state spanning `colspan` columns; `width` pins it to the visible part of the scroller. */
+  function emptyRowHtml(colspan, anyFilters, width) {
+    return '<tr><td colspan="' + colspan + '" class="pt-td-empty"><div class="pt-empty"' + (width ? ' style="width:' + width + 'px"' : '') + '>'
       + '<div class="pt-empty-ico"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l3-3 3 2 4-5" opacity="0.45"/></svg></div>'
       + '<div class="pt-empty-title">No data for this period</div>'
       + '<div class="pt-empty-sub">' + (anyFilters ? 'Try removing a filter, or a different period.' : 'Try a different year, quarter, or month.') + '</div>'
       + '</div></td></tr>';
   }
 
-  return { COLUMN_COUNT: COLUMN_COUNT, EMPTY_FILTERS: EMPTY_FILTERS, esc: esc, countFilters: countFilters, buildQuery: buildQuery, rowHtml: rowHtml, emptyRowHtml: emptyRowHtml };
+  return { EMPTY_FILTERS: EMPTY_FILTERS, esc: esc, countFilters: countFilters, buildQuery: buildQuery, rowHtml: rowHtml, emptyRowHtml: emptyRowHtml };
 })();
 
 if (typeof module !== 'undefined' && module.exports) {
@@ -172,7 +168,7 @@ if (typeof module !== 'undefined' && module.exports) {
 
     if (st.rows.length === 0) {
       var wrap = $('.pt-table-wrap');
-      tbody.innerHTML = V.emptyRowHtml(anyFilters, wrap ? wrap.clientWidth : 0);
+      tbody.innerHTML = V.emptyRowHtml($('.pt-table thead tr').cells.length, anyFilters, wrap ? wrap.clientWidth : 0);
     } else {
       tbody.innerHTML = st.rows.map(function (b) { return V.rowHtml(b, statusPill(b.status)); }).join('');
     }
@@ -287,8 +283,8 @@ if (typeof module !== 'undefined' && module.exports) {
     var clear = $('#pt-clear');
     if (clear) clear.addEventListener('click', function () {
       st.filters = EMPTY_FILTERS();
-      ['pt-f-quoteId', 'pt-f-description', 'pt-f-emailCode', 'pt-f-channel', 'pt-f-bidType', 'pt-f-contractType', 'pt-f-user', 'pt-f-dueDate', 'pt-f-endDateFrom', 'pt-f-endDateTo', 'pt-f-submittedFrom', 'pt-f-submittedTo', 'pt-f-letterOfIntent', 'pt-f-submissionMethod'].forEach(function (id) {
-        var el = document.getElementById(id); if (el) el.value = '';
+      Object.keys(st.filters).forEach(function (key) {
+        var el = document.getElementById('pt-f-' + key); if (el) el.value = '';
       });
       syncStatusMs();
       onFilterChange(true);

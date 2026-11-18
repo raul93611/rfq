@@ -77,12 +77,12 @@ class PipelineTableRepository {
         'submitted'       => !empty($r['fecha_submitted']) ? date('m/d/Y', strtotime($r['fecha_submitted'])) : '—',
         // Tracking columns (retired sheet). Raw values — the client escapes; null renders as —.
         'description'      => $name !== '' ? $name : null,
-        'qa'               => self::yesNo($r['qa']),
-        'qaDeadline'       => !empty($r['qa_deadline']) ? date('m/d/Y H:i', strtotime($r['qa_deadline'])) : null,
-        'resumes'          => self::yesNo($r['resumes']),
-        'siteVisit'        => self::yesNo($r['site_visit']),
-        'letterOfIntent'   => Rfq::pickOption($r['letter_of_intent'], Rfq::LETTER_OF_INTENT_OPTIONS),
-        'submissionMethod' => Rfq::pickOption($r['submission_method'], Rfq::SUBMISSION_METHOD_OPTIONS),
+        'qa'               => Rfq::yesNoLabel($r['qa']),
+        'qaDeadline'       => Rfq::formatQaDeadline($r['qa_deadline']),
+        'resumes'          => Rfq::yesNoLabel($r['resumes']),
+        'siteVisit'        => Rfq::yesNoLabel($r['site_visit']),
+        'letterOfIntent'   => $r['letter_of_intent'],   // whitelisted on write
+        'submissionMethod' => $r['submission_method'],
       ];
     }, $rows);
 
@@ -94,12 +94,6 @@ class PipelineTableRepository {
     $sql = "SELECT DISTINCT canal FROM rfq WHERE deleted = 0 AND canal IS NOT NULL AND canal <> '' ORDER BY canal ASC";
     $rows = self::run($conexion, $sql, []);
     return array_map(fn($r) => ['value' => $r['canal'], 'label' => self::displayChannel($r['canal'])], $rows);
-  }
-
-  /** TINYINT(1) yes/no column -> 'YES' / 'NO', or null when unset. */
-  private static function yesNo($v) {
-    if ($v === null || $v === '') return null;
-    return (int)$v === 1 ? 'YES' : 'NO';
   }
 
   /** Mirrors Rfq::print_channel() for the two renamed channels. */

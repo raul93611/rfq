@@ -151,21 +151,17 @@ try {
     check('edited name stored raw', 'Edited & <Renamed>', $stmt->fetchColumn());
   }
 
-  echo "\n[audit: information_events and the six bid fields]\n";
-  $infoEvents = function (array $bid, array $bidOriginal) use ($c, $id, $uname) {
-    // Every non-bid field is passed unchanged so only bid-field rows can appear.
-    AuditTrailRepository::information_events(
-      $c, 'IT', 'IT', '01/01/2030', '01/01/2030', '01/02/2030 10:00', '01/02/2030 10:00', '', '', '', '',
-      '', '', 'RTS', 'RTS', $uname, $uname, 'AUDITTEST', 'AUDITTEST', '', '', 'No comments', 'No comments', $id,
-      $bid, $bidOriginal
-    );
+  echo "\n[audit: bid_field_events on an Information save]\n";
+  // save_information.php compares the rfq row read before the save with the quote re-read after
+  // it, so both sides are DB-shaped: ints for yes/no, 'Y-m-d H:i:s' for the deadline.
+  $events = function (array $before, array $after) use ($c, $id) {
+    AuditTrailRepository::bid_field_events($c, new Rfq($before), new Rfq($after), $id);
   };
-  $blank = ['letter_of_intent' => null, 'submission_method' => null, 'qa' => null, 'qa_deadline' => null, 'resumes' => null, 'site_visit' => null];
-  // New values arrive as posted strings; originals come from the stored Rfq (ints, DB datetime).
-  $posted = ['letter_of_intent' => 'YES', 'submission_method' => 'EMAIL', 'qa' => '1', 'qa_deadline' => '12/01/2030 10:00', 'resumes' => '0', 'site_visit' => '1'];
+  $blank  = ['letter_of_intent' => null, 'submission_method' => null, 'qa' => null, 'qa_deadline' => null, 'resumes' => null, 'site_visit' => null];
+  $stored = ['letter_of_intent' => 'YES', 'submission_method' => 'EMAIL', 'qa' => 1, 'qa_deadline' => '2030-12-01 10:00:00', 'resumes' => 0, 'site_visit' => 1];
 
   $before = count($audit($id));
-  $infoEvents($posted, $blank);
+  $events($blank, $stored);
   $rows = $audit($id);
   check('six bid-field changes -> six audit rows', 6, count($rows) - $before);
   $text = implode("\n", array_column(array_slice($rows, 0, 6), 'audit_trail'));
@@ -178,11 +174,10 @@ try {
   check('Q&A Deadline shows MM/DD/YYYY HH:mm', true, strpos($text, '— > 12/01/2030 10:00') !== false);
 
   $before = count($audit($id));
-  $stored = ['letter_of_intent' => 'YES', 'submission_method' => 'EMAIL', 'qa' => 1, 'qa_deadline' => '2030-12-01 10:00:00', 'resumes' => 0, 'site_visit' => 1];
-  $infoEvents($posted, $stored);
+  $events($stored, $stored);
   check('no change -> no audit rows', $before, count($audit($id)));
 
-  $infoEvents(array_merge($posted, ['submission_method' => '']), $stored);
+  $events($stored, array_merge($stored, ['submission_method' => null]));
   $rows = $audit($id);
   check('one change -> one audit row', $before + 1, count($rows));
   check('cleared value shows EMAIL > —', true, strpos($rows[0]['audit_trail'], 'EMAIL > —') !== false);

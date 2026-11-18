@@ -22,7 +22,6 @@ function cells(html) {
 }
 
 test('table view shows all 18 columns in the specified order', () => {
-  assert.equal(V.COLUMN_COUNT, 18);
   assert.deepEqual(cells(V.rowHtml(FULL, '<span>Submitted</span>')), [
     '1234', '03/15/2026', 'Janitorial <services> & "more"', 'SAM', 'W912-26', 'Submitted',
     '03/20/2026', '03/25/2026 14:00', '03/22/2026', 'IT', 'Uncategorized',
@@ -52,11 +51,11 @@ test('yes/no and option values render as neutral tags', () => {
   for (const v of ['YES', 'NO', 'TBD', 'PLATFORM']) assert.ok(html.includes('<span class="pt-tag">' + v + '</span>'), v);
 });
 
-test('empty state spans every column', () => {
-  assert.ok(V.emptyRowHtml(false, 0).includes('colspan="18"'));
-  assert.ok(V.emptyRowHtml(true, 640).includes('style="width:640px"'));
-  assert.match(V.emptyRowHtml(true, 0), /Try removing a filter/);
-  assert.match(V.emptyRowHtml(false, 0), /Try a different year/);
+test('empty state spans the given column count', () => {
+  assert.ok(V.emptyRowHtml(18, false, 0).includes('colspan="18"'));
+  assert.ok(V.emptyRowHtml(18, true, 640).includes('style="width:640px"'));
+  assert.match(V.emptyRowHtml(18, true, 0), /Try removing a filter/);
+  assert.match(V.emptyRowHtml(18, false, 0), /Try a different year/);
 });
 
 test('Description, Letter of Intent and Submission Method count as filters and clear to empty', () => {

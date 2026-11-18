@@ -9,7 +9,7 @@
               placeholder="e.g. Westpine Middle School AV Refresh (upgrade and installation of audio-visual equipment across 3 classrooms)" required><?= htmlspecialchars($_POST['name'] ?? '', ENT_QUOTES, 'UTF-8'); ?></textarea>
     <?php $validador->mostrar_error_name(); ?>
     <small class="form-text text-muted">
-      <i class="fas fa-table mr-1" style="color:#2db4e8;"></i>Synced to the SharePoint sheet — include a short title and scope summary.
+      Include a short title and scope summary.
     </small>
   </div>
 
@@ -69,7 +69,7 @@
         <label for="internal_due_date">Internal Due Date</label>
         <input type="text" class="date form-control" id="internal_due_date" name="internal_due_date"
                placeholder="MM/DD/YYYY" required <?php $validador->mostrar_internal_due_date(); ?>>
-        <small class="form-text text-muted"><i class="fas fa-table mr-1" style="color:#2db4e8;"></i>Synced to the SharePoint sheet.</small>
+        <small class="form-text text-muted">The team's own deadline, ahead of the client due date.</small>
         <?php $validador->mostrar_error_internal_due_date(); ?>
       </div>
     </div>

@@ -297,7 +297,7 @@ $pm_statuses  = PipelineMetricsRepository::STATUSES;
             <div class="pt-card-sub" id="pt-card-sub">Loading…</div>
           </div>
           <div class="pt-table-wrap">
-            <!-- 18 tracking columns (sheet order). Keep in step with PipelineTableView.rowHtml in js/pipeline_table.js. -->
+            <!-- Tracking columns in sheet order. Keep in step with PipelineTableView.rowHtml in js/pipeline_table.js. -->
             <table class="pt-table" data-testid="pt-table">
               <colgroup>
                 <col class="pt-col-id"><col class="pt-col-created"><col class="pt-col-desc"><col class="pt-col-channel"><col class="pt-col-email"><col class="pt-col-status">

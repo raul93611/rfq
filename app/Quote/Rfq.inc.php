@@ -905,17 +905,23 @@ class Rfq {
     return $this->submission_method;
   }
 
+  /** Q&A Deadline as shown in forms, the table view and the audit trail. */
+  const QA_DEADLINE_FORMAT = 'm/d/Y H:i';
+
+  /** A stored yes/no TINYINT(1) as 'YES' / 'NO', or NULL when unset. */
+  public static function yesNoLabel($value) {
+    if ($value === null || $value === '') return null;
+    return (int)$value === 1 ? 'YES' : 'NO';
+  }
+
+  /** The stored qa_deadline DATETIME in QA_DEADLINE_FORMAT, or NULL when unset. */
+  public static function formatQaDeadline($value) {
+    return empty($value) ? null : date(self::QA_DEADLINE_FORMAT, strtotime($value));
+  }
+
   /** The value if it is one of $options (after trim), otherwise NULL. */
   public static function pickOption($value, array $options) {
     $value = is_string($value) ? trim($value) : $value;
     return in_array($value, $options, true) ? $value : null;
-  }
-
-  public function getVehicleForSheet() {
-    switch ($this->canal) {
-      case 'FedBid': return 'Unison';
-      case 'FBO':    return 'SAM';
-      default:       return $this->canal;
-    }
   }
 }

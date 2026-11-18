@@ -161,11 +161,8 @@ class AuditTrailRepository {
     $ship_to_original,
     $comments,
     $comments_original,
-    $id_rfq,
-    array $bid_fields = [],
-    array $bid_fields_original = []
+    $id_rfq
   ) {
-    self::bid_field_events($connection, $bid_fields, $bid_fields_original, $id_rfq);
     if ($type_of_bid != $type_of_bid_original) {
       self::create_audit_trail_modified($connection, 'Type of Bid', $type_of_bid, $type_of_bid_original, $id_rfq);
     }
@@ -201,26 +198,24 @@ class AuditTrailRepository {
     }
   }
 
-  /** Bid requirement fields audited by information_events, in display order: key => label. */
-  const BID_FIELD_LABELS = [
-    'letter_of_intent'  => 'Letter of Intent',
-    'submission_method' => 'Submission Method',
-    'qa'                => 'Q&A',
-    'qa_deadline'       => 'Q&A Deadline',
-    'resumes'           => 'Resumes',
-    'site_visit'        => 'Site Visit',
+  /** Bid requirement fields audited on an Information save, in display order: label => Rfq getter. */
+  const BID_FIELDS = [
+    'Letter of Intent'  => 'getLetterOfIntent',
+    'Submission Method' => 'getSubmissionMethod',
+    'Q&A'               => 'getQa',
+    'Q&A Deadline'      => 'getQaDeadline',
+    'Resumes'           => 'getResumes',
+    'Site Visit'        => 'getSiteVisit',
   ];
 
   /**
-   * One field_modified row per bid field whose display value changed. New values arrive as
-   * posted strings ('1', 'MM/DD/YYYY HH:mm'), originals as stored (1, 'Y-m-d H:i:s'), so the
-   * comparison is on the display strings. A key absent from $new is not audited.
+   * One field_modified row per bid field that differs between the quote as stored before and
+   * after a save. Both sides come from the DB, so values compare as-is; blank shows as —.
    */
-  private static function bid_field_events($connection, array $new, array $original, $id_rfq) {
-    foreach (self::BID_FIELD_LABELS as $key => $label) {
-      if (!array_key_exists($key, $new)) continue;
-      $to   = self::bid_field_display($key, $new[$key]);
-      $from = self::bid_field_display($key, $original[$key] ?? null);
+  public static function bid_field_events($connection, Rfq $before, Rfq $after, $id_rfq) {
+    foreach (self::BID_FIELDS as $label => $getter) {
+      $from = self::bid_field_display($getter, $before->$getter());
+      $to   = self::bid_field_display($getter, $after->$getter());
       if ($to !== $from) {
         self::create_audit_trail_modified($connection, htmlspecialchars($label), htmlspecialchars($to), htmlspecialchars($from), $id_rfq);
       }
@@ -228,20 +223,12 @@ class AuditTrailRepository {
   }
 
   /** YES / NO / TBD / PLATFORM… / MM/DD/YYYY HH:mm, or — when unset. */
-  private static function bid_field_display($key, $value) {
-    if ($value === null || $value === '') return '—';
-    switch ($key) {
-      case 'qa': case 'resumes': case 'site_visit':
-        return (string)(int)$value === '1' ? 'YES' : 'NO';
-      case 'qa_deadline':
-        $d = DateTime::createFromFormat('m/d/Y H:i', $value) ?: DateTime::createFromFormat('Y-m-d H:i:s', $value);
-        return $d ? $d->format('m/d/Y H:i') : '—';
-      case 'letter_of_intent':
-        return Rfq::pickOption($value, Rfq::LETTER_OF_INTENT_OPTIONS) ?? '—';
-      case 'submission_method':
-        return Rfq::pickOption($value, Rfq::SUBMISSION_METHOD_OPTIONS) ?? '—';
+  private static function bid_field_display($getter, $value) {
+    switch ($getter) {
+      case 'getQa': case 'getResumes': case 'getSiteVisit': $value = Rfq::yesNoLabel($value); break;
+      case 'getQaDeadline': $value = Rfq::formatQaDeadline($value); break;
     }
-    return '—';
+    return $value ?? '—';
   }
 
   public static function items_table_events($connection, $taxes, $taxes_original, $profit, $profit_original, $additional_general, $additional_general_original, $payment_terms, $payment_terms_original, $shipping, $shipping_original, $shipping_cost, $shipping_cost_original, $id_rfq) {
@@ -434,7 +421,7 @@ class AuditTrailRepository {
     self::insert_audit_trail($connection, $audit_trail);
   }
 
-  // ---- Quote lifecycle events (creation + Bid Pipeline sheet sync) ----
+  // ---- Quote lifecycle events ----
   // Each mirrors quote_status_audit_trail: session-derived username/id, one insert_audit_trail row.
 
   public static function quote_created_audit_trail($connection, $id_rfq) {

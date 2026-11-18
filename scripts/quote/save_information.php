@@ -31,9 +31,7 @@ if (isset($_POST['save_information'])) {
       echo json_encode(['success' => false, 'message' => $partnerError, 'field' => 'solicitation_number']);
       return;
     }
-    $priorPartner = PartnerShareRepository::row($conexion, $_POST['id_rfq']);
-    // Stored bid-field values, so the audit compares against the DB rather than hidden inputs.
-    $priorQuote = RepositorioRfq::obtener_cotizacion_por_id($conexion, $_POST['id_rfq']);
+    $priorPartner = PartnerShareRepository::row($conexion, $_POST['id_rfq']); // the whole rfq row
 
     // Prepare data
     $fecha_completado = !empty($_POST['completed_date']) ? $_POST['completed_date'] : null;
@@ -133,28 +131,15 @@ if (isset($_POST['save_information'])) {
       $_POST['ship_to_original'],
       $_POST['comments'],
       $_POST['comments_original'],
-      $_POST['id_rfq'],
-      [
-        'letter_of_intent'  => $letter_of_intent,
-        'submission_method' => $submission_method,
-        'qa'                => $qa,
-        'qa_deadline'       => $qa_deadline,
-        'resumes'           => $resumes,
-        'site_visit'        => $site_visit,
-      ],
-      $priorQuote ? [
-        'letter_of_intent'  => $priorQuote->getLetterOfIntent(),
-        'submission_method' => $priorQuote->getSubmissionMethod(),
-        'qa'                => $priorQuote->getQa(),
-        'qa_deadline'       => $priorQuote->getQaDeadline(),
-        'resumes'           => $priorQuote->getResumes(),
-        'site_visit'        => $priorQuote->getSiteVisit(),
-      ] : []
+      $_POST['id_rfq']
     );
 
-    // Re-fetch so the client can repaint the partner badges in place (the save is AJAX).
-    Conexion::abrir_conexion();
-    $finalQuote = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $_POST['id_rfq']);
+    // Re-fetch: the saved state feeds the bid-field audit (compared with the row read before the
+    // save) and the client's in-place repaint of the partner badges (the save is AJAX).
+    $finalQuote = RepositorioRfq::obtener_cotizacion_por_id($conexion, $_POST['id_rfq']);
+    if ($priorPartner) {
+      AuditTrailRepository::bid_field_events($conexion, new Rfq($priorPartner), $finalQuote, $_POST['id_rfq']);
+    }
     Conexion::cerrar_conexion();
 
     header('Content-Type: application/json');

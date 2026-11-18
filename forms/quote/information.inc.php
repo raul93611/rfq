@@ -12,7 +12,7 @@
           <textarea class="form-control form-control-sm" id="name" name="name" rows="3"
                     placeholder="e.g. Westpine Middle School AV Refresh (upgrade and installation of audio-visual equipment across 3 classrooms)" required><?= htmlspecialchars($quote->getName() ?? '', ENT_QUOTES, 'UTF-8'); ?></textarea>
           <small class="form-text text-muted">
-            <i class="fas fa-table mr-1" style="color:#2db4e8;"></i>Synced to the SharePoint sheet — include a short title and scope summary.
+            Include a short title and scope summary.
           </small>
         </div>
       </div>
@@ -111,7 +111,7 @@
             <label for="internal_due_date">Internal Due Date</label>
             <input type="text" class="date form-control form-control-sm" id="internal_due_date" name="internal_due_date"
                    value="<?= $quote->getInternalDueDate() ? date('m/d/Y', strtotime($quote->getInternalDueDate())) : ''; ?>">
-            <small class="form-text text-muted"><i class="fas fa-table mr-1" style="color:#2db4e8;"></i>Synced to SharePoint sheet.</small>
+            <small class="form-text text-muted">The team's own deadline, ahead of the client due date.</small>
           </div>
         </div>
         <div class="form-row">
@@ -177,7 +177,7 @@
             $res_val = $quote->getResumes();
             $res_sel = is_null($res_val) ? '' : (string)(int)$res_val;
             $qa_raw  = $quote->getQaDeadline();
-            $qa_disp = $qa_raw ? date('m/d/Y H:i', strtotime($qa_raw)) : '';
+            $qa_disp = Rfq::formatQaDeadline($qa_raw) ?? '';
             $qa_val  = $quote->getQa();
             $qa_sel  = is_null($qa_val) ? '' : (string)(int)$qa_val;
           ?>
