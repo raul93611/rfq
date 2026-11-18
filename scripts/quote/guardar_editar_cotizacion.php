@@ -93,12 +93,6 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
 
     Conexion::cerrar_conexion();
 
-    // Status transitions no longer push to the sheet's STATUS column (col E is human-owned —
-    // staff edit it directly in the sheet and a write would wipe their changes). The lifecycle
-    // status lives in the app; app-owned columns sync via the Save Information flow instead.
-    // Kept as a no-op so the status-transition branches below don't need to change.
-    $updateSheetStatus = function($id, $sheetRow, $newStatus) { /* STATUS is human-owned */ };
-
     if ($cotizacion_recuperada->obtener_canal() == 'Chemonics' && $award === 'si') {
       Conexion::abrir_conexion();
       $conexion = Conexion::obtener_conexion();
@@ -108,7 +102,6 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
       RepositorioRfq::actualizar_fecha_y_award($conexion, $id_rfq);
 
       Conexion::cerrar_conexion();
-      $updateSheetStatus($id_rfq, $cotizacion_recuperada->getSheetRow(), 'AWARD');
       Redireccion::redirigir(AWARD . $cotizacion_recuperada->obtener_canal());
     } else {
       if (!$cotizacion_recuperada->obtener_completado() && $completado === 'si') {
@@ -119,7 +112,6 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
         AuditTrailRepository::quote_status_audit_trail($conexion, 'Completed', $id_rfq);
 
         Conexion::cerrar_conexion();
-        $updateSheetStatus($id_rfq, $cotizacion_recuperada->getSheetRow(), 'BID');
         Redireccion::redirigir(COMPLETED . $cotizacion_recuperada->obtener_canal());
       } elseif (!$cotizacion_recuperada->obtener_status() && $status === 'si') {
         Conexion::abrir_conexion();
@@ -130,7 +122,6 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
         RepositorioRfq::set_sources_sought($conexion, $sources_sought, $id_rfq);
 
         Conexion::cerrar_conexion();
-        $updateSheetStatus($id_rfq, $cotizacion_recuperada->getSheetRow(), 'SUBMITTED');
         Redireccion::redirigir(COMPLETED . $cotizacion_recuperada->obtener_canal());
       } elseif (!$cotizacion_recuperada->obtener_award() && $award === 'si') {
         Conexion::abrir_conexion();
@@ -142,7 +133,6 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
         AuditTrailRepository::quote_status_audit_trail($conexion, 'Awarded', $id_rfq);
 
         Conexion::cerrar_conexion();
-        $updateSheetStatus($id_rfq, $cotizacion_recuperada->getSheetRow(), 'AWARD');
         Redireccion::redirigir(AWARD . $cotizacion_recuperada->obtener_canal());
       } elseif (!$cotizacion_recuperada->obtener_fullfillment() && $fulfillment === 'si') {
         Conexion::abrir_conexion();
@@ -155,7 +145,6 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
         AuditTrailRepository::quote_status_audit_trail($conexion, 'Fulfillment', $id_rfq);
 
         Conexion::cerrar_conexion();
-        $updateSheetStatus($id_rfq, $cotizacion_recuperada->getSheetRow(), 'AWARD');
         Redireccion::redirigir(FULFILLMENT_QUOTES);
       } elseif (!$cotizacion_recuperada->obtener_invoice() && $invoice === 'si') {
         Conexion::abrir_conexion();
@@ -170,7 +159,6 @@ if (isset($_POST['guardar_cambios_cotizacion'])) {
         AuditTrailRepository::quote_invoice_audit_trail($conexion, $id_rfq, $commission);
 
         Conexion::cerrar_conexion();
-        $updateSheetStatus($id_rfq, $cotizacion_recuperada->getSheetRow(), 'AWARD');
         Redireccion::redirigir(INVOICE_QUOTES);
       }
     }

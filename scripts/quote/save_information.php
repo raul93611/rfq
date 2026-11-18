@@ -32,6 +32,8 @@ if (isset($_POST['save_information'])) {
       return;
     }
     $priorPartner = PartnerShareRepository::row($conexion, $_POST['id_rfq']);
+    // Stored bid-field values, so the audit compares against the DB rather than hidden inputs.
+    $priorQuote = RepositorioRfq::obtener_cotizacion_por_id($conexion, $_POST['id_rfq']);
 
     // Prepare data
     $fecha_completado = !empty($_POST['completed_date']) ? $_POST['completed_date'] : null;
@@ -45,6 +47,8 @@ if (isset($_POST['save_information'])) {
     $qa_deadline       = !empty($_POST['qa_deadline'])       ? $_POST['qa_deadline']       : null;
     $internal_due_date = !empty($_POST['internal_due_date']) ? $_POST['internal_due_date'] : null;
     $qa                = isset($_POST['qa'])          && $_POST['qa']          !== '' ? (int)$_POST['qa']          : null;
+    $letter_of_intent  = $_POST['letter_of_intent']  ?? null; // whitelisted in RepositorioRfq::save_information
+    $submission_method = $_POST['submission_method'] ?? null;
 
     // Save information
     RepositorioRfq::save_information(
@@ -68,51 +72,14 @@ if (isset($_POST['save_information'])) {
       $resumes,
       $qa_deadline,
       $internal_due_date,
-      $qa
+      $qa,
+      $letter_of_intent,
+      $submission_method
     );
 
-    // Persist description
+    // Persist description (stored raw, escaped at render)
     if (isset($_POST['name'])) {
-      SheetSyncRepository::updateNameAndResetSync($conexion, $_POST['id_rfq'], trim($_POST['name']));
-    }
-
-    // Auto-sync to the SharePoint sheet whenever this quote is flagged to sync.
-    // The sync_to_sheet flag is the sole gate — bid type and master-link no longer matter.
-    // "Break Sync" sets the flag to 0 (keeping sheet_row), so edits then stop pushing.
-    try {
-      $updatedQuote = RepositorioRfq::obtener_cotizacion_por_id($conexion, $_POST['id_rfq']);
-      if ($updatedQuote && (int)$updatedQuote->getSyncToSheet() === 1) {
-        $designatedUsername = $_POST['usuario_designado'];
-        $priorRow    = $updatedQuote->getSheetRow();
-        $priorStatus = $updatedQuote->getSheetSyncStatus();
-
-        // Write-once: create the row if this quote isn't in the sheet, otherwise link to the
-        // existing row and write NOTHING. An ordinary edit of an already-linked quote makes
-        // zero Graph writes and leaves every cell untouched.
-        $result     = SheetSyncService::createOrLink($updatedQuote, $designatedUsername);
-        $writtenRow = $result['row'] ?? $priorRow;
-        $outcome    = $result['outcome'];
-
-        // Only stamp status / bump the timestamp / log an audit event when the link is newly
-        // established (created, or linked to a row this quote wasn't pointed at). A no-op edit
-        // produces no Sync-tab noise and doesn't move "last synced".
-        $established = $outcome !== null
-          && ($outcome === 'created'
-              || (string)$priorRow !== (string)$writtenRow
-              || $priorStatus !== 'synced');
-
-        if ($established) {
-          SheetSyncRepository::updateSyncStatus($conexion, $_POST['id_rfq'], 'synced', $writtenRow);
-          if ($outcome === 'created') {
-            AuditTrailRepository::sheet_row_created_audit_trail($conexion, $_POST['id_rfq']);
-          } else {
-            AuditTrailRepository::sheet_row_linked_audit_trail($conexion, $_POST['id_rfq']);
-          }
-        }
-      }
-    } catch (Exception $syncEx) {
-      SheetSyncRepository::updateSyncStatus($conexion, $_POST['id_rfq'], 'failed');
-      error_log('Sheet sync error on information save: ' . $syncEx->getMessage());
+      RepositorioRfq::update_name($conexion, $_POST['id_rfq'], trim($_POST['name']));
     }
 
     // Partner Opportunity Sync: persist the share gate + number, log what changed, then reconcile
@@ -166,13 +133,26 @@ if (isset($_POST['save_information'])) {
       $_POST['ship_to_original'],
       $_POST['comments'],
       $_POST['comments_original'],
-      $_POST['id_rfq']
+      $_POST['id_rfq'],
+      [
+        'letter_of_intent'  => $letter_of_intent,
+        'submission_method' => $submission_method,
+        'qa'                => $qa,
+        'qa_deadline'       => $qa_deadline,
+        'resumes'           => $resumes,
+        'site_visit'        => $site_visit,
+      ],
+      $priorQuote ? [
+        'letter_of_intent'  => $priorQuote->getLetterOfIntent(),
+        'submission_method' => $priorQuote->getSubmissionMethod(),
+        'qa'                => $priorQuote->getQa(),
+        'qa_deadline'       => $priorQuote->getQaDeadline(),
+        'resumes'           => $priorQuote->getResumes(),
+        'site_visit'        => $priorQuote->getSiteVisit(),
+      ] : []
     );
 
-    // Re-fetch: the sync block above can flip sheet_sync_status/sheet_row/sheet_sync_at, and
-    // the on-page Sheet Sync block is static HTML rendered once at page load — with the save
-    // now AJAX instead of a full-page redirect, nothing else re-renders it, so the client
-    // needs fresh values here to repaint it in place (see js/sheet_sync.js's ssRepaint).
+    // Re-fetch so the client can repaint the partner badges in place (the save is AJAX).
     Conexion::abrir_conexion();
     $finalQuote = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $_POST['id_rfq']);
     Conexion::cerrar_conexion();
@@ -180,11 +160,6 @@ if (isset($_POST['save_information'])) {
     header('Content-Type: application/json');
     echo json_encode([
       'success' => true,
-      'sheetSync' => [
-        'status' => $finalQuote->getSheetSyncStatus(),
-        'syncAt' => $finalQuote->getSheetSyncAt() ? date('M j, Y \a\t g:i A', strtotime($finalQuote->getSheetSyncAt())) : null,
-        'row'    => $finalQuote->getSheetRow(),
-      ],
       // Repaints the header badges + Solicitation # info card without a reload (js/partner_share.js).
       'partner' => $finalQuote->getPartnerSummary(),
     ]);

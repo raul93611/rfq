@@ -5,10 +5,117 @@
    this file owns the filters, the paginated table, and the Quote Summary
    modal. Server-side filtered + paginated (25/page).
    ========================================================================= */
+
+/* ---------- pure view helpers (no DOM; unit-tested in tests/js/pipeline_table.test.js) ---------- */
+var PipelineTableView = (function () {
+  'use strict';
+
+  // Tracking columns, in sheet order. Kept in step with the <colgroup>/<thead> in
+  // plantillas/utilities/pipeline_metrics.inc.php.
+  var COLUMN_COUNT = 18;
+
+  function EMPTY_FILTERS() {
+    return { quoteId: '', description: '', channel: '', emailCode: '', statuses: [], bidType: '', contractType: '', user: '', dueDate: '', endDateFrom: '', endDateTo: '', submittedFrom: '', submittedTo: '', letterOfIntent: '', submissionMethod: '' };
+  }
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
+      return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c];
+    });
+  }
+
+  var DASH = '<span class="pt-null">—</span>';
+  function tag(v) { return v ? '<span class="pt-tag">' + esc(v) + '</span>' : DASH; }
+  function text(v) { return v ? esc(v) : DASH; }
+
+  function countFilters(f) {
+    var n = 0;
+    if (f.quoteId.trim()) n++;
+    if (f.description.trim()) n++;
+    if (f.channel) n++;
+    if (f.emailCode.trim()) n++;
+    if (f.statuses.length) n++;
+    if (f.bidType) n++;
+    if (f.contractType) n++;
+    if (f.user) n++;
+    if (f.dueDate) n++;
+    if (f.endDateFrom || f.endDateTo) n++;
+    if (f.submittedFrom || f.submittedTo) n++;
+    if (f.letterOfIntent) n++;
+    if (f.submissionMethod) n++;
+    return n;
+  }
+
+  function buildQuery(p, f, page) {
+    var q = ['mode=' + p.mode, 'year=' + p.year, 'page=' + page];
+    if (p.mode === 'quarter') q.push('quarter=' + p.quarter);
+    if (p.mode === 'month') q.push('month=' + p.month);
+    if (p.mode === 'custom') { q.push('from=' + encodeURIComponent(p.from || '')); q.push('to=' + encodeURIComponent(p.to || '')); }
+    if (f.quoteId.trim()) q.push('quoteId=' + encodeURIComponent(f.quoteId.trim()));
+    if (f.description.trim()) q.push('description=' + encodeURIComponent(f.description.trim()));
+    if (f.channel) q.push('channel=' + encodeURIComponent(f.channel));
+    if (f.emailCode.trim()) q.push('emailCode=' + encodeURIComponent(f.emailCode.trim()));
+    if (f.bidType) q.push('bidType=' + encodeURIComponent(f.bidType));
+    if (f.contractType) q.push('contractType=' + encodeURIComponent(f.contractType));
+    if (f.user) q.push('user=' + encodeURIComponent(f.user));
+    if (f.dueDate) q.push('dueDate=' + encodeURIComponent(f.dueDate));
+    if (f.endDateFrom) q.push('endDateFrom=' + encodeURIComponent(f.endDateFrom));
+    if (f.endDateTo) q.push('endDateTo=' + encodeURIComponent(f.endDateTo));
+    if (f.submittedFrom) q.push('submittedFrom=' + encodeURIComponent(f.submittedFrom));
+    if (f.submittedTo) q.push('submittedTo=' + encodeURIComponent(f.submittedTo));
+    if (f.letterOfIntent) q.push('letterOfIntent=' + encodeURIComponent(f.letterOfIntent));
+    if (f.submissionMethod) q.push('submissionMethod=' + encodeURIComponent(f.submissionMethod));
+    f.statuses.forEach(function (k) { q.push('statuses[]=' + encodeURIComponent(k)); });
+    return q.join('&');
+  }
+
+  /** One <tr>. `pill` is the status pill markup (built from the page's status palette). */
+  function rowHtml(b, pill) {
+    return '<tr data-row="' + esc(b.id) + '">'
+      + '<td class="pt-td-id pt-sticky"><button type="button" class="pt-idlink" data-open="' + esc(b.id) + '">' + esc(b.id) + '</button></td>'
+      + '<td class="pt-td-mono">' + esc(b.created) + '</td>'
+      + '<td class="pt-td-desc">' + (b.description ? '<div class="pt-desc" title="' + esc(b.description) + '">' + esc(b.description) + '</div>' : DASH) + '</td>'
+      + '<td class="pt-td-ellip" title="' + esc(b.channel) + '">' + text(b.channel) + '</td>'
+      + '<td class="pt-td-mono" title="' + esc(b.emailCode) + '">' + esc(b.emailCode) + '</td>'
+      + '<td>' + pill + '</td>'
+      + '<td class="pt-td-mono">' + esc(b.internalDueDate) + '</td>'
+      + '<td class="pt-td-mono">' + esc(b.endDate) + '</td>'
+      + '<td class="pt-td-mono">' + esc(b.submitted) + '</td>'
+      + '<td class="pt-td-ellip" title="' + esc(b.bidType) + '">' + esc(b.bidType) + '</td>'
+      + '<td class="pt-td-ellip" title="' + esc(b.typeOfContract) + '">' + esc(b.typeOfContract) + '</td>'
+      + '<td>' + tag(b.qa) + '</td>'
+      + '<td class="pt-td-mono">' + text(b.qaDeadline) + '</td>'
+      + '<td>' + tag(b.resumes) + '</td>'
+      + '<td>' + tag(b.letterOfIntent) + '</td>'
+      + '<td>' + tag(b.siteVisit) + '</td>'
+      + '<td>' + tag(b.submissionMethod) + '</td>'
+      + '<td class="pt-td-ellip" title="' + esc(b.user) + '">' + esc(b.user) + '</td>'
+      + '</tr>';
+  }
+
+  /** Empty state spanning every column; `width` pins it to the visible part of the scroller. */
+  function emptyRowHtml(anyFilters, width) {
+    return '<tr><td colspan="' + COLUMN_COUNT + '" class="pt-td-empty"><div class="pt-empty"' + (width ? ' style="width:' + width + 'px"' : '') + '>'
+      + '<div class="pt-empty-ico"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l3-3 3 2 4-5" opacity="0.45"/></svg></div>'
+      + '<div class="pt-empty-title">No data for this period</div>'
+      + '<div class="pt-empty-sub">' + (anyFilters ? 'Try removing a filter, or a different period.' : 'Try a different year, quarter, or month.') + '</div>'
+      + '</div></td></tr>';
+  }
+
+  return { COLUMN_COUNT: COLUMN_COUNT, EMPTY_FILTERS: EMPTY_FILTERS, esc: esc, countFilters: countFilters, buildQuery: buildQuery, rowHtml: rowHtml, emptyRowHtml: emptyRowHtml };
+})();
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = PipelineTableView;
+}
+
+/* ---------- DOM controller ---------- */
 (function () {
   'use strict';
+  if (typeof window === 'undefined') return;
   var CFG = window.PM_CONFIG;
   if (!CFG) return;
+  var V = PipelineTableView;
 
   var $  = function (s, c) { return (c || document).querySelector(s); };
   var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
@@ -17,7 +124,8 @@
   var STATUS_BY_KEY = {};
   STATUSES.forEach(function (s) { STATUS_BY_KEY[s.key] = s; });
 
-  var EMPTY_FILTERS = function () { return { quoteId: '', channel: '', emailCode: '', statuses: [], bidType: '', contractType: '', user: '', dueDate: '', endDateFrom: '', endDateTo: '', submittedFrom: '', submittedTo: '' }; };
+  var EMPTY_FILTERS = V.EMPTY_FILTERS;
+  var esc = V.esc;
 
   var st = {
     period: null,
@@ -32,52 +140,14 @@
 
   /* ---------- formatting ---------- */
   function fmtMoneyFull(n) { return '$' + Math.round(n || 0).toLocaleString('en-US'); }
-  function esc(s) {
-    return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
-      return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c];
-    });
-  }
-
   function statusPill(key) {
     var s = STATUS_BY_KEY[key];
     if (!s) return '';
     return '<span class="pt-pill" style="--c:' + s.color + '"><span class="pt-pill-dot"></span>' + esc(s.label) + '</span>';
   }
   /* ---------- filter helpers ---------- */
-  function countFilters() {
-    var f = st.filters, n = 0;
-    if (f.quoteId.trim()) n++;
-    if (f.channel) n++;
-    if (f.emailCode.trim()) n++;
-    if (f.statuses.length) n++;
-    if (f.bidType) n++;
-    if (f.contractType) n++;
-    if (f.user) n++;
-    if (f.dueDate) n++;
-    if (f.endDateFrom || f.endDateTo) n++;
-    if (f.submittedFrom || f.submittedTo) n++;
-    return n;
-  }
-
-  function buildQuery() {
-    var p = st.period, f = st.filters, q = ['mode=' + p.mode, 'year=' + p.year, 'page=' + st.page];
-    if (p.mode === 'quarter') q.push('quarter=' + p.quarter);
-    if (p.mode === 'month') q.push('month=' + p.month);
-    if (p.mode === 'custom') { q.push('from=' + encodeURIComponent(p.from || '')); q.push('to=' + encodeURIComponent(p.to || '')); }
-    if (f.quoteId.trim()) q.push('quoteId=' + encodeURIComponent(f.quoteId.trim()));
-    if (f.channel) q.push('channel=' + encodeURIComponent(f.channel));
-    if (f.emailCode.trim()) q.push('emailCode=' + encodeURIComponent(f.emailCode.trim()));
-    if (f.bidType) q.push('bidType=' + encodeURIComponent(f.bidType));
-    if (f.contractType) q.push('contractType=' + encodeURIComponent(f.contractType));
-    if (f.user) q.push('user=' + encodeURIComponent(f.user));
-    if (f.dueDate) q.push('dueDate=' + encodeURIComponent(f.dueDate));
-    if (f.endDateFrom) q.push('endDateFrom=' + encodeURIComponent(f.endDateFrom));
-    if (f.endDateTo) q.push('endDateTo=' + encodeURIComponent(f.endDateTo));
-    if (f.submittedFrom) q.push('submittedFrom=' + encodeURIComponent(f.submittedFrom));
-    if (f.submittedTo) q.push('submittedTo=' + encodeURIComponent(f.submittedTo));
-    f.statuses.forEach(function (k) { q.push('statuses[]=' + encodeURIComponent(k)); });
-    return q.join('&');
-  }
+  function countFilters() { return V.countFilters(st.filters); }
+  function buildQuery() { return V.buildQuery(st.period, st.filters, st.page); }
 
   /* ---------- fetch + render ---------- */
   function fetchRows() {
@@ -101,27 +171,10 @@
     $('#pt-card-sub').textContent = st.total + (st.total === 1 ? ' quote' : ' quotes') + ' in this period';
 
     if (st.rows.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="11"><div class="pt-empty">'
-        + '<div class="pt-empty-ico"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l3-3 3 2 4-5" opacity="0.45"/></svg></div>'
-        + '<div class="pt-empty-title">No data for this period</div>'
-        + '<div class="pt-empty-sub">' + (anyFilters ? 'Try removing a filter, or a different period.' : 'Try a different year, quarter, or month.') + '</div>'
-        + '</div></td></tr>';
+      var wrap = $('.pt-table-wrap');
+      tbody.innerHTML = V.emptyRowHtml(anyFilters, wrap ? wrap.clientWidth : 0);
     } else {
-      tbody.innerHTML = st.rows.map(function (b) {
-        return '<tr data-row="' + b.id + '">'
-          + '<td class="pt-td-id"><button type="button" class="pt-idlink" data-open="' + b.id + '">' + esc(b.id) + '</button></td>'
-          + '<td class="pt-td-mono">' + esc(b.created) + '</td>'
-          + '<td class="pt-td-mono">' + esc(b.internalDueDate) + '</td>'
-          + '<td class="pt-td-mono">' + esc(b.endDate) + '</td>'
-          + '<td class="pt-td-mono">' + esc(b.submitted) + '</td>'
-          + '<td class="pt-td-ellip" title="' + esc(b.channel) + '">' + esc(b.channel) + '</td>'
-          + '<td class="pt-td-mono">' + esc(b.emailCode) + '</td>'
-          + '<td>' + statusPill(b.status) + '</td>'
-          + '<td>' + esc(b.bidType) + '</td>'
-          + '<td class="pt-td-wrap" title="' + esc(b.typeOfContract) + '">' + esc(b.typeOfContract) + '</td>'
-          + '<td class="pt-td-ellip" title="' + esc(b.user) + '">' + esc(b.user) + '</td>'
-          + '</tr>';
-      }).join('');
+      tbody.innerHTML = st.rows.map(function (b) { return V.rowHtml(b, statusPill(b.status)); }).join('');
     }
     renderPager();
     renderFilterFoot();
@@ -222,19 +275,19 @@
   }
 
   function wireFilters() {
-    var map = { 'pt-f-quoteId': 'quoteId', 'pt-f-emailCode': 'emailCode' };
+    var map = { 'pt-f-quoteId': 'quoteId', 'pt-f-emailCode': 'emailCode', 'pt-f-description': 'description' };
     Object.keys(map).forEach(function (id) {
       var el = document.getElementById(id);
       if (el) el.addEventListener('input', function () { st.filters[map[id]] = el.value; onFilterChange(); });
     });
-    ['pt-f-channel', 'pt-f-bidType', 'pt-f-contractType', 'pt-f-user', 'pt-f-dueDate', 'pt-f-endDateFrom', 'pt-f-endDateTo', 'pt-f-submittedFrom', 'pt-f-submittedTo'].forEach(function (id) {
+    ['pt-f-channel', 'pt-f-bidType', 'pt-f-contractType', 'pt-f-user', 'pt-f-dueDate', 'pt-f-endDateFrom', 'pt-f-endDateTo', 'pt-f-submittedFrom', 'pt-f-submittedTo', 'pt-f-letterOfIntent', 'pt-f-submissionMethod'].forEach(function (id) {
       var el = document.getElementById(id), key = id.replace('pt-f-', '');
       if (el) el.addEventListener('change', function () { st.filters[key] = el.value; onFilterChange(true); });
     });
     var clear = $('#pt-clear');
     if (clear) clear.addEventListener('click', function () {
       st.filters = EMPTY_FILTERS();
-      ['pt-f-quoteId', 'pt-f-emailCode', 'pt-f-channel', 'pt-f-bidType', 'pt-f-contractType', 'pt-f-user', 'pt-f-dueDate', 'pt-f-endDateFrom', 'pt-f-endDateTo', 'pt-f-submittedFrom', 'pt-f-submittedTo'].forEach(function (id) {
+      ['pt-f-quoteId', 'pt-f-description', 'pt-f-emailCode', 'pt-f-channel', 'pt-f-bidType', 'pt-f-contractType', 'pt-f-user', 'pt-f-dueDate', 'pt-f-endDateFrom', 'pt-f-endDateTo', 'pt-f-submittedFrom', 'pt-f-submittedTo', 'pt-f-letterOfIntent', 'pt-f-submissionMethod'].forEach(function (id) {
         var el = document.getElementById(id); if (el) el.value = '';
       });
       syncStatusMs();
@@ -354,6 +407,9 @@
       var b = e.target.closest('[data-page]');
       if (b && !b.disabled) { st.page = parseInt(b.dataset.page, 10); fetchRows(); }
     });
+    // Shadow on the pinned Quote ID column once the table is scrolled sideways.
+    var wrap = $('.pt-table-wrap');
+    if (wrap) wrap.addEventListener('scroll', function () { wrap.classList.toggle('is-scrolled', wrap.scrollLeft > 0); }, { passive: true });
     $('#qs-scrim').addEventListener('mousedown', function (e) { if (e.target === $('#qs-scrim')) closeModal(); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !$('#qs-scrim').hidden) closeModal(); });
   }

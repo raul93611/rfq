@@ -1,5 +1,9 @@
 <?php
 class Rfq {
+  // Bid requirement options (business-confirmed 2026-11-18). The stored value is the label.
+  const LETTER_OF_INTENT_OPTIONS = ['YES', 'NO', 'TBD'];
+  const SUBMISSION_METHOD_OPTIONS = ['PLATFORM', 'EMAIL', 'MAIL'];
+
   private $id;
   private $id_usuario;
   private $usuario_designado;
@@ -68,15 +72,13 @@ class Rfq {
   private $reference_url;
   private $priority;
   private $name;
-  private $sheet_sync_status;
-  private $sheet_sync_at;
-  private $sheet_row;
-  private $sync_to_sheet;
   private $site_visit;
   private $resumes;
   private $qa_deadline;
   private $internal_due_date;
   private $qa;
+  private $letter_of_intent;
+  private $submission_method;
   private $sources_sought;
   private $pop_start_date;
   private $pop_end_date;
@@ -160,17 +162,15 @@ class Rfq {
     $this->reference_url = $row['reference_url'] ?? null;
     $this->priority = $row['priority'] ?? null;
     $this->name = $row['name'] ?? null;
-    $this->sheet_sync_status = $row['sheet_sync_status'] ?? null;
-    $this->sheet_sync_at = $row['sheet_sync_at'] ?? null;
-    $this->sheet_row = $row['sheet_row'] ?? null;
-    // Explicit per-quote pipeline-sync flag. Defaults to 1 to match the column default
-    // for rows created/read before this property is set (e.g. hand-built Rfq arrays).
-    $this->sync_to_sheet = isset($row['sync_to_sheet']) ? (int)$row['sync_to_sheet'] : 1;
     $this->site_visit = isset($row['site_visit']) ? (int)$row['site_visit'] : null;
     $this->resumes = isset($row['resumes']) ? (int)$row['resumes'] : null;
     $this->qa_deadline = $row['qa_deadline'] ?? null;
     $this->internal_due_date = $row['internal_due_date'] ?? null;
     $this->qa = isset($row['qa']) ? (int)$row['qa'] : null;
+    // Whitelisted on the way in: anything outside the option list becomes NULL, so a bad
+    // value never blocks a save.
+    $this->letter_of_intent = self::pickOption($row['letter_of_intent'] ?? null, self::LETTER_OF_INTENT_OPTIONS);
+    $this->submission_method = self::pickOption($row['submission_method'] ?? null, self::SUBMISSION_METHOD_OPTIONS);
     // Sources Sought submission sub-type. Coexists with status = 1 and is excluded
     // from win/loss math. Defaults to 0 (regular submission).
     $this->sources_sought = isset($row['sources_sought']) ? (int)$row['sources_sought'] : 0;
@@ -759,22 +759,6 @@ class Rfq {
     return $this->name;
   }
 
-  public function getSheetSyncStatus() {
-    return $this->sheet_sync_status;
-  }
-
-  public function getSheetSyncAt() {
-    return $this->sheet_sync_at;
-  }
-
-  public function getSheetRow() {
-    return $this->sheet_row;
-  }
-
-  public function getSyncToSheet() {
-    return $this->sync_to_sheet;
-  }
-
   /**
    * Derives the pipeline status bucket for a single quote.
    *
@@ -911,6 +895,20 @@ class Rfq {
 
   public function getQaDeadline() {
     return $this->qa_deadline;
+  }
+
+  public function getLetterOfIntent() {
+    return $this->letter_of_intent;
+  }
+
+  public function getSubmissionMethod() {
+    return $this->submission_method;
+  }
+
+  /** The value if it is one of $options (after trim), otherwise NULL. */
+  public static function pickOption($value, array $options) {
+    $value = is_string($value) ? trim($value) : $value;
+    return in_array($value, $options, true) ? $value : null;
   }
 
   public function getVehicleForSheet() {

@@ -205,12 +205,32 @@
                 <option value="0" <?= $sv_sel === '0' ? 'selected' : ''; ?>>No</option>
               </select>
             </div>
-            <div class="form-group col-md-6 mb-0">
+            <div class="form-group col-md-6">
               <label for="resumes">Resumes</label>
               <select class="form-control form-control-sm" name="resumes" id="resumes">
                 <option value="" <?= $res_sel === '' ? 'selected' : ''; ?>>Not specified</option>
                 <option value="1" <?= $res_sel === '1' ? 'selected' : ''; ?>>Yes</option>
                 <option value="0" <?= $res_sel === '0' ? 'selected' : ''; ?>>No</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6 mb-0">
+              <label for="letter_of_intent">Letter of Intent</label>
+              <select class="form-control form-control-sm" name="letter_of_intent" id="letter_of_intent">
+                <option value="">—</option>
+                <?php foreach (Rfq::LETTER_OF_INTENT_OPTIONS as $opt) : ?>
+                  <option value="<?= $opt; ?>" <?= $quote->getLetterOfIntent() === $opt ? 'selected' : ''; ?>><?= $opt; ?></option>
+                <?php endforeach; ?>
+              </select>
+            </div>
+            <div class="form-group col-md-6 mb-0">
+              <label for="submission_method">Submission Method</label>
+              <select class="form-control form-control-sm" name="submission_method" id="submission_method">
+                <option value="">—</option>
+                <?php foreach (Rfq::SUBMISSION_METHOD_OPTIONS as $opt) : ?>
+                  <option value="<?= $opt; ?>" <?= $quote->getSubmissionMethod() === $opt ? 'selected' : ''; ?>><?= $opt; ?></option>
+                <?php endforeach; ?>
               </select>
             </div>
           </div>

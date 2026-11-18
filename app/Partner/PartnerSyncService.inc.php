@@ -244,7 +244,6 @@ class PartnerSyncService {
         || (int)$row['fullfillment'] !== 0 || (int)$row['invoice'] !== 0) return false;
     if ((float)$row['total_price'] !== 0.0) return false;
     if (!in_array((string)$row['comments'], ['', 'No comments'], true)) return false;
-    if (!empty($row['sheet_row'])) return false;
     $stmt = $conexion->prepare('SELECT COUNT(*) FROM item WHERE id_rfq = :id');
     $stmt->execute([':id' => $row['id']]);
     return (int)$stmt->fetchColumn() === 0;
@@ -406,8 +405,6 @@ class PartnerSyncService {
       'city' => null, 'zip_code' => null, 'state' => null, 'client' => is_string($rec['agency']) ? trim($rec['agency']) : null,
       'deleted' => 0, 'client_payment_terms' => 'Net 30', 'reference_url' => '', 'priority' => null,
       'name' => is_string($rec['name']) && trim($rec['name']) !== '' ? trim($rec['name']) : $number,
-      // Never push a background-created quote to the SharePoint sheet; a user opts in with "Sync to Sheet".
-      'sync_to_sheet' => 0,
     ]);
     list($inserted, $id) = RepositorioRfq::insertar_cotizacion($conexion, $rfq);
     if (!$inserted || !$id) return self::review($conexion, 'rejected', $rec, [], 'The quote could not be created');

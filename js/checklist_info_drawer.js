@@ -271,11 +271,6 @@
           if (which === 'checklist' && 'periodOfPerformance' in result.data) {
             updatePopCell(result.data.periodOfPerformance);
           }
-          if (which === 'information' && result.data.sheetSync && typeof window.ssRepaint === 'function') {
-            var ss = result.data.sheetSync;
-            var tone = ss.status === 'synced' ? 'synced' : (ss.status === 'failed' ? 'failed' : 'never');
-            window.ssRepaint(tone, ss.syncAt);
-          }
           if (result.data.partner && window.PartnerShare) {
             window.PartnerShare.repaint(result.data.partner);
           }

@@ -2,7 +2,7 @@
 
 Replace the SharePoint "E-LOGIC BID PIPELINE" spreadsheet with the portal: add two optional bid fields, turn the Pipeline Table View into the tracking view, and remove the sheet sync from the app completely.
 
-**Status:** `planned`
+**Status:** `built`
 
 ## Background
 

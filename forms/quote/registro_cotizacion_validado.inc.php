@@ -38,24 +38,6 @@
     </div>
   </div>
 
-  <div class="form-row">
-    <div class="col-md-6 d-none d-md-block"></div>
-    <div class="col-md-6">
-      <div class="form-group sync-field">
-        <label class="sync-check" for="sync_to_sheet">
-          <input type="checkbox" class="sync-check-input" id="sync_to_sheet" name="sync_to_sheet" value="1" <?= isset($_POST['sync_to_sheet']) ? 'checked' : ''; ?>>
-          <span class="sync-check-box" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          </span>
-          <span class="sync-check-text">
-            <span class="sync-check-label">Sync to pipeline</span>
-            <span class="sync-check-help">Adds this quote to the E-LOGIC Bid Pipeline sheet.</span>
-          </span>
-        </label>
-      </div>
-    </div>
-  </div>
-
   <?php
   $ps_solicitation = $_POST['solicitation_number'] ?? '';
   $ps_share = isset($_POST['share_with_partner']);
@@ -218,12 +200,36 @@
         </div>
       </div>
       <div class="col-md-6">
-        <div class="form-group mb-0">
+        <div class="form-group">
           <label for="resumes">Resumes</label>
           <select class="form-control" name="resumes" id="resumes">
             <option value="" <?= ($_POST['resumes'] ?? '') === '' ? 'selected' : ''; ?>>Not specified</option>
             <option value="1" <?= ($_POST['resumes'] ?? '') === '1' ? 'selected' : ''; ?>>Yes</option>
             <option value="0" <?= ($_POST['resumes'] ?? '') === '0' ? 'selected' : ''; ?>>No</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="col-md-6">
+        <div class="form-group mb-0">
+          <label for="letter_of_intent">Letter of Intent</label>
+          <select class="form-control" name="letter_of_intent" id="letter_of_intent">
+            <option value="">—</option>
+            <?php foreach (Rfq::LETTER_OF_INTENT_OPTIONS as $opt) : ?>
+              <option value="<?= $opt; ?>" <?= ($_POST['letter_of_intent'] ?? '') === $opt ? 'selected' : ''; ?>><?= $opt; ?></option>
+            <?php endforeach; ?>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group mb-0">
+          <label for="submission_method">Submission Method</label>
+          <select class="form-control" name="submission_method" id="submission_method">
+            <option value="">—</option>
+            <?php foreach (Rfq::SUBMISSION_METHOD_OPTIONS as $opt) : ?>
+              <option value="<?= $opt; ?>" <?= ($_POST['submission_method'] ?? '') === $opt ? 'selected' : ''; ?>><?= $opt; ?></option>
+            <?php endforeach; ?>
           </select>
         </div>
       </div>

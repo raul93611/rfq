@@ -34,10 +34,12 @@ class PipelineTableRepository {
     $total = (int)self::scalar($conexion, $countSql, $params);
 
     $offset = $page * self::PAGE_SIZE;
-    $rowsSql = "SELECT id, email_code, canal, type_of_bid, type_of_contract, name, designated_username, value, bucket, created_at, internal_due_date, end_date, fecha_submitted
+    $rowsSql = "SELECT id, email_code, canal, type_of_bid, type_of_contract, name, designated_username, value, bucket, created_at, internal_due_date, end_date, fecha_submitted,
+             qa, qa_deadline, resumes, site_visit, letter_of_intent, submission_method
       FROM (
         SELECT rfq.id, rfq.email_code, rfq.canal, rfq.type_of_bid, rfq.type_of_contract, rfq.name, rfq.created_at,
                rfq.internal_due_date, rfq.end_date, rfq.fecha_submitted,
+               rfq.qa, rfq.qa_deadline, rfq.resumes, rfq.site_visit, rfq.letter_of_intent, rfq.submission_method,
                u.nombre_usuario AS designated_username,
                " . PipelineMetricsRepository::VALUE_EXPR . " AS value,
                " . PipelineMetricsRepository::STATUS_CASE . " AS bucket
@@ -73,6 +75,14 @@ class PipelineTableRepository {
         'internalDueDate' => !empty($r['internal_due_date']) ? date('m/d/Y', strtotime($r['internal_due_date'])) : '—',
         'endDate'         => !empty($r['end_date']) ? $r['end_date'] : '—',
         'submitted'       => !empty($r['fecha_submitted']) ? date('m/d/Y', strtotime($r['fecha_submitted'])) : '—',
+        // Tracking columns (retired sheet). Raw values — the client escapes; null renders as —.
+        'description'      => $name !== '' ? $name : null,
+        'qa'               => self::yesNo($r['qa']),
+        'qaDeadline'       => !empty($r['qa_deadline']) ? date('m/d/Y H:i', strtotime($r['qa_deadline'])) : null,
+        'resumes'          => self::yesNo($r['resumes']),
+        'siteVisit'        => self::yesNo($r['site_visit']),
+        'letterOfIntent'   => Rfq::pickOption($r['letter_of_intent'], Rfq::LETTER_OF_INTENT_OPTIONS),
+        'submissionMethod' => Rfq::pickOption($r['submission_method'], Rfq::SUBMISSION_METHOD_OPTIONS),
       ];
     }, $rows);
 
@@ -84,6 +94,12 @@ class PipelineTableRepository {
     $sql = "SELECT DISTINCT canal FROM rfq WHERE deleted = 0 AND canal IS NOT NULL AND canal <> '' ORDER BY canal ASC";
     $rows = self::run($conexion, $sql, []);
     return array_map(fn($r) => ['value' => $r['canal'], 'label' => self::displayChannel($r['canal'])], $rows);
+  }
+
+  /** TINYINT(1) yes/no column -> 'YES' / 'NO', or null when unset. */
+  private static function yesNo($v) {
+    if ($v === null || $v === '') return null;
+    return (int)$v === 1 ? 'YES' : 'NO';
   }
 
   /** Mirrors Rfq::print_channel() for the two renamed channels. */
@@ -112,6 +128,18 @@ class PipelineTableRepository {
     if (!empty($filters['emailCode'])) {
       $params[':ec'] = '%' . $filters['emailCode'] . '%';
       $inner[] = "rfq.email_code LIKE :ec";
+    }
+    if (!empty($filters['description'])) {
+      $params[':desc'] = '%' . $filters['description'] . '%';
+      $inner[] = "rfq.name LIKE :desc";
+    }
+    if (!empty($filters['letterOfIntent'])) {
+      $params[':loi'] = (string)$filters['letterOfIntent'];
+      $inner[] = "rfq.letter_of_intent = :loi";
+    }
+    if (!empty($filters['submissionMethod'])) {
+      $params[':smeth'] = (string)$filters['submissionMethod'];
+      $inner[] = "rfq.submission_method = :smeth";
     }
     if (!empty($filters['bidType'])) {
       $params[':bt'] = $filters['bidType'];

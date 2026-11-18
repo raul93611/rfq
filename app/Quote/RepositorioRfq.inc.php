@@ -4,7 +4,7 @@ class RepositorioRfq {
     $cotizacion_insertada = false;
     if (isset($conexion)) {
       try {
-        $sql = 'INSERT INTO rfq(id_usuario, usuario_designado, canal, email_code, type_of_bid, issue_date, end_date, status, completado, total_cost, total_price, comments, award, fecha_completado, fecha_submitted, fecha_award, payment_terms, address, ship_to, expiration_date, ship_via, taxes, profit, additional, shipping, shipping_cost, fullfillment, fulfillment_date, contract_number, fulfillment_profit, services_fulfillment_profit, total_fulfillment, total_services_fulfillment, invoice, invoice_date, multi_year_project, submitted_invoice, submitted_invoice_date, fulfillment_pending, fulfillment_shipping_cost, fulfillment_shipping, type_of_contract, net30_fulfillment, sales_commission, city, zip_code, state, client, reference_url, priority, name, sync_to_sheet, site_visit, resumes, qa_deadline, internal_due_date, qa) VALUES(:id_usuario, :usuario_designado, :canal, :email_code, :type_of_bid, :issue_date, :end_date, :status, :completado, :total_cost, :total_price, :comments, :award, :fecha_completado, :fecha_submitted, :fecha_award, :payment_terms, :address, :ship_to, :expiration_date, :ship_via, :taxes, :profit, :additional, :shipping, :shipping_cost, :fullfillment, :fulfillment_date, :contract_number, :fulfillment_profit, :services_fulfillment_profit, :total_fulfillment, :total_services_fulfillment, :invoice, :invoice_date, :multi_year_project, :submitted_invoice, :submitted_invoice_date, :fulfillment_pending, :fulfillment_shipping_cost, :fulfillment_shipping, :type_of_contract, :net30_fulfillment, :sales_commission, :city, :zip_code, :state, :client, :reference_url, :priority, :name, :sync_to_sheet, :site_visit, :resumes, STR_TO_DATE(:qa_deadline, \'%m/%d/%Y %H:%i\'), STR_TO_DATE(:internal_due_date, \'%m/%d/%Y\'), :qa)';
+        $sql = 'INSERT INTO rfq(id_usuario, usuario_designado, canal, email_code, type_of_bid, issue_date, end_date, status, completado, total_cost, total_price, comments, award, fecha_completado, fecha_submitted, fecha_award, payment_terms, address, ship_to, expiration_date, ship_via, taxes, profit, additional, shipping, shipping_cost, fullfillment, fulfillment_date, contract_number, fulfillment_profit, services_fulfillment_profit, total_fulfillment, total_services_fulfillment, invoice, invoice_date, multi_year_project, submitted_invoice, submitted_invoice_date, fulfillment_pending, fulfillment_shipping_cost, fulfillment_shipping, type_of_contract, net30_fulfillment, sales_commission, city, zip_code, state, client, reference_url, priority, name, site_visit, resumes, qa_deadline, internal_due_date, qa, letter_of_intent, submission_method) VALUES(:id_usuario, :usuario_designado, :canal, :email_code, :type_of_bid, :issue_date, :end_date, :status, :completado, :total_cost, :total_price, :comments, :award, :fecha_completado, :fecha_submitted, :fecha_award, :payment_terms, :address, :ship_to, :expiration_date, :ship_via, :taxes, :profit, :additional, :shipping, :shipping_cost, :fullfillment, :fulfillment_date, :contract_number, :fulfillment_profit, :services_fulfillment_profit, :total_fulfillment, :total_services_fulfillment, :invoice, :invoice_date, :multi_year_project, :submitted_invoice, :submitted_invoice_date, :fulfillment_pending, :fulfillment_shipping_cost, :fulfillment_shipping, :type_of_contract, :net30_fulfillment, :sales_commission, :city, :zip_code, :state, :client, :reference_url, :priority, :name, :site_visit, :resumes, STR_TO_DATE(:qa_deadline, \'%m/%d/%Y %H:%i\'), STR_TO_DATE(:internal_due_date, \'%m/%d/%Y\'), :qa, :letter_of_intent, :submission_method)';
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindValue(':id_usuario', $cotizacion->obtener_id_usuario(), PDO::PARAM_STR);
         $sentencia->bindValue(':usuario_designado', $cotizacion->obtener_usuario_designado(), PDO::PARAM_STR);
@@ -57,12 +57,13 @@ class RepositorioRfq {
         $sentencia->bindValue(':reference_url', $cotizacion->getReferenceUrl(), PDO::PARAM_STR);
         $sentencia->bindValue(':priority', $cotizacion->getPriority(), PDO::PARAM_STR);
         $sentencia->bindValue(':name', $cotizacion->getName(), PDO::PARAM_STR);
-        $sentencia->bindValue(':sync_to_sheet', $cotizacion->getSyncToSheet(), PDO::PARAM_INT);
         $sentencia->bindValue(':site_visit', $cotizacion->getSiteVisit(), PDO::PARAM_INT);
         $sentencia->bindValue(':resumes', $cotizacion->getResumes(), PDO::PARAM_INT);
         $sentencia->bindValue(':qa_deadline', $cotizacion->getQaDeadline(), PDO::PARAM_STR);
         $sentencia->bindValue(':internal_due_date', $cotizacion->getInternalDueDate(), PDO::PARAM_STR);
         $sentencia->bindValue(':qa', $cotizacion->getQa(), PDO::PARAM_INT);
+        $sentencia->bindValue(':letter_of_intent', $cotizacion->getLetterOfIntent(), PDO::PARAM_STR);
+        $sentencia->bindValue(':submission_method', $cotizacion->getSubmissionMethod(), PDO::PARAM_STR);
         $resultado = $sentencia->execute();
         $id = $conexion->lastInsertId();
         if ($resultado) {
@@ -211,8 +212,7 @@ class RepositorioRfq {
           ELSE "false"
         END AS rfp,
         NULL AS options,
-        comments,
-        rfq.sheet_sync_status
+        comments
         FROM rfq
         LEFT JOIN usuarios ON rfq.usuario_designado = usuarios.id
         WHERE rfq.deleted = 0 AND 
@@ -314,8 +314,7 @@ class RepositorioRfq {
           ELSE 'false'
         END AS rfp,
         NULL AS options,
-        comments,
-        rfq.sheet_sync_status
+        comments
         FROM rfq
         LEFT JOIN usuarios ON rfq.usuario_designado = usuarios.id
         WHERE rfq.deleted = 0 AND
@@ -417,8 +416,7 @@ class RepositorioRfq {
           ELSE 'false'
         END AS rfp,
         NULL AS options,
-        comments,
-        rfq.sheet_sync_status
+        comments
         FROM rfq
         LEFT JOIN usuarios ON rfq.usuario_designado = usuarios.id
         WHERE rfq.deleted = 0 AND
@@ -520,8 +518,7 @@ class RepositorioRfq {
           ELSE 'false'
         END AS rfp,
         NULL AS options,
-        comments,
-        rfq.sheet_sync_status
+        comments
         FROM rfq
         LEFT JOIN usuarios ON rfq.usuario_designado = usuarios.id
         WHERE rfq.deleted = 0 AND 
@@ -839,7 +836,9 @@ class RepositorioRfq {
     $resumes = null,
     $qa_deadline = null,
     $internal_due_date = null,
-    $qa = null
+    $qa = null,
+    $letter_of_intent = null,
+    $submission_method = null
   ) {
     $cotizacion_editada = false;
     if (isset($conexion)) {
@@ -863,7 +862,9 @@ class RepositorioRfq {
         resumes = :resumes,
         qa_deadline = STR_TO_DATE(:qa_deadline, '%m/%d/%Y %H:%i'),
         internal_due_date = STR_TO_DATE(:internal_due_date, '%m/%d/%Y'),
-        qa = :qa
+        qa = :qa,
+        letter_of_intent = :letter_of_intent,
+        submission_method = :submission_method
         WHERE id = :id_rfq
         ";
         $sentencia = $conexion->prepare($sql);
@@ -886,6 +887,8 @@ class RepositorioRfq {
         $sentencia->bindValue(':qa_deadline', $qa_deadline, PDO::PARAM_STR);
         $sentencia->bindValue(':internal_due_date', $internal_due_date, PDO::PARAM_STR);
         $sentencia->bindValue(':qa', $qa, PDO::PARAM_INT);
+        $sentencia->bindValue(':letter_of_intent', Rfq::pickOption($letter_of_intent, Rfq::LETTER_OF_INTENT_OPTIONS), PDO::PARAM_STR);
+        $sentencia->bindValue(':submission_method', Rfq::pickOption($submission_method, Rfq::SUBMISSION_METHOD_OPTIONS), PDO::PARAM_STR);
         $sentencia->bindValue(':id_rfq', $id_rfq, PDO::PARAM_STR);
         $sentencia->execute();
         if ($sentencia) {
@@ -898,7 +901,15 @@ class RepositorioRfq {
     return $cotizacion_editada;
   }
 
-  public static function update_variables($connection, $payment_terms, $taxes, $profit, $total_cost, $total_price, $additional, $shipping, $shipping_cost, $id_rfq) {
+  /** Quote Description. Stored raw (trim only) — escape at render. */
+  public static function update_name($conexion, $id_rfq, $name) {
+    $stmt = $conexion->prepare('UPDATE rfq SET name = :name WHERE id = :id');
+    $stmt->bindValue(':name', $name, PDO::PARAM_STR);
+    $stmt->bindValue(':id', $id_rfq, PDO::PARAM_INT);
+    $stmt->execute();
+  }
+
+  public static function update_variables($connection,$payment_terms, $taxes, $profit, $total_cost, $total_price, $additional, $shipping, $shipping_cost, $id_rfq) {
     if (isset($connection)) {
       try {
         $sql = 'UPDATE rfq SET payment_terms = :payment_terms, taxes = :taxes, profit = :profit, total_cost = :total_cost, total_price = :total_price, additional = :additional, shipping = :shipping, shipping_cost = :shipping_cost WHERE id = :id_rfq';
@@ -2613,9 +2624,6 @@ class RepositorioRfq {
       'bpa' => $cotizacion->getBpa(),
       'reference_url' => $cotizacion->getReferenceUrl(),
       'priority' => null,
-      // Copies start un-synced so duplicating across years doesn't flood the pipeline;
-      // the user can opt a copy back in with the Sync to Sheet button.
-      'sync_to_sheet' => 0,
     ]);
 
     // Insert the copied RFQ

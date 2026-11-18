@@ -17,10 +17,10 @@ async function invoiceReadyQuote({ type = 'AV - Installation', price = 100000, f
         status, completado, award, payment_terms, address, ship_to, ship_via, taxes, profit, additional,
         shipping_cost, shipping, fullfillment, contract_number, services_payment_term, total_price, total_cost,
         total_fulfillment, fulfillment_profit, type_of_contract, city, zip_code, client, set_side, poc, co,
-        estimated_delivery_date, file_document, sync_to_sheet, invoice, invoice_date, fulfillment_pending, name, deleted)
+        estimated_delivery_date, file_document, invoice, invoice_date, fulfillment_pending, name, deleted)
        VALUES (?, ?, 'GSA-Buy', ?, 'RFQ', '2026-01-01', '2026-12-31', 1, 1, 1, 'Net 30', '123 Test St', 'Test Ship',
         'UPS', 0, 0, '', 0, '', 1, 'SC-E2E', 'Net 30', ?, ?, ?, ?, ?, 'Miami', '33101', 'Test Agency', 'None',
-        'Pat POC', 'Casey CO', '2026-12-01', 'W9', 0, ?, ?, 0, 'Commission e2e', 0)`,
+        'Pat POC', 'Casey CO', '2026-12-01', 'W9', ?, ?, 0, 'Commission e2e', 0)`,
       [userId, userId, `SC-${Date.now()}-${created.length}`, price, requote, fulfillment, price - fulfillment, type,
         invoiced ? 1 : 0, invoiced ? '2026-10-26' : null]
     );
