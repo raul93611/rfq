@@ -2,7 +2,7 @@
 
 The GSA proposal PDF still prints the SBA 8(a) case number and entrance/exit dates. Those two lines should be removed.
 
-**Status:** `planned`
+**Status:** `fixed`
 
 ## Steps to Reproduce
 
