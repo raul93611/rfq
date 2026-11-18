@@ -6,13 +6,7 @@ Guidance for Claude Code when working in this repository.
 
 All built; non-obvious ones detailed in `###` below.
 
-Quote Inline Editing · SharePoint Sheet Sync · Comment Mentions & Notifications · Bid Requirement Fields · Bid Pipeline Sync Controls · Pipeline Metrics Dashboard · Pipeline Table View · 3-Year Annual Awards · Quote Lifecycle Audit Events · Advanced Quote Search · Commercial Moving + 50/50 term · Shared Notification Mailbox · Daily RFQ Digest · Checklist & Info Drawer · Documents Drawer · Import Items Enhancements · Items & Services Table Redesign · Working on It status · **Partner Opportunity Sync** · **Automatic Sales Commission**
-
-Planned: **Retire Tracking Sheet** (`planned`) → [features/retire-tracking-sheet.md](features/retire-tracking-sheet.md)
-
-## Known Bugs
-
-- GSA proposal PDF still prints SBA 8(a) Case No / Entrance–Exit dates (`planned`) → [bugs/gsa-proposal-sba-case-info.md](bugs/gsa-proposal-sba-case-info.md)
+Quote Inline Editing · Comment Mentions & Notifications · Bid Requirement Fields · Pipeline Metrics Dashboard · Pipeline Table View · 3-Year Annual Awards · Quote Lifecycle Audit Events · Advanced Quote Search · Commercial Moving + 50/50 term · Shared Notification Mailbox · Daily RFQ Digest · Checklist & Info Drawer · Documents Drawer · Import Items Enhancements · Items & Services Table Redesign · Working on It status · **Partner Opportunity Sync** · **Automatic Sales Commission** · **Retire Tracking Sheet**
 
 ## Environment
 
@@ -20,7 +14,7 @@ PHP app on a LAMP stack inside Docker (`docker-compose-lamp`), served at `http:/
 
 - **Setup:** create `/tmp` at project root; disable MySQL strict mode (`sql_mode=""` under `[mysqld]`, restart); prod also needs the `xmlwriter` PHP module. `composer install`. Users: `/genera_usuario`.
 - **Database:** `elogicnewdb` on `database:3306`, schema [sql/elogic.sql](sql/elogic.sql), migrations in `sql/` (run once per environment — list in [DEPLOYMENT.md](DEPLOYMENT.md)). There is **no `.env`**: config constants live in `app/Bootstrap/config.inc.php`, **gitignored** — add new constants by hand per environment; code must degrade safely when one is undefined.
-- **Tests:** PHP `tests/php/` (`docker exec lamp-php83 php /var/www/html/rfq/tests/php/<file>`; DB-backed, transaction-rolled-back, so **no DDL inside a test**); Node `tests/js/` (`node --test`); Playwright `tests/specs/` (`cd tests && PW_CHANNEL=chrome npx playwright test`). No lint. PHP is not on the host.
+- **Tests:** PHP `tests/php/` (`docker exec lamp-php84 php /var/www/html/rfq/tests/php/<file>`; DB-backed, transaction-rolled-back, so **no DDL inside a test**); Node `tests/js/` (`node --test tests/js/*.test.js`); Playwright `tests/specs/` (`cd tests && PW_CHANNEL=chrome npx playwright test`). No lint. PHP is not on the host.
 - **Line endings:** many files are CRLF (`Rfq.inc.php`, `index.php`, `estilos.css`, several quote templates). Text-mode scripted edits silently rewrite them to LF (1000-line diff) — check `git diff --stat` after.
 
 ## Architecture
@@ -39,15 +33,11 @@ Local CSS/JS go through `asset_url('js/file.js')` (cache-busts on mtime). Never 
 
 **Routes:** constants in [app/Bootstrap/routes.inc.php](app/Bootstrap/routes.inc.php) + a `case` in `index.php`.
 
-**Quote status flow:** `Rfq` Created → Completed → Submitted → Award → Fulfillment → Invoice (terminal). `comments` encodes No Bid / Cancelled / Not submitted / Working on it. `Rfq::getSheetStatus()` is the canonical bucket logic.
-
-### SharePoint Sheet Sync — write-once create-or-link
-
-May create a missing row, never overwrites/deletes one. Every path goes through `SheetSyncService::createOrLink()`: presence is decided by **scanning column A** (never `sheet_row`); persists + audits only on **establishment**; no-op = zero Graph writes. **`sync_to_sheet` is the sole auto-sync gate.** App owns columns A,B,C,D,G,H,J,L,M,N,Q,T; E,F,I,K,O,P,R,S are human-owned. **`rfq.name` is stored raw** (`trim()` only) — never `htmlspecialchars()` at save, escape at render; legacy rows: run `sql/rfq_name_unescape_backfill.sql` once on prod.
+**Quote status flow:** `Rfq` Created → Completed → Submitted → Award → Fulfillment → Invoice (terminal). `comments` encodes No Bid / Cancelled / Not submitted / Working on it. `Rfq::getSheetStatus()` is the canonical bucket logic (historical name — keep it). **`rfq.name` (Description) is stored raw** (`trim()` only), escaped at render; legacy rows: `sql/rfq_name_unescape_backfill.sql` once on prod.
 
 ### Unified Audit Trail
 
-Quote / re-quote / fulfillment audit tables merged by `quote/load_unified_audit_trail`; `js/audit_trail.js`. Sync-group types: `sheet_row_created/linked`, `break_sync`, legacy `sync_to_sheet`, and `partner_link/unlink/sync_in/removed` — rendered as compact single rows (`syncType`), never folded into "N automatic syncs". Audit messages are rendered as raw HTML: escape any dynamic value you put in one.
+Quote / re-quote / fulfillment audit tables merged by `quote/load_unified_audit_trail`; `js/audit_trail.js`. Sync-group types: `partner_link/unlink/sync_in/removed`, plus legacy sheet types (`sheet_row_*`, `break_sync`, `sync_to_sheet`; render-only) — rendered as compact single rows (`syncType`), never folded into "N automatic syncs". Audit messages are rendered as raw HTML: escape any dynamic value you put in one.
 
 ### Comment Mentions, Mailbox, Digest
 
@@ -55,11 +45,11 @@ Quote / re-quote / fulfillment audit tables merged by `quote/load_unified_audit_
 
 ### Pipeline Metrics, Table View, Annual Awards, Advanced Search
 
-All aggregation is **SQL**, never loaded `Rfq` objects. Cohort date is `rfq.created_at` (prod also runs `sql/quote_created_at_revert_backfill.sql`). `PipelineMetricsRepository::STATUS_CASE` must mirror `Rfq::getSheetStatus()` (11 buckets); every consumer reads `STATUSES` dynamically. Win/loss denominator = submitted+award+lost, sources-sought excluded; dollar value = product total **+ services subtotal**. Table view (`PipelineTableRepository`, `js/pipeline_table.js`): server-paginated, filters AND-combined, a blank date never matches once a bound is set, no quote watchers (removed deliberately). `rfq.end_date` is a `VARCHAR` `MM/DD/YYYY HH:mm` — needs `STR_TO_DATE(NULLIF(end_date,''),'%m/%d/%Y %H:%i')`. Drill-down `byUser` needs `usuario_designado` in `getDrillDown()`'s inner SELECT; the Type of Contract bucket is the raw string (blank/null → `Uncategorized`). Annual Awards count by **award date** (`fecha_award`), not issue date, on purpose. Advanced Search reuses `STATUS_CASE` verbatim.
+All aggregation is **SQL**, never loaded `Rfq` objects. Cohort date is `rfq.created_at` (prod also runs `sql/quote_created_at_revert_backfill.sql`). `PipelineMetricsRepository::STATUS_CASE` must mirror `Rfq::getSheetStatus()` (11 buckets); every consumer reads `STATUSES` dynamically. Win/loss denominator = submitted+award+lost, sources-sought excluded; dollar value = product total **+ services subtotal**. Table view (`PipelineTableRepository`, `js/pipeline_table.js`): server-paginated, filters AND-combined, a blank date never matches once a bound is set, no quote watchers (removed deliberately). It replaced the SharePoint sheet (sync code deleted); row markup/filters are the pure `PipelineTableView` in `js/pipeline_table.js` — keep cells in step with the 18-col `<thead>`. `rfq.end_date` is a `VARCHAR` `MM/DD/YYYY HH:mm` — needs `STR_TO_DATE(NULLIF(end_date,''),'%m/%d/%Y %H:%i')`. Drill-down `byUser` needs `usuario_designado` in `getDrillDown()`'s inner SELECT; the Type of Contract bucket is the raw string (blank/null → `Uncategorized`). Annual Awards count by **award date** (`fecha_award`), not issue date, on purpose. Advanced Search reuses `STATUS_CASE` verbatim.
 
 ### Quote Edit drawer (Checklist / Information / Documents)
 
-Slide-over drawer `qed-*`; all tab forms stay mounted (hidden), ids prefixed `cl_`. Save endpoints always return JSON and the client must append `save_checklist=1` / `save_information=1` (FormData omits the submit button's name). Description, Internal Due Date and End Date are required in New Quote and the Information drawer (blank Description would make the partner silently drop the quote; `buildPayload()` falls back to the Solicitation # for legacy blank rows) (New Quote's `#end_date` picker needs its own `autoUpdateInput: false`). Period of Performance lives in the Checklist drawer only (`Rfq::getPeriodOfPerformanceDisplay()` is shared by the page render and the AJAX repaint). Documents use `js/document_widget.js` (`doc-*`; `immediate` mode on edit, `deferred` on New Quote) and must load in `<head>` before `checklist_info_drawer.js`.
+Slide-over drawer `qed-*`; all tab forms stay mounted (hidden), ids prefixed `cl_`. Save endpoints always return JSON and the client must append `save_checklist=1` / `save_information=1` (FormData omits the submit button's name). Description, Internal Due Date and End Date are required in New Quote and the Information drawer (blank Description would make the partner silently drop the quote; `buildPayload()` falls back to the Solicitation # for legacy blank rows) (New Quote's `#end_date` picker needs its own `autoUpdateInput: false`). Letter of Intent / Submission Method options live only in `Rfq::*_OPTIONS`; anything else → NULL (`Rfq::pickOption`). Bid-field audit (`AuditTrailRepository::bid_field_events`) compares the stored quote before vs after the save. Period of Performance lives in the Checklist drawer only (`Rfq::getPeriodOfPerformanceDisplay()` is shared by the page render and the AJAX repaint). Documents use `js/document_widget.js` (`doc-*`; `immediate` mode on edit, `deferred` on New Quote) and must load in `<head>` before `checklist_info_drawer.js`.
 
 ### Pricing notes
 
@@ -75,7 +65,7 @@ Two-way, token-authenticated sync of shared opportunities + solicitation files. 
 
 - **Gate:** `rfq.share_with_partner` is the sole outbound gate; Solicitation # is required only while on, its normalized key (trim + UPPER + collapse spaces) unique among non-deleted quotes. Partner state is never written via `insertar_cotizacion` — `PartnerShareRepository::saveShareSettings()` + `PartnerSyncService::reconcile()` run after the main save.
 - **`reconcile($c, $idRfq)`** is the one idempotent outbound call (payload hash detects real change; tombstones on unshare/delete; restores; shared-file changes). Called from save/delete/restore/upload hooks (must never fail the user action) and the every-minute safety net `scripts/cron/partner_webhook_dispatch.php`. Unrelated edits enqueue nothing.
-- **Inbound** (`applyIncoming`/`applyRemoval`): pinned `partner_record_id` → key match (1 = link, >1 = review) → unkeyed quote whose Code equals the key = review `possible` → create (service user `partner_integration`; assignee by email else default + `partner_needs_assignment`). Latest save wins on `partner_shared_updated_at` (UTC; incoming `<=` ours ignored; we adopt *their* timestamp). **Applying incoming never enqueues a notice (no echo).** Removal detaches the link and hides the quote only if untouched (Created, unpriced, no items, not in the sheet). Only pre-Award statuses No Bid / Cancelled / Not submitted are applied.
+- **Inbound** (`applyIncoming`/`applyRemoval`): pinned `partner_record_id` → key match (1 = link, >1 = review) → unkeyed quote whose Code equals the key = review `possible` → create (service user `partner_integration`; assignee by email else default + `partner_needs_assignment`). Latest save wins on `partner_shared_updated_at` (UTC; incoming `<=` ours ignored; we adopt *their* timestamp). **Applying incoming never enqueues a notice (no echo).** Removal detaches the link and hides the quote only if untouched (Created, unpriced, no items). Only pre-Award statuses No Bid / Cancelled / Not submitted are applied.
 - **API** (`api/partner/*`, pure `PartnerApi::handle`): Bearer token compared by hash; any auth failure is a **bare 401** (also when disabled). Webhooks also need `X-Signature` = HMAC-SHA256(`{timestamp}.{body}`) within 5 min; one `signing_secret` signs both directions. Only `shared=1`, non-generated, non-partner-origin files are listable.
 - **Files:** marks in `partner_documents` (lazy rows). App-generated PDFs and partner-origin files can never be shared — enforced in `setShared()`. Inbound downloads send the partner credential **only to the partner's host**, verify sha256, sanitize names, never overwrite ours.
 - **Delivery:** `partner_webhook_outbox`, coalesced per (quote, event); back-off 1m/5m/30m/2h/12h then `failed_at` (admin Retry = one attempt). `partner_pull.php` (15 min) catches up from enable time. Crons are CLI-only, `acquireLock`ed; run by hand as `docker exec -u www-data …`.
