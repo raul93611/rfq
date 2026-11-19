@@ -79,6 +79,9 @@ try {
       $op = $_POST['op'] ?? '';
       if (!in_array($op, ['link', 'create'], true)) partner_json(422, ['success' => false, 'message' => 'Unknown review action.']);
       $res = PartnerSyncService::resolveReview($c, (int)($_POST['id'] ?? 0), $op, $userId, (int)($_POST['quote_id'] ?? 0) ?: null);
+      if ($res['outcome'] === 'busy') {
+        partner_json(409, ['success' => false, 'message' => 'Another sync is applying this record right now. Try again in a moment.']);
+      }
       if (!in_array($res['outcome'], ['created', 'linked', 'updated'], true)) {
         partner_json(409, ['success' => false, 'message' => 'That record could not be resolved — it may already have been handled. Reload the page.']);
       }

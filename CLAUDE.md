@@ -15,7 +15,7 @@ PHP app on a LAMP stack inside Docker (`docker-compose-lamp`), served at `http:/
 - **Setup:** create `/tmp` at project root; disable MySQL strict mode (`sql_mode=""` under `[mysqld]`, restart); prod also needs the `xmlwriter` PHP module. `composer install`. Users: `/genera_usuario`.
 - **Database:** `elogicnewdb` on `database:3306`, schema [sql/elogic.sql](sql/elogic.sql), migrations in `sql/` (run once per environment — list in [DEPLOYMENT.md](DEPLOYMENT.md)). There is **no `.env`**: config constants live in `app/Bootstrap/config.inc.php`, **gitignored** — add new constants by hand per environment; code must degrade safely when one is undefined.
 - **Tests:** PHP `tests/php/` (`docker exec lamp-php84 php /var/www/html/rfq/tests/php/<file>`; DB-backed, transaction-rolled-back, so **no DDL inside a test**); Node `tests/js/` (`node --test tests/js/*.test.js`); Playwright `tests/specs/` (`cd tests && PW_CHANNEL=chrome npx playwright test`). No lint. PHP is not on the host.
-- **Line endings:** many files are CRLF (`Rfq.inc.php`, `index.php`, `estilos.css`, several quote templates). Text-mode scripted edits silently rewrite them to LF (1000-line diff) — check `git diff --stat` after.
+- **Line endings:** many files are CRLF (`Rfq.inc.php`, `index.php`, `estilos.css`, quote templates); scripted edits can silently convert to LF — check `git diff --stat`.
 
 ## Architecture
 
@@ -29,15 +29,13 @@ Local CSS/JS go through `asset_url('js/file.js')` (cache-busts on mtime). Never 
 
 **DB access** via the `Conexion` singleton (`Conexion::abrir_conexion(); …obtener_conexion()`); persistent PDO, `cerrar_conexion()` is a no-op.
 
-**Domains:** Quote, ReQuote, Fulfillment, Tracking, Invoice, SalesCommission, Projection, Task, Personnel, Service, Provider, PaymentTerm, Room, TypeOfBid/Contract/Project, Partner.
-
 **Routes:** constants in [app/Bootstrap/routes.inc.php](app/Bootstrap/routes.inc.php) + a `case` in `index.php`.
 
 **Quote status flow:** `Rfq` Created → Completed → Submitted → Award → Fulfillment → Invoice (terminal). `comments` encodes No Bid / Cancelled / Not submitted / Working on it. `Rfq::getSheetStatus()` is the canonical bucket logic (historical name — keep it). **`rfq.name` (Description) is stored raw** (`trim()` only), escaped at render; legacy rows: `sql/rfq_name_unescape_backfill.sql` once on prod.
 
 ### Unified Audit Trail
 
-Quote / re-quote / fulfillment audit tables merged by `quote/load_unified_audit_trail`; `js/audit_trail.js`. Sync-group types: `partner_link/unlink/sync_in/removed`, plus legacy sheet types (`sheet_row_*`, `break_sync`, `sync_to_sheet`; render-only) — rendered as compact single rows (`syncType`), never folded into "N automatic syncs". Audit messages are rendered as raw HTML: escape any dynamic value you put in one.
+Quote / re-quote / fulfillment audit tables merged by `quote/load_unified_audit_trail`; `js/audit_trail.js`. Sync-group types: `partner_link/unlink/sync_in/removed`, plus legacy sheet types (`sheet_row_*`, `break_sync`, `sync_to_sheet`; render-only) — rendered as compact single rows (`syncType`), never folded. Audit messages are rendered as raw HTML: escape any dynamic value you put in one.
 
 ### Comment Mentions, Mailbox, Digest
 
@@ -45,7 +43,7 @@ Quote / re-quote / fulfillment audit tables merged by `quote/load_unified_audit_
 
 ### Pipeline Metrics, Table View, Annual Awards, Advanced Search
 
-All aggregation is **SQL**, never loaded `Rfq` objects. Cohort date is `rfq.created_at` (prod also runs `sql/quote_created_at_revert_backfill.sql`). `PipelineMetricsRepository::STATUS_CASE` must mirror `Rfq::getSheetStatus()` (11 buckets); every consumer reads `STATUSES` dynamically. Win/loss denominator = submitted+award+lost, sources-sought excluded; dollar value = product total **+ services subtotal**. Table view (`PipelineTableRepository`, `js/pipeline_table.js`): server-paginated, filters AND-combined, a blank date never matches once a bound is set, no quote watchers (removed deliberately). It replaced the SharePoint sheet (sync code deleted); row markup/filters are the pure `PipelineTableView` in `js/pipeline_table.js` — keep cells in step with the 18-col `<thead>`. `rfq.end_date` is a `VARCHAR` `MM/DD/YYYY HH:mm` — needs `STR_TO_DATE(NULLIF(end_date,''),'%m/%d/%Y %H:%i')`. Drill-down `byUser` needs `usuario_designado` in `getDrillDown()`'s inner SELECT; the Type of Contract bucket is the raw string (blank/null → `Uncategorized`). Annual Awards count by **award date** (`fecha_award`), not issue date, on purpose. Advanced Search reuses `STATUS_CASE` verbatim.
+All aggregation is **SQL**, never loaded `Rfq` objects. Cohort date is `rfq.created_at` (prod also runs `sql/quote_created_at_revert_backfill.sql`). `PipelineMetricsRepository::STATUS_CASE` must mirror `Rfq::getSheetStatus()` (11 buckets); every consumer reads `STATUSES` dynamically. Win/loss denominator = submitted+award+lost, sources-sought excluded; dollar value = product total **+ services subtotal**. Table view (`PipelineTableRepository`, `js/pipeline_table.js`): server-paginated, filters AND-combined, a blank date never matches once a bound is set, no quote watchers (removed deliberately). Row markup/filters are the pure `PipelineTableView` in `js/pipeline_table.js` — keep cells in step with the 18-col `<thead>`. `rfq.end_date` is a `VARCHAR` `MM/DD/YYYY HH:mm` — needs `STR_TO_DATE(NULLIF(end_date,''),'%m/%d/%Y %H:%i')`. Drill-down `byUser` needs `usuario_designado` in `getDrillDown()`'s inner SELECT; the Type of Contract bucket is the raw string (blank/null → `Uncategorized`). Annual Awards count by **award date** (`fecha_award`), not issue date, on purpose. Advanced Search reuses `STATUS_CASE` verbatim.
 
 ### Quote Edit drawer (Checklist / Information / Documents)
 
@@ -61,11 +59,11 @@ Items table rows stay real `<table>` rows for `js/quote.js`'s `td:eq()` loop (12
 
 ### Partner Opportunity Sync
 
-Two-way, token-authenticated sync of shared opportunities + solicitation files. Code in `app/Partner/`; the payload is mapped only in `PartnerSyncService::buildPayload()` / `normalizeIncoming()` / `applyToQuote()` (**field list provisional until the partner's sample payload arrives**).
+Two-way, token-authenticated sync of opportunities + files (`app/Partner/`); the payload is mapped only in `PartnerSyncService::buildPayload()` / `normalizeIncoming()` / `applyToQuote()` (**field list provisional until the partner's sample payload arrives**).
 
 - **Gate:** `rfq.share_with_partner` is the sole outbound gate; Solicitation # is required only while on, its normalized key (trim + UPPER + collapse spaces) unique among non-deleted quotes. Partner state is never written via `insertar_cotizacion` — `PartnerShareRepository::saveShareSettings()` + `PartnerSyncService::reconcile()` run after the main save.
-- **`reconcile($c, $idRfq)`** is the one idempotent outbound call (payload hash detects real change; tombstones on unshare/delete; restores; shared-file changes). Called from save/delete/restore/upload hooks (must never fail the user action) and the every-minute safety net `scripts/cron/partner_webhook_dispatch.php`. Unrelated edits enqueue nothing.
-- **Inbound** (`applyIncoming`/`applyRemoval`): pinned `partner_record_id` → key match (1 = link, >1 = review) → unkeyed quote whose Code equals the key = review `possible` → create (service user `partner_integration`; assignee by email else default + `partner_needs_assignment`). Latest save wins on `partner_shared_updated_at` (UTC; incoming `<=` ours ignored; we adopt *their* timestamp). **Applying incoming never enqueues a notice (no echo).** Removal detaches the link and hides the quote only if untouched (Created, unpriced, no items). Only pre-Award statuses No Bid / Cancelled / Not submitted are applied.
+- **`reconcile($c, $idRfq)`** is the one idempotent outbound call (payload hash detects real change; tombstones on unshare/delete; restores; shared-file changes). Called from save/delete/restore/upload hooks (must never fail the user action) and the every-minute `scripts/cron/partner_webhook_dispatch.php`. Unrelated edits enqueue nothing.
+- **Inbound** (`applyIncoming`/`applyRemoval`): pinned `partner_record_id` → key match (1 = link, >1 = review) → unkeyed quote whose Code equals the key = review `possible` → create (service user `partner_integration`; assignee by email else default + `partner_needs_assignment`). Latest save wins on `partner_shared_updated_at` (UTC; incoming `<=` ours ignored; we adopt *their* timestamp). **Applying incoming never enqueues a notice (no echo).** Removal detaches the link and hides the quote only if untouched (Created, unpriced, no items). Only pre-Award statuses No Bid / Cancelled / Not submitted are applied. **All inbound entry points (incl. `resolveReview`) run under a per-record MySQL lock (`withRecordLock`)** — twins were created without it; inside a lock call only the `*Unlocked` bodies. Lock timeout → `busy`: webhook 503, `pull()` keeps `last_pull_at`, review 409.
 - **API** (`api/partner/*`, pure `PartnerApi::handle`): Bearer token compared by hash; any auth failure is a **bare 401** (also when disabled). Webhooks also need `X-Signature` = HMAC-SHA256(`{timestamp}.{body}`) within 5 min; one `signing_secret` signs both directions. Only `shared=1`, non-generated, non-partner-origin files are listable.
 - **Files:** marks in `partner_documents` (lazy rows). App-generated PDFs and partner-origin files can never be shared — enforced in `setShared()`. Inbound downloads send the partner credential **only to the partner's host**, verify sha256, sanitize names, never overwrite ours.
 - **Delivery:** `partner_webhook_outbox`, coalesced per (quote, event); back-off 1m/5m/30m/2h/12h then `failed_at` (admin Retry = one attempt). `partner_pull.php` (15 min) catches up from enable time. Crons are CLI-only, `acquireLock`ed; run by hand as `docker exec -u www-data …`.

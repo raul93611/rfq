@@ -122,14 +122,18 @@ class PartnerApi {
     $number = trim((string)($notice['solicitation_number'] ?? ''));
 
     if ($notice['event'] === 'opportunity.removed') {
-      $res = PartnerSyncService::applyRemoval($conexion, $recordId, $number);
-      return self::out(200, ['ok' => true, 'outcome' => $res['outcome']]);
+      return self::applied(PartnerSyncService::applyRemoval($conexion, $recordId, $number));
     }
     // Light notice: the fetch is authoritative. If it fails, say so — the partner retries, and the
     // changed-since pull is the backstop either way.
     $record = PartnerSyncService::fetchRecord($conexion, $recordId, $number);
     if ($record === null) return self::out(502, ['error' => 'fetch_failed']);
-    $res = PartnerSyncService::applyIncoming($conexion, $record);
+    return self::applied(PartnerSyncService::applyIncoming($conexion, $record));
+  }
+
+  /** Another request is still applying this record: 503 so the partner retries later. */
+  private static function applied(array $res) {
+    if ($res['outcome'] === 'busy') return self::out(503, ['error' => 'busy']);
     return self::out(200, ['ok' => true, 'outcome' => $res['outcome']]);
   }
 }

@@ -552,6 +552,151 @@ try {
   $ob = $one('SELECT * FROM partner_webhook_outbox WHERE id = :i', [':i' => $ob['id']]);
   check('Retry re-queues and delivers', true, $ob['delivered_at'] !== null && $ob['failed_at'] === null);
   check('last webhook success recorded', true, PartnerIntegrationRepository::get($c)['last_webhook_success_at'] !== null);
+
+  // ---------------------------------------------------------------- 16. concurrent inbound (bugs/partner-inbound-duplicate-quotes.md)
+  echo "-- 16. per-record lock\n";
+  // GET_LOCK is not transactional, and a second PERSISTENT PDO with the same DSN would be this very
+  // session (locks are reentrant per session) — so the "other request" is a fresh, non-persistent connection.
+  $other = new PDO('mysql:host=' . NOMBRE_SERVIDOR_DB . ';dbname=' . NOMBRE_BD, NOMBRE_USUARIO, PASSWORD,
+                   [PDO::ATTR_PERSISTENT => false, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
+  $lockName = function ($recordId) { return 'partner_rec_' . sha1((string)$recordId); };
+  $holdElsewhere = function ($recordId) use ($other, $lockName) {
+    $s = $other->prepare('SELECT GET_LOCK(:n, 0)'); $s->execute([':n' => $lockName($recordId)]);
+    return (int)$s->fetchColumn() === 1;
+  };
+  $releaseElsewhere = function ($recordId) use ($other, $lockName) {
+    $other->prepare('SELECT RELEASE_LOCK(:n)')->execute([':n' => $lockName($recordId)]);
+  };
+  $isFree = function ($recordId) use ($other, $lockName) {
+    $s = $other->prepare('SELECT IS_FREE_LOCK(:n)'); $s->execute([':n' => $lockName($recordId)]);
+    return (int)$s->fetchColumn() === 1;
+  };
+  $quotesFor = function ($recordId) use ($val) {
+    return (int)$val('SELECT COUNT(*) FROM rfq WHERE partner_record_id = :r', [':r' => $recordId]);
+  };
+  $savedTimeout = PartnerSyncService::$lockTimeout;
+  PartnerSyncService::$lockTimeout = 0;
+  PartnerSyncService::$http = null;
+
+  // busy: another request holds the record → nothing is created
+  $recB = incoming(['solicitation_number' => "BUSY-$run"]);
+  $quotesBefore = (int)$val('SELECT COUNT(*) FROM rfq');
+  check('lock taken by the other connection', true, $holdElsewhere($recB['record_id']));
+  try {
+    $resB = PartnerSyncService::applyIncoming($c, $recB);
+    check('applyIncoming while the record is locked → busy', ['busy', null], [$resB['outcome'], $resB['id_rfq']]);
+    check('…and no quote is created', $quotesBefore, (int)$val('SELECT COUNT(*) FROM rfq'));
+    check('…and no review row either', 0, (int)$val('SELECT COUNT(*) FROM partner_review WHERE partner_record_id = :r', [':r' => $recB['record_id']]));
+  } finally { $releaseElsewhere($recB['record_id']); }
+
+  // sequential replay: the second delivery of the same record finds the first quote
+  $recS = incoming(['solicitation_number' => "REPLAY-$run"]);
+  $first = PartnerSyncService::applyIncoming($c, $recS);
+  check('first delivery creates', 'created', $first['outcome']);
+  check('lock released after a normal apply', true, $isFree($recS['record_id']));
+  $second = PartnerSyncService::applyIncoming($c, $recS);
+  check('replayed delivery is ignored_stale on the same quote', ['ignored_stale', $first['id_rfq']], [$second['outcome'], $second['id_rfq']]);
+  check('exactly one quote for the record', 1, $quotesFor($recS['record_id']));
+  check('replay wrote no extra audit rows', 1,
+    (int)$val("SELECT COUNT(*) FROM audit_trails WHERE id_rfq = :i AND action_type = 'partner_sync_in'", [':i' => $first['id_rfq']]));
+
+  // removal busy: the link is left untouched
+  check('lock taken for the removal', true, $holdElsewhere($recS['record_id']));
+  try {
+    $rmB = PartnerSyncService::applyRemoval($c, $recS['record_id'], $recS['solicitation_number']);
+    check('applyRemoval while the record is locked → busy', 'busy', $rmB['outcome']);
+    $sq = quoteRow($c, $first['id_rfq']);
+    check('…link untouched', [$recS['record_id'], 1, 0], [$sq['partner_record_id'], (int)$sq['share_with_partner'], (int)$sq['deleted']]);
+  } finally { $releaseElsewhere($recS['record_id']); }
+
+  // a removed record arriving through applyIncoming takes the same lock (no self-deadlock: reentrant)
+  check('lock taken for removed-via-incoming', true, $holdElsewhere($recS['record_id']));
+  try {
+    $rmI = PartnerSyncService::applyIncoming($c, array_merge($recS, ['removed' => true]));
+    check('removed record through applyIncoming while locked → busy', 'busy', $rmI['outcome']);
+  } finally { $releaseElsewhere($recS['record_id']); }
+
+  // the lock is released when the apply throws (e.g. a download blows up)
+  $recT = incoming(['solicitation_number' => "THROW-$run",
+    'files' => [['id' => 'FT', 'name' => 'boom.pdf', 'download_url' => 'https://api.partner.test/v2/files/FT']]]);
+  PartnerSyncService::$http = function () { throw new RuntimeException('network exploded'); };
+  $threw = false;
+  try { PartnerSyncService::applyIncoming($c, $recT); } catch (RuntimeException $e) { $threw = true; }
+  PartnerSyncService::$http = null;
+  check('apply that throws propagates the error', true, $threw);
+  check('lock released after an apply that throws', true, $isFree($recT['record_id']));
+
+  // webhook: busy → 503 so the partner retries (both the update and the removed branch)
+  $whTs = (string)time();
+  $whHeaders = function ($body) use ($newToken, $sign, $whTs) {
+    return ['authorization' => "Bearer $newToken", 'x-timestamp' => $whTs, 'x-signature' => $sign($body, $whTs)];
+  };
+  $recW = incoming(['solicitation_number' => "WH-$run"]);
+  PartnerSyncService::$http = function ($method, $url) use ($recW) {
+    return strpos($url, '/opportunities/') !== false
+      ? ['status' => 200, 'body' => json_encode(['data' => $recW]), 'error' => null]
+      : ['status' => 404, 'body' => '', 'error' => null];
+  };
+  $upBody = json_encode(['event' => 'opportunity.updated', 'record_id' => $recW['record_id'], 'solicitation_number' => $recW['solicitation_number']]);
+  $rmBody = json_encode(['event' => 'opportunity.removed', 'record_id' => $recS['record_id'], 'solicitation_number' => $recS['solicitation_number']]);
+  $holdElsewhere($recW['record_id']);
+  $holdElsewhere($recS['record_id']);
+  try {
+    $wr = PartnerApi::handle($c, 'POST', ['partner', 'webhook'], [], $whHeaders($upBody), $upBody, (int)$whTs);
+    check('webhook update while locked → 503 busy', [503, ['error' => 'busy']], [$wr['status'], $wr['json']]);
+    check('…no quote created', 0, $quotesFor($recW['record_id']));
+    $wr = PartnerApi::handle($c, 'POST', ['partner', 'webhook'], [], $whHeaders($rmBody), $rmBody, (int)$whTs);
+    check('webhook removed while locked → 503 busy', [503, ['error' => 'busy']], [$wr['status'], $wr['json']]);
+    check('…link untouched', $recS['record_id'], quoteRow($c, $first['id_rfq'])['partner_record_id']);
+  } finally { $releaseElsewhere($recW['record_id']); $releaseElsewhere($recS['record_id']); }
+  $wr = PartnerApi::handle($c, 'POST', ['partner', 'webhook'], [], $whHeaders($upBody), $upBody, (int)$whTs);
+  check('webhook update once free → 200 created', [200, 'created'], [$wr['status'], $wr['json']['outcome'] ?? null]);
+  $wr = PartnerApi::handle($c, 'POST', ['partner', 'webhook'], [], $whHeaders($upBody), $upBody, (int)$whTs);
+  check('redelivered webhook → still one quote', [200, 'ignored_stale', 1], [$wr['status'], $wr['json']['outcome'] ?? null, $quotesFor($recW['record_id'])]);
+
+  // pull: a busy record must not let last_pull_at move past it
+  $recP = incoming(['solicitation_number' => "PULL-$run"]);
+  PartnerSyncService::$http = function ($method, $url) use ($recP) {
+    return strpos($url, '/opportunities?') !== false
+      ? ['status' => 200, 'body' => json_encode(['data' => [$recP], 'next_cursor' => null]), 'error' => null]
+      : ['status' => 404, 'body' => '', 'error' => null];
+  };
+  $q('UPDATE partner_integration SET last_pull_at = :t', [':t' => '2026-11-01 00:00:00']);
+  $q("UPDATE partner_review SET resolved_at = :t WHERE kind = 'rejected' AND resolved_at IS NULL", [':t' => gmdate('Y-m-d H:i:s')]); // keep reprocessRejected() out of the counts
+  $holdElsewhere($recP['record_id']);
+  try {
+    $pr = PartnerSyncService::pull($c);
+    check('pull with a busy record: seen but not applied', [1, 0], [$pr['seen'], $pr['applied']]);
+    check('…and last_pull_at does not advance', '2026-11-01 00:00:00', PartnerIntegrationRepository::get($c)['last_pull_at']);
+    check('…no quote created', 0, $quotesFor($recP['record_id']));
+  } finally { $releaseElsewhere($recP['record_id']); }
+  $pr = PartnerSyncService::pull($c);
+  check('next pull applies it', [1, 1, 1], [$pr['seen'], $pr['applied'], $quotesFor($recP['record_id'])]);
+  check('…and advances last_pull_at', true, PartnerIntegrationRepository::get($c)['last_pull_at'] > '2026-11-01 00:00:00');
+  PartnerSyncService::$http = null;
+
+  // resolveReview: busy, and "create" never makes a second quote for a record that already has one
+  $unkR = mkQuote($c, ['email_code' => "RESOLVE-$run"]);
+  $recR = incoming(['solicitation_number' => "RESOLVE-$run"]);
+  $resR = PartnerSyncService::applyIncoming($c, $recR);
+  check('setup: held for review', 'review', $resR['outcome']);
+  $holdElsewhere($recR['record_id']);
+  try {
+    $rr = PartnerSyncService::resolveReview($c, $resR['review_id'], 'create', $adminId);
+    check('resolveReview while the record is locked → busy', 'busy', $rr['outcome']);
+    check('…review stays open', null, $val('SELECT resolved_at FROM partner_review WHERE id = :i', [':i' => $resR['review_id']]));
+  } finally { $releaseElsewhere($recR['record_id']); }
+  // A concurrent request linked the record to a quote but the review row is still open.
+  $twin = mkQuote($c, ['name' => 'Already linked elsewhere']);
+  $q('UPDATE rfq SET partner_record_id = :r, share_with_partner = 1 WHERE id = :i', [':r' => $recR['record_id'], ':i' => $twin]);
+  $quotesBefore = (int)$val('SELECT COUNT(*) FROM rfq');
+  $rr = PartnerSyncService::resolveReview($c, $resR['review_id'], 'create', $adminId);
+  check('Create new on an already-linked record makes no second quote', [$quotesBefore, 1], [(int)$val('SELECT COUNT(*) FROM rfq'), $quotesFor($recR['record_id'])]);
+  check('…reported as not resolvable, pointing at the existing quote', ['invalid', $twin], [$rr['outcome'], $rr['id_rfq']]);
+  check('…and the stale review row is closed', 'auto', $val('SELECT resolution FROM partner_review WHERE id = :i', [':i' => $resR['review_id']]));
+  check('lock released after resolveReview', true, $isFree($recR['record_id']));
+
+  PartnerSyncService::$lockTimeout = $savedTimeout;
 } catch (Throwable $e) {
   $fail++;
   echo "  FAIL  unexpected " . get_class($e) . ': ' . $e->getMessage() . "\n    at " . $e->getFile() . ':' . $e->getLine() . "\n";

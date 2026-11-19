@@ -24,6 +24,8 @@ class PartnerSyncService {
   public static $http = null;
   /** Test seam: overrides PARTNER_DEFAULT_ASSIGNEE_EMAIL. */
   public static $defaultAssigneeEmail = null;
+  /** Seconds an inbound apply waits for another request working on the same partner record. Test seam. */
+  public static $lockTimeout = 30;
 
   const SERVICE_USERNAME = 'partner_integration';
   const ACTOR_NAME = 'Partner Integration';
@@ -253,14 +255,68 @@ class PartnerSyncService {
     return (int)$row['award'] === 1 || (int)$row['fullfillment'] === 1 || (int)$row['invoice'] === 1 || (int)$row['submitted_invoice'] === 1;
   }
 
+  /* ------------------------------------------------------------------ inbound: per-record lock */
+
+  /** Names of the record locks this process holds, for the shutdown safety net. */
+  private static $heldLocks = [];
+  private static $shutdownRegistered = false;
+
+  /** The partner record id, or the normalized Solicitation # when the record carries no id. */
+  private static function recordLockKey($recordId, $solicitationNumber) {
+    $recordId = trim((string)$recordId);
+    return $recordId !== '' ? $recordId : 'key:' . PartnerShareRepository::normalizeKey($solicitationNumber);
+  }
+
+  private static function releaseLock($conexion, $name) {
+    unset(self::$heldLocks[$name]);
+    $conexion->prepare('SELECT RELEASE_LOCK(:n)')->execute([':n' => $name]);
+  }
+
+  /**
+   * Run $fn while holding a per-record MySQL named lock, so two requests for the same partner record
+   * (two webhooks, a webhook overlapping the pull, an admin resolving a review) apply one after the
+   * other instead of both creating a quote. Nothing inbound runs in a transaction, so the waiter sees
+   * the first request's rows as soon as it gets the lock. Returns the `busy` outcome when the lock was
+   * not acquired within $lockTimeout seconds.
+   */
+  private static function withRecordLock($conexion, $recordId, $solicitationNumber, callable $fn) {
+    $name = 'partner_rec_' . sha1(self::recordLockKey($recordId, $solicitationNumber)); // 52 chars, under MySQL's 64
+    $stmt = $conexion->prepare('SELECT GET_LOCK(:n, :t)');
+    $stmt->execute([':n' => $name, ':t' => (int)self::$lockTimeout]);
+    if ((int)$stmt->fetchColumn() !== 1) return ['outcome' => 'busy', 'id_rfq' => null];
+    self::$heldLocks[$name] = $conexion;
+    // `finally` does not run on a fatal (memory, max_execution_time), and the connection is persistent:
+    // without this, the pooled connection would keep the lock after the request died.
+    if (!self::$shutdownRegistered) {
+      self::$shutdownRegistered = true;
+      register_shutdown_function(function () {
+        foreach (self::$heldLocks as $n => $conn) {
+          try { self::releaseLock($conn, $n); } catch (Throwable $e) {}
+        }
+      });
+    }
+    try {
+      return $fn();
+    } finally {
+      self::releaseLock($conexion, $name);
+    }
+  }
+
   /**
    * Apply an incoming record. Returns ['outcome' => created|linked|updated|ignored_stale|
-   * ignored_deleted|ignored_unshared|review|rejected, 'id_rfq' => ?int].
+   * ignored_deleted|ignored_unshared|review|rejected|busy, 'id_rfq' => ?int]. `busy` = another
+   * request is applying the same record and did not finish in time; nothing was changed.
    * opts: force (skip the conflict rule — a human chose this link).
    */
   public static function applyIncoming($conexion, array $rawRecord, array $opts = []) {
     $rec = self::normalizeIncoming($rawRecord);
-    if ($rec['removed']) return self::applyRemoval($conexion, $rec['record_id'], $rec['solicitation_number']);
+    return self::withRecordLock($conexion, $rec['record_id'], $rec['solicitation_number'],
+      fn() => self::applyIncomingUnlocked($conexion, $rec, $opts));
+  }
+
+  /** applyIncoming() body; the caller holds the record lock. */
+  private static function applyIncomingUnlocked($conexion, array $rec, array $opts) {
+    if ($rec['removed']) return self::applyRemovalUnlocked($conexion, $rec['record_id']);
     if ($rec['record_id'] === '') return self::review($conexion, 'rejected', $rec, [], 'The partner record has no id');
 
     $pinned = PartnerShareRepository::findByRecordId($conexion, $rec['record_id']);
@@ -429,9 +485,15 @@ class PartnerSyncService {
 
   /**
    * The partner stopped sharing / deleted the record: detach, stop syncing, and hide the quote
-   * only while it is still untouched. Never queues a notice back.
+   * only while it is still untouched. Never queues a notice back. `busy` when the record is locked.
    */
   public static function applyRemoval($conexion, $recordId, $solicitationNumber = '') {
+    return self::withRecordLock($conexion, $recordId, $solicitationNumber,
+      fn() => self::applyRemovalUnlocked($conexion, $recordId));
+  }
+
+  /** applyRemoval() body; the caller holds the record lock. */
+  private static function applyRemovalUnlocked($conexion, $recordId) {
     $row = $recordId !== '' ? PartnerShareRepository::findByRecordId($conexion, $recordId) : null;
     if (!$row) return ['outcome' => 'ignored_unknown', 'id_rfq' => null];
     $id = (int)$row['id'];
@@ -500,20 +562,41 @@ class PartnerSyncService {
 
   /**
    * An admin decision on a held record. action: 'link' (to $quoteId, default the single candidate)
-   * or 'create'. A human chose, so the conflict rule is skipped for a link.
+   * or 'create'. A human chose, so the conflict rule is skipped for a link. Takes the same record
+   * lock as the inbound path (`busy` when another request holds it).
    */
   public static function resolveReview($conexion, $reviewId, $action, $userId, $quoteId = null) {
+    $rv = self::openReview($conexion, $reviewId);
+    if (!$rv) return ['outcome' => 'not_found', 'id_rfq' => null];
+    return self::withRecordLock($conexion, $rv['partner_record_id'], $rv['solicitation_number'],
+      fn() => self::resolveReviewUnlocked($conexion, $reviewId, $action, $userId, $quoteId));
+  }
+
+  private static function openReview($conexion, $reviewId) {
     $stmt = $conexion->prepare('SELECT * FROM partner_review WHERE id = :id AND resolved_at IS NULL');
     $stmt->execute([':id' => $reviewId]);
-    $rv = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+  }
+
+  /** resolveReview() body; the caller holds the record lock. */
+  private static function resolveReviewUnlocked($conexion, $reviewId, $action, $userId, $quoteId) {
+    // Re-read under the lock: a concurrent link/create may have auto-closed it while we waited.
+    $rv = self::openReview($conexion, $reviewId);
     if (!$rv) return ['outcome' => 'not_found', 'id_rfq' => null];
     $rec = json_decode($rv['payload'], true) ?: [];
     $candidates = array_map('intval', json_decode($rv['candidates'] ?: '[]', true) ?: []);
+    if ($action !== 'create') $quoteId = $quoteId ?: (count($candidates) === 1 ? $candidates[0] : null);
+
+    // The record already has a quote (linked by another request): never create or link a second one.
+    $pinned = !empty($rec['record_id']) ? PartnerShareRepository::findByRecordId($conexion, $rec['record_id']) : null;
+    if ($pinned && ($action === 'create' || (int)$pinned['id'] !== (int)$quoteId)) {
+      self::closeReview($conexion, $rec['record_id'], 'auto');
+      return ['outcome' => 'invalid', 'id_rfq' => (int)$pinned['id']];
+    }
 
     if ($action === 'create') {
       $res = self::createFromIncoming($conexion, $rec);
     } else {
-      $quoteId = $quoteId ?: (count($candidates) === 1 ? $candidates[0] : null);
       $row = $quoteId ? PartnerShareRepository::row($conexion, $quoteId) : null;
       if (!$row || (int)$row['deleted'] === 1 || !in_array((int)$quoteId, $candidates, true)
           || ($row['partner_record_id'] !== null && $row['partner_record_id'] !== $rec['record_id'])) {
@@ -678,6 +761,7 @@ class PartnerSyncService {
     $startedAt = time();
     $since = $s['last_pull_at'] ? gmdate('Y-m-d\TH:i:s\Z', strtotime($s['last_pull_at'] . ' UTC')) : gmdate('Y-m-d\TH:i:s\Z', $startedAt);
     $cursor = null;
+    $busy = false;
     for ($page = 0; $page < 20; $page++) {
       $url = $s['partner_base_url'] . '/opportunities?changed_since=' . rawurlencode($since) . '&limit=100'
            . ($cursor ? '&cursor=' . rawurlencode($cursor) : '');
@@ -690,6 +774,7 @@ class PartnerSyncService {
         try {
           $res = self::applyIncoming($conexion, is_array($raw) ? $raw : []);
           if (in_array($res['outcome'], ['created', 'linked', 'updated', 'hidden', 'detached'], true)) $out['applied']++;
+          if ($res['outcome'] === 'busy') $busy = true;
         } catch (Throwable $e) {
           error_log('Partner pull: record failed — ' . $e->getMessage());
         }
@@ -697,8 +782,10 @@ class PartnerSyncService {
       $cursor = $json['next_cursor'] ?? null;
       if (!$cursor) break;
     }
-    // Overlap by a few seconds: re-applying a record is a no-op under the conflict rule.
-    PartnerIntegrationRepository::setLastPull($conexion, self::utc($startedAt - 5));
+    // Overlap by a few seconds: re-applying a record is a no-op under the conflict rule. A busy record
+    // keeps the old mark: changed_since filters on the partner's change time, so moving past it
+    // would mean the record never comes back.
+    if (!$busy) PartnerIntegrationRepository::setLastPull($conexion, self::utc($startedAt - 5));
     $out['applied'] += self::reprocessRejected($conexion);
     return $out;
   }
