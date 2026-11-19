@@ -15,7 +15,7 @@ PHP app on a LAMP stack inside Docker (`docker-compose-lamp`), served at `http:/
 - **Setup:** create `/tmp` at project root; disable MySQL strict mode (`sql_mode=""` under `[mysqld]`, restart); prod also needs the `xmlwriter` PHP module. `composer install`. Users: `/genera_usuario`.
 - **Database:** `elogicnewdb` on `database:3306`, schema [sql/elogic.sql](sql/elogic.sql), migrations in `sql/` (run once per environment — list in [DEPLOYMENT.md](DEPLOYMENT.md)). There is **no `.env`**: config constants live in `app/Bootstrap/config.inc.php`, **gitignored** — add new constants by hand per environment; code must degrade safely when one is undefined.
 - **Tests:** PHP `tests/php/` (`docker exec lamp-php84 php /var/www/html/rfq/tests/php/<file>`; DB-backed, transaction-rolled-back, so **no DDL inside a test**); Node `tests/js/` (`node --test tests/js/*.test.js`); Playwright `tests/specs/` (`cd tests && PW_CHANNEL=chrome npx playwright test`). No lint. PHP is not on the host.
-- **Line endings:** many files are CRLF (`Rfq.inc.php`, `index.php`, `estilos.css`, several quote templates). Text-mode scripted edits silently rewrite them to LF (1000-line diff) — check `git diff --stat` after.
+- **Line endings:** many files are CRLF (`Rfq.inc.php`, `index.php`, `estilos.css`, quote templates); scripted edits can silently convert to LF — check `git diff --stat`.
 
 ## Architecture
 
@@ -79,3 +79,7 @@ Tests: `tests/php/partner_opportunity_sync_test.php`, `tests/specs/15-partner-sy
 Calculated on the server at invoice time and **frozen** on the quote; the client posts nothing about it. `guardar_editar_cotizacion.php` → `SalesCommissionCalculator::forQuote()` → `RepositorioRfq::set_sales_commission()` writes `rfq.sales_commission_{amount,basis_profit,fulfillment_pct,reason}` plus the legacy `sales_commission` string so report filters work. **`sales_commission_amount IS NULL` = legacy quote** (manual choice + old CASE, never backfilled): check with `Rfq::obtener_saved_sales_commission()` in PHP, `SalesCommissionCalculator::amountSql('r','rq')` in SQL (queries declare `$commissionSql` — a heredoc can't call a static). Rate, the 6.00% threshold (on the *rounded* fulfillment %) and ineligible types live only in the calculator; profits are equipment-only. Invoice modal shows a read-only breakdown from `quote/commission_preview/{id}` (Save disabled until loaded); re-invoicing recalculates. Comment stored raw, escaped at render.
 
 Tests: `tests/php/sales_commission_calculator_test.php`, `tests/specs/16-sales-commission.spec.js`.
+
+## Known Bugs
+
+- **planned** · Concurrent inbound partner requests create duplicate quotes (recurring in prod) — [bugs/partner-inbound-duplicate-quotes.md](bugs/partner-inbound-duplicate-quotes.md)
