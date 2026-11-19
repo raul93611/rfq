@@ -85,6 +85,18 @@ SharePoint sync columns `sync_to_sheet`, `sheet_row`, `sheet_sync_status`, `shee
 code and run it together — the old code still writes `sync_to_sheet`. Not idempotent; run it once.
 `rfq.name` (the quote Description) is kept.
 
+**Partner duplicate quotes (one-time cleanup).** Before the inbound record lock shipped, concurrent
+partner requests could create twin quotes for one partner record. Find them with
+`SELECT partner_record_id, GROUP_CONCAT(id ORDER BY id) ids, COUNT(*) n FROM rfq WHERE partner_record_id IS NOT NULL GROUP BY partner_record_id HAVING n > 1;`
+**Do not delete a twin from the UI** — that tombstones the shared record and the partner drops it for
+both quotes. On the duplicate only (keep the lowest id unless the team already worked the other), in one
+transaction set `deleted = 1, share_with_partner = 0, partner_record_id = NULL, partner_linked_at = NULL,
+partner_shared_updated_at = NULL, partner_payload_hash = NULL, partner_removed_at = NULL,
+partner_needs_assignment = 0, solicitation_number = NULL, solicitation_key = NULL` and add an audit row
+("duplicate of #X created by a partner sync race; unlinked without notifying the partner"). With no
+timestamp/hash and `partner_removed_at` NULL, nothing advertises a removal, and the cleared key keeps a
+later restore-from-trash from colliding with the twin.
+
 Disable MySQL strict mode (the app relies on it): add `sql_mode = ""` under
 `[mysqld]` in `my.cnf` and restart the database container.
 
