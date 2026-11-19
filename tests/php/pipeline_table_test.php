@@ -15,6 +15,7 @@ $root = __DIR__ . '/../../';
 require_once $root . 'app/Bootstrap/config.inc.php';
 require_once $root . 'app/Bootstrap/routes.inc.php';
 require_once $root . 'app/Bootstrap/Conexion.inc.php';
+require_once $root . 'app/Quote/Rfq.inc.php';
 require_once $root . 'app/Report/PipelineMetricsRepository.inc.php';
 require_once $root . 'app/Report/PipelineTableRepository.inc.php';
 

@@ -8,10 +8,10 @@ spl_autoload_register(function ($class) {
     'Bootstrap' => ['Conexion', 'ControlSesion', 'Redireccion'],
     'User' => ['RepositorioUsuario', 'Usuario', 'ValidadorUsuario', 'ValidadorLogin', 'ValidadorRegistro'],
     'Cuestionario' => ['Cuestionario', 'RepositorioCuestionario'],
-    'Quote' => ['Rfq', 'RepositorioRfq', 'ValidadorCotizacion', 'ValidadorCotizacionRegistro', 'Item', 'RepositorioItem', 'Provider', 'RepositorioProvider', 'Subitem', 'RepositorioSubitem', 'ProviderSubitem', 'RepositorioProviderSubitem', 'AuditTrail', 'AuditTrailRepository', 'SheetSyncService', 'SheetSyncRepository', 'NotificationRepository'],
+    'Quote' => ['Rfq', 'RepositorioRfq', 'ValidadorCotizacion', 'ValidadorCotizacionRegistro', 'Item', 'RepositorioItem', 'Provider', 'RepositorioProvider', 'Subitem', 'RepositorioSubitem', 'ProviderSubitem', 'RepositorioProviderSubitem', 'AuditTrail', 'AuditTrailRepository', 'NotificationRepository'],
     'Comment' => ['Comment', 'RepositorioComment'],
     'ReQuote' => ['ReQuote', 'ReQuoteRepository', 'ReQuoteItem', 'ReQuoteItemRepository', 'ReQuoteProvider', 'ReQuoteProviderRepository', 'ReQuoteSubitem', 'ReQuoteSubitemRepository', 'ReQuoteSubitemProvider', 'ReQuoteSubitemProviderRepository', 'ReQuoteAuditTrail', 'ReQuoteAuditTrailRepository', 'ReQuoteService', 'ReQuoteServiceRepository'],
-    'Utilities' => ['PDFGenerator', 'ProposalRepository', 'ExcelRepository', 'Input', 'Email', 'TeamsIntegration', 'GraphApiClient', 'NotificationEmail', 'DigestEmailTemplate'],
+    'Utilities' => ['PDFGenerator', 'ProposalRepository', 'ExcelRepository', 'Input', 'Email', 'TeamsIntegration', 'NotificationEmail', 'DigestEmailTemplate'],
     'Setting' => ['NotificationMailboxRepository'],
     'Partner' => ['PartnerIntegrationRepository', 'PartnerShareRepository', 'PartnerDocumentRepository', 'PartnerOutboxRepository', 'PartnerSyncService', 'PartnerApi'],
     'TypeOfBid' => ['TypeOfBid', 'TypeOfBidRepository'],
@@ -118,12 +118,6 @@ switch ($partes_ruta[1] ?? null) {
         break;
       case 'award_table':
         $ruta_elegida = 'scripts/quote/award_table.php';
-        break;
-      case 'sync_to_sheet':
-        $ruta_elegida = 'scripts/quote/sync_to_sheet.php';
-        break;
-      case 'break_sheet_sync':
-        $ruta_elegida = 'scripts/quote/break_sheet_sync.php';
         break;
       case 'partner_share_file':
         $id_rfq = $partes_ruta[3] ?? '';

@@ -15,7 +15,7 @@ Set, at minimum, for the target environment:
 | `NOMBRE_SERVIDOR_DB` | DB host:port (`database:3306` in Docker) |
 | `NOMBRE_USUARIO` / `PASSWORD` / `NOMBRE_BD` | MySQL user / password / database |
 | `SERVIDOR` | Public base URL (must end with `/`) — every route constant builds on it |
-| `GRAPH_*` | Microsoft Graph creds for SharePoint sheet sync (leave blank to disable) |
+| `GRAPH_TENANT_ID` / `GRAPH_CLIENT_ID` / `GRAPH_CLIENT_SECRET` | Microsoft Entra app used by the notification mailbox OAuth (Admin Settings → Notification Mailbox) and delegated mention emails. **Keep them.** `GRAPH_SHAREPOINT_FILE_ID`, `GRAPH_SHAREPOINT_OWNER` and `GRAPH_SHEET_NAME` are no longer read (the SharePoint sheet sync was removed) — harmless to leave in the file |
 | `PARTNER_DEFAULT_ASSIGNEE_EMAIL` | Partner Opportunity Sync: `usuarios.email` that owns quotes created from a partner record when the partner's assignee is unknown (marks them *Needs assignment*). Must exist and be active; if it does not, incoming records are rejected and listed under **Needs review**, never dropped |
 | `PARTNER_DEFAULT_CHANNEL` | Channel for partner-created quotes (default `FBO` if undefined) |
 | `PARTNER_DEFAULT_TYPE_OF_BID` | Type of Bid for partner-created quotes — must exist in `type_of_bids` (default `Services` if undefined) |
@@ -46,7 +46,8 @@ for f in sql/sheet_sync_migration.sql \
          sql/daily_digest_migration.sql \
          sql/quote_watchers_drop.sql \
          sql/partner_opportunity_sync_migration.sql \
-         sql/sales_commission_auto_migration.sql; do
+         sql/sales_commission_auto_migration.sql \
+         sql/retire_tracking_sheet_migration.sql; do
   docker compose exec -T database mysql -uroot -p"$DB_PASS" elogicnewdb < "$f"
 done
 ```
@@ -57,8 +58,7 @@ backfill that prod should not).
 
 Also run `sql/rfq_name_unescape_backfill.sql` **once** on production: it decodes quote
 names that New Quote used to HTML-escape at save time (`&amp;` → `&`). It decodes one
-level per run, so don't re-run it. Rows already written to the SharePoint sheet keep the
-old text in column D (sync is write-once) — fix those cells by hand if needed.
+level per run, so don't re-run it.
 
 `quote_watchers_drop.sql` drops the retired `quote_watchers` table. Skip it if this
 environment never ran `quote_watchers_migration.sql`.
@@ -78,6 +78,12 @@ until an admin enables it.
 run it once. There is no backfill: a quote with `sales_commission_amount IS NULL` is a legacy quote and
 keeps its manual commission in the fulfillment page, report, Excel export and projection. The rate (3%)
 and the 6% threshold are constants in `SalesCommissionCalculator`; no `config.inc.php` change is needed.
+
+`retire_tracking_sheet_migration.sql` (Retire the Tracking Sheet) adds `rfq.letter_of_intent` and
+`rfq.submission_method` (`VARCHAR(10) NULL`, blank on every existing quote) and **drops** the four
+SharePoint sync columns `sync_to_sheet`, `sheet_row`, `sheet_sync_status`, `sheet_sync_at`. Deploy the
+code and run it together — the old code still writes `sync_to_sheet`. Not idempotent; run it once.
+`rfq.name` (the quote Description) is kept.
 
 Disable MySQL strict mode (the app relies on it): add `sql_mode = ""` under
 `[mysqld]` in `my.cnf` and restart the database container.
@@ -127,9 +133,11 @@ If the job silently never runs, check that cron's minimal environment actually r
 
 ## 5. Third-party services
 
-- **Microsoft Graph / SharePoint** — `GRAPH_*` constants drive the bid-pipeline
-  sheet sync and delegated mention emails. Register the app in Entra ID and set the
-  tenant/client/secret + target file id. Optional; the app runs without it.
+- **Microsoft Graph** — `GRAPH_TENANT_ID` / `GRAPH_CLIENT_ID` / `GRAPH_CLIENT_SECRET` drive the
+  notification mailbox OAuth and delegated mention emails. Register the app in Entra ID and set
+  the tenant/client/secret. Optional; the app runs without it. The SharePoint bid-pipeline sheet
+  sync is gone, so the app's **application** permission on the workbook (`Files.ReadWrite.All` or
+  equivalent) can be revoked — keep the delegated mail permissions.
 - **Teams webhooks** — `WEBHOOK_AWARD` / `WEBHOOK_FULFILLMENT` (optional).
 - **Partner capture platform** — configured at runtime in **Admin Settings → Partner
   Integration** (admin only), not in `config.inc.php`: partner base URL, partner webhook URL,

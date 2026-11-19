@@ -3,7 +3,8 @@
  * JSON: one page of the Bid Pipeline Metrics "Table" view.
  * Params (GET): period (mode=year|quarter|month|custom, year, quarter, month, from, to),
  *   page, and filters: quoteId, channel, emailCode, statuses[], bidType, contractType, user,
- *   dueDate, endDateFrom, endDateTo, submittedFrom, submittedTo.
+ *   dueDate, endDateFrom, endDateTo, submittedFrom, submittedTo, description, letterOfIntent,
+ *   submissionMethod.
  * Each row carries everything the Quote Summary modal needs (name, value, docs, context).
  */
 if (!ControlSesion::sesion_iniciada()) {
@@ -54,6 +55,9 @@ $filters = [
   'endDateTo'     => $endDateTo,
   'submittedFrom' => $submittedFrom,
   'submittedTo'   => $submittedTo,
+  'description'   => trim((string)($_GET['description'] ?? '')),
+  'letterOfIntent'   => (string)Rfq::pickOption($_GET['letterOfIntent'] ?? '', Rfq::LETTER_OF_INTENT_OPTIONS),
+  'submissionMethod' => (string)Rfq::pickOption($_GET['submissionMethod'] ?? '', Rfq::SUBMISSION_METHOD_OPTIONS),
 ];
 $page = max(0, (int)($_GET['page'] ?? 0));
 

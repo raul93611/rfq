@@ -216,21 +216,6 @@ $(document).ready(function () {
           },
         },
         {
-          data: 'sheet_sync_status',
-          orderable: false,
-          render: function (data, type) {
-            if (type !== 'display') return data;
-            const state = data || 'never';
-            const icons = {
-              synced: '<polyline points="20 6 9 17 4 12"/>',
-              failed: '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',
-              never:  '<line x1="5" y1="12" x2="19" y2="12"/>'
-            };
-            const title = { synced: 'Synced', failed: 'Sync failed', never: 'Not synced' };
-            return `<span class="ss-rowicon ss-rowicon-${state}" title="${title[state] || 'Not synced'}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round">${icons[state] || icons.never}</svg></span>`;
-          },
-        },
-        {
           data: 'options',
           orderable: false,
           render: function (data, type, row) {
@@ -313,21 +298,6 @@ $(document).ready(function () {
         },
       },
       {
-        data: 'sheet_sync_status',
-        orderable: false,
-        render: function (data, type) {
-          if (type !== 'display') return data;
-          const state = data || 'never';
-          const icons = {
-            synced: '<polyline points="20 6 9 17 4 12"/>',
-            failed: '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',
-            never:  '<line x1="5" y1="12" x2="19" y2="12"/>'
-          };
-          const title = { synced: 'Synced', failed: 'Sync failed', never: 'Not synced' };
-          return `<span class="ss-rowicon ss-rowicon-${state}" title="${title[state] || 'Not synced'}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round">${icons[state] || icons.never}</svg></span>`;
-        },
-      },
-      {
         data: 'options',
         orderable: false,
         render: function (data, type, row) {
@@ -399,21 +369,6 @@ $(document).ready(function () {
         },
       },
       {
-        data: 'sheet_sync_status',
-        orderable: false,
-        render: function (data, type) {
-          if (type !== 'display') return data;
-          const state = data || 'never';
-          const icons = {
-            synced: '<polyline points="20 6 9 17 4 12"/>',
-            failed: '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',
-            never:  '<line x1="5" y1="12" x2="19" y2="12"/>'
-          };
-          const title = { synced: 'Synced', failed: 'Sync failed', never: 'Not synced' };
-          return `<span class="ss-rowicon ss-rowicon-${state}" title="${title[state] || 'Not synced'}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round">${icons[state] || icons.never}</svg></span>`;
-        },
-      },
-      {
         data: 'options',
         orderable: false,
         render: function (data, type, row) {
@@ -482,21 +437,6 @@ $(document).ready(function () {
           return type === 'display'
             ? `<i class="text-success fas fa-check"></i>`
             : `<i class="text-danger fas fa-times"></i>`;
-        },
-      },
-      {
-        data: 'sheet_sync_status',
-        orderable: false,
-        render: function (data, type) {
-          if (type !== 'display') return data;
-          const state = data || 'never';
-          const icons = {
-            synced: '<polyline points="20 6 9 17 4 12"/>',
-            failed: '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',
-            never:  '<line x1="5" y1="12" x2="19" y2="12"/>'
-          };
-          const title = { synced: 'Synced', failed: 'Sync failed', never: 'Not synced' };
-          return `<span class="ss-rowicon ss-rowicon-${state}" title="${title[state] || 'Not synced'}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round">${icons[state] || icons.never}</svg></span>`;
         },
       },
       {

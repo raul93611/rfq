@@ -255,6 +255,32 @@ $pm_statuses  = PipelineMetricsRepository::STATUSES;
                 <input type="date" class="pt-input pt-date" id="pt-f-endDateTo" aria-label="End Date to">
               </div>
             </div>
+            <div class="pt-field">
+              <span class="pt-field-label">Description</span>
+              <input class="pt-input" id="pt-f-description" aria-label="Description" placeholder="Search description…">
+            </div>
+            <div class="pt-field">
+              <span class="pt-field-label">Letter of Intent</span>
+              <div class="pt-select-wrap">
+                <select class="pt-input pt-select" id="pt-f-letterOfIntent" aria-label="Letter of Intent">
+                  <option value="">Any</option>
+                  <?php foreach (Rfq::LETTER_OF_INTENT_OPTIONS as $opt) : ?>
+                    <option value="<?= $opt; ?>"><?= $opt; ?></option>
+                  <?php endforeach; ?>
+                </select>
+              </div>
+            </div>
+            <div class="pt-field">
+              <span class="pt-field-label">Submission Method</span>
+              <div class="pt-select-wrap">
+                <select class="pt-input pt-select" id="pt-f-submissionMethod" aria-label="Submission Method">
+                  <option value="">Any</option>
+                  <?php foreach (Rfq::SUBMISSION_METHOD_OPTIONS as $opt) : ?>
+                    <option value="<?= $opt; ?>"><?= $opt; ?></option>
+                  <?php endforeach; ?>
+                </select>
+              </div>
+            </div>
           </div>
           <div class="pt-filters-foot">
             <span class="pt-filters-count" id="pt-filters-count">No filters applied</span>
@@ -271,15 +297,18 @@ $pm_statuses  = PipelineMetricsRepository::STATUSES;
             <div class="pt-card-sub" id="pt-card-sub">Loading…</div>
           </div>
           <div class="pt-table-wrap">
-            <table class="pt-table">
+            <!-- Tracking columns in sheet order. Keep in step with PipelineTableView.rowHtml in js/pipeline_table.js. -->
+            <table class="pt-table" data-testid="pt-table">
               <colgroup>
-                <col class="pt-col-id"><col class="pt-col-created"><col class="pt-col-duedate"><col class="pt-col-enddate"><col class="pt-col-submitted"><col class="pt-col-channel"><col class="pt-col-email">
-                <col class="pt-col-status"><col class="pt-col-type"><col class="pt-col-contract"><col class="pt-col-user">
+                <col class="pt-col-id"><col class="pt-col-created"><col class="pt-col-desc"><col class="pt-col-channel"><col class="pt-col-email"><col class="pt-col-status">
+                <col class="pt-col-duedate"><col class="pt-col-enddate"><col class="pt-col-submitted"><col class="pt-col-type"><col class="pt-col-contract"><col class="pt-col-qa">
+                <col class="pt-col-qadl"><col class="pt-col-resumes"><col class="pt-col-loi"><col class="pt-col-site"><col class="pt-col-method"><col class="pt-col-user">
               </colgroup>
               <thead>
                 <tr>
-                  <th>Quote ID</th><th>Created</th><th>Internal Due Date</th><th>End Date</th><th>Submitted</th><th>Channel</th><th>Code</th><th>Status</th>
-                  <th>Type of Bid</th><th class="pt-th-wrap">Type of Contract</th><th>Designated User</th>
+                  <th class="pt-sticky">Quote ID</th><th>Created</th><th>Description</th><th>Channel</th><th>Code</th><th>Status</th>
+                  <th class="pt-th-wrap">Internal Due Date</th><th>End Date</th><th>Submitted</th><th class="pt-th-wrap">Type of Bid</th><th class="pt-th-wrap">Type of Contract</th><th>Q&amp;A</th>
+                  <th class="pt-th-wrap">Q&amp;A Deadline</th><th>Resumes</th><th class="pt-th-wrap">Letter of Intent</th><th class="pt-th-wrap">Site Visit</th><th class="pt-th-wrap">Submission Method</th><th class="pt-th-wrap">Designated User</th>
                 </tr>
               </thead>
               <tbody id="pt-tbody"></tbody>

@@ -136,9 +136,12 @@ test.describe('Bid Pipeline Metrics — Table view', () => {
     expect(endDateBox.x).toBeGreaterThan(dueDateBox.x);
   });
 
-  test('table shows Internal Due Date and End Date columns right after Created', async ({ page }) => {
+  test('table shows the 18 tracking columns in sheet order', async ({ page }) => {
+    // feature: retire-tracking-sheet.md (replaces the old "dates right after Created" order)
     const headers = await page.locator('.pt-table thead th').allTextContents();
-    expect(headers.slice(0, 4)).toEqual(['Quote ID', 'Created', 'Internal Due Date', 'End Date']);
+    expect(headers).toEqual(['Quote ID', 'Created', 'Description', 'Channel', 'Code', 'Status',
+      'Internal Due Date', 'End Date', 'Submitted', 'Type of Bid', 'Type of Contract', 'Q&A',
+      'Q&A Deadline', 'Resumes', 'Letter of Intent', 'Site Visit', 'Submission Method', 'Designated User']);
   });
 
   test('End Date filter re-queries the server with the selected range', async ({ page }) => {
@@ -172,7 +175,7 @@ test.describe('Bid Pipeline Metrics — Table view', () => {
 
   test('table shows a Submitted column right after End Date', async ({ page }) => {
     const headers = await page.locator('.pt-table thead th').allTextContents();
-    expect(headers.slice(0, 5)).toEqual(['Quote ID', 'Created', 'Internal Due Date', 'End Date', 'Submitted']);
+    expect(headers[headers.indexOf('End Date') + 1]).toBe('Submitted');
   });
 
   test('Submitted Date filter re-queries the server with the selected range', async ({ page }) => {

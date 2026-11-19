@@ -109,12 +109,14 @@ function createAndInsertQuote($validador, $usuario_designado) {
     'reference_url' => Input::test_input($_POST["reference_url"]),
     'priority' => isset($_POST['priority_level']) ? $_POST['priority_level'] : null,
     'name' => !empty($_POST['name']) ? trim($_POST['name']) : null,
-    'sync_to_sheet'    => isset($_POST['sync_to_sheet']) ? 1 : 0,
     'site_visit'       => isset($_POST['site_visit'])  && $_POST['site_visit']  !== '' ? (int)$_POST['site_visit']  : null,
     'resumes'          => isset($_POST['resumes'])     && $_POST['resumes']     !== '' ? (int)$_POST['resumes']     : null,
     'qa_deadline'      => !empty($_POST['qa_deadline'])      ? $_POST['qa_deadline']      : null,
     'internal_due_date'=> $validador->obtener_internal_due_date(),
     'qa'               => isset($_POST['qa'])             && $_POST['qa']             !== '' ? (int)$_POST['qa']             : null,
+    // Whitelisted by Rfq (anything outside the option list is stored as NULL).
+    'letter_of_intent' => $_POST['letter_of_intent'] ?? null,
+    'submission_method'=> $_POST['submission_method'] ?? null,
   ]);
 
   // Insert quote and retrieve ID
@@ -136,31 +138,6 @@ function createAndInsertQuote($validador, $usuario_designado) {
       PartnerSyncService::reconcile(Conexion::obtener_conexion(), (int)$id_rfq);
     } catch (Throwable $partnerEx) {
       error_log('Partner reconcile after quote create failed: ' . $partnerEx->getMessage());
-    }
-  }
-
-  // Auto-sync to the SharePoint sheet when the user opted in via the "Sync to pipeline"
-  // checkbox. The checkbox is the sole gate — bid type only sets its default in the form,
-  // and master-linked (child) quotes may sync too.
-  if ($cotizacion_insertada && isset($_POST['sync_to_sheet'])) {
-    try {
-      $designatedUsername = $_POST['usuario_designado'];
-      $insertedQuote = RepositorioRfq::obtener_cotizacion_por_id(Conexion::obtener_conexion(), $id_rfq);
-      // Write-once: link to the quote's row if it's already in the sheet, otherwise create it.
-      $result   = SheetSyncService::createOrLink($insertedQuote, $designatedUsername);
-      $sheetRow = $result['row'];
-      $outcome  = $result['outcome'];
-      if ($outcome !== null) {
-        SheetSyncRepository::updateSyncStatus(Conexion::obtener_conexion(), $id_rfq, 'synced', $sheetRow);
-        if ($outcome === 'created') {
-          AuditTrailRepository::sheet_row_created_audit_trail(Conexion::obtener_conexion(), $id_rfq);
-        } else {
-          AuditTrailRepository::sheet_row_linked_audit_trail(Conexion::obtener_conexion(), $id_rfq);
-        }
-      }
-    } catch (Exception $syncEx) {
-      SheetSyncRepository::updateSyncStatus(Conexion::obtener_conexion(), $id_rfq, 'failed');
-      error_log('Sheet sync error on create: ' . $syncEx->getMessage());
     }
   }
 

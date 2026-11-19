@@ -185,7 +185,6 @@ test.describe('Description required — New Quote', () => {
     await page.goto('http://localhost/rfq/perfil/quote/nuevo');
     await page.fill('#name', '   ');
     await page.fill('#email_code', code);
-    if (await page.locator('#sync_to_sheet').isChecked()) await page.locator('label.sync-check[for="sync_to_sheet"]').click();
     await page.fill('#issue_date', '10/12/2026');
     await page.fill('#end_date', '10/19/2026 00:00');
     await page.fill('#internal_due_date', '10/26/2026');

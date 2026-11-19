@@ -34,10 +34,12 @@ class PipelineTableRepository {
     $total = (int)self::scalar($conexion, $countSql, $params);
 
     $offset = $page * self::PAGE_SIZE;
-    $rowsSql = "SELECT id, email_code, canal, type_of_bid, type_of_contract, name, designated_username, value, bucket, created_at, internal_due_date, end_date, fecha_submitted
+    $rowsSql = "SELECT id, email_code, canal, type_of_bid, type_of_contract, name, designated_username, value, bucket, created_at, internal_due_date, end_date, fecha_submitted,
+             qa, qa_deadline, resumes, site_visit, letter_of_intent, submission_method
       FROM (
         SELECT rfq.id, rfq.email_code, rfq.canal, rfq.type_of_bid, rfq.type_of_contract, rfq.name, rfq.created_at,
                rfq.internal_due_date, rfq.end_date, rfq.fecha_submitted,
+               rfq.qa, rfq.qa_deadline, rfq.resumes, rfq.site_visit, rfq.letter_of_intent, rfq.submission_method,
                u.nombre_usuario AS designated_username,
                " . PipelineMetricsRepository::VALUE_EXPR . " AS value,
                " . PipelineMetricsRepository::STATUS_CASE . " AS bucket
@@ -73,6 +75,14 @@ class PipelineTableRepository {
         'internalDueDate' => !empty($r['internal_due_date']) ? date('m/d/Y', strtotime($r['internal_due_date'])) : '—',
         'endDate'         => !empty($r['end_date']) ? $r['end_date'] : '—',
         'submitted'       => !empty($r['fecha_submitted']) ? date('m/d/Y', strtotime($r['fecha_submitted'])) : '—',
+        // Tracking columns (retired sheet). Raw values — the client escapes; null renders as —.
+        'description'      => $name !== '' ? $name : null,
+        'qa'               => Rfq::yesNoLabel($r['qa']),
+        'qaDeadline'       => Rfq::formatQaDeadline($r['qa_deadline']),
+        'resumes'          => Rfq::yesNoLabel($r['resumes']),
+        'siteVisit'        => Rfq::yesNoLabel($r['site_visit']),
+        'letterOfIntent'   => $r['letter_of_intent'],   // whitelisted on write
+        'submissionMethod' => $r['submission_method'],
       ];
     }, $rows);
 
@@ -112,6 +122,18 @@ class PipelineTableRepository {
     if (!empty($filters['emailCode'])) {
       $params[':ec'] = '%' . $filters['emailCode'] . '%';
       $inner[] = "rfq.email_code LIKE :ec";
+    }
+    if (!empty($filters['description'])) {
+      $params[':desc'] = '%' . $filters['description'] . '%';
+      $inner[] = "rfq.name LIKE :desc";
+    }
+    if (!empty($filters['letterOfIntent'])) {
+      $params[':loi'] = (string)$filters['letterOfIntent'];
+      $inner[] = "rfq.letter_of_intent = :loi";
+    }
+    if (!empty($filters['submissionMethod'])) {
+      $params[':smeth'] = (string)$filters['submissionMethod'];
+      $inner[] = "rfq.submission_method = :smeth";
     }
     if (!empty($filters['bidType'])) {
       $params[':bt'] = $filters['bidType'];

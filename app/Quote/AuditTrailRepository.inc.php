@@ -198,6 +198,39 @@ class AuditTrailRepository {
     }
   }
 
+  /** Bid requirement fields audited on an Information save, in display order: label => Rfq getter. */
+  const BID_FIELDS = [
+    'Letter of Intent'  => 'getLetterOfIntent',
+    'Submission Method' => 'getSubmissionMethod',
+    'Q&A'               => 'getQa',
+    'Q&A Deadline'      => 'getQaDeadline',
+    'Resumes'           => 'getResumes',
+    'Site Visit'        => 'getSiteVisit',
+  ];
+
+  /**
+   * One field_modified row per bid field that differs between the quote as stored before and
+   * after a save. Both sides come from the DB, so values compare as-is; blank shows as —.
+   */
+  public static function bid_field_events($connection, Rfq $before, Rfq $after, $id_rfq) {
+    foreach (self::BID_FIELDS as $label => $getter) {
+      $from = self::bid_field_display($getter, $before->$getter());
+      $to   = self::bid_field_display($getter, $after->$getter());
+      if ($to !== $from) {
+        self::create_audit_trail_modified($connection, htmlspecialchars($label), htmlspecialchars($to), htmlspecialchars($from), $id_rfq);
+      }
+    }
+  }
+
+  /** YES / NO / TBD / PLATFORM… / MM/DD/YYYY HH:mm, or — when unset. */
+  private static function bid_field_display($getter, $value) {
+    switch ($getter) {
+      case 'getQa': case 'getResumes': case 'getSiteVisit': $value = Rfq::yesNoLabel($value); break;
+      case 'getQaDeadline': $value = Rfq::formatQaDeadline($value); break;
+    }
+    return $value ?? '—';
+  }
+
   public static function items_table_events($connection, $taxes, $taxes_original, $profit, $profit_original, $additional_general, $additional_general_original, $payment_terms, $payment_terms_original, $shipping, $shipping_original, $shipping_cost, $shipping_cost_original, $id_rfq) {
     if ($taxes != $taxes_original) {
       self::create_audit_trail_modified($connection, 'Taxes', $taxes, $taxes_original, $id_rfq);
@@ -388,40 +421,12 @@ class AuditTrailRepository {
     self::insert_audit_trail($connection, $audit_trail);
   }
 
-  // ---- Quote lifecycle events (creation + Bid Pipeline sheet sync) ----
+  // ---- Quote lifecycle events ----
   // Each mirrors quote_status_audit_trail: session-derived username/id, one insert_audit_trail row.
 
   public static function quote_created_audit_trail($connection, $id_rfq) {
     $message = 'The quote was <b>Created</b>';
     $audit_trail = new AuditTrail('', $id_rfq, $_SESSION['user']->obtener_nombre_usuario(), 'quote_created', $_SESSION['user']->obtener_id(), $message, '');
-    self::insert_audit_trail($connection, $audit_trail);
-  }
-
-  // Legacy generic "Synced" event. Superseded by the write-once create/link helpers below,
-  // but kept so historical sync_to_sheet rows still render. New sync paths log create/link.
-  public static function sync_to_sheet_audit_trail($connection, $id_rfq) {
-    $message = 'Quote synced to <b>Bid Pipeline</b>';
-    $audit_trail = new AuditTrail('', $id_rfq, $_SESSION['user']->obtener_nombre_usuario(), 'sync_to_sheet', $_SESSION['user']->obtener_id(), $message, '');
-    self::insert_audit_trail($connection, $audit_trail);
-  }
-
-  // Write-once sheet sync: the app added a brand-new pipeline row for this quote.
-  public static function sheet_row_created_audit_trail($connection, $id_rfq) {
-    $message = 'Created row in <b>Bid Pipeline</b>';
-    $audit_trail = new AuditTrail('', $id_rfq, $_SESSION['user']->obtener_nombre_usuario(), 'sheet_row_created', $_SESSION['user']->obtener_id(), $message, '');
-    self::insert_audit_trail($connection, $audit_trail);
-  }
-
-  // Write-once sheet sync: the app attached to a row that already existed, writing nothing.
-  public static function sheet_row_linked_audit_trail($connection, $id_rfq) {
-    $message = 'Linked to existing <b>Bid Pipeline</b> row';
-    $audit_trail = new AuditTrail('', $id_rfq, $_SESSION['user']->obtener_nombre_usuario(), 'sheet_row_linked', $_SESSION['user']->obtener_id(), $message, '');
-    self::insert_audit_trail($connection, $audit_trail);
-  }
-
-  public static function break_sync_audit_trail($connection, $id_rfq) {
-    $message = 'Quote unsynced from <b>Bid Pipeline</b>';
-    $audit_trail = new AuditTrail('', $id_rfq, $_SESSION['user']->obtener_nombre_usuario(), 'break_sync', $_SESSION['user']->obtener_id(), $message, '');
     self::insert_audit_trail($connection, $audit_trail);
   }
 

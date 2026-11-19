@@ -263,9 +263,7 @@
           <td></td>
           <td colspan="4">
             <b>Open Market Pricing Proposal</b><br>
-            E-Logic is an SBA 8(a) and HUBZone Certified SB<br>
-            <b>SBA 8(a) Case No:</b> C0069X<br>
-            <b>Entrance:</b> 09/30/2016 &nbsp;·&nbsp; <b>Exit:</b> 09/30/2026
+            E-Logic is an SBA 8(a) and HUBZone Certified SB
           </td>
         </tr>
       <?php endif; ?>
