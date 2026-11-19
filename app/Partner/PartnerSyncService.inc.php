@@ -257,8 +257,6 @@ class PartnerSyncService {
 
   /* ------------------------------------------------------------------ inbound: per-record lock */
 
-  const BUSY = ['outcome' => 'busy', 'id_rfq' => null];
-
   /** Names of the record locks this process holds, for the shutdown safety net. */
   private static $heldLocks = [];
   private static $shutdownRegistered = false;
@@ -278,14 +276,14 @@ class PartnerSyncService {
    * Run $fn while holding a per-record MySQL named lock, so two requests for the same partner record
    * (two webhooks, a webhook overlapping the pull, an admin resolving a review) apply one after the
    * other instead of both creating a quote. Nothing inbound runs in a transaction, so the waiter sees
-   * the first request's rows as soon as it gets the lock. Returns null when the lock was not acquired
-   * within $lockTimeout seconds.
+   * the first request's rows as soon as it gets the lock. Returns the `busy` outcome when the lock was
+   * not acquired within $lockTimeout seconds.
    */
-  private static function withRecordLock($conexion, $lockKey, callable $fn) {
-    $name = 'partner_rec_' . sha1((string)$lockKey); // 52 chars, under MySQL's 64
+  private static function withRecordLock($conexion, $recordId, $solicitationNumber, callable $fn) {
+    $name = 'partner_rec_' . sha1(self::recordLockKey($recordId, $solicitationNumber)); // 52 chars, under MySQL's 64
     $stmt = $conexion->prepare('SELECT GET_LOCK(:n, :t)');
     $stmt->execute([':n' => $name, ':t' => (int)self::$lockTimeout]);
-    if ((int)$stmt->fetchColumn() !== 1) return null;
+    if ((int)$stmt->fetchColumn() !== 1) return ['outcome' => 'busy', 'id_rfq' => null];
     self::$heldLocks[$name] = $conexion;
     // `finally` does not run on a fatal (memory, max_execution_time), and the connection is persistent:
     // without this, the pooled connection would keep the lock after the request died.
@@ -312,8 +310,8 @@ class PartnerSyncService {
    */
   public static function applyIncoming($conexion, array $rawRecord, array $opts = []) {
     $rec = self::normalizeIncoming($rawRecord);
-    return self::withRecordLock($conexion, self::recordLockKey($rec['record_id'], $rec['solicitation_number']),
-      function () use ($conexion, $rec, $opts) { return self::applyIncomingUnlocked($conexion, $rec, $opts); }) ?? self::BUSY;
+    return self::withRecordLock($conexion, $rec['record_id'], $rec['solicitation_number'],
+      fn() => self::applyIncomingUnlocked($conexion, $rec, $opts));
   }
 
   /** applyIncoming() body; the caller holds the record lock. */
@@ -490,8 +488,8 @@ class PartnerSyncService {
    * only while it is still untouched. Never queues a notice back. `busy` when the record is locked.
    */
   public static function applyRemoval($conexion, $recordId, $solicitationNumber = '') {
-    return self::withRecordLock($conexion, self::recordLockKey($recordId, $solicitationNumber),
-      function () use ($conexion, $recordId) { return self::applyRemovalUnlocked($conexion, $recordId); }) ?? self::BUSY;
+    return self::withRecordLock($conexion, $recordId, $solicitationNumber,
+      fn() => self::applyRemovalUnlocked($conexion, $recordId));
   }
 
   /** applyRemoval() body; the caller holds the record lock. */
@@ -570,11 +568,8 @@ class PartnerSyncService {
   public static function resolveReview($conexion, $reviewId, $action, $userId, $quoteId = null) {
     $rv = self::openReview($conexion, $reviewId);
     if (!$rv) return ['outcome' => 'not_found', 'id_rfq' => null];
-    $rec = json_decode($rv['payload'], true) ?: [];
-    return self::withRecordLock($conexion, self::recordLockKey($rv['partner_record_id'], $rec['solicitation_number'] ?? ''),
-      function () use ($conexion, $reviewId, $action, $userId, $quoteId) {
-        return self::resolveReviewUnlocked($conexion, $reviewId, $action, $userId, $quoteId);
-      }) ?? self::BUSY;
+    return self::withRecordLock($conexion, $rv['partner_record_id'], $rv['solicitation_number'],
+      fn() => self::resolveReviewUnlocked($conexion, $reviewId, $action, $userId, $quoteId));
   }
 
   private static function openReview($conexion, $reviewId) {
