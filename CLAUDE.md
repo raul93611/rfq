@@ -77,3 +77,7 @@ Tests: `tests/php/partner_opportunity_sync_test.php`, `tests/specs/15-partner-sy
 Calculated on the server at invoice time and **frozen** on the quote; the client posts nothing about it. `guardar_editar_cotizacion.php` → `SalesCommissionCalculator::forQuote()` → `RepositorioRfq::set_sales_commission()` writes `rfq.sales_commission_{amount,basis_profit,fulfillment_pct,reason}` plus the legacy `sales_commission` string so report filters work. **`sales_commission_amount IS NULL` = legacy quote** (manual choice + old CASE, never backfilled): check with `Rfq::obtener_saved_sales_commission()` in PHP, `SalesCommissionCalculator::amountSql('r','rq')` in SQL (queries declare `$commissionSql` — a heredoc can't call a static). Rate, the 6.00% threshold (on the *rounded* fulfillment %) and ineligible types live only in the calculator; profits are equipment-only. Invoice modal shows a read-only breakdown from `quote/commission_preview/{id}` (Save disabled until loaded); re-invoicing recalculates. Comment stored raw, escaped at render.
 
 Tests: `tests/php/sales_commission_calculator_test.php`, `tests/specs/16-sales-commission.spec.js`.
+
+## Known Bugs
+
+- **planned** — Pipeline Table can't sort by Internal Due Date / End Date → [bugs/pipeline-table-due-date-sort.md](bugs/pipeline-table-due-date-sort.md)
