@@ -51,7 +51,7 @@ var PipelineTableView = (function () {
 
   function buildQuery(p, f, page, sort) {
     var q = ['mode=' + p.mode, 'year=' + p.year, 'page=' + page];
-    if (sort && sort.col) { q.push('sort=' + encodeURIComponent(sort.col)); q.push('dir=' + (sort.dir === 'desc' ? 'desc' : 'asc')); }
+    if (sort && sort.col) { q.push('sort=' + encodeURIComponent(sort.col)); q.push('dir=' + sort.dir); }
     if (p.mode === 'quarter') q.push('quarter=' + p.quarter);
     if (p.mode === 'month') q.push('month=' + p.month);
     if (p.mode === 'custom') { q.push('from=' + encodeURIComponent(p.from || '')); q.push('to=' + encodeURIComponent(p.to || '')); }
@@ -407,8 +407,6 @@ if (typeof module !== 'undefined' && module.exports) {
     $$('.pt-table th[data-sort]').forEach(function (th) {
       var on = th.dataset.sort === st.sort.col;
       th.setAttribute('aria-sort', on ? (st.sort.dir === 'desc' ? 'descending' : 'ascending') : 'none');
-      th.classList.toggle('is-asc', on && st.sort.dir === 'asc');
-      th.classList.toggle('is-desc', on && st.sort.dir === 'desc');
     });
   }
 

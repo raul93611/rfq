@@ -19,14 +19,20 @@ class PipelineTableRepository {
   const PAGE_SIZE = 25;
 
   /**
+   * rfq.end_date parsed to a DATETIME. The column is a VARCHAR ("MM/DD/YYYY HH:mm"), NOT NULL
+   * with no default, so an unset value is '' -- NULLIF blanks that out first, since
+   * STR_TO_DATE('', ...) would otherwise parse to the zero date. A legacy date-only value
+   * parses as midnight. Shared by the End Date range filter and the End Date sort.
+   */
+  const END_DATE_EXPR = "STR_TO_DATE(NULLIF(rfq.end_date, ''), '%m/%d/%Y %H:%i')";
+
+  /**
    * Sortable columns -> SQL over the derived table `t`. Whitelist only: the request value is
-   * a key into this map and is never interpolated. end_date is a VARCHAR "MM/DD/YYYY HH:mm"
-   * (blank = ''), so it is parsed the same way the End Date range filter parses it; a legacy
-   * date-only value parses as midnight, and anything unparseable sorts with the blanks.
+   * a key into this map and is never interpolated.
    */
   const SORT_COLUMNS = [
     'internalDueDate' => 't.internal_due_date',
-    'endDate'         => "STR_TO_DATE(NULLIF(t.end_date, ''), '%m/%d/%Y %H:%i')",
+    'endDate'         => 't.end_dt',
   ];
 
   /**
@@ -50,7 +56,7 @@ class PipelineTableRepository {
              qa, qa_deadline, resumes, site_visit, letter_of_intent, submission_method
       FROM (
         SELECT rfq.id, rfq.email_code, rfq.canal, rfq.type_of_bid, rfq.type_of_contract, rfq.name, rfq.created_at,
-               rfq.internal_due_date, rfq.end_date, rfq.fecha_submitted,
+               rfq.internal_due_date, rfq.end_date, " . self::END_DATE_EXPR . " AS end_dt, rfq.fecha_submitted,
                rfq.qa, rfq.qa_deadline, rfq.resumes, rfq.site_visit, rfq.letter_of_intent, rfq.submission_method,
                u.nombre_usuario AS designated_username,
                " . PipelineMetricsRepository::VALUE_EXPR . " AS value,
@@ -179,10 +185,7 @@ class PipelineTableRepository {
       if ($clause !== null) $inner[] = $clause;
     }
     if (!empty($filters['endDateFrom']) || !empty($filters['endDateTo'])) {
-      // rfq.end_date is a VARCHAR ("MM/DD/YYYY HH:mm"), NOT NULL with no column default, so an
-      // unset value is '' rather than SQL NULL -- NULLIF blanks that out first, since
-      // STR_TO_DATE('', ...) would otherwise parse to the zero date 0000-00-00.
-      $endCol = 'STR_TO_DATE(NULLIF(rfq.end_date, ""), "%m/%d/%Y %H:%i")';
+      $endCol = self::END_DATE_EXPR;
       $inner[] = "$endCol IS NOT NULL";
       if (!empty($filters['endDateFrom'])) {
         $params[':efrom'] = (string)$filters['endDateFrom'];
