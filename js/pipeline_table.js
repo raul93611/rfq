@@ -42,8 +42,16 @@ var PipelineTableView = (function () {
     return n;
   }
 
-  function buildQuery(p, f, page) {
+  /** Header click cycle for one sortable column: none -> asc -> desc -> none. Another column starts at asc. */
+  function nextSort(sort, col) {
+    if (sort.col !== col) return { col: col, dir: 'asc' };
+    if (sort.dir === 'asc') return { col: col, dir: 'desc' };
+    return { col: '', dir: 'asc' };
+  }
+
+  function buildQuery(p, f, page, sort) {
     var q = ['mode=' + p.mode, 'year=' + p.year, 'page=' + page];
+    if (sort && sort.col) { q.push('sort=' + encodeURIComponent(sort.col)); q.push('dir=' + sort.dir); }
     if (p.mode === 'quarter') q.push('quarter=' + p.quarter);
     if (p.mode === 'month') q.push('month=' + p.month);
     if (p.mode === 'custom') { q.push('from=' + encodeURIComponent(p.from || '')); q.push('to=' + encodeURIComponent(p.to || '')); }
@@ -98,7 +106,7 @@ var PipelineTableView = (function () {
       + '</div></td></tr>';
   }
 
-  return { EMPTY_FILTERS: EMPTY_FILTERS, esc: esc, countFilters: countFilters, buildQuery: buildQuery, rowHtml: rowHtml, emptyRowHtml: emptyRowHtml };
+  return { EMPTY_FILTERS: EMPTY_FILTERS, esc: esc, countFilters: countFilters, nextSort: nextSort, buildQuery: buildQuery, rowHtml: rowHtml, emptyRowHtml: emptyRowHtml };
 })();
 
 if (typeof module !== 'undefined' && module.exports) {
@@ -127,6 +135,7 @@ if (typeof module !== 'undefined' && module.exports) {
     period: null,
     filters: EMPTY_FILTERS(),
     page: 0,
+    sort: { col: '', dir: 'asc' },   // server-side; not a filter, so Clear filters leaves it alone
     total: 0,
     rows: [],
     token: 0,
@@ -143,7 +152,7 @@ if (typeof module !== 'undefined' && module.exports) {
   }
   /* ---------- filter helpers ---------- */
   function countFilters() { return V.countFilters(st.filters); }
-  function buildQuery() { return V.buildQuery(st.period, st.filters, st.page); }
+  function buildQuery() { return V.buildQuery(st.period, st.filters, st.page, st.sort); }
 
   /* ---------- fetch + render ---------- */
   function fetchRows() {
@@ -393,8 +402,32 @@ if (typeof module !== 'undefined' && module.exports) {
       .finally(function () { send.disabled = true; });
   }
 
+  /* ---------- sortable date headers ---------- */
+  function syncSortHeaders() {
+    $$('.pt-table th[data-sort]').forEach(function (th) {
+      var on = th.dataset.sort === st.sort.col;
+      th.setAttribute('aria-sort', on ? (st.sort.dir === 'desc' ? 'descending' : 'ascending') : 'none');
+    });
+  }
+
+  function onSortHeader(th) {
+    st.sort = V.nextSort(st.sort, th.dataset.sort);
+    st.page = 0;
+    syncSortHeaders();
+    fetchRows();
+  }
+
   /* ---------- delegated table clicks ---------- */
   function wireTable() {
+    var thead = $('.pt-table thead');
+    thead.addEventListener('click', function (e) {
+      var th = e.target.closest('th[data-sort]');
+      if (th) onSortHeader(th);
+    });
+    thead.addEventListener('keydown', function (e) {
+      var th = e.target.closest('th[data-sort]');
+      if (th && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); onSortHeader(th); }
+    });
     $('#pt-tbody').addEventListener('click', function (e) {
       var open = e.target.closest('[data-open]');
       if (open) { openModal(parseInt(open.dataset.open, 10)); return; }

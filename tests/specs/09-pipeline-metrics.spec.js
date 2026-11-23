@@ -218,4 +218,56 @@ test.describe('Bid Pipeline Metrics — Table view', () => {
     await page.click('#pt-clear');
     await expect(page.locator('#pt-f-contractType')).toHaveValue('');
   });
+
+  // bug: pipeline-table-due-date-sort.md
+  const isTable = (r) => r.url().includes('/quote/pipeline_table');
+  async function clickSort(page, key) {
+    const [req] = await Promise.all([page.waitForRequest(isTable), page.click(`[data-testid="pt-sort-${key}"]`)]);
+    await page.waitForResponse(isTable);
+    return new URL(req.url()).searchParams;
+  }
+  // "MM/DD/YYYY[ HH:mm]" -> sortable number, or null for "—".
+  function endDateKey(s) {
+    const m = s.trim().match(/^(\d{2})\/(\d{2})\/(\d{4})(?: (\d{2}):(\d{2}))?$/);
+    return m ? Number(m[3] + m[1] + m[2] + (m[4] || '00') + (m[5] || '00')) : null;
+  }
+
+  test('clicking a date header cycles server-side sort asc -> desc -> default and back to page 1', async ({ page }) => {
+    for (const key of ['internalDueDate', 'endDate']) {
+      const th = page.locator(`[data-testid="pt-sort-${key}"]`);
+      let q = await clickSort(page, key);
+      expect([q.get('sort'), q.get('dir'), q.get('page')]).toEqual([key, 'asc', '0']);
+      await expect(th).toHaveAttribute('aria-sort', 'ascending');
+      q = await clickSort(page, key);
+      expect([q.get('sort'), q.get('dir')]).toEqual([key, 'desc']);
+      await expect(th).toHaveAttribute('aria-sort', 'descending');
+      q = await clickSort(page, key);
+      expect(q.has('sort')).toBe(false);
+      await expect(th).toHaveAttribute('aria-sort', 'none');
+    }
+  });
+
+  test('End Date sort orders rows oldest -> newest, then newest -> oldest', async ({ page }) => {
+    const dates = async () => (await page.locator('#pt-tbody tr td:nth-child(8)').allTextContents())
+      .map(endDateKey).filter((v) => v !== null);
+    await clickSort(page, 'endDate');
+    const asc = await dates();
+    expect(asc.length).toBeGreaterThan(1);
+    expect(asc).toEqual([...asc].sort((a, b) => a - b));
+    await clickSort(page, 'endDate');
+    const desc = await dates();
+    expect(desc).toEqual([...desc].sort((a, b) => b - a));
+  });
+
+  test('sort header is keyboard-operable and Clear filters keeps the sort', async ({ page }) => {
+    const th = page.locator('[data-testid="pt-sort-internalDueDate"]');
+    await th.focus();
+    await Promise.all([page.waitForResponse(isTable), page.keyboard.press('Enter')]);
+    await expect(th).toHaveAttribute('aria-sort', 'ascending');
+    await page.fill('#pt-f-endDateFrom', '2020-01-01');
+    await page.waitForResponse(isTable);
+    const [req] = await Promise.all([page.waitForRequest(isTable), page.click('#pt-clear')]);
+    expect(new URL(req.url()).searchParams.get('sort')).toBe('internalDueDate');
+    await expect(th).toHaveAttribute('aria-sort', 'ascending');
+  });
 });
