@@ -215,6 +215,51 @@ try {
   $ctAndBid = PipelineTableRepository::getPage($c, $year, array_merge($noF, ['contractType' => 'RFQ - VAR', 'bidType' => 'IT']), 0);
   check('contractType + bidType AND-combine -> still just the one matching row', 1, $ctAndBid['total']);
 
+  // --- Sort by Internal Due Date / End Date (bugs/pipeline-table-due-date-sort.md) ---
+  // Own cohort (2097) so only these rows are in the period.
+  $y97 = ['mode' => 'year', 'year' => 2097];
+  $at97 = ['created_at' => '2097-05-01 10:00:00'];
+  $sMid    = $mkRfq($at97 + ['internal_due_date' => '2097-03-15', 'end_date' => '03/15/2097 09:00']);
+  $sLate   = $mkRfq($at97 + ['internal_due_date' => '2097-09-01', 'end_date' => '09/01/2097 17:30']);
+  $sBlank  = $mkRfq($at97 + ['internal_due_date' => null,         'end_date' => '']);
+  $sEarly  = $mkRfq($at97 + ['internal_due_date' => '2097-01-02', 'end_date' => '01/02/2097 08:00']);
+  $sLegacy = $mkRfq($at97 + ['internal_due_date' => null,         'end_date' => '06/01/2097']); // no time part
+  // Same-day end dates: time-of-day orders them, not the string.
+  $sSameAm = $mkRfq($at97 + ['internal_due_date' => '2097-03-15', 'end_date' => '12/31/2096 08:00']);
+  $sSamePm = $mkRfq($at97 + ['internal_due_date' => null,         'end_date' => '12/31/2096 18:00']);
+
+  $ids = function ($sort) use ($c, $y97, $noF) {
+    return array_column(PipelineTableRepository::getPage($c, $y97, $noF, 0, $sort)['rows'], 'id');
+  };
+
+  check('default order (no sort) is newest quote first',
+    [$sSamePm, $sSameAm, $sLegacy, $sEarly, $sBlank, $sLate, $sMid], $ids([]));
+  check('unknown sort column falls back to newest quote first',
+    [$sSamePm, $sSameAm, $sLegacy, $sEarly, $sBlank, $sLate, $sMid], $ids(['col' => 'id; DROP TABLE rfq', 'dir' => 'asc']));
+
+  // Internal Due Date: equal dates tie-break on id DESC; undated rows last in both directions.
+  check('internalDueDate asc: oldest -> newest, blanks last',
+    [$sEarly, $sSameAm, $sMid, $sLate, $sSamePm, $sLegacy, $sBlank], $ids(['col' => 'internalDueDate', 'dir' => 'asc']));
+  check('internalDueDate desc: newest -> oldest, blanks still last',
+    [$sLate, $sSameAm, $sMid, $sEarly, $sSamePm, $sLegacy, $sBlank], $ids(['col' => 'internalDueDate', 'dir' => 'desc']));
+  check('invalid dir is treated as asc',
+    $ids(['col' => 'internalDueDate', 'dir' => 'asc']), $ids(['col' => 'internalDueDate', 'dir' => 'sideways']));
+
+  // End Date: parsed as a datetime, not compared as an MM/DD/YYYY string. A legacy value with
+  // no time part still parses (MySQL STR_TO_DATE reads it as midnight) and sorts by its date
+  // (pinned behaviour).
+  check('endDate asc: oldest -> newest by real date+time, legacy date-only in place, blanks last',
+    [$sSameAm, $sSamePm, $sEarly, $sMid, $sLegacy, $sLate, $sBlank], $ids(['col' => 'endDate', 'dir' => 'asc']));
+  check('endDate desc: newest -> oldest, blanks still last',
+    [$sLate, $sLegacy, $sMid, $sEarly, $sSamePm, $sSameAm, $sBlank], $ids(['col' => 'endDate', 'dir' => 'desc']));
+
+  // Sort spans every page, not just the visible 25: push the earliest date onto what would be page 2.
+  for ($i = 0; $i < PipelineTableRepository::PAGE_SIZE; $i++) $mkRfq($at97 + ['internal_due_date' => '2097-06-01']);
+  $p0 = PipelineTableRepository::getPage($c, $y97, $noF, 0, ['col' => 'internalDueDate', 'dir' => 'asc']);
+  check('sort applies across pages: earliest due date is first on page 1', $sEarly, $p0['rows'][0]['id'] ?? null);
+  $p1 = PipelineTableRepository::getPage($c, $y97, $noF, 1, ['col' => 'internalDueDate', 'dir' => 'asc']);
+  check('sort applies across pages: blanks land at the end of the last page', $sBlank, end($p1['rows'])['id'] ?? null);
+
 } finally {
   $c->rollBack();
   Conexion::cerrar_conexion();

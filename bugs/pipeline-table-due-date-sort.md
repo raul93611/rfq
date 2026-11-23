@@ -2,7 +2,7 @@
 
 The Bid Pipeline Metrics → Table view can't be sorted by due date; the team needs oldest → newest (and back) on both date columns.
 
-**Status:** planned
+**Status:** fixed
 
 ## Steps to reproduce
 

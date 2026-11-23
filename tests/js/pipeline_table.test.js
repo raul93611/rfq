@@ -81,3 +81,33 @@ test('new filters are sent in the query and combine with the existing ones', () 
   assert.ok(q.includes('channel=FBO'));
   assert.ok(!V.buildQuery({ mode: 'year', year: 2026 }, V.EMPTY_FILTERS(), 0).includes('description='));
 });
+
+/* ---------- Sort by Internal Due Date / End Date (bugs/pipeline-table-due-date-sort.md) ---------- */
+
+test('buildQuery omits sort/dir when no sort column is set', () => {
+  const q = V.buildQuery({ mode: 'year', year: 2026 }, V.EMPTY_FILTERS(), 0, { col: '', dir: 'asc' });
+  assert.ok(!q.includes('sort='));
+  assert.ok(!q.includes('dir='));
+  assert.ok(!V.buildQuery({ mode: 'year', year: 2026 }, V.EMPTY_FILTERS(), 0).includes('sort='), 'sort arg is optional');
+});
+
+test('buildQuery emits sort and dir when a sort column is set', () => {
+  const q = V.buildQuery({ mode: 'year', year: 2026 }, V.EMPTY_FILTERS(), 0, { col: 'endDate', dir: 'desc' });
+  assert.ok(q.includes('sort=endDate'));
+  assert.ok(q.includes('dir=desc'));
+});
+
+test('clicking a date header cycles none -> asc -> desc -> none', () => {
+  let s = { col: '', dir: 'asc' };
+  s = V.nextSort(s, 'internalDueDate'); assert.deepEqual(s, { col: 'internalDueDate', dir: 'asc' });
+  s = V.nextSort(s, 'internalDueDate'); assert.deepEqual(s, { col: 'internalDueDate', dir: 'desc' });
+  s = V.nextSort(s, 'internalDueDate'); assert.deepEqual(s, { col: '', dir: 'asc' });
+});
+
+test('clicking the other date header starts it at asc', () => {
+  assert.deepEqual(V.nextSort({ col: 'internalDueDate', dir: 'desc' }, 'endDate'), { col: 'endDate', dir: 'asc' });
+});
+
+test('sort is not counted as a filter', () => {
+  assert.equal(V.countFilters(V.EMPTY_FILTERS()), 0);
+});

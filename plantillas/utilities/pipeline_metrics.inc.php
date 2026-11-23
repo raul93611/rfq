@@ -307,7 +307,7 @@ $pm_statuses  = PipelineMetricsRepository::STATUSES;
               <thead>
                 <tr>
                   <th class="pt-sticky">Quote ID</th><th>Created</th><th>Description</th><th>Channel</th><th>Code</th><th>Status</th>
-                  <th class="pt-th-wrap">Internal Due Date</th><th>End Date</th><th>Submitted</th><th class="pt-th-wrap">Type of Bid</th><th class="pt-th-wrap">Type of Contract</th><th>Q&amp;A</th>
+                  <th class="pt-th-wrap pt-th-sort" data-sort="internalDueDate" data-testid="pt-sort-internalDueDate" tabindex="0" aria-sort="none" title="Sort by Internal Due Date">Internal Due Date<span class="pt-sort-ico" aria-hidden="true"></span></th><th class="pt-th-sort" data-sort="endDate" data-testid="pt-sort-endDate" tabindex="0" aria-sort="none" title="Sort by End Date">End Date<span class="pt-sort-ico" aria-hidden="true"></span></th><th>Submitted</th><th class="pt-th-wrap">Type of Bid</th><th class="pt-th-wrap">Type of Contract</th><th>Q&amp;A</th>
                   <th class="pt-th-wrap">Q&amp;A Deadline</th><th>Resumes</th><th class="pt-th-wrap">Letter of Intent</th><th class="pt-th-wrap">Site Visit</th><th class="pt-th-wrap">Submission Method</th><th class="pt-th-wrap">Designated User</th>
                 </tr>
               </thead>

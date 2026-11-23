@@ -4,7 +4,7 @@
  * Params (GET): period (mode=year|quarter|month|custom, year, quarter, month, from, to),
  *   page, and filters: quoteId, channel, emailCode, statuses[], bidType, contractType, user,
  *   dueDate, endDateFrom, endDateTo, submittedFrom, submittedTo, description, letterOfIntent,
- *   submissionMethod.
+ *   submissionMethod; sort (internalDueDate|endDate, else default order) + dir (asc|desc).
  * Each row carries everything the Quote Summary modal needs (name, value, docs, context).
  */
 if (!ControlSesion::sesion_iniciada()) {
@@ -61,10 +61,16 @@ $filters = [
 ];
 $page = max(0, (int)($_GET['page'] ?? 0));
 
+$sortCol = (string)($_GET['sort'] ?? '');
+$sort = [
+  'col' => array_key_exists($sortCol, PipelineTableRepository::SORT_COLUMNS) ? $sortCol : '',
+  'dir' => ($_GET['dir'] ?? '') === 'desc' ? 'desc' : 'asc',
+];
+
 try {
   Conexion::abrir_conexion();
   $conexion = Conexion::obtener_conexion();
-  $result = PipelineTableRepository::getPage($conexion, $period, $filters, $page);
+  $result = PipelineTableRepository::getPage($conexion, $period, $filters, $page, $sort);
   Conexion::cerrar_conexion();
   echo json_encode($result);
 } catch (Exception $e) {

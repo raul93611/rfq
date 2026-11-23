@@ -19,10 +19,22 @@ class PipelineTableRepository {
   const PAGE_SIZE = 25;
 
   /**
+   * Sortable columns -> SQL over the derived table `t`. Whitelist only: the request value is
+   * a key into this map and is never interpolated. end_date is a VARCHAR "MM/DD/YYYY HH:mm"
+   * (blank = ''), so it is parsed the same way the End Date range filter parses it; a legacy
+   * date-only value parses as midnight, and anything unparseable sorts with the blanks.
+   */
+  const SORT_COLUMNS = [
+    'internalDueDate' => 't.internal_due_date',
+    'endDate'         => "STR_TO_DATE(NULLIF(t.end_date, ''), '%m/%d/%Y %H:%i')",
+  ];
+
+  /**
    * One page of rows for a period + filters, plus the total count.
+   * @param array $sort ['col' => key of SORT_COLUMNS, 'dir' => 'asc'|'desc']; empty = newest quote first.
    * @return array ['rows' => [...], 'total' => int, 'page' => int, 'pageSize' => int]
    */
-  public static function getPage($conexion, array $period, array $filters, $page = 0) {
+  public static function getPage($conexion, array $period, array $filters, $page = 0, array $sort = []) {
     $page = max(0, (int)$page);
     [$innerWhere, $statusWhere, $params] = self::buildWhere($period, $filters);
 
@@ -48,7 +60,7 @@ class PipelineTableRepository {
         WHERE $innerWhere
       ) t
       " . ($statusWhere ? "WHERE $statusWhere" : "") . "
-      ORDER BY id DESC
+      ORDER BY " . self::orderBy($sort) . "
       LIMIT $offset, " . self::PAGE_SIZE;
 
     $rows = self::run($conexion, $rowsSql, $params);
@@ -87,6 +99,17 @@ class PipelineTableRepository {
     }, $rows);
 
     return ['rows' => $out, 'total' => $total, 'page' => $page, 'pageSize' => self::PAGE_SIZE];
+  }
+
+  /**
+   * ORDER BY for a sort request. Undated rows go last in both directions; id DESC breaks ties
+   * so paging is stable. Unknown/empty column = the default newest-quote-first order.
+   */
+  private static function orderBy(array $sort) {
+    $expr = self::SORT_COLUMNS[$sort['col'] ?? ''] ?? null;
+    if ($expr === null) return 'id DESC';
+    $dir = strtolower((string)($sort['dir'] ?? '')) === 'desc' ? 'DESC' : 'ASC';
+    return "$expr IS NULL, $expr $dir, id DESC";
   }
 
   /** Distinct raw channels present in the data, for the Channel filter dropdown. */
