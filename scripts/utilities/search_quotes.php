@@ -58,5 +58,4 @@ try {
 }
 
 // Output the response as JSON
-$json = json_encode($response, JSON_INVALID_UTF8_SUBSTITUTE);
-echo $json !== false ? $json : json_encode(["error" => "Error encoding response: " . json_last_error_msg()]);
+echo json_encode($response, JSON_INVALID_UTF8_SUBSTITUTE);

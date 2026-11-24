@@ -1569,9 +1569,9 @@ class RepositorioRfq {
     return strtr((string)$term, self::SEARCH_TERM_MAP);
   }
 
-  /** LIKE pattern for a search term. Latin1 columns (subitems.brand/part_number*,
-      invoices.name) must be compared as CONVERT(col USING utf8mb4): a utf8mb4 term
-      with a non-latin1 character otherwise fails with MySQL 1267. */
+  /** Normalized `%term%` LIKE pattern. Latin1 columns (subitems.brand/part_number*,
+      invoices.name) are compared as CONVERT(col USING utf8mb4) in the SQL below, or a
+      non-latin1 term fails with MySQL 1267. */
   private static function likeSearchTerm($term) {
     return '%' . self::normalizeSearchTerm($term) . '%';
   }
@@ -1906,11 +1906,11 @@ class RepositorioRfq {
 
     if (!empty($filters['client']) && trim($filters['client']) !== '') {
       $clauses[] = 'sq.client LIKE :f_client';
-      $params[':f_client'] = '%' . trim($filters['client']) . '%';
+      $params[':f_client'] = self::likeSearchTerm(trim($filters['client']));
     }
     if (!empty($filters['state']) && trim($filters['state']) !== '') {
       $clauses[] = 'sq.state LIKE :f_state';
-      $params[':f_state'] = '%' . trim($filters['state']) . '%';
+      $params[':f_state'] = self::likeSearchTerm(trim($filters['state']));
     }
 
     $where = count($clauses) ? 'WHERE ' . implode("\n          AND ", $clauses) : '';
