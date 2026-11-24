@@ -2,7 +2,7 @@
 
 Searching Quotes (or Partial Invoices) with a term that contains a character outside latin1 — e.g. a non-breaking hyphen pasted from a solicitation PDF — fails with a DataTables "Invalid JSON response" alert.
 
-**Status:** planned
+**Status:** fixed
 
 ## Steps to reproduce
 
