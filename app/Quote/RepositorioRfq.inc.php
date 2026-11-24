@@ -1554,9 +1554,31 @@ class RepositorioRfq {
     return $sentencia->fetchColumn();
   }
 
+  /** Typographic punctuation pasted from documents (PDFs, Word) → its ASCII form,
+      so a pasted "TC‑12" (U+2011) matches a stored "TC-12". Single source for every
+      search endpoint; anything not listed is left as-is. */
+  private const SEARCH_TERM_MAP = [
+    "\u{2010}" => '-', "\u{2011}" => '-', "\u{2012}" => '-', "\u{2013}" => '-',
+    "\u{2014}" => '-', "\u{2015}" => '-', "\u{2212}" => '-', "\u{FE58}" => '-',
+    "\u{FE63}" => '-', "\u{FF0D}" => '-',
+    "\u{00A0}" => ' ', "\u{2007}" => ' ', "\u{202F}" => ' ',
+    "\u{2018}" => "'", "\u{2019}" => "'", "\u{201C}" => '"', "\u{201D}" => '"',
+  ];
+
+  public static function normalizeSearchTerm($term) {
+    return strtr((string)$term, self::SEARCH_TERM_MAP);
+  }
+
+  /** Normalized `%term%` LIKE pattern. Latin1 columns (subitems.brand/part_number*,
+      invoices.name) are compared as CONVERT(col USING utf8mb4) in the SQL below, or a
+      non-latin1 term fails with MySQL 1267. */
+  private static function likeSearchTerm($term) {
+    return '%' . self::normalizeSearchTerm($term) . '%';
+  }
+
   public static function getSearchedQuotesByChannel($conexion, $start, $length, $search, $sort_column_index, $sort_direction, $search_term) {
     $data = [];
-    $search_term = '%' . $search_term . '%';
+    $search_term = self::likeSearchTerm($search_term);
     switch ($sort_column_index) {
       case 0:
         $sort_column = 'sq.id';
@@ -1653,10 +1675,10 @@ class RepositorioRfq {
               JOIN item i ON si.id_item = i.id
             WHERE i.id_rfq = sq.id
               AND (si.provider_menor LIKE :search_term
-                OR si.brand LIKE :search_term
-                OR si.brand_project LIKE :search_term
-                OR si.part_number LIKE :search_term
-                OR si.part_number_project LIKE :search_term
+                OR CONVERT(si.brand USING utf8mb4) LIKE :search_term
+                OR CONVERT(si.brand_project USING utf8mb4) LIKE :search_term
+                OR CONVERT(si.part_number USING utf8mb4) LIKE :search_term
+                OR CONVERT(si.part_number_project USING utf8mb4) LIKE :search_term
                 OR si.description LIKE :search_term
                 OR si.description_project LIKE :search_term
                 OR si.comments LIKE :search_term)
@@ -1671,14 +1693,15 @@ class RepositorioRfq {
           $data[] = $row;
         }
       } catch (PDOException $ex) {
-        print 'ERROR:' . $ex->getMessage() . '<br>';
+        error_log('search query error: ' . $ex->getMessage());
+        throw $ex;
       }
     }
     return $data;
   }
 
   public static function getTotalSearchedQuotesByChannelCount($conexion, $search_term) {
-    $search_term = '%' . $search_term . '%';
+    $search_term = self::likeSearchTerm($search_term);
     if (isset($conexion)) {
       try {
         $sql = "
@@ -1724,10 +1747,10 @@ class RepositorioRfq {
                 JOIN item i ON si.id_item = i.id
               WHERE i.id_rfq = r.id
                 AND (si.provider_menor LIKE :search_term
-                  OR si.brand LIKE :search_term
-                  OR si.brand_project LIKE :search_term
-                  OR si.part_number LIKE :search_term
-                  OR si.part_number_project LIKE :search_term
+                  OR CONVERT(si.brand USING utf8mb4) LIKE :search_term
+                  OR CONVERT(si.brand_project USING utf8mb4) LIKE :search_term
+                  OR CONVERT(si.part_number USING utf8mb4) LIKE :search_term
+                  OR CONVERT(si.part_number_project USING utf8mb4) LIKE :search_term
                   OR si.description LIKE :search_term
                   OR si.description_project LIKE :search_term
                   OR si.comments LIKE :search_term)
@@ -1738,7 +1761,8 @@ class RepositorioRfq {
         $sentencia->bindValue(':search_term', $search_term, PDO::PARAM_STR);
         $sentencia->execute();
       } catch (PDOException $ex) {
-        print 'ERROR:' . $ex->getMessage() . '<br>';
+        error_log('search query error: ' . $ex->getMessage());
+        throw $ex;
       }
     }
     return $sentencia->fetchColumn();
@@ -1784,7 +1808,7 @@ class RepositorioRfq {
     $params = [];
 
     if (trim((string)$search_term) !== '') {
-      $params[':search_term'] = '%' . $search_term . '%';
+      $params[':search_term'] = self::likeSearchTerm($search_term);
       $clauses[] = "(
         sq.nombre_usuario LIKE :search_term
         OR sq.email_code LIKE :search_term
@@ -1820,10 +1844,10 @@ class RepositorioRfq {
             JOIN item i ON si.id_item = i.id
           WHERE i.id_rfq = sq.id
             AND (si.provider_menor LIKE :search_term
-              OR si.brand LIKE :search_term
-              OR si.brand_project LIKE :search_term
-              OR si.part_number LIKE :search_term
-              OR si.part_number_project LIKE :search_term
+              OR CONVERT(si.brand USING utf8mb4) LIKE :search_term
+              OR CONVERT(si.brand_project USING utf8mb4) LIKE :search_term
+              OR CONVERT(si.part_number USING utf8mb4) LIKE :search_term
+              OR CONVERT(si.part_number_project USING utf8mb4) LIKE :search_term
               OR si.description LIKE :search_term
               OR si.description_project LIKE :search_term
               OR si.comments LIKE :search_term)
@@ -1882,11 +1906,11 @@ class RepositorioRfq {
 
     if (!empty($filters['client']) && trim($filters['client']) !== '') {
       $clauses[] = 'sq.client LIKE :f_client';
-      $params[':f_client'] = '%' . trim($filters['client']) . '%';
+      $params[':f_client'] = self::likeSearchTerm(trim($filters['client']));
     }
     if (!empty($filters['state']) && trim($filters['state']) !== '') {
       $clauses[] = 'sq.state LIKE :f_state';
-      $params[':f_state'] = '%' . trim($filters['state']) . '%';
+      $params[':f_state'] = self::likeSearchTerm(trim($filters['state']));
     }
 
     $where = count($clauses) ? 'WHERE ' . implode("\n          AND ", $clauses) : '';
@@ -1925,6 +1949,7 @@ class RepositorioRfq {
         }
       } catch (PDOException $ex) {
         error_log('getAdvancedSearchedQuotes error: ' . $ex->getMessage());
+        throw $ex;
       }
     }
     return $data;
@@ -1947,6 +1972,7 @@ class RepositorioRfq {
         return (int)$sentencia->fetchColumn();
       } catch (PDOException $ex) {
         error_log('getAdvancedSearchedQuotesCount error: ' . $ex->getMessage());
+        throw $ex;
       }
     }
     return 0;
@@ -1954,7 +1980,7 @@ class RepositorioRfq {
 
   public static function getSearchedInvoices($conexion, $start, $length, $sort_column_index, $sort_direction, $search_term) {
     $data = [];
-    $search_term = '%' . $search_term . '%';
+    $search_term = self::likeSearchTerm($search_term);
     switch ($sort_column_index) {
       case 0: $sort_column = 'inv.name'; break;
       case 1: $sort_column = 'inv.created_at'; break;
@@ -1978,7 +2004,7 @@ class RepositorioRfq {
         LEFT JOIN usuarios u ON r.usuario_designado = u.id
         LEFT JOIN services s ON r.id = s.id_rfq
         WHERE r.deleted = 0
-          AND inv.name LIKE :search_term
+          AND CONVERT(inv.name USING utf8mb4) LIKE :search_term
         GROUP BY inv.id, inv.name, inv.created_at, r.id, r.email_code, u.nombre_usuario, r.total_price
         ORDER BY {$sort_column} {$sort_direction}
         LIMIT {$start}, {$length}
@@ -1990,14 +2016,15 @@ class RepositorioRfq {
           $data[] = $row;
         }
       } catch (PDOException $ex) {
-        print 'ERROR:' . $ex->getMessage() . '<br>';
+        error_log('search query error: ' . $ex->getMessage());
+        throw $ex;
       }
     }
     return $data;
   }
 
   public static function getTotalSearchedInvoicesCount($conexion, $search_term) {
-    $search_term = '%' . $search_term . '%';
+    $search_term = self::likeSearchTerm($search_term);
     if (isset($conexion)) {
       try {
         $sql = "
@@ -2005,13 +2032,14 @@ class RepositorioRfq {
         FROM invoices inv
         JOIN rfq r ON inv.id_rfq = r.id
         WHERE r.deleted = 0
-          AND inv.name LIKE :search_term
+          AND CONVERT(inv.name USING utf8mb4) LIKE :search_term
         ";
         $sentencia = $conexion->prepare($sql);
         $sentencia->bindValue(':search_term', $search_term, PDO::PARAM_STR);
         $sentencia->execute();
       } catch (PDOException $ex) {
-        print 'ERROR:' . $ex->getMessage() . '<br>';
+        error_log('search query error: ' . $ex->getMessage());
+        throw $ex;
       }
     }
     return $sentencia->fetchColumn();

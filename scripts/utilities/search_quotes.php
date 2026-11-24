@@ -58,4 +58,4 @@ try {
 }
 
 // Output the response as JSON
-echo json_encode($response);
+echo json_encode($response, JSON_INVALID_UTF8_SUBSTITUTE);

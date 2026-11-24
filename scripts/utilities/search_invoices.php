@@ -29,4 +29,4 @@ try {
   Conexion::cerrar_conexion();
 }
 
-echo json_encode($response);
+echo json_encode($response, JSON_INVALID_UTF8_SUBSTITUTE);
