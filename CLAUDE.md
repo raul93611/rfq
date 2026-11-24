@@ -13,7 +13,7 @@ Quote Inline Editing · Comment Mentions & Notifications · Bid Requirement Fiel
 PHP app on a LAMP stack inside Docker (`docker-compose-lamp`), served at `http://localhost/rfq/`.
 
 - **Setup:** create `/tmp` at project root; disable MySQL strict mode (`sql_mode=""` under `[mysqld]`, restart); prod also needs the `xmlwriter` PHP module. `composer install`. Users: `/genera_usuario`.
-- **Database:** `elogicnewdb` on `database:3306`, schema [sql/elogic.sql](sql/elogic.sql), migrations in `sql/` (run once per environment — list in [DEPLOYMENT.md](DEPLOYMENT.md)). There is **no `.env`**: config constants live in `app/Bootstrap/config.inc.php`, **gitignored** — add new constants by hand per environment; code must degrade safely when one is undefined.
+- **Database:** `elogicnewdb` on `database:3306`, schema [sql/elogic.sql](sql/elogic.sql), migrations in `sql/` (run once per environment — list in [DEPLOYMENT.md](DEPLOYMENT.md)). There is **no `.env`**: config constants live in `app/Bootstrap/config.inc.php`, **gitignored** — add new constants by hand per environment; code must degrade safely when one is undefined. **Mixed charsets:** `subitems.brand/brand_project/part_number*/website/additional` and `invoices.name` are latin1 — a `LIKE` on them needs `CONVERT(col USING utf8mb4)`, or a non-latin1 term fails with MySQL 1267.
 - **Tests:** PHP `tests/php/` (`docker exec lamp-php84 php /var/www/html/rfq/tests/php/<file>`; DB-backed, transaction-rolled-back, so **no DDL inside a test**); Node `tests/js/` (`node --test tests/js/*.test.js`); Playwright `tests/specs/` (`cd tests && PW_CHANNEL=chrome npx playwright test`). No lint. PHP is not on the host.
 - **Line endings:** many files are CRLF (`Rfq.inc.php`, `index.php`, `estilos.css`, quote templates); scripted edits can silently convert to LF — check `git diff --stat`.
 
@@ -27,7 +27,7 @@ Custom PHP MVC-like app, no framework.
 
 Local CSS/JS go through `asset_url('js/file.js')` (cache-busts on mtime). Never bare `RUTA_CSS`/`RUTA_JS`.
 
-**DB access** via the `Conexion` singleton (`Conexion::abrir_conexion(); …obtener_conexion()`); persistent PDO, `cerrar_conexion()` is a no-op.
+**DB access:** `Conexion` singleton (`abrir_conexion()`/`obtener_conexion()`); persistent PDO, `cerrar_conexion()` is a no-op.
 
 **Routes:** constants in [app/Bootstrap/routes.inc.php](app/Bootstrap/routes.inc.php) + a `case` in `index.php`.
 
@@ -43,7 +43,7 @@ Quote / re-quote / fulfillment audit tables merged by `quote/load_unified_audit_
 
 ### Pipeline Metrics, Table View, Annual Awards, Advanced Search
 
-All aggregation is **SQL**, never loaded `Rfq` objects. Cohort date is `rfq.created_at` (prod also runs `sql/quote_created_at_revert_backfill.sql`). `PipelineMetricsRepository::STATUS_CASE` must mirror `Rfq::getSheetStatus()` (11 buckets); every consumer reads `STATUSES` dynamically. Win/loss denominator = submitted+award+lost, sources-sought excluded; dollar value = product total **+ services subtotal**. Table view (`PipelineTableRepository`, `js/pipeline_table.js`): server-paginated, filters AND-combined, sort only via the `SORT_COLUMNS` whitelist (Internal Due Date / End Date headers; undated last both ways, `id DESC` tiebreak; not a filter, Clear keeps it), a blank date never matches once a bound is set, no quote watchers (removed deliberately). Row markup/filters are the pure `PipelineTableView` in `js/pipeline_table.js` — keep cells in step with the 18-col `<thead>`. `rfq.end_date` is a `VARCHAR` `MM/DD/YYYY HH:mm` — needs `STR_TO_DATE(NULLIF(end_date,''),'%m/%d/%Y %H:%i')`. Drill-down `byUser` needs `usuario_designado` in `getDrillDown()`'s inner SELECT; the Type of Contract bucket is the raw string (blank/null → `Uncategorized`). Annual Awards count by **award date** (`fecha_award`), not issue date, on purpose. Advanced Search reuses `STATUS_CASE` verbatim.
+All aggregation is **SQL**, never loaded `Rfq` objects. Cohort date is `rfq.created_at` (prod also runs `sql/quote_created_at_revert_backfill.sql`). `PipelineMetricsRepository::STATUS_CASE` must mirror `Rfq::getSheetStatus()` (11 buckets); every consumer reads `STATUSES` dynamically. Win/loss denominator = submitted+award+lost, sources-sought excluded; dollar value = product total **+ services subtotal**. Table view (`PipelineTableRepository`, `js/pipeline_table.js`): server-paginated, filters AND-combined, sort only via the `SORT_COLUMNS` whitelist (Internal Due Date / End Date headers; undated last both ways, `id DESC` tiebreak; not a filter, Clear keeps it), a blank date never matches once a bound is set, no quote watchers (removed deliberately). Row markup/filters are the pure `PipelineTableView` in `js/pipeline_table.js` — keep cells in step with the 18-col `<thead>`. `rfq.end_date` is a `VARCHAR` `MM/DD/YYYY HH:mm` — needs `STR_TO_DATE(NULLIF(end_date,''),'%m/%d/%Y %H:%i')`. Drill-down `byUser` needs `usuario_designado` in `getDrillDown()`'s inner SELECT; the Type of Contract bucket is the raw string (blank/null → `Uncategorized`). Annual Awards count by **award date** (`fecha_award`), not issue date, on purpose. Advanced Search reuses `STATUS_CASE` verbatim. Every search term (basic, advanced, invoices) goes through `RepositorioRfq::likeSearchTerm()` (pasted dashes/NBSP/curly quotes → ASCII); search methods rethrow so the endpoint returns `{error}` JSON.
 
 ### Quote Edit drawer (Checklist / Information / Documents)
 
@@ -80,6 +80,5 @@ Tests: `tests/php/sales_commission_calculator_test.php`, `tests/specs/16-sales-c
 
 ## Known Bugs
 
-- **planned** — Search breaks on pasted non-latin1 punctuation (U+2011 hyphen; latin1 `subitems`/`invoices` columns → MySQL 1267 printed as HTML): [bugs/search-unicode-collation-error.md](bugs/search-unicode-collation-error.md)
-- **noted, not specced** — `utilities/search_quotes` + `search_invoices` answer without a session (no login check).
+- **noted, not specced** — `utilities/search_quotes` + `search_invoices` answer without a session; their `{error}` JSON echoes the raw SQL message.
 - **noted, not specced** — `order[0][dir]` is interpolated unvalidated into `ORDER BY` (search endpoints + many `*ByChannel` methods) → SQL injection; unauthenticated via the two endpoints above.
