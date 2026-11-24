@@ -77,3 +77,9 @@ Tests: `tests/php/partner_opportunity_sync_test.php`, `tests/specs/15-partner-sy
 Calculated on the server at invoice time and **frozen** on the quote; the client posts nothing about it. `guardar_editar_cotizacion.php` → `SalesCommissionCalculator::forQuote()` → `RepositorioRfq::set_sales_commission()` writes `rfq.sales_commission_{amount,basis_profit,fulfillment_pct,reason}` plus the legacy `sales_commission` string so report filters work. **`sales_commission_amount IS NULL` = legacy quote** (manual choice + old CASE, never backfilled): check with `Rfq::obtener_saved_sales_commission()` in PHP, `SalesCommissionCalculator::amountSql('r','rq')` in SQL (queries declare `$commissionSql` — a heredoc can't call a static). Rate, the 6.00% threshold (on the *rounded* fulfillment %) and ineligible types live only in the calculator; profits are equipment-only. Invoice modal shows a read-only breakdown from `quote/commission_preview/{id}` (Save disabled until loaded); re-invoicing recalculates. Comment stored raw, escaped at render.
 
 Tests: `tests/php/sales_commission_calculator_test.php`, `tests/specs/16-sales-commission.spec.js`.
+
+## Known Bugs
+
+- **planned** — Search breaks on pasted non-latin1 punctuation (U+2011 hyphen; latin1 `subitems`/`invoices` columns → MySQL 1267 printed as HTML): [bugs/search-unicode-collation-error.md](bugs/search-unicode-collation-error.md)
+- **noted, not specced** — `utilities/search_quotes` + `search_invoices` answer without a session (no login check).
+- **noted, not specced** — `order[0][dir]` is interpolated unvalidated into `ORDER BY` (search endpoints + many `*ByChannel` methods) → SQL injection; unauthenticated via the two endpoints above.
